@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+
+      <title>Arborescences</title>
+
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+      <style>
+
+				:root {
+					--background-color: black;
+					--foreground-color: white;
+				}
+
+				* {
+					background-color: var(--background-color);
+					margin: 0;
+					padding: 0;
+					text-decoration: none;
+					list-style-type: none;
+					font-family: "Arial", "sans-serif";
+				}
+
+				svg * {
+					transform-origin: center center;
+				}
+
+				svg {
+					margin: 0vh 0vw;
+					width: 100vw;
+					height: 100vh;
+				}
+
+				text{
+					text-anchor: middle;
+					dominant-baseline: middle;
+					alignment-baseline: middle;
+
+					fill: var(--foreground-color)
+				}
+
+				path {
+					stroke: var(--foreground-color);
+					stroke-width: 0.5px;
+					fill: var(--background-color);
+				}
+
+				svg > path {
+					fill: none;
+				}
+
+				g.originCentred {
+					transform: translate(-50%,-50%)
+				}
+
+      </style>
+
+
+  </head>
+
+  <body>
+
+		<svg id="mySVG" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<symbol id="transcendental" width="50" height="50" viewBox="0 0 100 100" overflow="visible">
+				<g class="originCentred">
+					<path d="
+						M -20,40
+						L 120,40
+						L 120,60
+						L -20,60
+						L -20,40
+					"/>
+					<text x="50" y="50" font-size="12px">Transcendental Synthesis</text>
+				</g>
+			</symbol>
+
+			<symbol id="synthesis" width="50" height="50" viewBox="0 0 100 100" overflow="visible">
+				<g class="originCentred">
+					<path d="
+						M 10,40
+						L 90,40
+						L 90,60
+						L 10,60
+						L 10,40
+					"/>
+					<text x="50" y="50" font-size="12px">Synthesis</text>
+				</g>
+			</symbol>
+
+			<symbol id="thesis" width="35" height="35" viewBox="0 0 100 100" overflow="visible">
+				<g class="originCentred">
+					<path d="
+						M 10,40
+						L 90,40
+						L 90,60
+						L 10,60
+						L 10,40
+					"/>
+					<text x="50" y="50" font-size="12px">Thesis</text>
+				</g>
+			</symbol>
+
+			<symbol id="antithesis" width="35" height="35" viewBox="0 0 100 100" overflow="visible">
+				<g class="originCentred">
+					<path d="
+						M 10,40
+						L 90,40
+						L 90,60
+						L 10,60
+						L 10,40
+					"/>
+					<text x="50" y="50" font-size="12px">Antithesis</text>
+				</g>
+			</symbol>
+
+			<path d="
+				M 50,10
+				L 20,30
+				L 0,70
+			"/>
+
+			<path d="
+				M 50,10
+				L 20,30
+				L 30,70
+			"/>
+
+			<path d="
+				M 50,10
+				L 80,30
+				L 70,70
+			"/>
+
+			<path d="
+				M 50,10
+				L 80,30
+				L 100,70
+			"/>
+
+			<use href="#transcendental" x="50" y="10"></use>
+
+			<use href="#synthesis" x="20" y="30"></use>
+			<use href="#thesis" x="0" y="70"></use>
+			<use href="#antithesis" x="30" y="70"></use>
+
+			<use href="#synthesis" x="80" y="30"></use>
+			<use href="#thesis" x="70" y="70"></use>
+			<use href="#antithesis" x="100" y="70"></use>
+
+		</svg>
+
+  </body>
+</html>

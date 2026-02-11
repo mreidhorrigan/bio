@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+      <title>A Hierarchy of Film Set Positions</title>
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+      <style>
+
+				* {
+					background-color: inherit;
+					margin: 0;
+					padding: 0;
+					text-decoration: none;
+					list-style-type: none;
+					font-family: "Arial", "sans-serif";
+					transition: 1s;
+				}
+
+				body{
+					margin: 30px;
+				}
+
+				form{
+					position: fixed;
+					right: 0;
+					margin: 0 30px 0 30px;
+					z-index: 1;
+
+					filter: drop-shadow(0 0 100px black);
+				}
+
+				form > label{
+					display: block;
+					border: solid;
+					border-radius: 10%;
+					margin: 5px;
+					padding: 5px;
+					font-size: 105%;
+					width: 100%;
+					background-color: white;
+				}
+
+				label:focus-within {
+					background-color: pink;
+				}
+
+				input{
+					opacity: 0;
+					width: 0;
+				}
+
+				ul {
+					margin: 0 0 0 3vw;
+				}
+
+				li{
+					margin: 2px 0 2px 0;
+				}
+
+				.hidden {
+					filter: blur(1px);
+					font-size: 0;
+					margin: 0;
+				}
+
+				.hidden + ul {
+					margin: 0;
+				}
+
+      </style>
+
+			<script>
+				function showThese(...toShow){
+					toShow = document.querySelectorAll(toShow);
+					toShow = Array.from(toShow);
+
+					let toHide = document.getElementsByTagName('li');
+
+					for (let theItem of toHide){
+						if(toShow.includes(theItem)){
+							theItem.classList.remove('hidden');
+						}else{
+							theItem.classList.add('hidden');
+						}
+					}
+				}
+			</script>
+  </head>
+
+  <body>
+		<form>
+			<label onclick="showThese('.homeVideo')">
+				<input type="radio" name="production">e.g. Home Video / Personal YouTube Channel
+			</label>
+
+			<label onclick="showThese('.homeVideo','.musicVideo')">
+				<input type="radio" name="production">e.g. Small Music Video or Student Production
+			</label>
+
+			<label onclick="showThese('.homeVideo','.musicVideo','.indieCrew')">
+				<input type="radio" name="production">e.g. Arthouse Indie Production
+			</label>
+
+			<label onclick="showThese('.homeVideo','.musicVideo','.indieCrew','.fullyPaid')">
+				<input type="radio" name="production">e.g. Commercial Advertising
+			</label>
+
+			<label onclick="showThese('.homeVideo','.musicVideo','.indieCrew','.fullyPaid','.partUnion *:not(.onlyBig *, .onlyBig)')">
+				<input type="radio" name="production">e.g. Hallmark or Low-Budget Horror
+			</label>
+
+			<label onclick="showThese('li')">
+				<input type="radio" name="production">e.g. Large Unionized Production
+			</label>
+		</form>
+
+    <li class="fullyPaid">Executive Producer</li><ul>
+        <li class="homeVideo">Producer</li><ul>
+            <li class='musicVideo'>Director</li><ul>
+							<li class="musicVideo onlyBig">Cast</li>
+              <li class="musicVideo">DOP (Director of Photography, Cinematographer)</li><ul class="partUnion">
+									<li>DIT (Digital Imaging Technical, Data Wrangler)</li>
+									<li class="fullyPaid">A Camera Op (Camera Operator)</li><ul>
+										<li class="indieCrew">1st AC (Camera Assistant, Focus Puller)</li><ul>
+											<li class="fullyPaid">2nd AC (Clapper/Loader)</li><ul>
+												<li>Camera Trainee (3rd AC)</li>
+											</ul>
+										</ul>
+									</ul>
+									<li>B Cam Op</li><ul>
+										<li>1st AC</li><ul>
+											<li>2nd AC</li><ul>
+												<li>Trainee</li>
+											</ul>
+										</ul>
+									</ul>
+									<li class="onlyBig">C Cam Op</li><ul class="onlyBig">
+										<li>1st AC</li><ul>
+											<li>2nd AC</li><ul>
+												<li>Trainee</li>
+											</ul>
+										</ul>
+									</ul>
+									<li class="onlyBig">Steadicam Op, Drone Op, and/or Technocrane Ops, etc...</li>
+									<li class="onlyBig">C Cam Op</li>
+									<li class="musicVideo">Gaffer</li><ul>
+										<li>Genny Op (Generator Operator)</li>
+										<li class="onlyBig">Board Op</li>
+										<li>Best Boy</li><ul>
+												<li class="fullyPaid">Lamp Ops</li>
+												<li>Balloon Ops</li>
+										</ul>
+										<li>Rigging Best</li><ul>
+											<li>Rig LX</li>
+										</ul>
+									</ul>
+									<li class="fullyPaid">Key Grip</li><ul class="partUnion">
+										<li>Best Boy Grip</li><ul>
+											<li>Dolly Grip</li>
+											<li class="indieCrew">Grips</li>
+										</ul>
+										<li>Rigging Best</li><ul>
+											<li>Riggers (Rigging Grips)</li>
+										</ul>
+									</ul>
+								</ul>
+							<li class="fullyPaid">Editor</li><ul class="fullyPaid">
+								<li class="fullyPaid">Sound Editor (Post Production Mixer)</li><ul>
+									<li class="fullyPaid">Dubbing Mixer (ADR, Automatic Dialogue Replacement)</li>
+									<li class="fullyPaid">Foley Artists</li>
+									<li class="fullyPaid">Music Editor</li>
+								</ul>
+								<li class="fullyPaid">Colourists</li>
+								<li class="fullyPaid">VFX (Video Effects)</li>
+							</ul>
+							<li class="indieCrew">Costume Designer</li><ul>
+								<li>Costumers, Background Costumers & Breakdown Artists</li>
+							</ul>
+							<li class="indieCrew">Hair Stylists</li>
+							<li class="musicVideo">Makeup Artists</li>
+              <li class="indieCrew">Production Designer</li><ul>
+								<li>Props Master</li class="indieCrew"><ul class="fullyPaid">
+									<li>Props Buyers</li>
+									<li>Props</li>
+								</ul>
+								<li class="indieCrew">Set Decorator and Co-Decorator or Assistant Decorator</li><ul class="fullyPaid">
+									<li>Onset Dresser(s)</li>
+									<li>Set Dec Coordinators</li><ul>
+										<li>Set Buyers</li>
+										<li>Lead Dresser</li><ul>
+											<li>Dressers (dressing & wrapping, fabricating, swamping)</li>
+										</ul>
+									</ul>
+									<li class="fullyPaid">Set Wires (Set Wireman)</li>
+								</ul>
+								<li class="fullyPaid">Art Director and Assistant(s)</li><ul>
+									<li>Draftspeople (Storyboards, Graphic Design)</li>
+								</ul>
+								<li class="partUnion">Construction Coordinator</li><ul>
+									<li class="fullyPaid">Onset Carpenter(s)</li>
+									<li>Construction Buyers</li>
+									<li>Foreman</li><ul>
+										<li class="indieCrew">Carpenters and other trades (sculptors, metalworkers)</li><ul>
+											<li>Labourers</li>
+										</ul>
+									</ul>
+								</ul>
+								<li>Paint Coordinator</li><ul>
+									<li>Onset Painter(s)</li>
+									<li>Paint Lead</li><ul>
+										<li>Painters</li><ul>
+											<li>Labourers</li>
+										</ul>
+									</ul>
+								</ul>
+								<li class="fullyPaid">Greens (forestry & landscaping)</li>
+							</ul>
+							<li class="fullyPaid">Stunt Coordinator (Stunt Captain)</li><ul class="partUnion">
+								<li class="indieCrew">Stunt People (Stunt Performers)</li>
+								<li>Stunt Riggers</li>
+							</ul>
+
+							<li>Line Producer</li><ul>
+								<li class="fullyPaid">PM (Unit Production Manager)</li><ul>
+									<li>UPM (Unit Production Manager)</li><ul class="partUnion">
+										<li class="fullyPaid">Accountants</li>
+										<li class="fullyPaid">Catering (3-person team)</li>
+										<li class="fullyPaid">Crafty/First-Aid</li><ul>
+											<li>Crafty Assist</li>
+										</ul>
+										<li>Transport Coordinator</li><ul>
+											<li class="fullyPaid">Transport Captain and Co-Captain(s)</li><ul>
+												<li class="fullyPaid">Drivers</li>
+												<li class="onlyBig">Picture Cars</li>
+											</ul>
+										</ul>
+										<li>LM (Location Manager)</li><ul>
+											<li>Location Scouts</li>
+											<li>ALM (Assistant Location Manager)</li><ul>
+												<li>TAL (Trainee Assistant Location Manager, Locations Assistant)</li><ul>
+													<li>Key PA (KPAs): Onset, Offset, Van Driver</li><ul>
+														<li>PAs (Prep and Shoot): 1 per door per shooting location + 2 per prepping or wrapping location during work (relieved by security otherwise) + 1 per isolated equipment item (e.g. generator) + addition work gangs of up to ~9 per special grunt labor task (clearing snow, piling dirt, etc)</li>
+													</ul>
+												</ul>
+											</ul>
+										</ul>
+										<li class="fullyPaid">1st AD (Assistant Director)</li><ul>
+											<li class="fullyPaid">2nd AD</li><ul>
+												<li>3rd AD (trailer and onset)</li><ul>
+													<li>TAD (Trainee Assistant Director, 4th AD)</li>
+													<li>Background Coordinator ("Wrangler")</li><ul>
+														<li>Background (Extras): Stand-Ins, Special Ability Extras (SAE), General Extras (GE)</li>
+													</ul>
+												</ul>
+											</ul>
+										</ul>
+										<li>Security Captain</li><ul>
+											<li>Security Guards: 1 per access point per location per 12 unoccupied hours.</li>
+										</ul>
+										<li>PC (Office Coordinator)</li><ul>
+											<li>Assistant Coordinator (APC)</li><ul>
+												<li class="onlyBig">2nd APC</li><ul>
+													<li>Office PA (OPA)</li>
+												</ul>
+											</ul>
+										</ul>
+										<li class="indieCrew">Sound Mixer</li><ul>
+											<li class="indieCrew">Boom Op</li><ul>
+												<li class="onlyBig">Sound Assistant</li>
+											</ul>
+											<li class="onlyBig">Public Address Operator</li>
+										</ul>
+										<li>Scripty (Script Supervisor, Continuity)</li><ul>
+											<li class="onlyBig">Assistant Scripty</li>
+										</ul>
+										<li>Special Effects (SFX) Coordinator</li><ul>
+											<li>SFX Lead</li><ul>
+												<li>SFX Technicians</li>
+											</ul>
+										</ul>
+										<li class="onlyBig">Wranglers</li>
+									</ul>
+								</ul>
+							</ul>
+						</ul>
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+  </body>
+</html>

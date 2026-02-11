@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+
+      <title>Rhizomes</title>
+
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+      <style>
+
+				:root {
+					--background-color: black;
+					--foreground-color: white;
+				}
+
+				* {
+					background-color: var(--background-color);
+					margin: 0;
+					padding: 0;
+					text-decoration: none;
+					list-style-type: none;
+					font-family: "Arial", "sans-serif";
+				}
+
+				svg * {
+					transform-origin: center center;
+				}
+
+				svg {
+					margin: 0vh 0vw;
+					width: 100vw;
+					height: 100vh;
+				}
+
+				text{
+					text-anchor: middle;
+					dominant-baseline: middle;
+					alignment-baseline: middle;
+
+					fill: var(--foreground-color)
+				}
+
+				path {
+					stroke: var(--foreground-color);
+					stroke-width: 0.5px;
+					fill: var(--background-color);
+				}
+
+				g.originCentred {
+					transform: translate(-50%,-50%)
+				}
+
+      </style>
+
+			<script>
+				window.onload = makeTheRhizome;
+
+				function makeTheRhizome() {
+					var toRemove = document.querySelectorAll("svg > path");
+					toRemove.forEach(rhizomePiece => {
+						rhizomePiece.remove();
+					});
+
+					toRemove = document.querySelectorAll("use");
+					toRemove.forEach(rhizomePiece => {
+						rhizomePiece.remove();
+					});
+
+					let thePathArray = [];
+					let thePathString = "";
+
+					let theSVG = document.getElementById("mySVG");
+					let theSketcher = document.createElementNS('http://www.w3.org/2000/svg','path');
+
+
+					for(let i=7;i>0;i--){
+						let theRounder=Math.ceil(Math.random()*25.0);
+
+						thePathArray.push([
+							theRounder*Math.ceil((Math.random()*70+10)/theRounder),
+							theRounder*Math.ceil((Math.random()*70+10)/theRounder)
+						]);
+					}
+
+					thePathArray.push([thePathArray[0][0],thePathArray[0][1]]);
+
+					let j=0;
+					for(const thePoint of thePathArray){
+						if(j==0){
+							thePathString += "M " + thePoint[0] + "," + thePoint[1];
+						} else {
+							thePathString += " L " + thePoint[0] + "," + thePoint[1];
+						}
+						j++;
+					}
+					theSketcher.setAttribute('d', thePathString);
+					theSVG.appendChild(theSketcher);
+
+					for(const thePoint of thePathArray){
+						let theUse = document.createElementNS('http://www.w3.org/2000/svg','use');
+						theUse.setAttribute('href',"#firstPrinciples");
+						theUse.setAttribute('x',""+thePoint[0]);
+						theUse.setAttribute('y',""+thePoint[1]);
+						theSVG.appendChild(theUse);
+					}
+				}
+
+				setInterval(makeTheRhizome, 1500);
+
+			</script>
+
+  </head>
+
+  <body>
+
+		<svg id="mySVG" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<symbol id="firstPrinciples" width="40" height="40" viewBox="0 0 100 100" overflow="visible">
+				<g class="originCentred">
+					<path d="
+						M 0,40
+						L 100,40
+						L 100,60
+						L 0,60
+						L 0,40
+					"/>
+					<text x="50" y="50" font-size="12px">First principles?</text>
+				</g>
+			</symbol>
+		</svg>
+
+  </body>
+
+</html>

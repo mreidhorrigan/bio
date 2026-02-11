@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+      <title>Matt Horrigan—How do you work?</title>
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+	<meta charset="UTF-8">
+	<meta name="description" content="Matt Horrigan, Communications">
+	<meta name="keywords" content="scholar, teaching, learning, tertiary education, higher education">
+	<meta name="author" content="Matt Horrigan">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+      <link rel="manifest" href="site.webmanifest">
+
+      <style>
+
+        :root{
+		--favcolor:#c3f0ff;
+		--secondcolor:#f28b46;
+        }
+
+	*{
+		margin: 0;
+		padding: 0;
+		border: 0;
+		color: black;
+		pointer-events: auto;
+	}
+
+	body{
+		font-family: "georgia", serif;
+		font-size: max(14pt,2vh);
+		padding: 5vw 10px;
+		margin: 0 auto;
+		max-width: 600px;
+		margin-bottom: max(2rem,2vh);
+	}
+
+
+	.flare{
+
+		pointer-events: none;
+
+		position: absolute;
+
+		top: 0;
+		left: 0;
+		width: 50%;
+		height: 50%;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: -1;
+
+
+		filter:blur(50px);
+
+
+		background: radial-gradient(ellipse at 70% 100%, var(--secondcolor) 20%, var(--favcolor) 30%, #ffffff 75%);
+	}
+
+	p:not(.subtitle){
+		margin: 12px;
+	}
+
+	h1, h2, h3{
+		font-family: "tahoma", "arial", sans-serif;
+		font-variant-caps: small-caps;
+		margin-top: max(2rem,2vh);
+	}
+
+	h1{
+		text-align: center;
+	}
+
+	h2{
+		text-align: left;
+	}
+
+	a:hover{
+		text-decoration: underline overline;
+	}
+
+	small {
+		font-size: 60%;
+	}
+
+	.favpicture{
+
+		z-index: -2;
+		float: right;
+		animation: animfav 30s infinite;
+
+
+		background-image: url("Matt.jpg");
+		background-size: 150%;
+		background-repeat: repeat-x;
+		background-position: 30%;
+		box-shadow: 0 0 1vw 1vw white inset;
+
+
+		height: max(300px);
+		width: max(180px);
+
+		border-radius: 25% 0% 50% 0%;
+
+		margin: 2px;
+	}
+
+	@keyframes animfav{
+		0%{
+			filter: contrast(100%);
+		}
+		50%{
+			filter: contrast(180%);
+		}
+		100%{
+			filter: contrast(100%);
+		}
+	}
+
+	.subtitle{
+		text-align: center;
+		margin-bottom: clamp(1rem,8vw,2rem);
+        }
+
+	span.blacklight, span.blacklight *, ::selection{
+		color:black;
+		background:var(--favcolor);
+
+		border-radius: 25% 5% 25% 5%;
+
+		filter: drop-shadow(0px 0px 5px var(--favcolor));
+	}
+
+	.organize{
+		box-shadow: -4px 0 0 0 var(--secondcolor);
+		padding-left: 4px;
+	}
+
+	.catchphrase{
+		font-style:italic;
+	}
+
+	.emphasize{
+		font-style:bold;
+	}
+
+/*
+
+filter:grayscale(100);
+
+        .favpicture:hover{
+          filter:grayscale(0);
+        }
+
+*/
+
+      </style>
+  </head>
+
+  <body>
+
+	<div class="flare"></div>
+
+	<h1>Matt H</span><span class="blacklight">orrigan</h1>
+	<p class="subtitle">mhorriga [at] sfu [dot] ca</p>
+	<div class="favpicture"></div>
+
+	<div class="catchphrase">
+		<p>How do you work?</p>
+		<p>Can I see?</p>
+	</div>
+
+	<div class="organize">
+
+	<p>Hi. I'm Matthew Horrigan, communication scholar. I <a href="https://scholar.google.ca/citations?user=g8USNu8AAAAJ&hl=en">research</a> media <span class="blacklight">production cultures.</span></p>
+
+	<p>My teaching connects the technical skills of writing, podcasting, and video with theories of labor and management.</p>
+
+	<p>I have guided <span class="blacklight">more than a thousand students from the global community through seminars, labs, lectures, and online learning.</span> In the age of GPT, my students adapt to new technology while keeping their own voices.</p>
+
+	<p>In an earlier artistic career, I was a <a href="https://soundcloud.com/matt_horrigan">sound designer</a> and computer programmer. I wrote code for art installations and musical performances. I treat computing as a form of literacy, and believe that modern life demands not just fluency with, but understanding of, the inner workings that make our public images.</p>
+
+	</div>
+
+	<div class="catchphrase">
+		<p>My <span class="blacklight">CV is <a href="Horrigan_CV.pdf" target="_blank">here</span></a>. Email me at mhorriga [at] sfu [dot] ca.</p>
+	</div>
+
+
+
+  </body>
+
+<!--
+  - footer with social media symbols, and my CV?
+  - multimedia feed of works
+  - using academia.edu and preprint archives?
+-->
+
+</html>

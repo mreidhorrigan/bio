@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+      <title>An SVG Experiment</title>
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+      <style>
+
+				* {
+					background-color: inherit;
+					margin: 0;
+					padding: 0;
+					text-decoration: none;
+					list-style-type: none;
+					font-family: "Arial", "sans-serif";
+					transition: 1s;
+				}
+
+			</style>
+
+			<script></script>
+  </head>
+
+  <body>
+
+		<div id="svg-container">
+			<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+				<g>
+					<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+
+						<polygon
+							fill="none"
+							stroke="black"
+							points="0,50 50,0 100,50 50,100"
+
+							transform="
+								scale(1 0.5)
+								translate(0 50)
+							"
+						/>
+
+						<path stroke="black" fill="transparent"
+
+							d="
+								M 0 50
+								C 20 20,
+								80 20,
+								100 50
+							"
+
+						/>
+
+						<path stroke="black" fill="transparent"
+
+							d="
+								M 0 20,
+								10 10
+								20 20
+								40 30
+							"
+
+						/>
+
+						<text x="50" y="50" text-anchor="middle" dominant-baseline="central">test<text>
+
+					</svg>
+				</g>
+			</svg>
+		</div>
+
+	</body>
+
+</html>
