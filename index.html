@@ -89,6 +89,7 @@
 	.favpicture{
 
 		overflow: hidden;
+		transform: translateZ(0);
 
 		z-index: -2;
 		float: right;
@@ -99,7 +100,11 @@
 		background-size: 150%;
 		background-repeat: repeat-x;
 		background-position: 30%;
+
 		box-shadow: 0 0 1vw 1vw white inset;
+   		outline: 2px solid white;
+
+
 
 
 		height: max(300px);
@@ -148,18 +153,9 @@
 	.emphasize{
 		font-style:bold;
 	}
-
-/*
-
-filter:grayscale(100);
-
-        .favpicture:hover{
-          filter:grayscale(0);
-        }
-
-*/
-
-      </style>
+	
+	</style>
+	  
   </head>
 
   <body>
@@ -191,14 +187,6 @@ filter:grayscale(100);
 		<p>My <span class="blacklight">CV is <a href="Horrigan_CV.pdf" target="_blank">here</span></a>. Email me at mhorriga [at] sfu [dot] ca.</p>
 	</div>
 
-
-
   </body>
-
-<!--
-  - footer with social media symbols, and my CV?
-  - multimedia feed of works
-  - using academia.edu and preprint archives?
--->
 
 </html>
