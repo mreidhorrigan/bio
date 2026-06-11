@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="pandoc + md-to-pdf builder">
+  <title>Matthew Reid Horrigan</title>
+  <style>
+
+
+
+:root {
+--ink: #1a1a1a;
+--muted: #595959;
+--faint: #8a8a8a;
+--rule: #d9d9d9;
+--accent: #6b1f2a; 
+--year-col: 6.5rem; 
+--maxwidth: 46rem;
+--body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+--sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 14px; }
+body {
+font-family: var(--body-font);
+color: var(--ink);
+line-height: 1.5;
+margin: 0;
+hanging-punctuation: first;
+text-rendering: optimizeLegibility;
+-webkit-print-color-adjust: exact; 
+print-color-adjust: exact;
+}
+
+#screen-view {
+zoom: 1.2;
+max-width: var(--maxwidth);
+margin: 3rem auto;
+padding: 0 1.5rem;
+}
+
+h1.title, h1 {
+font-family: var(--sans-font);
+font-size: 2.1rem;
+font-weight: 700;
+letter-spacing: -0.01em;
+margin: 0 0 0.25rem;
+color: var(--ink);
+}
+.subtitle, header p { color: var(--muted); margin: 0.15rem 0; }
+.contact, body > p:first-of-type { color: var(--muted); }
+
+h1:not(.title) {
+font-family: var(--sans-font);
+font-size: 0.85rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.12em;
+color: var(--accent);
+border-bottom: 1.5px solid var(--accent);
+padding-bottom: 0.3rem;
+margin: 2.4rem 0 1rem;
+}
+
+h2 {
+font-family: var(--sans-font);
+font-size: 0.95rem;
+font-weight: 600;
+color: var(--ink);
+margin: 1.4rem 0 0.6rem;
+}
+h3, h4, h5 {
+font-family: var(--sans-font);
+font-size: 0.85rem;
+font-weight: 600;
+color: var(--muted);
+margin: 1rem 0 0.4rem;
+}
+
+p { margin: 0.5rem 0; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--rule); }
+a:hover { border-bottom-color: var(--accent); }
+
+ul, ol { list-style: none; margin: 0.4rem 0; padding-left: 0; }
+li { margin: 0.25rem 0; }
+em { font-style: italic; }
+/* ==========================================================================
+3. LEDGER PRIMITIVE (pandoc definition lists — a reusable layout)
+A "term on the left, details on the right" row. Written in Markdown as a
+definition list and reusable for any such content — CV years, syllabus weeks,
+due dates, grade weights:
+2025
+: **PhD**, Individualized Interdisciplinary Studies ...
+Renders as <dl>
+<div class="led-row"><dt>2025</dt><dd>...</dd></div>
+</dl>. build.py's wrap_ledger_rows()
+     groups each <dt>+<dd> in a .led-row so the pair never splits across a page.
+     ========================================================================== */
+  dl { margin: 0.5rem 0 1rem; }
+  /* Each term + its details is wrapped (by build.py) in a .led-row so the pair
+     stays together AND the list fragments cleanly across printed pages. We lay each
+     row out with a floated term (not CSS grid, which fragments unreliably across
+     page breaks) and mark the row break-inside: avoid. */
+  .led-row {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    overflow: hidden;             /* contain the floated term within this row */
+    margin-bottom: 0.55rem;
+  }
+  .led-row:last-child { margin-bottom: 0; }
+  dl dt {
+    float: left;
+    width: var(--year-col);
+    font-family: var(--sans-font);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--faint);
+    text-align: right;
+    padding-top: 0.12rem;
+    white-space: nowrap;
+  }
+  dl dd { margin: 0 0 0 calc(var(--year-col) + 1.25rem); }
+  dl dd + dd { margin-top: 0.2rem; }          /* extra dd lines for one term */
+
+  /* A ledger entry's leading bold lead-in (degree, role, award name) */
+  dl dd strong { color: var(--ink); }
+
+  /* ==========================================================================
+     4. PAGED-MEDIA ENGINE  (printing / PDF) — shared by every document type
+     @page sets the sheet size, margins and the "name — page X of Y" footer; the
+     break rules below keep headings with their content and stop ledger rows from
+     splitting. Modern Chrome renders all of this in --print-to-pdf (build.py), and
+     a browser's own Print honours it too — no paged.js involved. A per-type
+     stylesheet adds break rules for its own blocks (see cv.css's publications).
+     ========================================================================== */
+  @page {
+    /* The size and margin below are filled at build time from the document's front
+       matter (papersize: / margin:) or the --papersize / --margin flags, defaulting
+       to US Letter (8.5in 11in) with the original margins — so an unchanged document
+       still prints exactly as before. `size` accepts a named size (letter, legal,
+       A4, A3, …, optionally with portrait/landscape) or 1–2 CSS lengths (e.g.
+       6in 9in, 210mm 297mm). See EXTENDING.md "Page size & margins". build.py
+       validates the value, because Chrome's --print-to-pdf silently falls back to
+       Letter on an invalid `size`. Don't hand-edit the values here — they're
+       overwritten each build; set them in the front matter / on the CLI. */
+    size: 8.5in 11in;                    /* default: 8.5in 11in (US Letter) */
+    margin: 0.85in 0.85in 0.75in;                /* default: 0.85in 0.85in 0.75in */
+    @bottom-right {
+      /* Matthew Reid Horrigan is replaced at build time with the document's front-matter
+         `title` (or a `footer:` override). Edit the styling here; edit the text
+         in the Markdown front matter. */
+      content: "Matthew Reid Horrigan — page " counter(page) " of " counter(pages);
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #8a8a8a;
+    }
+  }
+
+  /* When PRINTING (the build-time Chrome PDF, or a user's own Ctrl/Cmd-P), drop the
+     on-screen reading affordances on #screen-view so the document fills the @page
+     content area at its true 10.5pt size. Modern Chrome renders the @page footer
+     above natively, so no paged.js is involved and this @media print block is safe
+     (nothing flattens it anymore). */
+  @media print {
+    #screen-view { zoom: 1; max-width: none; margin: 0; padding: 0; }
+  }
+
+  /* Keep every heading level with the content that follows it (a heading must
+     never be the last thing on a page). Both modern and legacy properties. */
+  h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
+    page-break-after: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Keep a heading with the first block that follows it. `break-after: avoid` on
+     the heading alone isn't enough: the break can land just INSIDE the following
+     list wrapper, stranding the heading. So also forbid a break right before the
+     following block and before its first row. (Per-type stylesheets add the same
+     for their own blocks — see cv.css for the publication list.) */
+  dl {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  .led-row:first-child {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  /* Don't split an individual ledger row's term/details, or a list item. */
+  dl dt, dl dd, li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  p { orphans: 3; widows: 3; }
+
+  /* NOTE on screen vs print: there is only ONE document (#screen-view). On screen
+     it's a centred reading column (zoomed up for legibility); for print/PDF the
+     @media print block above resets that wrapper to fill the @page area at the
+     true 10.5pt size, and Chrome renders the @page footer. No paged.js, no page
+     "sheets" on screen, no cloned second view — the PDF is built separately by
+     headless Chrome (build.py) and the web view embeds it behind the menubar. */
+
+  /* ==========================================================================
+     cv.css — CV-specific idioms, layered on base.css
+     --------------------------------------------------------------------------
+     build.py concatenates this AFTER base.css, so it inherits every brand token,
+     the base typography, the ledger primitive (year-left rows), and the whole
+     paged-media engine. It adds only what is unique to a scholarly CV: the
+     title-first, hanging-indent publication list that pandoc + citeproc emit (see
+     build.py's publication expansion and styles/cv-publications.csl).
+
+     This is the template for a NEW document type: a small file that adds only its
+     own idioms on top of base.css. A syllabus or cover letter would look the same
+     in spirit — its own blocks here, everything shared left in base.css. The
+     year-left "term : details" ledger now lives in base.css, so a syllabus reuses
+     it for the weekly schedule for free. See EXTENDING.md "Add a document type".
+     ========================================================================== */
+
+  /* ==========================================================================
+     TITLE-FIRST PUBLICATIONS  (citeproc output)
+     citeproc emits:  <div class="csl-bib-body"><div class="csl-entry">…</div></div>
+     build.py wraps each rendered block in <div class="pub-list">.
+     ========================================================================== */
+  .csl-bib-body { margin: 0.4rem 0 1rem; }
+  .csl-entry {
+    margin: 0 0 0.7rem;
+    padding-left: 1.5rem;
+    text-indent: -1.5rem;       /* hanging indent */
+  }
+  .csl-entry:last-child { margin-bottom: 0; }
+
+  /* Plain prose lists used for non-citeproc items (monograph, in-prep) */
+  .pub-plain p { margin: 0 0 0.7rem; padding-left: 1.5rem; text-indent: -1.5rem; }
+
+  /* ---- Publication page-break rules (companion to base.css §4) ------------
+     Keep a category heading with the first reference, and don't split a reference
+     across a page boundary. base.css already handles headings and the ledger. */
+  .pub-list, .csl-bib-body, .pub-plain {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  .csl-bib-body > .csl-entry:first-child,
+  .pub-plain > p:first-child {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  .csl-entry, .pub-plain p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  </style>
+</head>
+<body>
+<!-- The generic page skeleton for every document type (CV, syllabus, letter…).
+     #screen-view is the continuous document: a centred reading column on screen,
+     and on print/PDF base.css's @media print rules let it fill the @page area.
+     The web build appends the menubar (templates/menubar.html) after the body. -->
+<div id="screen-view">
+<header id="title-block-header">
+  <h1 class="title">Matthew Reid Horrigan</h1>
+  <p class="subtitle">Sessional Instructor · Alexander College · Simon
+Fraser University</p>
+</header>
+<p>Department of Social Sciences, Alexander College<br />
+School for the Contemporary Arts, Simon Fraser University</p>
+<p>(778) 996-9770 · <a href="mailto:matt.horrigan@icloud.com">matt.horrigan@icloud.com</a> · <a href="mailto:matthorriganmusic@gmail.com">matthorriganmusic@gmail.com</a>
+· <a href="mailto:m.horrigan@alexandercollege.ca">m.horrigan@alexandercollege.ca</a></p>
+<h1 id="areas-of-expertise">Areas of Expertise</h1>
+<p>Media Studies, Sound &amp; Music, Production Cultures</p>
+<h1 id="education">Education</h1>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+<strong>PhD</strong>, Individualized Interdisciplinary Studies. Faculty
+of Communication, Art, and Technology, Simon Fraser University.
+<em>Dissertation:</em> “Departmentalities: Class, Myth, and Service
+Moviemaking.” <em>Committee:</em> Eldritch Priest, Lindsey Freeman,
+Nicolas Kenny, Aleena Chia.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<strong>MFA</strong>, Interdisciplinary Studies. School for the
+Contemporary Arts, Simon Fraser University. <em>Supervisor:</em> Arne
+Eigenfeldt.
+</dd></div>
+<div class="led-row"><dt>2014</dt>
+<dd>
+<strong>BMus</strong>, Composition. <em>Bernard Shapiro prize for
+excellence in music research.</em> Schulich School of Music, McGill
+University. <em>Advisors:</em> John Rea, Brian Cherney.
+</dd></div>
+</dl>
+<h1 id="appointments">Appointments</h1>
+<dl>
+<div class="led-row"><dt>2023–</dt>
+<dd>
+<strong>Sessional Instructor</strong>, Department of Social Sciences.
+Alexander College.
+</dd></div>
+<div class="led-row"><dt>2017–</dt>
+<dd>
+<strong>Sessional Instructor</strong>, School for the Contemporary Arts.
+Simon Fraser University.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<strong>Visiting Researcher</strong>, Department of Media, Humanities
+and the Arts. University of Huddersfield.
+</dd></div>
+<div class="led-row"><dt>2016–23</dt>
+<dd>
+<strong>Teaching Assistant</strong>, Faculty of Communication, Art, and
+Technology. Simon Fraser University.
+</dd></div>
+</dl>
+<h1 id="publications">Publications</h1>
+<h2 id="monographs">Monographs</h2>
+<div class="pub-plain">
+<p>Under contract—manuscript delivery December 2026.
+<em>Voiceshifting.</em> Routledge.</p>
+</div>
+<h2 id="refereed-journal-articles">Refereed Journal Articles</h2>
+<div class="pub-list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
+<div id="ref-horrigan2026myth" class="csl-entry" role="listitem">
+“The Myth of the Suffering Artist in the Mind of the City, or
+Hinterscapes: A Textured Circuit”. Horrigan, Matthew. 2026. <em>BC
+Studies</em> 230.
+</div>
+<div id="ref-horriganVoiceshiftingGenderProlific2025" class="csl-entry" role="listitem">
+“Voiceshifting, Gender, and Prolific Profiles in the Songs of 100 Gecs
+and Alex G”. Horrigan, Matthew Reid. 2025. <em>Rock Music Studies</em>:
+1–18. <a href="https://doi.org/10.1080/19401159.2025.2506204">https://doi.org/10.1080/19401159.2025.2506204</a>.
+</div>
+<div id="ref-horriganDrainingSwamp2023" class="csl-entry" role="listitem">
+“Draining a Swamp”. Horrigan, Matthew. 2023. <em>Comparative Media Arts
+Journal</em> (13). <a href="https://www.sfu.ca/cmajournal/issues/issue-thirteen--the-outside/Matt-Horrigan.html">https://www.sfu.ca/cmajournal/issues/issue-thirteen--the-outside/Matt-Horrigan.html</a>.
+</div>
+<div id="ref-horriganListeningInterruptionsSonic2022" class="csl-entry" role="listitem">
+“Listening to Interruptions: Sonic Dominance and Sonic Norms”. Horrigan,
+Matthew. 2022. <em>Sound Studies</em> 8 (2): 219–234. <a href="https://doi.org/10.1080/20551940.2022.2107347">https://doi.org/10.1080/20551940.2022.2107347</a>.
+</div>
+<div id="ref-horriganPlayingLegendAge2022" class="csl-entry" role="listitem">
+“Playing for the Legend in the Age of Empires II Online Community”.
+Horrigan, Matthew. 2022. <em>Press Start</em> 8 (1): 20–40. <a href="http://press-start.gla.ac.uk/index.php/press-start/article/view/210">http://press-start.gla.ac.uk/index.php/press-start/article/view/210</a>.
+</div>
+<div id="ref-horriganNulltopiaDisjunctSpace2022" class="csl-entry" role="listitem">
+“Nulltopia: Of Disjunct Space”. Horrigan, Matthew. 2022. <em>Acta
+Ludologica</em> 5 (2): 58–70. <a href="https://actaludologica.com/volume-5/">https://actaludologica.com/volume-5/</a>.
+</div>
+<div id="ref-horriganLiminoidSinglePlayerVideogaming2021" class="csl-entry" role="listitem">
+“The Liminoid in Single-Player Videogaming: A Critical and Collaborative
+Response to Recent Work on Liminality and Ritual”. Horrigan, Matthew.
+2021. <em>Game Studies</em> 21 (2). <a href="http://gamestudies.org/2102/articles/horrigan">http://gamestudies.org/2102/articles/horrigan</a>.
+</div>
+<div id="ref-horriganFlatteringRobopocalypseHuman2020" class="csl-entry" role="listitem">
+“A Flattering Robopocalypse: Human Exclusion and the Procedural Rhetoric
+of Captcha”. Horrigan, Matthew Reid. 2020. <em>M/C Journal</em> 23 (6).
+<a href="https://doi.org/10.5204/mcj.2726">https://doi.org/10.5204/mcj.2726</a>.
+</div>
+</div>
+</div>
+<h2 id="book-chapters">Book Chapters</h2>
+<div class="pub-list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
+<div id="ref-horrigan2026gilded" class="csl-entry" role="listitem">
+“Gilded Time: Trophies, Boosting, and Cultural Capital”. Horrigan,
+Matthew. Forthcoming. In <em>Trophy Cases: The Theory, Design, &amp;
+Cultural Politics of Video Game Trophies &amp; Achievements</em>, edited
+by Ryan Scheiding, Dan Staines, and Sarah Christina Ganzon. Bloomsbury.
+</div>
+<div id="ref-horriganmallgoth" class="csl-entry" role="listitem">
+“Mall Goth Aristocracy: Vampire Students and Class”. Horrigan, Matthew.
+Accepted. In <em>Vampires and Fashion</em>, edited by Teresa
+Cutler-Broyles and Lorraine Rumson. Peter Lang.
+</div>
+</div>
+</div>
+<h2 id="refereed-conference-proceedings">Refereed Conference
+Proceedings</h2>
+<div class="pub-list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
+<div id="ref-horrigan2026player" class="csl-entry" role="listitem">
+“Player as Medium: Games of Mid(dle) Management”. Horrigan, Matthew.
+2026. In <em>The Interdisciplinary Journal on Games and Narrative</em>.
+</div>
+<div id="ref-horriganEnormousFabricatedAbility2023" class="csl-entry" role="listitem">
+“Enormous Fabricated Ability: Boosting in the Battlefront II Player
+Community”. Horrigan, Matthew. 2023. In <em>Proceedings of DiGRA
+2023</em> Online. <a href="https://dl.digra.org/index.php/dl/article/download/1968/1967/1964">https://dl.digra.org/index.php/dl/article/download/1968/1967/1964</a>.
+</div>
+<div id="ref-horriganFirstGlueProtocolar2023" class="csl-entry" role="listitem">
+“First Glue: Protocolar Power and the Texts of Game Cultures”. Horrigan,
+Matthew. 2023. In <em>Proceedings of DiGRA 2023</em> Online. <a href="https://dl.digra.org/index.php/dl/article/view/2110/2109">https://dl.digra.org/index.php/dl/article/view/2110/2109</a>.
+</div>
+<div id="ref-brown2018musebots" class="csl-entry" role="listitem">
+“Interacting with Musebots”. Brown, Andrew R., Matthew Horrigan, Arne
+Eigenfeldt, Toby Gifford, Daniel Field, and Jon McCormack. 2018. In
+<em>Proceedings of the International Conference on New Interfaces for
+Musical Expression</em> Blacksburg, Virginia, USA. <a href="https://zenodo.org/record/1302659">https://zenodo.org/record/1302659</a>.
+</div>
+</div>
+</div>
+<h2 id="book-reviews">Book Reviews</h2>
+<div class="pub-list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
+<div id="ref-horriganReviewCineworldingScenes2023" class="csl-entry" role="listitem">
+“A Review of Cineworlding: Scenes of Cinematic Research-Creation, by
+Michael B. MacDonald.”. Horrigan, Matt. 2023. <em>Performance
+Matters</em> 9 (1-2): 406–408. <a href="https://performancematters-thejournal.com/index.php/pm/article/view/471">https://performancematters-thejournal.com/index.php/pm/article/view/471</a>.
+</div>
+</div>
+</div>
+<h2 id="other-articles">Other Articles</h2>
+<div class="pub-list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
+<div id="ref-poirierpoulin2025editorial" class="csl-entry" role="listitem">
+“Editorial”. Poirier-Poulin, Samuel, Juan Escobar-Lamana, David ten
+Cate, Rory Manning Graham, Alex Habgood, Hyerin Shin, Chelsea Russell,
+and Matt Horrigan. 2025. <em>Press Start</em> 11 (1): 1.
+</div>
+<div id="ref-poirierpoulin2024editorial" class="csl-entry" role="listitem">
+“Editorial: Ten Years of Press Start”. Poirier-Poulin, Samuel, Cassandra
+Barkman, Andrew Fleshman, Meg Ritchie, Matt Horrigan, Charlotte
+Courtois, and Olivia Shepard. 2024. <em>Press Start</em> 10 (1): i–iii.
+</div>
+<div id="ref-horriganPuppersNotYuppers2022" class="csl-entry" role="listitem">
+“Puppers Not Yuppers (On Abstractive Mnemonics)”. Horrigan, Matthew
+Reid. 2022. <em>Society for Ethnomusicology Student News</em> 18 (1). <a href="https://www.semsn.com/181-horrigan">https://www.semsn.com/181-horrigan</a>.
+</div>
+<div id="ref-horriganAggregateMonstersEcologies2021" class="csl-entry" role="listitem">
+“Aggregate Monsters: Ecologies Challenging Encounters”. Horrigan, Matt.
+2021. <em>Analog Game Studies</em>. <a href="https://analoggamestudies.org/2021/10/aggregate-monsters-ecologies-challenging-encounters/">https://analoggamestudies.org/2021/10/aggregate-monsters-ecologies-challenging-encounters/</a>.
+</div>
+<div id="ref-horriganScholarClassTabletop2020" class="csl-entry" role="listitem">
+“The Scholar Class in the Tabletop Role-Play Party - First Person
+Scholar”. Horrigan, Matthew, and Bradley Young. 2020. <em>First Person
+Scholar</em>. <a href="http://www.firstpersonscholar.com/the-scholar-class-in-the-tabletop-role-play-party/">http://www.firstpersonscholar.com/the-scholar-class-in-the-tabletop-role-play-party/</a>.
+</div>
+<div id="ref-horriganDoodlingPosthumanCorpus2017" class="csl-entry" role="listitem">
+“Doodling in the Posthuman Corpus”. Horrigan, Matthew. 2017.
+<em>eContact!</em> 19 (3). <a href="https://www.econtact.ca/19_3/horrigan_posthuman.html">https://www.econtact.ca/19_3/horrigan_posthuman.html</a>.
+</div>
+</div>
+</div>
+<h2 id="in-preparation">In Preparation</h2>
+<div class="pub-plain">
+<p>“The Hunger for the Ghosts of səmiq̓ʷəʔelə.” Article in revision for
+<em>Mediapolis</em>.</p>
+<p>“Ludocracy: Gamified Governance in Online Roleplay.” Article for
+submission to <em>Game Studies</em>.</p>
+<p>“Cozy Nightmares.” Journal special issue and article about cozy
+horror gaming, in preparation with Sara Bimo and Aparajita Bhandari.</p>
+</div>
+<h1 id="awards">Awards</h1>
+<dl>
+<div class="led-row"><dt>2024</dt>
+<dd>
+Award for Educational Excellence, Teaching Assistant, Faculty of
+Communication, Art and Technology, Simon Fraser University.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+Best Paper, Canadian Game Studies Association Conference.
+</dd></div>
+<div class="led-row"><dt>2018</dt>
+<dd>
+SOCAN Foundation Awards (Society of Composers, Authors and Music
+Publishers of Canada), 3rd Prize, Hugh LeCaine award for electroacoustic
+composition.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+SOCAN Foundation Awards, 2nd Prize, Godfrey Rideout award for vocal
+composition.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+SOCAN Foundation Awards, 3rd Prize, Hugh LeCaine award for
+electroacoustic composition.
+</dd></div>
+</dl>
+<h1 id="funding">Funding</h1>
+<dl>
+<div class="led-row"><dt>2024</dt>
+<dd>
+SFU Dissertation Completion Fellowship (7000 CAD).
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+SFU Travel and Research Award (1600 CAD).
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+SFU Humanities Fellowship (7000 CAD).
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+SFU Travel and Research Awards (1500 CAD).
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+SFU Transforming Inquiry into Learning and Teaching grant (5000 CAD).
+Co-applicant with principal investigator Eldritch Priest.
+</dd></div>
+<div class="led-row"><dt>2020–24</dt>
+<dd>
+SFU Graduate Fellowships (34750 CAD).
+</dd></div>
+<div class="led-row"><dt>2019–20</dt>
+<dd>
+BC Graduate Scholarships (30000 CAD).
+</dd></div>
+<div class="led-row"><dt>2019</dt>
+<dd>
+SFU Dean’s Graduate Fellowship (5000 CAD).
+</dd></div>
+<div class="led-row"><dt>2018</dt>
+<dd>
+CCA (Canada Council for the Arts) Concept to Realization Grant (13000
+CAD).
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+BCAC (BC Arts Council) Early Career Development Grant (8541 CAD).
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+SSHRC Michael Smith Foreign Study Supplement (5449 CAD).
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+SSHRC Joseph–Armand Bombardier Graduate Scholarship (17500 CAD).
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+SFU Travel &amp; Minor Research Award (500 CAD).
+</dd></div>
+<div class="led-row"><dt>2014</dt>
+<dd>
+McGill University Bernard Shapiro Prize (500 CAD).
+</dd></div>
+<div class="led-row"><dt>2013</dt>
+<dd>
+McGill University Marion Magor Memorial Scholarship (3400 CAD).
+</dd></div>
+<div class="led-row"><dt>2012</dt>
+<dd>
+McGill University Schulich School of Music Scholarship (1000 CAD).
+</dd></div>
+<div class="led-row"><dt>2011</dt>
+<dd>
+McGill University William MacDonald Scholarship in Music (1200 CAD).
+</dd></div>
+</dl>
+<h1 id="conferencing">Conferencing</h1>
+<h2 id="invited-talks">Invited Talks</h2>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+The Nostagain Network, online, July 25.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+“DOJRP: A Study in Authoritarian Ethic.” Canadian Game Studies
+Association Top Paper Panel, online, October 12.
+</dd></div>
+</dl>
+<h2 id="panels-organized">Panels Organized</h2>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Cozy Nightmares: Comfort in Horror Games,” with Aparajita Bhandari and
+Sara Bimo. Canadian Game Studies Association, online, June 8.
+</dd></div>
+</dl>
+<h2 id="conference-papers">Conference Papers</h2>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Play in Security (or, When Freedom is Overrated).” Society for
+Literature, Science, and the Arts, University of Oregon, August 21.
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Can Theory Waste?” Canadian Sociological Association, online, June 13.
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“The End of Discursive Economy and the Double Bind of Moral
+Distinction.” Canadian Sociological Association, online, June 13.
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Player as Medium: Hauntological Security in Games of Middle
+Management.” Canadian Game Studies Association, online, June 8.
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Critical Thinking in and Through the Discovery Interview.” Private
+Degree Granting Institutions Association, Vancouver, April 10.
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Player as Medium: Games of Mid(dle) Management.” International
+Conference on Games and Narrative, online, March 3.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Tracing Technopacity.” Society for Literature, Science, and the Arts,
+Dallas, Texas, November 7.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Exhuming Ravenhood.” Canadian Sociological Association, online, June
+20.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Background Figures.” Canadian Sociological Association, online, June
+19.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Industrial Catastrophilia: Perils, Pleasures, Pretermissions.” Film and
+Media Studies Association of Canada, Concordia University Loyola,
+Montreal, June 16.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Narrative Engines: Survival Gameshows, Hollywood Legacies.” Canadian
+Game Studies Association, Concordia University, Montreal, June 15.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Crass: For a Labour Anthropology of Dysphemism.” Language Sciences
+Graduate Student and Postdoctoral Research Day, University of British
+Columbia, Vancouver, May 10.
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+“Abject-Curious: Of Unitology.” Society for Literature, Science, and the
+Arts, Arizona State University, Phoenix, October 29.
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+Matthew Horrigan and Carina Xu. “Specters of the Civilian: Hauntology
+versus Militainment.” Canadian Game Studies Association, online, June 6.
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+“GameSense Does Not Exist: Rogue Alea as Governmentality.” International
+Communication Association Game Studies Preconference, University of
+Toronto, Mississauga, May 25.
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+“From Clandom to Regime: Specters of the ‘Digital Tribe.’” Conduits
+Graduate Conference, Simon Fraser University, Vancouver, May 12.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+“Bantering: Recorded Para-Song Vocalizations.” Vicarious Vocalities:
+Voices in and Out of Place, Newcastle University, online, September 6.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+“Paralyzed from the Inside? Nostalgia in Dreampop.” Music Theory Society
+of the Mid-Atlantic, online, July 30.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+“DOJRP: A Study in Authoritarian Ethic.” Canadian Game Studies
+Association, online, May 30.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+“Defending the Sublime: Scary Stories in an Age of Magical
+Reproduction.” Contemporary Arts Graduate Symposium, Simon Fraser
+University, Vancouver, April 8.
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+“Social Climate and Collective Entities at War in <em>Age of Empires
+II</em>.” International Medieval Congress, online, July 7.
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+“Hauntology, Appropriation and the Aesthetic Apocalypse of an Empire.”
+Harvard Graduate Music Forum, online, February 19.
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+Ferguson, Alexander, Patrick Blenkarn, Milton Lim, Maria Horner, and
+Matthew Horrigan. “Videocan Report 2021: International Attitudes and
+Regulations on Video Documentation.” Canadian Association for Theatre
+Research, online, June 26.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+“Apocalyptic Fictions, Thanatic Simulations: Videogames and the Figure
+of Death.” Video Games and Religion: Apocalypse and Utopia, Centre for
+the Critical Study of Apocalyptic and Millenarian Movements, online,
+November 19.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+“State Visioning of the Performing Arts in Canada.” BC Political Studies
+Association, online, October 16.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+“Playing for the Legend.” Digital Heroisms Conference, University of
+Glasgow, online, August 4.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+“Ethics in Contemporary Electroacoustic Music and Its Instruction.”
+Toronto International Electroacoustic Symposium, Toronto, August 10.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+“Consenting to Instruction: When Do I Persuade and When Do I Teach?”
+16th Annual Symposium on Teaching and Learning, Simon Fraser University,
+Burnaby, May 17.
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+“The Musical Status Transaction.” Musical Intersections, University of
+Calgary School of Music, April 18.
+</dd></div>
+</dl>
+<h2 id="departmental-talks">Departmental Talks</h2>
+<dl>
+<div class="led-row"><dt>2024</dt>
+<dd>
+“Teaching Assistant Skills.” School for the Contemporary Arts, Simon
+Fraser University, September 9.
+</dd></div>
+</dl>
+<h1 id="teaching">Teaching</h1>
+<h2 id="alexander-college-sessional-instructor-in-person">Alexander
+College, Sessional Instructor (in-person)</h2>
+<ul>
+<li><strong>Cultural Industries: Canada and the World (CMNS
+230)</strong> — Winter 2025, 33 students</li>
+<li><strong>Sociology of Popular Culture (SOCI 230)</strong> — Winter
+2025, 34 students</li>
+<li><strong>Social Movements and Social Change (SOCI 220)</strong> —
+Fall 2025, 35 students; Spring 2025, 35 students</li>
+<li><strong>Communication and Social Change (CMNS 130)</strong> — Fall
+2025, 35 students; Spring 2025, 35 students; Winter 2025, 2 sections, 58
+students; Summer 2024, 2 sections, 70 students; Spring 2024, 2 sections,
+70 students; Fall 2023, 2 sections, 70 students; Summer 2023, 1 section,
+35 students</li>
+<li><strong>Introduction to New Media and ICTs (CMNS 253)</strong> —
+Spring 2025, 2 sections, 64 students; Fall 2024, 1 section, 35 students;
+Summer 2024, 2 sections, 70 students; Summer 2023, 1 section, 34
+students</li>
+<li><strong>Introduction to Communication Studies (CMNS 110)</strong> —
+Fall 2024, 2 sections, 61 students</li>
+</ul>
+<h2 id="simon-fraser-university-sessional-instructor-in-person">Simon
+Fraser University, Sessional Instructor (in-person)</h2>
+<ul>
+<li><strong>Creative Electronics Lab I (CA 247)</strong> — Fall 2025, 2
+sections, 26 students</li>
+<li><strong>Critical Writing in the Arts (CA 319)</strong> — Spring
+2025, 1 teaching assistant, 50 students</li>
+<li><strong>Thinking and Writing About Sound: Musical Subcultures (CA
+344)</strong> — Spring 2023, 19 students</li>
+<li><strong>Advanced Topic in the History of Art, Performance and Cinema
+Studies: Hauntology (CA 414)</strong> — Fall 2023, 19 students</li>
+<li><strong>Electroacoustic Music I (CA 247)</strong> — Fall 2017, 10
+students</li>
+</ul>
+<h2 id="teaching-assistant-at-simon-fraser-university">Teaching
+Assistant at Simon Fraser University</h2>
+<p><strong>In-person:</strong> Filmmaking I (CA 131), Spring 2023,
+Spring 2022; Digital Media Communication Techniques (CMNS 226), Fall
+2022; Fundamentals of Film (CA 130), Fall 2022; The History and
+Aesthetics of Cinema (CA 136), Fall 2022; Audio Media Analysis (CMNS
+257), Spring 2022; Sound Design (IAT 340), Fall 2020; Selected Topics in
+Art and Culture Studies: Sonic Fiction (CA 312), Fall 2019; Music After
+1900 (CA 140), Summer 2017, Fall 2016.</p>
+<p><strong>Online synchronous:</strong> Introduction to Cinema (CA 135),
+Summer 2021; Music Composition and Theory (CA 146/246/346), Fall 2020,
+Spring 2021.</p>
+<p><strong>Online asynchronous:</strong> Contexts in Creative Music
+&amp; Sound (CA 140), Summer 2023, Fall 2022; Film Music (CA 386),
+Summer 2021; 20th Century Music Appreciation (CA 142), Summer 2020;
+Music Fundamentals (CA 104), Summer 2022, Summer 2021, Spring 2020, Fall
+2019, Spring 2017, Summer 2016.</p>
+<h2 id="consultant-course-developer">Consultant Course Developer</h2>
+<p>Inclusive Interpersonal Communications, Alexander College (CMNS 2XX,
+developed summer 2024).</p>
+<h2 id="mentorship-and-tutoring">Mentorship and Tutoring</h2>
+<p>Mentor, Faculty of Communication, Art, and Technology mentorship
+program (SFU), 2025. Tutor, piano and music theory, five students,
+2006–18.</p>
+<h1 id="research-assistant-experience">Research Assistant
+Experience</h1>
+<dl>
+<div class="led-row"><dt>2023–24</dt>
+<dd>
+“Reading Modalities: Conditions of Interface Between Student and Text.”
+<em>Funding:</em> Transforming Inquiry into Teaching and Learning, Simon
+Fraser University. <em>Principal investigator:</em> Eldritch Priest. As
+a collaborator, I analyzed student experience data.
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+“Videocan.” <em>Funding:</em> Digital Strategy Fund, Canada Council for
+the Arts. <em>Principal investigator:</em> Patrick Blenkarn. As a
+research assistant, I conducted archival research of union contracts and
+performance documentation regulations.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+“Collaborative musical composition and performance with creative
+agents.” <em>Funding:</em> Insight Grant, Social Sciences and Humanities
+Research Council of Canada. <em>Principal investigator:</em> Arne
+Eigenfeldt. As a research assistant, I designed and developed
+interactive music software using Max/MSP and Node.js.
+</dd></div>
+<div class="led-row"><dt>2014–15</dt>
+<dd>
+“The poetics of image, sound, computation and flow in the creation of
+generative time-based art.” <em>Funding:</em> Insight Grant, Social
+Sciences and Humanities Research Council of Canada. <em>Principal
+investigator:</em> James Bizzocchi. As a research assistant, I reviewed
+musical emotion literature.
+</dd></div>
+</dl>
+<h1 id="service">Service</h1>
+<h2 id="to-the-profession">To the Profession</h2>
+<dl>
+<div class="led-row"><dt>2015–26</dt>
+<dd>
+Peer review: <em>New Media and Society</em>, <em>Continuum</em>,
+<em>Television and New Media</em>, <em>M/C Journal</em>, <em>Press
+Start</em>, <em>Comparative Media Arts Journal</em>, <em>SAGE Open</em>;
+International Conference on Games and Narrative (ICGaN) 2025; Canadian
+Game Studies Association (CGSA) 2025, 2024, 2023; Foundations of Digital
+Games (FDG) 2021; Musical Metacreation Workshop (MUME) 2015.
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+Prospectus review: Routledge.
+</dd></div>
+<div class="led-row"><dt>2023–25</dt>
+<dd>
+Editorial board member: <em>Press Start</em>.
+</dd></div>
+<div class="led-row"><dt>2022–24</dt>
+<dd>
+Panel chair: Canadian Game Studies Association Conference (4 panels).
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+Conference organizer: <em>The New Daydream Imaginary</em>, SFU, June
+15–17.
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+Conference committee: Canadian Game Studies Association.
+</dd></div>
+</dl>
+<h2 id="to-the-institution">To the Institution</h2>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+Student Voices III Conference Planning Committee, Alexander College.
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+Strategic Planning Committee, Social Sciences Department, Alexander
+College.
+</dd></div>
+<div class="led-row"><dt>2023–24</dt>
+<dd>
+Advisory Committee, Sexual Assault Awareness Month, SFU.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+Advisory Committee, Covid Safety Plan, School for the Contemporary Arts,
+SFU.
+</dd></div>
+<div class="led-row"><dt>2015–16</dt>
+<dd>
+Chair, Graduate Student Caucus, School for the Contemporary Arts, SFU.
+</dd></div>
+</dl>
+<h2 id="to-the-community">To the Community</h2>
+<dl>
+<div class="led-row"><dt>2018</dt>
+<dd>
+Host, <em>The Arts Rational</em>, CFRO 100.FM Vancouver Co-op Radio.
+</dd></div>
+<div class="led-row"><dt>2017–18</dt>
+<dd>
+Board Member, Vancouver Pro Musica.
+</dd></div>
+<div class="led-row"><dt>2016–17</dt>
+<dd>
+Organizer, Co.Crea.Tive Performance Art Collective (Vancouver).
+</dd></div>
+<div class="led-row"><dt>2015–17</dt>
+<dd>
+Host, <em>re:composition</em>, CFRO 100.FM Vancouver Co-op Radio.
+</dd></div>
+<div class="led-row"><dt>2013–14</dt>
+<dd>
+Editor, <em>The Phonograph</em> newspaper, Schulich School of Music,
+McGill University.
+</dd></div>
+</dl>
+<h1 id="art">Art</h1>
+<h2 id="as-project-lead">As Project Lead</h2>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+“Devin’s,” “the sky a silver,” “Loved an Image”—three songs created as
+part of a larger audio project, No Phenomenon.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+<em>Rock walls and damp—these match our dream; but, Rector, the cold is
+new</em>, interactive digital narrative, Small File Media Festival,
+online, August.
+</dd></div>
+<div class="led-row"><dt>2018</dt>
+<dd>
+<em>Monsterkill 5: ReMonsterkilled</em>, stage play, 1h20m, Havana
+Theatre, Vancouver, October.
+</dd></div>
+<div class="led-row"><dt>2018</dt>
+<dd>
+<em>Quanta/Qualia (Ambient Academia)</em>, ambient work for loudspeakers
+&amp; video, 3h, Nightshift: Quantum Futures, UBC Museum of
+Anthropology, April 5.
+</dd></div>
+<div class="led-row"><dt>2018</dt>
+<dd>
+<em>Heavy Traffic</em>, electric guitarist Graham Banfield &amp;
+subwoofers, 25m, Canadian Music Centre, Toronto, August 11.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<em>Hewn from Living Rock</em>, guitarist Adrian Verdejo &amp;
+loudspeakers, 10m, <em>Play Nice</em> at Sawdust Collector, Vancouver,
+July 28.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<em>Follow Turtle Chase Leaf</em>, for chamber ensemble Ecstatic Waves,
+30m, 240 Northern Street, Vancouver, June 23; reworked as <em>Around the
+House</em> for chamber ensemble, 11m, Boca da Lupo, Vancouver, October
+13.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<em>Apple Season</em>, stage play reading, 1h20m, Carousel Theatre,
+Vancouver, August 6.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<em>Assimilations</em>, for pianist Beatrice de Trenqualye, 10m; and
+<em>100, 91, 84, 81, 72, 69, 58, 44, 37, 38, 42, 21, 28, 12, 7</em>, for
+pianist Nadia Schibli, 10m30s, Canadian Music Centre, Vancouver, July 5.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<em>Why——</em>, voice &amp; chamber group Erato Ensemble, 7m30s, Sonic
+Boom festival, The Annex, Vancouver, March 19.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Gourd Motor Mindscape</em>, classical guitar &amp; surface
+transducer, 10m50s, Canadian Music Centre, Toronto, December; Clara
+Lichtenstein Hall, Montreal, January 19, 2017; Canadian Music Centre,
+Vancouver, March 15, 2017; Martin Batchelor Gallery, Victoria, April 19,
+2018.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Feral Instruments</em>, loudspeakers &amp; mechatronic instruments,
+14m04s, Djavid Mowafaghian World Art Centre, Vancouver, December 3.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Don’t Make Me Talk About Politics</em>, guitar &amp; surface
+transducer, 10m, The Gold Saucer, Vancouver, October 24.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Flatness</em>, spoken word &amp; loudspeakers, co-created with Julia
+Siedlanowska, 1h10m, SFU Woodward’s Soundstage, Vancouver, August 25–26.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Return Main</em>, chamber ensemble, 5m19s, 918 Bathurst Centre,
+Toronto, June 24.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Swear Jar</em>, drums, choreography &amp; telematic audio, 12m,
+co-created with Minah Lee &amp; Maren Lisac, VIVO Media Arts Centre,
+Vancouver, June 3.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+<em>Domestic Instruments</em>, loudspeakers, 9m26s, SFU Woodward’s
+Studio T, Vancouver, April 15.
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+<em>Kyrie</em>, vocalist Dorothea Hayley &amp; loudspeakers, 18m50s, SFU
+Woodward’s Studio T, Vancouver, April 24–25.
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+<em>In the Minimal Senses</em>, loudspeakers, 7m59s, Western Front,
+Vancouver, November 22.
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+<em>Sonatinas</em>, piano, 6m30s; <em>Three Songs</em>, voice &amp;
+piano, 3m; <em>Serial Box</em>, chamber ensemble, 4m30s; Dissonant
+Disco, Merge, Vancouver, August 15.
+</dd></div>
+<div class="led-row"><dt>2014</dt>
+<dd>
+<em>juxtapositions, collisions, juxtapositions “between” objects,
+collisions</em>, McGill Brass Ensemble, 7m5s, Pollack Hall, Montreal,
+April 30.
+</dd></div>
+<div class="led-row"><dt>2013</dt>
+<dd>
+<em>Terms of Entwinement</em>, saxophone &amp; percussion, 3m20s,
+Montreal Contemporary Music Lab, Conservatoire de musique de Montréal,
+July 22.
+</dd></div>
+<div class="led-row"><dt>2013</dt>
+<dd>
+<em>(avec nous) dans la rue</em>, cello, 59s, Jan Hus United Church, New
+York, May 19; Virtual Concert Halls, online, August 15, 2020.
+</dd></div>
+<div class="led-row"><dt>2013</dt>
+<dd>
+<em>In Prophecy</em>, trumpet &amp; loudspeakers, 8m, Tanna Schulich
+Hall, Montreal, April 7–8.
+</dd></div>
+<div class="led-row"><dt>2013</dt>
+<dd>
+<em>Noisekiller</em>, McGill Brass Ensemble, 45s, Redpath Hall,
+Montreal, November 24.
+</dd></div>
+<div class="led-row"><dt>2012</dt>
+<dd>
+<em>Immurement</em>, loudspeakers, 5m7s, Clara Lichtenstein Hall,
+Montreal, December 5.
+</dd></div>
+</dl>
+<h2 id="as-contributor">As Contributor</h2>
+<h3 id="audio">Audio</h3>
+<dl>
+<div class="led-row"><dt>2022</dt>
+<dd>
+Composer, <em>An Honourable Man</em>, short film directed by Ryan
+Curtis, Run N Gun 48-hour Film Festival, Vancouver.
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+Composer, <em>Sen Nemuri</em>, stage play directed by Kanon Hewitt &amp;
+Julia Siedlanowska, June–July, workshop at Carousel Theatre, Vancouver.
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+Sound Designer, <em>Attachment Theory Through the Lens of a Bear</em>,
+audio play created by Julia Siedlanowska, April, Hive Performance
+Collective, Vancouver.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+Composer, <em>Nom Nom Gnomes</em>, audio play directed by Manami Hara
+&amp; Kanon Hewitt, December, Carousel Theatre, Vancouver.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+Sound Designer, <em>Beirut</em>, stage play directed by Louisa Phung,
+October, Vancouver Fringe.
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+Composer, <em>Date Night Facades</em>, short film directed by Yvonne
+Chapman, April.
+</dd></div>
+<div class="led-row"><dt>2019</dt>
+<dd>
+Sound Designer, <em>Unsettled</em>, Theatre Terrific, KW Studios,
+Vancouver, July.
+</dd></div>
+<div class="led-row"><dt>2018</dt>
+<dd>
+Composer, <em>Sonata d’été</em>, dance duet, 8m10s, choreographed by
+Marc Arboleda, November 23–24, Kababayang Pilipino, The Vancouver
+Playhouse.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+Sound Designer, <em>ROAD</em>, stage play, 10m, directed by Davey
+Calderon, About Love Festival, Havana Theatre, Vancouver, June 13–17.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+Composer, <em>The Green Wanderer</em>, Vancouver Polish Theatre,
+May–August.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+Composer, <em>Pas de Deux</em>, dance duet, 5m, choreographed by Marc
+Arboleda, The Gold Saucer, Vancouver, April 15–16.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+Composer, <em>Plus Ultra</em>, solo dance, 9m50s, choreographed by Marc
+Arboleda, Moberly Arts &amp; Cultural Centre, Vancouver, March 2–3.
+</dd></div>
+<div class="led-row"><dt>2016</dt>
+<dd>
+Composer, “The Exquisite Corpse,” MAYCE Dance, The Beaumont, Vancouver,
+January 29; Fei &amp; Milton Wong Experimental Theatre, Vancouver, April
+6–9, 2016.
+</dd></div>
+</dl>
+<h3 id="video">Video</h3>
+<dl>
+<div class="led-row"><dt>2016</dt>
+<dd>
+Projection Designer, <em>Any Night</em>, Stone’s Throw Theatre,
+Vancouver, June.
+</dd></div>
+<div class="led-row"><dt>2015–16</dt>
+<dd>
+Software Developer, <em>Musebot Chill-Out Session</em>, generative music
+project directed by Arne Eigenfeldt. Presented at ISEA 2015 (Vancouver),
+SMC 2016 (Hamburg), NIME 2016 (Brisbane).
+</dd></div>
+<div class="led-row"><dt>2015</dt>
+<dd>
+Software Developer, <em>Fake Gems</em>, performance directed by The
+Party, Inter-Urban Gallery, Vancouver, August 28.
+</dd></div>
+</dl>
+<h3 id="performer">Performer</h3>
+<dl>
+<div class="led-row"><dt>2008–18</dt>
+<dd>
+Drummer: Harley Small, Vancouver, 2017–18; Dumbpop, Vancouver, April
+2018; Reagan Mutt, Vancouver, March–April 2018; Sister Island, Montreal,
+2011–14; Arpa Nova Ensemble, Ottawa, 2008–10.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+Actor, <em>Dark Matter</em>, interactive play directed by Mily Mumford,
+The James Black Gallery, Vancouver, October–November.
+</dd></div>
+</dl>
+<h3 id="technician-labour">Technician &amp; Labour</h3>
+<dl>
+<div class="led-row"><dt>2018–21</dt>
+<dd>
+BC motion picture industry: craftsperson (IATSE 891 permittee lamp
+operator, set dresser, construction labourer) &amp; production assistant
+(Director’s Guild of Canada BC permittee locations production assistant
+and van driver).
+</dd></div>
+<div class="led-row"><dt>2019</dt>
+<dd>
+Greater Vancouver live entertainment industry: stagehand (IATSE 118
+permittee).
+</dd></div>
+</dl>
+<h1 id="professional-development-in-teaching">Professional Development
+in Teaching</h1>
+<dl>
+<div class="led-row"><dt>2025</dt>
+<dd>
+Alexander College Teaching Online Certificate (ACTOC).
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+Effective Learning Management System Design (E-LMS), Alexander College.
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+Certificate in University Teaching and Learning, Simon Fraser
+University.
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+Instructional Skills Workshop, Simon Fraser University.
+</dd></div>
+<div class="led-row"><dt>2014</dt>
+<dd>
+Elementary Piano Pedagogy Certificate, Royal Conservatory of Music.
+</dd></div>
+</dl>
+<h1 id="memberships">Memberships</h1>
+<ul>
+<li>Canadian Game Studies Association (2022–)</li>
+<li>Society for Literature, Science &amp; the Arts (2023–)</li>
+<li>Society for Cinema and Media Studies (2023–)</li>
+<li>Canadian Sociological Association (2024–)</li>
+<li>Film and Media Studies Association of Canada (2024–)</li>
+<li>Digital Games Research Association (2023–2024)</li>
+</ul>
+<h1 id="languages">Languages</h1>
+<ul>
+<li>English (converse, write, detect genAI)</li>
+<li>French (converse, write)</li>
+<li>Read with dictionary: German, Spanish, Italian, Portuguese</li>
+</ul>
+<h1 id="software-and-programming-languages">Software and Programming
+Languages</h1>
+<p>HTML, CSS, JavaScript (Node.js), Lua, PHP, Max/MSP; various digital
+audio workstations (Reaper, Ableton, Pro Tools…), non-linear editing
+applications (Resolve, Premiere, Final Cut…), music scoring applications
+(MuseScore, Finale…), productivity tools (Microsoft Office, Google
+Workspace, Zotero…), learning management systems (Canvas) and content
+management systems (WordPress), with ability to learn, script, and
+integrate additional software as needed.</p>
+</div>
+<!-- menubar.html — the fixed top menubar appended to the WEB view only.
+     build.py fills Matthew Reid Horrigan · CV and Horrigan_CV.pdf, then splices this in via
+     pandoc --include-after-body. It is NOT in the print HTML, and @media print
+     hides it anyway, so it never reaches the PDF. Self-contained markup + style
+     + a few lines of toggle JS (Web <-> embedded PDF preview). Shared by every
+     document type. (Ids/classes keep a cv- prefix for historical reasons; they
+     are just names and apply unchanged to any document.) -->
+<div id="cv-menubar" role="navigation" aria-label="Document views">
+  <span class="cv-mb-title">Matthew Reid Horrigan · CV</span>
+  <span class="cv-mb-actions">
+    <button type="button" id="cv-tab-web" class="cv-mb-tab is-active" aria-pressed="true">Web</button>
+    <button type="button" id="cv-tab-pdf" class="cv-mb-tab" aria-pressed="false">Print / PDF</button>
+    <a id="cv-mb-download" class="cv-mb-dl" href="Horrigan_CV.pdf" download>Download PDF ↓</a>
+  </span>
+</div>
+<div id="cv-pdf-pane" hidden>
+  <iframe role="img" id="cv-pdf-frame" title="Printable PDF (paginated)" src="about:blank"></iframe>
+</div>
+<style>
+:root { --cv-mb-h: 46px; }
+body { padding-top: var(--cv-mb-h); }
+#cv-menubar {
+position: fixed; inset: 0 0 auto 0; height: var(--cv-mb-h);
+display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+padding: 0 clamp(12px, 4vw, 28px);
+background: #fff; border-bottom: 1px solid var(--rule, #d9d9d9);
+font-family: var(--sans-font, system-ui, sans-serif); z-index: 1000;
+box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+}
+.cv-mb-title {
+font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+color: var(--muted, #595959);
+white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cv-mb-actions { display: flex; align-items: center; gap: .35rem; flex: none; }
+.cv-mb-tab {
+font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer;
+border: 1px solid transparent; border-radius: 999px; padding: .3rem .85rem;
+color: var(--muted, #595959); background: transparent;
+}
+.cv-mb-tab:hover { color: var(--accent, #6b1f2a); }
+.cv-mb-tab.is-active { color: #fff; background: var(--accent, #6b1f2a); }
+.cv-mb-dl {
+font-size: .82rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+color: var(--accent, #6b1f2a); border: 1px solid var(--accent, #6b1f2a);
+border-radius: 999px; padding: .3rem .85rem; margin-left: .25rem;
+}
+.cv-mb-dl:hover { color: #fff; background: var(--accent, #6b1f2a); }
+#cv-pdf-pane { position: fixed; inset: var(--cv-mb-h) 0 0 0; z-index: 900; background: #525659; }
+#cv-pdf-frame { display: block; width: 100%; height: 100%; border: 0; }
+@media (max-width: 640px) { .cv-mb-title { display: none; } }
+@media print {
+#cv-menubar, #cv-pdf-pane { display: none !important; }
+body { padding-top: 0; }
+#screen-view { zoom: 1; }
+}
+</style>
+<script>
+(function () {
+  var web = document.getElementById('cv-tab-web');
+  var pdf = document.getElementById('cv-tab-pdf');
+  var pane = document.getElementById('cv-pdf-pane');
+  var frame = document.getElementById('cv-pdf-frame');
+  var screenView = document.getElementById('screen-view');
+  if (!web || !pdf || !pane || !frame) return;
+  var PDF_URL = 'Horrigan_CV.pdf';
+
+  function setView(which) {
+    var showPdf = (which === 'pdf');
+    if (showPdf && frame.getAttribute('src') !== PDF_URL) {
+      frame.setAttribute('src', PDF_URL);   // lazy-load the PDF on first open
+    }
+    pane.hidden = !showPdf;
+    if (screenView) screenView.style.display = showPdf ? 'none' : '';
+    pdf.classList.toggle('is-active', showPdf);
+    web.classList.toggle('is-active', !showPdf);
+    pdf.setAttribute('aria-pressed', String(showPdf));
+    web.setAttribute('aria-pressed', String(!showPdf));
+    try { history.replaceState(null, '', showPdf ? '#pdf' : '#web'); } catch (e) {}
+  }
+
+  web.addEventListener('click', function () { setView('web'); });
+  pdf.addEventListener('click', function () { setView('pdf'); });
+  if (location.hash === '#pdf') setView('pdf');
+})();
+</script>
+</body>
+</html>

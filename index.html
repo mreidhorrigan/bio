@@ -132,6 +132,36 @@
 		margin-bottom: clamp(1rem,8vw,2rem);
         }
 
+	.menubar{
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: clamp(6px, 3vw, 26px);
+		padding: 10px 6px;
+		margin-bottom: clamp(1rem, 6vw, 2rem);
+		font-family: "tahoma", "arial", sans-serif;
+		font-variant-caps: small-caps;
+		font-size: max(12pt, 1.8vh);
+		background: rgba(255,255,255,.85);
+		backdrop-filter: blur(6px);
+		box-shadow: 0 4px 0 0 var(--favcolor);
+	}
+
+	.menubar a{
+		text-decoration: none;
+		padding: 2px 10px;
+		border-radius: 25% 5% 25% 5%;
+		white-space: nowrap;
+	}
+
+	.menubar a:hover, .menubar a[aria-current="page"]{
+		background: var(--favcolor);
+		filter: drop-shadow(0px 0px 5px var(--favcolor));
+	}
+
 	span.blacklight, span.blacklight *, ::selection{
 		color:black;
 		background:var(--favcolor);
@@ -162,7 +192,15 @@
 
 	<div class="flare"></div>
 
-	<h1>Matt H</span><span class="blacklight">orrigan</h1>
+	<nav class="menubar">
+		<a href="index.html" aria-current="page">Home</a>
+		<a href="Horrigan_CV.html">CV</a>
+		<a href="https://github.com/mreidhorrigan/Clod-Bathos-Superior-Machine-An-LM-IDN">Clod Bathos</a>
+		<a href="https://soundcloud.com/matt_horrigan">Music</a>
+		<a href="https://scholar.google.ca/citations?user=g8USNu8AAAAJ&amp;hl=en">Research</a>
+	</nav>
+
+	<h1>Matt H<span class="blacklight">orrigan</span></h1>
 	<p class="subtitle">mhorriga [at] sfu [dot] ca</p>
 	<div class="favpicture"></div>
 
@@ -184,7 +222,7 @@
 	</div>
 
 	<div class="catchphrase">
-		<p>My <span class="blacklight">CV is <a href="Horrigan_CV.pdf" target="_blank">here</span></a>. Email me at mhorriga [at] sfu [dot] ca.</p>
+		<p>My <span class="blacklight">CV is <a href="Horrigan_CV.html" target="_blank">here</a></span> (<a href="Horrigan_CV.pdf" target="_blank">PDF</a>). Email me at mhorriga [at] sfu [dot] ca.</p>
 	</div>
 
   </body>
