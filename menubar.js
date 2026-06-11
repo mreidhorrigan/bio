@@ -20,6 +20,7 @@
   "use strict";
 
   var GAMES = [
+    ["Autofac: Rad Shipping — echolocation warehouse haul (Mac)", "autofac.html"],
     ["Clod Bathos, Superior Machine",
      "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"],
     ["Appraising the Pedagogical Value of Audiogames (CGSA 2026)",
@@ -41,14 +42,19 @@
     ["Research", "https://scholar.google.ca/citations?user=g8USNu8AAAAJ&hl=en"]
   ];
 
+  /* All menubar metrics are pinned in px ON PURPOSE: pages set different root font
+   * sizes (CV: html{font-size:14px}; index/MCQer: 16px default) and different
+   * --sans-font stacks, so rem/var-based sizing rendered a different bar on every
+   * page. px + a fixed family = pixel-identical menubar site-wide.
+   * (13px / 5.5px 13px ≈ the old .82rem / .34rem .8rem at a 16px root.) */
   var CSS = [
     ":root{ --mh-blue:#c3f0ff; }",
     ".mh-nav{ display:flex; align-items:center; flex-wrap:wrap; gap:2px 4px; min-width:0; }",
     ".mh-nav a, .mh-nav summary{",
-    "  font-family:var(--sans-font, system-ui, -apple-system, 'Segoe UI', sans-serif);",
-    "  font-size:.82rem; font-weight:600; line-height:1.1;",
+    "  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;",
+    "  font-size:13px; font-weight:600; line-height:1.1;",
     "  color:#595959; text-decoration:none; cursor:pointer; white-space:nowrap;",
-    "  padding:.34rem .8rem; border-radius:25% 5% 25% 5%;",
+    "  padding:5.5px 13px; border-radius:25% 5% 25% 5%;",
     "}",
     ".mh-nav a:hover, .mh-nav summary:hover, .mh-nav a[aria-current='page'], .mh-nav summary[aria-current='page'], .mh-dd[open] summary{",
     "  color:#000; background:var(--mh-blue);",
@@ -69,12 +75,12 @@
     /* standalone bar (pages without the CV builder's #cv-menubar) */
     "#mh-menubar{",
     "  position:fixed; inset:0 0 auto 0; min-height:46px;",
-    "  display:flex; align-items:center; gap:1rem; padding:4px clamp(12px,4vw,28px);",
+    "  display:flex; align-items:center; gap:16px; padding:4px clamp(12px,4vw,28px);",
     "  background:#fff; border-bottom:1px solid #d9d9d9; box-shadow:0 1px 4px rgba(0,0,0,.05);",
     "  z-index:1000;",
     "}",
-    /* when spliced into the CV bar: let it wrap instead of clipping */
-    "#cv-menubar{ height:auto !important; min-height:46px; flex-wrap:wrap; padding-top:4px; padding-bottom:4px; }",
+    /* when spliced into the CV bar: let it wrap instead of clipping; pin the same gap */
+    "#cv-menubar{ height:auto !important; min-height:46px; flex-wrap:wrap; padding-top:4px; padding-bottom:4px; gap:16px; }",
     "#cv-menubar .mh-nav{ flex:1 1 auto; }"
   ].join("\n");
 

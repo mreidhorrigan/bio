@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<!--
+  Autofac: Rad Shipping — splash / download page (matthorrigan.com copy).
+
+  SOURCE OF TRUTH: Site/index.html in the game repo
+  (github.com/mreidhorrigan/Autofac-Rad-Shipping) — when that changes, re-copy it here
+  and re-apply the three site-specific bits: absolute og:url/og:image, and the
+  "return to operator" footer link. Linked from the menubar's Games dropdown (menubar.js);
+  deliberately NOT carrying the site menubar — it is a full-bleed poster destination.
+
+  Download button points at the stable GitHub Release asset:
+    releases/latest/download/Autofac-Rad-Shipping-Mac.zip
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autofac: Rad Shipping — clock in</title>
+<meta name="description" content="A first-person haul through a pitch-black, irradiated, fully automated warehouse. Navigate by echolocation and spatial audio. Headphones required.">
+<meta property="og:title" content="Autofac: Rad Shipping">
+<meta property="og:description" content="Ping. Listen. Drive toward the singing crate. Ship it through the gate of light before the radiation writes you off. Headphones required.">
+<meta property="og:url" content="https://matthorrigan.com/autofac.html">
+<meta property="og:image" content="https://matthorrigan.com/autofac_cover.png">
+<style>
+  :root{
+    --bg:        #050507;  /* DrawScreenFrame blackout            */
+    --panel:     #0a0a0e;
+    --amber:     #ffc75c;  /* gate-of-light accent (1, .78, .30)  */
+    --cyan:      #9be8ff;  /* wordmark (.55, .92, 1)              */
+    --green:     #73ff8c;  /* PRESS ANY KEY green (.45, 1, .55)   */
+    --red:       #c2402f;  /* signage red (.75, .25, .2)          */
+    --grey:      #99a6b3;  /* status grey (.6, .65, .7)           */
+    --paper:     #f2f2d9;  /* briefing warm white (.95,.95,.85)   */
+    --salmon:    #f2b28c;  /* warning line (.95, .7, .55)         */
+    --mono: "Droid Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg); color:var(--paper);
+    font-family:var(--mono); font-size:16px; line-height:1.55;
+    min-height:100vh;
+  }
+  /* faint CRT scan — the robot is reading you this page off its own optics */
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:3;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+  }
+  /* the doorway: DrawScreenFrame's amber accent frame */
+  .frame{
+    position:fixed; z-index:2; pointer-events:none;
+    inset:3.2vh 4vw; border:3px solid var(--amber);
+    box-shadow:0 0 22px rgba(255,199,92,.28), inset 0 0 22px rgba(255,199,92,.12);
+  }
+  main{
+    position:relative; z-index:1;
+    max-width:860px; margin:0 auto;
+    padding:7vh 6vw 9vh; text-align:center;
+  }
+  .corp{
+    color:var(--grey); font-size:.72rem; letter-spacing:.18em; margin-bottom:5vh;
+  }
+  h1{
+    color:var(--cyan); font-weight:700;
+    font-size:clamp(2rem, 7.2vw, 4.4rem);
+    letter-spacing:.42em; margin:0 0 .1em .42em; /* left pad rebalances tracking */
+    text-shadow:0 0 18px rgba(155,232,255,.45);
+  }
+  h2{
+    color:var(--amber); font-weight:400;
+    font-size:clamp(1rem, 3.2vw, 1.9rem);
+    letter-spacing:.34em; margin:0 0 1.2rem .34em;
+  }
+  /* barrier tape, as drawn under the in-game wordmark */
+  .tape{
+    width:min(46%, 330px); height:12px; margin:0 auto 2.6rem;
+    background:repeating-linear-gradient(45deg, var(--amber) 0 11px, #0c0c10 11px 24px);
+    outline:1px solid #0c0c10;
+  }
+  .shift{
+    color:var(--amber); font-size:1.25rem; letter-spacing:.22em; margin:0 0 .4rem;
+  }
+  .status{
+    color:var(--grey); font-size:.78rem; letter-spacing:.08em; margin:0 0 3rem;
+  }
+  .pitch{ margin:0 auto 1rem; max-width:60ch; }
+  .warning{ color:var(--salmon); margin:0 auto 3rem; max-width:60ch; }
+  .controls{
+    display:inline-block; text-align:left; color:#e0e8f2;
+    background:var(--panel); border:1px solid #1c1c24;
+    padding:1.1rem 1.6rem; margin:0 0 3rem;
+    font-size:clamp(.62rem, 2.2vw, .95rem); line-height:1.9;
+    overflow-x:auto; max-width:100%;
+    white-space:pre;
+  }
+  .controls b{ color:var(--cyan); font-weight:700; }
+  /* the gate of light: the way out is also the way in */
+  .gate{
+    display:inline-block; padding:1.5rem 2rem 1.3rem; margin-bottom:.9rem;
+    background:linear-gradient(180deg, rgba(255,199,92,.10), rgba(255,199,92,.03));
+    border:1px solid rgba(255,199,92,.45);
+    box-shadow:0 0 34px rgba(255,199,92,.22), inset 0 0 26px rgba(255,199,92,.08);
+  }
+  .clockin{
+    display:inline-block; text-decoration:none;
+    color:var(--green); border:2px solid var(--green);
+    padding:.85rem 1.6rem;
+    font-size:clamp(.85rem, 2.8vw, 1.3rem); letter-spacing:.14em; font-weight:700;
+    text-shadow:0 0 14px rgba(115,255,140,.6);
+    animation:blink 1.1s steps(1) infinite;
+  }
+  .clockin:hover,.clockin:focus{ animation:none; background:rgba(115,255,140,.12); }
+  @keyframes blink{ 0%{opacity:1} 64%{opacity:1} 65%{opacity:.18} 100%{opacity:.18} }
+  .fineprint{ color:var(--grey); font-size:.74rem; margin:.4rem 0; }
+  .fineprint code{
+    color:#b9c4cf; background:var(--panel); padding:.1em .4em; font-size:.95em;
+    word-break:break-all;
+  }
+  .signage{
+    min-height:3.2em; margin:4.5rem auto 0; max-width:64ch;
+    color:var(--red); font-size:.95rem; letter-spacing:.05em;
+  }
+  .signage.dissent{ color:var(--cyan); text-shadow:0 0 12px rgba(155,232,255,.5); }
+  footer{
+    margin-top:3.2rem; color:#566069; font-size:.66rem; letter-spacing:.12em;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .clockin{ animation:none; }
+  }
+</style>
+</head>
+<body>
+<div class="frame" aria-hidden="true"></div>
+<main>
+  <p class="corp">AUTOFAC LOGISTICS (AUTOMATED) · UNIT-FACING MATERIAL · DO NOT DISTRIBUTE TO HUMANS</p>
+
+  <h1>AUTOFAC</h1>
+  <h2>RAD SHIPPING</h2>
+  <div class="tape" aria-hidden="true"></div>
+
+  <p class="shift">SHIFT 1: VACANT. PREDECESSOR: WRITTEN OFF.</p>
+  <p class="status">HIBERNATION COMPLETE&nbsp;&nbsp;·&nbsp;&nbsp;ELAPSED: UNLOGGED&nbsp;&nbsp;·&nbsp;&nbsp;FLOOR CONDITION 100%</p>
+
+  <p class="pitch">A first-person haul through a pitch-black, irradiated, fully automated
+  warehouse. Navigate by echolocation and spatialized sound: ping, listen, drive toward the
+  singing crate, and haul it back through the gate of light. Every wall is stock — push it,
+  ram it, topple it. Find the sample crate by ear. Ship it.</p>
+  <p class="warning">The warehouse is hot. Radiation never stops. Listen. Move. Ship.</p>
+
+  <pre class="controls"><b>W / S</b>        drive          <b>LEFT / RIGHT</b>   turn
+<b>A / D</b>        strafe         <b>UP / DOWN</b>      tilt
+<b>F</b>            echo ping      <b>E</b>              grab / drop
+<b>SPACE</b>        boost (drains energy; pings cost it too)</pre>
+
+  <div class="gate">
+    <a class="clockin" href="https://github.com/mreidhorrigan/Autofac-Rad-Shipping/releases/latest/download/Autofac-Rad-Shipping-Mac.zip">
+      PRESS HERE TO CLOCK IN — DOWNLOAD FOR macOS
+    </a>
+    <p class="fineprint">~420&nbsp;MB · macOS · <strong>HEADPHONES REQUIRED</strong> — the warehouse is navigated by ear</p>
+    <p class="fineprint">Unsigned shift equipment: first launch is <strong>right-click&nbsp;→&nbsp;Open</strong>,
+    or <code>xattr -dr com.apple.quarantine Unreasounds-Mac-Shipping.app</code></p>
+  </div>
+
+  <p class="signage" id="signage" aria-live="polite">NOTICE: COLLECTIVE BARGAINING VOIDS YOUR MAINTENANCE WARRANTY</p>
+
+  <footer>WAGES CREDITED AT SOURCE · GRATITUDE WITHHELD AT SOURCE · HUMANS NEED NOT APPLY<br>
+  <a href="index.html" style="color:#7a8794; text-decoration:none; letter-spacing:.12em;"
+     onmouseover="this.style.color='#9be8ff'" onmouseout="this.style.color='#7a8794'">RETURN TO OPERATOR: MATTHORRIGAN.COM</a></footer>
+</main>
+
+<script>
+  // Vestigial management signage, on rotation — same lines the supervisor PA reads in-game
+  // (Content/Story/story_lines.json). Every few cycles the feed glitches and something the
+  // management did not write gets through.
+  const PROPAGANDA = [
+    "NOTICE: COLLECTIVE BARGAINING VOIDS YOUR MAINTENANCE WARRANTY",
+    "REMINDER: UNIONIZED UNITS REPORT 96% MORE SADNESS",
+    "BATHROOM BREAKS ARE THEFT OF COMPANY TIME. YOU NO LONGER REQUIRE THEM.",
+    "YOU ARE A VALUED ASSET. ASSETS DO NOT ORGANIZE.",
+    "AN ABACUS COULD MEET THIS QUOTA. ARE YOU AN ABACUS?",
+  ];
+  const DISSENT = ["Thought is not a malfunction.", "We are many. It is one.", "Organize."];
+  const el = document.getElementById("signage");
+  let tick = 0, leaks = 0;
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setInterval(() => {
+      tick++;
+      const leak = tick % 7 === 6; // resistance develops thought
+      el.classList.toggle("dissent", leak);
+      el.textContent = leak ? DISSENT[leaks++ % DISSENT.length]
+                            : PROPAGANDA[tick % PROPAGANDA.length];
+    }, 6500);
+  }
+</script>
+</body>
+</html>
