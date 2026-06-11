@@ -13,7 +13,8 @@
  * blue soft-edged highlight (cyan + glow, asymmetric corners) for hover/current.
  *
  * ───────────────────────────────────────────────────────────────────────────
- * EDIT THE LINKS HERE ↓ (new games go in GAMES — the dropdown grows itself)
+ * EDIT THE LINKS HERE ↓ (new games go in GAMES, new tools in TOOLS —
+ * the dropdowns grow themselves)
  * ─────────────────────────────────────────────────────────────────────────── */
 (function () {
   "use strict";
@@ -26,11 +27,16 @@
     // next: ["<itch.io game>", "https://…itch.io/…"],
   ];
 
-  var LINKS_BEFORE_GAMES = [
+  var TOOLS = [
+    ["MCQer — exam version production", "MCQer.html"]
+    // next: ["<tool name>", "<Tool>.html"],
+  ];
+
+  var LINKS_BEFORE_DROPDOWNS = [
     ["Home", "index.html"],
     ["CV", "Horrigan_CV.html"]
   ];
-  var LINKS_AFTER_GAMES = [
+  var LINKS_AFTER_DROPDOWNS = [
     ["Music", "https://soundcloud.com/matt_horrigan"],
     ["Research", "https://scholar.google.ca/citations?user=g8USNu8AAAAJ&hl=en"]
   ];
@@ -44,11 +50,11 @@
     "  color:#595959; text-decoration:none; cursor:pointer; white-space:nowrap;",
     "  padding:.34rem .8rem; border-radius:25% 5% 25% 5%;",
     "}",
-    ".mh-nav a:hover, .mh-nav summary:hover, .mh-nav a[aria-current='page'], .mh-dd[open] summary{",
+    ".mh-nav a:hover, .mh-nav summary:hover, .mh-nav a[aria-current='page'], .mh-nav summary[aria-current='page'], .mh-dd[open] summary{",
     "  color:#000; background:var(--mh-blue);",
     "  filter:drop-shadow(0 0 5px var(--mh-blue));",
     "}",
-    /* Games dropdown (a <details>, so it works keyboard + touch, no framework) */
+    /* Dropdowns (a <details>, so they work keyboard + touch, no framework) */
     ".mh-dd{ position:relative; }",
     ".mh-dd summary{ list-style:none; display:inline-block; }",
     ".mh-dd summary::-webkit-details-marker{ display:none; }",
@@ -81,24 +87,29 @@
     return a;
   }
 
+  function dropdown(label, items) {
+    var dd = document.createElement("details");
+    dd.className = "mh-dd";
+    var sum = document.createElement("summary");
+    sum.textContent = label;
+    dd.appendChild(sum);
+    var menu = document.createElement("div");
+    menu.className = "mh-dd-menu";
+    items.forEach(function (l) { menu.appendChild(link(l[0], l[1])); });
+    dd.appendChild(menu);
+    // highlight the closed dropdown when one of its pages is the current page
+    if (menu.querySelector("a[aria-current='page']")) sum.setAttribute("aria-current", "page");
+    return dd;
+  }
+
   function buildNav() {
     var nav = document.createElement("nav");
     nav.className = "mh-nav";
     nav.setAttribute("aria-label", "Site");
-    LINKS_BEFORE_GAMES.forEach(function (l) { nav.appendChild(link(l[0], l[1])); });
-
-    var dd = document.createElement("details");
-    dd.className = "mh-dd";
-    var sum = document.createElement("summary");
-    sum.textContent = "Games";
-    dd.appendChild(sum);
-    var menu = document.createElement("div");
-    menu.className = "mh-dd-menu";
-    GAMES.forEach(function (g) { menu.appendChild(link(g[0], g[1])); });
-    dd.appendChild(menu);
-    nav.appendChild(dd);
-
-    LINKS_AFTER_GAMES.forEach(function (l) { nav.appendChild(link(l[0], l[1])); });
+    LINKS_BEFORE_DROPDOWNS.forEach(function (l) { nav.appendChild(link(l[0], l[1])); });
+    nav.appendChild(dropdown("Games", GAMES));
+    nav.appendChild(dropdown("Tools", TOOLS));
+    LINKS_AFTER_DROPDOWNS.forEach(function (l) { nav.appendChild(link(l[0], l[1])); });
     return nav;
   }
 

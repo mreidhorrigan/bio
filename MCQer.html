@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MCQer v11</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- the one site-wide menubar (links + dropdowns live in this file) -->
+  <script src="menubar.js" defer></script>
+  <style>
+    /* ── Palette ──────────────────────────────────────────────────────────────
+       Navy        #0C2F56   primary text, buttons, badges
+       Deep Blue   #152A4E   button hover
+       Dark Red    #B2241A   eyebrow labels, dragover, error
+       Gold        #F2CC56   progress bar, gold accents
+       Gold dark   #D4A800   confirmed upload border (contrast on white)
+       Off-white   #F7F5F0   page background
+       Blue tint   #EEF3F8   version row, preview bg
+    ────────────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #F7F5F0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 4px 28px rgba(12,47,86,0.13);
+      padding: 2.5rem 2.5rem 2rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* ── Masthead ─────────────────────────────────────────────────────────── */
+    .masthead { margin-bottom: 1.75rem; }
+    .masthead .eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #B2241A; margin-bottom: 0.3rem;
+    }
+    h1 {
+      font-size: 1.8rem; font-weight: 800; color: #0C2F56;
+      margin-bottom: 0.2rem; line-height: 1.15;
+    }
+    h1 em { font-style: normal; color: #B2241A; }
+    .subtitle { color: #4a5e74; font-size: 0.92rem; line-height: 1.5; }
+
+    /* ── Upload sections ─────────────────────────────────────────────────── */
+    .upload-section { margin-bottom: 1.25rem; }
+    .upload-label {
+      font-size: 0.72rem; font-weight: 700; color: #B2241A;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .upload-label .optional {
+      font-weight: 500; text-transform: none; letter-spacing: 0;
+      background: #EEF3F8; color: #0C2F56; font-size: 0.72rem;
+      padding: 0.1rem 0.45rem; border-radius: 4px;
+    }
+    .drop-zone {
+      border: 2px dashed #C8D8E8;
+      border-radius: 10px;
+      padding: 1.4rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      color: #0C2F56;
+      background: #FFFFFF;
+    }
+    .drop-zone.compact { padding: 0.9rem 1.5rem; }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: #B2241A;
+      background: #fdf3f2;
+    }
+    .drop-zone.has-file {
+      border-color: #D4A800;
+      border-style: solid;
+      background: #fffbee;
+    }
+    .drop-zone svg { margin-bottom: 0.5rem; }
+    .drop-zone p { font-size: 0.9rem; color: #0C2F56; }
+    .drop-zone span.cta { color: #0C2F56; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+    .drop-zone .file-name { color: #7a6000; font-weight: 700; font-size: 0.88rem; }
+    .drop-zone .hint { font-size: 0.76rem; color: #7a8fa6; margin-top: 0.3rem; }
+    input[type=file] { display: none; }
+
+    /* ── Status bar ──────────────────────────────────────────────────────── */
+    #status {
+      font-size: 0.88rem; margin-bottom: 1rem; padding: 0.5rem 0.8rem;
+      border-radius: 6px; display: none; border-left: 3px solid transparent;
+    }
+    #status.info    { display: block; background: #EEF3F8; color: #0C2F56; border-color: #0C2F56; }
+    #status.success { display: block; background: #fffbee; color: #7a6000; border-color: #D4A800; }
+    #status.error   { display: block; background: #fdf3f2; color: #B2241A; border-color: #B2241A; }
+
+    /* ── Question preview ────────────────────────────────────────────────── */
+    #preview { display: none; margin-bottom: 1.25rem; }
+    #preview .preview-header {
+      font-size: 0.72rem; font-weight: 700; color: #B2241A;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;
+    }
+    #preview-list {
+      max-height: 180px; overflow-y: auto;
+      border: 1px solid #C8D8E8; border-radius: 8px;
+      padding: 0.75rem; font-size: 0.85rem; color: #0C2F56; line-height: 1.5;
+      background: #EEF3F8;
+    }
+    .q-item { margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid #C8D8E8; }
+    .q-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .q-text { font-weight: 700; color: #0C2F56; }
+    .q-opts { color: #4a5e74; font-size: 0.82rem; margin-top: 0.2rem; }
+    .q-opts .no-opts { font-style: italic; color: #7a8fa6; }
+
+    /* ── Format reference ────────────────────────────────────────────────── */
+    #format-ref {
+      display: block; margin-bottom: 1.25rem;
+      border: 1px solid #C8D8E8; border-radius: 8px; overflow: hidden;
+    }
+    #format-ref .format-header {
+      font-size: 0.72rem; font-weight: 700; color: #FFFFFF;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      background: #0C2F56; padding: 0.4rem 0.75rem;
+    }
+    #format-ref .format-body {
+      background: #FFFFFF; padding: 0.85rem 1rem; font-size: 0.83rem;
+      color: #0C2F56; line-height: 1.7;
+    }
+    .fmt-version {
+      text-align: center; font-weight: 800; font-size: 1rem;
+      color: #0C2F56; border-bottom: 1px solid #C8D8E8;
+      padding-bottom: 0.5rem; margin-bottom: 0.6rem;
+    }
+    .fmt-q  { font-weight: 700; color: #0C2F56; margin-bottom: 0.25rem; }
+    .fmt-opt { color: #0C2F56; padding-left: 1.2rem; line-height: 1.6; }
+    .fmt-opt.answer { color: #7a6000; }
+    .fmt-opt.answer::before { content: '[Answer.] '; font-size: 0.75rem; color: #D4A800; font-weight: 700; }
+    .fmt-divider {
+      border: none; border-top: 1px dashed #C8D8E8;
+      margin: 0.6rem 0;
+    }
+    .fmt-sa { font-weight: 700; color: #0C2F56; margin-bottom: 0.2rem; }
+    .fmt-sa-note { color: #7a8fa6; font-style: italic; font-size: 0.78rem; }
+    .fmt-pb {
+      text-align: center; font-size: 0.75rem; color: #B2241A;
+      border: 1px dashed #B2241A; border-radius: 4px;
+      padding: 0.2rem 0.5rem; margin: 0.4rem auto; display: inline-block;
+    }
+
+    /* ── Tag reference table ─────────────────────────────────────────────── */
+    .tag-group-title {
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #B2241A;
+      margin: 0.85rem 0 0.4rem;
+    }
+    .tag-group-title:first-child { margin-top: 0; }
+    .tag-table { width: 100%; border-collapse: collapse; margin-bottom: 0.3rem; }
+    .tag-table td {
+      vertical-align: top; padding: 0.28rem 0.5rem 0.28rem 0;
+      font-size: 0.8rem; line-height: 1.45; color: #0C2F56;
+      border-bottom: 1px solid #EEF3F8;
+    }
+    .tag-table td.tag-name {
+      white-space: nowrap; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.76rem; font-weight: 700; color: #152A4E;
+      width: 1%; padding-right: 0.9rem;
+    }
+    .tag-table td em { color: #B2241A; font-style: normal; font-weight: 700; }
+    .tag-example {
+      background: #F7F5F0; border: 1px solid #EEF3F8; border-radius: 6px;
+      padding: 0.55rem 0.7rem; margin: 0.2rem 0 0.4rem;
+      font-size: 0.78rem; line-height: 1.7; color: #0C2F56;
+    }
+    .tag-example .ex-tag {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.72rem; font-weight: 700; color: #B2241A; margin-right: 0.15rem;
+    }
+    .tag-note {
+      font-size: 0.76rem; color: #4a5e74; line-height: 1.6;
+      margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dashed #C8D8E8;
+    }
+
+    /* ── Version selector ────────────────────────────────────────────────── */
+    .version-row {
+      display: none; align-items: center; gap: 1rem; margin-bottom: 1.25rem;
+      padding: 0.85rem 1rem; background: #EEF3F8;
+      border: 1px solid #C8D8E8; border-radius: 8px;
+    }
+    .version-row label { font-size: 0.9rem; font-weight: 700; color: #0C2F56; white-space: nowrap; }
+    .version-stepper { display: flex; align-items: center; gap: 0.5rem; }
+    .version-stepper button {
+      width: 2rem; height: 2rem; padding: 0; border-radius: 6px;
+      background: #0C2F56; color: #FFFFFF; font-size: 1.1rem; font-weight: 700;
+      line-height: 1; flex: none; border: none; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .version-stepper button:hover { background: #152A4E; }
+    .version-stepper button:disabled { opacity: 0.35; cursor: not-allowed; }
+    #version-display { font-size: 1.15rem; font-weight: 800; color: #0C2F56; min-width: 1.5rem; text-align: center; }
+    .version-badges { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-left: auto; }
+    .badge {
+      font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.55rem;
+      border-radius: 999px; background: #0C2F56; color: #F2CC56;
+      border: 1px solid #0C2F56; letter-spacing: 0.03em;
+    }
+
+    /* ── Generate button ─────────────────────────────────────────────────── */
+    #btn-row { display: none; margin-bottom: 0.75rem; }
+    #btn-generate {
+      width: 100%; padding: 0.9rem; border: none; border-radius: 8px;
+      font-size: 0.97rem; font-weight: 700; cursor: pointer;
+      background: #0C2F56; color: #FFFFFF;
+      transition: background 0.18s, opacity 0.18s;
+      letter-spacing: 0.02em;
+    }
+    #btn-generate:hover { background: #152A4E; }
+    #btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ── Progress ─────────────────────────────────────────────────────────── */
+    #progress-wrap { display: none; margin-bottom: 0.75rem; }
+    #progress-bar-bg { background: #EEF3F8; border-radius: 999px; height: 8px; overflow: hidden; }
+    #progress-bar { height: 100%; background: #F2CC56; border-radius: 999px; width: 0%; transition: width 0.2s; }
+    #progress-label { font-size: 0.78rem; color: #4a5e74; margin-top: 0.35rem; text-align: center; }
+
+    /* ── Output legend ───────────────────────────────────────────────────── */
+    .output-legend { display: none; font-size: 0.8rem; color: #4a5e74; line-height: 1.9; }
+    .output-legend span { font-weight: 700; color: #0C2F56; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="masthead">
+    <div class="eyebrow">Exam Generator</div>
+    <h1>MCQer <em>v11</em></h1>
+    <p class="subtitle">Upload questions and an optional PDF coversheet. Downloads versioned answer keys and test forms as DOCX + PDF.</p>
+  </div>
+
+  <div class="upload-section">
+    <div class="upload-label">Questions document</div>
+    <div class="drop-zone" id="drop-zone-q">
+      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#C8D8E8" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+      </svg>
+      <p><span class="cta">Choose a .docx file</span> or drag it here</p>
+      <p class="hint">A .docx of tagged paragraphs — see the tag reference below the upload area.</p>
+    </div>
+    <input type="file" id="file-input-q" accept=".docx" />
+  </div>
+
+  <div class="upload-section">
+    <div class="upload-label">
+      PDF Coversheet
+      <span class="optional">optional</span>
+    </div>
+    <div class="drop-zone compact" id="drop-zone-c">
+      <p><span class="cta">Choose a PDF coversheet</span> or drag it here</p>
+      <p class="hint">Prepended to all PDF outputs as-is. Docx outputs have no coversheet.</p>
+    </div>
+    <input type="file" id="file-input-c" accept=".pdf" />
+  </div>
+
+  <div class="upload-section">
+    <div class="upload-label">
+      Images for [Image: …] tags
+      <span class="optional">optional</span>
+    </div>
+    <div class="drop-zone compact" id="drop-zone-img">
+      <p><span class="cta">Choose image files</span> or drag them here</p>
+      <p class="hint">Only needed for the [Image: filename] fallback. Images embedded directly in the Word document are detected automatically.</p>
+    </div>
+    <input type="file" id="file-input-img" accept="image/*" multiple />
+  </div>
+
+  <div id="status"></div>
+
+  <!-- Tag reference — always visible -->
+  <div id="format-ref">
+    <div class="format-header">Accepted tags &amp; expected format</div>
+    <div class="format-body">
+
+      <div class="tag-group-title">Core question tags</div>
+      <table class="tag-table">
+        <tr><td class="tag-name">[Question.]</td><td>Begins a question. Text after it (up to the next tag) is the question stem.</td></tr>
+        <tr><td class="tag-name">[Answer.]</td><td>Marks the correct option. <em>[Correct.]</em> works identically.</td></tr>
+        <tr><td class="tag-name">[Correct.]</td><td>Synonym for [Answer.].</td></tr>
+        <tr><td class="tag-name">[Distractor.]</td><td>Marks an incorrect option. Use one per wrong choice.</td></tr>
+      </table>
+      <div class="tag-example">
+        <span class="ex-tag">[Question.]</span> What is the powerhouse of the cell?
+        <span class="ex-tag">[Answer.]</span> Mitochondria.
+        <span class="ex-tag">[Distractor.]</span> Nucleus.
+        <span class="ex-tag">[Distractor.]</span> Ribosome.
+      </div>
+
+      <div class="tag-group-title">Layout tags</div>
+      <table class="tag-table">
+        <tr><td class="tag-name">[Page break.]</td><td>In its own paragraph: starts a new page. At the end of a question: leaves the rest of that page blank for writing.</td></tr>
+        <tr><td class="tag-name">[Paragraph.]</td><td>Marks the paragraph as scenario/description text (not a question, no number). Use for shared scenarios.</td></tr>
+        <tr><td class="tag-name">[Keep with previous.]</td><td>Used with [Paragraph.]: keeps this paragraph attached to the one before it for multi-paragraph scenarios.</td></tr>
+        <tr><td class="tag-name">[Not a question.]</td><td>Older synonym for [Paragraph.] — still accepted.</td></tr>
+        <tr><td class="tag-name">[Image: name.png]</td><td>Centers an uploaded image at this point. Optional — images embedded directly in the Word document are detected automatically (even on their own line, with no tag) and need no [Image:] tag.</td></tr>
+      </table>
+
+      <div class="tag-group-title">Version &amp; pooling tags</div>
+      <table class="tag-table">
+        <tr><td class="tag-name">[Only Version X.]</td><td>Before a question: it appears only in version X (A–E).</td></tr>
+        <tr><td class="tag-name">[Each version take N of the following options.]</td><td>Followed by [Option.] paragraphs: each version gets N of them, distinct across versions when enough exist.</td></tr>
+        <tr><td class="tag-name">[Scramble the order of the following options.]</td><td>Followed by [Option.] paragraphs: every version includes all, in a different order.</td></tr>
+        <tr><td class="tag-name">[Option.]</td><td>Prefixes a question that belongs to the pool directly above.</td></tr>
+      </table>
+
+      <div class="tag-note">
+        Options are lettered <strong>(a) (b) (c)…</strong> after scrambling. In the answer key the correct option is prefixed
+        <strong style="color:#D4A800">[Answer.]</strong>; the test form shows no marker. <u>Underlined</u> text and
+        embedded images are preserved in both outputs, and every page is numbered "Page X of Y".
+      </div>
+    </div>
+  </div>
+
+  <div id="preview">
+    <div class="preview-header">Questions found (<span id="q-count">0</span>)</div>
+    <div id="preview-list"></div>
+  </div>
+
+  <div class="version-row" id="version-row">
+    <label>Exam versions:</label>
+    <div class="version-stepper">
+      <button id="btn-minus" type="button">−</button>
+      <span id="version-display">3</span>
+      <button id="btn-plus" type="button">+</button>
+    </div>
+    <div class="version-badges" id="version-badges"></div>
+  </div>
+
+  <div id="btn-row">
+    <button id="btn-generate">⬇ Download All Versions</button>
+  </div>
+
+  <div id="progress-wrap">
+    <div id="progress-bar-bg"><div id="progress-bar"></div></div>
+    <div id="progress-label">Preparing…</div>
+  </div>
+
+  <div class="output-legend" id="output-legend"></div>
+</div>
+
+<script>
+(function () {
+
+  // ── DOM ───────────────────────────────────────────────────────────────────
+  const dropQ       = document.getElementById('drop-zone-q');
+  const inputQ      = document.getElementById('file-input-q');
+  const dropC       = document.getElementById('drop-zone-c');
+  const inputC      = document.getElementById('file-input-c');
+  const dropImg     = document.getElementById('drop-zone-img');
+  const inputImg    = document.getElementById('file-input-img');
+  const statusEl    = document.getElementById('status');
+  const previewEl   = document.getElementById('preview');
+  const previewList = document.getElementById('preview-list');
+  const qCountEl    = document.getElementById('q-count');
+  const versionRow  = document.getElementById('version-row');
+  const btnMinus    = document.getElementById('btn-minus');
+  const btnPlus     = document.getElementById('btn-plus');
+  const versionDisp = document.getElementById('version-display');
+  const versionBadges = document.getElementById('version-badges');
+  const btnRow      = document.getElementById('btn-row');
+  const btnGenerate = document.getElementById('btn-generate');
+  const progressWrap  = document.getElementById('progress-wrap');
+  const progressBar   = document.getElementById('progress-bar');
+  const progressLbl   = document.getElementById('progress-label');
+  const legendEl    = document.getElementById('output-legend');
+
+  const VERSION_LABELS = ['A','B','C','D','E'];
+  const MIN_V = 2, MAX_V = 5, DEF_V = 3;
+
+  let parsedQuestions    = [];   // parsed question objects
+  let hasVersionXTag     = false; // whether source doc contains [Version X]
+  let coversheetPdfBytes = null;  // ArrayBuffer of uploaded PDF coversheet
+  let numVersions        = DEF_V;
+  let sourceBaseName     = 'exam'; // questions file name without extension
+  let uploadedImages     = {};     // { 'filename.png': dataUrl } for [Image: …] fallback
+
+  // ── Utilities ─────────────────────────────────────────────────────────────
+  function setStatus(msg, type) { statusEl.textContent = msg; statusEl.className = type; }
+  function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function setProgress(pct, label) {
+    progressBar.style.width = pct + '%';
+    progressLbl.textContent = label;
+  }
+
+  // ── Rich-text model ───────────────────────────────────────────────────────
+  // A document is parsed into "rich paragraphs": arrays of "runs".
+  //   text run:  { text:string, underline:boolean }
+  //   image run: { text:'',     underline:false, image:{ dataUrl, width, height } }
+  // Image runs carry no text, so they pass through text operations untouched
+  // (runsText ignores them) but are preserved by the slice/trim helpers below.
+
+  const isImageRun = r => !!r.image;
+
+  // Convert mammoth HTML into rich paragraphs (one per block element).
+  function htmlToRichParagraphs(html) {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    const blocks = container.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li');
+    const list = blocks.length ? Array.from(blocks) : [container];
+
+    return list
+      .map(block => mergeRuns(collectRuns(block)))
+      .filter(runs => runs.length);
+  }
+
+  // Walk a block's inline nodes into a flat run list, tracking underline state.
+  function collectRuns(block) {
+    const out = [];
+    (function walk(node, underlined) {
+      node.childNodes.forEach(child => {
+        if (child.nodeType === 3) {                       // text
+          out.push({ text: child.textContent, underline: underlined });
+        } else if (child.nodeType === 1) {                // element
+          const tag = child.tagName.toLowerCase();
+          if (tag === 'img' && child.getAttribute('src')) {
+            out.push(makeImageRun(child));
+          } else {
+            const u = underlined || tag === 'u' ||
+              ((child.style?.textDecoration || '').includes('underline'));
+            walk(child, u);
+          }
+        }
+      });
+    })(block, false);
+    return out;
+  }
+
+  // Build an image run from an <img> element (mammoth emits base64 data URLs).
+  function makeImageRun(img) {
+    const w = parseFloat(img.getAttribute('width'))  || null;
+    const hh = parseFloat(img.getAttribute('height')) || null;
+    return { text: '', underline: false,
+             image: { dataUrl: img.getAttribute('src'), width: w, height: hh } };
+  }
+
+  // Merge adjacent text runs sharing underline state; keep image runs atomic.
+  function mergeRuns(runs) {
+    const out = [];
+    runs.forEach(r => {
+      if (isImageRun(r)) { out.push(r); return; }
+      if (!r.text) return;
+      const last = out[out.length - 1];
+      if (last && !isImageRun(last) && last.underline === r.underline) last.text += r.text;
+      else out.push({ text: r.text, underline: r.underline });
+    });
+    return out;
+  }
+
+  const runsText = runs => runs.map(r => r.text).join('');
+  const hasImage = runs => runs.some(isImageRun);
+  const prependPlain = (prefix, runs) => [{ text: prefix, underline: false }, ...runs];
+
+  // Slice a rich string by character offsets [start,end). Text is cut on offsets;
+  // image runs (zero-width) are kept if they fall inside or at the range bounds.
+  function sliceRuns(runs, start, end) {
+    const out = [];
+    let pos = 0;
+    for (const r of runs) {
+      if (isImageRun(r)) {
+        if (pos >= start && pos <= end) out.push(r);
+        continue; // images do not advance the character cursor
+      }
+      const rStart = pos, rEnd = pos + r.text.length;
+      if (rEnd > start && rStart < end) {
+        const t = r.text.slice(Math.max(start, rStart) - rStart,
+                               Math.min(end, rEnd) - rStart);
+        if (t) out.push({ text: t, underline: r.underline });
+      }
+      pos = rEnd;
+    }
+    return out;
+  }
+
+  // Trim surrounding whitespace from a rich string (text only; images preserved).
+  // Leading/trailing image runs are kept even though they carry no text.
+  function trimRuns(runs) {
+    if (!runs.length) return runs;
+    const text = runsText(runs);
+    const start = text.length - text.replace(/^\s+/, '').length;
+    const end   = text.replace(/\s+$/, '').length;
+    const sliced = sliceRuns(runs, start, end);
+    // Re-attach edge image runs that sliceRuns may have excluded by trimming.
+    const lead  = [], trail = [];
+    for (const r of runs) { if (isImageRun(r)) lead.push(r); else if (r.text.trim()) break; }
+    for (let i = runs.length - 1; i >= 0; i--) { const r = runs[i]; if (isImageRun(r)) trail.unshift(r); else if (r.text.trim()) break; }
+    const dedup = arr => arr.filter(r => !sliced.includes(r));
+    return [...dedup(lead), ...sliced, ...dedup(trail)];
+  }
+
+  // ── Image sizing ──────────────────────────────────────────────────────────
+  // Scale an image's intrinsic size to fit within maxW (points), capping height.
+  function fitImage(image, maxW, maxH = 540) {
+    let w = image.width || 300, h = image.height || 200;
+    if (w > maxW) { h *= maxW / w; w = maxW; }
+    if (h > maxH) { w *= maxH / h; h = maxH; }
+    return { w: Math.round(w), h: Math.round(h) };
+  }
+
+  // Measure intrinsic pixel dimensions of every image run, once, before output.
+  function preloadImageDimensions(items) {
+    const imageRuns = [];
+    const visit = runs => runs && runs.forEach(r => { if (isImageRun(r)) imageRuns.push(r); });
+    items.forEach(item => {
+      if (item.type === 'paragraph') visit(item.content);
+      else if (item.type === 'question') { visit(item.question); visit(item.answer); (item.distractors || []).forEach(visit); }
+      else if (item.questions) item.questions.forEach(q => {
+        if (q.type === 'paragraph') visit(q.content);
+        else { visit(q.question); visit(q.answer); (q.distractors || []).forEach(visit); }
+      });
+    });
+    return Promise.all(imageRuns.map(r => new Promise(resolve => {
+      if (r.image.width && r.image.height) return resolve();
+      const img = new Image();
+      img.onload  = () => { r.image.width = img.naturalWidth; r.image.height = img.naturalHeight; resolve(); };
+      img.onerror = () => { r.image.width = 300; r.image.height = 200; resolve(); };
+      img.src = r.image.dataUrl;
+    })));
+  }
+
+  // ── Drag-and-drop wiring ─────────────────────────────────────────────────
+  function wireDrop(zone, input, onFile) {
+    zone.addEventListener('click', () => input.click());
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
+    });
+    input.addEventListener('change', () => { if (input.files[0]) onFile(input.files[0]); });
+  }
+
+  // ── Questions file ────────────────────────────────────────────────────────
+  wireDrop(dropQ, inputQ, handleQuestionsFile);
+
+  function handleQuestionsFile(file) {
+    if (!file.name.endsWith('.docx')) { setStatus('Please upload a .docx file.', 'error'); return; }
+    setStatus('Reading questions…', 'info');
+    resetOutputsUI();
+    sourceBaseName = file.name.replace(/\.docx$/i, '').trim() || 'exam';
+
+    const reader = new FileReader();
+    reader.onload = e => readDocx(e.target.result)
+      .then(richParas => {
+        parsedQuestions = parseAllParagraphs(stripVersionXParagraph(richParas));
+        const allQ = collectAllQuestions(parsedQuestions);
+        if (!allQ.length) { setStatus('No valid [Question.] paragraphs found.', 'error'); return; }
+
+        setStatus(...summarizeParse(parsedQuestions, allQ));
+        renderPreview();
+        showOutputsUI(file.name);
+        updateVersionUI();
+      })
+      .catch(err => setStatus('Error reading file: ' + err.message, 'error'));
+    reader.readAsArrayBuffer(file);
+  }
+
+  // Read a .docx ArrayBuffer into rich paragraphs, with embedded images inlined
+  // as base64 data URLs so diagrams in [Paragraph.] blocks are preserved.
+  function readDocx(arrayBuffer) {
+    const options = {
+      convertImage: mammoth.images.imgElement(img =>
+        img.read('base64').then(data => ({ src: `data:${img.contentType};base64,${data}` })))
+    };
+    return mammoth.convertToHtml({ arrayBuffer }, options)
+      .then(result => htmlToRichParagraphs(result.value));
+  }
+
+  // Remove the bare [Version X] marker paragraph (handled separately).
+  function stripVersionXParagraph(richParas) {
+    hasVersionXTag = richParas.some(runs => runsText(runs).includes('[Version X]'));
+    return richParas.filter(runs => runsText(runs).trim() !== '[Version X]');
+  }
+
+  // Flatten parsed items (including pool members) into a list of question objects.
+  function collectAllQuestions(items) {
+    return items.flatMap(item =>
+      (item.type === 'option-pool' || item.type === 'scramble-pool') ? item.questions
+      : item.type === 'question' ? [item] : []);
+  }
+
+  // Produce [message, statusType] describing the parse, flagging pool problems.
+  function summarizeParse(items, allQ) {
+    const count = (type) => items.filter(i => i.type === type).length;
+    const mcq = allQ.filter(q => q.distractors.length > 0).length;
+    const noOpt = allQ.length - mcq;
+    const onlyN = allQ.filter(q => q.onlyVersion).length;
+
+    const parts = [`Found ${allQ.length} question(s)`];
+    if (noOpt)         parts.push(`${mcq} MCQ, ${noOpt} without options`);
+    if (onlyN)         parts.push(`${onlyN} version-specific`);
+    if (count('option-pool'))   parts.push(`${count('option-pool')} option pool(s)`);
+    if (count('scramble-pool')) parts.push(`${count('scramble-pool')} scramble pool(s)`);
+    if (count('pagebreak'))     parts.push(`${count('pagebreak')} page break(s)`);
+    const summary = parts[0] + (parts.length > 1 ? ' (' + parts.slice(1).join(', ') + ')' : '');
+
+    const empty = items.filter(i =>
+      (i.type === 'option-pool' || i.type === 'scramble-pool') && i.questions.length === 0);
+    const short = items.filter(i =>
+      i.type === 'option-pool' && i.questions.length > 0 && i.questions.length < i.take);
+
+    if (empty.length) return [`Warning: ${empty.length} pool(s) have no valid [Option.] [Question.] paragraphs. ` + summary, 'error'];
+    if (short.length) return ['Warning: a pool has fewer questions than its "take" number, so questions will repeat across versions. ' + summary, 'error'];
+    return [summary + '. Ready to generate.', 'success'];
+  }
+
+  // Show/hide helpers for the post-upload UI.
+  function resetOutputsUI() {
+    parsedQuestions = [];
+    previewEl.style.display  = 'none';
+    versionRow.style.display = 'none';
+    btnRow.style.display     = 'none';
+    legendEl.style.display   = 'none';
+  }
+  function showOutputsUI(fileName) {
+    dropQ.classList.add('has-file');
+    dropQ.querySelector('p:first-of-type').innerHTML = `<span class="file-name">✓ ${escHtml(fileName)}</span>`;
+    versionRow.style.display = 'flex';
+    btnRow.style.display     = 'block';
+    legendEl.style.display   = 'block';
+  }
+
+  // ── Coversheet PDF file ───────────────────────────────────────────────────
+  wireDrop(dropC, inputC, handleCoversheetFile);
+
+  function handleCoversheetFile(file) {
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      setStatus('Coversheet must be a PDF file.', 'error'); return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      coversheetPdfBytes = e.target.result;
+      dropC.classList.add('has-file');
+      dropC.innerHTML = `<p><span class="file-name">✓ ${escHtml(file.name)}</span></p>
+        <p class="hint">Will be prepended to all PDF outputs</p>`;
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  // ── Images for [Image: …] fallback tags ───────────────────────────────────
+  dropImg.addEventListener('click', () => inputImg.click());
+  dropImg.addEventListener('dragover', e => { e.preventDefault(); dropImg.classList.add('dragover'); });
+  dropImg.addEventListener('dragleave', () => dropImg.classList.remove('dragover'));
+  dropImg.addEventListener('drop', e => {
+    e.preventDefault(); dropImg.classList.remove('dragover');
+    handleImageFiles(e.dataTransfer.files);
+  });
+  inputImg.addEventListener('change', () => handleImageFiles(inputImg.files));
+
+  function handleImageFiles(fileList) {
+    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
+    Promise.all(files.map(readImageAsDataUrl)).then(() => {
+      const names = Object.keys(uploadedImages);
+      dropImg.classList.add('has-file');
+      dropImg.innerHTML = `<p><span class="file-name">✓ ${names.length} image(s)</span></p>
+        <p class="hint">${escHtml(names.join(', '))}</p>`;
+    });
+  }
+
+  function readImageAsDataUrl(file) {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => { uploadedImages[file.name] = e.target.result; resolve(); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  // Content tags split a question paragraph into stem / answer / distractor parts.
+  // [Correct.] is an accepted synonym for [Answer.].
+  const CONTENT_SPLIT_RE = /(\[Question\.\]|\[Answer\.\]|\[Correct\.\]|\[Distractor\.\])/;
+  const PARAGRAPH_RE      = /^\[(Paragraph|Not a question)\.\]\s*/i;
+  const KEEP_PREV_RE      = /^\[Keep with previous\.\]\s*/i;
+  const IMAGE_TAG_RE      = /\[Image:\s*([^\]]+?)\s*\]/i;
+
+  // "Content" is present if there is visible text OR an embedded/looked-up image.
+  const hasContent = runs => runsText(runs).trim() !== '' || hasImage(runs);
+
+  // Strip a leading regex match from a rich string, returning the remainder.
+  function stripPrefix(runs, re) {
+    const m = runsText(runs).match(re);
+    return m ? trimRuns(sliceRuns(runs, m[0].length, runsText(runs).length)) : runs;
+  }
+
+  // Replace any [Image: filename] tags with looked-up uploaded images (if any).
+  // Returns runs with the tag text removed and an image run spliced in its place.
+  function resolveImageTags(runs) {
+    const plain = runsText(runs);
+    const m = plain.match(IMAGE_TAG_RE);
+    if (!m) return runs;
+    const name = m[1].trim();
+    const dataUrl = uploadedImages[name];
+    const before = trimRuns(sliceRuns(runs, 0, m.index));
+    const after  = trimRuns(sliceRuns(runs, m.index + m[0].length, plain.length));
+    const imgRun = dataUrl ? [{ text: '', underline: false, image: { dataUrl, width: null, height: null } }] : [];
+    return resolveImageTags([...before, ...imgRun, ...after]);
+  }
+
+  // Parse one rich paragraph (segment) into a structured item, or null.
+  // extraProps may include { onlyVersion }.
+  function parseRichSegment(runs, extraProps) {
+    runs = resolveImageTags(trimRuns(runs));
+    const plain = runsText(runs);
+    if (!hasContent(runs)) return null;
+
+    // [Paragraph.] / [Not a question.] — scenario or description text (unnumbered).
+    if (PARAGRAPH_RE.test(plain)) {
+      let rest = stripPrefix(runs, PARAGRAPH_RE);
+      const keepWithPrev = KEEP_PREV_RE.test(runsText(rest));
+      if (keepWithPrev) rest = stripPrefix(rest, KEEP_PREV_RE);
+      return hasContent(rest) ? { type: 'paragraph', content: rest, keepWithPrev, ...extraProps } : null;
+    }
+
+    // [Keep with previous.] alone also marks scenario text.
+    if (KEEP_PREV_RE.test(plain)) {
+      const rest = stripPrefix(runs, KEEP_PREV_RE);
+      return hasContent(rest) ? { type: 'paragraph', content: rest, keepWithPrev: true, ...extraProps } : null;
+    }
+
+    // An untagged paragraph that contains an image (e.g. a diagram dropped in on
+    // its own line) is treated as scenario content so the image still renders.
+    // It keeps with the previous paragraph so it stays near related text.
+    if (!/\[Question\.\]/.test(plain) && hasImage(runs)) {
+      return { type: 'paragraph', content: runs, keepWithPrev: true, ...extraProps };
+    }
+
+    // Otherwise it must be a question.
+    if (!/\[Question\.\]/.test(plain)) return null;
+    return parseQuestionRuns(runs, plain, extraProps);
+  }
+
+  // Split a [Question.] paragraph into stem/answer/distractors, preserving runs.
+  function parseQuestionRuns(runs, plain, extraProps) {
+    let question = null, answer = null, tag = null, pos = 0;
+    const distractors = [];
+
+    for (const tok of plain.split(CONTENT_SPLIT_RE)) {
+      if (tok === '[Question.]')                        { tag = 'q'; pos += tok.length; continue; }
+      if (tok === '[Answer.]' || tok === '[Correct.]')  { tag = 'a'; pos += tok.length; continue; }
+      if (tok === '[Distractor.]')                      { tag = 'd'; pos += tok.length; continue; }
+      if (!tok) continue;
+      const seg = trimRuns(sliceRuns(runs, pos, pos + tok.length));
+      pos += tok.length;
+      if (!hasContent(seg)) continue;
+      if      (tag === 'q') question = seg;
+      else if (tag === 'a') answer = seg;
+      else if (tag === 'd') distractors.push(seg);
+    }
+    return question ? { type: 'question', question, answer, distractors, ...extraProps } : null;
+  }
+
+  // Parse one rich paragraph, splitting on [Page break.] (which may appear inline).
+  // Returns an array of { type:'question'|'paragraph'|'pagebreak', ... }.
+  function parseParagraph(runs, extraProps = {}) {
+    runs = trimRuns(runs);
+    const plain = runsText(runs);
+    if (!plain.trim() && !hasImage(runs)) return [];
+
+    const TAG = '[Page break.]';
+    if (!plain.includes(TAG)) {
+      const item = parseRichSegment(runs, extraProps);
+      return item ? [item] : [];
+    }
+
+    // Build [start,end) ranges separated by each page-break tag.
+    const ranges = [];
+    let cursor = 0, idx;
+    while ((idx = plain.indexOf(TAG, cursor)) !== -1) { ranges.push([cursor, idx]); cursor = idx + TAG.length; }
+    ranges.push([cursor, plain.length]);
+
+    const results = [];
+    ranges.forEach(([a, b], i) => {
+      if (i > 0) {
+        const prevWasContent = results.length && results[results.length - 1].type !== 'pagebreak';
+        results.push({ type: 'pagebreak', blankPage: prevWasContent });
+      }
+      const seg = trimRuns(sliceRuns(runs, a, b));
+      if (hasContent(seg)) {
+        const item = parseRichSegment(seg, extraProps);
+        if (item) results.push(item);
+      }
+    });
+    if (!results.length) results.push({ type: 'pagebreak', blankPage: false });
+    return results;
+  }
+
+  // ── Parse all rich paragraphs, building option/scramble pools ────────────────
+  // Item types:
+  //   { type:'question',      question, answer, distractors, onlyVersion, pagebreakAfter }
+  //   { type:'paragraph',     content, keepWithPrev }
+  //   { type:'pagebreak',     blankPage }
+  //   { type:'option-pool',   take:N, questions:[...] }
+  //   { type:'scramble-pool', questions:[...] }
+  function parseAllParagraphs(richParas) {
+    const items = [];
+    let i = 0;
+
+    // Collect immediately-following [Option.] paragraphs into a pool list
+    function collectOptionParas() {
+      const qs = [];
+      while (i < richParas.length) {
+        const runs = trimRuns(richParas[i]);
+        const plain = runsText(runs);
+        if (!/^\[Option\.\]/.test(plain)) break;
+        // Strip the [Option.] prefix
+        let rest = sliceRuns(runs, plain.match(/^\[Option\.\]\s*/)[0].length, plain.length);
+        let onlyVersion = null;
+        const op = runsText(rest);
+        const onlyMatch = op.match(/^\[Only Version ([A-E])\.\]\s*/i);
+        if (onlyMatch) { onlyVersion = onlyMatch[1].toUpperCase(); rest = sliceRuns(rest, onlyMatch[0].length, op.length); }
+        const parsed = parseParagraph(rest, { onlyVersion });
+        parsed.forEach((p, pi) => {
+          if (p.type === 'question' || p.type === 'paragraph') {
+            const next = parsed[pi + 1];
+            if (next && next.type === 'pagebreak') p = { ...p, pagebreakAfter: true };
+            qs.push(p);
+          }
+        });
+        i++;
+      }
+      return qs;
+    }
+
+    while (i < richParas.length) {
+      const runs = trimRuns(richParas[i]);
+      const text = runsText(runs);
+
+      // [Each version take N of the following options.]
+      const poolMatch = text.match(/^\[Each version take (\d+) of the following options?\.\]$/i);
+      if (poolMatch) {
+        const take = parseInt(poolMatch[1], 10);
+        i++;
+        const poolQuestions = collectOptionParas();
+        items.push({ type: 'option-pool', take, questions: poolQuestions });
+        continue;
+      }
+
+      // [Scramble the order of the following options.]
+      const scrambleMatch = text.match(/^\[Scramble the order of the following options?\.\]$/i);
+      if (scrambleMatch) {
+        i++;
+        const poolQuestions = collectOptionParas();
+        items.push({ type: 'scramble-pool', questions: poolQuestions });
+        continue;
+      }
+
+      // [Only Version X.] prefix
+      const onlyMatch = text.match(/^\[Only Version ([A-E])\.\]\s*/i);
+      if (onlyMatch) {
+        const onlyVersion = onlyMatch[1].toUpperCase();
+        const rest = sliceRuns(runs, onlyMatch[0].length, text.length);
+        parseParagraph(rest, { onlyVersion }).forEach(p => items.push(p));
+        i++;
+        continue;
+      }
+
+      // Stray [Option.] outside a pool — skip
+      if (/^\[Option\.\]/.test(text)) { i++; continue; }
+
+      // Normal paragraph (question, [Paragraph.], or inline page break)
+      parseParagraph(runs, { onlyVersion: null }).forEach(p => items.push(p));
+      i++;
+    }
+
+    return items;
+  }
+
+  // ── Assign option/scramble pool questions to versions ────────────────────────
+  // option-pool: each version gets `take` DISTINCT questions. Versions are made
+  //   as different from one another as possible by dealing from a rotating,
+  //   reshuffled deck — but a single version never receives a duplicate, even
+  //   when `take` does not evenly divide the pool size.
+  // scramble-pool: every version gets all questions in its own shuffled order.
+  function assignOptionPools(pools, versionLabels) {
+    const assignments = new Map();
+
+    pools.forEach(pool => {
+      const versionMap = {};
+
+      if (pool.type === 'scramble-pool') {
+        versionLabels.forEach(lbl => { versionMap[lbl] = shuffle(pool.questions.slice()); });
+        assignments.set(pool, versionMap);
+        return;
+      }
+
+      const { take, questions } = pool;
+      const poolSize = questions.length;
+
+      // `deck` is a rotating supply of questions, reshuffled whenever it empties.
+      // For each version we draw `take` items, skipping any already chosen for
+      // THAT version so a version can never contain a duplicate. To maximise
+      // cross-version variety we keep drawing from where the previous version
+      // left off rather than resetting the deck per version.
+      let deck = [];
+      const refill = () => { deck = shuffle(questions.slice()); };
+
+      versionLabels.forEach(lbl => {
+        const chosen = [];
+        const setAside = []; // candidates that duplicate this version's picks
+        const want = Math.min(take, poolSize); // cannot exceed distinct supply
+        while (chosen.length < want) {
+          if (deck.length === 0) {
+            // Deck exhausted mid-version: return set-aside items and reshuffle.
+            refill();
+            // Avoid an impossible loop if somehow nothing new can be added.
+            if (deck.every(q => chosen.includes(q))) break;
+          }
+          const candidate = deck.shift();
+          if (chosen.includes(candidate)) setAside.push(candidate);
+          else chosen.push(candidate);
+        }
+        // Return unused set-aside items to the deck for the next version.
+        deck = deck.concat(setAside);
+        versionMap[lbl] = chosen;
+      });
+
+      assignments.set(pool, versionMap);
+    });
+
+    return assignments;
+  }
+
+  // ── Preview ───────────────────────────────────────────────────────────────
+  function renderPreview() {
+    previewList.innerHTML = '';
+    let qNum = 0;
+
+    function optsHtmlFor(q) {
+      if (q.type === 'paragraph') return '<span class="no-opts">[Paragraph] scenario text</span>';
+      if (!q.distractors || q.distractors.length === 0) return '<span class="no-opts">No options — unscrambled</span>';
+      const ans = q.answer ? escHtml(runsText(q.answer)) : '';
+      const dis = q.distractors.map(d => escHtml(runsText(d))).join(' | ');
+      return `✔ ${ans} &nbsp;|&nbsp; ${dis}`;
+    }
+    function titleFor(q) {
+      return escHtml(q.type === 'paragraph' ? runsText(q.content) : runsText(q.question));
+    }
+
+    parsedQuestions.forEach(item => {
+      if (item.type === 'pagebreak') return;
+
+      if (item.type === 'option-pool' || item.type === 'scramble-pool') {
+        const isScramble = item.type === 'scramble-pool';
+        const header = document.createElement('div');
+        header.className = 'q-item';
+        const desc = isScramble
+          ? `Scramble pool — all ${item.questions.length} included, order shuffled per version`
+          : `Option pool — each version takes ${item.take} of ${item.questions.length}`;
+        header.innerHTML = `<div class="q-text" style="color:#B2241A">↳ ${desc}</div>`;
+        previewList.appendChild(header);
+        item.questions.forEach(q => {
+          if (q.type === 'question') qNum++;
+          const div = document.createElement('div');
+          div.className = 'q-item';
+          div.style.paddingLeft = '1rem';
+          div.innerHTML = `<div class="q-text">[pool] ${titleFor(q)}</div>
+            <div class="q-opts">${optsHtmlFor(q)}</div>`;
+          previewList.appendChild(div);
+        });
+        return;
+      }
+
+      if (item.type === 'paragraph') {
+        const div = document.createElement('div');
+        div.className = 'q-item';
+        const kw = item.keepWithPrev ? '[Keep with previous] ' : '';
+        div.innerHTML = `<div class="q-text" style="font-style:italic;color:#7a8fa6">${kw}[Paragraph] ${escHtml(runsText(item.content))}</div>`;
+        previewList.appendChild(div);
+        return;
+      }
+
+      if (item.type === 'question') {
+        qNum++;
+        const div = document.createElement('div');
+        div.className = 'q-item';
+        const tag = item.onlyVersion ? `<span style="color:#B2241A;font-size:0.75rem">[Only Version ${item.onlyVersion}]</span> ` : '';
+        div.innerHTML = `<div class="q-text">${tag}${qNum}. ${escHtml(runsText(item.question))}</div>
+          <div class="q-opts">${optsHtmlFor(item)}</div>`;
+        previewList.appendChild(div);
+      }
+    });
+    qCountEl.textContent = qNum;
+    previewEl.style.display = 'block';
+  }
+
+  // ── Version stepper ───────────────────────────────────────────────────────
+  function updateVersionUI() {
+    versionDisp.textContent = numVersions;
+    btnMinus.disabled = numVersions <= MIN_V;
+    btnPlus.disabled  = numVersions >= MAX_V;
+    versionBadges.innerHTML = '';
+    VERSION_LABELS.slice(0, numVersions).forEach(l => {
+      const b = document.createElement('span');
+      b.className = 'badge'; b.textContent = 'Version ' + l;
+      versionBadges.appendChild(b);
+    });
+    let html = '';
+    VERSION_LABELS.slice(0, numVersions).forEach(l => {
+      html += `<span>${sourceBaseName}_answerKey_${l}</span>.docx + .pdf &nbsp; <span>${sourceBaseName}_testForm_${l}</span>.docx + .pdf<br>`;
+    });
+    legendEl.innerHTML = html;
+  }
+  btnMinus.addEventListener('click', () => { if (numVersions > MIN_V) { numVersions--; updateVersionUI(); } });
+  btnPlus.addEventListener('click',  () => { if (numVersions < MAX_V) { numVersions++; updateVersionUI(); } });
+  updateVersionUI();
+
+  // ── Build paragraph list for one version ─────────────────────────────────
+  // Produces render items with RICH content (run arrays):
+  //   { type:'version-label', text }                     (plain string)
+  //   { type:'question',  content:runs, keepWithNext }
+  //   { type:'paragraph', content:runs, keepWithNext }   (scenario/description)
+  //   { type:'option',    content:runs, isAnswer }
+  //   { type:'pagebreak', blankPage }
+  function buildVersionParas(versionLabel, poolAssignments) {
+    const paras = [];
+    const letters = ['a','b','c','d','e'];
+
+    paras.push({ type: 'version-label', text: 'Version ' + versionLabel });
+
+    let questionNumber = 0;
+
+    // Scenario/description paragraph (unnumbered). keepWithNext is set later.
+    function emitParagraph(item) {
+      paras.push({ type: 'paragraph', content: item.content, keepWithNext: true });
+      if (item.pagebreakAfter) paras.push({ type: 'pagebreak', blankPage: true });
+    }
+
+    // A numbered question plus its scrambled, lettered options.
+    function emitQuestion(q) {
+      const isMCQ = q.answer && q.distractors.length > 0;
+      questionNumber++;
+      const stem = prependPlain(questionNumber + '. ', q.question);
+      paras.push({ type: 'question', content: stem, keepWithNext: isMCQ });
+      if (isMCQ) {
+        const scrambled = shuffle([{ runs: q.answer, isAnswer: true },
+                                   ...q.distractors.map(d => ({ runs: d, isAnswer: false }))]);
+        scrambled.forEach((opt, idx) => {
+          const lettered = prependPlain('(' + letters[idx] + ') ', opt.runs);
+          paras.push({ type: 'option', content: lettered, isAnswer: opt.isAnswer });
+        });
+      }
+      if (q.pagebreakAfter) paras.push({ type: 'pagebreak', blankPage: true });
+    }
+
+    parsedQuestions.forEach(item => {
+      if (item.type === 'pagebreak') {
+        paras.push({ type: 'pagebreak', blankPage: item.blankPage });
+        return;
+      }
+
+      if (item.type === 'option-pool' || item.type === 'scramble-pool') {
+        const assigned = poolAssignments.get(item)[versionLabel] || [];
+        assigned.forEach(q => {
+          if (q.type === 'paragraph') emitParagraph(q);
+          else emitQuestion(q);
+        });
+        return;
+      }
+
+      if (item.type === 'paragraph') { emitParagraph(item); return; }
+
+      if (item.type === 'question') {
+        if (item.onlyVersion && item.onlyVersion !== versionLabel) return;
+        emitQuestion(item);
+      }
+    });
+
+    // ── Post-process keep-with-next chains for scenarios ────────────────────
+    // A scenario [Paragraph.] should stay with the content that follows it.
+    // A [Keep with previous.] paragraph keeps the PRIOR paragraph attached too.
+    // We already set paragraph.keepWithNext = true above. Now make sure a
+    // paragraph followed only by a pagebreak doesn't force-keep across it.
+    for (let k = 0; k < paras.length; k++) {
+      if (paras[k].type === 'paragraph') {
+        const next = paras[k + 1];
+        if (!next || next.type === 'pagebreak') paras[k].keepWithNext = false;
+      }
+    }
+
+    // ── Drop a trailing page break (avoids an extra blank final page) ───────
+    while (paras.length && paras[paras.length - 1].type === 'pagebreak') {
+      paras.pop();
+    }
+
+    return paras;
+  }
+
+  // ── DOCX builder ──────────────────────────────────────────────────────────
+  function makeDocxStyles() {
+    return {
+      paragraphStyles: [
+        {
+          id: 'Heading1', name: 'Heading 1', basedOn: 'Normal', next: 'Normal', quickFormat: true,
+          run: { size: 24, bold: true, font: 'Calibri', color: '000000' },
+          paragraph: { spacing: { before: 240, after: 120 }, outlineLevel: 0 }
+        },
+        {
+          id: 'Heading2', name: 'Heading 2', basedOn: 'Normal', next: 'Normal', quickFormat: true,
+          run: { size: 24, bold: false, font: 'Calibri', color: '000000' },
+          paragraph: { spacing: { before: 80, after: 80 }, outlineLevel: 1 }
+        }
+      ]
+    };
+  }
+
+  function buildDocx(lib, paras, isKey) {
+    const { Document, Paragraph, TextRun, ImageRun, HeadingLevel, PageBreak,
+            AlignmentType, Header, Footer, PageNumber } = lib;
+
+    // Convert a base64 data URL to a Uint8Array for ImageRun.
+    function dataUrlToBytes(dataUrl) {
+      const base64 = dataUrl.split(',')[1];
+      const bin = atob(base64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    // Build docx runs (text + image) from a rich string.
+    function richRuns(runs, opts = {}) {
+      return runs.map(r => {
+        if (isImageRun(r)) {
+          const { w, h } = fitImage(r.image, 432); // 432pt = 6in usable width
+          return new ImageRun({ data: dataUrlToBytes(r.image.dataUrl),
+                                transformation: { width: w, height: h } });
+        }
+        return new TextRun({ text: r.text, underline: r.underline ? {} : undefined, bold: opts.bold });
+      });
+    }
+
+    // An image paragraph is centered; mixed text+image stays inline/left.
+    function paragraphFor(runs, { heading, keepNext, bold } = {}) {
+      const opts = { keepNext, children: richRuns(runs, { bold }) };
+      if (heading) opts.heading = heading;
+      if (hasImage(runs) && runsText(runs).trim() === '') opts.alignment = AlignmentType.CENTER;
+      return new Paragraph(opts);
+    }
+
+    const children = [];
+
+    paras.forEach((p, idx) => {
+      if (p.type === 'pagebreak') {
+        children.push(new Paragraph({ children: [new PageBreak()] }));
+      } else if (p.type === 'version-label') {
+        children.push(new Paragraph({
+          heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER,
+          children: [new TextRun(p.text)]
+        }));
+      } else if (p.type === 'paragraph') {
+        children.push(paragraphFor(p.content, { keepNext: p.keepWithNext }));
+      } else if (p.type === 'question') {
+        children.push(paragraphFor(p.content, { heading: HeadingLevel.HEADING_1, keepNext: p.keepWithNext, bold: true }));
+      } else if (p.type === 'option') {
+        const nextIsOption = paras[idx + 1]?.type === 'option';
+        const runs = (isKey && p.isAnswer) ? prependPlain('[Answer.] ', p.content) : p.content;
+        children.push(paragraphFor(runs, { heading: HeadingLevel.HEADING_2, keepNext: nextIsOption }));
+      }
+    });
+
+    // Page-number footer: "Page X of Y", centered.
+    const footer = new Footer({
+      children: [new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new TextRun('Page '),
+          new TextRun({ children: [PageNumber.CURRENT] }),
+          new TextRun(' of '),
+          new TextRun({ children: [PageNumber.TOTAL_PAGES] })
+        ]
+      })]
+    });
+
+    return new Document({
+      styles: makeDocxStyles(),
+      sections: [{
+        properties: {
+          page: {
+            size: { width: 12240, height: 15840 },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+          }
+        },
+        footers: { default: footer },
+        children
+      }]
+    });
+  }
+
+  // ── PDF builder (jsPDF) ───────────────────────────────────────────────────
+  function buildBodyPdf(paras, isKey) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+
+    const marginL = 72, marginR = 72, marginT = 72, marginB = 72;
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const maxW    = pageW - marginL - marginR;
+    const indentW = pageW - marginL - marginR - 20; // options indented 20pt
+
+    let y = marginT;
+    function newPage() { doc.addPage(); y = marginT; }
+    function ensureSpace(h) { if (y + h > pageH - marginB) newPage(); }
+
+    // Lay out a rich string into wrapped lines of word-tokens, each token
+    // carrying its underline flag. Returns array of lines; each line is an
+    // array of { text, underline, w }.
+    function layoutRichLines(runs, fontSize, width, fontStyle) {
+      doc.setFont('helvetica', fontStyle);
+      doc.setFontSize(fontSize);
+      const spaceW = doc.getTextWidth(' ');
+      const lines = [];
+      let line = [];
+      let lineW = 0;
+
+      runs.forEach(run => {
+        // Split run into words but keep underline flag; whitespace splits tokens
+        const words = run.text.split(/(\s+)/).filter(s => s.length > 0);
+        words.forEach(word => {
+          if (/^\s+$/.test(word)) {
+            // whitespace — add a space token if line not empty
+            if (line.length > 0) { line.push({ text: ' ', underline: run.underline, w: spaceW }); lineW += spaceW; }
+            return;
+          }
+          const w = doc.getTextWidth(word);
+          if (lineW + w > width && line.length > 0) {
+            // wrap — strip trailing space token
+            while (line.length && line[line.length - 1].text === ' ') { lineW -= line[line.length-1].w; line.pop(); }
+            lines.push(line); line = []; lineW = 0;
+          }
+          line.push({ text: word, underline: run.underline, w });
+          lineW += w;
+        });
+      });
+      if (line.length) {
+        while (line.length && line[line.length - 1].text === ' ') line.pop();
+        lines.push(line);
+      }
+      return lines;
+    }
+
+    function richHeight(runs, fontSize, width, fontStyle) {
+      const lines = layoutRichLines(runs, fontSize, width, fontStyle);
+      return lines.length * fontSize * 1.2;
+    }
+
+    // Draw pre-laid-out lines at x/font; advances y. Underlines runs as needed.
+    function drawLines(lines, x, fontSize, fontStyle) {
+      doc.setFont('helvetica', fontStyle);
+      doc.setFontSize(fontSize);
+      const lineH = fontSize * 1.2;
+      lines.forEach(line => {
+        let cx = x;
+        line.forEach(tok => {
+          doc.text(tok.text, cx, y);
+          if (tok.underline && tok.text.trim()) {
+            const uy = y + fontSize * 0.12;
+            doc.setLineWidth(0.6);
+            doc.line(cx, uy, cx + tok.w, uy);
+          }
+          cx += tok.w;
+        });
+        y += lineH;
+      });
+    }
+
+    // Height of a question group (question + its options) for keep-together.
+    function groupHeight(startIdx) {
+      let h = 10 + richHeight(paras[startIdx].content, 12, maxW, 'bold');
+      let j = startIdx + 1;
+      while (j < paras.length && paras[j].type === 'option') {
+        h += richHeight(paras[j].content, 12, indentW, 'normal') + 2;
+        j++;
+      }
+      return h;
+    }
+
+    // Draw a centered image run, paging if it won't fit. Advances y.
+    function drawImage(run) {
+      const { w, h } = fitImage(run.image, maxW);
+      ensureSpace(h + 8);
+      const fmt = run.image.dataUrl.startsWith('data:image/png') ? 'PNG' : 'JPEG';
+      try { doc.addImage(run.image.dataUrl, fmt, marginL + (maxW - w) / 2, y, w, h); } catch (_) {}
+      y += h + 8;
+    }
+
+    // Render a content block: text (wrapped, with underlines) then centered images.
+    function renderBlock(runs, x, width, fontStyle, leadGap) {
+      const textRuns = runs.filter(r => !isImageRun(r));
+      const imgRuns  = runs.filter(isImageRun);
+      if (runsText(textRuns).trim()) {
+        const lines = layoutRichLines(textRuns, 12, width, fontStyle);
+        ensureSpace(leadGap + lines.length * 12 * 1.2 + 4);
+        y += leadGap;
+        drawLines(lines, x, 12, fontStyle);
+        y += 4;
+      } else if (leadGap) {
+        y += leadGap;
+      }
+      imgRuns.forEach(drawImage);
+    }
+
+    paras.forEach((p, idx) => {
+      if (p.type === 'pagebreak') { newPage(); return; }
+
+      if (p.type === 'version-label') {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        const lines = doc.splitTextToSize(p.text, maxW);
+        const lineH = 16 * 1.2;
+        ensureSpace(lines.length * lineH + 12);
+        lines.forEach(line => { doc.text(line, pageW / 2, y, { align: 'center' }); y += lineH; });
+        y += 12;
+        return;
+      }
+
+      if (p.type === 'paragraph') {
+        renderBlock(p.content, marginL, maxW, 'normal', 10);
+        return;
+      }
+
+      if (p.type === 'question') {
+        if (p.keepWithNext && !hasImage(p.content)) ensureSpace(groupHeight(idx));
+        renderBlock(p.content, marginL, maxW, 'bold', 10);
+        return;
+      }
+
+      if (p.type === 'option') {
+        const runs = (isKey && p.isAnswer) ? prependPlain('[Answer.] ', p.content) : p.content;
+        renderBlock(runs, marginL + 20, indentW, 'normal', 0);
+        y += 2;
+        return;
+      }
+    });
+
+    // Page-number footer on every page: "Page X of Y", centered.
+    const total = doc.internal.getNumberOfPages();
+    for (let pg = 1; pg <= total; pg++) {
+      doc.setPage(pg);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.text(`Page ${pg} of ${total}`, pageW / 2, pageH - marginB / 2, { align: 'center' });
+    }
+
+    return doc.output('arraybuffer');
+  }
+
+  // ── Merge PDF coversheet + body using pdf-lib ─────────────────────────────
+  async function mergePdfs(coverBytes, bodyBytes) {
+    const { PDFDocument } = PDFLib;
+    const merged = await PDFDocument.create();
+
+    if (coverBytes) {
+      const cover = await PDFDocument.load(coverBytes);
+      const indices = cover.getPageIndices();
+      const pages = await merged.copyPages(cover, indices);
+      pages.forEach(p => merged.addPage(p));
+    }
+
+    const body = await PDFDocument.load(bodyBytes);
+    const indices = body.getPageIndices();
+    const pages = await merged.copyPages(body, indices);
+    pages.forEach(p => merged.addPage(p));
+
+    return merged.save(); // returns Uint8Array
+  }
+
+  // ── Download helper ───────────────────────────────────────────────────────
+  function downloadBlob(blob, filename) {
+    return new Promise(resolve => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => { URL.revokeObjectURL(url); resolve(); }, 400);
+    });
+  }
+
+  // ── Main generate ─────────────────────────────────────────────────────────
+  btnGenerate.addEventListener('click', async () => {
+    btnGenerate.disabled = true;
+    progressWrap.style.display = 'block';
+    setProgress(0, 'Starting…');
+
+    try {
+      const lib = window.docx;
+      if (!lib) throw new Error('docx library failed to load. Check your internet connection.');
+      if (!window.PDFLib) throw new Error('pdf-lib failed to load. Check your internet connection.');
+      if (!window.jspdf) throw new Error('jsPDF failed to load. Check your internet connection.');
+
+      const { Packer } = lib;
+      const versionLabels = VERSION_LABELS.slice(0, numVersions);
+
+      // Measure any images once so docx/pdf can size them correctly.
+      await preloadImageDimensions(parsedQuestions);
+
+      // Compute option pool assignments once for all versions
+      const pools = parsedQuestions.filter(p => p.type === 'option-pool' || p.type === 'scramble-pool');
+      const poolAssignments = assignOptionPools(pools, versionLabels);
+
+      // Steps per version: build paras, build 2 docx, pack 2 docx, build 2 pdf, merge 2 pdfs, download 4
+      const totalSteps = numVersions * 10;
+      let step = 0;
+      const tick = label => { step++; setProgress(Math.round(step / totalSteps * 100), label); };
+
+      for (let i = 0; i < numVersions; i++) {
+        const lbl   = versionLabels[i];
+        const base  = sourceBaseName;
+        const keyName  = `${base}_answerKey_${lbl}`;
+        const formName = `${base}_testForm_${lbl}`;
+
+        setProgress(Math.round(step / totalSteps * 100), `Building Version ${lbl}…`);
+
+        // Build para lists (shared scramble per version — key and form match)
+        const paras = buildVersionParas(lbl, poolAssignments);
+        tick(`Version ${lbl}: paragraphs`);
+
+        // DOCX
+        const keyDocxDoc  = buildDocx(lib, paras, true);
+        const formDocxDoc = buildDocx(lib, paras, false);
+        tick(`Version ${lbl}: docx built`);
+
+        const [keyDocxBlob, formDocxBlob] = await Promise.all([
+          Packer.toBlob(keyDocxDoc),
+          Packer.toBlob(formDocxDoc)
+        ]);
+        tick(`Version ${lbl}: docx packed`);
+
+        // PDF bodies
+        const keyBodyBuf  = buildBodyPdf(paras, true);
+        const formBodyBuf = buildBodyPdf(paras, false);
+        tick(`Version ${lbl}: pdf built`);
+
+        // Merge with coversheet
+        const keyPdfBytes  = await mergePdfs(coversheetPdfBytes, keyBodyBuf);
+        const formPdfBytes = await mergePdfs(coversheetPdfBytes, formBodyBuf);
+        tick(`Version ${lbl}: pdf merged`);
+
+        const keyPdfBlob  = new Blob([keyPdfBytes],  { type: 'application/pdf' });
+        const formPdfBlob = new Blob([formPdfBytes], { type: 'application/pdf' });
+
+        // Downloads
+        await downloadBlob(keyDocxBlob,  `${keyName}.docx`);  tick(`↓ ${keyName} docx`);
+        await downloadBlob(keyPdfBlob,   `${keyName}.pdf`);   tick(`↓ ${keyName} pdf`);
+        await downloadBlob(formDocxBlob, `${formName}.docx`); tick(`↓ ${formName} docx`);
+        await downloadBlob(formPdfBlob,  `${formName}.pdf`);  tick(`↓ ${formName} pdf`);
+      }
+
+      setProgress(100, 'Done!');
+      setStatus(
+        `✓ ${numVersions * 4} files downloaded — ${numVersions} versions × (answer_key + test_form) × (docx + pdf).`,
+        'success'
+      );
+    } catch (err) {
+      setStatus('Error: ' + err.message, 'error');
+      console.error(err);
+    } finally {
+      btnGenerate.disabled = false;
+      setTimeout(() => { progressWrap.style.display = 'none'; }, 3000);
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
