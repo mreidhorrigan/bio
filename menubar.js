@@ -20,7 +20,7 @@
   "use strict";
 
   var GAMES = [
-    ["Autofac: Rad Shipping — echolocation warehouse haul (Mac)", "autofac.html"],
+    ["Autofac: Rad Shipping", "autofac.html"],
     ["Clod Bathos, Superior Machine",
      "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"],
     ["Appraising the Pedagogical Value of Audiogames (CGSA 2026)",
