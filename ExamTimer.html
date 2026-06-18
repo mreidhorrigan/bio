@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Timer</title>
+<!-- the one site-wide menubar (links + dropdowns live in this file) -->
+<script src="menubar.js" defer></script>
+<style>
+  /* ── Palette & theme tokens ─────────────────────────────────────────────────
+     Shared vocabulary with matthorrigan.com / MCQer / Seat Planner (base.css):
+     --ink, --muted, --faint, --rule, --accent (deep maroon). This tool re-skins
+     from the :root block below so it reads as a sibling of MCQer and the CV it
+     sits beside in the site menubar. The cyan --focus (the menubar highlight) is
+     used for input focus; the orange→blue --flare glow is lifted from the home
+     page. Swap the brand here once and every control follows.
+  ────────────────────────────────────────────────────────────────────────────── */
+  :root {
+    --ink:           #1a1a1a;   /* primary text                                   */
+    --muted:         #595959;   /* secondary text, subtitles                      */
+    --faint:         #8a8a8a;   /* hints, captions                                */
+    --rule:          #d9d9d9;   /* hairlines, borders                             */
+    --accent:        #6b1f2a;   /* deep maroon — buttons, labels, links           */
+    --accent-strong: #531722;   /* accent hover / active                          */
+    --accent-wash:   #f6eef0;   /* tint behind callouts / hovered surfaces        */
+    --on-accent:     #ffffff;   /* text & icons on an accent fill                 */
+    --bg:            #faf6f7;   /* page background                                */
+    --surface:       #ffffff;   /* cards                                          */
+    --surface-tint:  #f3eef1;   /* panels                                         */
+    --danger:        #b2241a;   /* time-up / warnings (distinct from brand)       */
+    --danger-wash:   #fbecea;   /* warning background                             */
+    --ok:            #1f7a3d;   /* "ends at" / running affirmation                */
+    --focus:         #c3f0ff;   /* cyan focus ring — nods to menubar              */
+    --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
+    --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
+    --radius:        8px;
+    --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Base colour lives on <html> so the z-index:-1 flare shows over it. */
+  html { background: var(--bg); }
+
+  body {
+    font-family: var(--sans-font);
+    color: var(--ink);
+    background: transparent;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2.5rem 1.5rem 4rem;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--focus); }
+
+  /* Cloudy orange→blue glow lifted from matthorrigan.com's home page (.flare). */
+  .flare {
+    pointer-events: none;
+    position: absolute;
+    top: 0; left: 0;
+    width: 50%; height: 50%;
+    z-index: -1;
+    filter: blur(50px);
+    background: radial-gradient(ellipse at 70% 100%, var(--flare-warm) 20%, var(--flare-cool) 30%, #ffffff 75%);
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: 0 4px 28px rgba(0,0,0,0.10);
+    padding: 2.5rem 2.5rem 2.25rem;
+    max-width: 960px;
+    width: 100%;
+  }
+
+  @media (max-width: 620px) { .card { padding: 1.75rem 1.4rem 1.75rem; } }
+
+  /* ── Masthead ─────────────────────────────────────────────────────────────── */
+  .masthead { margin-bottom: 1.5rem; }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.25rem;
+  }
+
+  h1 em { font-style: normal; color: var(--accent); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    max-width: 640px;
+  }
+
+  .subtitle strong { color: var(--ink); font-weight: 700; }
+
+  /* ── Setup row ────────────────────────────────────────────────────────────── */
+  .setup {
+    background: var(--surface-tint);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .setup-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.7rem;
+  }
+
+  .time-inputs {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 0.2rem; }
+
+  .field span {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-left: 0.15rem;
+  }
+
+  .time-inputs input[type="number"] {
+    width: 4.4rem;
+    font-family: var(--sans-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    padding: 0.4rem 0.3rem;
+    -moz-appearance: textfield;
+  }
+  .time-inputs input::-webkit-outer-spin-button,
+  .time-inputs input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .time-inputs .colon {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--faint);
+    padding-bottom: 0.5rem;
+  }
+
+  .time-inputs input:focus-visible,
+  .exam-name-input:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--focus);
+  }
+
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.95rem;
+  }
+
+  .preset {
+    font-family: var(--sans-font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    padding: 0.32rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .preset:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .preset:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+  .preset.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+
+  .exam-name-row { margin-top: 1rem; }
+  .exam-name-input {
+    width: 100%;
+    max-width: 30rem;
+    font-family: var(--sans-font);
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+  }
+  .exam-name-input::placeholder { color: var(--faint); }
+
+  /* ── Timer stage ──────────────────────────────────────────────────────────── */
+  .stage {
+    text-align: center;
+    padding: 1.25rem 0 0.5rem;
+    border-radius: 14px;
+    transition: background 0.25s;
+  }
+
+  .exam-name-display {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+    margin-bottom: 0.4rem;
+    min-height: 1.2em;
+  }
+  .exam-name-display:empty { display: none; }
+
+  .fs-label { display: none; }   /* projection caption — only shown in fullscreen */
+
+  .time {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    font-size: clamp(4rem, 19vw, 12rem);
+    transition: color 0.25s;
+  }
+
+  /* Final stretch — amber/danger pull on the digits. */
+  .stage.low .time { color: var(--danger); }
+
+  /* Time up — flashing danger field. */
+  .stage.finished { background: var(--danger-wash); }
+  .stage.finished .time { color: var(--danger); animation: flash 1s steps(1) infinite; }
+  @keyframes flash { 50% { opacity: 0.25; } }
+
+  /* Progress bar — depletes from full → empty over the configured length. */
+  .progress {
+    margin: 1.2rem auto 0;
+    max-width: 40rem;
+    width: 100%;
+  }
+  .progress-track {
+    height: 12px;
+    background: var(--surface-tint);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.2s linear, background 0.25s;
+  }
+  .stage.low .progress-fill { background: var(--danger); }
+  .stage.finished .progress-fill { background: var(--danger); }
+
+  .stage-sub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    margin-top: 0.85rem;
+    min-height: 1.6rem;
+  }
+
+  .chip {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.7rem;
+    border-radius: 999px;
+    background: var(--surface-tint);
+    color: var(--muted);
+    border: 1px solid var(--rule);
+  }
+  .chip.running { background: var(--accent-wash); color: var(--accent); border-color: var(--accent-wash); }
+  .chip.finished { background: var(--danger); color: var(--on-accent); border-color: var(--danger); }
+
+  .ends-at {
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .ends-at strong { color: var(--ok); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ends-at:empty { display: none; }
+
+  /* Milestone banner — “entry closed” / “final 5 minutes”. */
+  .banner {
+    margin: 1rem auto 0;
+    max-width: 40rem;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-wash);
+    color: var(--accent);
+    display: none;
+  }
+  .banner.show { display: block; }
+  .banner.danger { border-left-color: var(--danger); background: var(--danger-wash); color: var(--danger); }
+
+  /* ── Controls ─────────────────────────────────────────────────────────────── */
+  .controls {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1.5rem 0 0.4rem;
+  }
+
+  .btn {
+    font-family: var(--sans-font);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    padding: 0.6rem 1.4rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 7px;
+    background: var(--accent);
+    color: var(--on-accent);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s, transform 0.1s;
+  }
+  .btn:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+
+  .btn-secondary { background: transparent; color: var(--accent); }
+  .btn-secondary:hover { background: var(--accent); color: var(--on-accent); }
+
+  .btn-danger { background: var(--danger); border-color: var(--danger); }
+  .btn-danger:hover { background: #8f1c14; border-color: #8f1c14; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--rule);
+    font-size: 0.83rem;
+    padding: 0.56rem 1rem;
+  }
+  .btn-ghost:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+
+  .btn-big { font-size: 1rem; padding: 0.7rem 2rem; }
+
+  .kbd-hint {
+    text-align: center;
+    font-size: 0.76rem;
+    color: var(--faint);
+    margin-top: 0.9rem;
+  }
+  .kbd-hint kbd {
+    font-family: var(--sans-font);
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--surface-tint);
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 0.05rem 0.4rem;
+    color: var(--muted);
+  }
+
+  /* ── Milestone config ─────────────────────────────────────────────────────── */
+  .milestones {
+    margin-top: 1.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+  }
+  .milestones .setup-label { margin-bottom: 0.85rem; }
+
+  .ms-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding: 0.35rem 0;
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+  .ms-row + .ms-row { border-top: 1px dashed var(--rule); margin-top: 0.2rem; padding-top: 0.6rem; }
+  .ms-row input[type="checkbox"] { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); cursor: pointer; }
+  .ms-row .ms-text { color: var(--muted); }
+  .ms-row .ms-text strong { color: var(--ink); font-weight: 700; }
+  .ms-row input[type="number"] {
+    width: 3.4rem;
+    font-family: var(--sans-font);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 0.22rem 0.2rem;
+    -moz-appearance: textfield;
+  }
+  .ms-row input[type="number"]::-webkit-outer-spin-button,
+  .ms-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .ms-row input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus); }
+
+  /* ── Rules ────────────────────────────────────────────────────────────────── */
+  .rules {
+    margin-top: 1.75rem;
+    border-top: 2px solid var(--accent);
+    padding-top: 1.4rem;
+  }
+
+  .rules-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .rules-head h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .rules-actions { display: flex; gap: 0.5rem; align-items: center; }
+  .link-btn {
+    font-family: var(--sans-font);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 0.2rem;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .link-btn:hover { color: var(--accent-strong); }
+  .link-btn.muted { color: var(--faint); }
+  .link-btn.muted:hover { color: var(--muted); }
+
+  .rules-intro {
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 1.1rem;
+  }
+  .rules-intro:empty { display: none; }
+
+  ol.rules-list {
+    list-style: none;
+    counter-reset: rule;
+    display: grid;
+    gap: 0.7rem;
+  }
+  ol.rules-list li {
+    counter-increment: rule;
+    position: relative;
+    padding-left: 2.4rem;
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  ol.rules-list li::before {
+    content: counter(rule);
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    width: 1.7rem;
+    height: 1.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sans-font);
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--on-accent);
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .rules-warning {
+    margin-top: 1.25rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    background: var(--danger-wash);
+    border-left: 4px solid var(--danger);
+    color: var(--danger);
+    font-weight: 800;
+    font-size: 0.98rem;
+    letter-spacing: 0.01em;
+  }
+  .rules-warning:empty { display: none; }
+
+  /* Rules edit mode */
+  .rules-edit { display: none; }
+  .rules-edit.show { display: block; }
+  .rules-view.hide { display: none; }
+  .edit-field { margin-bottom: 1rem; }
+  .edit-field label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+  .edit-field textarea,
+  .edit-field input[type="text"] {
+    width: 100%;
+    font-family: var(--sans-font);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    padding: 0.6rem 0.7rem;
+    resize: vertical;
+  }
+  .edit-field textarea:focus-visible,
+  .edit-field input[type="text"]:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--focus);
+  }
+  .edit-field .hint { font-size: 0.76rem; color: var(--faint); margin-top: 0.3rem; }
+  .edit-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+  /* ── Fullscreen / projection mode ─────────────────────────────────────────── */
+  body.fs {
+    padding: 0 !important;   /* override the site menubar's inline padding-top when projecting */
+    align-items: center;
+    background: var(--bg);
+  }
+  /* On matthorrigan.com the shared menubar.js injects a fixed #mh-menubar bar;
+     hide it in fullscreen so the projected timer is clean. No-op as a standalone file. */
+  body.fs #mh-menubar { display: none !important; }
+  body.fs .card {
+    max-width: none;
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2vh 4vw;
+  }
+  body.fs .masthead,
+  body.fs .setup,
+  body.fs .milestones,
+  body.fs .rules,
+  body.fs .kbd-hint { display: none; }
+  body.fs .stage { padding: 0; }
+  /* inline-block so fitTime() can measure the true digit width (a full-width
+     block would just report the container width); it then refines the size. */
+  body.fs .time { display: inline-block; font-size: min(20vw, 56vh); }
+  body.fs .fs-label {
+    display: block;
+    font-size: clamp(0.9rem, 2.2vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1vh;
+  }
+  body.fs .stage.finished .fs-label { color: var(--danger); }
+  body.fs .exam-name-display { font-size: clamp(1.5rem, 4vw, 3rem); margin-bottom: 1.5vh; }
+  body.fs .progress { max-width: 78vw; margin-top: 3vh; }
+  body.fs .progress-track { height: clamp(14px, 2.4vh, 36px); }
+  body.fs .stage-sub { margin-top: 2.5vh; }
+  body.fs .stage-sub .chip { font-size: clamp(0.9rem, 1.6vw, 1.3rem); }
+  body.fs .ends-at { font-size: clamp(1rem, 1.8vw, 1.5rem); }
+  body.fs .banner { font-size: clamp(1rem, 2vw, 1.6rem); max-width: 70vw; }
+  body.fs .controls { margin-top: 4vh; }
+
+  /* ── Print ────────────────────────────────────────────────────────────────── */
+  @media print {
+    .flare, .setup, .milestones, .controls, .kbd-hint, .rules-actions, .stage-sub, #mh-menubar { display: none !important; }
+    .card { box-shadow: none; max-width: none; }
+    body { padding: 0 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flare"></div>
+
+<div class="card">
+
+  <!-- ── Masthead ── -->
+  <div class="masthead">
+    <div class="eyebrow">Exam Invigilation</div>
+    <h1>Exam <em>Timer</em></h1>
+  </div>
+
+  <!-- ── Setup ── -->
+  <div class="setup">
+    <div class="setup-label">Set the time</div>
+    <div class="time-inputs">
+      <label class="field">
+        <span>Hours</span>
+        <input type="number" id="inp-h" min="0" max="23" value="1" inputmode="numeric">
+      </label>
+      <span class="colon">:</span>
+      <label class="field">
+        <span>Minutes</span>
+        <input type="number" id="inp-m" min="0" max="59" value="30" inputmode="numeric">
+      </label>
+      <span class="colon">:</span>
+      <label class="field">
+        <span>Seconds</span>
+        <input type="number" id="inp-s" min="0" max="59" value="0" inputmode="numeric">
+      </label>
+    </div>
+    <div class="presets" id="presets">
+      <button class="preset" data-min="180">3 h</button>
+      <button class="preset" data-min="120">2 h</button>
+      <button class="preset" data-min="90">90 min</button>
+      <button class="preset" data-min="60">60 min</button>
+      <button class="preset" data-min="50">50 min</button>
+      <button class="preset" data-min="30">30 min</button>
+      <button class="preset" data-min="15">15 min</button>
+      <button class="preset" data-min="10">10 min</button>
+      <button class="preset" data-min="5">5 min</button>
+      <button class="preset" data-min="1">1 min</button>
+    </div>
+    <div class="exam-name-row">
+      <input type="text" class="exam-name-input" id="exam-name" maxlength="80"
+             placeholder="Exam name to display (optional) — e.g. IAT 206W — Midterm">
+    </div>
+  </div>
+
+  <!-- ── Timer stage ── -->
+  <div class="stage" id="stage">
+    <div class="exam-name-display" id="exam-name-display"></div>
+    <div class="fs-label" id="fs-label">Exam time remaining</div>
+    <div class="time" id="time-display" role="timer" aria-live="off">1:30:00</div>
+    <div class="progress" id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Exam time remaining">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="stage-sub">
+      <span class="chip" id="state-chip">Ready</span>
+      <span class="ends-at" id="ends-at"></span>
+    </div>
+    <div class="banner" id="banner"></div>
+  </div>
+
+  <!-- ── Controls ── -->
+  <div class="controls">
+    <button class="btn btn-big" id="btn-start">Start</button>
+    <button class="btn btn-secondary" id="btn-reset" disabled>Reset</button>
+    <button class="btn btn-secondary" id="btn-sub1" disabled>−1 min</button>
+    <button class="btn btn-secondary" id="btn-add1" disabled>+1 min</button>
+    <button class="btn btn-secondary" id="btn-add5" disabled>+5 min</button>
+    <button class="btn btn-danger" id="btn-silence" style="display:none">Silence alarm</button>
+    <button class="btn btn-ghost" id="btn-test">Test sound</button>
+    <button class="btn btn-ghost" id="btn-full">Fullscreen</button>
+  </div>
+  <div class="kbd-hint">
+    <kbd>Space</kbd> start / pause &nbsp;·&nbsp; <kbd>R</kbd> reset &nbsp;·&nbsp; <kbd>F</kbd> fullscreen
+  </div>
+
+  <!-- ── Milestone chimes ── -->
+  <div class="milestones">
+    <div class="setup-label">Milestone chimes</div>
+    <label class="ms-row">
+      <input type="checkbox" id="chk-entry" checked>
+      <span class="ms-text"><strong>Entry closes</strong> after</span>
+      <input type="number" id="inp-entry" min="1" max="180" value="30">
+      <span class="ms-text">min from start</span>
+    </label>
+    <label class="ms-row">
+      <input type="checkbox" id="chk-final" checked>
+      <span class="ms-text"><strong>Final warning</strong> with</span>
+      <input type="number" id="inp-final" min="1" max="60" value="5">
+      <span class="ms-text">min remaining (no leaving)</span>
+    </label>
+  </div>
+
+  <!-- ── Rules ── -->
+  <div class="rules">
+    <div class="rules-head">
+      <h2>Exam Rules</h2>
+      <div class="rules-actions">
+        <button class="link-btn" id="btn-edit-rules">Edit rules</button>
+        <button class="link-btn muted" id="btn-reset-rules" style="display:none">Reset to default</button>
+      </div>
+    </div>
+
+    <!-- View mode -->
+    <div class="rules-view" id="rules-view">
+      <p class="rules-intro" id="rules-intro"></p>
+      <ol class="rules-list" id="rules-list"></ol>
+      <div class="rules-warning" id="rules-warning"></div>
+    </div>
+
+    <!-- Edit mode -->
+    <div class="rules-edit" id="rules-edit">
+      <div class="edit-field">
+        <label for="edit-intro">Intro paragraph</label>
+        <textarea id="edit-intro" rows="3"></textarea>
+        <div class="hint">General instructions shown above the numbered rules. Leave blank to hide.</div>
+      </div>
+      <div class="edit-field">
+        <label for="edit-list">Numbered rules</label>
+        <textarea id="edit-list" rows="12"></textarea>
+        <div class="hint">One rule per line. Blank lines are ignored.</div>
+      </div>
+      <div class="edit-field">
+        <label for="edit-warning">Warning line</label>
+        <input type="text" id="edit-warning">
+        <div class="hint">Bold red callout under the rules. Leave blank to hide.</div>
+      </div>
+      <div class="edit-actions">
+        <button class="btn" id="btn-save-rules">Save</button>
+        <button class="btn btn-secondary" id="btn-cancel-rules">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Exam Timer — single-file, dependency-free. State, audio (Web Audio API),
+   timing (timestamp-based so it never drifts), and editable rules persisted to
+   localStorage. Sibling of MCQer / Seat Planner in ~/CLAUDE_PROJECTS/DOC_TOOLS.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+  "use strict";
+
+  const $ = (id) => document.getElementById(id);
+  const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+
+  // ── Default rules (verbatim from midterm_coversheet.docx) ──────────────────
+  const DEFAULT_RULES = {
+    intro: "You have approximately 90 minutes to write this exam. You are allowed pencils or pens and erasers. All multiple-choice question (MCQ) answers are to be circled on the answer sheet. Written-answer questions are to be completed in this exam booklet and may use pen. This coversheet must be completed in full and signed.",
+    list: [
+      "Student ID card is required to write all final exams. Other ID will not be accepted.",
+      "No entry after 30 minutes. If you leave the exam room within the first 30 minutes, your exam will be over, and you will receive an academic alert.",
+      "No bathroom breaks during the exam time. If you leave the room during the exam, your exam will be over.",
+      "No cell phones or electronic devices in pockets (possession is considered cheating).",
+      "Only writing supplies, student card and a beverage allowed on the desk. No pencil cases.",
+      "No jackets, hats, bags or watches. All student possessions must be placed at the front of the room.",
+      "No sharing calculators or any other materials during the exam.",
+      "Possession or use of information or materials not authorized by the instructor is cheating.",
+      "No talking or other communication except quietly with invigilator or instructor.",
+      "It is your responsibility not to appear to be cheating.",
+      "The exam begins only when the invigilator says “go.” Do not turn over this coversheet until then.",
+      "Your hands must remain above the desk for the entire exam. This is to prevent phone cheating.",
+      "The invigilator reserves the right not to answer questions mid-exam. To ask the invigilator a question, raise your hand quietly. The invigilator will only answer questions that involve defining everyday words—not course glossary terms—or clarifying exam procedures.",
+      "No leaving the exam room in the final 5 minutes of the exam. If you complete the exam with less than 5 minutes remaining, stay at your desk with the exam.",
+      "Otherwise, if you finish the exam early, put your answer booklet where directed by the invigilator."
+    ],
+    warning: "NOT FOLLOWING THESE RULES WILL RESULT IN A ZERO (0) MARK FOR THE TEST & A MISCONDUCT REPORT."
+  };
+
+  const STORE_KEY = "examtimer.v1";
+
+  // ── Persistent settings ────────────────────────────────────────────────────
+  let settings = {
+    h: 1, m: 30, s: 0,
+    examName: "",
+    entryOn: true, entryMin: 30,
+    finalOn: true, finalMin: 5,
+    rules: JSON.parse(JSON.stringify(DEFAULT_RULES))
+  };
+
+  function loadSettings() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        settings = Object.assign(settings, saved);
+        if (!settings.rules) settings.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+      }
+    } catch (e) { /* ignore corrupt storage */ }
+  }
+  function saveSettings() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(settings)); } catch (e) {}
+  }
+
+  // ── Timer state ─────────────────────────────────────────────────────────────
+  let state = "idle";        // idle | running | paused | finished
+  let remainingMs = 0;       // ms left (authoritative while paused/finished)
+  let endTs = 0;             // wall-clock end timestamp while running
+  let totalMs = 0;           // full length, set at start — drives the progress bar
+  let tickHandle = null;
+  let entryFired = false, finalFired = false;
+  let bannerHandle = null;
+
+  // ── Audio (Web Audio API — no audio files, works offline) ───────────────────
+  let audioCtx = null;
+  let alarmHandle = null;
+
+  function ensureAudio() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+
+  function beep(freq, offset, dur, vol) {
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const t = ctx.currentTime + offset;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    osc.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.start(t);
+    osc.stop(t + dur + 0.03);
+  }
+
+  // Urgent three-note motif used for the end-of-exam alarm + sound test.
+  function playMotif() {
+    beep(880, 0.00, 0.18, 0.5);
+    beep(880, 0.22, 0.18, 0.5);
+    beep(1175, 0.44, 0.34, 0.55);
+  }
+  // Softer two-note chime for milestones.
+  function playMilestone() {
+    beep(660, 0.00, 0.18, 0.4);
+    beep(990, 0.20, 0.30, 0.4);
+  }
+
+  function startAlarm() {
+    stopAlarm();
+    let n = 0;
+    const fire = () => { playMotif(); if (++n >= 16) stopAlarm(); }; // ~20 s then auto-stop
+    fire();
+    alarmHandle = setInterval(fire, 1300);
+  }
+  function stopAlarm() {
+    if (alarmHandle) { clearInterval(alarmHandle); alarmHandle = null; }
+  }
+
+  // ── Screen wake lock (best-effort — keeps a projector display awake) ─────────
+  let wakeLock = null;
+  async function requestWake() {
+    try { if ("wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen"); }
+    catch (e) { /* not supported / denied */ }
+  }
+  function releaseWake() {
+    try { if (wakeLock) wakeLock.release(); } catch (e) {}
+    wakeLock = null;
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && state === "running") requestWake();
+  });
+
+  // ── Elements ────────────────────────────────────────────────────────────────
+  const inpH = $("inp-h"), inpM = $("inp-m"), inpS = $("inp-s");
+  const examNameInput = $("exam-name"), examNameDisplay = $("exam-name-display");
+  const timeDisplay = $("time-display"), stage = $("stage"), fsLabel = $("fs-label");
+  const progressEl = $("progress"), progressFill = $("progress-fill");
+  const stateChip = $("state-chip"), endsAt = $("ends-at"), banner = $("banner");
+  const btnStart = $("btn-start"), btnReset = $("btn-reset");
+  const btnSub1 = $("btn-sub1"), btnAdd1 = $("btn-add1"), btnAdd5 = $("btn-add5");
+  const btnSilence = $("btn-silence"), btnTest = $("btn-test"), btnFull = $("btn-full");
+  const chkEntry = $("chk-entry"), inpEntry = $("inp-entry");
+  const chkFinal = $("chk-final"), inpFinal = $("inp-final");
+
+  // ── Time helpers ─────────────────────────────────────────────────────────────
+  function readInputsMs() {
+    const h = clamp(parseInt(inpH.value, 10) || 0, 0, 23);
+    const m = clamp(parseInt(inpM.value, 10) || 0, 0, 59);
+    const s = clamp(parseInt(inpS.value, 10) || 0, 0, 59);
+    return ((h * 3600) + (m * 60) + s) * 1000;
+  }
+  function writeInputsFromMs(ms) {
+    let total = Math.round(ms / 1000);
+    inpH.value = Math.floor(total / 3600);
+    inpM.value = Math.floor((total % 3600) / 60);
+    inpS.value = total % 60;
+  }
+  function fmt(ms) {
+    let total = Math.max(0, Math.ceil(ms / 1000));
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    const pad = (n) => String(n).padStart(2, "0");
+    return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+  }
+  function fmtClock(date) {
+    return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  function showBanner(text, danger) {
+    banner.textContent = text;
+    banner.classList.toggle("danger", !!danger);
+    banner.classList.add("show");
+    if (bannerHandle) clearTimeout(bannerHandle);
+    bannerHandle = setTimeout(() => banner.classList.remove("show"), 18000);
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────────
+  function currentMs() {
+    if (state === "running") return Math.max(0, endTs - Date.now());
+    if (state === "idle") return readInputsMs();
+    return remainingMs;
+  }
+
+  function render() {
+    const ms = currentMs();
+    timeDisplay.textContent = fmt(ms);
+
+    // Stage colour states.
+    const finalMs = (chkFinal.checked ? clamp(parseInt(inpFinal.value, 10) || 0, 1, 60) : 1) * 60000;
+    const lowThreshold = Math.max(60000, finalMs); // last minute, or the final-warning window
+    stage.classList.toggle("low", state === "running" && ms <= lowThreshold && ms > 0);
+    stage.classList.toggle("finished", state === "finished");
+
+    // Progress bar — full when idle/at start, empty at time-up.
+    const frac = (state === "idle") ? 1 : (totalMs > 0 ? clamp(ms / totalMs, 0, 1) : 0);
+    progressFill.style.width = (frac * 100).toFixed(2) + "%";
+    progressEl.setAttribute("aria-valuenow", String(Math.round(frac * 100)));
+
+    // State chip.
+    stateChip.classList.remove("running", "finished");
+    if (state === "idle")      { stateChip.textContent = "Ready"; }
+    else if (state === "running") { stateChip.textContent = "Running"; stateChip.classList.add("running"); }
+    else if (state === "paused")  { stateChip.textContent = "Paused"; }
+    else if (state === "finished"){ stateChip.textContent = "Time is up"; stateChip.classList.add("finished"); }
+
+    // Ends-at line.
+    if (state === "running") {
+      endsAt.innerHTML = `Ends at <strong>${fmtClock(new Date(endTs))}</strong>`;
+    } else if (state === "paused") {
+      endsAt.innerHTML = `Paused with <strong>${fmt(remainingMs)}</strong> left`;
+    } else {
+      endsAt.textContent = "";
+    }
+
+    // Buttons.
+    btnStart.style.display = (state === "finished") ? "none" : "";
+    if (state === "idle")      btnStart.textContent = "Start";
+    else if (state === "running") btnStart.textContent = "Pause";
+    else if (state === "paused")  btnStart.textContent = "Resume";
+    btnStart.disabled = (state === "idle" && readInputsMs() === 0);
+
+    btnReset.disabled = (state === "idle");
+    const adjustable = (state === "running" || state === "paused");
+    btnSub1.disabled = !adjustable;
+    btnAdd1.disabled = !adjustable;
+    btnAdd5.disabled = !adjustable;
+    btnSilence.style.display = (state === "finished" && alarmHandle) ? "" : "none";
+
+    // Lock the setup while a countdown is live.
+    const lockInputs = (state !== "idle");
+    [inpH, inpM, inpS].forEach((el) => { el.disabled = lockInputs; });
+    document.querySelectorAll(".preset").forEach((b) => { b.disabled = lockInputs; });
+
+    syncPresetHighlight();
+    fsLabel.textContent = (state === "finished") ? "Time is up" : "Exam time remaining";
+    fitTime();
+  }
+
+  function syncPresetHighlight() {
+    if (state !== "idle") { document.querySelectorAll(".preset").forEach((b) => b.classList.remove("active")); return; }
+    const mins = readInputsMs() / 60000;
+    document.querySelectorAll(".preset").forEach((b) => {
+      b.classList.toggle("active", parseInt(b.dataset.min, 10) === mins);
+    });
+  }
+
+  // ── Tick ──────────────────────────────────────────────────────────────────────
+  function tick() {
+    const ms = endTs - Date.now();
+    if (ms <= 0) { finish(); return; }
+    remainingMs = ms;
+    checkMilestones(ms);
+    render();
+  }
+
+  function checkMilestones(ms) {
+    const total = (settings.h * 3600 + settings.m * 60 + settings.s) * 1000; // configured length
+    if (chkEntry.checked && !entryFired) {
+      const entryMs = clamp(parseInt(inpEntry.value, 10) || 0, 1, 180) * 60000;
+      if (entryMs < total && (total - ms) >= entryMs) {
+        entryFired = true;
+        playMilestone();
+        showBanner(`Entry is now closed — no entry after ${Math.round(entryMs / 60000)} minutes.`, false);
+      }
+    }
+    if (chkFinal.checked && !finalFired) {
+      const finalMs = clamp(parseInt(inpFinal.value, 10) || 0, 1, 60) * 60000;
+      if (ms <= finalMs) {
+        finalFired = true;
+        playMilestone();
+        showBanner(`Final ${Math.round(finalMs / 60000)} minutes — no leaving the room.`, true);
+      }
+    }
+  }
+
+  // ── Transitions ─────────────────────────────────────────────────────────────
+  function start() {
+    ensureAudio(); // unlock audio on this user gesture
+    if (state === "idle") {
+      const ms = readInputsMs();
+      if (ms <= 0) return;
+      settings.h = parseInt(inpH.value, 10) || 0;
+      settings.m = parseInt(inpM.value, 10) || 0;
+      settings.s = parseInt(inpS.value, 10) || 0;
+      saveSettings();
+      remainingMs = ms;
+      totalMs = ms;
+      entryFired = false; finalFired = false;
+      banner.classList.remove("show");
+      endTs = Date.now() + remainingMs;
+      state = "running";
+      requestWake();
+      startTick();
+    } else if (state === "running") {
+      pause();
+    } else if (state === "paused") {
+      endTs = Date.now() + remainingMs;
+      state = "running";
+      requestWake();
+      startTick();
+    }
+    render();
+  }
+
+  function pause() {
+    if (state !== "running") return;
+    remainingMs = Math.max(0, endTs - Date.now());
+    state = "paused";
+    stopTick();
+    releaseWake();
+    render();
+  }
+
+  function reset() {
+    stopTick();
+    stopAlarm();
+    releaseWake();
+    state = "idle";
+    remainingMs = 0;
+    totalMs = 0;
+    entryFired = false; finalFired = false;
+    banner.classList.remove("show");
+    stage.classList.remove("low", "finished");
+    writeInputsFromMs((settings.h * 3600 + settings.m * 60 + settings.s) * 1000);
+    render();
+  }
+
+  function finish() {
+    stopTick();
+    releaseWake();
+    state = "finished";
+    remainingMs = 0;
+    startAlarm();
+    render();
+  }
+
+  function addTime(deltaMs) {
+    if (state === "running") {
+      endTs += deltaMs;
+      if (endTs <= Date.now()) endTs = Date.now() + 1000;
+      remainingMs = endTs - Date.now();
+    } else if (state === "paused") {
+      remainingMs = Math.max(1000, remainingMs + deltaMs);
+    }
+    if (deltaMs > 0) totalMs += deltaMs; // extend the whole so the bar stays in range
+    render();
+  }
+
+  function startTick() {
+    stopTick();
+    tickHandle = setInterval(tick, 200);
+    tick();
+  }
+  function stopTick() {
+    if (tickHandle) { clearInterval(tickHandle); tickHandle = null; }
+  }
+
+  // ── Rules rendering ───────────────────────────────────────────────────────────
+  function renderRules() {
+    const r = settings.rules;
+    $("rules-intro").textContent = r.intro || "";
+    const ol = $("rules-list");
+    ol.innerHTML = "";
+    (r.list || []).forEach((text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      ol.appendChild(li);
+    });
+    $("rules-warning").textContent = r.warning || "";
+  }
+
+  function openRulesEditor() {
+    const r = settings.rules;
+    $("edit-intro").value = r.intro || "";
+    $("edit-list").value = (r.list || []).join("\n");
+    $("edit-warning").value = r.warning || "";
+    $("rules-view").classList.add("hide");
+    $("rules-edit").classList.add("show");
+    $("btn-edit-rules").style.display = "none";
+    $("btn-reset-rules").style.display = "";
+  }
+  function closeRulesEditor() {
+    $("rules-view").classList.remove("hide");
+    $("rules-edit").classList.remove("show");
+    $("btn-edit-rules").style.display = "";
+    $("btn-reset-rules").style.display = "none";
+  }
+  function saveRules() {
+    settings.rules = {
+      intro: $("edit-intro").value.trim(),
+      list: $("edit-list").value.split("\n").map((s) => s.trim()).filter(Boolean),
+      warning: $("edit-warning").value.trim()
+    };
+    saveSettings();
+    renderRules();
+    closeRulesEditor();
+  }
+
+  // ── Fullscreen ────────────────────────────────────────────────────────────────
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen
+        || (() => {})).call(document.documentElement);
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || (() => {})).call(document);
+    }
+  }
+  // Size the digits to fill the row in fullscreen without clipping (CSS can't
+  // know the glyph count, so measure and scale). No-op outside fullscreen.
+  function fitTime() {
+    if (!document.body.classList.contains("fs")) { timeDisplay.style.fontSize = ""; return; }
+    const availW = stage.clientWidth * 0.94;
+    const availH = window.innerHeight * 0.56;
+    if (availW <= 0 || availH <= 0) return;
+    timeDisplay.style.fontSize = availH + "px";
+    const w = timeDisplay.getBoundingClientRect().width;
+    if (w > availW) timeDisplay.style.fontSize = Math.floor(availH * (availW / w)) + "px";
+  }
+  window.addEventListener("resize", fitTime);
+
+  document.addEventListener("fullscreenchange", () => {
+    document.body.classList.toggle("fs", !!document.fullscreenElement);
+    btnFull.textContent = document.fullscreenElement ? "Exit fullscreen" : "Fullscreen";
+    requestAnimationFrame(fitTime);
+  });
+
+  // ── Wire up ──────────────────────────────────────────────────────────────────
+  btnStart.addEventListener("click", start);
+  btnReset.addEventListener("click", reset);
+  btnSub1.addEventListener("click", () => addTime(-60000));
+  btnAdd1.addEventListener("click", () => addTime(60000));
+  btnAdd5.addEventListener("click", () => addTime(5 * 60000));
+  btnSilence.addEventListener("click", () => { stopAlarm(); render(); });
+  btnTest.addEventListener("click", () => { ensureAudio(); playMotif(); });
+  btnFull.addEventListener("click", toggleFullscreen);
+
+  [inpH, inpM, inpS].forEach((el) => {
+    el.addEventListener("input", () => { if (state === "idle") render(); });
+    el.addEventListener("change", () => {
+      el.value = clamp(parseInt(el.value, 10) || 0, parseInt(el.min, 10), parseInt(el.max, 10));
+      if (state === "idle") {
+        settings.h = parseInt(inpH.value, 10) || 0;
+        settings.m = parseInt(inpM.value, 10) || 0;
+        settings.s = parseInt(inpS.value, 10) || 0;
+        saveSettings();
+        render();
+      }
+    });
+  });
+
+  document.querySelectorAll(".preset").forEach((b) => {
+    b.addEventListener("click", () => {
+      if (state !== "idle") return;
+      writeInputsFromMs(parseInt(b.dataset.min, 10) * 60000);
+      settings.h = parseInt(inpH.value, 10) || 0;
+      settings.m = parseInt(inpM.value, 10) || 0;
+      settings.s = parseInt(inpS.value, 10) || 0;
+      saveSettings();
+      render();
+    });
+  });
+
+  examNameInput.addEventListener("input", () => {
+    examNameDisplay.textContent = examNameInput.value.trim();
+    settings.examName = examNameInput.value;
+    saveSettings();
+  });
+
+  [chkEntry, inpEntry, chkFinal, inpFinal].forEach((el) => {
+    el.addEventListener("change", () => {
+      settings.entryOn = chkEntry.checked;
+      settings.entryMin = clamp(parseInt(inpEntry.value, 10) || 0, 1, 180);
+      settings.finalOn = chkFinal.checked;
+      settings.finalMin = clamp(parseInt(inpFinal.value, 10) || 0, 1, 60);
+      inpEntry.value = settings.entryMin;
+      inpFinal.value = settings.finalMin;
+      saveSettings();
+      render();
+    });
+  });
+
+  $("btn-edit-rules").addEventListener("click", openRulesEditor);
+  $("btn-cancel-rules").addEventListener("click", closeRulesEditor);
+  $("btn-save-rules").addEventListener("click", saveRules);
+  $("btn-reset-rules").addEventListener("click", () => {
+    if (confirm("Reset the exam rules to the default cover-sheet rules?")) {
+      settings.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
+      saveSettings();
+      renderRules();
+      openRulesEditor(); // refresh the editor fields with the defaults
+    }
+  });
+
+  // Keyboard shortcuts (ignored while typing in a field).
+  document.addEventListener("keydown", (e) => {
+    const tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || e.target.isContentEditable) return;
+    if (e.code === "Space") { e.preventDefault(); if (state !== "finished") start(); }
+    else if (e.key === "r" || e.key === "R") { reset(); }
+    else if (e.key === "f" || e.key === "F") { toggleFullscreen(); }
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  function init() {
+    loadSettings();
+    inpH.value = settings.h; inpM.value = settings.m; inpS.value = settings.s;
+    examNameInput.value = settings.examName || "";
+    examNameDisplay.textContent = (settings.examName || "").trim();
+    chkEntry.checked = settings.entryOn; inpEntry.value = settings.entryMin;
+    chkFinal.checked = settings.finalOn; inpFinal.value = settings.finalMin;
+    renderRules();
+    render();
+  }
+  init();
+</script>
+</body>
+</html>

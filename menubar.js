@@ -29,7 +29,9 @@
   ];
 
   var TOOLS = [
-    ["MCQer — exam version production", "MCQer.html"]
+    ["MCQer — exam version production", "MCQer.html"],
+    ["Seat Planner — classroom seating charts", "SeatPlanner.html"],
+    ["Exam Timer — invigilation countdown", "ExamTimer.html"]
     // next: ["<tool name>", "<Tool>.html"],
   ];
 
