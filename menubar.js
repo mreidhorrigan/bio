@@ -21,6 +21,8 @@
 
   var GAMES = [
     ["Autofac: Rad Shipping", "autofac.html"],
+    ["Rock walls and damp—these match our dream; but, Rector, the cold is new.",
+     "Rock_Walls_and_Damp.html"],
     ["Clod Bathos, Superior Machine",
      "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"],
     ["Appraising the Pedagogical Value of Audiogames (CGSA 2026)",
