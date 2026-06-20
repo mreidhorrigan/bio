@@ -52,14 +52,12 @@
    * page. px + a fixed family = pixel-identical menubar site-wide.
    * (13px / 5.5px 13px ≈ the old .82rem / .34rem .8rem at a 16px root.) */
   var CSS = [
-    /* Brand corner: a slight asymmetric 'leaf' — a gentle sweep at the top-left
-       and bottom-right, near-square at the other two. One canonical set of radii,
-       sized for each context (item-size uses %, larger boxes use fixed ellipses
-       so the sweep stays a slight angle instead of ballooning with the box). */
-    /* FIXED elliptical radii (not %) so the corner arc is identical on every box,
-       wide or narrow. With % the sweep flattened as items got wider, so a wide
-       dropdown pill read flatter than a narrow nav pill; fixed radii make them
-       match exactly. ~16x7 at the leaf corners echoes the original nav-pill look. */
+    /* Brand corner — the asymmetric 'leaf': a gentle sweep at the top-left and
+       bottom-right, near-square at the other two. FIXED elliptical radii (not %)
+       so the corner arc is identical on every box, wide or narrow. With % the
+       sweep flattened as items got wider, so a wide dropdown pill read flatter
+       than a narrow nav pill; fixed radii make them match exactly. ~16x7 at the
+       leaf corners echoes the original nav-pill look. See brand/house-style.md. */
     ":root{ --mh-blue:#c3f0ff;",
     "  --mh-leaf:16px 4px 16px 4px / 7px 2px 7px 2px;",        /* item-size: hovers/pills */
     "  --mh-leaf-box:22px 6px 22px 6px / 10px 3px 10px 3px;",  /* the dropdown panel (same angle) */

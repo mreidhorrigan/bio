@@ -1,0 +1,117 @@
+/* ===========================================================================
+   brand.css — the one canonical stylesheet for matthorrigan.com's house style.
+
+   Drop-in for build tools (the CV builder, a dossier builder, future tools):
+     <link rel="stylesheet" href="brand/brand.css">
+   …then include the shared menubar:
+     <script src="menubar.js" defer></script>
+
+   This file is the SOURCE OF TRUTH for the tokens. brand/tokens.json mirrors it
+   for programmatic consumers; brand/house-style.md explains the rules + rationale.
+   The existing pages (index, CV, MCQer/SeatPlanner/ExamTimer) are the reference
+   implementations and already embody these values.
+   =========================================================================== */
+
+:root {
+  /* ---- Colour: light "document" context (index, CV, tools) --------------- */
+  --brand-cyan:        #c3f0ff;  /* THE highlight/interaction colour          */
+  --accent:            #6b1f2a;  /* deep maroon — links, buttons, labels      */
+  --accent-strong:     #531722;  /* accent hover / active                     */
+  --accent-wash:       #f6eef0;  /* tint behind hovered/confirmed surfaces    */
+  --on-accent:         #ffffff;  /* text/icons on an accent fill              */
+
+  --flare-warm:        #f28b46;  /* home/landing cloud: orange                */
+  --flare-cool:        #c3f0ff;  /* home/landing cloud: blue (= --brand-cyan) */
+
+  --ink:               #1a1a1a;  /* primary text                             */
+  --muted:             #595959;  /* secondary text, subtitles                */
+  --faint:             #8a8a8a;  /* hints, captions                          */
+  --rule:              #d9d9d9;  /* hairlines, borders, dashed drop-zones    */
+  --bg:                #faf6f7;  /* page background                          */
+  --surface:           #ffffff;  /* cards, drop-zones                        */
+  --surface-tint:      #f3eef1;  /* panels, previews                         */
+
+  --danger:            #b2241a;  /* error/warning text (distinct from brand) */
+  --danger-wash:       #fbecea;  /* error/warning background                 */
+  --ok:                #1f7a3d;  /* affirmation (used by ExamTimer)          */
+  --focus:             #c3f0ff;  /* focus ring (= --brand-cyan)              */
+
+  /* ---- The leaf corner (fixed elliptical radii — never %, except fluid) --
+     Shape: big sweep at TOP-LEFT + BOTTOM-RIGHT, near-square TOP-RIGHT + BOTTOM-LEFT.
+     Same names the components already expect, so importing this "feeds" them. */
+  --leaf:      15px 4px 15px 4px / 8px 3px 8px 3px;     /* buttons & medium controls */
+  --leaf-lg:   22px 6px 22px 6px / 12px 4px 12px 4px;   /* cards, panels, modals, drop zones */
+  --leaf-sm:   8px 3px 8px 3px / 5px 2px 5px 2px;       /* inputs, chips, badges, small boxes */
+  --mh-leaf:     16px 4px 16px 4px / 7px 2px 7px 2px;   /* pills / menubar items / highlights */
+  --mh-leaf-box: 22px 6px 22px 6px / 10px 3px 10px 3px; /* the menubar dropdown panel */
+  --mh-leaf-bar: 34px 16px;                             /* the menubar's bottom-right sweep */
+  --leaf-fluid:  25% 5% 25% 5%;                         /* fluid/inline only (text highlights) */
+
+  /* ---- Type ------------------------------------------------------------- */
+  --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono-font: ui-monospace, "SF Mono", Menlo, Consolas, monospace;  /* code / tabular previews */
+  /* NB: the menubar (menubar.js) hard-codes its own near-identical sans stack
+     that additionally lists `system-ui`; it is self-contained on purpose. */
+
+  /* ---- Elevation -------------------------------------------------------- */
+  --shadow-card:     0 4px 28px rgba(0,0,0,0.10);  /* main cards / elevated surfaces */
+  --shadow-bar:      0 1px 4px  rgba(0,0,0,0.05);  /* the fixed menubar           */
+  --shadow-dropdown: 0 6px 18px rgba(0,0,0,0.12);  /* the menubar dropdown panel  */
+
+  /* ---- Misc ------------------------------------------------------------- */
+  --radius: 8px;   /* legacy symmetric radius/spacing scalar, still defined by the
+                      tools; superseded for corners by the --leaf* tokens above   */
+}
+
+/* ---------------------------------------------------------------------------
+   Utility classes — opt-in helpers so a builder doesn't re-derive the rules.
+   --------------------------------------------------------------------------- */
+
+/* Leaf-cornered surfaces */
+.leaf      { border-radius: var(--leaf); }
+.leaf-lg   { border-radius: var(--leaf-lg); }
+.leaf-sm   { border-radius: var(--leaf-sm); }
+
+/* The cyan "highlighter" treatment (key words, active chips, menubar items) */
+.hl {
+  color: #000;
+  background: var(--brand-cyan);
+  border-radius: var(--mh-leaf);
+  filter: drop-shadow(0 0 5px var(--brand-cyan));
+}
+
+/* Site-wide selection colour — matches the highlight (radius/filter are ignored
+   by ::selection, so only background + colour take effect) */
+::selection { background: var(--brand-cyan); color: #000; }
+
+/* Focus ring — cyan, 3px. Apply on your control's :focus-visible (and tint
+   native form controls with the accent). Recipe used across the tools:
+     .btn:focus-visible, input:focus-visible {
+       outline: none; box-shadow: 0 0 0 3px var(--focus); border-color: var(--accent);
+     }
+     input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); } */
+.focus-ring:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+
+/* Left-accent callout / notice strip — an intentional NON-leaf exception:
+   a coloured left border with simple right-rounded corners. Use --accent for
+   info, --danger for errors. */
+.callout {
+  border-left: 4px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  background: var(--accent-wash);
+  padding: 0.6rem 0.9rem;
+}
+.callout.is-error { border-left-color: var(--danger); background: var(--danger-wash); }
+
+/* Soft orange→cyan landing backdrop (home/splash). Put on a full-bleed layer
+   behind content, e.g. a fixed/absolute element with z-index below the page. */
+.flare-backdrop {
+  background: radial-gradient(ellipse at 70% 100%,
+              var(--flare-warm) 20%, var(--flare-cool) 30%, #ffffff 75%);
+}
+
+/* NEVER leaf these — kept here as a reminder for generated markup:
+     .progress-track, .progress-fill { border-radius: 999px; }  (rounded ends)
+     .avatar, .dot                   { border-radius: 50%; }     (true circles)
+   and print/fullscreen surfaces are intentionally squared (border-radius: 0). */
