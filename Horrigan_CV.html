@@ -1275,7 +1275,7 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 .cv-mb-actions { display: flex; align-items: center; gap: .35rem; flex: none; }
 .cv-mb-tab {
 font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer;
-border: 1px solid transparent; border-radius: 999px; padding: .3rem .85rem;
+border: 1px solid transparent; border-radius: var(--mh-leaf, 16px 4px 16px 4px / 7px 2px 7px 2px); padding: .3rem .85rem;
 color: var(--muted, #595959); background: transparent;
 }
 .cv-mb-tab:hover { color: var(--accent, #6b1f2a); }
@@ -1283,7 +1283,7 @@ color: var(--muted, #595959); background: transparent;
 .cv-mb-dl {
 font-size: .82rem; font-weight: 600; text-decoration: none; white-space: nowrap;
 color: var(--accent, #6b1f2a); border: 1px solid var(--accent, #6b1f2a);
-border-radius: 999px; padding: .3rem .85rem; margin-left: .25rem;
+border-radius: var(--mh-leaf, 16px 4px 16px 4px / 7px 2px 7px 2px); padding: .3rem .85rem; margin-left: .25rem;
 }
 .cv-mb-dl:hover { color: #fff; background: var(--accent, #6b1f2a); }
 #cv-pdf-pane { position: fixed; inset: var(--cv-mb-h) 0 0 0; z-index: 900; background: #525659; }

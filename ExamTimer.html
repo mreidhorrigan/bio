@@ -34,6 +34,9 @@
     --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
     --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
     --radius:        8px;
+    --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
+    --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
+    --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
     --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   }
@@ -71,7 +74,7 @@
   .card {
     position: relative;
     background: var(--surface);
-    border-radius: 14px;
+    border-radius: var(--leaf-lg);
     box-shadow: 0 4px 28px rgba(0,0,0,0.10);
     padding: 2.5rem 2.5rem 2.25rem;
     max-width: 960px;
@@ -116,7 +119,7 @@
   .setup {
     background: var(--surface-tint);
     border: 1px solid var(--rule);
-    border-radius: 12px;
+    border-radius: var(--leaf-lg);
     padding: 1.1rem 1.25rem 1.25rem;
     margin-bottom: 1.5rem;
   }
@@ -158,7 +161,7 @@
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--rule);
-    border-radius: 8px;
+    border-radius: var(--leaf-sm);
     padding: 0.4rem 0.3rem;
     -moz-appearance: textfield;
   }
@@ -211,7 +214,7 @@
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--rule);
-    border-radius: 8px;
+    border-radius: var(--leaf-sm);
     padding: 0.5rem 0.7rem;
   }
   .exam-name-input::placeholder { color: var(--faint); }
@@ -220,7 +223,7 @@
   .stage {
     text-align: center;
     padding: 1.25rem 0 0.5rem;
-    border-radius: 14px;
+    border-radius: var(--leaf-lg);
     transition: background 0.25s;
   }
 
@@ -314,7 +317,7 @@
     margin: 1rem auto 0;
     max-width: 40rem;
     padding: 0.7rem 1rem;
-    border-radius: 10px;
+    border-radius: var(--leaf-lg);
     font-size: 0.95rem;
     font-weight: 700;
     border-left: 4px solid var(--accent);
@@ -341,7 +344,7 @@
     letter-spacing: 0.01em;
     padding: 0.6rem 1.4rem;
     border: 1.5px solid var(--accent);
-    border-radius: 7px;
+    border-radius: var(--leaf);
     background: var(--accent);
     color: var(--on-accent);
     cursor: pointer;
@@ -382,7 +385,7 @@
     background: var(--surface-tint);
     border: 1px solid var(--rule);
     border-bottom-width: 2px;
-    border-radius: 5px;
+    border-radius: var(--leaf-sm);
     padding: 0.05rem 0.4rem;
     color: var(--muted);
   }
@@ -391,7 +394,7 @@
   .milestones {
     margin-top: 1.75rem;
     border: 1px solid var(--rule);
-    border-radius: 12px;
+    border-radius: var(--leaf-lg);
     padding: 1.1rem 1.25rem;
   }
   .milestones .setup-label { margin-bottom: 0.85rem; }
@@ -418,7 +421,7 @@
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--rule);
-    border-radius: 6px;
+    border-radius: var(--leaf-sm);
     padding: 0.22rem 0.2rem;
     -moz-appearance: textfield;
   }
@@ -508,7 +511,7 @@
   .rules-warning {
     margin-top: 1.25rem;
     padding: 0.9rem 1.1rem;
-    border-radius: 10px;
+    border-radius: var(--leaf-lg);
     background: var(--danger-wash);
     border-left: 4px solid var(--danger);
     color: var(--danger);
@@ -541,7 +544,7 @@
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--rule);
-    border-radius: 8px;
+    border-radius: var(--leaf-sm);
     padding: 0.6rem 0.7rem;
     resize: vertical;
   }

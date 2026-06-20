@@ -52,7 +52,19 @@
    * page. px + a fixed family = pixel-identical menubar site-wide.
    * (13px / 5.5px 13px ≈ the old .82rem / .34rem .8rem at a 16px root.) */
   var CSS = [
-    ":root{ --mh-blue:#c3f0ff; }",
+    /* Brand corner: a slight asymmetric 'leaf' — a gentle sweep at the top-left
+       and bottom-right, near-square at the other two. One canonical set of radii,
+       sized for each context (item-size uses %, larger boxes use fixed ellipses
+       so the sweep stays a slight angle instead of ballooning with the box). */
+    /* FIXED elliptical radii (not %) so the corner arc is identical on every box,
+       wide or narrow. With % the sweep flattened as items got wider, so a wide
+       dropdown pill read flatter than a narrow nav pill; fixed radii make them
+       match exactly. ~16x7 at the leaf corners echoes the original nav-pill look. */
+    ":root{ --mh-blue:#c3f0ff;",
+    "  --mh-leaf:16px 4px 16px 4px / 7px 2px 7px 2px;",        /* item-size: hovers/pills */
+    "  --mh-leaf-box:22px 6px 22px 6px / 10px 3px 10px 3px;",  /* the dropdown panel (same angle) */
+    "  --mh-leaf-bar:34px 16px;", /* the bar's bottom-right sweep (h v) */
+    "}",
     /* The bar owns its box model and base look so a host page's resets can't
        reshape it: index.html has no box-sizing (content-box) while the CV/tools
        set border-box, which is exactly what made the index bar render taller. */
@@ -68,7 +80,7 @@
     "  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;",
     "  font-size:13px; font-weight:600; line-height:1.1;",
     "  color:#595959; text-decoration:none; cursor:pointer; white-space:nowrap;",
-    "  padding:5.5px 13px; border-radius:25% 5% 25% 5%;",
+    "  padding:5.5px 13px; border-radius:var(--mh-leaf);",
     /* reset border/margin/background so a host's global a{} can't bleed in
        (e.g. the CV's a{border-bottom:1px} was drawing a stray underline here) */
     "  position:relative; border:0; margin:0; background:none;",
@@ -96,19 +108,20 @@
     ".mh-dd-menu{",
     "  position:absolute; left:0; top:calc(100% + 8px); min-width:260px; max-width:min(340px,86vw);",
     "  display:flex; flex-direction:column; gap:2px; padding:6px; z-index:1001;",
-    "  background:#fff; border:1px solid #d9d9d9; border-radius:12px;",
+    "  background:#fff; border:1px solid #d9d9d9; border-radius:var(--mh-leaf-box);",
     "  box-shadow:0 6px 18px rgba(0,0,0,.12);",
     "}",
-    ".mh-dd-menu a{ white-space:normal; border-radius:10px; font-weight:500; line-height:1.3; }",
+    ".mh-dd-menu a{ white-space:normal; border-radius:var(--mh-leaf); font-weight:500; line-height:1.3; }",
     /* standalone bar (pages without the CV builder's #cv-menubar) */
     "#mh-menubar{",
     "  position:fixed; inset:0 0 auto 0; min-height:46px;",
     "  display:flex; align-items:center; gap:16px; padding:4px clamp(12px,4vw,28px);",
     "  background:#fff; border-bottom:1px solid #d9d9d9; box-shadow:0 1px 4px rgba(0,0,0,.05);",
-    "  z-index:1000;",
+    "  z-index:1000; border-bottom-right-radius:var(--mh-leaf-bar);",
     "}",
     /* when spliced into the CV bar: let it wrap instead of clipping; pin the same gap */
-    "#cv-menubar{ height:auto !important; min-height:46px; flex-wrap:wrap; padding-top:4px; padding-bottom:4px; gap:16px; }",
+    "#cv-menubar{ height:auto !important; min-height:46px; flex-wrap:wrap; padding-top:4px; padding-bottom:4px; gap:16px;",
+    "  border-bottom-right-radius:var(--mh-leaf-bar); }",
     "#cv-menubar .mh-nav{ flex:1 1 auto; }"
   ].join("\n");
 

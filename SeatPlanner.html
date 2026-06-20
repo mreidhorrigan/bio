@@ -33,6 +33,9 @@
     --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
     --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
     --radius:        8px;
+    --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
+    --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
+    --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
     --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   }
@@ -70,7 +73,7 @@
   .card {
     position: relative;
     background: var(--surface);
-    border-radius: 14px;
+    border-radius: var(--leaf-lg);
     box-shadow: 0 4px 28px rgba(0,0,0,0.10);
     padding: 2.5rem 2.5rem 2.25rem;
     max-width: 1000px;
@@ -123,7 +126,7 @@
 
   .upload-card {
     border: 2px dashed var(--rule);
-    border-radius: 10px;
+    border-radius: var(--leaf-lg);
     padding: 1.3rem 1.4rem;
     cursor: pointer;
     transition: border-color 0.18s, background 0.18s;
@@ -172,7 +175,7 @@
     color: var(--muted);
     font-size: 0.7rem;
     padding: 0.1rem 0.45rem;
-    border-radius: 4px;
+    border-radius: var(--leaf-sm);
   }
 
   .card-title {
@@ -202,7 +205,7 @@
   /* ── Options panel (ranking / flagging toggles) ───────────────────────────── */
   .options-panel {
     border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--leaf-lg);
     background: var(--surface);
     padding: 0.35rem 0.95rem;
     margin-bottom: 1.25rem;
@@ -236,7 +239,7 @@
     padding: 0.7rem 0.8rem;
     background: var(--surface-tint);
     border: 1px solid var(--rule);
-    border-radius: 6px;
+    border-radius: var(--leaf-sm);
   }
   .flag-terms-wrap.visible { display: block; }
 
@@ -257,7 +260,7 @@
     color: var(--ink);
     background: var(--surface);
     border: 1px solid var(--rule);
-    border-radius: 6px;
+    border-radius: var(--leaf-sm);
     padding: 0.5rem 0.6rem;
     resize: vertical;
     line-height: 1.5;
@@ -316,7 +319,7 @@
     padding: 0.85rem 1rem;
     background: var(--surface-tint);
     border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--leaf-lg);
     flex-wrap: wrap;
   }
 
@@ -327,7 +330,7 @@
     letter-spacing: 0.01em;
     padding: 0.55rem 1.25rem;
     border: 1.5px solid var(--accent);
-    border-radius: 7px;
+    border-radius: var(--leaf);
     background: var(--accent);
     color: var(--on-accent);
     cursor: pointer;
@@ -411,7 +414,7 @@
     padding: 0.6rem 1rem;
     background: var(--surface-tint);
     border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--leaf-sm);
     min-width: 92px;
   }
 
@@ -460,7 +463,7 @@
     overflow-x: auto;
     margin-bottom: 0.5rem;
     border: 1px solid var(--rule);
-    border-radius: 10px;
+    border-radius: var(--leaf-lg);
     background: var(--surface);
     padding: 1.25rem;
     user-select: none;
@@ -554,7 +557,7 @@
     font-size: 0.62rem;
     font-weight: 700;
     padding: 1px 5px;
-    border-radius: 4px;
+    border-radius: var(--leaf-sm);
     letter-spacing: 0.02em;
     line-height: 1.4;
   }
@@ -568,7 +571,7 @@
     font-size: 0.62rem;
     font-weight: 700;
     padding: 1px 5px;
-    border-radius: 4px;
+    border-radius: var(--leaf-sm);
     line-height: 1.4;
     border: 1px solid rgba(178,36,26,0.3);
   }
