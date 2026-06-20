@@ -53,17 +53,35 @@
    * (13px / 5.5px 13px ≈ the old .82rem / .34rem .8rem at a 16px root.) */
   var CSS = [
     ":root{ --mh-blue:#c3f0ff; }",
-    ".mh-nav{ display:flex; align-items:center; flex-wrap:wrap; gap:2px 4px; min-width:0; }",
+    /* The bar owns its box model and base look so a host page's resets can't
+       reshape it: index.html has no box-sizing (content-box) while the CV/tools
+       set border-box, which is exactly what made the index bar render taller. */
+    "#mh-menubar, .mh-nav, .mh-nav *{ box-sizing:border-box; }",
+    /* a soft arc, used (via mask) as the 'opens another website' underline cue */
+    ".mh-nav{ display:flex; align-items:center; flex-wrap:wrap; gap:2px 4px; min-width:0;",
+    "  --mh-arc:url(\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%2010'%20preserveAspectRatio='none'%3E%3Cpath%20d='M3,3Q50,12,97,3'%20fill='none'%20stroke='%23000'%20stroke-width='2.4'%20stroke-linecap='round'/%3E%3C/svg%3E\"); }",
     ".mh-nav a, .mh-nav summary{",
     "  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;",
     "  font-size:13px; font-weight:600; line-height:1.1;",
     "  color:#595959; text-decoration:none; cursor:pointer; white-space:nowrap;",
     "  padding:5.5px 13px; border-radius:25% 5% 25% 5%;",
+    /* reset border/margin/background so a host's global a{} can't bleed in
+       (e.g. the CV's a{border-bottom:1px} was drawing a stray underline here) */
+    "  position:relative; border:0; margin:0; background:none;",
     "}",
     ".mh-nav a:hover, .mh-nav summary:hover, .mh-nav a[aria-current='page'], .mh-nav summary[aria-current='page'], .mh-dd[open] summary{",
-    "  color:#000; background:var(--mh-blue);",
+    "  color:#000; background:var(--mh-blue); text-decoration:none;",
     "  filter:drop-shadow(0 0 5px var(--mh-blue));",
     "}",
+    /* external-link cue: a faint curved underline on items that open another
+       website; it brightens to cyan on hover and never shows on internal pages */
+    ".mh-nav a.mh-ext::after{",
+    "  content:''; position:absolute; left:13px; right:13px; bottom:3px; height:6px;",
+    "  background-color:#9aa0a6; pointer-events:none; transition:background-color .15s ease;",
+    "  -webkit-mask:var(--mh-arc) center/100% 100% no-repeat;",
+    "          mask:var(--mh-arc) center/100% 100% no-repeat;",
+    "}",
+    ".mh-nav a.mh-ext:hover::after{ background-color:#17a3d6; }",
     /* Dropdowns (a <details>, so they work keyboard + touch, no framework) */
     ".mh-dd{ position:relative; }",
     ".mh-dd summary{ list-style:none; display:inline-block; }",
@@ -88,12 +106,22 @@
     "#cv-menubar .mh-nav{ flex:1 1 auto; }"
   ].join("\n");
 
+  // off-site if it resolves to a different origin (works on the live domain and
+  // in a local file:// preview, where same-site relative links share the origin)
+  function isExternal(href) {
+    try {
+      var u = new URL(href, location.href);
+      return /^https?:$/.test(u.protocol) && u.origin !== location.origin;
+    } catch (e) { return false; }
+  }
+
   function link(label, href) {
     var a = document.createElement("a");
     a.textContent = label;
     a.href = href;
     var here = location.pathname.split("/").pop() || "index.html";
     if (href === here) a.setAttribute("aria-current", "page");
+    if (isExternal(href)) a.className = "mh-ext";
     return a;
   }
 
