@@ -63,7 +63,7 @@
        preserveAspectRatio='none' lets the flat run stretch to the label width
        while the sweep keeps its place at the right, like the highlight's corner. */
     ".mh-nav{ display:flex; align-items:center; flex-wrap:wrap; gap:2px 4px; min-width:0;",
-    "  --mh-arc:url(\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%2010'%20preserveAspectRatio='none'%3E%3Cpath%20d='M2,8L70,8Q89,8,98,3.2'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E\"); }",
+    "  --mh-arc:url(\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%2010'%20preserveAspectRatio='none'%3E%3Cpath%20d='M2,9L68,9Q88,9,98,2.5'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E\"); }",
     ".mh-nav a, .mh-nav summary{",
     "  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;",
     "  font-size:13px; font-weight:600; line-height:1.1;",
@@ -80,7 +80,9 @@
     /* external-link cue: a faint curved underline on items that open another
        website; it brightens to cyan on hover and never shows on internal pages */
     ".mh-nav a.mh-ext::after{",
-    "  content:''; position:absolute; left:13px; right:13px; bottom:2px; height:7px;",
+    /* span the whole item and sit flush at its bottom, so the cue traces the
+       bottom edge of the blue hover pill (which fills the full padding box) */
+    "  content:''; position:absolute; left:0; right:0; bottom:0; height:8px;",
     "  background-color:#9aa0a6; pointer-events:none; transition:background-color .15s ease;",
     "  -webkit-mask:var(--mh-arc) center/100% 100% no-repeat;",
     "          mask:var(--mh-arc) center/100% 100% no-repeat;",
