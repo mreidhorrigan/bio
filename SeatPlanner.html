@@ -20,22 +20,35 @@
     --muted:         #595959;   /* secondary text, subtitles                      */
     --faint:         #8a8a8a;   /* hints, captions, empty seats                   */
     --rule:          #d9d9d9;   /* hairlines, borders, dashed drop-zones          */
-    --accent:        #6b1f2a;   /* deep maroon — buttons, labels, links           */
-    --accent-strong: #531722;   /* accent hover / active                          */
-    --accent-wash:   #f6eef0;   /* tint behind confirmed / hovered surfaces       */
+    --accent:        #5b2a86;   /* deep violet: buttons, labels, links            */
+    --accent-strong: #46206a;   /* accent hover / active                          */
+    --accent-wash:   #f1ebf8;   /* tint behind confirmed / hovered surfaces       */
     --on-accent:     #ffffff;   /* text & icons on an accent fill                 */
-    --bg:            #faf6f7;   /* page background                                */
+    --bg:            #f9f7fb;   /* page background                                */
     --surface:       #ffffff;   /* cards, drop-zones, filled-seat chips           */
-    --surface-tint:  #f3eef1;   /* panels, preview, filled seats                  */
+    --surface-tint:  #f1edf7;   /* panels, preview, filled seats                  */
     --danger:        #b2241a;   /* integrity flags / error (distinct from brand)  */
     --danger-wash:   #fbecea;   /* flag / error background                        */
-    --focus:         #c3f0ff;   /* cyan focus ring & swap flash — nods to menubar */
+    --focus:         #c3f0ff;   /* cyan focus ring & swap flash (nods to menubar) */
+    /* Seating-chart tonal ramp — one place to restyle the grid. The @media print
+       block redefines these for higher-contrast paper output; every cell rule
+       (screen and print) reads them, so a single edit retints the whole chart.  */
+    --seat-cell-border:   #e6dfe2;          /* default cell border             */
+    --seat-cell-text:     var(--faint);     /* default / unfilled cell text    */
+    --seat-filled-bg:     var(--surface-tint); /* filled-seat background       */
+    --seat-filled-border: #d8c9cf;          /* filled-seat border + flag fallback */
+    --seat-filled-text:   var(--ink);       /* filled-seat name                */
+    --seat-filled-hover:  #ece1e5;          /* filled-seat hover (screen only) */
+    --seat-empty-bg:      var(--surface);   /* empty seat background           */
+    --seat-empty-border:  #ece6e8;          /* empty seat border               */
+    --seat-empty-text:    var(--faint);     /* empty seat label                */
     --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
     --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
     --radius:        8px;
     --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
     --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
     --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
+    --card-max: 860px;          /* shared main-card width across the tools         */
     --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   }
@@ -76,7 +89,7 @@
     border-radius: var(--leaf-lg);
     box-shadow: 0 4px 28px rgba(0,0,0,0.10);
     padding: 2.5rem 2.5rem 2.25rem;
-    max-width: 1000px;
+    max-width: var(--card-max);
     width: 100%;
   }
 
@@ -105,11 +118,14 @@
 
   h1 em { font-style: normal; color: var(--accent); }
 
+  /* Instructional prose uses the serif --body-font (the home-page voice); the UI
+     chrome (labels, buttons, inputs, badges, the seat grid) stays on --sans-font. */
   .subtitle {
     color: var(--muted);
-    font-size: 0.92rem;
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.6;
     max-width: 640px;
+    font-family: var(--body-font);
   }
 
   .subtitle strong { color: var(--ink); font-weight: 700; }
@@ -186,9 +202,10 @@
   }
 
   .card-hint {
-    font-size: 0.76rem;
+    font-size: 0.84rem;
     color: var(--faint);
     line-height: 1.6;
+    font-family: var(--body-font);
   }
 
   .card-status {
@@ -231,7 +248,7 @@
 
   .opt-text { display: flex; flex-direction: column; gap: 2px; }
   .opt-title { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
-  .opt-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+  .opt-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.55; font-family: var(--body-font); }
 
   .flag-terms-wrap {
     display: none;
@@ -273,11 +290,11 @@
     cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
   }
   .link-btn:hover { color: var(--accent-strong); }
-  .flag-terms-hint { font-size: 0.74rem; color: var(--faint); }
+  .flag-terms-hint { font-size: 0.8rem; color: var(--faint); font-family: var(--body-font); }
 
   /* ── Notice bar ───────────────────────────────────────────────────────────── */
   .notice {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--ink);
     margin-bottom: 1.1rem;
     padding: 0.55rem 0.9rem;
@@ -285,6 +302,7 @@
     border-left: 3px solid var(--muted);
     border-radius: 0 6px 6px 0;
     line-height: 1.6;
+    font-family: var(--body-font);
   }
 
   .notice strong { font-weight: 700; }
@@ -391,12 +409,13 @@
   }
 
   .drag-hint {
-    font-size: 0.74rem;
+    font-size: 0.82rem;
     color: var(--faint);
     font-style: italic;
     letter-spacing: 0;
     text-transform: none;
     font-weight: 400;
+    font-family: var(--body-font);
   }
 
   /* ── Stats ────────────────────────────────────────────────────────────────── */
@@ -470,13 +489,14 @@
     box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   }
 
-  /* Caption shown only when ranking is on — describes the chart, not the room. */
+  /* Caption shown only when ranking is on; describes the chart, not the room. */
   .rank-caption {
     text-align: center;
-    font-size: 0.76rem;
+    font-size: 0.82rem;
     font-style: italic;
     color: var(--faint);
     margin: 0.6rem 0 0;
+    font-family: var(--body-font);
   }
 
   .grid-table {
@@ -491,36 +511,36 @@
     width: 112px;
     height: 52px;
     text-align: center;
-    border: 1px solid #e6dfe2;
+    border: 1px solid var(--seat-cell-border);
     padding: 5px 7px;
     vertical-align: middle;
     white-space: normal;
     word-break: break-word;
     line-height: 1.3;
-    color: var(--faint);
+    color: var(--seat-cell-text);
     transition: background 0.12s, box-shadow 0.12s;
     position: relative;
   }
 
   /* Filled seat */
   .cell-filled {
-    background: var(--surface-tint);
-    border-color: #d8c9cf !important;
-    color: var(--ink);
+    background: var(--seat-filled-bg);
+    border-color: var(--seat-filled-border) !important;
+    color: var(--seat-filled-text);
     font-weight: 600;
     cursor: grab;
   }
 
   .cell-filled:hover {
-    background: #ece1e5;
+    background: var(--seat-filled-hover);
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     z-index: 2;
   }
 
   .cell-empty-seat {
-    background: var(--surface);
-    border-color: #ece6e8 !important;
-    color: var(--faint);
+    background: var(--seat-empty-bg);
+    border-color: var(--seat-empty-border) !important;
+    color: var(--seat-empty-text);
     font-style: italic;
     font-size: 0.72rem;
   }
@@ -587,7 +607,7 @@
   .grid-table.details-off .grade-badge,
   .grid-table.details-off .flag-marker { display: none; }
   .grid-table.details-off .cell-filled.has-flag {
-    border-left-color: #d8c9cf !important;
+    border-left-color: var(--seat-filled-border) !important;
     border-left-width: 1px !important;
   }
 
@@ -633,7 +653,19 @@
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-    html, body { background: #fff !important; }
+    /* Higher-contrast seat ramp for paper: redefine the tokens once and every
+       cell rule below inherits the print values. */
+    :root {
+      --seat-cell-border:   #cfc5c9;
+      --seat-cell-text:     #b3a8ac;
+      --seat-filled-bg:     #f3eef1;
+      --seat-filled-border: #bda9b0;
+      --seat-empty-bg:      #fbf9fa;
+      --seat-empty-border:  #ddd2d6;
+      --seat-empty-text:    #c2b8bc;
+    }
+
+    html, body { background: var(--surface) !important; }
     .flare { display: none !important; }
 
     body { display: block !important; padding: 0 !important; }
@@ -689,25 +721,25 @@
       word-break: break-word !important;
       line-height: 1.2 !important;
       vertical-align: middle !important;
-      border: 1px solid #cfc5c9 !important;
-      color: #b3a8ac !important;
+      border: 1px solid var(--seat-cell-border) !important;
+      color: var(--seat-cell-text) !important;
     }
 
     .cell-filled {
-      background: #f3eef1 !important;
-      border-color: #bda9b0 !important;
-      color: #1a1a1a !important;
+      background: var(--seat-filled-bg) !important;
+      border-color: var(--seat-filled-border) !important;
+      color: var(--seat-filled-text) !important;
       font-weight: 700 !important;
     }
 
     .cell-empty-seat {
-      background: #fbf9fa !important;
-      border-color: #ddd2d6 !important;
-      color: #c2b8bc !important;
+      background: var(--seat-empty-bg) !important;
+      border-color: var(--seat-empty-border) !important;
+      color: var(--seat-empty-text) !important;
     }
 
     .cell-spacer {
-      background: #ffffff !important;
+      background: var(--surface) !important;
       border-color: transparent !important;
     }
 
@@ -715,11 +747,11 @@
     .flag-marker { display: none !important; }
 
     .cell-filled.has-flag {
-      border-left-color: #bda9b0 !important;
+      border-left-color: var(--seat-filled-border) !important;
       border-left-width: 1px !important;
     }
 
-    .rank-caption { color: #8a8a8a !important; margin-top: 8px !important; }
+    .rank-caption { color: var(--faint) !important; margin-top: 8px !important; }
   }
 </style>
 </head>
@@ -734,7 +766,7 @@
   <div class="masthead">
     <div class="eyebrow">Classroom Seating</div>
     <h1>Seat Planner <em>v11</em></h1>
-    <p class="subtitle">Upload a class roster — a simple name list <strong>or a Canvas gradebook export</strong> — and an optional room layout to generate a seating chart, then <strong>drag any student onto another</strong> to swap. Optional toggles let you rank by gradebook score and flag integrity concerns.</p>
+    <p class="subtitle">Upload a class roster (a simple name list <strong>or a Canvas gradebook export</strong>) and an optional room layout to generate a seating chart, then <strong>drag any student onto another</strong> to swap. Optional toggles let you rank by gradebook score and flag integrity concerns.</p>
   </div>
 
   <!-- ── File uploads ── -->
@@ -746,7 +778,7 @@
       <div class="card-hint">
         <strong>Simple CSV:</strong> name, optional score, optional note.<br>
         <strong>Canvas export:</strong> drop it in as-is. Ranking and integrity
-        flags are off by default — enable them below.
+        flags are off by default. Enable them below.
       </div>
       <div class="card-status" id="status-students"></div>
     </div>
@@ -783,14 +815,14 @@ integrity flag</textarea>
       <div class="flag-terms-upload">
         <label class="link-btn" for="input-flag-terms">Upload a list…</label>
         <input type="file" id="input-flag-terms" accept=".txt,.csv" hidden>
-        <span class="flag-terms-hint" id="flag-terms-hint">.txt or .csv — one term per line</span>
+        <span class="flag-terms-hint" id="flag-terms-hint">.txt or .csv, one term per line</span>
       </div>
     </div>
   </div>
 
-  <!-- Notice bar — updated dynamically -->
+  <!-- Notice bar (updated dynamically) -->
   <div class="notice" id="main-notice">
-    <strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps — 35 seats total. Upload a layout CSV above to override.
+    <strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps, 35 seats total. Upload a layout CSV above to override.
   </div>
 
   <div class="error-msg" id="error-msg"></div>
@@ -810,13 +842,13 @@ integrity flag</textarea>
   <div class="preview-section" id="preview-section">
 
     <!-- Print-only header -->
-    <div id="print-header" style="display:none; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; border-bottom:2px solid #6b1f2a; padding-bottom:8px;">
+    <div id="print-header" style="display:none; font-family:var(--sans-font);">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; border-bottom:2px solid var(--accent); padding-bottom:8px;">
         <div>
-          <div style="font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:#6b1f2a; margin-bottom:4px;">Seat Planner</div>
-          <div style="font-size:18px; font-weight:700; color:#1a1a1a;">Seating Plan</div>
+          <div style="font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:4px;">Seat Planner</div>
+          <div style="font-size:18px; font-weight:700; color:var(--ink);">Seating Plan</div>
         </div>
-        <div id="print-meta" style="font-size:9px; color:#595959; text-align:right; line-height:1.7;"></div>
+        <div id="print-meta" style="font-size:9px; color:var(--muted); text-align:right; line-height:1.7;"></div>
       </div>
     </div>
 
@@ -1048,7 +1080,7 @@ integrity flag</textarea>
   function updateNotice() {
     const parts = [];
     if (layoutData === DEFAULT_LAYOUT)
-      parts.push('<strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps — 35 seats total. Upload a layout CSV above to override.');
+      parts.push('<strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps, 35 seats total. Upload a layout CSV above to override.');
 
     let accentMode = false;
     if (rankingEnabled) {
@@ -1056,7 +1088,7 @@ integrity flag</textarea>
         parts.push('<strong>Ranking on:</strong> lower scores are placed toward the bottom of the chart. Shuffling is disabled while ranking.');
         accentMode = true;
       } else {
-        parts.push('<strong>Ranking on,</strong> but no gradebook scores were found in this roster — students will be spread evenly.');
+        parts.push('<strong>Ranking on,</strong> but no gradebook scores were found in this roster, so students will be spread evenly.');
       }
     }
     if (flaggingEnabled) {
@@ -1106,7 +1138,7 @@ integrity flag</textarea>
     reader.onload = ev => {
       layoutData = parseCSV(ev.target.result);
       const seats = layoutData.flat().filter(c => c.toUpperCase() === 'X').length;
-      statusLayout.textContent = `${layoutData.length} rows × ${layoutData[0].length} cols — ${seats} seats`;
+      statusLayout.textContent = `${layoutData.length} rows × ${layoutData[0].length} cols, ${seats} seats`;
       cardLayout.classList.add('loaded');
       updateNotice();
     };
@@ -1293,7 +1325,7 @@ integrity flag</textarea>
 
           const gradeLabel = grade !== null ? ' · ' + formatGradeTitle(grade) : '';
           const flagLabel  = flagged ? ' · ⚑ integrity flag' : '';
-          td.title = `${val}${gradeLabel}${flagLabel} — drag to swap`;
+          td.title = `${val}${gradeLabel}${flagLabel} (drag to swap)`;
 
           const inner = document.createElement('div');
           inner.className = 'cell-inner';

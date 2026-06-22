@@ -15,23 +15,26 @@
 :root {
   /* ---- Colour: light "document" context (index, CV, tools) --------------- */
   --brand-cyan:        #c3f0ff;  /* THE highlight/interaction colour          */
-  --accent:            #6b1f2a;  /* deep maroon — links, buttons, labels      */
-  --accent-strong:     #531722;  /* accent hover / active                     */
-  --accent-wash:       #f6eef0;  /* tint behind hovered/confirmed surfaces    */
+  --accent:            #5b2a86;  /* deep violet — links, buttons, labels      */
+  --accent-strong:     #46206a;  /* accent hover / active                     */
+  --accent-wash:       #f1ebf8;  /* tint behind hovered/confirmed surfaces    */
   --on-accent:         #ffffff;  /* text/icons on an accent fill              */
 
   --flare-warm:        #f28b46;  /* home/landing cloud: orange                */
+  --flare-strong:      #9a4310;  /* deep burnt orange — orange-family callout text/border */
+  --flare-wash:        #fdefe2;  /* light orange tint — orange-family callout background  */
   --flare-cool:        #c3f0ff;  /* home/landing cloud: blue (= --brand-cyan) */
 
   --ink:               #1a1a1a;  /* primary text                             */
   --muted:             #595959;  /* secondary text, subtitles                */
   --faint:             #8a8a8a;  /* hints, captions                          */
   --rule:              #d9d9d9;  /* hairlines, borders, dashed drop-zones    */
-  --bg:                #faf6f7;  /* page background                          */
+  --bg:                #f9f7fb;  /* page background (lavender-tinted white)   */
   --surface:           #ffffff;  /* cards, drop-zones                        */
-  --surface-tint:      #f3eef1;  /* panels, previews                         */
+  --surface-tint:      #f1edf7;  /* panels, previews                         */
 
   --danger:            #b2241a;  /* error/warning text (distinct from brand) */
+  --danger-strong:     #8f1c14;  /* error hover / active                     */
   --danger-wash:       #fbecea;  /* error/warning background                 */
   --ok:                #1f7a3d;  /* affirmation (used by ExamTimer)          */
   --focus:             #c3f0ff;  /* focus ring (= --brand-cyan)              */
@@ -46,6 +49,12 @@
   --mh-leaf-box: 22px 6px 22px 6px / 10px 3px 10px 3px; /* the menubar dropdown panel */
   --mh-leaf-bar: 34px 16px;                             /* the menubar's bottom-right sweep */
   --leaf-fluid:  25% 5% 25% 5%;                         /* fluid/inline only (text highlights) */
+
+  /* ---- Layout ----------------------------------------------------------- */
+  --card-max: 860px;   /* shared max-width for a tool's main card/panel, so the
+                          three tools read as one set. Sized for comfortable
+                          reading in the single-column tool (MCQer), not just the
+                          grid tools; the seat grid scrolls inside its own pane. */
 
   /* ---- Type ------------------------------------------------------------- */
   --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;

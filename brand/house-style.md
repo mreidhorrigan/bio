@@ -31,10 +31,12 @@ see [The game exception](#the-game-exception).
 Then:
 
 - Build surfaces with the **leaf corner** (`var(--leaf)`, `--leaf-lg`, `--leaf-sm`).
-- Use **maroon `--accent`** for the document's links / primary buttons / labels.
+- Use **violet `--accent`** for the document's links / primary buttons / labels.
+- Cap a tool's main card at **`--card-max`** so the tools read as one set.
 - Let the **menubar stay cyan-only** (it's handled for you by `menubar.js`).
-- Type: **`--sans-font`** for UI / headings / app chrome; **`--body-font`** (serif)
-  for long-form prose (the CV); **`--mono-font`** for code/tabular output.
+- Type: **`--sans-font`** for UI / headings / app chrome. Use **`--body-font`**
+  (serif) for long-form prose and for **tool instructions** (subtitles, hints,
+  reference notes). Use **`--mono-font`** for code/tabular output.
 - Reference radii with a fallback so they render before `menubar.js` runs:
   `border-radius: var(--mh-leaf, 16px 4px 16px 4px / 7px 2px 7px 2px);`
 
@@ -52,14 +54,19 @@ Then:
 2. **One highlight colour — cyan `#c3f0ff`.** Interaction/attention is *always*
    cyan: menubar hover, current page, text selection, focus, key-word highlights.
    Nothing else competes for "this is live / selected / important".
-3. **Menubar = site brand; document body = its own accent.** The menubar is
-   cyan everywhere. The reading surface (CV, tools) uses the **maroon `--accent`**
+3. **Three house colours.** The brand reads in three: the cyan highlight
+   (`--brand-cyan`), the warm orange flare (`--flare-warm`), and the deep violet
+   accent (`--accent`). They sit far apart on the wheel (cool, warm, deep) so they
+   complement rather than clash. Cyan is for interaction, orange is the landing
+   backdrop only, violet carries the document's links and buttons.
+4. **Menubar = site brand; document body = its own accent.** The menubar is
+   cyan everywhere. The reading surface (CV, tools) uses the **violet `--accent`**
    for its links and buttons. Keeping these lanes separate is intentional.
-4. **Fixed geometry over fluid.** The leaf uses fixed px radii so a wide panel and
-   a narrow pill show the *same* corner arc. Percentages stretch the corner flat;
-   we only use them for genuinely fluid/inline things (text highlights).
-5. **Status colours stay out of the brand.** Errors/warnings use a separate red
-   (`--danger`) so they never get mistaken for the maroon accent.
+5. **Fixed geometry over fluid.** The leaf uses fixed px radii so a wide panel and
+   a narrow pill show the *same* corner arc. Percentages stretch the corner flat,
+   so we use them only for genuinely fluid/inline things (text highlights).
+6. **Status colours stay out of the brand.** Errors/warnings use a separate red
+   (`--danger`) so they never get mistaken for the violet accent.
 
 ---
 
@@ -73,16 +80,26 @@ Then:
 ### Document accent (CV + tools; **not** the menubar)
 | Token | Value | Role |
 |---|---|---|
-| `--accent` | `#6b1f2a` | deep maroon — links, primary buttons, labels, progress fills |
-| `--accent-strong` | `#531722` | accent hover / active |
-| `--accent-wash` | `#f6eef0` | tint behind hovered / confirmed surfaces |
+| `--accent` | `#5b2a86` | deep violet: links, primary buttons, labels, progress fills |
+| `--accent-strong` | `#46206a` | accent hover / active |
+| `--accent-wash` | `#f1ebf8` | tint behind hovered / confirmed surfaces |
 | `--on-accent` | `#ffffff` | text/icons on an accent fill |
 
-### Flare / landing backdrop
+The accent is the **third house colour**: a deep violet picked to complement the
+cyan highlight and the orange flare (see Principle 3). It is dark enough to clear
+WCAG AA for text and buttons on white (contrast ≈ 9.9:1).
+
+### Flare / orange (the warm house colour)
 | Token | Value | Role |
 |---|---|---|
 | `--flare-warm` | `#f28b46` | orange end of the home/landing "cloud" (`--secondcolor` on index) |
+| `--flare-strong` | `#9a4310` | deep burnt orange: orange-family callout **text + border** |
+| `--flare-wash` | `#fdefe2` | light orange: orange-family callout **background** |
 | `--flare-cool` | `#c3f0ff` | blue end of the cloud (= `--brand-cyan`) |
+
+Use `--flare-strong` on `--flare-wash` for an **orange callout** that keeps the
+light-background / dark-text contrast of a danger strip but reads as the warm
+house colour, not an error. (ExamTimer's exam-rules warning uses it.)
 
 ### Neutrals
 | Token | Value |
@@ -91,14 +108,19 @@ Then:
 | `--muted` | `#595959` |
 | `--faint` | `#8a8a8a` |
 | `--rule` | `#d9d9d9` |
-| `--bg` | `#faf6f7` |
+| `--bg` | `#f9f7fb` |
 | `--surface` | `#ffffff` |
-| `--surface-tint` | `#f3eef1` |
+| `--surface-tint` | `#f1edf7` |
+
+The `--bg` and `--surface-tint` near-whites carry a faint **lavender** tint so the
+neutrals lean toward the violet accent rather than against it. (They were warm-pink
+under the old maroon accent.)
 
 ### Status (deliberately distinct from the brand)
 | Token | Value | Role |
 |---|---|---|
 | `--danger` | `#b2241a` | error / warning text & state |
+| `--danger-strong` | `#8f1c14` | error hover / active (ExamTimer's danger button) |
 | `--danger-wash` | `#fbecea` | error / warning background |
 | `--ok` | `#1f7a3d` | affirmation (ExamTimer's "ends at" / running) |
 
@@ -195,21 +217,25 @@ live domain and in local `file://` previews.)
 
 | Token | Stack | Use |
 |---|---|---|
-| `--sans-font` | `-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif` | UI, headings, app chrome, **the tool bodies**, CV headings |
-| `--body-font` | `"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif` | long-form prose — the **CV body** (and prose blocks elsewhere) |
+| `--sans-font` | `-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif` | UI, headings, app chrome, controls, CV headings |
+| `--body-font` | `"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif` | long-form prose: the **CV body** AND the **tools' instructional prose** |
 | `--mono-font` | `ui-monospace, "SF Mono", Menlo, Consolas, monospace` | code / tabular previews (e.g. MCQer's format reference) |
 
-- **Sans is the default for UI.** The three tools are UI-dense apps and set their
-  `<body>` to `--sans-font`; `--body-font` (serif) is for *running prose* — the
-  CV's body — not for tool chrome.
+- **Sans is the default for chrome; serif carries the words.** The tools set their
+  `<body>` to `--sans-font` for the UI (labels, buttons, inputs, badges). Their
+  **instructional prose** — the masthead subtitle, hint text, reference notes,
+  option descriptions, ExamTimer's rules — uses **`--body-font`** (serif), echoing
+  the home page's reading voice so the tools feel like the rest of the site, not a
+  separate app. The split is the rule: if it instructs or describes, it's serif; if
+  it's a control, it's sans.
 - The **menubar** pins a system-sans stack at a **fixed `13px` / weight `600`**
   (px, not rem) so the bar is pixel-identical across pages with different root
   font-sizes (the CV uses `html{font-size:14px}`; others default to 16px).
-  `menubar.js` hard-codes this stack — which additionally lists `system-ui` —
+  `menubar.js` hard-codes this stack (which additionally lists `system-ui`)
   rather than referencing `--sans-font`, on purpose, so the bar is self-contained.
-- **Home-page exception:** `index.html` is bespoke — Georgia serif body with
-  Tahoma/Arial small-caps headings. New tools should prefer `--sans-font` (UI) +
-  `--body-font` (prose) rather than copying the home page.
+- **Home-page exception:** `index.html` is bespoke: Georgia serif body with
+  Tahoma/Arial small-caps headings. `--body-font` falls back to Georgia, so the
+  tools' serif prose reads as a sibling of the home page even where Iowan is absent.
 
 ---
 
@@ -244,8 +270,9 @@ its own fixed bar like the CV) expose a `#cv-menubar` container.
 
 | Element | Corner | Notes |
 |---|---|---|
+| Main card (a tool's outer panel) | `--leaf-lg` | width capped at **`--card-max`** (`860px`) so the tools match; let wide content (e.g. a grid) scroll inside its own pane rather than stretch the card |
 | Card / panel / modal / drop zone / section | `--leaf-lg` | `--surface` on `--bg`; `--rule` borders; elevation `--shadow-card` |
-| Button / medium control | `--leaf` | maroon `--accent` fill or outline; cyan only in the menubar |
+| Button / medium control | `--leaf` | violet `--accent` fill or outline; cyan only in the menubar |
 | Input / select / textarea | `--leaf-sm` | `--rule` border; cyan focus ring (below) |
 | Chip / badge | `--leaf-sm` | even ones that were pill-shaped |
 | Menubar item / pill / highlight | `--mh-leaf` | cyan highlight on hover/current |
@@ -281,7 +308,29 @@ includes the shared `menubar.js`.
 
 ---
 
-## 11. Keeping this in sync
+## 11. Writing style (the words)
+
+The site has a house *writing* voice as much as a visual one. It governs the
+**reader-facing prose**: tool subtitles and hints, button and status text, the CV,
+the home page. (Internal dev comments are not bound by it, though they may follow
+it.) The full, enforceable rules and rewrite recipes live in the
+**`house-style-writing` skill** (`.claude/skills/house-style-writing/SKILL.md`);
+the essentials:
+
+1. **No spaced em dashes.** Never ` — `. Recast as two sentences (`.`), a colon
+   (`:` for an elaboration), a comma, or parentheses for an aside.
+2. **Don't lean on the em dash.** At most one per paragraph, and prefer none.
+   Most em dashes are a period, colon, or pair of parentheses in disguise.
+3. **Semicolons don't join sentences.** If both halves stand alone, use two
+   sentences. Keep the semicolon only for separating items in a complex list.
+4. **Plain, active, concrete.** Short sentences. Say what the control does.
+
+A linter for rules 1–3 lives in the local-only `house-style-private/` workshop
+(`scan-style.py`), kept out of the repo.
+
+---
+
+## 12. Keeping this in sync
 
 `brand.css` and `tokens.json` are the source of truth for the values; this file
 is the source of truth for the rules. The existing pages predate these files and
@@ -289,4 +338,4 @@ is the source of truth for the rules. The existing pages predate these files and
 update all three brand files **and** the affected reference pages. New tools
 should **import** `brand.css` rather than copy, so over time the look converges on
 one editable place. (Retrofitting the existing pages to import `brand.css` would
-make that fully true — a worthwhile future cleanup, not done here.)
+make that fully true: a worthwhile future cleanup, not done here.)

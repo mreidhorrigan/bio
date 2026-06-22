@@ -20,3 +20,10 @@ Gemfile.lock
 # Local-only archive of unused / unlinked site material.
 # Files moved here stay on disk but are never tracked or pushed.
 storage/
+
+# Local-only house-style workshop: linting scripts, private notes, and any
+# tooling used to author/enforce the house style. Never tracked or pushed.
+house-style-private/
+
+# Stray local command transcripts dropped in the repo root.
+*-local-command-caveatcaveat-the-messages-below.txt

@@ -20,23 +20,27 @@
     --muted:         #595959;   /* secondary text, subtitles                      */
     --faint:         #8a8a8a;   /* hints, captions                                */
     --rule:          #d9d9d9;   /* hairlines, borders                             */
-    --accent:        #6b1f2a;   /* deep maroon — buttons, labels, links           */
-    --accent-strong: #531722;   /* accent hover / active                          */
-    --accent-wash:   #f6eef0;   /* tint behind callouts / hovered surfaces        */
+    --accent:        #5b2a86;   /* deep violet: buttons, labels, links            */
+    --accent-strong: #46206a;   /* accent hover / active                          */
+    --accent-wash:   #f1ebf8;   /* tint behind callouts / hovered surfaces        */
     --on-accent:     #ffffff;   /* text & icons on an accent fill                 */
-    --bg:            #faf6f7;   /* page background                                */
+    --bg:            #f9f7fb;   /* page background                                */
     --surface:       #ffffff;   /* cards                                          */
-    --surface-tint:  #f3eef1;   /* panels                                         */
+    --surface-tint:  #f1edf7;   /* panels                                         */
     --danger:        #b2241a;   /* time-up / warnings (distinct from brand)       */
+    --danger-strong: #8f1c14;   /* danger hover / active                          */
     --danger-wash:   #fbecea;   /* warning background                             */
     --ok:            #1f7a3d;   /* "ends at" / running affirmation                */
     --focus:         #c3f0ff;   /* cyan focus ring — nods to menubar              */
     --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
+    --flare-strong:  #9a4310;   /* deep burnt orange — orange-family callout text/border */
+    --flare-wash:    #fdefe2;   /* light orange tint — orange-family callout background   */
     --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
     --radius:        8px;
     --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
     --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
     --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
+    --card-max: 860px;          /* shared main-card width across the tools         */
     --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   }
@@ -77,7 +81,7 @@
     border-radius: var(--leaf-lg);
     box-shadow: 0 4px 28px rgba(0,0,0,0.10);
     padding: 2.5rem 2.5rem 2.25rem;
-    max-width: 960px;
+    max-width: var(--card-max);
     width: 100%;
   }
 
@@ -359,7 +363,7 @@
   .btn-secondary:hover { background: var(--accent); color: var(--on-accent); }
 
   .btn-danger { background: var(--danger); border-color: var(--danger); }
-  .btn-danger:hover { background: #8f1c14; border-color: #8f1c14; }
+  .btn-danger:hover { background: var(--danger-strong); border-color: var(--danger-strong); }
 
   .btn-ghost {
     background: transparent;
@@ -508,13 +512,15 @@
     border-radius: 50%;
   }
 
+  /* Orange-family callout (the house warm colour), light wash + deep burnt-orange
+     text/border so it keeps the lighter/darker contrast of a danger strip. */
   .rules-warning {
     margin-top: 1.25rem;
     padding: 0.9rem 1.1rem;
     border-radius: var(--leaf-lg);
-    background: var(--danger-wash);
-    border-left: 4px solid var(--danger);
-    color: var(--danger);
+    background: var(--flare-wash);
+    border-left: 4px solid var(--flare-strong);
+    color: var(--flare-strong);
     font-weight: 800;
     font-size: 0.98rem;
     letter-spacing: 0.01em;
@@ -554,7 +560,7 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--focus);
   }
-  .edit-field .hint { font-size: 0.76rem; color: var(--faint); margin-top: 0.3rem; }
+  .edit-field .hint { font-size: 0.82rem; color: var(--faint); margin-top: 0.3rem; font-family: var(--body-font); }
   .edit-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
   /* ── Fullscreen / projection mode ─────────────────────────────────────────── */
@@ -659,7 +665,7 @@
     </div>
     <div class="exam-name-row">
       <input type="text" class="exam-name-input" id="exam-name" maxlength="80"
-             placeholder="Exam name to display (optional) — e.g. IAT 206W — Midterm">
+             placeholder="Exam name to display (optional), e.g. IAT 206W Midterm">
     </div>
   </div>
 
@@ -765,7 +771,7 @@
   const $ = (id) => document.getElementById(id);
   const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 
-  // ── Default rules (verbatim from midterm_coversheet.docx) ──────────────────
+  // ── Default rules (from midterm_coversheet.docx; punctuation set in house style) ──
   const DEFAULT_RULES = {
     intro: "You have approximately 90 minutes to write this exam. You are allowed pencils or pens and erasers. All multiple-choice question (MCQ) answers are to be circled on the answer sheet. Written-answer questions are to be completed in this exam booklet and may use pen. This coversheet must be completed in full and signed.",
     list: [
@@ -781,7 +787,7 @@
       "It is your responsibility not to appear to be cheating.",
       "The exam begins only when the invigilator says “go.” Do not turn over this coversheet until then.",
       "Your hands must remain above the desk for the entire exam. This is to prevent phone cheating.",
-      "The invigilator reserves the right not to answer questions mid-exam. To ask the invigilator a question, raise your hand quietly. The invigilator will only answer questions that involve defining everyday words—not course glossary terms—or clarifying exam procedures.",
+      "The invigilator reserves the right not to answer questions mid-exam. To ask the invigilator a question, raise your hand quietly. The invigilator will only answer questions that involve defining everyday words (not course glossary terms) or clarifying exam procedures.",
       "No leaving the exam room in the final 5 minutes of the exam. If you complete the exam with less than 5 minutes remaining, stay at your desk with the exam.",
       "Otherwise, if you finish the exam early, put your answer booklet where directed by the invigilator."
     ],
@@ -1019,7 +1025,7 @@
       if (entryMs < total && (total - ms) >= entryMs) {
         entryFired = true;
         playMilestone();
-        showBanner(`Entry is now closed — no entry after ${Math.round(entryMs / 60000)} minutes.`, false);
+        showBanner(`Entry is now closed. No entry after ${Math.round(entryMs / 60000)} minutes.`, false);
       }
     }
     if (chkFinal.checked && !finalFired) {
@@ -1027,7 +1033,7 @@
       if (ms <= finalMs) {
         finalFired = true;
         playMilestone();
-        showBanner(`Final ${Math.round(finalMs / 60000)} minutes — no leaving the room.`, true);
+        showBanner(`Final ${Math.round(finalMs / 60000)} minutes. No leaving the room.`, true);
       }
     }
   }
