@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="pandoc + md-to-pdf builder">
   <title>Matthew Reid Horrigan</title>
+  <!-- canonical house tokens (--ink/--accent/--mh-leaf/fonts…); the inline :root
+       below keeps only the CV's structural tokens and may override -->
+  <link rel="stylesheet" href="brand/brand.css">
   <style>
 
 
 
+/* --ink/--muted/--faint/--rule/--accent now come from brand/brand.css (identical
+   values). The CV keeps only its own structural tokens (and its font stacks). */
 :root {
---ink: #1a1a1a;
---muted: #595959;
---faint: #8a8a8a;
---rule: #d9d9d9;
---accent: #5b2a86;
---year-col: 6.5rem; 
+--year-col: 6.5rem;
 --maxwidth: 46rem;
 --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
 --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -1265,7 +1265,7 @@ body { padding-top: var(--cv-mb-h); }
 position: fixed; inset: 0 0 auto 0; height: var(--cv-mb-h);
 display: flex; align-items: center; justify-content: space-between; gap: 1rem;
 padding: 0 clamp(12px, 4vw, 28px);
-background: #fff; border-bottom: 1px solid var(--rule, #d9d9d9);
+background: #fff;
 font-family: var(--sans-font, system-ui, sans-serif); z-index: 1000;
 box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
 }
@@ -1275,19 +1275,26 @@ color: var(--muted, #595959);
 white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .cv-mb-actions { display: flex; align-items: center; gap: .35rem; flex: none; }
+/* Emboss/deboss to match the injected site menubar (menubar.js): available items
+   sit RAISED, the current/hovered item reads PRESSED. Tokens from brand/brand.css
+   (imported in <head>), so the two menubars share one definition and don't drift. */
 .cv-mb-tab {
 font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer;
 border: 1px solid transparent; border-radius: var(--mh-leaf, 16px 4px 16px 4px / 7px 2px 7px 2px); padding: .3rem .85rem;
 color: var(--muted, #595959); background: transparent;
+box-shadow: var(--emboss-raised, -1px -1px 0 rgba(255,255,255,.7), 1px 1px 2px rgba(0,0,0,.10));
+transition: box-shadow .15s ease;
 }
-.cv-mb-tab:hover { color: #000; background: var(--mh-blue, #c3f0ff); filter: drop-shadow(0 0 5px var(--mh-blue, #c3f0ff)); }
-.cv-mb-tab.is-active { color: #000; background: var(--mh-blue, #c3f0ff); filter: drop-shadow(0 0 5px var(--mh-blue, #c3f0ff)); }
+.cv-mb-tab:hover { color: #000; background: var(--mh-blue, #c3f0ff); filter: drop-shadow(0 0 5px var(--mh-blue, #c3f0ff)); box-shadow: var(--emboss-pressed, inset 1px 1px 2px rgba(0,0,0,.16), inset -1px -1px 1px rgba(255,255,255,.55)); }
+.cv-mb-tab.is-active { color: #000; background: var(--mh-blue, #c3f0ff); filter: drop-shadow(0 0 5px var(--mh-blue, #c3f0ff)); box-shadow: var(--emboss-pressed, inset 1px 1px 2px rgba(0,0,0,.16), inset -1px -1px 1px rgba(255,255,255,.55)); }
 .cv-mb-dl {
 font-size: .82rem; font-weight: 600; text-decoration: none; white-space: nowrap;
 color: var(--muted, #595959); border: 1px solid var(--rule, #d9d9d9);
 border-radius: var(--mh-leaf, 16px 4px 16px 4px / 7px 2px 7px 2px); padding: .3rem .85rem; margin-left: .25rem;
+box-shadow: var(--emboss-raised, -1px -1px 0 rgba(255,255,255,.7), 1px 1px 2px rgba(0,0,0,.10));
+transition: box-shadow .15s ease;
 }
-.cv-mb-dl:hover { color: #000; background: var(--mh-blue, #c3f0ff); border-color: var(--mh-blue, #c3f0ff); filter: drop-shadow(0 0 5px var(--mh-blue, #c3f0ff)); }
+.cv-mb-dl:hover { color: #000; background: var(--mh-blue, #c3f0ff); border-color: var(--mh-blue, #c3f0ff); filter: drop-shadow(0 0 5px var(--mh-blue, #c3f0ff)); box-shadow: var(--emboss-pressed, inset 1px 1px 2px rgba(0,0,0,.16), inset -1px -1px 1px rgba(255,255,255,.55)); }
 #cv-pdf-pane { position: fixed; inset: var(--cv-mb-h) 0 0 0; z-index: 900; background: #525659; }
 #cv-pdf-frame { display: block; width: 100%; height: 100%; border: 0; }
 @media (max-width: 640px) { .cv-mb-title { display: none; } }
@@ -1295,6 +1302,18 @@ border-radius: var(--mh-leaf, 16px 4px 16px 4px / 7px 2px 7px 2px); padding: .3r
 #cv-menubar, #cv-pdf-pane { display: none !important; }
 body { padding-top: 0; }
 #screen-view { zoom: 1; }
+}
+
+/* Keyboard focus — tokenised cyan ring on the CV's interactive elements (links
+   and the CV menubar's tabs/download), matching the rest of the site. */
+a:focus-visible, .cv-mb-tab:focus-visible, .cv-mb-dl:focus-visible {
+outline: none; box-shadow: 0 0 0 3px var(--focus, #c3f0ff);
+}
+
+/* Respect reduced-motion: neutralise the menubar emboss transition and any
+   other animation/transition. Mirrors autofac.html's approach. */
+@media (prefers-reduced-motion: reduce){
+*,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
 }
 </style>
 <script>

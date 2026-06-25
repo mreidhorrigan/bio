@@ -18,6 +18,12 @@
       <!-- the one site-wide menubar (links + dropdowns live in this file) -->
       <script src="menubar.js" defer></script>
 
+      <!-- canonical house tokens, imported for site consistency. index.html is
+           bespoke (Georgia serif, --favcolor/--secondcolor names), so it keeps
+           its own tokens and styles below; brand.css just makes the shared
+           vocabulary available. -->
+      <link rel="stylesheet" href="brand/brand.css">
+
       <style>
 
         :root{
@@ -156,7 +162,20 @@
 	.emphasize{
 		font-style:bold;
 	}
-	
+
+	/* Keyboard focus — tokenised cyan ring on links (matches --favcolor and the
+	   rest of the site). On :focus-visible so it only shows for keyboard users. */
+	a:focus-visible{
+		outline: none;
+		box-shadow: 0 0 0 3px var(--focus, #c3f0ff);
+	}
+
+	/* Respect reduced-motion: stop the hero photo's contrast pulse and any
+	   transitions. Mirrors autofac.html's approach. */
+	@media (prefers-reduced-motion: reduce){
+		*,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
+	}
+
 	</style>
 	  
   </head>

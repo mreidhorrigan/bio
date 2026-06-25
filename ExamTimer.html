@@ -6,6 +6,9 @@
 <title>Exam Timer</title>
 <!-- the one site-wide menubar (links + dropdowns live in this file) -->
 <script src="menubar.js" defer></script>
+<!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); Exam Timer
+     uses only shared tokens, so it has no page-specific :root of its own -->
+<link rel="stylesheet" href="brand/brand.css">
 <style>
   /* ── Palette & theme tokens ─────────────────────────────────────────────────
      Shared vocabulary with matthorrigan.com / MCQer / Seat Planner (base.css):
@@ -15,35 +18,10 @@
      used for input focus; the orange→blue --flare glow is lifted from the home
      page. Swap the brand here once and every control follows.
   ────────────────────────────────────────────────────────────────────────────── */
-  :root {
-    --ink:           #1a1a1a;   /* primary text                                   */
-    --muted:         #595959;   /* secondary text, subtitles                      */
-    --faint:         #8a8a8a;   /* hints, captions                                */
-    --rule:          #d9d9d9;   /* hairlines, borders                             */
-    --accent:        #5b2a86;   /* deep violet: buttons, labels, links            */
-    --accent-strong: #46206a;   /* accent hover / active                          */
-    --accent-wash:   #f1ebf8;   /* tint behind callouts / hovered surfaces        */
-    --on-accent:     #ffffff;   /* text & icons on an accent fill                 */
-    --bg:            #f9f7fb;   /* page background                                */
-    --surface:       #ffffff;   /* cards                                          */
-    --surface-tint:  #f1edf7;   /* panels                                         */
-    --danger:        #b2241a;   /* time-up / warnings (distinct from brand)       */
-    --danger-strong: #8f1c14;   /* danger hover / active                          */
-    --danger-wash:   #fbecea;   /* warning background                             */
-    --ok:            #1f7a3d;   /* "ends at" / running affirmation                */
-    --focus:         #c3f0ff;   /* cyan focus ring — nods to menubar              */
-    --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
-    --flare-strong:  #9a4310;   /* deep burnt orange — orange-family callout text/border */
-    --flare-wash:    #fdefe2;   /* light orange tint — orange-family callout background   */
-    --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
-    --radius:        8px;
-    --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
-    --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
-    --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
-    --card-max: 860px;          /* shared main-card width across the tools         */
-    --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  }
+  /* All theme tokens (--ink/--muted/--faint/--rule, --accent*, --on-accent,
+     --bg/--surface*, --danger*, --ok, --focus, --flare-*, --radius, --leaf*,
+     --card-max, fonts) now come from brand/brand.css. Exam Timer adds no
+     page-specific tokens, so it has no inline :root. */
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -321,7 +299,7 @@
     margin: 1rem auto 0;
     max-width: 40rem;
     padding: 0.7rem 1rem;
-    border-radius: var(--leaf-lg);
+    border-radius: 0 6px 6px 0;
     font-size: 0.95rem;
     font-weight: 700;
     border-left: 4px solid var(--accent);
@@ -517,7 +495,7 @@
   .rules-warning {
     margin-top: 1.25rem;
     padding: 0.9rem 1.1rem;
-    border-radius: var(--leaf-lg);
+    border-radius: 0 6px 6px 0;
     background: var(--flare-wash);
     border-left: 4px solid var(--flare-strong);
     color: var(--flare-strong);
@@ -617,6 +595,12 @@
     .flare, .setup, .milestones, .controls, .kbd-hint, .rules-actions, .stage-sub, #mh-menubar { display: none !important; }
     .card { box-shadow: none; max-width: none; }
     body { padding: 0 !important; }
+  }
+
+  /* Respect reduced-motion: neutralise fades, flashes and transitions
+     (mirrors autofac.html's approach). */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
   }
 </style>
 </head>

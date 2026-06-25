@@ -6,6 +6,9 @@
 <title>Seat Planner</title>
 <!-- the one site-wide menubar (links + dropdowns live in this file) -->
 <script src="menubar.js" defer></script>
+<!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); the inline
+     :root below keeps only Seat Planner's page-specific tokens and may override -->
+<link rel="stylesheet" href="brand/brand.css">
 <style>
   /* ── Palette & theme tokens ─────────────────────────────────────────────────
      Shared vocabulary with matthorrigan.com / MCQer (base.css): --ink, --muted,
@@ -15,21 +18,11 @@
      for swap flashes and input focus; the orange→blue --flare glow is lifted
      from the home page. Swap the brand here once and every control follows.
   ────────────────────────────────────────────────────────────────────────────── */
+  /* All shared tokens (--ink/--muted/--faint/--rule, --accent*, --on-accent,
+     --bg/--surface*, --danger*, --focus, --flare-warm/-cool, --radius, --leaf*,
+     --card-max, fonts) now come from brand/brand.css. Only Seat Planner's own
+     seating-chart ramp lives here. */
   :root {
-    --ink:           #1a1a1a;   /* primary text                                   */
-    --muted:         #595959;   /* secondary text, subtitles                      */
-    --faint:         #8a8a8a;   /* hints, captions, empty seats                   */
-    --rule:          #d9d9d9;   /* hairlines, borders, dashed drop-zones          */
-    --accent:        #5b2a86;   /* deep violet: buttons, labels, links            */
-    --accent-strong: #46206a;   /* accent hover / active                          */
-    --accent-wash:   #f1ebf8;   /* tint behind confirmed / hovered surfaces       */
-    --on-accent:     #ffffff;   /* text & icons on an accent fill                 */
-    --bg:            #f9f7fb;   /* page background                                */
-    --surface:       #ffffff;   /* cards, drop-zones, filled-seat chips           */
-    --surface-tint:  #f1edf7;   /* panels, preview, filled seats                  */
-    --danger:        #b2241a;   /* integrity flags / error (distinct from brand)  */
-    --danger-wash:   #fbecea;   /* flag / error background                        */
-    --focus:         #c3f0ff;   /* cyan focus ring & swap flash (nods to menubar) */
     /* Seating-chart tonal ramp — one place to restyle the grid. The @media print
        block redefines these for higher-contrast paper output; every cell rule
        (screen and print) reads them, so a single edit retints the whole chart.  */
@@ -42,15 +35,6 @@
     --seat-empty-bg:      var(--surface);   /* empty seat background           */
     --seat-empty-border:  #ece6e8;          /* empty seat border               */
     --seat-empty-text:    var(--faint);     /* empty seat label                */
-    --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                */
-    --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus) */
-    --radius:        8px;
-    --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
-    --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
-    --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
-    --card-max: 860px;          /* shared main-card width across the tools         */
-    --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -282,7 +266,7 @@
     resize: vertical;
     line-height: 1.5;
   }
-  #flag-terms:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus); }
+  #flag-terms:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus); }
 
   .flag-terms-upload { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.45rem; flex-wrap: wrap; }
   .link-btn {
@@ -752,6 +736,12 @@
     }
 
     .rank-caption { color: var(--faint) !important; margin-top: 8px !important; }
+  }
+
+  /* Respect reduced-motion: neutralise fades, swap-flashes and transitions
+     (mirrors autofac.html's approach). */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
   }
 </style>
 </head>

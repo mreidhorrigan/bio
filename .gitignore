@@ -27,3 +27,6 @@ house-style-private/
 
 # Stray local command transcripts dropped in the repo root.
 *-local-command-caveatcaveat-the-messages-below.txt
+
+# macOS Finder cruft — never publish it.
+.DS_Store

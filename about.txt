@@ -1,6 +1,7 @@
-This favicon was generated using the following graphics from Twitter Twemoji:
+The matthorrigan.com favicon is an original mark: the site's asymmetric "leaf"
+tile filled with the house pentad gradient, with cyan and orange leading and
+violet, rose, and green woven through. It is generated from the brand tokens
+(see brand/house-style.md and brand/pentad.py).
 
-- Graphics Title: 1f60c.svg
-- Graphics Author: Copyright 2020 Twitter, Inc and other contributors (https://github.com/twitter/twemoji)
-- Graphics Source: https://github.com/twitter/twemoji/blob/master/assets/svg/1f60c.svg
-- Graphics License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+It replaced an earlier placeholder adapted from a Twitter Twemoji glyph (1f60c,
+licensed CC-BY 4.0). That artwork is no longer used.

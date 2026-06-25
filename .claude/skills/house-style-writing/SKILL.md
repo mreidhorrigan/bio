@@ -27,7 +27,9 @@ exempt.
 
 ### 1. No spaced em dashes. Ever.
 
-Never write a space-em dash-space (` — `). It is the single hard rule. Recast it:
+Never write a space-em dash-space (` — `). It is the single hard rule. An em dash
+is *allowed* only when it is **closed up** against the words on both sides
+(`word—word`), and even then only **rarely** (see rule 2). Recast a spaced one:
 
 | Instead of ` — ` | Use | When |
 |---|---|---|
@@ -70,6 +72,21 @@ contain commas. That case is rare in UI copy.
 - Cut filler ("simply," "just," "please," "in order to"). Prefer the short word.
 - Sentence case for everything except proper nouns. No Title Case In Sentences.
 - Match the existing copy's terms; don't introduce a synonym for a named thing.
+
+### 5. Colon capitalization (APA).
+
+Capitalize the first word after a colon **only when what follows is a complete
+sentence**. Keep it lowercase when what follows is a fragment or a list.
+
+- ✓ complete sentence: `The rule is simple: Every roster needs a layout.`
+- ✓ fragment: `Upload two things: a roster and a layout.`
+- ✓ list: `Supported formats: plain text, CSV, Canvas export.`
+
+### 6. Default to Chicago.
+
+For anything these house rules don't cover (hyphenation, number style, quotation
+and punctuation placement, capitalization edge cases), follow the **Chicago Manual
+of Style**. The house rules above win wherever they speak; Chicago fills the rest.
 
 ## Workflow when editing site copy
 

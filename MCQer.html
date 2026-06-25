@@ -10,6 +10,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- the one site-wide menubar (links + dropdowns live in this file) -->
   <script src="menubar.js" defer></script>
+  <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); the inline
+       :root below keeps only MCQer's page-specific tokens and may override -->
+  <link rel="stylesheet" href="brand/brand.css">
   <style>
     /* ── Palette & theme tokens ─────────────────────────────────────────────────
        The whole tool re-skins from the :root tokens below. The names mirror the
@@ -18,32 +21,13 @@
        the site and MCQer reads as a sibling of the CV it sits beside in the menubar.
        Swap the brand here once and every control follows.
     ────────────────────────────────────────────────────────────────────────────── */
+    /* All shared tokens (--ink/--muted/--faint/--rule, --accent*, --on-accent,
+       --bg/--surface*, --danger*, --focus, --flare-warm/-cool, --radius, --leaf*,
+       --card-max, fonts) now come from brand/brand.css. Only MCQer's two
+       page-specific tokens live here. */
     :root {
-      --ink:           #1a1a1a;   /* primary text                                   */
-      --muted:         #595959;   /* secondary text, subtitles                      */
-      --faint:         #8a8a8a;   /* hints, captions                                */
-      --rule:          #d9d9d9;   /* hairlines, borders, dashed drop-zones          */
-      --accent:        #5b2a86;   /* deep violet: buttons, labels, progress, links  */
-      --accent-strong: #46206a;   /* accent hover / active                          */
-      --accent-wash:   #f1ebf8;   /* tint behind confirmed / hovered surfaces       */
-      --on-accent:     #ffffff;   /* text & icons on an accent fill                 */
-      --bg:            #f9f7fb;   /* page background                                */
-      --surface:       #ffffff;   /* card, drop-zones                               */
-      --surface-tint:  #f1edf7;   /* panels, preview, progress track                */
-      --danger:        #b2241a;   /* error text / state (kept distinct from brand)  */
-      --danger-wash:   #fbecea;   /* error background                               */
       --answer:        #d4a800;   /* gold [Answer.] marker in the tag reference     */
       --paragraph:     #7a8fa6;   /* slate-blue [Paragraph] scenario text in preview */
-      --focus:         #c3f0ff;   /* cyan focus ring & selection (nods to the menubar) */
-      --flare-warm:    #f28b46;   /* home-page cloud: orange (exact)                 */
-      --flare-cool:    #c3f0ff;   /* home-page cloud: blue (exact, same as --focus)  */
-      --radius:        8px;
-      --leaf-lg: 22px 6px 22px 6px / 12px 4px 12px 4px;   /* big cards, panels, modals, sections, dropzones */
-      --leaf:    15px 4px 15px 4px / 8px 3px 8px 3px;      /* buttons & medium controls */
-      --leaf-sm: 8px 3px 8px 3px / 5px 2px 5px 2px;        /* inputs, chips, badges, small boxes */
-      --card-max: 860px;          /* shared main-card width across the tools         */
-      --sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      --body-font: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     /* Base colour lives on <html> so the z-index:-1 cloud below shows over it —
@@ -136,7 +120,7 @@
     /* ── Status bar ──────────────────────────────────────────────────────── */
     #status {
       font-size: 0.88rem; margin-bottom: 1rem; padding: 0.5rem 0.8rem;
-      border-radius: var(--leaf-sm); display: none; border-left: 3px solid transparent;
+      border-radius: 0 6px 6px 0; display: none; border-left: 3px solid transparent;
     }
     #status.info    { display: block; background: var(--surface-tint); color: var(--ink);    border-color: var(--muted); }
     #status.success { display: block; background: var(--accent-wash);  color: var(--accent); border-color: var(--accent); }
@@ -248,7 +232,7 @@
     }
     .version-stepper { display: flex; align-items: center; gap: 0.5rem; }
     .version-stepper button {
-      width: 2rem; height: 2rem; padding: 0; border-radius: var(--leaf);
+      width: 2rem; height: 2rem; padding: 0; border-radius: var(--leaf-sm);
       background: var(--accent); color: var(--on-accent); font-size: 1.1rem; font-weight: 700;
       line-height: 1; flex: none; border: none; cursor: pointer;
       transition: background 0.15s;
@@ -263,7 +247,7 @@
       border: 1px solid var(--rule); border-radius: var(--leaf-sm);
       transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .num-input:focus {
+    .num-input:focus-visible {
       outline: none; border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--focus);
     }
@@ -295,6 +279,23 @@
     /* ── Output legend ───────────────────────────────────────────────────── */
     .output-legend { display: none; font-size: 0.8rem; color: var(--muted); line-height: 1.9; }
     .output-legend span { font-weight: 700; color: var(--ink); }
+
+    /* ── Keyboard focus ──────────────────────────────────────────────────────
+       One tokenised cyan ring for every focusable control (buttons, drop-zones,
+       links), on :focus-visible so it shows for keyboard users without flashing
+       on click. .num-input keeps its own ring (it also tints the border). */
+    .version-stepper button:focus-visible,
+    #btn-generate:focus-visible,
+    .drop-zone:focus-visible,
+    a:focus-visible {
+      outline: none; box-shadow: 0 0 0 3px var(--focus);
+    }
+
+    /* Respect reduced-motion: neutralise transitions (the progress bar, hovers,
+       drop-zone fades). Mirrors autofac.html's approach. */
+    @media (prefers-reduced-motion: reduce){
+      *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
+    }
 </style>
 </head>
 <body>

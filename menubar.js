@@ -8,8 +8,8 @@
  *    the site nav into that bar's left slot (replacing the document title) and
  *    keeps its Web / Print-PDF / Download controls on the right.
  *
- * Design: derived from the CV builder's menubar (fixed white bar, hairline
- * bottom border, soft shadow, small bold sans, pill-ish items) with the site's
+ * Design: derived from the CV builder's menubar (fixed white bar, soft drop
+ * shadow — no bottom border, small bold sans, pill-ish items) with the site's
  * blue soft-edged highlight (cyan + glow, asymmetric corners) for hover/current.
  *
  * ───────────────────────────────────────────────────────────────────────────
@@ -67,13 +67,13 @@
        reshape it: index.html has no box-sizing (content-box) while the CV/tools
        set border-box, which is exactly what made the index bar render taller. */
     "#mh-menubar, .mh-nav, .mh-nav *{ box-sizing:border-box; }",
-    /* the 'opens another website' underline (used via mask): a mostly-flat line
-       that sweeps up at the bottom-right, echoing the leaf highlight's bottom
-       edge (border-radius:25% 5% 25% 5% -> big curve only at the bottom-right).
-       preserveAspectRatio='none' lets the flat run stretch to the label width
-       while the sweep keeps its place at the right, like the highlight's corner. */
-    ".mh-nav{ display:flex; align-items:center; flex-wrap:wrap; gap:2px 4px; min-width:0;",
-    "  --mh-arc:url(\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%2010'%20preserveAspectRatio='none'%3E%3Cpath%20d='M2,9L68,9Q88,9,98,2.5'%20fill='none'%20stroke='%23000'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E\"); }",
+    /* When items wrap to multiple rows on narrow/phone widths, pack the rows
+       tightly and EVENLY: align-content:center keeps only the row-gap between
+       rows (no leftover vertical space distributed between them, which is what
+       made the wrapped row spacing look random against the bar's min-height).
+       gap is row-gap col-gap = a uniform 6px between every wrapped row. */
+    ".mh-nav{ display:flex; align-items:center; align-content:center; flex-wrap:wrap; gap:6px; min-width:0;",
+    "}",
     ".mh-nav a, .mh-nav summary{",
     "  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;",
     "  font-size:13px; font-weight:600; line-height:1.1;",
@@ -82,22 +82,30 @@
     /* reset border/margin/background so a host's global a{} can't bleed in
        (e.g. the CV's a{border-bottom:1px} was drawing a stray underline here) */
     "  position:relative; border:0; margin:0; background:none;",
+    /* ── emboss/deboss experiment (menubar) ─────────────────────────────────
+       Available items read as gently EMBOSSED (raised, inviting a press): a
+       light highlight on the top-left rim, a soft shadow at the bottom-right,
+       so the bevel agrees with the brand's top-left light source. Alphas are
+       deliberately tiny on the white bar. To dial intensity, change the two
+       alphas below (.7 highlight / .10 shadow); to tilt the bevel, change the
+       1px offsets. Set both to 'none' to revert this line only. */
+    "  box-shadow: var(--emboss-raised, -1px -1px 0 rgba(255,255,255,.7), 1px 1px 2px rgba(0,0,0,.10));",
+    /* a soft transition so the press (deboss) feels physical, not abrupt */
+    "  transition: box-shadow .15s ease, background-color .15s ease;",
     "}",
     ".mh-nav a:hover, .mh-nav summary:hover, .mh-nav a[aria-current='page'], .mh-nav summary[aria-current='page'], .mh-dd[open] summary{",
     "  color:#000; background:var(--mh-blue); text-decoration:none;",
     "  filter:drop-shadow(0 0 5px var(--mh-blue));",
+    /* ── emboss/deboss experiment (menubar, pressed state) ──────────────────
+       The current/hover item flips to DEBOSSED (pressed in): inset shadows
+       reverse the bevel — a soft dark inset at the top-left, a light inset at
+       the bottom-right — so a hovered/selected item looks pushed below the
+       surface while still carrying the cyan fill + glow above. The cyan glow
+       lives in `filter` (untouched); these inset shadows layer alongside it.
+       To soften the press, lower the .16 / .55 alphas; revert by removing this
+       box-shadow line. */
+    "  box-shadow: var(--emboss-pressed, inset 1px 1px 2px rgba(0,0,0,.16), inset -1px -1px 1px rgba(255,255,255,.55));",
     "}",
-    /* external-link cue: a faint curved underline on items that open another
-       website; it brightens to cyan on hover and never shows on internal pages */
-    ".mh-nav a.mh-ext::after{",
-    /* span the whole item and sit flush at its bottom, so the cue traces the
-       bottom edge of the blue hover pill (which fills the full padding box) */
-    "  content:''; position:absolute; left:0; right:0; bottom:0; height:8px;",
-    "  background-color:#9aa0a6; pointer-events:none; transition:background-color .15s ease;",
-    "  -webkit-mask:var(--mh-arc) center/100% 100% no-repeat;",
-    "          mask:var(--mh-arc) center/100% 100% no-repeat;",
-    "}",
-    ".mh-nav a.mh-ext:hover::after{ background-color:#17a3d6; }",
     /* Dropdowns (a <details>, so they work keyboard + touch, no framework) */
     ".mh-dd{ position:relative; }",
     ".mh-dd summary{ list-style:none; display:inline-block; }",
@@ -114,7 +122,7 @@
     "#mh-menubar{",
     "  position:fixed; inset:0 0 auto 0; min-height:46px;",
     "  display:flex; align-items:center; gap:16px; padding:4px clamp(12px,4vw,28px);",
-    "  background:#fff; border-bottom:1px solid #d9d9d9; box-shadow:0 1px 4px rgba(0,0,0,.05);",
+    "  background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.05);",
     "  z-index:1000; border-bottom-right-radius:var(--mh-leaf-bar);",
     "}",
     /* when spliced into the CV bar: let it wrap instead of clipping; pin the same gap */
@@ -123,22 +131,12 @@
     "#cv-menubar .mh-nav{ flex:1 1 auto; }"
   ].join("\n");
 
-  // off-site if it resolves to a different origin (works on the live domain and
-  // in a local file:// preview, where same-site relative links share the origin)
-  function isExternal(href) {
-    try {
-      var u = new URL(href, location.href);
-      return /^https?:$/.test(u.protocol) && u.origin !== location.origin;
-    } catch (e) { return false; }
-  }
-
   function link(label, href) {
     var a = document.createElement("a");
     a.textContent = label;
     a.href = href;
     var here = location.pathname.split("/").pop() || "index.html";
     if (href === here) a.setAttribute("aria-current", "page");
-    if (isExternal(href)) a.className = "mh-ext";
     return a;
   }
 

@@ -13,17 +13,61 @@
    =========================================================================== */
 
 :root {
-  /* ---- Colour: light "document" context (index, CV, tools) --------------- */
-  --brand-cyan:        #c3f0ff;  /* THE highlight/interaction colour          */
-  --accent:            #5b2a86;  /* deep violet — links, buttons, labels      */
+  /* ---- Colour: the PENTAD (light "document" context: index, CV, tools) ----
+     Five hues 72 degrees apart on the wheel, anchored on the cyan (hue 195).
+     Three members are long-established and hand-tuned (cyan, violet, orange);
+     rose + green complete the ring. Generate/retune them with brand/pentad.py
+     (the single knob: change the anchor or the tonal recipe, re-emit, paste).
+     Deploy rose and green SPARINGLY, as semantic accents, never as co-equal
+     brand colours; and never show violet + orange as the only two colours of a
+     mark (the pair reads as FedEx).
+       arm +0    195  cyan    --brand-cyan   highlight / interaction
+       arm +72   267  violet  --accent*      links, buttons, labels
+       arm +144  339  rose    --rose*        secondary / warm accent (sparse)
+       arm +216   51  orange  --flare*       landing flare / warm callout
+       arm +288  123  green   --green*       positive / affirmation accent (sparse) */
+  --brand-cyan:        #c3f0ff;  /* cyan   (arm 0): THE highlight/interaction colour */
+  --accent:            #5b2a86;  /* violet (arm 1): links, buttons, labels    */
   --accent-strong:     #46206a;  /* accent hover / active                     */
   --accent-wash:       #f1ebf8;  /* tint behind hovered/confirmed surfaces    */
   --on-accent:         #ffffff;  /* text/icons on an accent fill              */
 
-  --flare-warm:        #f28b46;  /* home/landing cloud: orange                */
-  --flare-strong:      #9a4310;  /* deep burnt orange — orange-family callout text/border */
-  --flare-wash:        #fdefe2;  /* light orange tint — orange-family callout background  */
+  --flare-warm:        #f28b46;  /* orange (arm 3): home/landing cloud         */
+  --flare-strong:      #9a4310;  /* deep burnt orange (brown-adjacent): orange callout text/border */
+  --flare-wash:        #fdefe2;  /* light orange tint: orange callout background  */
   --flare-cool:        #c3f0ff;  /* home/landing cloud: blue (= --brand-cyan) */
+
+  /* rose (arm 2) + green (arm 4): the two NEW pentad members. Sparse semantic
+     accents only. Deep `base`/`-strong` clear WCAG AA for text on white; `-mid`
+     is a bright fill; `-tint`/`-wash` mirror the cyan and violet-wash tonalities.
+     Caution: --rose, --green and --accent all sit near L 33%, so they can collapse
+     under red-green colour-vision deficiency. Never separate them by hue alone. */
+  --rose:              #862a4a;  /* rose base: AA text/links (the pink we can use) */
+  --rose-strong:       #6e233d;  /* rose hover / active                       */
+  --rose-mid:          #cb4d79;  /* bright rose fill / accent line            */
+  --rose-tint:         #ffc2d7;  /* pale rose highlight (cyan-tint sibling)   */
+  --rose-wash:         #f8ebf0;  /* rose surface / callout background         */
+  --green:             #287e2c;  /* green base: AA text (positive / affirmation) */
+  --green-strong:      #226b26;  /* green hover / active                      */
+  --green-mid:         #4dcb53;  /* bright green fill                         */
+  --green-tint:        #c2ffc5;  /* pale green highlight                      */
+  --green-wash:        #ebf8ec;  /* green surface / callout background        */
+
+  /* ---- Supporting colours: the "world" around the pentad ------------------
+     Derivatives of the arms, NOT new brand hues. Brown is the orange arm
+     darkened + muted (so it reads as native warmth, not a 6th colour); the
+     neutrals are grey pulled toward an arm (violet = cool, orange = warm).
+     Use browns/neutrals freely for structure; keep --teal / --gold RARE. The
+     burnt orange --flare-strong is brown-adjacent but too hot to be THE brown. */
+  --brown:             #584132;  /* walnut: the house brown (warm rules, sepia, brown text) */
+  --brown-deep:        #493527;  /* espresso: deepest warm near-black text     */
+  --taupe:             #7c685a;  /* warm neutral: muted text in warm contexts  */
+  --slate:             #726c7a;  /* cool neutral: secondary text/icons         */
+  --teal:              #2a8186;  /* RARE cool bridge (near cyan): secondary cool accent */
+  --gold:              #ba962c;  /* RARE warm bridge (near orange): decorative only */
+  --violet-black:      #1e1528;  /* near-black tinted to the identity violet   */
+  --parchment:         #f6f4ee;  /* warm surface: an orange-keyed callout card */
+  --cream:             #f9f8f3;  /* lightest warm page tint                    */
 
   --ink:               #1a1a1a;  /* primary text                             */
   --muted:             #595959;  /* secondary text, subtitles                */
@@ -67,6 +111,13 @@
   --shadow-card:     0 4px 28px rgba(0,0,0,0.10);  /* main cards / elevated surfaces */
   --shadow-bar:      0 1px 4px  rgba(0,0,0,0.05);  /* the fixed menubar           */
   --shadow-dropdown: 0 6px 18px rgba(0,0,0,0.12);  /* the menubar dropdown panel  */
+
+  /* Emboss / deboss for menubar items (light from the top-left, agreeing with the
+     leaf diagonal). One definition so the injected menubar and the CV menubar can
+     both reference it and not drift. `raised` = an available item; `pressed` =
+     the current / hovered item (layered with the cyan fill + glow). */
+  --emboss-raised:   -1px -1px 0 rgba(255,255,255,.7), 1px 1px 2px rgba(0,0,0,.10);
+  --emboss-pressed:  inset 1px 1px 2px rgba(0,0,0,.16), inset -1px -1px 1px rgba(255,255,255,.55);
 
   /* ---- Misc ------------------------------------------------------------- */
   --radius: 8px;   /* legacy symmetric radius/spacing scalar, still defined by the
