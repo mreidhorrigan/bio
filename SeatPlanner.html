@@ -82,15 +82,6 @@
   /* ── Masthead ─────────────────────────────────────────────────────────────── */
   .masthead { margin-bottom: 1.75rem; }
 
-  .eyebrow {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.3rem;
-  }
-
   h1 {
     font-size: 1.8rem;
     font-weight: 800;
@@ -754,8 +745,7 @@
 
   <!-- ── Masthead ── -->
   <div class="masthead">
-    <div class="eyebrow">Classroom Seating</div>
-    <h1>Seat Planner <em>v11</em></h1>
+    <h1>Seat Planner</h1>
     <p class="subtitle">Upload a class roster (a simple name list <strong>or a Canvas gradebook export</strong>) and an optional room layout to generate a seating chart, then <strong>drag any student onto another</strong> to swap. Optional toggles let you rank by gradebook score and flag integrity concerns.</p>
   </div>
 
@@ -763,7 +753,6 @@
   <div class="uploads">
     <div class="upload-card" id="card-students">
       <input type="file" accept=".csv" id="input-students">
-      <div class="card-label">Roster CSV</div>
       <div class="card-title">Student Roster</div>
       <div class="card-hint">
         <strong>Simple CSV:</strong> name, optional score, optional note.<br>
@@ -775,7 +764,7 @@
 
     <div class="upload-card" id="card-layout">
       <input type="file" accept=".csv" id="input-layout">
-      <div class="card-label">Classroom Layout CSV <span class="optional">optional</span></div>
+      <div class="card-label"><span class="optional">optional</span></div>
       <div class="card-title">Classroom Layout</div>
       <div class="card-hint">Cells with "X" mark valid seat positions.<br>Leave blank to use the default layout.</div>
       <div class="card-status" id="status-layout"></div>

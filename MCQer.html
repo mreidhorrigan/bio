@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MCQer v11</title>
+  <title>Exam Version Generator</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -23,10 +23,9 @@
     ────────────────────────────────────────────────────────────────────────────── */
     /* All shared tokens (--ink/--muted/--faint/--rule, --accent*, --on-accent,
        --bg/--surface*, --danger*, --focus, --flare-warm/-cool, --radius, --leaf*,
-       --card-max, fonts) now come from brand/brand.css. Only MCQer's two
-       page-specific tokens live here. */
+       --card-max, fonts) now come from brand/brand.css. Only MCQer's one
+       page-specific token lives here. */
     :root {
-      --answer:        #d4a800;   /* gold [Answer.] marker in the tag reference     */
       --paragraph:     #7a8fa6;   /* slate-blue [Paragraph] scenario text in preview */
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,10 +64,6 @@
 
     /* ── Masthead ─────────────────────────────────────────────────────────── */
     .masthead { margin-bottom: 1.75rem; }
-    .masthead .eyebrow {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem;
-    }
     h1 {
       font-size: 1.8rem; font-weight: 800; color: var(--ink);
       margin-bottom: 0.2rem; line-height: 1.15; letter-spacing: -0.01em;
@@ -169,8 +164,8 @@
     }
     .fmt-q  { font-weight: 700; color: var(--ink); margin-bottom: 0.25rem; }
     .fmt-opt { color: var(--ink); padding-left: 1.2rem; line-height: 1.6; }
-    .fmt-opt.answer { color: var(--accent); }
-    .fmt-opt.answer::before { content: '[Answer.] '; font-size: 0.75rem; color: var(--accent); font-weight: 700; }
+    .fmt-opt.answer { color: var(--green); }
+    .fmt-opt.answer::before { content: '[Answer.] '; font-size: 0.75rem; color: var(--green); font-weight: 700; }
     .fmt-divider {
       border: none; border-top: 1px dashed var(--rule);
       margin: 0.6rem 0;
@@ -302,8 +297,7 @@
 <div class="flare"></div>
 <div class="card">
   <div class="masthead">
-    <div class="eyebrow">Exam Generator</div>
-    <h1>MCQer <em>v11</em></h1>
+    <h1>Exam Version Generator</h1>
     <p class="subtitle">Upload questions and an optional PDF coversheet. Downloads versioned answer keys and test forms as DOCX + PDF.</p>
   </div>
 
@@ -383,7 +377,7 @@
 
       <div class="tag-note">
         Options are lettered <strong>(a) (b) (c)…</strong> after scrambling. In the answer key the correct option is prefixed
-        <strong style="color:var(--answer)">[Answer.]</strong>. The test form shows no marker. <u>Underlined</u> text and
+        <strong style="color:var(--green)">[Answer.]</strong>. The test form shows no marker. <u>Underlined</u> text and
         embedded images are preserved in both outputs, and every page is numbered "Page X of Y".
       </div>
     </div>
