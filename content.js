@@ -59,16 +59,10 @@
       },
       {
         title: "Music",
-        page: {
-          title: "Music",
-          toc: [   // labels match the site menubar's "Music" dropdown verbatim
-            { label: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },
-            { label: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
-          ],
-        },
-        satellites: [   // slimeverse: each item grows into a house down the Music road
-          { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },
-          { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
+        page: { url: `${B}classic.html?menu=Music` },          // open the About page with the Music dropdown deployed (new tab)
+        satellites: [   // slimeverse: each Music house opens About with the Music dropdown deployed
+          { title: "No Phenomenon", url: `${B}classic.html?menu=Music` },
+          { title: "SoundCloud", url: `${B}classic.html?menu=Music` },
         ],
         html: `
           <p>In an earlier artistic career I was a sound designer and programmer, writing
@@ -79,20 +73,12 @@
       },
       {
         title: "Games",
-        page: {
-          title: "Games",
-          toc: [   // labels match the site menubar's "Games" dropdown verbatim
-            { label: "Rock walls and damp—these match our dream; but, Rector, the cold is new.", url: `${B}Rock_Walls_and_Damp.html` },
-            { label: "Autofac: Rad Shipping", url: `${B}autofac.html` },
-            { label: "Clod Bathos, Superior Machine", url: "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/" },
-            { label: "Appraising the Pedagogical Value of Audiogames (CGSA 2026)", url: "https://cgsa2026-audio-presentation.onrender.com" },
-          ],
-        },
-        satellites: [   // slimeverse: each item grows into a house down the Games road
-          { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
-          { title: "Autofac", url: `${B}autofac.html` },
-          { title: "Clod Bathos", url: "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/" },
-          { title: "Audiogames (CGSA)", url: "https://cgsa2026-audio-presentation.onrender.com" },
+        page: { url: `${B}classic.html?menu=Games` },          // open the About page with the Games dropdown deployed (new tab)
+        satellites: [   // slimeverse: each Games house opens About with the Games dropdown deployed
+          { title: "Rock Walls & Damp", url: `${B}classic.html?menu=Games` },
+          { title: "Autofac", url: `${B}classic.html?menu=Games` },
+          { title: "Clod Bathos", url: `${B}classic.html?menu=Games` },
+          { title: "Audiogames (CGSA)", url: `${B}classic.html?menu=Games` },
         ],
         html: `
           <p>Games and interactive pieces:</p>

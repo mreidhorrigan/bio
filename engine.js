@@ -836,8 +836,13 @@ function update(dt) {
 function loop(ts) {
   let dt = (ts - last) / 1000; if (dt > 0.05) dt = 0.05;
   last = ts; tnow = ts / 1000;
-  frameMs += ((dt * 1000) - frameMs) * 0.1;                 // smoothed frame time; adaptive degrade on weak machines (no effect on capable ones)
-  perfSkip = frameMs > 46 ? 2 : frameMs > 31 ? 1 : 0;
+  frameMs += ((dt * 1000) - frameMs) * 0.1;                 // smoothed frame time (no effect on capable machines)
+  // Adaptive scenery degrade WITH HYSTERESIS: step the skip UP only when clearly slow and DOWN only
+  // when clearly recovered, with a wide dead-band between. A plain threshold (frameMs>46?2:>31?1:0)
+  // toggled every frame when the frame time sat near a cutoff, flipping props on/off — the "flickering
+  // plants" (and it persisted across a theme switch because perfSkip is global). One step per frame.
+  if (perfSkip < 2 && frameMs > (perfSkip === 0 ? 33 : 48)) perfSkip++;
+  else if (perfSkip > 0 && frameMs < (perfSkip === 2 ? 38 : 24)) perfSkip--;
   if (mode === "walking") update(dt);
   render(); updateHUD();
   requestAnimationFrame(loop);
@@ -929,9 +934,17 @@ function render() {
     for (const ex of EXHIBITS) {                        // keep each kiosk's BAUBLE legible even when the slime isn't looking at it
       const c = toScreen(nearImg(ex.tx, player.x), nearImg(ex.ty, player.y));
       if (c.x < -90 || c.x > W + 90 || c.y < -160 || c.y > H + 90) continue;
-      const by = c.y - 100, sp = dctx.createRadialGradient(c.x, by, 2, c.x, by, 55);
-      sp.addColorStop(0, "rgba(255,255,255,0.92)"); sp.addColorStop(0.6, "rgba(255,255,255,0.5)"); sp.addColorStop(1, "rgba(255,255,255,0)");
-      dctx.fillStyle = sp; dctx.beginPath(); dctx.ellipse(c.x, by, 55, 40, 0, 0, Math.PI * 2); dctx.fill();
+      const sr = ex.signRect;
+      if (sr) {                                         // reveal a patch the SHAPE of the sign (a soft rounded-rect), not a round halo
+        dctx.save(); dctx.shadowColor = "rgba(255,255,255,0.85)"; dctx.shadowBlur = 26; dctx.fillStyle = "rgba(255,255,255,0.9)";
+        const x = sr.x - 4, y = sr.y - 4, w = sr.w + 8, h = sr.h + 8, r = 8;
+        dctx.beginPath(); dctx.moveTo(x + r, y); dctx.arcTo(x + w, y, x + w, y + h, r); dctx.arcTo(x + w, y + h, x, y + h, r); dctx.arcTo(x, y + h, x, y, r); dctx.arcTo(x, y, x + w, y, r); dctx.closePath(); dctx.fill();
+        dctx.restore();
+      } else {                                          // fallback (no stashed sign rect): a soft round pool above the kiosk
+        const by = c.y - 100, sp = dctx.createRadialGradient(c.x, by, 2, c.x, by, 55);
+        sp.addColorStop(0, "rgba(255,255,255,0.92)"); sp.addColorStop(0.6, "rgba(255,255,255,0.5)"); sp.addColorStop(1, "rgba(255,255,255,0)");
+        dctx.fillStyle = sp; dctx.beginPath(); dctx.ellipse(c.x, by, 55, 40, 0, 0, Math.PI * 2); dctx.fill();
+      }
     }
     if (T.avatarBeam && beamState) paintSlimeBeam(dctx, beamState.sx, beamState.baseY, beamState.a);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "multiply"; ctx.drawImage(darkCv, 0, 0); ctx.restore();
@@ -993,13 +1006,12 @@ function drawVignette() {
 // the slime's directional light (ambient pool + view-cone). In gloom modes it's drawn
 // POST-darkness so the deep multiply can't dim it. Cone apex at the base, clipped to the
 // base line (never spills below the slime) — except when pointing downward (forward IS below).
-function paintSlimeBeam(g, sx, baseY, a) {   // WHITE reveal-mask: an ambient pool + a view-triangle that STARTS at the slime's near corner
-  const cy = baseY - 4, ang = Math.atan2(a.dy, a.dx);
-  const apexX = sx + a.dx * 13, apexY = baseY;   // bottom-left corner when moving left, bottom-right when moving right (no clip — not a flashlight)
-  g.save(); g.globalCompositeOperation = "lighter";
-  const amb = g.createRadialGradient(sx, cy, 2, sx, cy, 48);        // a GENTLE glow — enough to see the slime, not so bright it washes it out
-  amb.addColorStop(0, "rgba(255,255,255,0.6)"); amb.addColorStop(0.55, "rgba(255,255,255,0.3)"); amb.addColorStop(1, "rgba(255,255,255,0)");
-  g.fillStyle = amb; g.beginPath(); g.arc(sx, cy, 48, 0, Math.PI * 2); g.fill();
+function paintSlimeBeam(g, sx, baseY, a) {   // WHITE reveal-mask: a view-cone + an ambient pool, with the slime's
+  const cy = baseY - 4, ang = Math.atan2(a.dy, a.dx);   // footprint PUNCHED out of the cone so the triangle reads as BEHIND
+  const apexX = sx + a.dx * 13, apexY = baseY;          // the slime (no bright wedge over the body when walking toward it, e.g. up)
+  g.save();
+  // 1) the directional view-cone, drawn FIRST so the slime can sit in front of it
+  g.globalCompositeOperation = "lighter";
   const reach = 196, half = 0.8;
   for (let i = 0; i < 5; i++) {                                      // feathered overlapping wedges (wide+faint → narrow+bright): soft sides
     const tt = i / 4, hw = half * (1 - tt * 0.62), al = 0.1 + tt * 0.12;
@@ -1007,6 +1019,16 @@ function paintSlimeBeam(g, sx, baseY, a) {   // WHITE reveal-mask: an ambient po
     cone.addColorStop(0, "rgba(255,255,255," + al + ")"); cone.addColorStop(0.5, "rgba(255,255,255," + (al * 0.55) + ")"); cone.addColorStop(1, "rgba(255,255,255,0)");
     g.fillStyle = cone; g.beginPath(); g.moveTo(apexX, apexY); g.arc(apexX, apexY, reach, ang - hw, ang + hw); g.closePath(); g.fill();
   }
+  // 2) punch the slime's footprint OUT of the cone (feathered) — the wedge no longer paints over the body
+  g.globalCompositeOperation = "destination-out";
+  const hole = g.createRadialGradient(sx, cy, 4, sx, cy, 22);
+  hole.addColorStop(0, "rgba(0,0,0,1)"); hole.addColorStop(0.72, "rgba(0,0,0,0.92)"); hole.addColorStop(1, "rgba(0,0,0,0)");
+  g.fillStyle = hole; g.beginPath(); g.arc(sx, cy, 22, 0, Math.PI * 2); g.fill();
+  // 3) the ambient pool RELIGHTS the slime (its own soft glow, not the cone wedge) so it stays visible
+  g.globalCompositeOperation = "lighter";
+  const amb = g.createRadialGradient(sx, cy, 2, sx, cy, 48);        // a GENTLE glow — enough to see the slime, not so bright it washes it out
+  amb.addColorStop(0, "rgba(255,255,255,0.6)"); amb.addColorStop(0.55, "rgba(255,255,255,0.3)"); amb.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = amb; g.beginPath(); g.arc(sx, cy, 48, 0, Math.PI * 2); g.fill();
   g.restore();
 }
 let darkCv = null, dctx = null;
@@ -1366,7 +1388,7 @@ function defPaintSignpost(g, sx, sy, dir, dist, info) {
    -------------------------------------------------------------------------- */
 
 function isoToScreen(wx, wy) { return { x: (wx - wy) * (TILE_W / 2), y: (wx + wy) * (TILE_H / 2) }; }
-function toScreen(wx, wy) { const p = isoToScreen(wx, wy); return { x: p.x + originX, y: p.y + originY }; }
+function toScreen(wx, wy) { return { x: (wx - wy) * (TILE_W / 2) + originX, y: (wx + wy) * (TILE_H / 2) + originY }; }   // inlined: one object alloc, not two (hot path, ~thousands/frame)
 function screenToWorld(sx, sy) { const ix = sx - originX, iy = sy - originY; return { x: ix / TILE_W + iy / TILE_H, y: iy / TILE_H - ix / TILE_W }; }
 
 /** which kiosk (if any) sits under a screen point — a tall hit-box, front-most wins */

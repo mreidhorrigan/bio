@@ -52,6 +52,22 @@
     g.strokeStyle = "rgba(15,40,20,0.18)";
     g.beginPath(); g.moveTo(sx - 48, sy); g.lineTo(sx, sy + 24); g.lineTo(sx + 48, sy); g.stroke();
   }
+  /** Trace the brand "leaf" tag onto the current path: the asymmetric corner used to flag
+   *  items throughout the site (menubar pills, cards, favicon) — top-left & bottom-right
+   *  sweep, top-right & bottom-left near-square. Radii echo --mh-leaf (16x7 / 4x2). */
+  function leafPath(g, x, y, w, h) {
+    const Sx = Math.min(16, w / 2), Sy = Math.min(7, h / 2);   // sweeping corners (TL, BR)
+    const sx2 = Math.min(4, w / 2), sy2 = Math.min(2, h / 2);  // near-square corners (TR, BL)
+    const r = x + w, b = y + h;
+    g.beginPath();
+    g.moveTo(x + Sx, y);
+    g.lineTo(r - sx2, y); g.quadraticCurveTo(r, y, r, y + sy2);      // top edge → TR
+    g.lineTo(r, b - Sy);  g.quadraticCurveTo(r, b, r - Sx, b);       // right edge → BR (sweep)
+    g.lineTo(x + sx2, b); g.quadraticCurveTo(x, b, x, b - sy2);      // bottom edge → BL
+    g.lineTo(x, y + Sy);  g.quadraticCurveTo(x, y, x + Sx, y);       // left edge → TL (sweep)
+    g.closePath();
+  }
+
   /** vines: a few climbing strokes + leaves, scaled by density */
   function vines(g, sx, sy0, sy1, dens, t, slot) {
     const n = Math.round(dens * 4); if (n <= 0) return;
@@ -82,7 +98,7 @@
     accents: ["#f0b62a", "#f28b46", "#d24f86", "#8a52d0", "#36b9d6", "#e0613a"],   // saturated, warm-leaning → baubles pop off the cool alien ground
     audio: { root: 261.63, scale: [0, 2, 4, 7, 9, 11], type: "triangle" },
     bgCss: "#cfe4d6",
-    ecology: { enabled: true, showFlora: false, cfg: { motes: 46, grazerStart: 30, predatorStart: 0, fireflies: 0, moteSpeed: 1.3, grazerSpeed: 0.95 } },
+    ecology: { enabled: true, showFlora: false, cfg: { motes: 46, grazerStart: 30, predatorStart: 6, predatorDormant: true, fireflies: 0, moteSpeed: 1.3, grazerSpeed: 0.95 } },   // daylight: a few DORMANT predators stand around as eerie "plants"
     fluidGround: true, plazaColor: "#e7cf94", roadColor: "#d95f93",   // saturated rose-pink road + warm plaza mark the village
 
     css: `
@@ -209,14 +225,14 @@
       // SPECIAL colour (so it never reads as part of the map). No overlaid shapes, no halo.
       const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, CONN = "#ff6e8c";
       g.font = "700 16px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif"; const label = ex.title;   // the theme's usual display serif (Comic Sans clashed)
-      const bw = Math.max(48, g.measureText(label).width + 26), bh = 30, rr = bh / 2;
+      const bw = Math.max(48, g.measureText(label).width + 26), bh = 30;
       const bcx = sx + sway, bcy = topY - 48, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
       g.save(); if (!RM()) { g.shadowColor = CONN; g.shadowBlur = 5; } g.strokeStyle = CONN; g.lineWidth = 4; g.lineCap = "round";   // the special connector
       g.beginPath(); g.moveTo(sx, topY - 4); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.4, bcx, y0 + bh - 1); g.stroke(); g.restore();
       g.save(); if (!RM()) { g.shadowColor = U.hexA(ex.accent, 0.85); g.shadowBlur = active ? 14 : 8; }   // the pill's OWN soft aura (not a separate shape)
       const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
       bg.addColorStop(0, U.shade(ex.accent, 0.32)); bg.addColorStop(1, U.shade(ex.accent, -0.18));
-      g.fillStyle = bg; g.beginPath(); g.moveTo(x0 + rr, y0); g.arcTo(x0 + bw, y0, x0 + bw, y0 + bh, rr); g.arcTo(x0 + bw, y0 + bh, x0, y0 + bh, rr); g.arcTo(x0, y0 + bh, x0, y0, rr); g.arcTo(x0, y0, x0 + bw, y0, rr); g.closePath(); g.fill();
+      leafPath(g, x0, y0, bw, bh); g.fillStyle = bg; g.fill();                                   // the brand "leaf" tag shape — matches the flags used for items site-wide
       g.shadowBlur = 0; g.lineWidth = active ? 2.6 : 1.8; g.strokeStyle = U.hexA(GOLD, active ? 1 : 0.82); g.lineJoin = "round"; g.stroke(); g.restore();
       g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
       g.lineWidth = 3.5; g.strokeStyle = "rgba(12,30,18,0.9)"; g.strokeText(label, bcx, bcy);   // dark outline → readable on any accent

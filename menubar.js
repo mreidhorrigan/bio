@@ -117,7 +117,7 @@
     ".mh-dd summary::-webkit-details-marker{ display:none; }",
     ".mh-dd summary::after{ content:' \\25BE'; font-size:.75em; }",
     ".mh-dd-menu{",
-    "  position:absolute; left:0; top:calc(100% + 8px); min-width:260px; max-width:min(340px,86vw);",
+    "  position:absolute; left:0; top:calc(100% + 8px); min-width:min(260px,calc(100vw - 16px)); max-width:min(340px,calc(100vw - 16px));",
     "  display:flex; flex-direction:column; gap:2px; padding:6px; z-index:1001;",
     "  background:#fff; border:1px solid #d9d9d9; border-radius:var(--mh-leaf-box);",
     "  box-shadow:0 6px 18px rgba(0,0,0,.12);",
@@ -199,7 +199,32 @@
       else document.documentElement.style.setProperty("--cv-mb-h", h + "px");
     }
     syncPad();
-    window.addEventListener("resize", syncPad);
+    var padPend = false;
+    window.addEventListener("resize", function () {           // coalesce resize → one sync per frame (no layout thrash)
+      if (padPend) return; padPend = true;
+      requestAnimationFrame(function () { padPend = false; syncPad(); });
+    });
+
+    // keep an opened dropdown inside the viewport: if its panel would spill past the right
+    // edge (narrow phones), flip it to right-anchored so it can never force a sideways scroll.
+    function fitMenu(dd) {
+      var menu = dd.querySelector(".mh-dd-menu"); if (!menu || !menu.getBoundingClientRect) return;
+      menu.style.left = ""; menu.style.right = "";
+      if (dd.open && menu.getBoundingClientRect().right > window.innerWidth - 8) { menu.style.left = "auto"; menu.style.right = "0"; }
+    }
+    Array.prototype.forEach.call(bar.querySelectorAll(".mh-dd"), function (dd) {
+      dd.addEventListener("toggle", function () { fitMenu(dd); });
+    });
+
+    // a page can request a dropdown be open on load, e.g. classic.html?menu=Music — the walkable
+    // site's Music/Games houses link here so About opens with that category's dropdown deployed.
+    try {
+      var wantMenu = new URLSearchParams(location.search).get("menu");
+      if (wantMenu) Array.prototype.forEach.call(bar.querySelectorAll(".mh-dd"), function (dd) {
+        var s = dd.querySelector("summary");
+        if (s && s.textContent.trim().toLowerCase() === wantMenu.trim().toLowerCase()) { dd.setAttribute("open", ""); fitMenu(dd); }
+      });
+    } catch (e) { /* no URLSearchParams / blocked: fine */ }
 
     // dropdown closes on outside click / Escape
     document.addEventListener("click", function (e) {

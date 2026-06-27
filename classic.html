@@ -37,6 +37,21 @@
 		border: 0;
 		color: black;
 		pointer-events: auto;
+		box-sizing: border-box;
+	}
+
+	/* iOS Safari fix: keep the page from scrolling sideways / zooming out.
+	   box-sizing:border-box (above) keeps any element's padding inside its own
+	   width. -webkit-text-size-adjust:100% stops iOS Safari auto-inflating the
+	   text and reflowing the layout wider than the viewport. overflow-x:hidden
+	   + max-width:100% on the root is a belt-and-braces guard so no stray
+	   element (including the injected fixed menubar and its dropdowns) can ever
+	   make the document horizontally scrollable. */
+	html{
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+		max-width: 100%;
+		overflow-x: hidden;
 	}
 
 	body{
@@ -46,6 +61,7 @@
 		margin: 0 auto;
 		max-width: 600px;
 		margin-bottom: max(2rem,2vh);
+		overflow-x: hidden;
 	}
 
 
