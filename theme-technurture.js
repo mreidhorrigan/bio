@@ -75,6 +75,7 @@
     propDensity: 0.2,
     fogColor: "232,224,196",
     biomes: true,
+    spurRoads: true,   // slimeverse: Music & Games grow a road of houses (exploration); the flatverse stays a direct menu
     biomeColor: (b) => (BIO[b] || BIO.grass).ground,             // engine draws a smooth blended biome ground (no tiles)
     wayfinding: { compass: false, roads: true, signposts: false, recall: true, fog: true },
     avatarColors: [GRN, GOLD, TERRA, TEAL], avatarInk: "#1f3a1a", avatarGel: true,   // gel inner texture, keep outline
@@ -207,7 +208,7 @@
       // THE menu item — ONE clean pill sign, joined to the house by a connector in a single
       // SPECIAL colour (so it never reads as part of the map). No overlaid shapes, no halo.
       const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, CONN = "#ff6e8c";
-      g.font = "700 16px 'Comic Sans MS', 'Chalkboard SE', cursive"; const label = ex.title;   // goofy in-bauble font
+      g.font = "700 16px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif"; const label = ex.title;   // the theme's usual display serif (Comic Sans clashed)
       const bw = Math.max(48, g.measureText(label).width + 26), bh = 30, rr = bh / 2;
       const bcx = sx + sway, bcy = topY - 48, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
       g.save(); if (!RM()) { g.shadowColor = CONN; g.shadowBlur = 5; } g.strokeStyle = CONN; g.lineWidth = 4; g.lineCap = "round";   // the special connector

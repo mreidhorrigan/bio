@@ -170,6 +170,20 @@
 		box-shadow: 0 0 0 3px var(--focus, #c3f0ff);
 	}
 
+	/* Thin phones: stop the photo floating beside the text (which cramps the
+	   bio into a narrow column). It already sits between the subtitle and the
+	   catchphrase in the DOM, so float:none + margin:auto renders it as a
+	   centred block between those paragraphs, slightly smaller for the screen. */
+	@media (max-width: 480px){
+		.favpicture{
+			float: none;
+			display: block;
+			margin: 1rem auto;
+			height: max(220px);
+			width: max(140px);
+		}
+	}
+
 	/* Respect reduced-motion: stop the hero photo's contrast pulse and any
 	   transitions. Mirrors autofac.html's approach. */
 	@media (prefers-reduced-motion: reduce){

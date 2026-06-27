@@ -94,6 +94,7 @@ let tnow = 0, last = 0, frameMs = 16, perfSkip = 0;
 let HX = 0, HY = 0;                     // hub centre (canonical tile, in [0,P))
 /** @typedef {{tx:number, ty:number, title:string, accent:string, slot:number, visited:boolean}} Exhibit */
 /** @type {Exhibit[]} */ let EXHIBITS = [];
+const SPUR_TILES = new Set();          // wrapped "tx,ty" keys paved as the Music/Games house-roads (slimeverse only)
 let activeIndex = -1, prevActive = -1, currentTarget = -1, openIndex = -1;
 let avatarIndex = 0;
 
@@ -405,6 +406,7 @@ function buildNavbar() {
   home.addEventListener("click", () => { if (mode === "walking") recallHome(); });
   navbarEl.appendChild(home);
   EXHIBITS.forEach((ex, i) => {
+    if (ex.satellite) return;                  // road-houses are walk-up only, not plaza nav chips
     const b = document.createElement("button");
     b.type = "button"; b.className = "mh-navchip"; b.textContent = (i + 1) + ". " + ex.title;
     b.style.setProperty("--chip", ex.accent);
@@ -515,6 +517,7 @@ function zoneAt(tx, ty) {
   const dist = Math.hypot(dx, dy);
   if (dist <= T.hubRadius) return { zone: "hub", n: noise01(tx, ty, 5) };
   if (T.wayfinding.roads && (wrap(tx - HX) === 0 || wrap(ty - HY) === 0)) return { zone: "road", n: noise01(tx, ty, 5) };
+  if (T.spurRoads && SPUR_TILES.has(wrap(tx) + "," + wrap(ty))) return { zone: "road", n: noise01(tx, ty, 5) };  // Music/Games spurs
   return { zone: "field", n: noise01(tx, ty, 6.5) };
 }
 
@@ -552,6 +555,35 @@ function buildHub() {
   // and the kiosks always return to their even ring. Clear any saved layout on load.
   BUILDINGS.length = 0;
   try { if (window.localStorage) window.localStorage.removeItem("mh-layout"); } catch (e) { /* fine */ }
+  rebuildSpurs();
+}
+
+/** World-aware: in the slimeverse, each kiosk that carries a `satellites` list grows a
+ *  ROAD off the plaza with one walk-up HOUSE per item (Music, Games). The gateway kiosk
+ *  stays on the ring; the houses march straight outward from it, and the spur between is
+ *  paved as road. The flatverse has no spurs (it stays a direct, efficient menu). Idempotent
+ *  and rebuilt on every world-switch, so the houses appear and vanish with the world. */
+function rebuildSpurs() {
+  if (EXHIBITS.length > CONTENT.kiosks.length) EXHIBITS.length = CONTENT.kiosks.length;  // drop any houses from a previous world
+  SPUR_TILES.clear();
+  if (!T.spurRoads) return;
+  const items = CONTENT.kiosks, step = 2.5;
+  for (let s = 0; s < items.length; s++) {
+    const sats = items[s].satellites, gate = EXHIBITS[s];
+    if (!sats || !sats.length || !gate) continue;
+    const ang = Math.atan2(gate.ty - HY, gate.tx - HX);          // straight out from the plaza, through the gateway kiosk
+    for (let j = 0; j < sats.length; j++) {
+      const r = T.ringRadius + step * (j + 1);
+      EXHIBITS.push({
+        tx: HX + r * Math.cos(ang), ty: HY + r * Math.sin(ang),
+        title: sats[j].title, accent: gate.accent, slot: 90 + s * 13 + j * 7,   // slot is only a visual seed for houses
+        url: sats[j].url, satellite: true, visited: false,
+      });
+    }
+    const rEnd = T.ringRadius + step * sats.length + 0.7;        // pave the spur from the hub edge out to the last house
+    for (let r = T.hubRadius - 0.3; r <= rEnd; r += 0.33)
+      SPUR_TILES.add(wrap(Math.round(HX + r * Math.cos(ang))) + "," + wrap(Math.round(HY + r * Math.sin(ang))));
+  }
 }
 
 /* ----------------------------------------------------------------------------
@@ -568,7 +600,6 @@ function wireInput() {
   startBtn.addEventListener("click", startGame);
   byId("mh-cardClose").addEventListener("click", closeCard);
   byId("mh-cardBack").addEventListener("click", () => { if (openIndex >= 0) renderCard(openIndex); });
-  cardBodyEl.addEventListener("click", onCardBodyClick);
   cardEl.addEventListener("click", (e) => { if (e.target === cardEl) closeCard(); });
   compassEl.addEventListener("click", recallHome);
   byId("mh-menu").addEventListener("click", toggleMenu);
@@ -1120,9 +1151,27 @@ function updateHUD() {
    10. CARD MODAL  — themed content card (trusted inline HTML from content.js)
    -------------------------------------------------------------------------- */
 
+/** Open a URL in a new browser tab. Every page link in the world now opens this way —
+ *  About, CV, the Toolbox, the Music/Games menus, and the road-houses — so nothing is
+ *  shown in an in-world iframe any more. Local pages and external sites are treated the
+ *  same. @param {string} url */
+function openExternal(url) { try { window.open(url, "_blank", "noopener"); } catch (e) { /* popup blocked / headless: ignore */ } }
+
 /** @param {number} i exhibit index */
 function openCard(i) {
-  openIndex = i; const ex = EXHIBITS[i];
+  const ex = EXHIBITS[i];
+  if (ex.satellite) {                              // a road-house opens its OWN link in a NEW TAB (no iframe)
+    ex.visited = true; currentTarget = i; sfx.open(0);
+    openExternal(ex.url);
+    return;
+  }
+  const k = CONTENT.kiosks[i], page = k && k.page;
+  if (page && page.url) {                          // About / CV / Toolbox → open the real page in a NEW TAB, never framed
+    ex.visited = true; currentTarget = i; sfx.open(i);
+    openExternal(page.url);
+    return;
+  }
+  openIndex = i;
   ex.visited = true; currentTarget = i;
   sfx.open(i);
   keys.up = keys.down = keys.left = keys.right = false;
@@ -1132,8 +1181,17 @@ function openCard(i) {
   byId("mh-cardInner").focus();
 }
 function browse(dir) {
-  const ni = (openIndex + dir + EXHIBITS.length) % EXHIBITS.length;
-  if (ni !== openIndex) { sfx.nav(); openIndex = ni; EXHIBITS[ni].visited = true; currentTarget = ni; renderCard(ni); }
+  let ni = openIndex;
+  for (let k = 0; k < EXHIBITS.length; k++) { ni = (ni + dir + EXHIBITS.length) % EXHIBITS.length; if (opensAsCard(ni)) break; }
+  if (ni !== openIndex && opensAsCard(ni)) { sfx.nav(); openIndex = ni; EXHIBITS[ni].visited = true; currentTarget = ni; renderCard(ni); }
+}
+/** A kiosk shows an in-world card only when it is NOT a road-house and NOT a page.url
+ *  kiosk (those open in a new tab). The Music/Games TOC and any prose kiosk open as a
+ *  card, so card-browse cycles only through those. @param {number} i */
+function opensAsCard(i) {
+  const ex = EXHIBITS[i]; if (!ex || ex.satellite) return false;
+  const k = CONTENT.kiosks[i], page = k && k.page;
+  return !(page && page.url);
 }
 function renderCard(i) {
   const k = CONTENT.kiosks[i];
@@ -1141,13 +1199,10 @@ function renderCard(i) {
   byId("mh-cardInner").style.setProperty("--mh-card-accent", EXHIBITS[i].accent);  // accent → kiosk colour
   showCardBack(false);
   const page = k.page;
-  if (page && page.url && !isExternalUrl(page.url)) {   // a real LOCAL page → large iframe; external sites never get framed
-    setCardWide(true); setCardClean(false);
-    embedPage(page.url, k.title);
-  } else if (page && page.toc) {                  // a table-of-contents kiosk → just the dropdown (no title/footer chrome)
+  if (page && page.toc) {                         // a table-of-contents kiosk → the dropdown menu (every link opens in a new tab)
     setCardWide(false); setCardClean(true);
     renderToc(page);
-  } else {                                        // fall back to the themed prose card
+  } else {                                        // the themed prose card
     setCardWide(false); setCardClean(false);
     cardBodyEl.innerHTML = k.html || "";
     cardBodyEl.scrollTop = 0;
@@ -1171,79 +1226,14 @@ function showCardBack(on) {
   if (b && b.classList) b.classList.toggle("mh-hidden", !on);
 }
 
-/** Fill the card body with an <iframe> of a (usually local) site page. Built via the
- *  DOM, not string injection, so it's safe and stub-friendly. @param {string} url @param {string} title */
-function embedPage(url, title) {
-  if (!cardBodyEl) return;
-  cardBodyEl.innerHTML = "";
-  const ifr = document.createElement("iframe");
-  ifr.className = "mh-pageframe";
-  if (ifr.setAttribute) {
-    ifr.setAttribute("src", url);
-    ifr.setAttribute("loading", "lazy");
-    ifr.setAttribute("title", title || "");
-  } else { ifr.src = url; }
-  if (ifr.addEventListener) ifr.addEventListener("load", function () {   // tidy the embedded page's links so the sub-window behaves
-    try {
-      const doc = ifr.contentDocument; if (!doc || !doc.querySelectorAll) return;
-      doc.querySelectorAll("a").forEach(function (a) {
-        const href = a.getAttribute("href") || "";
-        if (/^https?:\/\//i.test(href)) { a.target = "_blank"; a.rel = "noopener"; return; }   // external (Scholar, Bandcamp…) → new tab, never framed
-        if (/(^|\/)index\.html($|[?#])/i.test(href) || href === "" || href === "/" || href === "./")   // "Home" → the world → just CLOSE the sub-window (no recursion)
-          a.addEventListener("click", function (e) { e.preventDefault(); closeCard(); });
-      });
-    } catch (e) { /* cross-origin: leave it */ }
-  });
-  cardBodyEl.appendChild(ifr);
-  wireCardIframeKeys(ifr);
-}
-
-/** Render a Toolbox/Games table of contents as a clean link menu. Local pages open in
- *  the same sub-window (data-embed); external links open in a new tab. @param {{toc:any[]}} page */
+/** Render a Music/Games table of contents as a clean link menu. Every entry — local
+ *  page or external site — opens in a NEW TAB (no in-world iframe). @param {{toc:any[]}} page */
 function renderToc(page) {
-  const rows = (page.toc || []).map((it) => {
-    const ext = isExternalUrl(it.url);
-    const attrs = ext
-      ? ` href="${it.url}" target="_blank" rel="noopener" data-ext="1"`
-      : ` href="${it.url}" data-embed="1" data-title="${it.label}"`;
-    return `<a class="mh-toc-link"${attrs}>${it.label}</a>`;   // bare link, like the site's menubar dropdown
-  }).join("");
+  const rows = (page.toc || []).map((it) =>
+    `<a class="mh-toc-link" href="${it.url}" target="_blank" rel="noopener">${it.label}</a>`   // bare link, like the site's menubar dropdown
+  ).join("");
   cardBodyEl.innerHTML = `<div class="mh-toc">${rows}</div>`;
   cardBodyEl.scrollTop = 0;
-}
-
-/** A TOC click: a local page (data-embed) opens in the sub-window; an external link
- *  falls through to the browser (new tab). @param {MouseEvent} e */
-function onCardBodyClick(e) {
-  const t = e.target;
-  const a = t && t.closest ? t.closest("a.mh-toc-link") : null;
-  if (!a || !a.dataset || !a.dataset.embed) return;        // not a local TOC link → leave it alone
-  e.preventDefault();
-  const title = a.getAttribute ? (a.getAttribute("data-title") || "") : "";
-  setCardWide(true);
-  showCardBack(true);
-  if (title) cardTitleEl.textContent = title;
-  embedPage(a.getAttribute ? a.getAttribute("href") : "", title);
-  sfx.open(openIndex >= 0 ? openIndex : 0);
-}
-
-/** @param {string} u */ function isExternalUrl(u) { return /^https?:\/\//i.test(u || ""); }
-
-/** A same-origin embedded page grabs the keyboard once you click into it; forward only
- *  Esc back to the engine so the sub-window still closes (the ✕ and backdrop always work,
- *  and cross-origin frames — unreachable — rely on those). @param {HTMLIFrameElement} ifr */
-function wireCardIframeKeys(ifr) {
-  if (!ifr || !ifr.addEventListener) return;
-  ifr.addEventListener("load", () => {
-    let doc = null;
-    try { doc = ifr.contentDocument; } catch (_) { doc = null; }   // cross-origin → blocked, fine
-    if (doc && doc.addEventListener) doc.addEventListener("keydown", onCardIframeKey);
-  });
-}
-/** @param {KeyboardEvent} e */
-function onCardIframeKey(e) {
-  if (mode !== "card") return;
-  if ((e.key || "").toLowerCase() === "escape") { e.preventDefault(); closeCard(); }
 }
 
 function closeCard() {
@@ -1521,6 +1511,7 @@ function switchTheme(id) {
   const sk = document.getElementById("mh-theme"); if (sk) sk.textContent = T.css || "";
   document.documentElement.style.background = T.bgCss; document.body.style.background = T.bgCss;
   EXHIBITS.forEach((ex, i) => { ex.accent = T.accents[i % T.accents.length]; });
+  rebuildSpurs();                                  // grow or clear the Music/Games house-roads for the new world
   avatarIndex = avatarIndex % T.avatarColors.length;
   buildPicker(); if (navbarEl) buildNavbar(); refreshSwitcher();
   document.title = ((CONTENT && CONTENT.title) || "Matt Horrigan") + " · " + T.name;
@@ -1547,6 +1538,25 @@ function refreshSwitcher() {
 }
 
 function persistSkin(id) { try { if (window.localStorage) window.localStorage.setItem("mh-skin", id); } catch (e) { /* file:// or blocked: fine */ } }
+
+/** The skin a FRESH visit lands on, chosen by the visitor's LOCAL time of day:
+ *    weekday business hours (Mon–Fri, 9am–5pm) → technocute  (bureaucore)
+ *    other daylight         (6am–8pm)          → technurture (the lush slimeworld)
+ *    late night             (8pm–6am)          → technoscure (gloomthmaxx)
+ *  A boot script uses this as the default landing skin; ?skin= still overrides it. Falls
+ *  back to any registered id if the time-pick isn't loaded. */
+function timeDefaultSkin() {
+  let id = "technocute";
+  try {
+    const d = new Date(), h = d.getHours(), day = d.getDay();          // day: 0=Sun … 6=Sat
+    if (day >= 1 && day <= 5 && h >= 9 && h < 17) id = "technocute";   // bureaucore: weekday business hours
+    else if (h >= 6 && h < 20) id = "technurture";                     // daylight
+    else id = "technoscure";                                           // gloomthmaxx: late night
+  } catch (e) { /* no clock: fall through to the registry fallback */ }
+  if (REGISTRY.has(id)) return id;
+  const first = REGISTRY.keys().next();
+  return first && !first.done ? first.value : id;
+}
 
 /** Apply the active theme's ecology config to the optional ecology layer (so the
  *  flora-only / predators+fireflies / off mix changes with the skin). */
@@ -1579,7 +1589,7 @@ const ECO_API = {
 
 // expose helpers a theme may want to reuse (iso math, colour, primitives)
 window.MH_ISO = {
-  register, start, switchTheme: requestSwitch, cycle: cycleSkin,
+  register, start, switchTheme: requestSwitch, cycle: cycleSkin, timeDefaultSkin,
   themes: () => [...REGISTRY.values()].map((t) => ({ id: t.id, name: t.name })),
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period

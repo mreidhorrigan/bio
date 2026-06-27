@@ -66,6 +66,10 @@
             { label: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
           ],
         },
+        satellites: [   // slimeverse: each item grows into a house down the Music road
+          { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },
+          { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
+        ],
         html: `
           <p>In an earlier artistic career I was a sound designer and programmer, writing
           code for art installations and musical performances.</p>
@@ -84,6 +88,12 @@
             { label: "Appraising the Pedagogical Value of Audiogames (CGSA 2026)", url: "https://cgsa2026-audio-presentation.onrender.com" },
           ],
         },
+        satellites: [   // slimeverse: each item grows into a house down the Games road
+          { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
+          { title: "Autofac", url: `${B}autofac.html` },
+          { title: "Clod Bathos", url: "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/" },
+          { title: "Audiogames (CGSA)", url: "https://cgsa2026-audio-presentation.onrender.com" },
+        ],
         html: `
           <p>Games and interactive pieces:</p>
           <ul>

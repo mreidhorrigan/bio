@@ -39,7 +39,8 @@
   ];
 
   var LINKS_BEFORE_DROPDOWNS = [
-    ["Home", "index.html"],
+    ["Home", "index.html"],          // the walkable slimeverse homepage
+    ["About", "classic.html"],       // the bio page (reachable directly now that Home lands in the world)
     ["CV", "Horrigan_CV.html"]
   ];
   var MUSIC = [

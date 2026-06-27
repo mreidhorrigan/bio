@@ -13,6 +13,9 @@
 (function () {
   const u = window.MH_ISO.util, RM = window.MH_ISO.reduced;
   const GOLD = "#caa24a", TEAL = "#3a8a82", IRON = "#14160f", BONE = "#cdbf9a", CR = "#7a2e2e";
+  // sickly neon tube colours for the damaged-marquee baubles (hoisted: no per-frame alloc).
+  // cyan, carnival-magenta, ember-orange, cold mint — each sign picks one, seeded by slot.
+  const NEONS = ["#36a89a", "#c64a8a", "#d6553e", "#4fd6c0"];
 
   // ALIEN SLIMEWORLD after dark: the technurture hues drained to near-night (the engine
   // self-multiplies the scene, so only these dark alien tints + the glows survive).
@@ -55,6 +58,7 @@
     propDensity: 0.2,
     fogColor: "3,5,4",
     biomes: true,
+    spurRoads: true,   // slimeverse: Music & Games grow a road of houses (exploration); the flatverse stays a direct menu
     biomeColor: (b) => (BIO[b] || BIO.grass).ground,             // engine draws a smooth blended biome ground (no tiles)
     wayfinding: { compass: false, roads: true, signposts: false, recall: true, fog: true },
     avatarColors: ["#8fbcb2", "#a99fc0", "#bca96a", "#7fa07f"], avatarInk: "#0a0e0a", avatarGel: true,
@@ -187,23 +191,76 @@
       g.fillStyle = u.shade(b.wall, -0.18);
       for (const ddx of [-ww * 0.62, -ww * 0.05, ww * 0.5]) { g.beginPath(); g.moveTo(sx + ddx - 2.5, baseY - 1); g.quadraticCurveTo(sx + ddx, baseY + 9, sx + ddx + 2.5, baseY - 1); g.lineTo(sx + ddx + 2.5, baseY - 6); g.lineTo(sx + ddx - 2.5, baseY - 6); g.closePath(); g.fill(); }
       if (b.snow) { g.fillStyle = "rgba(200,214,224,0.45)"; g.beginPath(); g.ellipse(sx + wob, topY + 4, ww * 0.5, 6, 0, Math.PI, 0); g.fill(); }
-      // THE menu item — ONE clean pill sign, joined to the house by a connector in a single
-      // SPECIAL colour (so it never reads as part of the map). No overlaid shapes, no halo.
-      const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, CONN = "#ff6e8c";
-      g.font = "700 16px 'Courier New', Courier, ui-monospace, monospace"; const label = ex.title.toLowerCase();   // lowercase tech/terminal bauble text
-      const bw = Math.max(48, g.measureText(label).width + 26), bh = 30, rr = bh / 2;
-      const bcx = sx + sway, bcy = topY - 48, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
-      g.save(); if (!RM()) { g.shadowColor = CONN; g.shadowBlur = 5; } g.strokeStyle = CONN; g.lineWidth = 4; g.lineCap = "round";   // the special connector
-      g.beginPath(); g.moveTo(sx, topY - 4); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.4, bcx, y0 + bh - 1); g.stroke(); g.restore();
-      g.save(); if (!RM()) { g.shadowColor = "#5fe0c8"; g.shadowBlur = active ? 15 : 9; }   // the pill's OWN glow (survives the dark), not a separate shape
+      // THE menu item — a DAMAGED NEON MARQUEE salvaged from an abandoned amusement park:
+      // a rusted, chipped backing board ringed by half-dead bulbs, with the label burning in
+      // glass neon TUBES (a couple of letters dead, one flickering). The whole sign buzzes and
+      // browns-out. Each sign is broken in its OWN way — seeded by slot, so it stays consistent.
+      const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, near = active ? 1.35 : 1;
+      const NEON = NEONS[(u.hash01(slot * 3 + 1, 7) * NEONS.length) | 0];   // this sign's tube colour
+      g.font = "800 16px 'Arial Narrow','Helvetica Neue',Impact,sans-serif";   // condensed display = marquee tubes
+      const label = ex.title.toUpperCase(), n = label.length, GAP = 2;
+      let tw = 0; for (let i = 0; i < n; i++) tw += g.measureText(label[i]).width + GAP; tw = Math.max(0, tw - GAP);   // tube-gap layout, no array
+      const bw = Math.max(58, tw + 30), bh = 34, rr = 5;
+      const bcx = sx + sway, bcy = topY - 50, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
+      // BUZZ: a mains hum with occasional brown-out dropouts. Fixed "lit" when motion is reduced.
+      let buzz = 1;
+      if (!RM()) { const ft = t * 7.3 + slot * 2.1, w = Math.sin(ft) + 0.7 * Math.sin(ft * 2.7 + 1.3); buzz = w < -1.15 ? 0.1 : 0.66 + 0.34 * Math.sin(ft * 4.1); }
+
+      // 1) connector — a rusted pole from house to board, faintly neon-lit at the seam
+      g.save(); g.lineCap = "round"; g.strokeStyle = "#1b160e"; g.lineWidth = 4.5;
+      g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke();
+      g.strokeStyle = u.hexA(NEON, 0.35); g.lineWidth = 1.4;
+      g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke(); g.restore();
+
+      // 2) rusted backing board — dark, grimy, chipped; the neon must pop against this
       const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
-      bg.addColorStop(0, u.shade(ex.accent, 0.2)); bg.addColorStop(1, u.shade(ex.accent, -0.28));
-      g.fillStyle = bg; g.beginPath(); g.moveTo(x0 + rr, y0); g.arcTo(x0 + bw, y0, x0 + bw, y0 + bh, rr); g.arcTo(x0 + bw, y0 + bh, x0, y0 + bh, rr); g.arcTo(x0, y0 + bh, x0, y0, rr); g.arcTo(x0, y0, x0 + bw, y0, rr); g.closePath(); g.fill();
-      g.shadowBlur = 0; g.lineWidth = active ? 2.6 : 1.8; g.strokeStyle = u.hexA(GOLD, active ? 1 : 0.75); g.lineJoin = "round"; g.stroke(); g.restore();
-      g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
-      g.lineWidth = 3.5; g.strokeStyle = "rgba(0,0,0,0.92)"; g.strokeText(label, bcx, bcy);   // dark outline → readable
-      g.fillStyle = "#eafff7"; g.fillText(label, bcx, bcy);
-      if (ex.visited) glow(g, sx + ww * 0.6, baseY - hh * 0.55, 3, "#5fe0c8", 8);
+      bg.addColorStop(0, "#231b12"); bg.addColorStop(0.55, "#15100a"); bg.addColorStop(1, "#0b0805");
+      g.fillStyle = bg; g.beginPath();
+      g.moveTo(x0 + rr, y0); g.arcTo(x0 + bw, y0, x0 + bw, y0 + bh, rr); g.arcTo(x0 + bw, y0 + bh, x0, y0 + bh, rr); g.arcTo(x0, y0 + bh, x0, y0, rr); g.arcTo(x0, y0, x0 + bw, y0, rr); g.closePath(); g.fill();
+      g.fillStyle = "rgba(74,52,30,0.16)"; for (let i = 0; i < 3; i++) { const rx = x0 + 6 + u.hash01(slot + i, 11) * (bw - 12); g.fillRect(rx, y0 + 2, 1.5, bh - 4); }   // rust streaks
+      g.lineWidth = 1.4; g.strokeStyle = u.hexA(BONE, 0.16); g.beginPath();   // pitted metal frame
+      g.moveTo(x0 + rr, y0); g.arcTo(x0 + bw, y0, x0 + bw, y0 + bh, rr); g.arcTo(x0 + bw, y0 + bh, x0, y0 + bh, rr); g.arcTo(x0, y0 + bh, x0, y0, rr); g.arcTo(x0, y0, x0 + bw, y0, rr); g.closePath(); g.stroke();
+      const chipX = x0 + 10 + u.hash01(slot, 19) * (bw - 28);   // a bitten-out chunk of the top edge (cuts the frame)
+      g.fillStyle = "#0b0805"; g.beginPath(); g.moveTo(chipX, y0 - 1); g.lineTo(chipX + 10, y0 - 1); g.lineTo(chipX + 5, y0 + 5); g.closePath(); g.fill();
+      const cyk = y0 + 5 + u.hash01(slot, 37) * (bh - 12);   // a hairline crack
+      g.strokeStyle = "rgba(0,0,0,0.5)"; g.lineWidth = 0.7; g.beginPath(); g.moveTo(x0 + 4, cyk); g.lineTo(x0 + bw * 0.42, cyk + 3); g.lineTo(x0 + bw * 0.58, cyk - 2); g.stroke();
+
+      // 3) marquee BULBS ringing top & bottom — some warm-lit, most burnt out, a few flicker
+      const per = Math.max(4, Math.round((bw - 10) / 11));
+      for (let i = 0; i <= per; i++) {
+        const fx = x0 + 5 + (i / per) * (bw - 10);
+        for (let row = 0; row < 2; row++) {
+          const fy = row ? y0 + bh - 3.5 : y0 + 3.5, h = u.hash01(slot * 5 + i * 2 + row, 41);
+          let on = h > 0.42;   // most bulbs are dead
+          if (on && !RM() && u.hash01(slot + i + row, 53) < 0.22) on = Math.sin(t * 11 + i + slot + row * 2) > -0.3;   // a few flicker
+          if (on) { const c = h > 0.7 ? "#ffcf6a" : NEON; g.save(); g.shadowColor = c; g.shadowBlur = (RM() ? 6 : 4 + buzz * 5) * near; g.fillStyle = c; g.beginPath(); g.arc(fx, fy, 1.7, 0, Math.PI * 2); g.fill(); g.restore(); }
+          else { g.fillStyle = "#191510"; g.beginPath(); g.arc(fx, fy, 1.5, 0, Math.PI * 2); g.fill(); g.strokeStyle = "rgba(120,110,90,0.18)"; g.lineWidth = 0.7; g.stroke(); }   // a dead socket
+        }
+      }
+
+      // 4) the neon-TUBE label: lit letters glow as glass tubes; a couple are dead, one flickers.
+      //    Dead/flickered letters still leave faint cold glass so the word stays navigable.
+      g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round"; g.lineCap = "round";
+      const deadA = (u.hash01(slot * 7 + 2, 29) * n) | 0, deadB = (u.hash01(slot * 11 + 5, 31) * n) | 0;
+      const flickI = (u.hash01(slot * 13 + 1, 23) * n) | 0;
+      let cx = bcx - tw / 2;
+      for (let i = 0; i < n; i++) {
+        const ch = label[i], cw = g.measureText(ch).width, gx = cx + cw / 2;
+        const dead = n >= 3 && (i === deadA || i === deadB);
+        let lit = dead ? 0 : 1;
+        if (!RM() && !dead && n >= 2 && i === flickI) lit = Math.sin(t * 17 + slot) > -0.2 ? 1 : 0.14;   // the flickering letter
+        if (lit > 0.05) {
+          const gl = buzz * lit;
+          g.save();
+          g.shadowColor = NEON; g.shadowBlur = (RM() ? 9 : 4 + gl * 10) * near;
+          g.lineWidth = 3.4; g.strokeStyle = u.hexA(NEON, 0.45 + 0.5 * gl); g.strokeText(ch, gx, bcy);   // outer glass-tube glow
+          g.shadowBlur = (RM() ? 4 : gl * 5) * near;
+          g.lineWidth = 1.3; g.strokeStyle = u.hexA("#f6fffb", 0.6 + 0.4 * gl); g.strokeText(ch, gx, bcy);   // hot inner filament
+          g.restore();
+        } else { g.lineWidth = 2; g.strokeStyle = "rgba(150,160,152,0.26)"; g.strokeText(ch, gx, bcy); }   // burnt-out: cold dead glass
+        cx += cw + GAP;
+      }
+      if (ex.visited) glow(g, x0 + bw - 2, y0 - 2, 3, "#5fe0c8", 8);
     },
 
     paintSignpost(g, sx, sy, dir, dist, info) {
