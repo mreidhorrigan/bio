@@ -1,7 +1,7 @@
 // @ts-check
 "use strict";
 /* ============================================================================
-   content.js  —  the WORDS of the walkable site, as a set of kiosks.
+   content.js: the WORDS of the walkable site, as a set of kiosks.
    ----------------------------------------------------------------------------
    Presentation-agnostic: the same content drives all skins. The engine lays the
    kiosks out on a ring and opens each in a themed card. A kiosk's `page` says how:
@@ -39,22 +39,14 @@
       },
       {
         title: "Toolbox",
-        page: {
-          title: "Toolbox",
-          toc: [   // labels match the site menubar's "Tools" dropdown verbatim
-            { label: "Produce exam versions.", url: `${B}MCQer.html` },
-            { label: "Make a seating plan from a Canvas gradebook.", url: `${B}SeatPlanner.html` },
-            { label: "Run a fullscreen exam timer.", url: `${B}ExamTimer.html` },
-            { label: "Print nameplates from a Canvas gradebook.", url: `${B}Nameplates.html` },
-          ],
-        },
+        page: { url: `${B}toolbox.html` },                     // a tool-themed splash (flatverse: efficiency and utility)
         html: `
           <p>Small, free tools I built for teaching:</p>
           <ul>
-            <li><a href="${B}MCQer.html"${ext}>MCQer</a> — write and mark multiple-choice questions.</li>
-            <li><a href="${B}SeatPlanner.html"${ext}>SeatPlanner</a> — seating plans for a class.</li>
-            <li><a href="${B}ExamTimer.html"${ext}>ExamTimer</a> — a clear, calm clock for exams.</li>
-            <li><a href="${B}Nameplates.html"${ext}>Nameplates</a> — printable desk name cards.</li>
+            <li><a href="${B}MCQer.html"${ext}>MCQer</a>:write and mark multiple-choice questions.</li>
+            <li><a href="${B}SeatPlanner.html"${ext}>SeatPlanner</a>: seating plans for a class.</li>
+            <li><a href="${B}ExamTimer.html"${ext}>ExamTimer</a>:a clear, calm clock for exams.</li>
+            <li><a href="${B}Nameplates.html"${ext}>Nameplates</a>:printable desk name cards.</li>
           </ul>`,
       },
       {
@@ -95,7 +87,7 @@
         html: `
           <p>Games and interactive pieces:</p>
           <ul>
-            <li><a href="${B}Rock_Walls_and_Damp.html"${ext}>Rock Walls and Damp</a> — a hypertext piece.</li>
+            <li><a href="${B}Rock_Walls_and_Damp.html"${ext}>Rock Walls and Damp</a>:a hypertext piece.</li>
             <li><a href="${B}autofac.html"${ext}>Autofac: Rad Shipping</a>.</li>
             <li><a href="https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"${ext}>Clod Bathos, Superior Machine</a>.</li>
             <li><a href="https://cgsa2026-audio-presentation.onrender.com"${ext}>Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>

@@ -87,7 +87,7 @@ let TILE_W = 96, TILE_H = 48, P = 56;
 /** @type {CanvasRenderingContext2D} */ let ctx;
 let W = 0, H = 0, dpr = 1;
 let originX = 0, originY = 0;          // camera offset (per frame)
-let tnow = 0, last = 0;
+let tnow = 0, last = 0, frameMs = 16, perfSkip = 0;
 
 /** @type {"intro"|"walking"|"card"} */ let mode = "intro";
 
@@ -272,7 +272,7 @@ const BASE_CSS = `
   /* large page sub-window: a big centred panel showing a REAL site page in an iframe
      (the CV, the homepage sections, or a picked tool/game). Reuses .mh-card + .mh-overlay
      so every theme's palette carries over; only the size + a flush iframe are new. */
-  .mh-card.mh-card--page{ width:90vw; max-width:1400px; height:88vh; max-height:88vh; position:relative; }
+  .mh-card.mh-card--page{ width:94vw; max-width:none; height:92vh; max-height:92vh; position:relative; }
   /* a real page keeps its OWN menubar — so drop our card chrome and float only the controls */
   .mh-card--page .mh-card-head{ position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:flex-start; background:transparent; border:none; padding:7px 9px; z-index:5; pointer-events:none; }
   .mh-card--page .mh-card-head > button{ pointer-events:auto; }
@@ -435,18 +435,18 @@ const audio = {
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!AC) return;
     this.ctx = new AC(); this.master = this.ctx.createGain();
-    this.master.gain.value = this.muted ? 0 : 0.8; this.master.connect(this.ctx.destination);
+    this.master.gain.value = this.muted ? 0 : 0.5; this.master.connect(this.ctx.destination);
   },
   resume() { if (this.ctx && this.ctx.state === "suspended") this.ctx.resume(); },
-  setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.8, this.ctx.currentTime, 0.02); },
+  setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.5, this.ctx.currentTime, 0.02); },
   /** @param {number} f @param {{delay?:number,dur?:number,gain?:number,type?:OscillatorType}} [o] */
   tone(f, o) {
     if (!this.ctx || !this.master || this.muted) return;
     const t = this.ctx.currentTime + (o?.delay ?? 0), dur = o?.dur ?? 0.15, peak = o?.gain ?? 0.2;
     const osc = this.ctx.createOscillator(), g = this.ctx.createGain();
-    osc.type = o?.type ?? T.audio.type ?? "sine"; osc.frequency.value = f;
+    osc.type = "sine"; osc.frequency.value = f;                  // brief, gentle sine cues in every world
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(peak, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.014);        // a soft attack (no click)
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     osc.connect(g); g.connect(this.master); osc.start(t); osc.stop(t + dur + 0.03);
   },
@@ -458,12 +458,12 @@ function noteFreq(degree) {
   return T.audio.root * Math.pow(2, semi / 12);
 }
 const sfx = {
-  open(d) { audio.tone(noteFreq(d), { gain: 0.26, dur: 0.18 }); audio.tone(noteFreq(d + 2), { delay: 0.08, gain: 0.2, dur: 0.16 }); },
-  near(d) { audio.tone(noteFreq(d), { gain: 0.09, dur: 0.09 }); },
-  close() { audio.tone(noteFreq(1), { gain: 0.11, dur: 0.12 }); audio.tone(noteFreq(0), { delay: 0.07, gain: 0.09, dur: 0.13 }); },
-  nav() { audio.tone(noteFreq(2), { gain: 0.07, dur: 0.05 }); },
-  pick() { audio.tone(noteFreq(4), { gain: 0.14, dur: 0.1 }); },
-  step() { audio.tone(noteFreq(0), { gain: 0.03, dur: 0.05, type: "triangle" }); },
+  open(d) { audio.tone(noteFreq(d), { gain: 0.15, dur: 0.16 }); audio.tone(noteFreq(d + 2), { delay: 0.08, gain: 0.11, dur: 0.14 }); },
+  near(d) { audio.tone(noteFreq(d), { gain: 0.055, dur: 0.08 }); },
+  close() { audio.tone(noteFreq(1), { gain: 0.07, dur: 0.11 }); audio.tone(noteFreq(0), { delay: 0.07, gain: 0.055, dur: 0.12 }); },
+  nav() { audio.tone(noteFreq(2), { gain: 0.045, dur: 0.05 }); },
+  pick() { audio.tone(noteFreq(4), { gain: 0.085, dur: 0.09 }); },
+  step() { audio.tone(noteFreq(0), { gain: 0.02, dur: 0.05 }); },
 };
 
 /* ----------------------------------------------------------------------------
@@ -805,6 +805,8 @@ function update(dt) {
 function loop(ts) {
   let dt = (ts - last) / 1000; if (dt > 0.05) dt = 0.05;
   last = ts; tnow = ts / 1000;
+  frameMs += ((dt * 1000) - frameMs) * 0.1;                 // smoothed frame time; adaptive degrade on weak machines (no effect on capable ones)
+  perfSkip = frameMs > 46 ? 2 : frameMs > 31 ? 1 : 0;
   if (mode === "walking") update(dt);
   render(); updateHUD();
   requestAnimationFrame(loop);
@@ -851,8 +853,10 @@ function render() {
       if (c.x < -TILE_W * 2 || c.x > W + TILE_W * 2 || c.y < -TILE_H * 4 || c.y > H + TILE_H * 2) continue;
       const z = zoneAt(tx, ty);
       if (z.zone === "field") {
-        const pid = (T.propAt || defPropAt)(tx, ty);
-        if (pid) actors.push({ depth: tx + ty - 0.05, draw: () => (T.paintProp || defPaintProp)(ctx, c.x, c.y, pid, { tx, ty, n: z.n, t: tnow }) });
+        if (!(perfSkip && (((tx * 31 + ty * 17) & 3) < perfSkip))) {   // when struggling, thin the scenery (stable per tile, so no flicker)
+          const pid = (T.propAt || defPropAt)(tx, ty);
+          if (pid) actors.push({ depth: tx + ty - 0.05, draw: () => (T.paintProp || defPaintProp)(ctx, c.x, c.y, pid, { tx, ty, n: z.n, t: tnow }) });
+        }
       } else if (z.zone === "road" && T.wayfinding.signposts) {
         const sp = signpostHere(tx, ty);
         if (sp) actors.push({ depth: tx + ty - 0.04, draw: () => (T.paintSignpost || defPaintSignpost)(ctx, c.x, c.y, sp.dir, sp.dist, { tx, ty, t: tnow }) });

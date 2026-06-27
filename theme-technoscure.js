@@ -27,13 +27,16 @@
   };
   const bio = (b) => BIO[b] || BIO.grass;
   // an OPAQUE organic ground blob (~one tile, seeded). Engine draws back-to-front, so
-  // overlaps are covered by the front blob — fluid arbitrary shapes, no grid, no blur.
+  // overlaps are covered by the front blob: fluid arbitrary shapes, no grid, no blur.
+  // Hot path: precomputed unit cos/sin + a reused point buffer (no per-tile trig/alloc).
+  const _BC = [], _BS = [], _BX = [], _BY = [];
+  for (let i = 0; i < 8; i++) { _BC.push(Math.cos(i / 8 * Math.PI * 2)); _BS.push(Math.sin(i / 8 * Math.PI * 2)); }
   function groundBlob(g, sx, sy, col, tx, ty) {
-    const N = 8, pts = [];
-    for (let i = 0; i < N; i++) { const a = (i / N) * Math.PI * 2, j = 0.86 + u.hash01(tx * 7 + i * 3, ty * 5 + i * 2) * 0.3; pts.push([sx + Math.cos(a) * 53 * j, sy + Math.sin(a) * 29 * j]); }
+    const N = 8;
+    for (let i = 0; i < N; i++) { const j = 0.86 + u.hash01(tx * 7 + i * 3, ty * 5 + i * 2) * 0.3; _BX[i] = sx + _BC[i] * 53 * j; _BY[i] = sy + _BS[i] * 29 * j; }
     g.fillStyle = col; g.beginPath();
-    g.moveTo((pts[N - 1][0] + pts[0][0]) / 2, (pts[N - 1][1] + pts[0][1]) / 2);
-    for (let i = 0; i < N; i++) { const n = (i + 1) % N; g.quadraticCurveTo(pts[i][0], pts[i][1], (pts[i][0] + pts[n][0]) / 2, (pts[i][1] + pts[n][1]) / 2); }
+    g.moveTo((_BX[N - 1] + _BX[0]) / 2, (_BY[N - 1] + _BY[0]) / 2);
+    for (let i = 0; i < N; i++) { const n = (i + 1) % N; g.quadraticCurveTo(_BX[i], _BY[i], (_BX[i] + _BX[n]) / 2, (_BY[i] + _BY[n]) / 2); }
     g.closePath(); g.fill();
   }
   function glow(g, x, y, r, col, blur) { g.save(); if (!RM()) { g.shadowColor = col; g.shadowBlur = blur; } g.fillStyle = col; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); g.restore(); }
