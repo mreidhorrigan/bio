@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seat Planner</title>
-<!-- the one site-wide menubar (links + dropdowns live in this file) -->
-<script src="menubar.js" defer></script>
-<!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); the inline
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
+      initial-scale=1.0">
+    <title>Seat Planner</title>
+    <!-- the one site-wide menubar (links + dropdowns live in this file) -->
+    <script src="menubar.js" defer="defer"></script>
+    <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); the inline
      :root below keeps only Seat Planner's page-specific tokens and may override -->
-<link rel="stylesheet" href="brand/brand.css">
-<style>
+    <link rel="stylesheet" href="brand/brand.css">
+    <style>
   /* ── Palette & theme tokens ─────────────────────────────────────────────────
      Shared vocabulary with matthorrigan.com / MCQer (base.css): --ink, --muted,
      --faint, --rule, --accent (deep maroon). Seat Planner re-skins from the
@@ -56,16 +59,7 @@
 
   ::selection { background: var(--focus); }
 
-  /* Cloudy orange→blue glow lifted from matthorrigan.com's home page (.flare). */
-  .flare {
-    pointer-events: none;
-    position: absolute;
-    top: 0; left: 0;
-    width: 50%; height: 50%;
-    z-index: -1;
-    filter: blur(50px);
-    background: radial-gradient(ellipse at 70% 100%, var(--flare-warm) 20%, var(--flare-cool) 30%, #ffffff 75%);
-  }
+  /* .flare landing glow is shared in brand/brand.css now. */
 
   .card {
     position: relative;
@@ -735,117 +729,117 @@
     *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
   }
 </style>
-</head>
-<body>
-
-<div class="flare"></div>
-<div id="drag-ghost"></div>
-
-<div class="card">
-
-  <!-- ── Masthead ── -->
-  <div class="masthead">
-    <h1>Seat Planner</h1>
-    <p class="subtitle">Upload a class roster (a simple name list <strong>or a Canvas gradebook export</strong>) and an optional room layout to generate a seating chart, then <strong>drag any student onto another</strong> to swap. Optional toggles let you rank by gradebook score and flag integrity concerns.</p>
-  </div>
-
-  <!-- ── File uploads ── -->
-  <div class="uploads">
-    <div class="upload-card" id="card-students">
-      <input type="file" accept=".csv" id="input-students">
-      <div class="card-title">Student Roster</div>
-      <div class="card-hint">
-        <strong>Simple CSV:</strong> name, optional score, optional note.<br>
-        <strong>Canvas export:</strong> drop it in as-is. Ranking and integrity
-        flags are off by default. Enable them below.
+  </head>
+  <body>
+    <div class="flare"></div>
+    <div id="drag-ghost"></div>
+    <div class="card">
+      <!-- ── Masthead ── -->
+      <div class="masthead">
+        <h1>Seating Planner</h1>
+        <p class="subtitle">Upload a class roster (a simple name list <strong>or
+            a Canvas gradebook export</strong>) and an optional room
+          layout to generate a seating chart, then <strong>drag any
+            student onto another</strong> to swap. Optional toggles let
+          you rank by gradebook score and flag integrity concerns.</p>
       </div>
-      <div class="card-status" id="status-students"></div>
-    </div>
-
-    <div class="upload-card" id="card-layout">
-      <input type="file" accept=".csv" id="input-layout">
-      <div class="card-label"><span class="optional">optional</span></div>
-      <div class="card-title">Classroom Layout</div>
-      <div class="card-hint">Cells with "X" mark valid seat positions.<br>Leave blank to use the default layout.</div>
-      <div class="card-status" id="status-layout"></div>
-    </div>
-  </div>
-
-  <!-- ── Options: ranking + flagging (both off by default) ── -->
-  <div class="options-panel">
-    <label class="opt-row">
-      <input type="checkbox" id="chk-rank">
-      <span class="opt-text">
-        <span class="opt-title">Rank by gradebook score</span>
-        <span class="opt-desc">Place students with lower scores toward the bottom of the chart (Canvas <em>Unposted Current Score</em>, or column 2 of a simple CSV). Shuffling is disabled while on.</span>
-      </span>
-    </label>
-    <label class="opt-row">
-      <input type="checkbox" id="chk-flag">
-      <span class="opt-text">
-        <span class="opt-title">Flag integrity concerns</span>
-        <span class="opt-desc">Flag students whose Canvas <em>Notes</em> (or column 3 of a simple CSV) contain any term below, and seat them at the bottom-most seats.</span>
-      </span>
-    </label>
-    <div class="flag-terms-wrap" id="flag-terms-wrap">
-      <label class="flag-terms-label" for="flag-terms">Flag when the notes contain any of these (one per line)</label>
-      <textarea id="flag-terms" rows="3" spellcheck="false">integrity concern
-integrity flag</textarea>
-      <div class="flag-terms-upload">
-        <label class="link-btn" for="input-flag-terms">Upload a list…</label>
-        <input type="file" id="input-flag-terms" accept=".txt,.csv" hidden>
-        <span class="flag-terms-hint" id="flag-terms-hint">.txt or .csv, one term per line</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notice bar (updated dynamically) -->
-  <div class="notice" id="main-notice">
-    <strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps, 35 seats total. Upload a layout CSV above to override.
-  </div>
-
-  <div class="error-msg" id="error-msg"></div>
-
-  <!-- ── Controls ── -->
-  <div class="toolbar">
-    <button class="btn"               id="btn-assign"   disabled>Assign Seats</button>
-    <button class="btn btn-secondary" id="btn-reassign" style="display:none">Reassign (Shuffle)</button>
-    <button class="btn btn-secondary" id="btn-download" style="display:none">Download CSV</button>
-    <button class="btn btn-pdf"       id="btn-pdf"      style="display:none">Download PDF</button>
-    <button class="btn btn-ghost"     id="btn-toggle-details" style="display:none">Show Details</button>
-    <span class="spacer"></span>
-    <button class="btn btn-ghost"     id="btn-undo"     style="display:none" disabled>↩ Undo Swap</button>
-  </div>
-
-  <!-- ── Preview ── -->
-  <div class="preview-section" id="preview-section">
-
-    <!-- Print-only header -->
-    <div id="print-header" style="display:none; font-family:var(--sans-font);">
-      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; border-bottom:2px solid var(--accent); padding-bottom:8px;">
-        <div>
-          <div style="font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:4px;">Seat Planner</div>
-          <div style="font-size:18px; font-weight:700; color:var(--ink);">Seating Plan</div>
+      <!-- ── File uploads ── -->
+      <div class="uploads">
+        <div class="upload-card" id="card-students"> <input
+            accept=".csv" id="input-students" type="file">
+          <div class="card-title">Student Roster</div>
+          <div class="card-hint"> <strong>Simple CSV:</strong> name,
+            optional score, optional note.<br>
+            <strong>Canvas export:</strong> drop it in as-is. Ranking
+            and integrity flags are off by default. Enable them below. </div>
+          <div class="card-status" id="status-students"></div>
         </div>
-        <div id="print-meta" style="font-size:9px; color:var(--muted); text-align:right; line-height:1.7;"></div>
+        <div class="upload-card" id="card-layout"> <input accept=".csv"
+            id="input-layout" type="file">
+          <div class="card-label"><span class="optional">optional</span></div>
+          <div class="card-title">Classroom Layout</div>
+          <div class="card-hint">Cells with "X" mark valid seat
+            positions.<br>
+            Leave blank to use the default layout.</div>
+          <div class="card-status" id="status-layout"></div>
+        </div>
+      </div>
+      <!-- ── Options: ranking + flagging (both off by default) ── -->
+      <div class="options-panel"> <label class="opt-row"> <input
+            id="chk-rank" type="checkbox"> <span class="opt-text"> <span
+              class="opt-title">Rank by gradebook score</span> <span
+              class="opt-desc">Place students with lower scores toward
+              the bottom of the chart (Canvas <em>Unposted Current
+                Score</em>, or column 2 of a simple CSV). Shuffling is
+              disabled while on.</span> </span> </label> <label
+          class="opt-row"> <input id="chk-flag" type="checkbox"> <span
+            class="opt-text"> <span class="opt-title">Flag integrity
+              concerns</span> <span class="opt-desc">Flag students
+              whose Canvas <em>Notes</em> (or column 3 of a simple CSV)
+              contain any term below, and seat them at the bottom-most
+              seats.</span> </span> </label>
+        <div class="flag-terms-wrap" id="flag-terms-wrap"> <label
+            class="flag-terms-label" for="flag-terms">Flag when the
+            notes contain any of these (one per line)</label> <textarea id="flag-terms" rows="3" spellcheck="false">integrity concern
+integrity flag</textarea>
+          <div class="flag-terms-upload"> <label class="link-btn"
+              for="input-flag-terms">Upload a list…</label> <input
+              id="input-flag-terms" accept=".txt,.csv" type="file"
+              hidden=""> <span class="flag-terms-hint"
+              id="flag-terms-hint">.txt or .csv, one term per line</span>
+          </div>
+        </div>
+      </div>
+      <!-- Notice bar (updated dynamically) -->
+      <div class="notice" id="main-notice"> <strong>Default layout
+          active:</strong> 5 rows × 9 columns with two aisle gaps, 35
+        seats total. Upload a layout CSV above to override. </div>
+      <div class="error-msg" id="error-msg"></div>
+      <!-- ── Controls ── -->
+      <div class="toolbar"> <button class="btn" id="btn-assign"
+          disabled="disabled">Assign Seats</button> <button class="btn
+          btn-secondary" id="btn-reassign" style="display:none">Reassign
+          (Shuffle)</button> <button class="btn btn-secondary"
+          id="btn-download" style="display:none">Download CSV</button> <button
+          class="btn btn-pdf" id="btn-pdf" style="display:none">Download
+          PDF</button> <button class="btn btn-ghost"
+          id="btn-toggle-details" style="display:none">Show Details</button>
+        <span class="spacer"></span> <button class="btn btn-ghost"
+          id="btn-undo" style="display:none" disabled="disabled">↩ Undo
+          Swap</button> </div>
+      <!-- ── Preview ── -->
+      <div class="preview-section" id="preview-section">
+        <!-- Print-only header -->
+        <div id="print-header" style="display:none;
+          font-family:var(--sans-font);">
+          <div style="display:flex; align-items:baseline;
+            justify-content:space-between; margin-bottom:12px;
+            border-bottom:2px solid var(--accent); padding-bottom:8px;">
+            <div>
+              <div style="font-size:8px; letter-spacing:0.14em;
+                text-transform:uppercase; color:var(--accent);
+                margin-bottom:4px;">Seat Planner</div>
+              <div style="font-size:18px; font-weight:700;
+                color:var(--ink);">Seating Plan</div>
+            </div>
+            <div id="print-meta" style="font-size:9px;
+              color:var(--muted); text-align:right; line-height:1.7;"></div>
+          </div>
+        </div>
+        <div class="section-label"> <span>Seating Chart Preview</span>
+          <span class="drag-hint">drag a student onto another to swap</span>
+        </div>
+        <div class="stats-row" id="stats-row"></div>
+        <div class="swap-log" id="swap-log"></div>
+        <div class="grid-preview">
+          <table class="grid-table" id="grid-table">
+          </table>
+        </div>
+        <div class="rank-caption" id="rank-caption" style="display:none">Lower
+          scores ranked toward the bottom of the chart</div>
       </div>
     </div>
-
-    <div class="section-label">
-      <span>Seating Chart Preview</span>
-      <span class="drag-hint">drag a student onto another to swap</span>
-    </div>
-    <div class="stats-row" id="stats-row"></div>
-    <div class="swap-log"  id="swap-log"></div>
-    <div class="grid-preview">
-      <table class="grid-table" id="grid-table"></table>
-    </div>
-    <div class="rank-caption" id="rank-caption" style="display:none">Lower scores ranked toward the bottom of the chart</div>
-  </div>
-
-</div>
-
-<script>
+    <script>
   // ════════════════════════════════════════════════════════════════════════════
   //  CORE LOGIC — kept in lock-step with the headless CLI (seatplanner.js).
   //  parseCSV / isCanvasGradebook / ingest* / noteMatches / selectFilledSeats /
@@ -1509,5 +1503,5 @@ integrity flag</textarea>
     }, 80);
   });
 </script>
-</body>
+  </body>
 </html>
