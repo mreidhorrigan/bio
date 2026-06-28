@@ -98,7 +98,7 @@
     accents: ["#f0b62a", "#f28b46", "#d24f86", "#8a52d0", "#36b9d6", "#e0613a"],   // saturated, warm-leaning → baubles pop off the cool alien ground
     audio: { root: 261.63, scale: [0, 2, 4, 7, 9, 11], type: "triangle" },
     bgCss: "#cfe4d6",
-    ecology: { enabled: true, showFlora: false, cfg: { motes: 46, grazerStart: 30, predatorStart: 6, predatorDormant: true, fireflies: 0, moteSpeed: 1.3, grazerSpeed: 0.95 } },   // daylight: a few DORMANT predators stand around as eerie "plants"
+    ecology: { enabled: true, showFlora: false, cfg: { motes: 0, grazerStart: 30, predatorStart: 6, predatorDormant: true, fireflies: 0, moteSpeed: 1.3, grazerSpeed: 0.95 } },   // daylight: NO glowing drifters (no motes/fireflies); a few DORMANT predators stand around as eerie "plants"
     fluidGround: true, plazaColor: "#e7cf94", roadColor: "#d95f93",   // saturated rose-pink road + warm plaza mark the village
 
     css: `

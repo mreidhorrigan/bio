@@ -172,7 +172,24 @@
     return nav;
   }
 
+  /* Site head chrome: inject the favicon set + manifest once, here, so every page that loads
+     menubar.js gets them without repeating the head boilerplate. Skipped if the page already
+     declares its own icons (so index.html / toolbox keep theirs). */
+  function injectHead() {
+    if (document.querySelector('link[rel="icon"]')) return;
+    function add(rel, href, attrs) {
+      var l = document.createElement("link"); l.rel = rel; l.href = href;
+      if (attrs) for (var k in attrs) l.setAttribute(k, attrs[k]);
+      document.head.appendChild(l);
+    }
+    add("icon", "favicon-32x32.png", { type: "image/png", sizes: "32x32" });
+    add("icon", "favicon-16x16.png", { type: "image/png", sizes: "16x16" });
+    add("apple-touch-icon", "apple-touch-icon.png", { sizes: "180x180" });
+    if (!document.querySelector('link[rel="manifest"]')) add("manifest", "site.webmanifest");
+  }
+
   function mount() {
+    injectHead();
     var style = document.createElement("style");
     style.textContent = CSS;
     document.head.appendChild(style);

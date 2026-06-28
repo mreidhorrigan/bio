@@ -171,6 +171,19 @@
               var(--flare-warm) 20%, var(--flare-cool) 30%, #ffffff 75%);
 }
 
+/* The full landing glow as one shared rule: a blurred orange→cyan radial anchored to the
+   top-left, sat behind content. Add <div class="flare"></div> + link brand.css — no per-page
+   copy. (Canonicalised from the identical block each tool page used to inline.) */
+.flare {
+  pointer-events: none;
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%; height: 50%;
+  z-index: -1;
+  filter: blur(50px);
+  background: radial-gradient(ellipse at 70% 100%, var(--flare-warm) 20%, var(--flare-cool) 30%, #ffffff 75%);
+}
+
 /* NEVER leaf these — kept here as a reminder for generated markup:
      .progress-track, .progress-fill { border-radius: 999px; }  (rounded ends)
      .avatar, .dot                   { border-radius: 50%; }     (true circles)

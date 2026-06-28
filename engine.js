@@ -946,6 +946,16 @@ function render() {
         dctx.fillStyle = sp; dctx.beginPath(); dctx.ellipse(c.x, by, 55, 40, 0, 0, Math.PI * 2); dctx.fill();
       }
     }
+    if (ecoOn && window.MH_ECO && window.MH_ECO.fireflies && window.MH_ECO.fireflies.length) {   // fireflies are emissive → let each one's light punch through the gloom
+      const ff = window.MH_ECO.fireflies, sprite = fireflyGlow(), R = 19, now = window.MH_ECO.now || 0;
+      for (const f of ff) {
+        const p = ECO_API.place(f.x, f.y);
+        if (p.x < -24 || p.x > W + 24 || p.y < -28 || p.y > H + 24) continue;
+        const blink = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(now * 4 + (f.phase || 0)));
+        dctx.globalAlpha = blink; dctx.drawImage(sprite, p.x - R, p.y - 6 - R, R * 2, R * 2);
+      }
+      dctx.globalAlpha = 1;
+    }
     if (T.avatarBeam && beamState) paintSlimeBeam(dctx, beamState.sx, beamState.baseY, beamState.a);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "multiply"; ctx.drawImage(darkCv, 0, 0); ctx.restore();
   }
@@ -1030,6 +1040,18 @@ function paintSlimeBeam(g, sx, baseY, a) {   // WHITE reveal-mask: a view-cone +
   amb.addColorStop(0, "rgba(255,255,255,0.6)"); amb.addColorStop(0.55, "rgba(255,255,255,0.3)"); amb.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = amb; g.beginPath(); g.arc(sx, cy, 48, 0, Math.PI * 2); g.fill();
   g.restore();
+}
+let fireflyGlowCv = null;
+/** a baked amber firefly-glow sprite (built once), drawImaged into the gloom-reveal so each
+ *  firefly's light shines THROUGH the dark multiply — cheap, no per-firefly gradient. */
+function fireflyGlow() {
+  if (fireflyGlowCv) return fireflyGlowCv;
+  const s = 40, cv = document.createElement("canvas"); cv.width = s; cv.height = s;
+  const g = cv.getContext("2d"), r = s / 2;
+  const grad = g.createRadialGradient(r, r, 1, r, r, r);
+  grad.addColorStop(0, "rgba(255,240,176,0.95)"); grad.addColorStop(0.45, "rgba(255,226,140,0.4)"); grad.addColorStop(1, "rgba(255,226,140,0)");
+  g.fillStyle = grad; g.fillRect(0, 0, s, s);
+  fireflyGlowCv = cv; return cv;
 }
 let darkCv = null, dctx = null;
 function ensureDarkCv() {
