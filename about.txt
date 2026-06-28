@@ -1,7 +1,15 @@
-The matthorrigan.com favicon is an original mark: the site's asymmetric "leaf"
-tile filled with the house pentad gradient, with cyan and orange leading and
-violet, rose, and green woven through. It is generated from the brand tokens
-(see brand/house-style.md and brand/pentad.py).
+The matthorrigan.com favicon is the site's hero slime: the green gel avatar you
+walk around the isometric world. It is a rounded dome on a flat base, filled with
+a brand-green gel gradient (a light core, green body, darker rim), with a bright
+sheen near the top-left and a dark ink outline. For the icon the slime gains two
+friendly eyes with the pupils low, so it looks downward and peeks toward the page
+below the browser tab.
 
-It replaced an earlier placeholder adapted from a Twitter Twemoji glyph (1f60c,
-licensed CC-BY 4.0). That artwork is no longer used.
+The mark mirrors the in-world avatar (see defPaintAvatar in engine.js and the
+theme avatarColors and avatarInk). The source vector is brand/favicon-slime.svg,
+rasterised to each PNG and the multi-size .ico (see brand/house-style.md). The
+home-screen icons sit on a soft cream backdrop, since iOS renders a transparent
+icon on black.
+
+It replaced an earlier brand "leaf" tile and, before that, a placeholder adapted
+from a Twitter Twemoji glyph (1f60c, licensed CC-BY 4.0). Neither is used now.

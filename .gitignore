@@ -30,3 +30,6 @@ house-style-private/
 
 # macOS Finder cruft — never publish it.
 .DS_Store
+
+# Local double-click helper to commit + push edits. A personal tool; never published.
+/commit.command

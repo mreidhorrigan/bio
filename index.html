@@ -36,6 +36,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       var ids = (window.MH_ISO ? window.MH_ISO.themes() : []).map(function (t) { return t.id; });
       var want = null; try { want = new URLSearchParams(location.search).get("skin"); } catch (e) {}
+      want = window.MH_ISO.resolveSkin(want);   // accept friendly aliases too: ?skin=bureaucore / gloomthmaxx
       // The default landing skin follows the visitor's LOCAL time of day (business hours →
       // bureaucore, daylight → technurture, late night → gloomthmaxx). See engine.js
       // timeDefaultSkin(). An explicit ?skin= still overrides it.

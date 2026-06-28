@@ -60,9 +60,9 @@
       {
         title: "Music",
         page: { url: `${B}classic.html?menu=Music` },          // open the About page with the Music dropdown deployed (new tab)
-        satellites: [   // slimeverse: each Music house opens About with the Music dropdown deployed
-          { title: "No Phenomenon", url: `${B}classic.html?menu=Music` },
-          { title: "SoundCloud", url: `${B}classic.html?menu=Music` },
+        satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Music" gateway opens the menu)
+          { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },
+          { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
         ],
         html: `
           <p>In an earlier artistic career I was a sound designer and programmer, writing
@@ -74,12 +74,13 @@
       {
         title: "Games",
         page: { url: `${B}classic.html?menu=Games` },          // open the About page with the Games dropdown deployed (new tab)
-        satellites: [   // slimeverse: each Games house opens About with the Games dropdown deployed
-          { title: "Rock Walls & Damp", url: `${B}classic.html?menu=Games` },
-          { title: "Autofac", url: `${B}classic.html?menu=Games` },
-          { title: "Clod Bathos", url: `${B}classic.html?menu=Games` },
-          { title: "Audiogames (CGSA)", url: `${B}classic.html?menu=Games` },
+        satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Games" gateway opens the menu)
+          { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
+          { title: "Autofac", url: `${B}autofac.html` },
+          { title: "Clod Bathos", url: "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/" },
+          { title: "Audiogames (CGSA)", url: "https://cgsa2026-audio-presentation.onrender.com" },
         ],
+
         html: `
           <p>Games and interactive pieces:</p>
           <ul>

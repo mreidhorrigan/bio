@@ -1513,7 +1513,7 @@ function register(theme) {
 /** Boot the engine on a skin, or — if already running — live-swap to it.
  *  @param {string|object} themeOrId @param {object} [content] */
 function start(themeOrId, content) {
-  const theme = typeof themeOrId === "string" ? REGISTRY.get(themeOrId) : themeOrId;
+  const theme = typeof themeOrId === "string" ? REGISTRY.get(resolveSkin(themeOrId)) : themeOrId;
   if (!theme) throw new Error("MH_ISO.start: unknown skin " + themeOrId);
   if (typeof themeOrId !== "string") REGISTRY.set(theme.id, theme);
   if (started) { requestSwitch(theme.id); return; }
@@ -1559,7 +1559,7 @@ function switchTheme(id) {
   avatarIndex = avatarIndex % T.avatarColors.length;
   buildPicker(); if (navbarEl) buildNavbar(); refreshSwitcher();
   document.title = ((CONTENT && CONTENT.title) || "Matt Horrigan") + " · " + T.name;
-  persistSkin(id); applyEcology(); sfx.pick(); toast(T.name);
+  persistSkin(id); reflectSkinInURL(id); applyEcology(); sfx.pick(); toast(T.name);
 }
 
 /** Cycle to the next registered skin (the T key). */
@@ -1582,6 +1582,19 @@ function refreshSwitcher() {
 }
 
 function persistSkin(id) { try { if (window.localStorage) window.localStorage.setItem("mh-skin", id); } catch (e) { /* file:// or blocked: fine */ } }
+
+/* Shareable theme links. Friendly public names (the ones the site uses out loud) map to the
+   engine ids, so ?skin=gloomthmaxx / ?skin=bureaucore / ?skin=technurture all work. */
+const SKIN_ALIAS = { bureaucore: "technocute", gloomthmaxx: "technoscure" };   // ?skin input → registry id
+const SKIN_SHARE = { technocute: "bureaucore", technoscure: "gloomthmaxx" };   // registry id → friendly name shown in the URL
+/** Resolve a skin id OR a friendly alias to a real registry id. @param {string} s */
+function resolveSkin(s) { s = String(s == null ? "" : s).toLowerCase(); return SKIN_ALIAS[s] || s; }
+/** Reflect the active skin in the address bar so the current theme is shareable by copying the URL.
+   Only fires on a live switch (switchTheme), so a fresh time-of-day landing keeps a clean URL. */
+function reflectSkinInURL(id) {
+  try { const u = new URL(location.href); u.searchParams.set("skin", SKIN_SHARE[id] || id); history.replaceState(history.state, "", u.href); }
+  catch (e) { /* file:// or blocked: fine */ }
+}
 
 /** The skin a FRESH visit lands on, chosen by the visitor's LOCAL time of day:
  *    weekday business hours (Mon–Fri, 9am–5pm) → technocute  (bureaucore)
@@ -1633,7 +1646,7 @@ const ECO_API = {
 
 // expose helpers a theme may want to reuse (iso math, colour, primitives)
 window.MH_ISO = {
-  register, start, switchTheme: requestSwitch, cycle: cycleSkin, timeDefaultSkin,
+  register, start, switchTheme: requestSwitch, cycle: cycleSkin, timeDefaultSkin, resolveSkin,
   themes: () => [...REGISTRY.values()].map((t) => ({ id: t.id, name: t.name })),
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period
