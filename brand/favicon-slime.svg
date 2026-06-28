@@ -1,31 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- matthorrigan.com favicon: the walkable world's "hero slime" avatar, drawn as a
-       cute gel dome looking DOWNWARD (single eye, pupil low) toward the page.
+       squat gel dome with one big eye looking DOWNWARD (pupil low) toward the page.
        Colours mirror engine.js defPaintAvatar + theme-technurture avatarColors/avatarInk:
        brand green #4FA373, gel radial gradient (light core #B0D6C0 -> green -> dark rim
        #3A7955, = shade(0.55)/color/shade(-0.26)), white sheen, ink outline #1f3a1a. -->
   <defs>
-    <radialGradient id="gel" gradientUnits="userSpaceOnUse" cx="16" cy="19" r="16" fx="12" fy="6">
+    <radialGradient id="gel" gradientUnits="userSpaceOnUse" cx="16" cy="20" r="16" fx="12" fy="9">
       <stop offset="0" stop-color="#B0D6C0"/>
       <stop offset="0.5" stop-color="#4FA373"/>
       <stop offset="1" stop-color="#3A7955"/>
     </radialGradient>
   </defs>
 
-  <!-- gel dome: flat-ish base, rounded crown -->
-  <path d="M 4 27 C 4 14 8 5 16 5 C 24 5 28 14 28 27 Z"
+  <!-- squat gel dome: flat base, low rounded crown -->
+  <path d="M 3 27 C 3 15 7 8 16 8 C 25 8 29 15 29 27 Z"
         fill="url(#gel)" stroke="#1f3a1a" stroke-width="2" stroke-linejoin="round"/>
 
-  <!-- bright gel sheen near the top-left -->
-  <ellipse cx="12" cy="7" rx="2.6" ry="3.6" fill="#ffffff" opacity="0.32"
-           transform="rotate(-28 12 7)"/>
+  <!-- bright gel sheen on the upper-left shoulder -->
+  <ellipse cx="10.5" cy="12" rx="2.1" ry="2.9" fill="#ffffff" opacity="0.32"
+           transform="rotate(-30 10.5 12)"/>
 
-  <!-- the canonical single Slime Volleyball eye, high/centered on the crown,
-       pupil pushed LOW so it reads as looking straight down toward the tab -->
+  <!-- the canonical single Slime Volleyball eye: big, sat low on the dome
+       (~baseY - ry*0.6), pupil pushed to the bottom so it looks straight down -->
   <g stroke="#1f3a1a" stroke-linecap="round">
-    <circle cx="16" cy="12.5" r="3.6" fill="#ffffff" stroke-width="1.3"/>
-    <path d="M 13.6 11.4 Q 16 10.5 18.4 11.4" fill="none" stroke-width="1.1"/>
-    <circle cx="16" cy="13.9" r="1.85" fill="#1f3a1a" stroke="none"/>
-    <circle cx="15.3" cy="13.2" r="0.7" fill="#ffffff" stroke="none"/>
+    <circle cx="16" cy="15.5" r="5.5" fill="#ffffff" stroke-width="1.3"/>
+    <path d="M 11.8 13 Q 16 11.8 20.2 13" fill="none" stroke-width="1.3"/>
+    <circle cx="16" cy="17.6" r="2.75" fill="#1f3a1a" stroke="none"/>
+    <circle cx="15" cy="16.6" r="1" fill="#ffffff" stroke="none"/>
   </g>
 </svg>
