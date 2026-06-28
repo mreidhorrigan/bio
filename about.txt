@@ -1,9 +1,9 @@
 The matthorrigan.com favicon is the site's hero slime: the green gel avatar you
 walk around the isometric world. It is a rounded dome on a flat base, filled with
 a brand-green gel gradient (a light core, green body, darker rim), with a bright
-sheen near the top-left and a dark ink outline. For the icon the slime gains two
-friendly eyes with the pupils low, so it looks downward and peeks toward the page
-below the browser tab.
+sheen near the top-left and a dark ink outline. Like its Slime Volleyball cousin
+it has a single eye, and for the icon the pupil sits low, so the slime looks
+downward and peeks toward the page below the browser tab.
 
 The mark mirrors the in-world avatar (see defPaintAvatar in engine.js and the
 theme avatarColors and avatarInk). The source vector is brand/favicon-slime.svg,

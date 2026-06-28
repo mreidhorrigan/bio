@@ -147,7 +147,7 @@ function buildDOM() {
     <div id="mh-switcher" class="mh-switcher mh-faded" role="group" aria-label="Choose a skin"></div>
     <div id="mh-mark" title="matthorrigan.com — same place, different light"><span>MH</span></div>
     <div id="mh-buildbar" class="mh-buildbar mh-faded" role="toolbar" aria-label="Build tools">
-      <button class="mh-tool mh-cur" type="button" data-tool="move">✋ Move</button>
+      <button class="mh-tool mh-cur" type="button" data-tool="move"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M12 4V20M4 12H20M12 4l-2.5 2.5M12 4l2.5 2.5M12 20l-2.5-2.5M12 20l2.5-2.5M4 12l2.5-2.5M4 12l2.5 2.5M20 12l-2.5-2.5M20 12l-2.5 2.5"/></svg>Move</button>
       <button class="mh-tool" type="button" data-tool="house">Plant a house.</button>
       <button class="mh-tool" type="button" data-tool="tree">Build a tree.</button>
       <button class="mh-tool" type="button" data-tool="delete">✕ Remove</button>
@@ -713,11 +713,18 @@ function onBuildTool(e) {
 function refreshBuildTools() {
   if (!buildbarEl || !buildbarEl.querySelectorAll) return;
   Array.from(buildbarEl.querySelectorAll(".mh-tool")).forEach((el) => el.classList.toggle("mh-cur", el.dataset.tool === buildTool));
+  updateBuildCursor();
+}
+/** Show the move/drag affordance on the CURSOR (not an icon): the Move tool gives the canvas a
+ *  grab cursor, grabbing while a building is held; other tools / build-off restore the default. */
+function updateBuildCursor() {
+  if (!canvas || !canvas.style) return;
+  canvas.style.cursor = (buildMode && buildTool === "move") ? (drag ? "grabbing" : "grab") : "";
 }
 function buildPointerDown(sx, sy) {
   if (buildTool === "move") {
-    const k = kioskAtScreen(sx, sy); if (k >= 0) { drag = { kind: "kiosk", i: k }; return; }
-    const d = decorAtScreen(sx, sy); if (d >= 0) drag = { kind: "decor", i: d };
+    const k = kioskAtScreen(sx, sy); if (k >= 0) { drag = { kind: "kiosk", i: k }; updateBuildCursor(); return; }
+    const d = decorAtScreen(sx, sy); if (d >= 0) { drag = { kind: "decor", i: d }; updateBuildCursor(); }
   } else if (buildTool === "house" || buildTool === "tree") {
     const w = screenToWorld(sx, sy), tx = wrap(Math.round(w.x)), ty = wrap(Math.round(w.y));
     if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast("Something is already built here"); return; }   // one structure per tile
@@ -736,7 +743,7 @@ function onPointerUp() {
   if (!buildMode || !drag) return;
   if (drag.kind === "kiosk") { const ex = EXHIBITS[drag.i]; if (ex) { ex.tx = wrap(Math.round(ex.tx)); ex.ty = wrap(Math.round(ex.ty)); } }
   else { const b = BUILDINGS[drag.i]; if (b) { b.tx = wrap(Math.round(b.tx)); b.ty = wrap(Math.round(b.ty)); } }
-  drag = null; saveLayout();
+  drag = null; saveLayout(); updateBuildCursor();
 }
 /** which decorative building (if any) is under a screen point */
 function decorAtScreen(sx, sy) {
