@@ -420,8 +420,20 @@ function navTo(i) {
   if (mode !== "walking") return;
   audio.ensure(); audio.resume();
   menuOpen = false; const m = document.getElementById("mh-menu"); if (m) m.classList.remove("mh-on");
-  if (!opensAsCard(i)) { openCard(i); return; }   // external kiosk → open in THIS user gesture (navbar tap / Space / Enter); no deferred arrival, no popup block
+  if (!opensAsCard(i)) { warpAndOpen(i); return; }   // external kiosk → warp the slime there AND open the page in THIS gesture (popup-safe; the teleport motion plays as the tab opens)
   auto.active = true; auto.goal = i; auto.warp = true; auto.lastDist = Infinity; auto.stuck = 0;
+}
+/** Send the slime WARPING toward kiosk i — as a POSITION target (auto.goal = -1), so its arrival
+ *  won't try to re-open it (a deferred open would be popup-blocked) — and open the kiosk's page in
+ *  THIS user gesture. The "teleport-to fast move" plays while the new tab opens. */
+function warpAndOpen(i) {
+  const ex = EXHIBITS[i]; if (!ex) return;
+  const dx = nearImg(ex.tx, player.x) - player.x, dy = nearImg(ex.ty, player.y) - player.y;
+  const d = Math.hypot(dx, dy) || 1, stop = Math.max(0, d - (T.interact || 1.2));   // pull up just in front of the building, not on top of it
+  auto.active = true; auto.goal = -1; auto.warp = true;
+  auto.tx = player.x + (dx / d) * stop; auto.ty = player.y + (dy / d) * stop;
+  auto.lastDist = Infinity; auto.stuck = 0;
+  openCard(i);
 }
 
 /** @param {string} id */
@@ -684,7 +696,7 @@ function onCanvasPointerUp(e) {
   if (!td || td.ki < 0) return;
   let moved = 0;
   try { const r = canvas.getBoundingClientRect(); moved = Math.hypot((e.clientX - r.left) - td.sx, (e.clientY - r.top) - td.sy); } catch (_) { /* ignore */ }
-  if (moved < 18) { auto.active = false; openCard(td.ki); }      // a tap (not a drag) on the kiosk → open it
+  if (moved < 18) warpAndOpen(td.ki);                            // a tap (not a drag) on a kiosk → warp the slime there + open it (in this pointerup gesture)
 }
 
 /** Auto-walk to the next unvisited kiosk (wraps). */
