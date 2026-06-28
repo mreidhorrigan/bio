@@ -44,6 +44,7 @@
     // bureaucore is strictly functional: a fluid plaza + roads for orientation, buildings
     // for interaction, and NOTHING else — no beacon, no scenery, no grid.
     fluidGround: true, plazaColor: "#dcf3ff", roadColor: "#8a5cc0", monument: true,   // a plain tall cone marks the plaza (orientation only)
+    spurRoads: true,   // grow the Music/Games roads of project houses here too — same world geometry as the slime skins
 
     css: `
       :root{

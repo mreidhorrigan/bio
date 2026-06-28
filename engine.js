@@ -561,8 +561,8 @@ function buildHub() {
 /** World-aware: in the slimeverse, each kiosk that carries a `satellites` list grows a
  *  ROAD off the plaza with one walk-up HOUSE per item (Music, Games). The gateway kiosk
  *  stays on the ring; the houses march straight outward from it, and the spur between is
- *  paved as road. The flatverse has no spurs (it stays a direct, efficient menu). Idempotent
- *  and rebuilt on every world-switch, so the houses appear and vanish with the world. */
+ *  paved as road. Gated on T.spurRoads (now on for every skin), so the same house geometry
+ *  appears in all worlds. Idempotent and rebuilt on every world-switch. */
 function rebuildSpurs() {
   if (EXHIBITS.length > CONTENT.kiosks.length) EXHIBITS.length = CONTENT.kiosks.length;  // drop any houses from a previous world
   SPUR_TILES.clear();
