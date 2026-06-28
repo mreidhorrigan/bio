@@ -110,7 +110,7 @@ let reduce = false;                     // prefers-reduced-motion: themes gate f
 const REGISTRY = new Map();             // id -> raw theme, for the live skin-switcher
 let started = false, switcherEl = null;
 // build mode (AoE2 / Frostpunk-ish): rearrange the buildings, add decorative ones
-let buildMode = false, buildTool = "move", drag = null, buildbarEl = null, buildToggleEl = null, menuOpen = false;
+let buildMode = false, buildTool = "move", drag = null, buildbarEl = null, buildToggleEl = null, menuOpen = false, tapDown = null;
 /** @type {{tx:number, ty:number, type:string}[]} decorative buildings the visitor places */
 const BUILDINGS = [];
 
@@ -420,6 +420,7 @@ function navTo(i) {
   if (mode !== "walking") return;
   audio.ensure(); audio.resume();
   menuOpen = false; const m = document.getElementById("mh-menu"); if (m) m.classList.remove("mh-on");
+  if (!opensAsCard(i)) { openCard(i); return; }   // external kiosk → open in THIS user gesture (navbar tap / Space / Enter); no deferred arrival, no popup block
   auto.active = true; auto.goal = i; auto.warp = true; auto.lastDist = Infinity; auto.stuck = 0;
 }
 
@@ -591,7 +592,10 @@ function rebuildSpurs() {
    -------------------------------------------------------------------------- */
 
 function wireInput() {
-  window.addEventListener("resize", resize);
+  window.addEventListener("resize", scheduleResize);
+  window.addEventListener("orientationchange", scheduleResize);
+  if (window.visualViewport && window.visualViewport.addEventListener) window.visualViewport.addEventListener("resize", scheduleResize);
+  canvas.addEventListener("pointerup", onCanvasPointerUp);
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
   window.addEventListener("blur", () => { keys.up = keys.down = keys.left = keys.right = false; });
@@ -667,9 +671,20 @@ function onPointer(e) {
   const sx = e.clientX - r.left, sy = e.clientY - r.top;
   if (buildMode) { buildPointerDown(sx, sy); return; }           // build mode: edit buildings, don't walk
   const ki = kioskAtScreen(sx, sy);
-  if (ki >= 0) { auto.active = false; openCard(ki); return; }    // a click on a kiosk opens it straight away
+  if (ki >= 0) { tapDown = { sx, sy, ki }; return; }             // a kiosk: OPEN on pointerUP (browsers allow a new tab from pointerup/click, NOT pointerdown — fixes the iOS/Firefox block)
+  tapDown = null;
   if (decorAtScreen(sx, sy) >= 0) { toast("Press B (✎ Build) to move or remove buildings"); return; }
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
+}
+/** Canvas pointer-UP: open a tapped kiosk HERE. iOS Safari & Firefox only honour window.open from a
+ *  pointerup/click/touchend gesture, not pointerdown, so the new tab must be opened on release. */
+function onCanvasPointerUp(e) {
+  if (buildMode || mode !== "walking") { tapDown = null; return; }
+  const td = tapDown; tapDown = null;
+  if (!td || td.ki < 0) return;
+  let moved = 0;
+  try { const r = canvas.getBoundingClientRect(); moved = Math.hypot((e.clientX - r.left) - td.sx, (e.clientY - r.top) - td.sy); } catch (_) { /* ignore */ }
+  if (moved < 18) { auto.active = false; openCard(td.ki); }      // a tap (not a drag) on the kiosk → open it
 }
 
 /** Auto-walk to the next unvisited kiosk (wraps). */
@@ -699,7 +714,7 @@ function toggleMenu() { menuOpen = !menuOpen; const el = document.getElementById
 
 /* --- build mode: rearrange the buildings + add decorative ones (persisted) --- */
 function toggleBuild() {
-  buildMode = !buildMode; buildTool = "move"; drag = null;
+  buildMode = !buildMode; buildTool = "move"; drag = null; tapDown = null;
   if (buildbarEl) buildbarEl.classList.toggle("mh-faded", !buildMode);
   if (buildToggleEl) buildToggleEl.classList.toggle("mh-on", buildMode);
   refreshBuildTools();
@@ -715,11 +730,27 @@ function refreshBuildTools() {
   Array.from(buildbarEl.querySelectorAll(".mh-tool")).forEach((el) => el.classList.toggle("mh-cur", el.dataset.tool === buildTool));
   updateBuildCursor();
 }
-/** Show the move/drag affordance on the CURSOR (not an icon): the Move tool gives the canvas a
- *  grab cursor, grabbing while a building is held; other tools / build-off restore the default. */
+let _eraserCursor = null;
+/** A pink-eraser cursor (data-URI SVG) for the Remove tool, built once. Falls back to crosshair
+ *  where encodeURIComponent is unavailable (headless selftest). */
+function eraserCursor() {
+  if (_eraserCursor != null) return _eraserCursor;
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"><g transform="rotate(-40 13 13)"><rect x="4" y="10" width="17" height="9" rx="2.5" fill="#f3a6c1" stroke="#1b1b1b" stroke-width="1.7"/><path d="M13 10V19" stroke="#1b1b1b" stroke-width="1.5"/></g></svg>';
+  _eraserCursor = (typeof encodeURIComponent === "function")
+    ? "url('data:image/svg+xml," + encodeURIComponent(svg) + "') 6 19, crosshair"
+    : "crosshair";
+  return _eraserCursor;
+}
+/** Show the active build tool on the CURSOR (not an icon): Move → grab/grabbing, Remove → an eraser;
+ *  other tools and build-off restore the default. */
 function updateBuildCursor() {
   if (!canvas || !canvas.style) return;
-  canvas.style.cursor = (buildMode && buildTool === "move") ? (drag ? "grabbing" : "grab") : "";
+  let c = "";
+  if (buildMode) {
+    if (buildTool === "move") c = drag ? "grabbing" : "grab";
+    else if (buildTool === "delete") c = eraserCursor();
+  }
+  canvas.style.cursor = c;
 }
 function buildPointerDown(sx, sy) {
   if (buildTool === "move") {
@@ -1206,7 +1237,12 @@ function updateHUD() {
  *  About, CV, the Toolbox, the Music/Games menus, and the road-houses — so nothing is
  *  shown in an in-world iframe any more. Local pages and external sites are treated the
  *  same. @param {string} url */
-function openExternal(url) { try { window.open(url, "_blank", "noopener"); } catch (e) { /* popup blocked / headless: ignore */ } }
+function openExternal(url) {
+  // a plain new TAB: no features string (a features string makes Safari treat it as a blockable
+  // popup window). Must be called SYNCHRONOUSLY from a user gesture or iPad/iPhone will block it.
+  try { const w = window.open(url, "_blank"); if (w) { try { w.opener = null; } catch (e) { /* _blank is noopener by default on modern browsers */ } } }
+  catch (e) { /* headless / blocked: ignore */ }
+}
 
 /** @param {number} i exhibit index */
 function openCard(i) {
@@ -1487,12 +1523,17 @@ function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${(n 
 function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
 function resize() {
-  dpr = Math.min(window.devicePixelRatio || 1, 2);
-  W = window.innerWidth; H = window.innerHeight;
+  const ndpr = Math.min(window.devicePixelRatio || 1, 2);
+  const nW = window.innerWidth, nH = window.innerHeight;
+  if (nW === W && nH === H && ndpr === dpr) return;   // unchanged → skip the costly canvas-buffer realloc
+  dpr = ndpr; W = nW; H = nH;
   canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
   canvas.style.width = W + "px"; canvas.style.height = H + "px";
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
+/** On a phone the resize/orientationchange event fires before the viewport finishes rotating, so a
+ *  single resize() can leave half the canvas unrendered. Re-measure now and again after it settles. */
+function scheduleResize() { resize(); setTimeout(resize, 120); setTimeout(resize, 400); }
 
 /* ----------------------------------------------------------------------------
    PUBLIC ENTRY

@@ -113,9 +113,11 @@
       const dy = active ? -2 : 0, accent = ex.accent, slot = ex.slot, H = 46;
       U.poly(g, [[sx + 13, sy + 4], [sx + 34, sy + 15], [sx + 13, sy + 26], [sx - 15, sy + 15]], "rgba(17,17,17,0.85)");  // shadow
       box(g, sx, sy + dy, 22, H, accent);                        // ONE clean solid block — maximally simple
-      // big number plate centred on the front face
-      bRect(g, sx - 13, sy - 28 + dy, 26, 26, "#fff", 2.5);
-      g.fillStyle = BLACK; g.font = "900 21px var(--mh-display)"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(String(slot + 1), sx, sy - 15 + dy);
+      // big number plate centred on the front face — plaza kiosks only (road-houses aren't numbered)
+      if (!ex.satellite) {
+        bRect(g, sx - 13, sy - 28 + dy, 26, 26, "#fff", 2.5);
+        g.fillStyle = BLACK; g.font = "900 21px var(--mh-display)"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(String(slot + 1), sx, sy - 15 + dy);
+      }
       // title banner above the block
       g.font = "800 13px var(--mh-display)";
       const tw = g.measureText(ex.title.toUpperCase()).width + 14, by = sy - H + dy - 26;
