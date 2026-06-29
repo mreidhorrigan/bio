@@ -20,8 +20,11 @@
     <style>
     :root{ --leaf:16px 4px 16px 4px / 7px 2px 7px 2px; --leaf-lg:22px 6px 22px 6px / 12px 4px 12px 4px; }
     *{ box-sizing:border-box; }
+    /* Base colour lives on <html> so the z-index:-1 .flare cloud shows over it —
+       an opaque background on <body> would paint over the negative-z child. */
+    html{ background:var(--bg); }
     body{ margin:0; font-family:-apple-system,"Segoe UI",system-ui,Helvetica,Arial,sans-serif; color:#1a1a1a;
-      background:#f7f9fb; padding:84px 18px 4rem; max-width:880px; margin:0 auto; line-height:1.5; }
+      background:transparent; padding:84px 18px 4rem; max-width:880px; margin:0 auto; line-height:1.5; }
     h1{ font-family:Tahoma,Arial,sans-serif; font-variant-caps:small-caps; font-size:clamp(28px,5vw,40px); margin:0 0 2px; }
     .lede{ max-width:60ch; color:#3a3a3a; font-size:1.05rem; margin:0 0 1.6rem; }
     .hl{ color:#000; background:#c3f0ff; border-radius:var(--leaf); padding:0 .18em; }
@@ -38,6 +41,7 @@
   </style>
   </head>
   <body>
+    <div class="flare"></div>
     <h1>Toolbox</h1>
     <p class="lede">Free tools I built and use for classroom management.
       Each runs in your <span class="hl">browser</span> with nothing to
