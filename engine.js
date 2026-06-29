@@ -115,9 +115,8 @@ let buildMode = false, buildTool = "move", drag = null, buildbarEl = null, build
 const BUILDINGS = [];
 
 // DOM refs (filled in buildDOM)
-let introEl, cardEl, cardTitleEl, cardBodyEl, hudEl, hintEl, compassEl, compassArrowEl,
+let introEl, cardEl, cardTitleEl, cardBodyEl, hudEl, compassEl, compassArrowEl,
     compassDistEl, progressEl, startBtn, pickerEl, navbarEl;
-let lastHint = "";
 
 /* ----------------------------------------------------------------------------
    3. DOM  — the engine builds its own canvas / HUD / intro / modal, so a themed
@@ -191,7 +190,6 @@ function buildDOM() {
     </div>
 
     <div id="mh-hud" class="mh-hidden">
-      <div class="mh-hint" id="mh-hint"></div>
       <div class="mh-hud-right">
         <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu — jump to a building">☰ Menu</button>
         <button id="mh-buildtoggle" class="mh-hudbtn" type="button" title="Rearrange the buildings (B)">✎ Build</button>
@@ -211,7 +209,6 @@ function buildDOM() {
   cardTitleEl = byId("mh-cardTitle");
   cardBodyEl = byId("mh-cardBody");
   hudEl = byId("mh-hud");
-  hintEl = byId("mh-hint");
   compassEl = byId("mh-compass");
   compassArrowEl = byId("mh-needle");
   compassDistEl = byId("mh-cdist");
@@ -312,7 +309,6 @@ const BASE_CSS = `
   /* HUD */
   #mh-hud{ position:fixed; left:0; right:0; bottom:0; z-index:5; pointer-events:none;
     display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px 16px; }
-  .mh-hint{ font:500 14px/1.35 var(--mh-ui,system-ui,sans-serif); text-shadow:0 1px 4px rgba(0,0,0,.55); }
   .mh-hud-right{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
   .mh-hudbtn{ pointer-events:auto; appearance:none; cursor:pointer; font:700 12px var(--mh-ui,system-ui,sans-serif);
     padding:6px 10px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); line-height:1; white-space:nowrap; }
@@ -363,7 +359,7 @@ const BASE_CSS = `
      play area. top: back + mark + nav-bar; bottom: switcher + hint/progress. */
   @media (max-width:600px){
     .mh-legend{ display:none; }
-    .mh-hint, #mh-themechip, #mh-menu{ display:none; }   /* declutter the phone HUD: drop the wander-hint, the redundant style label, and the menu button */
+    #mh-themechip, #mh-menu{ display:none; }   /* declutter the phone HUD: drop the redundant style label and the menu button */
     #mh-hud{ padding:9px 9px; align-items:flex-end; }
     .mh-progress{ font-size:11px; padding:5px 8px; }
     .mh-navbar{ top:42px; gap:4px; padding:4px 6px; max-width:96vw; }
@@ -1280,15 +1276,6 @@ function updateHUD() {
     compassArrowEl.style.transform = `rotate(${ang}deg)`;
     compassDistEl.textContent = Math.round(Math.hypot(wrapDelta(HX - player.x), wrapDelta(HY - player.y))) + "";
   }
-
-  let hint;
-  if (mode !== "walking") hint = lastHint;
-  else if (auto.active && auto.goal >= 0) hint = `Walking to “${EXHIBITS[auto.goal].title}”…`;
-  else if (auto.active) hint = `On my way…`;
-  else if (activeIndex >= 0) hint = `Press E to open “${EXHIBITS[activeIndex].title}”  ·  Space / Enter → About`;
-  else if (inHub) hint = `Space / Enter → About  ·  wander out, it all loops back`;
-  else hint = T.wayfinding.recall ? `Wandering… follow a road back to the plaza, or press G to return` : `Wandering… follow a road and it loops back to the plaza`;
-  if (hint !== lastHint) { hintEl.textContent = hint; lastHint = hint; }
 }
 
 /* ----------------------------------------------------------------------------
