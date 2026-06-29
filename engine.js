@@ -373,6 +373,21 @@ const BASE_CSS = `
     .mh-card{ width:96vw; max-height:88vh; }
     .mh-card-body{ font-size:15px; padding:0 16px 6px; }
   }
+  /* phone landscape: the viewport is wide but very short — and a landscape phone is
+     usually WIDER than 600px, so the max-width:600px phone rules above never kick in.
+     Spread the building menu across the full width as one top-hugging row (scroll if it
+     ever overflows) instead of a centred block that wraps down over the slime; tuck the
+     skin switcher to the bottom edge. Both hug an edge, leaving the centre clear. */
+  @media (orientation:landscape) and (max-height:500px){
+    .mh-navbar{ top:6px; left:8px; right:8px; transform:none; max-width:none;
+      flex-wrap:nowrap; gap:5px; padding:4px 6px; overflow-x:auto;
+      -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+    .mh-navbar::-webkit-scrollbar{ display:none; }
+    .mh-navbar.mh-faded{ transform:translateY(-12px); }
+    .mh-navchip{ font-size:10.5px; padding:5px 9px; flex:0 0 auto; }
+    .mh-switcher{ bottom:6px; gap:4px; padding:3px; }
+    .mh-skin{ font-size:10.5px; padding:4px 8px; }
+  }
   @media (max-width:600px) and (pointer:coarse){ .mh-card-foot{ display:none; } }
   @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms!important; transition-duration:.001ms!important; } }
 `;
