@@ -908,6 +908,24 @@ function ensureWaterImg() {
   waterImg.onerror = () => { waterFailed = true; };   // one-shot: never re-request a missing asset every frame
   waterImg.src = ((window.MH_SITE && window.MH_SITE.base) || "") + "water.webp";
 }
+let waterTex = null, waterPat = null, waterTexKey = "", waterTexSat = -1;
+/** Pre-stretch the water photo (overscanning every edge) into a screen-sized offscreen so per-frame we
+ *  just FILL the pond blobs from it — no per-frame rescale or giant clip. The About portrait's filter
+ *  pulse is baked in here (saturate, ~30s) and only re-baked when it drifts, NOT every frame. */
+function ensureWaterTex(sat) {
+  if (!waterReady || !waterImg || typeof document === "undefined" || !document.createElement) return null;
+  const key = Math.round(W) + "x" + Math.round(H), sizeChanged = waterTexKey !== key;
+  if (waterTex && !sizeChanged && Math.abs(sat - waterTexSat) < 0.03) return waterTex;
+  if (!waterTex) waterTex = document.createElement("canvas");
+  if (sizeChanged) { waterTex.width = Math.max(1, Math.round(W)); waterTex.height = Math.max(1, Math.round(H)); waterPat = null; }
+  const wc = waterTex.getContext("2d"), ox = W * 0.12, oy = H * 0.12;
+  wc.clearRect(0, 0, waterTex.width, waterTex.height);
+  wc.filter = "saturate(" + sat.toFixed(3) + ")";
+  wc.drawImage(waterImg, -ox, -oy, W + ox * 2, H + oy * 2);
+  wc.filter = "none";
+  waterTexKey = key; waterTexSat = sat;
+  return waterTex;
+}
 function render() {
   ensureWaterImg();
   const env = { t: tnow, dpr, W, H, reduce };
@@ -942,15 +960,18 @@ function render() {
       if (ecoOn && window.MH_ECO.groundTint) { const ti = window.MH_ECO.groundTint(tx, ty); if (ti) diamond(ctx, c.x, c.y, ti, null); }
     }
   }
-  // water zones reveal ONE water photo: clipped to the SAME organic blob shape as the ground (rounded
-  // pond edges, not hard diamonds) and stretched to OVERSCAN past every screen edge so its own edges never show.
+  // water zones reveal the water photo: FILL each pond with the SAME organic blob shape as the ground
+  // (rounded edges, not hard diamonds) from the pre-stretched, overscanned offscreen — cheap, and it
+  // carries the saturation pulse (periodically more vivid/blue, like the About portrait's filter).
   if (waterCells) {
-    ctx.save(); ctx.beginPath();
-    for (let i = 0; i < waterCells.length; i += 4) blobPath(ctx, waterCells[i], waterCells[i + 1], waterCells[i + 2], waterCells[i + 3]);
-    ctx.clip();
-    const ox = W * 0.12, oy = H * 0.12;
-    ctx.drawImage(waterImg, -ox, -oy, W + ox * 2, H + oy * 2);
-    ctx.restore();
+    const sat = 1 + 0.4 * (1 - Math.cos(tnow * (Math.PI * 2 / 30)));   // 1.0 ↔ 1.8 over 30s
+    const tex = ensureWaterTex(sat);
+    if (tex) {
+      if (!waterPat) waterPat = ctx.createPattern(tex, "repeat");
+      ctx.save(); ctx.fillStyle = waterPat; ctx.beginPath();
+      for (let i = 0; i < waterCells.length; i += 4) blobPath(ctx, waterCells[i], waterCells[i + 1], waterCells[i + 2], waterCells[i + 3]);
+      ctx.fill(); ctx.restore();
+    }
   }
 
   if (T.fluidGround) drawFluidZones();           // smooth plaza + roads over the blobby field (no grid)

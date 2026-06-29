@@ -24,12 +24,13 @@
     pointer-events:none; filter:drop-shadow(0 6px 7px rgba(0,0,0,0.18)); }
   .hero-slime svg{ width:100%; height:100%; display:block; overflow:visible; }
   /* breathing/squash, planted on its flat base (origin = bottom centre) */
-  .hero-slime .slime-dome{ transform-box:fill-box; transform-origin:50% 100%;
+  .hero-slime .slime-dome{ transform-box:view-box; transform-origin:50% 100%;
     animation:heroSlimePulse 3s ease-in-out infinite; }
   @keyframes heroSlimePulse{ 0%,100%{ transform:scale(1,1); } 50%{ transform:scale(1.05,0.93); } }
   /* mini version on small / touch screens (the eye follows touch instead of a cursor) */
   @media (max-width:700px){ .hero-slime{ width:64px; height:56px; right:10px; } }
-  @media (prefers-reduced-motion:reduce){ .hero-slime .slime-dome{ animation:none; } }`;
+  @media (prefers-reduced-motion:reduce){ .hero-slime .slime-dome{ animation:none; } }
+  body.fs .hero-slime{ display:none; }   /* ExamTimer projection/fullscreen mode hides the slime */`;
 
   // viewBox cropped to 0 0 32 28 so the flat base sits flush with the bottom edge.
   const SVG = `<svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg">
