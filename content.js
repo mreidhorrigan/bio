@@ -28,7 +28,7 @@
     kiosks: [
       {
         title: "About",
-        page: { url: `${B}classic.html` },                     // the archived classic homepage (menubar and all). NOT index.html: once promoted, index IS this world (would recurse).
+        page: { url: `${B}about.html` },                       // the About page (menubar and all). NOT index.html: index IS this world (would recurse).
         html: `
           <p><span class="mh-big">How do you work? Can I see?</span></p>
           <p>Hi. I'm Matthew Horrigan, a communication scholar. I research media
@@ -59,7 +59,7 @@
       },
       {
         title: "Music",
-        page: { url: `${B}classic.html?menu=Music` },          // open the About page with the Music dropdown deployed (new tab)
+        page: { url: `${B}about.html?menu=Music` },            // open the About page with the Music dropdown deployed (new tab)
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Music" gateway opens the menu)
           { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },
           { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
@@ -73,7 +73,7 @@
       },
       {
         title: "Games",
-        page: { url: `${B}classic.html?menu=Games` },          // open the About page with the Games dropdown deployed (new tab)
+        page: { url: `${B}about.html?menu=Games` },            // open the About page with the Games dropdown deployed (new tab)
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Games" gateway opens the menu)
           { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
           { title: "Autofac", url: `${B}autofac.html` },

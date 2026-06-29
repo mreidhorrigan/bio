@@ -40,7 +40,7 @@
 
   var LINKS_BEFORE_DROPDOWNS = [
     ["Home", "index.html"],          // the walkable slimeverse homepage
-    ["About", "classic.html"],       // the bio page (reachable directly now that Home lands in the world)
+    ["About", "about.html"],         // the bio page (reachable directly now that Home lands in the world)
     ["CV", "Horrigan_CV.html"]
   ];
   var MUSIC = [
@@ -233,7 +233,7 @@
       dd.addEventListener("toggle", function () { fitMenu(dd); });
     });
 
-    // a page can request a dropdown be open on load, e.g. classic.html?menu=Music — the walkable
+    // a page can request a dropdown be open on load, e.g. about.html?menu=Music — the walkable
     // site's Music/Games houses link here so About opens with that category's dropdown deployed.
     try {
       var wantMenu = new URLSearchParams(location.search).get("menu");
