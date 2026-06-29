@@ -297,10 +297,10 @@
       <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
       </svg>
-      <p><span class="cta">Choose a .docx file</span> or drag it here</p>
-      <p class="hint">A .docx of tagged paragraphs. See the tag reference below the upload area.</p>
+      <p><span class="cta">Choose a .docx, .md, or .txt file</span> or drag it here</p>
+      <p class="hint">A file of tagged paragraphs. In plain text put a blank line between items. See the tag reference below the upload area.</p>
     </div>
-    <input type="file" id="file-input-q" accept=".docx" />
+    <input type="file" id="file-input-q" accept=".docx,.md,.markdown,.txt,text/markdown,text/plain" />
   </div>
 
   <div class="upload-section">
@@ -395,6 +395,16 @@
       <label for="margin-size">Margins (pt)</label>
       <input class="num-input" type="number" id="margin-size" value="72" min="18" max="144">
     </div>
+    <div class="control-field">
+      <label for="max-mcq">Max MCQs</label>
+      <input class="num-input" type="number" id="max-mcq" min="1" placeholder="all"
+             title="Use at most this many multiple-choice questions. Blank or 0 uses all of them.">
+    </div>
+    <div class="control-field">
+      <label for="max-written">Max written answers</label>
+      <input class="num-input" type="number" id="max-written" min="1" placeholder="all"
+             title="Use at most this many written-answer questions per version. Blank or 0 keeps the document's count.">
+    </div>
     <div class="version-badges" id="version-badges"></div>
   </div>
 
@@ -431,6 +441,8 @@
   const versionBadges = document.getElementById('version-badges');
   const fontSizeSelect = document.getElementById('font-size');
   const marginSizeSelect = document.getElementById('margin-size');
+  const maxMcqInput      = document.getElementById('max-mcq');
+  const maxWrittenInput  = document.getElementById('max-written');
   const btnRow      = document.getElementById('btn-row');
   const btnGenerate = document.getElementById('btn-generate');
   const progressWrap  = document.getElementById('progress-wrap');
@@ -615,25 +627,36 @@
   wireDrop(dropQ, inputQ, handleQuestionsFile);
 
   function handleQuestionsFile(file) {
-    if (!file.name.endsWith('.docx')) { setStatus('Please upload a .docx file.', 'error'); return; }
+    const name   = file.name.toLowerCase();
+    const isDocx = name.endsWith('.docx');
+    const isText = name.endsWith('.txt') || name.endsWith('.md') || name.endsWith('.markdown');
+    if (!isDocx && !isText) { setStatus('Upload a .docx, .md, or .txt file.', 'error'); return; }
     setStatus('Reading questions…', 'info');
     resetOutputsUI();
-    sourceBaseName = file.name.replace(/\.docx$/i, '').trim() || 'exam';
+    sourceBaseName = file.name.replace(/\.(docx|markdown|md|txt)$/i, '').trim() || 'exam';
 
     const reader = new FileReader();
-    reader.onload = e => readDocx(e.target.result)
-      .then(richParas => {
-        parsedQuestions = parseAllParagraphs(stripVersionXParagraph(richParas));
-        const allQ = collectAllQuestions(parsedQuestions);
-        if (!allQ.length) { setStatus('No valid [Question.] paragraphs found.', 'error'); return; }
+    reader.onload = e => {
+      // .docx unzips to formatted HTML (mammoth); .md/.txt is read as raw text and
+      // split into the same rich-paragraph shape. Both feed the identical parser.
+      const toRichParas = isDocx
+        ? readDocx(e.target.result)
+        : Promise.resolve(textToRichParagraphs(e.target.result));
+      toRichParas
+        .then(richParas => {
+          parsedQuestions = parseAllParagraphs(stripVersionXParagraph(richParas));
+          const allQ = collectAllQuestions(parsedQuestions);
+          if (!allQ.length) { setStatus('No valid [Question.] paragraphs found.', 'error'); return; }
 
-        setStatus(...summarizeParse(parsedQuestions, allQ));
-        renderPreview();
-        showOutputsUI(file.name);
-        updateVersionUI();
-      })
-      .catch(err => setStatus('Error reading file: ' + err.message, 'error'));
-    reader.readAsArrayBuffer(file);
+          setStatus(...summarizeParse(parsedQuestions, allQ));
+          renderPreview();
+          showOutputsUI(file.name);
+          updateVersionUI();
+        })
+        .catch(err => setStatus('Error reading file: ' + err.message, 'error'));
+    };
+    if (isDocx) reader.readAsArrayBuffer(file);
+    else        reader.readAsText(file);
   }
 
   // Read a .docx ArrayBuffer into rich paragraphs, with embedded images inlined
@@ -645,6 +668,38 @@
     };
     return mammoth.convertToHtml({ arrayBuffer }, options)
       .then(result => htmlToRichParagraphs(result.value));
+  }
+
+  // Convert raw .md/.txt into the same rich-paragraph shape readDocx produces, so
+  // one parser serves every format. Plain text has no underline or embedded
+  // images, so every block becomes a single plain run.
+  //
+  // Paragraph splitting: blocks are separated by a BLANK line (Markdown's own
+  // rule), and soft wraps inside a block collapse to single spaces. So a question
+  // may wrap across lines, but each question, [Option.], pool header, [Paragraph.]
+  // and standalone [Page break.] must sit in its own blank-line-separated block,
+  // the plain-text equivalent of one Word paragraph.
+  function textToRichParagraphs(text) {
+    return text
+      .replace(/\r\n?/g, '\n')          // normalise CRLF / CR to LF
+      .split(/\n[ \t]*\n+/)             // a blank line separates blocks
+      .map(cleanTextBlock)
+      .filter(t => t !== '')
+      .map(t => [{ text: t, underline: false }]);
+  }
+
+  // Flatten one text block to a single line and strip the markdown that would
+  // otherwise break the anchored tag regexes or show up as literal noise. A
+  // leading list/heading/quote marker is removed so a tag at the line start still
+  // matches; bold and inline-code markers are dropped (docx preserves only
+  // underline, so dropping bold/italic matches that output).
+  function cleanTextBlock(block) {
+    let t = block.replace(/\s*\n\s*/g, ' ').trim();
+    t = t.replace(/^\s*(?:#{1,6}\s+|>\s+|[-*+]\s+|\d+[.)]\s+)/, '');
+    t = t.replace(/\*\*([^*]+)\*\*/g, '$1')
+         .replace(/__([^_]+)__/g, '$1')
+         .replace(/`([^`]+)`/g, '$1');
+    return t.trim();
   }
 
   // Remove the bare [Version X] marker paragraph (handled separately).
@@ -953,7 +1008,7 @@
   //   reshuffled deck — but a single version never receives a duplicate, even
   //   when `take` does not evenly divide the pool size.
   // scramble-pool: every version gets all questions in its own shuffled order.
-  function assignOptionPools(pools, versionLabels) {
+  function assignOptionPools(pools, versionLabels, maxWritten) {
     const assignments = new Map();
 
     pools.forEach(pool => {
@@ -965,7 +1020,10 @@
         return;
       }
 
-      const { take, questions } = pool;
+      const questions = pool.questions;
+      // max-written, when set, lowers a take-N pool's N so a large written pool can
+      // supply a shorter exam. Blank/0 leaves the document's N untouched.
+      const take = (maxWritten && maxWritten < pool.take) ? maxWritten : pool.take;
       const poolSize = questions.length;
 
       // `deck` is a rotating supply of questions, reshuffled whenever it empties.
@@ -1000,6 +1058,32 @@
     });
 
     return assignments;
+  }
+
+  // ── Optional subset caps (max MCQs / max written answers) ────────────────────
+  // Standalone MCQ = a question with distractors; standalone written = the rest
+  // (matches the upload summary's "N MCQ, M without options" split). Pool members
+  // are governed by their pool's own dealing, not these caps.
+  const isMcqQ     = q => q.type === 'question' && q.distractors && q.distractors.length > 0;
+  const isWrittenQ = q => q.type === 'question' && (!q.distractors || q.distractors.length === 0);
+
+  // Choose which standalone questions survive the optional caps. Returns a Set of
+  // the questions to KEEP, or null when no cap is set (so output is identical to
+  // today's). One subset is picked here and reused for every version, so all forms
+  // test the same items and differ only in option order, which is what keeps a
+  // multi-version exam fair to grade. We drop a RANDOM excess (so the whole bank is
+  // sampled and a re-run yields a fresh exam) but keep the survivors in document
+  // order, preserving any deliberate easy-to-hard ramp.
+  function pickStandaloneSubset(items, maxMcq, maxWritten) {
+    if (!maxMcq && !maxWritten) return null;
+    const standalone = items.filter(it => it.type === 'question');
+    const keep = new Set(standalone);
+    const cap = (group, max) => {
+      if (max && group.length > max) shuffle(group).slice(max).forEach(q => keep.delete(q));
+    };
+    cap(standalone.filter(isMcqQ),     maxMcq);
+    cap(standalone.filter(isWrittenQ), maxWritten);
+    return keep;
   }
 
   // ── Preview ───────────────────────────────────────────────────────────────
@@ -1092,7 +1176,7 @@
   //   { type:'paragraph', content:runs, keepWithNext }   (scenario/description)
   //   { type:'option',    content:runs, isAnswer }
   //   { type:'pagebreak', blankPage }
-  function buildVersionParas(versionLabel, poolAssignments) {
+  function buildVersionParas(versionLabel, poolAssignments, keepSet) {
     const paras = [];
     const letters = ['a','b','c','d','e'];
 
@@ -1142,6 +1226,7 @@
 
       if (item.type === 'question') {
         if (item.onlyVersion && item.onlyVersion !== versionLabel) return;
+        if (keepSet && !keepSet.has(item)) return;   // dropped by a max cap
         emitQuestion(item);
       }
     });
@@ -1486,12 +1571,21 @@
       const { Packer } = lib;
       const versionLabels = VERSION_LABELS.slice(0, numVersions);
 
+      // Optional subset caps. Blank or 0 means "use everything", the current default.
+      const readCap = el => { const n = parseInt(el.value, 10); return n > 0 ? n : 0; };
+      const maxMcq     = readCap(maxMcqInput);
+      const maxWritten = readCap(maxWrittenInput);
+
       // Measure any images once so docx/pdf can size them correctly.
       await preloadImageDimensions(parsedQuestions);
 
-      // Compute option pool assignments once for all versions
+      // Compute option pool assignments once for all versions. max-written, when
+      // set, lowers each take-N pool's N (see assignOptionPools).
       const pools = parsedQuestions.filter(p => p.type === 'option-pool' || p.type === 'scramble-pool');
-      const poolAssignments = assignOptionPools(pools, versionLabels);
+      const poolAssignments = assignOptionPools(pools, versionLabels, maxWritten);
+
+      // One shared standalone subset reused across every version (null when no cap).
+      const keepSet = pickStandaloneSubset(parsedQuestions, maxMcq, maxWritten);
 
       // Read page-setup once for all versions, clamped to the field ranges so a
       // hand-typed out-of-range value can't break the layout; reflect any clamp
@@ -1515,7 +1609,7 @@
         setProgress(Math.round(step / totalSteps * 100), `Building Version ${lbl}…`);
 
         // Build para lists (shared scramble per version — key and form match)
-        const paras = buildVersionParas(lbl, poolAssignments);
+        const paras = buildVersionParas(lbl, poolAssignments, keepSet);
         tick(`Version ${lbl}: paragraphs`);
 
         // DOCX
@@ -1550,8 +1644,17 @@
       }
 
       setProgress(100, 'Done!');
+      // Note any cap that actually bit, so the user can confirm it took effect.
+      const standaloneQs = parsedQuestions.filter(p => p.type === 'question');
+      const mcqTotal     = standaloneQs.filter(isMcqQ).length;
+      const writtenTotal = standaloneQs.filter(isWrittenQ).length;
+      const poolCut      = maxWritten && pools.some(p => p.type === 'option-pool' && p.take > maxWritten);
+      const capNote = [];
+      if (maxMcq && mcqTotal > maxMcq)                          capNote.push(`${maxMcq} of ${mcqTotal} MCQs`);
+      if (maxWritten && (writtenTotal > maxWritten || poolCut)) capNote.push(`${maxWritten} written answers`);
       setStatus(
-        `✓ ${numVersions * 4} files downloaded: ${numVersions} versions × (answer_key + test_form) × (docx + pdf).`,
+        `✓ ${numVersions * 4} files downloaded: ${numVersions} versions × (answer_key + test_form) × (docx + pdf).` +
+        (capNote.length ? ` Capped to ${capNote.join(' and ')}.` : ''),
         'success'
       );
     } catch (err) {
