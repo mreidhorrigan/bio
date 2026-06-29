@@ -30,7 +30,8 @@
   /* mini version on small / touch screens (the eye follows touch instead of a cursor) */
   @media (max-width:700px){ .hero-slime{ width:64px; height:56px; right:10px; } }
   @media (prefers-reduced-motion:reduce){ .hero-slime .slime-dome{ animation:none; } }
-  body.fs .hero-slime{ display:none; }   /* ExamTimer projection/fullscreen mode hides the slime */`;
+  body.fs .hero-slime{ display:none; }   /* ExamTimer projection/fullscreen mode hides the slime */
+  @media print{ .hero-slime{ display:none; } }   /* never print the slime (e.g. the CV print/PDF view) */`;
 
   // viewBox cropped to 0 0 32 28 so the flat base sits flush with the bottom edge.
   const SVG = `<svg viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg">
