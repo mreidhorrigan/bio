@@ -136,12 +136,42 @@
     "#cv-menubar .mh-nav{ flex:1 1 auto; }"
   ].join("\n");
 
+  // A gentle two-note "bloop" on menu interactions — the slimeverse's enter-a-house cue, ported to the
+  // flat pages. Self-contained Web Audio (no files); ARMED by the first real pointer gesture, so the
+  // ?menu= auto-open on load stays silent. C major-pentatonic, matching the world's default scale.
+  var _actx = null, _amaster = null, _armed = false;
+  var A_ROOT = 261.63, A_SCALE = [0, 2, 4, 7, 9];
+  document.addEventListener("pointerdown", function () { _armed = true; }, true);
+  function aFreq(d) { var n = A_SCALE.length, oct = Math.floor(d / n); return A_ROOT * Math.pow(2, (A_SCALE[((d % n) + n) % n] + 12 * oct) / 12); }
+  function aTone(f, delay, dur, peak) {
+    if (!_actx || !_amaster) return;
+    var t = _actx.currentTime + delay, osc = _actx.createOscillator(), g = _actx.createGain();
+    osc.type = "sine"; osc.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.014);   // soft attack, no click
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(g); g.connect(_amaster); osc.start(t); osc.stop(t + dur + 0.03);
+  }
+  function bloop() {
+    if (!_armed) return;                                    // wait for a real user gesture (keeps the load-time auto-open silent)
+    try {
+      if (!_actx) {
+        var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+        _actx = new AC(); _amaster = _actx.createGain(); _amaster.gain.value = 0.4; _amaster.connect(_actx.destination);
+      }
+      if (_actx.state === "suspended") _actx.resume();
+      var d = Math.floor(Math.random() * 5);                // a little pitch variety between clicks
+      aTone(aFreq(d), 0, 0.16, 0.14); aTone(aFreq(d + 2), 0.08, 0.14, 0.1);   // two-note rising bloop
+    } catch (e) { /* audio unavailable: ignore */ }
+  }
+
   function link(label, href) {
     var a = document.createElement("a");
     a.textContent = label;
     a.href = href;
     var here = location.pathname.split("/").pop() || "index.html";
     if (href === here) a.setAttribute("aria-current", "page");
+    a.addEventListener("click", bloop);
     return a;
   }
 
@@ -230,7 +260,7 @@
       if (dd.open && menu.getBoundingClientRect().right > window.innerWidth - 8) { menu.style.left = "auto"; menu.style.right = "0"; }
     }
     Array.prototype.forEach.call(bar.querySelectorAll(".mh-dd"), function (dd) {
-      dd.addEventListener("toggle", function () { fitMenu(dd); });
+      dd.addEventListener("toggle", function () { fitMenu(dd); if (dd.open) bloop(); });
     });
 
     // a page can request a dropdown be open on load, e.g. about.html?menu=Music — the walkable
