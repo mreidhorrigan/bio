@@ -152,26 +152,31 @@
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     osc.connect(g); g.connect(_amaster); osc.start(t); osc.stop(t + dur + 0.03);
   }
-  function bloop() {
+  // Degree per item = the kiosk index, so each item plays the open cue of ITS house, matching the
+  // slimeverse (content.js kiosk order: About 0, Toolbox/"Tools" 1, CV 2, Music 3, Games 4).
+  var HOUSE_DEG = { Home: 0, About: 0, CV: 2, Tools: 1, Music: 3, Games: 4 };
+  function degFor(label) { return Object.prototype.hasOwnProperty.call(HOUSE_DEG, label) ? HOUSE_DEG[label] : 2; }
+  function bloop(d) {
     if (!_armed) return;                                    // wait for a real user gesture (keeps the load-time auto-open silent)
     try {
       if (!_actx) {
         var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-        _actx = new AC(); _amaster = _actx.createGain(); _amaster.gain.value = 0.4; _amaster.connect(_actx.destination);
+        _actx = new AC(); _amaster = _actx.createGain(); _amaster.gain.value = 0.5; _amaster.connect(_actx.destination);
       }
       if (_actx.state === "suspended") _actx.resume();
-      var d = Math.floor(Math.random() * 5);                // a little pitch variety between clicks
-      aTone(aFreq(d), 0, 0.16, 0.14); aTone(aFreq(d + 2), 0.08, 0.14, 0.1);   // two-note rising bloop
+      var n = (typeof d === "number") ? d : 2;
+      aTone(aFreq(n), 0, 0.16, 0.15); aTone(aFreq(n + 2), 0.08, 0.14, 0.11);   // EXACTLY engine.js sfx.open(n): the two-note house-open cue
     } catch (e) { /* audio unavailable: ignore */ }
   }
 
-  function link(label, href) {
+  function link(label, href, deg) {
     var a = document.createElement("a");
     a.textContent = label;
     a.href = href;
     var here = location.pathname.split("/").pop() || "index.html";
     if (href === here) a.setAttribute("aria-current", "page");
-    a.addEventListener("click", bloop);
+    var dn = (typeof deg === "number") ? deg : degFor(label);   // dropdown items inherit their house's pitch
+    a.addEventListener("click", function () { bloop(dn); });
     return a;
   }
 
@@ -181,9 +186,10 @@
     var sum = document.createElement("summary");
     sum.textContent = label;
     dd.appendChild(sum);
+    dd._deg = degFor(label);                 // the dropdown (and its items) sound like this house
     var menu = document.createElement("div");
     menu.className = "mh-dd-menu";
-    items.forEach(function (l) { menu.appendChild(link(l[0], l[1])); });
+    items.forEach(function (l) { menu.appendChild(link(l[0], l[1], dd._deg)); });
     dd.appendChild(menu);
     // highlight the closed dropdown when one of its pages is the current page
     if (menu.querySelector("a[aria-current='page']")) sum.setAttribute("aria-current", "page");
@@ -260,7 +266,7 @@
       if (dd.open && menu.getBoundingClientRect().right > window.innerWidth - 8) { menu.style.left = "auto"; menu.style.right = "0"; }
     }
     Array.prototype.forEach.call(bar.querySelectorAll(".mh-dd"), function (dd) {
-      dd.addEventListener("toggle", function () { fitMenu(dd); if (dd.open) bloop(); });
+      dd.addEventListener("toggle", function () { fitMenu(dd); if (dd.open) bloop(dd._deg); });
     });
 
     // a page can request a dropdown be open on load, e.g. about.html?menu=Music — the walkable
