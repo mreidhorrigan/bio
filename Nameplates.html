@@ -231,8 +231,30 @@
     border-radius: 4px; padding: 0.05em 0.4em;
   }
 
-  /* ── The nameplate sheets (three plates per page) ─────────────────────────────
-     TENT-FOLD DESK NAMEPLATES, three to a page (the example's real layout).
+  /* ── Options (page size + name sizing), shown with the print toolbar ───────── */
+  .options { display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 0.75rem; }
+
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+  .field-label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+  }
+
+  .field-select {
+    font-family: var(--sans-font); font-size: 0.95rem; font-weight: 600; color: var(--ink);
+    padding: 0.4rem 0.6rem; border: 1px solid var(--rule);
+    border-radius: var(--leaf-sm); background: var(--surface); cursor: pointer;
+  }
+
+  .field-select:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); border-color: var(--accent); }
+
+  .opt-hint { flex-basis: 100%; margin: 0; }
+
+  /* ── The nameplate sheets (plates per page follow the chosen page size) ───────
+     TENT-FOLD DESK NAMEPLATES. Letter (the default) fits three to a page, the
+     example's real layout. Other page sizes keep that strip height and fit more
+     or fewer strips, computed from the page height (see PAGE_SIZES in the script).
 
      A .sheet is one full 8.5x11 portrait page. It holds THREE .plate strips, each
      exactly one third of the page (792/3 = 264 pt tall in the example). Within a
@@ -250,7 +272,7 @@
     position: relative;
     width: 100%;
     max-width: 460px;                /* screen preview only; print fills the page */
-    aspect-ratio: 8.5 / 11;          /* portrait letter, matching the example */
+    aspect-ratio: var(--sheet-aspect, 8.5 / 11);  /* page-size control sets this; letter default */
     background: var(--surface);
     border: 1px solid var(--rule);
     border-radius: var(--leaf-sm);
@@ -300,12 +322,12 @@
   .plate.empty { visibility: hidden; }
 
   /* ── Print ────────────────────────────────────────────────────────────────── */
-  @page { size: letter portrait; margin: 0; }
+  @page { size: letter portrait; margin: 0; }   /* default; #page-style overrides for other page sizes */
 
   @media print {
     /* hide every bit of UI chrome */
     .flare, .masthead, .upload-card, .error-msg, .parse-note, .review,
-    .toolbar, #mh-menubar { display: none !important; }
+    .options, .toolbar, #mh-menubar { display: none !important; }
 
     body { padding: 0 !important; display: block !important; background: #fff !important; }
     html { background: #fff !important; }
@@ -344,6 +366,9 @@
     *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
   }
 </style>
+<!-- The page-size control rewrites @page here. The letter default in the
+     stylesheet above stays as a fallback. Empty until a size is picked. -->
+<style id="page-style"></style>
 </head>
 <body>
 
@@ -354,7 +379,7 @@
   <!-- ── Masthead ── -->
   <div class="masthead">
     <h1>Name<em>plates</em></h1>
-    <p class="subtitle">Upload a class roster (a Canvas gradebook export <strong>or a plain name list</strong>) and print tent-fold desk nameplates, <strong>three to a page</strong>. Each name sits low in its third with blank space above. Cut the page into strips and fold each one so the name stands up on the desk. Check the parsed first names below, fix any the tool got wrong, then print to PDF.</p>
+    <p class="subtitle">Upload a class roster (a Canvas gradebook export <strong>or a plain name list</strong>) and print tent-fold desk nameplates. Each name sits low in its strip with blank space above. Cut the page into strips and fold each one so the name stands up on the desk. Pick a page size, check the parsed first names below, fix any the tool got wrong, then print to PDF.</p>
   </div>
 
   <!-- ── File upload ── -->
@@ -401,10 +426,32 @@
     </table>
   </div>
 
+  <!-- ── Page size and name sizing (shown with the print toolbar) ── -->
+  <div class="options" id="options" style="display:none;">
+    <label class="field">
+      <span class="field-label">Page size</span>
+      <select class="field-select" id="page-size">
+        <option value="letter" selected>US Letter (8.5 × 11 in)</option>
+        <option value="legal">US Legal (8.5 × 14 in)</option>
+        <option value="a4">A4 (210 × 297 mm)</option>
+        <option value="tabloid">Tabloid (11 × 17 in)</option>
+        <option value="a3">A3 (297 × 420 mm)</option>
+      </select>
+    </label>
+    <label class="field">
+      <span class="field-label">Name size</span>
+      <select class="field-select" id="fit-mode">
+        <option value="uniform" selected>One size fits every name</option>
+        <option value="each">Fill each plate</option>
+      </select>
+    </label>
+    <p class="kbd-hint opt-hint">One size matches every name to the longest. Fill each plate makes shorter names larger.</p>
+  </div>
+
   <!-- ── Print ── -->
   <div class="toolbar" id="toolbar" style="display:none;">
     <button class="btn" id="btn-print" type="button">Print nameplates</button>
-    <span class="kbd-hint">or press <kbd>Cmd</kbd>+<kbd>P</kbd> and save as PDF. Three names per page.</span>
+    <span class="kbd-hint">or press <kbd>Cmd</kbd>+<kbd>P</kbd> and save as PDF. <span id="per-page-hint">Three names per page.</span></span>
   </div>
 
   <!-- ── The sheets (filled by JS; the print target) ── -->
@@ -587,43 +634,84 @@
   }
 
   function fitAll() {
-    const plates = Array.prototype.slice.call(document.querySelectorAll('.plate'))
+    const platesEls = Array.prototype.slice.call(document.querySelectorAll('.plate'))
       .filter(p => !p.classList.contains('empty'));
-    if (!plates.length) return;
+    if (!platesEls.length) return;
 
-    // 1+2. per-name max-fit ratios, then the uniform (minimum) ratio.
-    const ratios = plates.map(p => {
-      const n = p.querySelector('.name');
-      return maxFitRatio(n, p.clientWidth, p.clientHeight);
-    }).filter(r => r > 0);
-    if (!ratios.length) return;
+    // Per-name max-fit ratio: the largest no-clip font-size (as a fraction of the
+    // plate width) that fits the name. Kept index-aligned with platesEls.
+    const ratios = platesEls.map(p => maxFitRatio(p.querySelector('.name'), p.clientWidth, p.clientHeight));
+    const positive = ratios.filter(r => r > 0);
+    if (!positive.length) return;
+    const fallback = Math.min.apply(null, positive);
 
-    const uniform = Math.min.apply(null, ratios);   // the most-constrained name
+    if (fitMode === 'each') {
+      // FILL EACH PLATE: every name as large as its own plate allows, so shorter
+      // names render larger than longer ones. Each is still capped by its own
+      // no-clip max-fit, so nothing wraps or clips.
+      platesEls.forEach((p, i) => {
+        const r = ratios[i] > 0 ? ratios[i] : fallback;
+        p.querySelector('.name').style.fontSize = 'calc(' + r.toFixed(5) + ' * 100cqw)';
+      });
+      return;
+    }
 
-    // 3. Pull the whole set DOWN to the most-constrained name, so every plate
-    //    renders at the SAME size: target = uniform. Short names shrink to match
-    //    the longest instead of ballooning.
+    // ONE SIZE FITS EVERY NAME (default): pull the whole set DOWN to the most-
+    // constrained (longest) name, so every plate renders at the SAME size. Short
+    // names match the longest instead of ballooning.
     //
-    //    Outlier guard: if a single very long name would force everyone
-    //    uncomfortably small (the rest could be much bigger), don't tank the set.
-    //    When the median name's max-fit exceeds uniform by more than MAX_SPREAD,
-    //    lift the target to uniform * MAX_SPREAD. Each name is still capped by its
-    //    own no-clip max-fit, so the outlier stays smaller and nothing clips, but
-    //    the spread is bounded and the set stays visually consistent.
-    const sorted = ratios.slice().sort((a, b) => a - b);
+    // Outlier guard: if a single very long name would force everyone uncomfortably
+    // small (the rest could be much bigger), don't tank the set. When the median
+    // name's max-fit exceeds the uniform size by more than MAX_SPREAD, lift the
+    // target to uniform * MAX_SPREAD. Each name is still capped by its own no-clip
+    // max-fit, so the outlier stays smaller and nothing clips, but the spread is
+    // bounded and the set stays visually consistent.
+    const uniform = fallback;        // the most-constrained name
+    const sorted = positive.slice().sort((a, b) => a - b);
     const median = sorted[Math.floor(sorted.length / 2)];
     let target = uniform;
     if (median > uniform * MAX_SPREAD) target = uniform * MAX_SPREAD;
 
-    plates.forEach((p, i) => {
-      const applied = Math.min(ratios[i], target); // never above a name's own max-fit
-      const n = p.querySelector('.name');
-      n.style.fontSize = 'calc(' + applied.toFixed(5) + ' * 100cqw)';
+    platesEls.forEach((p, i) => {
+      const own = ratios[i] > 0 ? ratios[i] : uniform;
+      const applied = Math.min(own, target);   // never above a name's own max-fit
+      p.querySelector('.name').style.fontSize = 'calc(' + applied.toFixed(5) + ' * 100cqw)';
     });
   }
 
+  // ── Page sizes ────────────────────────────────────────────────────────────────
+  //    Each plate is one tent-fold strip. Letter (the default) fits three per page.
+  //    Other sizes keep that strip height (~3.67 in) and fit as many whole strips
+  //    as the page is tall: round(pageHeight / strip). So US Legal fits 4, A4 fits
+  //    3, Tabloid and A3 fit 5. These dimensions drive BOTH the on-screen sheet
+  //    aspect-ratio and the print @page size, so preview and print always agree.
+  const MM_PER_IN = 25.4;
+  const STRIP_IN = 11 / 3;        // Letter's natural strip height (one third)
+  const PAGE_SIZES = {
+    letter:  { w: 8.5 * MM_PER_IN, h: 11 * MM_PER_IN, css: '8.5in 11in' },
+    legal:   { w: 8.5 * MM_PER_IN, h: 14 * MM_PER_IN, css: '8.5in 14in' },
+    a4:      { w: 210,             h: 297,            css: '210mm 297mm' },
+    tabloid: { w: 11 * MM_PER_IN,  h: 17 * MM_PER_IN, css: '11in 17in' },
+    a3:      { w: 297,             h: 420,            css: '297mm 420mm' }
+  };
+
+  function perPageFor(key) {
+    const p = PAGE_SIZES[key] || PAGE_SIZES.letter;
+    return Math.max(1, Math.round((p.h / MM_PER_IN) / STRIP_IN));
+  }
+
+  // Small-number word for the per-page hint ("Three names per page.").
+  function countWord(n) {
+    const words = ['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
+    const w = words[n] || String(n);
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  }
+
   // ── State + DOM refs ─────────────────────────────────────────────────────────
-  let entries = [];   // [{ orig, first, skip }]
+  let entries = [];         // [{ orig, first, skip }]
+  let pageKey = 'letter';   // chosen page size (key into PAGE_SIZES)
+  let fitMode = 'uniform';  // name sizing: 'uniform' (default) or 'each'
+  let perPage = 3;          // plates per page, derived from the page size
 
   const inputRoster = document.getElementById('input-roster');
   const cardRoster  = document.getElementById('card-roster');
@@ -635,6 +723,11 @@
   const toolbar     = document.getElementById('toolbar');
   const plates      = document.getElementById('plates');
   const btnPrint    = document.getElementById('btn-print');
+  const optionsRow  = document.getElementById('options');
+  const pageSizeSel = document.getElementById('page-size');
+  const fitModeSel  = document.getElementById('fit-mode');
+  const pageStyle   = document.getElementById('page-style');
+  const perPageHint = document.getElementById('per-page-hint');
 
   function showError(msg) {
     errorMsg.textContent = msg;
@@ -681,20 +774,18 @@
     });
   }
 
-  // ── Render THREE plates per sheet (the tent-fold layout), then auto-fit ───────
-  //    Kept names are chunked into groups of 3; each group is one .sheet (a full
-  //    page). A final partial sheet is padded with blank thirds so every page
-  //    still cuts cleanly into three equal strips.
-  const PER_PAGE = 3;
-
+  // ── Render the plates for each sheet (the tent-fold layout), then auto-fit ────
+  //    Kept names are chunked into groups of `perPage` (set by the page size). Each
+  //    group is one .sheet (a full page). A final partial sheet is padded with blank
+  //    strips so every page still cuts cleanly into equal strips.
   function renderPlates() {
     plates.innerHTML = '';
     const names = entries.filter(e => !e.skip && e.first.trim()).map(e => e.first.trim());
 
-    for (let i = 0; i < names.length; i += PER_PAGE) {
+    for (let i = 0; i < names.length; i += perPage) {
       const sheet = document.createElement('div');
       sheet.className = 'sheet';
-      for (let j = 0; j < PER_PAGE; j++) {
+      for (let j = 0; j < perPage; j++) {
         const plate = document.createElement('div');
         plate.className = 'plate';
         const name = document.createElement('div');
@@ -708,6 +799,19 @@
       plates.appendChild(sheet);
     }
     fitAll();
+  }
+
+  // ── Apply a page size: set the preview shape, the print @page, and the count ──
+  function applyPageSize(key) {
+    pageKey = PAGE_SIZES[key] ? key : 'letter';
+    const p = PAGE_SIZES[pageKey];
+    perPage = perPageFor(pageKey);
+    // screen preview: the sheet takes the page's shape
+    document.documentElement.style.setProperty('--sheet-aspect', p.w + ' / ' + p.h);
+    // print: rewrite @page so the printed page matches the preview
+    pageStyle.textContent = '@page { size: ' + p.css + '; margin: 0; }';
+    perPageHint.textContent = countWord(perPage) + ' name' + (perPage === 1 ? '' : 's') + ' per page.';
+    renderPlates();
   }
 
   // ── Ingest a dropped/selected file ───────────────────────────────────────────
@@ -724,7 +828,7 @@
       if (!entries.length) {
         showError('No student names were found. Upload a Canvas gradebook export or a plain name list.');
         statusRoster.textContent = '';
-        parseNote.style.display = reviewWrap.style.display = toolbar.style.display = 'none';
+        parseNote.style.display = reviewWrap.style.display = optionsRow.style.display = toolbar.style.display = 'none';
         plates.innerHTML = '';
         return;
       }
@@ -732,7 +836,7 @@
       const kind = isCanvasGradebook(rows) ? 'Canvas gradebook' : 'name list';
       statusRoster.textContent = entries.length + ' name' + (entries.length === 1 ? '' : 's') +
         ' loaded from a ' + kind + '.';
-      parseNote.style.display = reviewWrap.style.display = toolbar.style.display = '';
+      parseNote.style.display = reviewWrap.style.display = optionsRow.style.display = toolbar.style.display = '';
       renderReview();
       renderPlates();
     };
@@ -760,6 +864,13 @@
   });
 
   btnPrint.addEventListener('click', () => window.print());
+
+  // Page size and name-size controls.
+  pageSizeSel.addEventListener('change', () => applyPageSize(pageSizeSel.value));
+  fitModeSel.addEventListener('change', () => {
+    fitMode = fitModeSel.value === 'each' ? 'each' : 'uniform';
+    fitAll();
+  });
 
   // Re-fit on resize (preview width changes) and before/after print.
   let resizeTimer;
