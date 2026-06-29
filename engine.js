@@ -908,22 +908,19 @@ function ensureWaterImg() {
   waterImg.onerror = () => { waterFailed = true; };   // one-shot: never re-request a missing asset every frame
   waterImg.src = ((window.MH_SITE && window.MH_SITE.base) || "") + "water.webp";
 }
-let waterTex = null, waterPat = null, waterTexKey = "", waterTexSat = -1;
-/** Pre-stretch the water photo (overscanning every edge) into a screen-sized offscreen so per-frame we
- *  just FILL the pond blobs from it — no per-frame rescale or giant clip. The About portrait's filter
- *  pulse is baked in here (saturate, ~30s) and only re-baked when it drifts, NOT every frame. */
-function ensureWaterTex(sat) {
+let waterTex = null, waterPat = null, waterTexKey = "";
+/** Pre-stretch the water photo (overscanning every edge) into a screen-sized offscreen ONCE per size,
+ *  so per-frame we just FILL the pond blobs from it — no per-frame rescale, clip, or filter. */
+function ensureWaterTex() {
   if (!waterReady || !waterImg || typeof document === "undefined" || !document.createElement) return null;
-  const key = Math.round(W) + "x" + Math.round(H), sizeChanged = waterTexKey !== key;
-  if (waterTex && !sizeChanged && Math.abs(sat - waterTexSat) < 0.03) return waterTex;
+  const key = Math.round(W) + "x" + Math.round(H);
+  if (waterTex && waterTexKey === key) return waterTex;
   if (!waterTex) waterTex = document.createElement("canvas");
-  if (sizeChanged) { waterTex.width = Math.max(1, Math.round(W)); waterTex.height = Math.max(1, Math.round(H)); waterPat = null; }
+  waterTex.width = Math.max(1, Math.round(W)); waterTex.height = Math.max(1, Math.round(H));
   const wc = waterTex.getContext("2d"), ox = W * 0.12, oy = H * 0.12;
   wc.clearRect(0, 0, waterTex.width, waterTex.height);
-  wc.filter = "saturate(" + sat.toFixed(3) + ")";
   wc.drawImage(waterImg, -ox, -oy, W + ox * 2, H + oy * 2);
-  wc.filter = "none";
-  waterTexKey = key; waterTexSat = sat;
+  waterTexKey = key; waterPat = null;
   return waterTex;
 }
 function render() {
@@ -964,13 +961,15 @@ function render() {
   // (rounded edges, not hard diamonds) from the pre-stretched, overscanned offscreen — cheap, and it
   // carries the saturation pulse (periodically more vivid/blue, like the About portrait's filter).
   if (waterCells) {
-    const sat = 1 + 0.4 * (1 - Math.cos(tnow * (Math.PI * 2 / 30)));   // 1.0 ↔ 1.8 over 30s
-    const tex = ensureWaterTex(sat);
+    const tex = ensureWaterTex();
     if (tex) {
       if (!waterPat) waterPat = ctx.createPattern(tex, "repeat");
-      ctx.save(); ctx.fillStyle = waterPat; ctx.beginPath();
+      ctx.save(); ctx.beginPath();
       for (let i = 0; i < waterCells.length; i += 4) blobPath(ctx, waterCells[i], waterCells[i + 1], waterCells[i + 2], waterCells[i + 3]);
-      ctx.fill(); ctx.restore();
+      ctx.fillStyle = waterPat; ctx.fill();                                     // the photo: one cheap straight-copy fill
+      const blue = 0.17 * (1 - Math.cos(tnow * (Math.PI * 2 / 30)));            // periodically MORE BLUE (0 ↔ 0.34 over 30s)
+      ctx.fillStyle = "rgba(30,130,175," + blue.toFixed(3) + ")"; ctx.fill();   // a cheap wash REUSING the path — no ctx.filter, no rebake
+      ctx.restore();
     }
   }
 
