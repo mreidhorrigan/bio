@@ -898,7 +898,18 @@ function loop(ts) {
   requestAnimationFrame(loop);
 }
 
+let waterImg = null, waterReady = false, waterFailed = false;
+/** Slimeverse water zones reveal one stretched water photo (a screen-fixed backdrop). Loaded ONCE;
+ *  guarded so the headless selftest (no Image) and a missing asset both fall back to the themed water. */
+function ensureWaterImg() {
+  if (waterImg || waterFailed || typeof Image === "undefined") return;
+  waterImg = new Image();
+  waterImg.onload = () => { waterReady = true; };
+  waterImg.onerror = () => { waterFailed = true; };   // one-shot: never re-request a missing asset every frame
+  waterImg.src = ((window.MH_SITE && window.MH_SITE.base) || "") + "water.webp";
+}
 function render() {
+  ensureWaterImg();
   const env = { t: tnow, dpr, W, H, reduce };
   const ecoOn = ecoActive();
   (T.paintBackground || defPaintBackground)(ctx, env);
@@ -915,6 +926,8 @@ function render() {
 
   // ---- ground pass: back-to-front by (tx+ty) ----
   const sMin = txMin + tyMin, sMax = txMax + tyMax;
+  const photoWater = waterReady && waterImg && T.biomes;   // swap the themed water fill for the stretched photo
+  let waterCells = null;
   for (let s = sMin; s <= sMax; s++) {
     const a = Math.max(txMin, s - tyMax), b = Math.min(txMax, s - tyMin);
     for (let tx = a; tx <= b; tx++) {
@@ -922,9 +935,22 @@ function render() {
       const c = toScreen(tx, ty);
       if (c.x < -TILE_W || c.x > W + TILE_W || c.y < -TILE_H * 2 || c.y > H + TILE_H * 2) continue;
       const z = zoneAt(tx, ty);
-      (T.paintGround || defPaintGround)(ctx, c.x, c.y, { zone: z.zone, n: z.n, tx, ty, t: tnow, biome: T.biomes ? biomeAt(tx, ty) : null });
+      const biome = T.biomes ? biomeAt(tx, ty) : null;
+      const isPhotoWater = photoWater && z.zone === "field" && biome === "water";
+      if (!isPhotoWater) (T.paintGround || defPaintGround)(ctx, c.x, c.y, { zone: z.zone, n: z.n, tx, ty, t: tnow, biome });
+      else (waterCells || (waterCells = [])).push(c.x, c.y, tx, ty);   // skip the themed fill; revealed via the photo below
       if (ecoOn && window.MH_ECO.groundTint) { const ti = window.MH_ECO.groundTint(tx, ty); if (ti) diamond(ctx, c.x, c.y, ti, null); }
     }
+  }
+  // water zones reveal ONE water photo: clipped to the SAME organic blob shape as the ground (rounded
+  // pond edges, not hard diamonds) and stretched to OVERSCAN past every screen edge so its own edges never show.
+  if (waterCells) {
+    ctx.save(); ctx.beginPath();
+    for (let i = 0; i < waterCells.length; i += 4) blobPath(ctx, waterCells[i], waterCells[i + 1], waterCells[i + 2], waterCells[i + 3]);
+    ctx.clip();
+    const ox = W * 0.12, oy = H * 0.12;
+    ctx.drawImage(waterImg, -ox, -oy, W + ox * 2, H + oy * 2);
+    ctx.restore();
   }
 
   if (T.fluidGround) drawFluidZones();           // smooth plaza + roads over the blobby field (no grid)
@@ -1140,13 +1166,17 @@ function drawKioskGlow(sx, sy, ex, active) {
  *  world axes through the plaza (and the nearest torus repeats), then a soft-edged
  *  plaza disc. Drawn in screen space so the plaza reads as one shape, not a grid. */
 // one opaque organic ground blob (~a tile), seeded; matches the themes' field blobs
-function groundBlob(g, sx, sy, col, tx, ty) {
+/** Append ONE organic tile-blob as a subpath (no begin/fill): the rounded shape the field, plaza,
+ *  roads, AND the water ponds all share. Seeded by (tx,ty) so it's stable per tile (no flicker). */
+function blobPath(g, sx, sy, tx, ty) {
   const N = 8, pts = [];
   for (let i = 0; i < N; i++) { const a = (i / N) * Math.PI * 2, j = 0.86 + hash01(tx * 7 + i * 3, ty * 5 + i * 2) * 0.3; pts.push([sx + Math.cos(a) * 53 * j, sy + Math.sin(a) * 29 * j]); }
-  g.fillStyle = col; g.beginPath();
   g.moveTo((pts[N - 1][0] + pts[0][0]) / 2, (pts[N - 1][1] + pts[0][1]) / 2);
   for (let i = 0; i < N; i++) { const n = (i + 1) % N; g.quadraticCurveTo(pts[i][0], pts[i][1], (pts[i][0] + pts[n][0]) / 2, (pts[i][1] + pts[n][1]) / 2); }
-  g.closePath(); g.fill();
+  g.closePath();
+}
+function groundBlob(g, sx, sy, col, tx, ty) {
+  g.fillStyle = col; g.beginPath(); blobPath(g, sx, sy, tx, ty); g.fill();
 }
 // biome worlds: draw the plaza + roads as opaque blobs ON TOP of the field, so they're the
 // same fluid shapes as the ground and nothing shows through underneath them.
