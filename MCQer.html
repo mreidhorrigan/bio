@@ -1445,11 +1445,20 @@
     }
 
     // Height of a question group (question + its options) for keep-together.
+    // This MUST match what the render path below actually consumes, or a group
+    // near the page bottom is misjudged as fitting and its trailing options get
+    // orphaned onto the next page. renderBlock advances y by leadGap + text + 4;
+    // the question uses leadGap 10, and each option uses leadGap 0 and then adds
+    // a further 2 ("y += 2"). On the answer key the answer option also carries the
+    // "[Answer.] " prefix, which can wrap an extra line, so measure the same runs
+    // the key actually draws.
     function groupHeight(startIdx) {
-      let h = 10 + richHeight(paras[startIdx].content, fontSize, maxW, 'bold');
+      let h = 10 + richHeight(paras[startIdx].content, fontSize, maxW, 'bold') + 4;
       let j = startIdx + 1;
       while (j < paras.length && paras[j].type === 'option') {
-        h += richHeight(paras[j].content, fontSize, indentW, 'normal') + 2;
+        const o = paras[j];
+        const runs = (isKey && o.isAnswer) ? prependPlain('[Answer.] ', o.content) : o.content;
+        h += richHeight(runs, fontSize, indentW, 'normal') + 6;
         j++;
       }
       return h;
