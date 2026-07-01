@@ -25,8 +25,8 @@
     html{ background:var(--bg); }
     body{ margin:0; font-family:-apple-system,"Segoe UI",system-ui,Helvetica,Arial,sans-serif; color:#1a1a1a;
       background:transparent; padding:84px 18px 4rem; max-width:880px; margin:0 auto; line-height:1.5; }
-    h1{ font-family:Tahoma,Arial,sans-serif; font-variant-caps:small-caps; font-size:clamp(28px,5vw,40px); margin:0 0 2px; }
-    .lede{ max-width:60ch; color:#3a3a3a; font-size:1.05rem; margin:0 0 1.6rem; }
+    h1{ font-family:Tahoma,Arial,sans-serif; font-variant-caps:small-caps; font-size:clamp(28px,5vw,40px); margin: 1.2rem 0 2px; }
+    .lede{ max-width:60ch; color:#3a3a3a; font-size:1.05rem; margin:0 0 0.4rem; }
     .hl{ color:#000; background:#c3f0ff; border-radius:var(--leaf); padding:0 .18em; }
     .tools{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:.4rem; }
     .tool{ display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e2e6ea;
@@ -42,8 +42,8 @@
   </head>
   <body>
     <div class="flare"></div>
-    <h1>Toolbox</h1>
-    <p class="lede">Free tools I built and use for classroom management.
+    <h1>For Classes</h1>
+    <p class="lede">Classroom management tools I designed.
       Each runs in your <span class="hl">browser</span> with nothing to
       install and no account to make. Use freely.</p>
     <div class="tools"> <a class="tool" href="MCQer.html">
@@ -66,7 +66,17 @@
         <p>Print desk nameplates from a standard gradebook export
           (Canvas).</p>
         <span class="go">Open ›</span> </a> </div>
-    <footer>Built for my own classes and shared as is. Found a bug? <a
+    <h1>For Making More Tools</h1>
+<p class="lede">Software development tools for workflows like mine. Use freely.</p>
+	<div class="tools">
+	<a class="tool" href="https://github.com/mreidhorrigan/best-practices-for-tool-development">
+	<h2>AI Development Handbook
+	</h2>
+	<p>Best practices manual for tool development, fed to an AI at development or audit time. Prioritizes runtime efficiency, replicability, and foolproofness: maintainability and drivability by AIs less intelligent than those used in development.</p>
+	<span class="go">Open ›</span>
+  </a>
+</div>
+    <footer>Built for my own work and shared as is. Found a bug? <a
         href="about.html">Get in touch</a>.</footer>
   <script src="slime-widget.js" defer></script>
   </body>
