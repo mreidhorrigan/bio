@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Shifter</title>
+    <!-- the one site-wide menubar (links + dropdowns live in this file) -->
+    <script src="menubar.js" defer></script>
+    <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…) -->
+    <link rel="stylesheet" href="brand/brand.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { background: var(--bg); }
+
+        body {
+            font-family: var(--sans-font);
+            color: var(--ink);
+            background: transparent;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2.5rem 1.5rem 4rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::selection { background: var(--focus); }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--leaf-lg);
+            box-shadow: 0 4px 28px rgba(0,0,0,0.10);
+            padding: 2.5rem 2.5rem 2.25rem;
+            max-width: var(--card-max);
+            width: 100%;
+        }
+
+        @media (max-width: 620px) { .card { padding: 1.75rem 1.4rem 1.75rem; } }
+
+        h1 { font-size: 1.8rem; font-weight: 800; line-height: 1.15; margin: 0 0 0.5rem; }
+
+        .subtitle {
+            font-family: var(--body-font);
+            font-size: 0.95em;
+            color: var(--muted);
+            margin: 0 0 0.4em;
+        }
+
+        .controls {
+            margin: 1.5rem 0 0;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--rule);
+            border-radius: var(--leaf);
+            background: var(--bg);
+        }
+
+        button {
+            font-family: var(--sans-font);
+            font-weight: 600;
+            padding: 8px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: var(--leaf);
+            background: var(--accent);
+            color: var(--on-accent);
+            cursor: pointer;
+        }
+
+        button:hover { background: var(--accent-strong); }
+
+        input[type="file"] { font-family: var(--sans-font); }
+
+        input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+            accent-color: var(--accent);
+        }
+
+        input[type="range"]:focus-visible,
+        button:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--focus);
+        }
+
+        .status {
+            margin: 1rem 0;
+            padding: 10px 14px;
+            border-radius: var(--leaf-sm);
+            background: var(--green-wash);
+            color: var(--green-strong);
+        }
+
+        .layer {
+            margin: 15px 0;
+            padding: 1rem;
+            border: 1px solid var(--rule);
+            border-radius: var(--leaf-sm);
+            background: var(--surface);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: var(--rule);
+            border-radius: 999px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .remove-layer { float: right; color: var(--danger); cursor: pointer; }
+
+        .relationship-info, .time-label {
+            font-family: var(--body-font);
+            font-size: 0.8em;
+            color: var(--muted);
+        }
+
+        #addLayer { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="flare is-animated"></div>
+
+    <div class="card">
+        <h1>Pitch Shifter</h1>
+        <p class="subtitle"><strong>Mathematical relationship:</strong> rate = 2^(cents/1200)</p>
+        <p class="subtitle">
+            Cents and Playback Rate are two units for the same physical quantity. Adjusting either one moves
+            the other to match, since raising playback speed and raising pitch are the same thing.
+        </p>
+
+        <div class="controls">
+            <h3>Upload Audio File</h3>
+            <input type="file" id="audioFile" accept="audio/*">
+            <button id="loadButton">Load Audio</button>
+
+            <div id="status" class="status" style="display: none;"></div>
+
+            <div id="mainControls" style="display: none; margin-top: 20px;">
+                <button id="playOriginal">Play Original</button>
+                <button id="playLayers">Play All Layers</button>
+                <button id="stopAll">Stop All</button>
+            </div>
+
+            <div id="layersContainer" style="display: none; margin-top: 20px;"></div>
+
+            <button id="addLayer" style="display: none;">+ Add Layer</button>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio API context
+        let audioContext = null;
+        let audioBuffer = null;
+        let activeSources = [];
+        let animationFrameId = null;
+        let playbackStartTime = null;
+
+        // Layer management
+        let layers = [];
+
+        // DOM elements
+        const audioFileInput = document.getElementById('audioFile');
+        const loadButton = document.getElementById('loadButton');
+        const statusDiv = document.getElementById('status');
+        const mainControls = document.getElementById('mainControls');
+        const layersContainer = document.getElementById('layersContainer');
+        const addLayerButton = document.getElementById('addLayer');
+        const playOriginalButton = document.getElementById('playOriginal');
+        const playLayersButton = document.getElementById('playLayers');
+        const stopAllButton = document.getElementById('stopAll');
+
+        // Initialize audio context
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+
+        // Load audio file
+        loadButton.addEventListener('click', function() {
+            const file = audioFileInput.files[0];
+            if (!file) {
+                showStatus('Please select an audio file first.');
+                return;
+            }
+
+            const ctx = getAudioContext();
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                ctx.decodeAudioData(e.target.result)
+                    .then(function(buffer) {
+                        audioBuffer = buffer;
+                        showStatus(`Audio loaded: ${buffer.duration.toFixed(2)} seconds`);
+                        mainControls.style.display = 'block';
+                        layersContainer.style.display = 'block';
+                        addLayerButton.style.display = 'block';
+
+                        // Add first layer
+                        addLayer(0, 1.0);
+                    })
+                    .catch(function(error) {
+                        showStatus(`Error: ${error.message}`);
+                    });
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        // Add a new layer
+        function addLayer(cents, playbackRate) {
+            const layerId = 'layer-' + Date.now();
+            const centsValue = cents || 0;
+            const playbackRateValue = playbackRate || 1.0;
+
+            const layerDiv = document.createElement('div');
+            layerDiv.className = 'layer';
+            layerDiv.id = layerId;
+
+            layerDiv.innerHTML = `
+                <h3>Layer ${layers.length + 1} <span class="remove-layer" data-id="${layerId}">×</span></h3>
+                <div>
+                    <label>Cents: </label>
+                    <input type="range" class="cents-slider" min="-1200" max="1200" value="${centsValue}">
+                    <span class="cents-value">${centsValue}</span>
+                </div>
+                <div>
+                    <label>Playback Rate: </label>
+                    <input type="range" class="playback-rate-slider" min="0.5" max="2" step="0.01" value="${playbackRateValue}">
+                    <span class="playback-rate-value">${playbackRateValue.toFixed(2)}</span>
+                </div>
+                <div>
+                    <label>Effective Rate: </label>
+                    <span class="effective-rate">${playbackRateValue.toFixed(2)}</span>
+                    <span class="relationship-info" style="margin-left: 10px;">
+                        (rate = 2^(cents/1200))
+                    </span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+                <div class="time-label">0:00 / 0:00</div>
+            `;
+
+            layersContainer.appendChild(layerDiv);
+
+            // Store layer data
+            const layer = {
+                id: layerId,
+                cents: centsValue,
+                playbackRate: playbackRateValue,
+                centsSlider: layerDiv.querySelector('.cents-slider'),
+                playbackRateSlider: layerDiv.querySelector('.playback-rate-slider'),
+                centsValueSpan: layerDiv.querySelector('.cents-value'),
+                playbackRateValueSpan: layerDiv.querySelector('.playback-rate-value'),
+                effectiveRateSpan: layerDiv.querySelector('.effective-rate'),
+                progressBar: layerDiv.querySelector('.progress-bar'),
+                timeLabel: layerDiv.querySelector('.time-label')
+            };
+
+            layers.push(layer);
+
+            // Cents and Playback Rate are two units for the SAME physical quantity
+            // (rate = 2^(cents/1200)). Moving either slider moves the other one to match,
+            // and both live-update any currently playing source for this layer.
+            layer.centsSlider.addEventListener('input', function() {
+                const cents = parseFloat(this.value);
+                const rate = clamp(Math.pow(2, cents / 1200),
+                    parseFloat(layer.playbackRateSlider.min), parseFloat(layer.playbackRateSlider.max));
+
+                layer.cents = cents;
+                layer.playbackRate = rate;
+                layer.centsValueSpan.textContent = cents;
+                layer.playbackRateSlider.value = rate;
+                layer.playbackRateValueSpan.textContent = rate.toFixed(2);
+
+                updateEffectiveRate(layer);
+                updateLiveSourceRate(layer);
+            });
+
+            layer.playbackRateSlider.addEventListener('input', function() {
+                const playbackRate = parseFloat(this.value);
+                const cents = clamp(Math.log2(playbackRate) * 1200,
+                    parseFloat(layer.centsSlider.min), parseFloat(layer.centsSlider.max));
+
+                layer.playbackRate = playbackRate;
+                layer.cents = cents;
+                layer.playbackRateValueSpan.textContent = playbackRate.toFixed(2);
+                layer.centsSlider.value = cents;
+                layer.centsValueSpan.textContent = Math.round(cents);
+
+                updateEffectiveRate(layer);
+                updateLiveSourceRate(layer);
+            });
+
+            layerDiv.querySelector('.remove-layer').addEventListener('click', function() {
+                removeLayer(layerId);
+            });
+        }
+
+        function clamp(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function updateEffectiveRate(layer) {
+            // Cents and Playback Rate are kept in sync to the same physical rate,
+            // so the effective rate is just that rate.
+            layer.effectiveRateSpan.textContent = layer.playbackRate.toFixed(2);
+        }
+
+        // Push a layer's current rate to its live-playing source, if any
+        function updateLiveSourceRate(layer) {
+            const active = activeSources.find(entry => entry.layer === layer);
+            if (!active) return;
+
+            active.source.playbackRate.value = layer.playbackRate;
+        }
+
+        // Add layer button
+        addLayerButton.addEventListener('click', function() {
+            addLayer(0, 1.0);
+        });
+
+        // Play original
+        playOriginalButton.addEventListener('click', function() {
+            playAudio([{cents: 0, playbackRate: 1.0}]);
+        });
+
+        // Play all layers
+        playLayersButton.addEventListener('click', async function() {
+            if (layers.length === 0) return;
+            await playAudio();
+        });
+
+        // Stop all
+        stopAllButton.addEventListener('click', stopAllAudio);
+
+        async function playAudio(overrideLayers) {
+            stopAllAudio();
+
+            const ctx = getAudioContext();
+            if (ctx.state === 'suspended') {
+                await ctx.resume();
+                console.log('Audio context resumed successfully');
+            }
+
+            if (ctx.state !== 'running') {
+                console.error('Audio context not running:', ctx.state);
+                showStatus('Audio context error: ' + ctx.state);
+                return;
+            }
+
+            if (!audioBuffer) {
+                console.error('No audio buffer loaded');
+                showStatus('No audio loaded');
+                return;
+            }
+
+            const playbackLayers = overrideLayers || layers;
+
+            console.log('Starting playback with', playbackLayers.length, 'layers');
+            const startTime = ctx.currentTime + 0.05;
+            playbackStartTime = startTime;
+
+            playbackLayers.forEach((layer, index) => {
+                if (!layer) return;
+
+                // Read the current rate directly from DOM when available, else use the plain value provided
+                const finalPlaybackRate = layer.playbackRateSlider ? parseFloat(layer.playbackRateSlider.value) : layer.playbackRate;
+
+                console.log(`Layer ${index}: rate=${finalPlaybackRate.toFixed(3)}`);
+
+                const source = ctx.createBufferSource();
+                source.buffer = audioBuffer;
+                source.playbackRate.value = finalPlaybackRate;
+                console.log(`Source created: rate=${finalPlaybackRate.toFixed(3)}`);
+
+                const gainNode = ctx.createGain();
+                gainNode.gain.value = 0.7;
+
+                source.connect(gainNode);
+                gainNode.connect(ctx.destination);
+
+                source.start(startTime);
+
+                const entry = {source, gainNode, layer, layerIndex: index};
+                activeSources.push(entry);
+
+                source.addEventListener('ended', function() {
+                    const i = activeSources.indexOf(entry);
+                    if (i !== -1) activeSources.splice(i, 1);
+
+                    if (layer.progressBar) {
+                        layer.progressBar.style.width = '100%';
+                    }
+                });
+
+                // Reset progress bar if this layer has one
+                if (layer.progressBar) {
+                    layer.progressBar.style.width = '0%';
+                }
+            });
+
+            if (!animationFrameId) {
+                animationFrameId = requestAnimationFrame(updateProgress);
+            }
+
+            showStatus(`Playing ${playbackLayers.length} layer${playbackLayers.length === 1 ? '' : 's'}`);
+        }
+
+        function stopAllAudio() {
+            activeSources.forEach(({source, gainNode}) => {
+                try { source.stop(); } catch(e) {}
+                try { source.disconnect(); gainNode.disconnect(); } catch(e) {}
+            });
+            activeSources = [];
+            playbackStartTime = null;
+
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+
+            showStatus('Stopped');
+        }
+
+        function formatTime(seconds) {
+            const s = Math.max(0, seconds);
+            const mins = Math.floor(s / 60);
+            const secs = Math.floor(s % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            if (activeSources.length === 0 || playbackStartTime === null) {
+                animationFrameId = null;
+                return;
+            }
+
+            const currentTime = audioContext.currentTime;
+            const elapsed = currentTime - playbackStartTime;
+
+            activeSources.forEach(({ layer, source }) => {
+                if (!layer || !layer.progressBar) return;
+
+                const finalPlaybackRate = source.playbackRate.value;
+                const duration = audioBuffer.duration / finalPlaybackRate;
+                const progress = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+
+                layer.progressBar.style.width = progress + '%';
+
+                if (layer.timeLabel) {
+                    layer.timeLabel.textContent =
+                        `${formatTime(Math.min(elapsed, duration))} / ${formatTime(duration)}`;
+                }
+            });
+
+            animationFrameId = requestAnimationFrame(updateProgress);
+        }
+
+        function removeLayer(layerId) {
+            const index = layers.findIndex(l => l.id === layerId);
+            if (index !== -1) {
+                layers.splice(index, 1);
+                document.getElementById(layerId).remove();
+                showStatus(`Layer removed (${layers.length} remaining)`);
+            }
+        }
+
+        function showStatus(message) {
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+        }
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            stopAllAudio();
+            if (audioContext && audioContext.state !== 'closed') {
+                audioContext.close();
+            }
+        });
+    </script>
+</body>
+</html>
