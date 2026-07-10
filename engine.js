@@ -1704,7 +1704,7 @@ function resolveSkin(s) { s = String(s == null ? "" : s).toLowerCase(); return S
 /** Reflect the active skin in the address bar so the current theme is shareable by copying the URL.
    Only fires on a live switch (switchTheme), so a fresh time-of-day landing keeps a clean URL. */
 function reflectSkinInURL(id) {
-  try { const u = new URL(location.href); u.searchParams.set("skin", SKIN_SHARE[id] || id); history.replaceState(history.state, "", u.href); }
+  try { const u = new URL(location.href); u.searchParams.set("theme", SKIN_SHARE[id] || id); history.replaceState(history.state, "", u.href); }
   catch (e) { /* file:// or blocked: fine */ }
 }
 
