@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Viewport Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: red;
+        }
+        #test-canvas {
+            display: block;
+            position: fixed;
+            inset: 0;
+            background: blue;
+        }
+        #info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.7);
+            padding: 10px;
+            font-family: sans-serif;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>Window: <span id="window-size">0 x 0</span></div>
+        <div>Visual Viewport: <span id="visual-size">0 x 0</span></div>
+        <div>Orientation: <span id="orientation">unknown</span></div>
+    </div>
+    <canvas id="test-canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('test-canvas');
+        const windowSize = document.getElementById('window-size');
+        const visualSize = document.getElementById('visual-size');
+        const orientation = document.getElementById('orientation');
+
+        function updateInfo() {
+            windowSize.textContent = `${window.innerWidth} x ${window.innerHeight}`;
+            if (window.visualViewport) {
+                visualSize.textContent = `${window.visualViewport.width} x ${window.visualViewport.height}`;
+            }
+            orientation.textContent = screen.orientation ? screen.orientation.type : 'unknown';
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+            canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            updateInfo();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', resizeCanvas);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', resizeCanvas);
+        }
+
+        resizeCanvas();
+    </script>
+</body>
+</html>
