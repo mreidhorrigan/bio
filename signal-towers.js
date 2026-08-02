@@ -10498,14 +10498,18 @@
       if (seconds) gain.linearRampToValueAtTime(target, now + seconds);
       else gain.setValueAtTime(target, now);
     }
-    setSpatialAttenuation({ gain = 1, cutoffHz = 18e3, q = 0.55 } = {}, duration = 0.14) {
-      this.setSpatialGain(gain, duration);
+    setSpatialAttenuation({ gain = 1, cutoffHz = 18e3, q = 0.55 } = {}, gainDuration = 0.14, filterDuration = 0.42) {
+      this.setSpatialGain(gain, gainDuration);
       const cutoff = Math.max(40, Math.min(this.ctx?.sampleRate ? this.ctx.sampleRate * 0.45 : 2e4, Number(cutoffHz) || 18e3));
       this.pendingSpatialCutoff = cutoff;
       if (!this.spatialFilter || !this.ctx) return;
-      const now = this.ctx.currentTime, seconds = Math.max(0, Number(duration) || 0), frequency = this.spatialFilter.frequency;
-      frequency.cancelScheduledValues(now);
-      frequency.setValueAtTime(Math.max(40, frequency.value), now);
+      const now = this.ctx.currentTime, seconds = Math.max(0, Number(filterDuration) || 0), frequency = this.spatialFilter.frequency;
+      if (typeof frequency.cancelAndHoldAtTime === "function") frequency.cancelAndHoldAtTime(now);
+      else {
+        const held = Math.max(40, frequency.value);
+        frequency.cancelScheduledValues(now);
+        frequency.setValueAtTime(held, now);
+      }
       if (seconds) frequency.exponentialRampToValueAtTime(cutoff, now + seconds);
       else frequency.setValueAtTime(cutoff, now);
       this.spatialFilter.Q.setTargetAtTime(Math.max(0.01, Number(q) || 0.55), now, 0.02);
@@ -12868,7 +12872,8 @@
     nearCutoffHz: 18e3,
     farCutoffHz: 1600,
     filterQ: 0.55,
-    rampSeconds: 0.14,
+    gainRampSeconds: 0.14,
+    filterRampSeconds: 0.42,
     updateIntervalMs: 80
   });
   function wrappedAxisDistance(left, right, period) {
@@ -13120,7 +13125,8 @@
       runtime.distanceCutoffHz = attenuation.cutoffHz;
       runtime.audio.setSpatialAttenuation?.(
         { ...attenuation, q: SPATIALIZATION_CONFIG.filterQ },
-        SPATIALIZATION_CONFIG.rampSeconds
+        SPATIALIZATION_CONFIG.gainRampSeconds,
+        SPATIALIZATION_CONFIG.filterRampSeconds
       );
     }
   }

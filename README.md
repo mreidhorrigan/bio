@@ -116,6 +116,9 @@ spatialization logic applies both smooth gain falloff and progressively darker
 low-pass filtering. Gain bottoms out at 20%, so a distant agent remains audible.
 Message-only towers are unaffected. Current `distanceGain` and
 `distanceCutoffHz` values appear in `MH_MUSEBOTS.diagnostics()`.
+Filter automation holds its instantaneous value before redirecting overlapping
+ramps and glides more slowly than gain, avoiding cutoff jumps or walking-induced
+warble while preserving responsive loudness cues.
 
 Input-responsive enhancements never request microphone permission merely because
 a bot was loaded. In particular, Decider remains autonomous unless a future
