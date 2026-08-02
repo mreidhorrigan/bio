@@ -243,6 +243,21 @@
     }
   }
 
+  function drawSignalTower(C, b) {
+    var g = C.g, sx = C.sx, sy = C.sy, state = window.MH_MUSEBOTS ? window.MH_MUSEBOTS.stateFor(b.uid) : { state: "unassigned" };
+    shadowPool(g, sx, sy, 18);
+    g.fillStyle = rgba("#26344a", 0.88); g.beginPath(); g.ellipse(sx, sy, 15, 7, 0, 0, 6.2832); g.fill();
+    g.strokeStyle = C.ink; g.lineWidth = 3; g.beginPath(); g.moveTo(sx, sy - 3); g.lineTo(sx, sy - 68); g.stroke();
+    g.strokeStyle = "#79a9a1"; g.lineWidth = 2;
+    for (var y = sy - 12; y >= sy - 60; y -= 12) { g.beginPath(); g.moveTo(sx - 9, y); g.lineTo(sx + 9, y); g.stroke(); }
+    var live = state.state === "playing" || state.state === "ready", pulse = Math.max(0, Math.min(1, state.beat || 0));
+    var beacon = live ? "#7afcff" : state.state === "error" ? "#ff6b78" : "#c890ff";
+    glow(g, sx, sy - 75, 7 + pulse * 5, beacon, live ? 20 + pulse * 12 : 10, 0.92);
+    g.strokeStyle = rgba(beacon, 0.5); g.lineWidth = 1.4;
+    for (var r = 13; r <= 25; r += 12) { g.beginPath(); g.arc(sx, sy - 75, r, Math.PI * 1.12, Math.PI * 1.88); g.stroke(); }
+    if (pulse > 0) { g.globalAlpha = pulse; g.strokeStyle = beacon; g.lineWidth = 2; g.beginPath(); g.arc(sx, sy - 75, 12 + (1 - pulse) * 17, 0, 6.2832); g.stroke(); g.globalAlpha = 1; }
+  }
+
   /* ---- entry: build the per-call context, dispatch by type ---------------- */
   function paint(g, sx, sy, b, env) {
     if (!g || !env || !env.util || !env.util.hash01) return;     // guard: no toolbox -> no-op
@@ -255,7 +270,7 @@
     };
     C.pick = function (arr, salt) { return arr[Math.floor(C.R(salt) * arr.length)]; };
     g.save();
-    try { if (b && b.type === "tree") drawTree(C); else drawHouse(C); }  // unknown types -> a dwelling
+    try { if (b && b.type === "tree") drawTree(C); else if (b && b.type === "signal") drawSignalTower(C, b); else drawHouse(C); }  // unknown types -> a dwelling
     finally { g.restore(); }
   }
 

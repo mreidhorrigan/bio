@@ -108,10 +108,12 @@ let inHub = true;                       // is the player on/over the plaza platf
 let kiosksOut = false;                  // are ALL kiosks currently off-screen? (→ show nav-bar + edge markers)
 let reduce = false;                     // prefers-reduced-motion: themes gate flicker/glitch on this
 const REGISTRY = new Map();             // id -> raw theme, for the live skin-switcher
+let lastPlayerShareAt = 0;              // throttle URL updates while the slime is moving
+let playerWasMoving = false;
 let started = false, switcherEl = null;
 // build mode (AoE2 / Frostpunk-ish): rearrange the buildings, add decorative ones
 let buildMode = false, buildTool = "move", drag = null, buildbarEl = null, buildToggleEl = null, menuOpen = false, tapDown = null;
-/** @type {{tx:number, ty:number, type:string}[]} decorative buildings the visitor places */
+/** @type {{tx:number, ty:number, type:string, uid?:string, botToken?:string}[]} decorative buildings the visitor places */
 const BUILDINGS = [];
 
 // DOM refs (filled in buildDOM)
@@ -149,6 +151,7 @@ function buildDOM() {
       <button class="mh-tool mh-cur" type="button" data-tool="move"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M12 4V20M4 12H20M12 4l-2.5 2.5M12 4l2.5 2.5M12 20l-2.5-2.5M12 20l2.5-2.5M4 12l2.5-2.5M4 12l2.5 2.5M20 12l-2.5-2.5M20 12l-2.5 2.5"/></svg>Move</button>
       <button class="mh-tool" type="button" data-tool="house">Plant a house.</button>
       <button class="mh-tool" type="button" data-tool="tree">Build a tree.</button>
+      <button class="mh-tool" type="button" data-tool="signal">Raise a signal tower.</button>
       <button class="mh-tool" type="button" data-tool="delete">✕ Remove</button>
       <button class="mh-tool mh-tool-done" type="button" data-tool="done">Done</button>
     </div>
@@ -456,19 +459,27 @@ function byId(id) { const el = document.getElementById(id); if (!el) throw new E
 
 const audio = {
   /** @type {AudioContext|null} */ ctx: null, /** @type {GainNode|null} */ master: null, muted: false,
-  ensure() {
-    if (this.ctx) return;
+  musebotsActive: false,
+  ensure(sharedContext) {
+    if (sharedContext && this.ctx !== sharedContext) {
+      if (this.ctx && this.ctx.state === "running") this.ctx.suspend().catch(() => {});
+      this.ctx = sharedContext; this.master = null;
+    }
+    if (this.ctx && this.master) return;
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
-    if (!AC) return;
-    this.ctx = new AC(); this.master = this.ctx.createGain();
-    this.master.gain.value = this.muted ? 0 : 0.5; this.master.connect(this.ctx.destination);
+    if (!this.ctx && !AC) return;
+    this.ctx ||= new AC(); this.master = this.ctx.createGain();
+    this.master.gain.value = this.muted ? 0 : (this.musebotsActive ? 0.9 : 0.5); this.master.connect(this.ctx.destination);
   },
   resume() { if (this.ctx && this.ctx.state === "suspended") this.ctx.resume(); },
-  setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.5, this.ctx.currentTime, 0.02); },
+  setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : (this.musebotsActive ? 0.9 : 0.5), this.ctx.currentTime, 0.02); },
   /** @param {number} f @param {{delay?:number,dur?:number,gain?:number,type?:OscillatorType}} [o] */
   tone(f, o) {
     if (!this.ctx || !this.master || this.muted) return;
-    const t = this.ctx.currentTime + (o?.delay ?? 0), dur = o?.dur ?? 0.15, peak = o?.gain ?? 0.2;
+    const t = this.ctx.currentTime + (o?.delay ?? 0), dur = o?.dur ?? 0.15,
+      // Website cues otherwise disappear perceptually beneath several Musebot
+      // masters. This is a small cue-only compensation, not musical ducking.
+      peak = Math.min(0.32, (o?.gain ?? 0.2) * (this.musebotsActive ? 1.65 : 1));
     const osc = this.ctx.createOscillator(), g = this.ctx.createGain();
     osc.type = "sine"; osc.frequency.value = f;                  // brief, gentle sine cues in every world
     g.gain.setValueAtTime(0.0001, t);
@@ -574,11 +585,13 @@ function buildHub() {
     };
   });
   player.x = HX; player.y = HY + 1.8; player.fx = 0; player.fy = 1;   // spawn on the plaza, clear of the central beacon
+  restorePlayerFromURL();
   activeIndex = prevActive = currentTarget = -1;
   // build-mode is a per-session sandbox: placed buildings do NOT persist across a refresh,
   // and the kiosks always return to their even ring. Clear any saved layout on load.
   BUILDINGS.length = 0;
   try { if (window.localStorage) window.localStorage.removeItem("mh-layout"); } catch (e) { /* fine */ }
+  if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.restore) window.MH_MUSEBOTS.restore(BUILDINGS);
   rebuildSpurs();
 }
 
@@ -634,12 +647,18 @@ function wireInput() {
   buildbarEl.addEventListener("click", onBuildTool);
   canvas.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
+  window.addEventListener("mh-musebots-ready", () => {
+    if (!window.MH_MUSEBOTS) return;
+    window.MH_MUSEBOTS.restore(BUILDINGS);
+    window.MH_MUSEBOTS.updateListener?.(player.x, player.y, P, BUILDINGS);
+  });
 }
 
 /** @param {KeyboardEvent} e */
 function onKeyDown(e) {
   const k = e.key.toLowerCase();
   audio.resume();
+  if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
   if (mode === "intro") {
     if (!startBtn.disabled && ["enter", " ", "w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) { e.preventDefault(); startGame(); }
     return;
@@ -689,14 +708,24 @@ function onKeyUp(e) {
 function onPointer(e) {
   if (mode !== "walking") return;
   if (e.pointerType === "mouse" && e.button > 0) return;
-  e.preventDefault(); audio.ensure(); audio.resume();
+  e.preventDefault();
+  audio.ensure(); audio.resume();
+  if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
   const r = canvas.getBoundingClientRect();
   const sx = e.clientX - r.left, sy = e.clientY - r.top;
   if (buildMode) { buildPointerDown(sx, sy); return; }           // build mode: edit buildings, don't walk
   const ki = kioskAtScreen(sx, sy);
   if (ki >= 0) { tapDown = { sx, sy, ki }; return; }             // a kiosk: OPEN on pointerUP (browsers allow a new tab from pointerup/click, NOT pointerdown — fixes the iOS/Firefox block)
   tapDown = null;
-  if (decorAtScreen(sx, sy) >= 0) { toast("Press B (✎ Build) to move or remove buildings"); return; }
+  const decor = decorAtScreen(sx, sy);
+  if (decor >= 0) {
+    const building = BUILDINGS[decor];
+    if (building && building.type === "signal" && window.MH_MUSEBOTS) {
+      window.MH_MUSEBOTS.openSelector(building, BUILDINGS);
+      return;
+    }
+    toast("Press B (✎ Build) to move or remove buildings"); return;
+  }
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
 }
 /** Canvas pointer-UP: open a tapped kiosk HERE. iOS Safari & Firefox only honour window.open from a
@@ -727,6 +756,7 @@ function recallHome() {
 
 function startGame() {
   audio.ensure(); audio.resume(); sfx.open(2);
+  if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
   introEl.classList.add("mh-hidden"); hudEl.classList.remove("mh-hidden");
   mode = "walking"; last = performance.now();
 }
@@ -754,6 +784,7 @@ function refreshBuildTools() {
   updateBuildCursor();
 }
 let _eraserCursor = null;
+const _buildCursors = {};
 /** A pink-eraser cursor (data-URI SVG) for the Remove tool, built once. Falls back to crosshair
  *  where encodeURIComponent is unavailable (headless selftest). */
 function eraserCursor() {
@@ -764,6 +795,19 @@ function eraserCursor() {
     : "crosshair";
   return _eraserCursor;
 }
+/** Compact structure silhouette: clicking will place this tool. */
+function placementCursor(tool) {
+  if (_buildCursors[tool]) return _buildCursors[tool];
+  const glyph = tool === "house"
+    ? '<path d="M8 13l7-6 7 6v9H8z" fill="#ffd37a"/><path d="M6 14l9-8 9 8" fill="none" stroke="#17202a" stroke-width="2"/>'
+    : tool === "tree"
+      ? '<path d="M15 11v12" stroke="#17202a" stroke-width="3"/><circle cx="15" cy="9" r="6" fill="#73d98b" stroke="#17202a" stroke-width="1.5"/>'
+      : '<path d="M15 7v17M10 24h10M11 13h8M12 18h6" stroke="#17202a" stroke-width="2"/><circle cx="15" cy="6" r="3" fill="#7afcff" stroke="#17202a"/>';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">${glyph}</svg>`;
+  return _buildCursors[tool] = typeof encodeURIComponent === "function"
+    ? `url('data:image/svg+xml,${encodeURIComponent(svg)}') 15 28, pointer`
+    : "pointer";
+}
 /** Show the active build tool on the CURSOR (not an icon): Move → grab/grabbing, Remove → an eraser;
  *  other tools and build-off restore the default. */
 function updateBuildCursor() {
@@ -772,6 +816,7 @@ function updateBuildCursor() {
   if (buildMode) {
     if (buildTool === "move") c = drag ? "grabbing" : "grab";
     else if (buildTool === "delete") c = eraserCursor();
+    else if (buildTool === "house" || buildTool === "tree" || buildTool === "signal") c = placementCursor(buildTool);
   }
   canvas.style.cursor = c;
 }
@@ -779,12 +824,19 @@ function buildPointerDown(sx, sy) {
   if (buildTool === "move") {
     const k = kioskAtScreen(sx, sy); if (k >= 0) { drag = { kind: "kiosk", i: k }; updateBuildCursor(); return; }
     const d = decorAtScreen(sx, sy); if (d >= 0) { drag = { kind: "decor", i: d }; updateBuildCursor(); }
-  } else if (buildTool === "house" || buildTool === "tree") {
+  } else if (buildTool === "house" || buildTool === "tree" || buildTool === "signal") {
     const w = screenToWorld(sx, sy), tx = wrap(Math.round(w.x)), ty = wrap(Math.round(w.y));
     if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast("Something is already built here"); return; }   // one structure per tile
-    BUILDINGS.push({ tx, ty, type: buildTool }); saveLayout(); sfx.pick();
+    const building = { tx, ty, type: buildTool };
+    if (buildTool === "signal" && window.MH_MUSEBOTS) building.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS);
+    BUILDINGS.push(building); saveLayout(); sfx.pick();
+    if (buildTool === "signal" && window.MH_MUSEBOTS) window.MH_MUSEBOTS.openSelector(building, BUILDINGS);
   } else if (buildTool === "delete") {
-    const d = decorAtScreen(sx, sy); if (d >= 0) { BUILDINGS.splice(d, 1); saveLayout(); sfx.close(); }
+    const d = decorAtScreen(sx, sy); if (d >= 0) {
+      const building = BUILDINGS[d];
+      if (building && window.MH_MUSEBOTS) window.MH_MUSEBOTS.remove(building);
+      BUILDINGS.splice(d, 1); saveLayout(); sfx.close();
+    }
   }
 }
 function onPointerMove(e) {
@@ -804,12 +856,14 @@ function decorAtScreen(sx, sy) {
   let pick = -1, best = -Infinity;
   for (let i = 0; i < BUILDINGS.length; i++) {
     const b = BUILDINGS[i], c = toScreen(nearImg(b.tx, player.x), nearImg(b.ty, player.y));
-    if (sx >= c.x - 24 && sx <= c.x + 24 && sy >= c.y - 44 && sy <= c.y + 12) { const d = b.tx + b.ty; if (d > best) { best = d; pick = i; } }
+    const top = b.type === "signal" ? 96 : 44;
+    if (sx >= c.x - 28 && sx <= c.x + 28 && sy >= c.y - top && sy <= c.y + 12) { const d = b.tx + b.ty; if (d > best) { best = d; pick = i; } }
   }
   return pick;
 }
 function saveLayout() {
   try { if (window.localStorage) window.localStorage.setItem("mh-layout", JSON.stringify({ kiosks: EXHIBITS.map((e) => ({ tx: e.tx, ty: e.ty })), buildings: BUILDINGS })); } catch (e) { /* fine */ }
+  if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.reflect) window.MH_MUSEBOTS.reflect(BUILDINGS);
 }
 function loadLayout() {
   try { if (!window.localStorage) return null; const s = window.localStorage.getItem("mh-layout"); return s ? JSON.parse(s) : null; } catch (e) { return null; }
@@ -873,6 +927,7 @@ function update(dt) {
       }
     }
     player.x = nx; player.y = ny;
+    if (performance.now() - lastPlayerShareAt > 500) reflectPlayerInURL();
     if (player.moving && Math.sin(tnow * 12) > 0.93) sfx.step();
   }
 
@@ -888,6 +943,10 @@ function update(dt) {
   inHub = hd <= T.hubRadius + T.ringRadius + 1.2;
 
   if (ecoActive() && window.MH_ECO.update) window.MH_ECO.update(dt, ECO_API);
+  if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.updateListener)
+    window.MH_MUSEBOTS.updateListener(player.x, player.y, P, BUILDINGS);
+  if (playerWasMoving && !player.moving) reflectPlayerInURL();
+  playerWasMoving = player.moving;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1488,6 +1547,19 @@ function defPaintBuilding(g, sx, sy, b, env) {
     return;
   }
   const ink = T.avatarInk || "#3a3a3a", s1 = hash01((b.tx * 7 + 3) | 0, (b.ty * 5 + 1) | 0), s2 = hash01((b.ty * 3 + 2) | 0, (b.tx * 9 + 4) | 0);
+  if (b.type === "signal") {
+    const state = window.MH_MUSEBOTS ? window.MH_MUSEBOTS.stateFor(b.uid) : { state: "unassigned" };
+    shadow(g, sx, sy, 18);
+    poly(g, [[sx - 12, sy], [sx, sy + 6], [sx + 12, sy], [sx, sy - 6]], "#26344a");
+    g.strokeStyle = ink; g.lineWidth = 3; g.beginPath(); g.moveTo(sx, sy - 4); g.lineTo(sx, sy - 64); g.stroke();
+    g.strokeStyle = "#8ba4bd"; g.lineWidth = 2;
+    for (let y = sy - 12; y >= sy - 58; y -= 12) { g.beginPath(); g.moveTo(sx - 8, y); g.lineTo(sx + 8, y); g.stroke(); }
+    const live = state.state === "playing" || state.state === "ready", pulse = Math.max(0, Math.min(1, state.beat || 0));
+    g.fillStyle = live ? "#7afcff" : "#c890ff"; g.shadowColor = g.fillStyle; g.shadowBlur = live ? 18 : 8;
+    g.beginPath(); g.arc(sx, sy - 70, 7 + pulse * 5, 0, Math.PI * 2); g.fill(); g.shadowBlur = 0;
+    if (pulse > 0) { g.globalAlpha = pulse; g.strokeStyle = g.fillStyle; g.lineWidth = 2; g.beginPath(); g.arc(sx, sy - 70, 12 + (1 - pulse) * 16, 0, Math.PI * 2); g.stroke(); g.globalAlpha = 1; }
+    return;
+  }
   if (b.type === "tree") {
     shadow(g, sx, sy, 11);
     poly(g, [[sx - 2.5, sy], [sx + 2.5, sy], [sx + 2, sy - 20], [sx - 2, sy - 20]], "#5a3c22");
@@ -1650,7 +1722,10 @@ function start(themeOrId, content) {
  *  allowed), so a skin change reads as the same object seen in different light. */
 function requestSwitch(id) {
   if (!started || !REGISTRY.has(id) || id === (T && T.id)) return;
-  if (!reduce && document.startViewTransition) document.startViewTransition(() => switchTheme(id));
+  const towersPlaying = !!(window.MH_MUSEBOTS && window.MH_MUSEBOTS.hasSounding && window.MH_MUSEBOTS.hasSounding());
+  // Full-canvas View Transition snapshots can briefly starve real-time audio on
+  // mobile, so switch immediately while Musebots are active.
+  if (!towersPlaying && !reduce && document.startViewTransition) document.startViewTransition(() => switchTheme(id));
   else switchTheme(id);
 }
 
@@ -1671,7 +1746,9 @@ function switchTheme(id) {
   avatarIndex = avatarIndex % T.avatarColors.length;
   buildPicker(); if (navbarEl) buildNavbar(); refreshSwitcher();
   document.title = ((CONTENT && CONTENT.title) || "Matt Horrigan") + " · " + T.name;
-  persistSkin(id); reflectSkinInURL(id); applyEcology(); sfx.pick(); toast(T.name);
+  persistSkin(id); reflectSkinInURL(id); applyEcology();
+  sfx.pick();
+  toast(T.name);
 }
 
 /** Cycle to the next registered skin (the T key). */
@@ -1694,6 +1771,36 @@ function refreshSwitcher() {
 }
 
 function persistSkin(id) { try { if (window.localStorage) window.localStorage.setItem("mh-skin", id); } catch (e) { /* file:// or blocked: fine */ } }
+
+/** Give real-time Musebots exclusive ownership of browser audio hardware. */
+function setMusebotAudioActive(active, sharedContext) {
+  audio.musebotsActive = !!active;
+  if (active && sharedContext) audio.ensure(sharedContext);
+  if (audio.master && audio.ctx)
+    audio.master.gain.setTargetAtTime(audio.muted ? 0 : (active ? 0.9 : 0.5), audio.ctx.currentTime, 0.025);
+}
+
+/** Share the slime's unwrapped world position without disturbing theme or towers. */
+function reflectPlayerInURL() {
+  lastPlayerShareAt = performance.now();
+  try {
+    const u = new URL(location.href);
+    u.searchParams.set("slime", `${Number(player.x.toFixed(3))},${Number(player.y.toFixed(3))}`);
+    history.replaceState(history.state, "", u.href);
+  } catch (_) { /* file URL or restricted history */ }
+}
+
+/** Old links have no slime parameter and retain the ordinary plaza spawn. */
+function restorePlayerFromURL() {
+  try {
+    const value = new URL(location.href).searchParams.get("slime");
+    if (!value) return;
+    const [x, y] = value.split(",").map(Number);
+    if (Number.isFinite(x) && Number.isFinite(y) && Math.abs(x) < 1e6 && Math.abs(y) < 1e6) {
+      player.x = x; player.y = y;
+    }
+  } catch (_) { /* malformed or unavailable URL */ }
+}
 
 /* Shareable theme links. Friendly public names (the ones the site uses out loud) map to the
    engine ids, so ?skin=gloomthmaxx / ?skin=bureaucore / ?skin=technurture all work. */
@@ -1759,6 +1866,13 @@ const ECO_API = {
 // expose helpers a theme may want to reuse (iso math, colour, primitives)
 window.MH_ISO = {
   register, start, switchTheme: requestSwitch, cycle: cycleSkin, timeDefaultSkin, resolveSkin,
+  setMusebotAudioActive,
+  siteAudioDiagnostics: () => ({
+    contextState: audio.ctx?.state || "not-created",
+    masterGain: Number(audio.master?.gain.value || 0),
+    musebotsActive: audio.musebotsActive,
+    muted: audio.muted,
+  }),
   themes: () => [...REGISTRY.values()].map((t) => ({ id: t.id, name: t.name })),
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period

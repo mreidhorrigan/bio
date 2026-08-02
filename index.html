@@ -31,6 +31,15 @@
   <script src="theme-technocute.js" defer></script>
   <script src="theme-technurture.js" defer></script>
   <script src="theme-technoscure.js" defer></script>
+  <script>
+    // Musebots are a large optional enhancement: let the core world, themes,
+    // and ordinary assets finish first, then fetch the self-contained bundle.
+    window.addEventListener("load", function () {
+      var script = document.createElement("script");
+      script.src = "signal-towers.js"; script.async = true;
+      document.body.appendChild(script);
+    }, { once: true });
+  </script>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {

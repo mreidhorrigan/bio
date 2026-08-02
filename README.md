@@ -11,8 +11,15 @@ your own words, and you have your own walkable site. This README explains the on
 split that makes that work: the **content** (your words, swap these) versus the
 **engine and design system** (the walkable machine, keep these).
 
-No build step, no dependencies, no framework. Plain HTML, CSS, and vanilla
-JavaScript with a Canvas. Edit a file, save, refresh.
+The core site has no build step, dependencies, or framework: it is plain HTML,
+CSS, and vanilla JavaScript with a Canvas. The optional Musebot signal-tower
+bundle is generated from the separate `web-musebots` project so that this site
+still ships as static files.
+
+The core world and themes do not wait for the comparatively large Musebot bundle.
+`signal-towers.js` begins loading asynchronously after the window `load` event,
+then announces readiness and restores any towers encoded in the URL. This keeps
+the optional music system off the critical page-loading path.
 
 ## The one idea: content vs. engine
 
@@ -43,6 +50,7 @@ a friend fork this, replace the content, and keep a working walkable site.
 | `theme-technoscure.js` | The dark "gloomthmaxx" skin: the same world after nightfall. |
 | `ecology.js` | An optional artificial-life layer: flora that spreads, grazers, predators, and drifting motes. The slime skins lean on it. The calm skin does not. |
 | `buildings.js` | Procedural slime-world dwellings the skins draw. |
+| `signal-towers.js` | Generated, self-contained browser bundle for playable Musebot signal towers. Its source of truth is `web-musebots/integrations/bio-signal-towers.js`; do not hand-edit the bundle. |
 | `index.html` (the boot script) | Wires the engine, content, ecology, and themes together and picks the starting skin. |
 | `brand/` | The house design tokens (colours, type, the "leaf" corner) shared across the whole site. |
 
@@ -56,6 +64,71 @@ content meet at exactly one line: `MH_ISO.start(skin)`.
 Paths inside `content.js` are base-aware through `window.MH_SITE` (set in
 `index.html`), so the same content file works from the site root or from a dev
 folder without edits.
+
+## Musebot signal towers
+
+In build mode, **Raise a signal tower** adds a third building type. Placing or
+clicking a tower opens the Musebot selector. The selector includes sounding bots
+and message-only coordinating agents such as PlexBOT, with their roles labelled;
+incomplete and external-MIDI-only entries remain out of the public menu. Each assigned tower runs an
+independent instance of the selected browser Musebot; every tower on the page
+shares the same client-side clock and Musebot Protocol room, so several towers
+can play together. The first pointer or keyboard interaction unlocks Web Audio.
+
+Tower positions and assignments are stored in the `signals` URL query parameter,
+and the slime's current world position is stored in `slime`. Copying the URL
+therefore shares both the ensemble configuration and the visitor's location. The query
+contains versioned opaque public tokens, not Musebot registry IDs or display
+names. Those tokens are permanently assigned in
+`web-musebots/public/data/signal-tower-tokens.json`; when a bot is renamed, update
+the manifest's ID but retain its token so old links continue to work.
+
+This static integration reuses the canonical Musebot agent implementations,
+audio engine, protocol normalization, and client ensemble—the same behavioral
+core used by the other wrappers. It does not connect visitors to one another or
+to a running Musebot server: sharing a link shares configuration, not a live
+network session.
+
+Active towers flash their beacon on every shared ensemble beat. All tower audio
+uses one browser `AudioContext` with separate per-bot signal chains, avoiding the
+resource pressure and timing instability of one hardware-facing context per bot.
+While autoplay is blocked, agents may join and exchange protocol state but do
+not schedule musical ticks into the suspended context. The clock is freshly
+anchored after the user unlocks audio, preventing stale startup notes from
+colliding with the live stream and forcing the limiters to turn the mix down.
+Theme changes
+remain live, but expensive full-canvas transition snapshots and the website's
+separate theme-change sound are skipped while towers are active to protect the
+real-time audio stream, particularly on mobile devices.
+
+The website's footsteps and interface cues use the same `AudioContext` as active
+towers, retaining those sounds without making two contexts compete for browser
+audio hardware. For a
+diagnostic snapshot, run `MH_MUSEBOTS.diagnostics()` in the browser console; it
+reports context state transitions and each tower limiter's current gain reduction.
+`MH_ISO.siteAudioDiagnostics()` reports the website-cue side of the same graph.
+While sounding towers are present, cue gain receives modest compensation so quiet
+slime footsteps remain perceptible under the ensemble; the music is not ducked.
+
+Each sounding tower also has independent distance attenuation based on the
+shortest wrapped distance to the slime in the toroidal world. Encapsulated shared
+spatialization logic applies both smooth gain falloff and progressively darker
+low-pass filtering. Gain bottoms out at 20%, so a distant agent remains audible.
+Message-only towers are unaffected. Current `distanceGain` and
+`distanceCutoffHz` values appear in `MH_MUSEBOTS.diagnostics()`.
+
+Input-responsive enhancements never request microphone permission merely because
+a bot was loaded. In particular, Decider remains autonomous unless a future
+explicit input control opts it into microphone analysis.
+
+After changing the underlying Musebots, regenerate the checked-in website bundle:
+
+```sh
+cd "/Users/matthorrigan/Documents/OneDrive - Simon Fraser University (1sfu)/Work/2026_Musebots/web-musebots"
+npm run website:towers
+```
+
+Run the website-side integration check with `node --test signal-towers.test.mjs`.
 
 ## Quick start: fork and make it yours
 
