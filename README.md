@@ -105,7 +105,12 @@ The website's footsteps and interface cues use the same `AudioContext` as active
 towers, retaining those sounds without making two contexts compete for browser
 audio hardware. For a
 diagnostic snapshot, run `MH_MUSEBOTS.diagnostics()` in the browser console; it
-reports context state transitions and each tower limiter's current gain reduction.
+reports context state transitions, Chrome recovery attempts, audio-clock tick
+age/count, and each tower limiter's current gain reduction. If Chrome suspends
+or interrupts the shared context after user unlock, the integration makes
+throttled resume attempts from context transitions and ensemble clocks, with
+additional retries on focus, page-show, visibility, pointer, touch, and key
+events. Successful recovery resets buffered clocks so stale events do not burst.
 `MH_ISO.siteAudioDiagnostics()` reports the website-cue side of the same graph.
 While sounding towers are present, cue gain receives modest compensation so quiet
 slime footsteps remain perceptible under the ensemble; the music is not ducked.

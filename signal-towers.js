@@ -10202,9 +10202,12 @@
   var midiRoutes = new MidiRouteRegistry();
   var nextMidiRoute = 1;
   var AudioEngine = class {
-    constructor({ clientOnly = false, context = null } = {}) {
+    constructor({ clientOnly = false, context = null, dynamics = true, monitorOutput = false } = {}) {
       this.clientOnly = clientOnly;
       this.ctx = context;
+      this.dynamics = dynamics;
+      this.monitorOutput = monitorOutput;
+      this.activeGraphs = /* @__PURE__ */ new Set();
       this.mpeEnabled = true;
       this.mpeBendRange = 48;
       this.mpeZone = "lower";
@@ -10217,20 +10220,33 @@
       this.buffers || (this.buffers = /* @__PURE__ */ new Map());
       if (resume && !this.master) {
         this.master = this.ctx.createGain();
-        this.limiter = this.ctx.createDynamicsCompressor();
+        this.limiter = this.dynamics ? this.ctx.createDynamicsCompressor() : null;
         this.spatialFilter = this.ctx.createBiquadFilter();
         this.spatialGain = this.ctx.createGain();
         this.master.gain.value = this.pendingPerformanceGain ?? 4;
         this.spatialGain.gain.value = this.pendingSpatialGain ?? 1;
+        this.appliedPerformanceGain = this.master.gain.value;
+        this.appliedSpatialGain = this.spatialGain.gain.value;
         this.spatialFilter.type = "lowpass";
         this.spatialFilter.frequency.value = this.pendingSpatialCutoff ?? 18e3;
         this.spatialFilter.Q.value = 0.55;
-        this.limiter.threshold.value = -8;
-        this.limiter.knee.value = 8;
-        this.limiter.ratio.value = 12;
-        this.limiter.attack.value = 3e-3;
-        this.limiter.release.value = 0.18;
-        this.master.connect(this.limiter).connect(this.spatialFilter).connect(this.spatialGain).connect(this.ctx.destination);
+        this.appliedSpatialCutoff = this.spatialFilter.frequency.value;
+        this.appliedSpatialQ = this.spatialFilter.Q.value;
+        if (this.limiter) {
+          this.limiter.threshold.value = -8;
+          this.limiter.knee.value = 8;
+          this.limiter.ratio.value = 12;
+          this.limiter.attack.value = 3e-3;
+          this.limiter.release.value = 0.18;
+          this.master.connect(this.limiter).connect(this.spatialFilter);
+        } else this.master.connect(this.spatialFilter);
+        this.spatialFilter.connect(this.spatialGain);
+        if (this.monitorOutput) {
+          this.outputAnalyser = this.ctx.createAnalyser();
+          this.outputAnalyser.fftSize = 256;
+          this.outputSamples = new Float32Array(this.outputAnalyser.fftSize);
+          this.spatialGain.connect(this.outputAnalyser).connect(this.ctx.destination);
+        } else this.spatialGain.connect(this.ctx.destination);
       }
       if (resume && this.ctx.state !== "running") {
         const resumed = this.ctx.resume();
@@ -10253,6 +10269,30 @@
         throw new Error(
           `Browser audio is ${this.ctx.state}; allow audio autoplay for this page and try again`
         );
+    }
+    outputLevel() {
+      if (!this.outputAnalyser || !this.outputSamples) return null;
+      this.outputAnalyser.getFloatTimeDomainData(this.outputSamples);
+      let sum = 0;
+      for (const value of this.outputSamples) sum += value * value;
+      return Math.sqrt(sum / this.outputSamples.length);
+    }
+    retainGraph(source, nodes) {
+      const graph = { source, nodes };
+      this.activeGraphs.add(graph);
+      const release = () => {
+        for (const node of nodes) {
+          try {
+            node.disconnect();
+          } catch {
+          }
+        }
+        this.activeGraphs.delete(graph);
+      };
+      if (typeof source.addEventListener === "function")
+        source.addEventListener("ended", release, { once: true });
+      else if ("onended" in source) source.onended = release;
+      return graph;
     }
     async configure(definition, mode = "synth", midiOutputId = "") {
       this.definition = definition;
@@ -10472,6 +10512,9 @@
       const target = Math.max(0, Math.min(4, Number(value)));
       this.pendingPerformanceGain = target;
       if (!this.master) return;
+      if (Math.abs((this.appliedPerformanceGain ?? this.master.gain.value) - target) < 1e-6)
+        return;
+      this.appliedPerformanceGain = target;
       const now = this.ctx.currentTime, seconds = Math.max(0, Number(duration) || 0), gain = this.master.gain;
       if (typeof gain.cancelAndHoldAtTime === "function")
         gain.cancelAndHoldAtTime(now);
@@ -10488,6 +10531,9 @@
       const target = Math.max(0, Math.min(1, Number(value)));
       this.pendingSpatialGain = target;
       if (!this.spatialGain || !this.ctx) return;
+      if (Math.abs((this.appliedSpatialGain ?? this.spatialGain.gain.value) - target) < 1e-6)
+        return;
+      this.appliedSpatialGain = target;
       const gain = this.spatialGain.gain, now = this.ctx.currentTime, seconds = Math.max(0, Number(duration) || 0);
       if (typeof gain.cancelAndHoldAtTime === "function") gain.cancelAndHoldAtTime(now);
       else {
@@ -10503,6 +10549,10 @@
       const cutoff = Math.max(40, Math.min(this.ctx?.sampleRate ? this.ctx.sampleRate * 0.45 : 2e4, Number(cutoffHz) || 18e3));
       this.pendingSpatialCutoff = cutoff;
       if (!this.spatialFilter || !this.ctx) return;
+      const targetQ = Math.max(0.01, Number(q) || 0.55), cutoffUnchanged = Math.abs(Math.log((this.appliedSpatialCutoff ?? this.spatialFilter.frequency.value) / cutoff)) < 1e-6, qUnchanged = Math.abs((this.appliedSpatialQ ?? this.spatialFilter.Q.value) - targetQ) < 1e-6;
+      if (cutoffUnchanged && qUnchanged) return;
+      this.appliedSpatialCutoff = cutoff;
+      this.appliedSpatialQ = targetQ;
       const now = this.ctx.currentTime, seconds = Math.max(0, Number(filterDuration) || 0), frequency = this.spatialFilter.frequency;
       if (typeof frequency.cancelAndHoldAtTime === "function") frequency.cancelAndHoldAtTime(now);
       else {
@@ -10512,7 +10562,7 @@
       }
       if (seconds) frequency.exponentialRampToValueAtTime(cutoff, now + seconds);
       else frequency.setValueAtTime(cutoff, now);
-      this.spatialFilter.Q.setTargetAtTime(Math.max(0.01, Number(q) || 0.55), now, 0.02);
+      this.spatialFilter.Q.setTargetAtTime(targetQ, now, 0.02);
     }
     lifecycle(action, payload = {}) {
       this.onLifecycle?.(action, payload);
@@ -10616,6 +10666,7 @@
       lfoDepth.gain.value = performance2.vibratoDepth * 100;
       lfo.connect(lfoDepth).connect(osc.detune);
       osc.connect(filter).connect(amp).connect(pressure).connect(this.master);
+      this.retainGraph(osc, [osc, filter, amp, pressure, lfo, lfoDepth]);
       osc.start(now);
       lfo.start(now);
       osc.stop(now + duration + 0.03);
@@ -10624,7 +10675,11 @@
         nominalNote,
         note,
         deviationCents: (note - nominalNote) * 100,
-        duration
+        duration,
+        scheduledAt: now,
+        contextTime: this.ctx.currentTime,
+        eventTime: this.eventTime,
+        gain: safeGain
       });
       this.report("expressive_note", {
         note,
@@ -10652,7 +10707,9 @@
       amp.gain.setValueAtTime(Math.max(1e-4, gain), releaseStart);
       amp.gain.exponentialRampToValueAtTime(1e-4, now + duration);
       source.connect(filter).connect(amp).connect(this.master);
+      this.retainGraph(source, [source, filter, amp]);
       source.start(now);
+      source.stop(now + duration + 0.03);
     }
     expressiveMidiCurve(channel, note, duration, at, performance2) {
       if (!performance2.sustained) return;
@@ -12889,20 +12946,80 @@
   var ROOM = "signal-towers";
   var QUERY_KEY = "signals";
   var MAX_TOWERS = 24;
+  var BRIDGE_BUILD = "20260805-chrome-audio-4";
   var ensemble = new ClientEnsemble();
   var runtimes = /* @__PURE__ */ new Map();
   var sharedAudioContext = null;
   var audioStateTransitions = [];
+  var audioRecovery = {
+    attempts: 0,
+    successes: 0,
+    failures: 0,
+    lastReason: null,
+    lastAttemptAt: -Infinity,
+    inFlight: null
+  };
+  function hasUnlockedSoundingTower() {
+    return [...runtimes.values()].some(
+      (runtime) => !runtime.item.messageOnly && runtime.unlocked
+    );
+  }
+  async function resumeTowerAudio(reason = "unspecified", force = false) {
+    const context = sharedAudioContext;
+    if (!context || context.state === "closed") return false;
+    if (context.state === "running") return true;
+    if (!force && !hasUnlockedSoundingTower()) return false;
+    const now = performance.now();
+    if (audioRecovery.inFlight) return audioRecovery.inFlight;
+    if (!force && now - audioRecovery.lastAttemptAt < 750) return false;
+    audioRecovery.attempts++;
+    audioRecovery.lastReason = reason;
+    audioRecovery.lastAttemptAt = now;
+    audioRecovery.inFlight = Promise.resolve(context.resume()).then(() => {
+      const recovered = context.state === "running";
+      if (recovered) {
+        audioRecovery.successes++;
+        for (const runtime of runtimes.values())
+          if (runtime.unlocked && !runtime.item.messageOnly) {
+            runtime.audio.clock?.reset();
+            runtime.state = "playing";
+          }
+      } else audioRecovery.failures++;
+      return recovered;
+    }).catch(() => {
+      audioRecovery.failures++;
+      return false;
+    }).finally(() => {
+      audioRecovery.inFlight = null;
+    });
+    return audioRecovery.inFlight;
+  }
+  function installAudioRecoveryListeners() {
+    const recover = (event) => {
+      void resumeTowerAudio(event.type, true);
+    };
+    for (const type of ["pointerdown", "touchstart", "keydown"])
+      window.addEventListener(type, recover, { capture: true, passive: true });
+    window.addEventListener("focus", recover, { passive: true });
+    window.addEventListener("pageshow", recover, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible")
+        void resumeTowerAudio("visibilitychange", true);
+    });
+  }
   function towerAudioContext() {
     if (!sharedAudioContext) {
-      sharedAudioContext = new AudioContext({ latencyHint: "interactive" });
+      sharedAudioContext = window.MH_ISO?.sharedAudioContext?.() || new AudioContext({ latencyHint: "interactive" });
       const record = () => {
         audioStateTransitions.push({ at: Math.round(performance.now()), state: sharedAudioContext.state });
         if (audioStateTransitions.length > 32) audioStateTransitions.shift();
-        if (sharedAudioContext.state === "interrupted")
+        if (sharedAudioContext.state === "interrupted" || sharedAudioContext.state === "suspended") {
           console.warn("Signal-tower audio context interrupted by the browser or operating system");
+          void resumeTowerAudio("statechange");
+        }
       };
       sharedAudioContext.addEventListener("statechange", record);
+      installAudioRecoveryListeners();
       record();
     }
     return sharedAudioContext;
@@ -12982,8 +13099,35 @@
       this.state = "loading";
       this.unlocked = false;
       this.lastBeatAt = -Infinity;
+      this.audioTickCount = 0;
+      this.lastAudioTickAt = -Infinity;
+      this.audioEventCount = 0;
+      this.lastAudioEventAt = -Infinity;
       this.socket = ensemble.connect();
-      this.audio = new AudioEngine({ clientOnly: true, context: sharedAudioContext });
+      this.audio = new AudioEngine({
+        clientOnly: true,
+        context: sharedAudioContext,
+        monitorOutput: true
+      });
+      this.audio.setPerformanceGain(1);
+      this.recentAudioEvents = [];
+      this.audio.onAudioEvent = (event) => {
+        this.audioEventCount++;
+        this.lastAudioEventAt = performance.now();
+        if (["pitched", "rendered_pitch"].includes(event.kind)) {
+          this.recentAudioEvents.push({
+            kind: event.kind,
+            note: event.note,
+            duration: event.duration,
+            scheduledAt: event.scheduledAt,
+            contextTime: event.contextTime,
+            eventTime: event.eventTime,
+            gain: event.gain,
+            at: Math.round(performance.now())
+          });
+          if (this.recentAudioEvents.length > 12) this.recentAudioEvents.shift();
+        }
+      };
       this.audio.configure(AGENTS[item.id], "synth").catch(() => {
       });
       const send = (address, args = []) => {
@@ -13006,13 +13150,20 @@
           this.bot.onMessage?.(normalizeProtocolMessage(message));
         if (message.type === "clock") {
           if (message.beatStart) this.lastBeatAt = performance.now();
-          if (!this.item.messageOnly && (!this.unlocked || this.audio.ctx?.state !== "running")) return;
+          if (!this.item.messageOnly && (!this.unlocked || this.audio.ctx?.state !== "running")) {
+            if (this.unlocked) void resumeTowerAudio("ensemble-clock");
+            return;
+          }
           if (!this.item.messageOnly) this.audio.beginTick(
             message.tick,
             message.bpm,
             message.meter?.subdivision || 4,
             message
           );
+          if (!this.item.messageOnly) {
+            this.audioTickCount++;
+            this.lastAudioTickAt = performance.now();
+          }
           this.bot.onTick?.(message.tick, message);
         }
       });
@@ -13031,6 +13182,7 @@
       (_a = this.audio).ctx || (_a.ctx = towerAudioContext());
       if (this.unlocked && this.audio.ctx?.state === "running") return;
       try {
+        await resumeTowerAudio("tower-unlock", true);
         await this.audio.start(true);
         this.audio.clock?.reset();
         this.unlocked = true;
@@ -13123,6 +13275,10 @@
       );
       runtime.distanceGain = attenuation.gain;
       runtime.distanceCutoffHz = attenuation.cutoffHz;
+      const unchanged = Number.isFinite(runtime.appliedSpatialGain) && Math.abs(runtime.appliedSpatialGain - attenuation.gain) < 5e-4 && Math.abs(Math.log(runtime.appliedSpatialCutoffHz / attenuation.cutoffHz)) < 2e-3;
+      if (unchanged) continue;
+      runtime.appliedSpatialGain = attenuation.gain;
+      runtime.appliedSpatialCutoffHz = attenuation.cutoffHz;
       runtime.audio.setSpatialAttenuation?.(
         { ...attenuation, q: SPATIALIZATION_CONFIG.filterQ },
         SPATIALIZATION_CONFIG.gainRampSeconds,
@@ -13207,6 +13363,10 @@
     setTimeout(() => input.focus(), 0);
   }
   async function unlock() {
+    if ([...runtimes.values()].some((runtime) => !runtime.item.messageOnly)) {
+      towerAudioContext();
+      await resumeTowerAudio("ensemble-unlock", true);
+    }
     await Promise.all([...runtimes.values()].map((runtime) => runtime.unlock()));
   }
   window.MH_MUSEBOTS = {
@@ -13221,8 +13381,15 @@
     hasActive: () => runtimes.size > 0,
     hasSounding: () => [...runtimes.values()].some((runtime) => !runtime.item.messageOnly),
     diagnostics: () => ({
+      bridgeBuild: BRIDGE_BUILD,
       contextState: sharedAudioContext?.state || "not-created",
       contextTransitions: audioStateTransitions.map((item) => ({ ...item })),
+      recovery: {
+        attempts: audioRecovery.attempts,
+        successes: audioRecovery.successes,
+        failures: audioRecovery.failures,
+        lastReason: audioRecovery.lastReason
+      },
       towers: [...runtimes.values()].map((runtime) => ({
         uid: runtime.uid,
         bot: runtime.item.label,
@@ -13230,7 +13397,14 @@
         limiterReductionDb: Number(runtime.audio.limiter?.reduction || 0),
         masterGain: Number(runtime.audio.master?.gain.value || 0),
         distanceGain: Number(runtime.distanceGain ?? 1),
-        distanceCutoffHz: Number(runtime.distanceCutoffHz ?? SPATIALIZATION_CONFIG.nearCutoffHz)
+        distanceCutoffHz: Number(runtime.distanceCutoffHz ?? SPATIALIZATION_CONFIG.nearCutoffHz),
+        audioTickCount: runtime.audioTickCount,
+        lastAudioTickAgeMs: Number.isFinite(runtime.lastAudioTickAt) ? Math.round(performance.now() - runtime.lastAudioTickAt) : null,
+        audioEventCount: runtime.audioEventCount,
+        outputLevel: runtime.audio.outputLevel?.(),
+        contextTime: runtime.audio.ctx?.currentTime,
+        recentAudioEvents: runtime.recentAudioEvents.map((event) => ({ ...event })),
+        lastAudioEventAgeMs: Number.isFinite(runtime.lastAudioEventAt) ? Math.round(performance.now() - runtime.lastAudioEventAt) : null
       }))
     }),
     stateFor(uid) {

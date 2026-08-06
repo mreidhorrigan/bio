@@ -9,7 +9,7 @@ test("the site loads and integrates the generated signal-tower bundle", async ()
     read("index.html"), read("engine.js"), read("buildings.js"), read("signal-towers.js"),
   ]);
   assert.match(html, /addEventListener\("load"/);
-  assert.match(html, /script\.src = "signal-towers\.js"; script\.async = true/);
+  assert.match(html, /script\.src = "signal-towers\.js\?v=[^"]+"; script\.async = true/);
   assert.match(engine, /data-tool="signal"/);
   assert.match(engine, /MH_MUSEBOTS\.restore\(BUILDINGS\)/);
   assert.match(engine, /MH_MUSEBOTS\.reflect\(BUILDINGS\)/);

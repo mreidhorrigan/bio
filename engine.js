@@ -471,7 +471,10 @@ const audio = {
     this.ctx ||= new AC(); this.master = this.ctx.createGain();
     this.master.gain.value = this.muted ? 0 : (this.musebotsActive ? 0.9 : 0.5); this.master.connect(this.ctx.destination);
   },
-  resume() { if (this.ctx && this.ctx.state === "suspended") this.ctx.resume(); },
+  resume() {
+    if (this.ctx && this.ctx.state !== "running" && this.ctx.state !== "closed")
+      this.ctx.resume().catch(() => {});
+  },
   setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : (this.musebotsActive ? 0.9 : 0.5), this.ctx.currentTime, 0.02); },
   /** @param {number} f @param {{delay?:number,dur?:number,gain?:number,type?:OscillatorType}} [o] */
   tone(f, o) {
@@ -1774,10 +1777,18 @@ function persistSkin(id) { try { if (window.localStorage) window.localStorage.se
 
 /** Give real-time Musebots exclusive ownership of browser audio hardware. */
 function setMusebotAudioActive(active, sharedContext) {
+  const changed = audio.musebotsActive !== !!active;
   audio.musebotsActive = !!active;
   if (active && sharedContext) audio.ensure(sharedContext);
-  if (audio.master && audio.ctx)
+  if (changed && audio.master && audio.ctx)
     audio.master.gain.setTargetAtTime(audio.muted ? 0 : (active ? 0.9 : 0.5), audio.ctx.currentTime, 0.025);
+}
+
+/** Return the world's one AudioContext so optional audio systems can join it
+ * without opening a competing context and interrupting sounds already playing. */
+function sharedAudioContext() {
+  audio.ensure();
+  return audio.ctx;
 }
 
 /** Share the slime's unwrapped world position without disturbing theme or towers. */
@@ -1867,6 +1878,7 @@ const ECO_API = {
 window.MH_ISO = {
   register, start, switchTheme: requestSwitch, cycle: cycleSkin, timeDefaultSkin, resolveSkin,
   setMusebotAudioActive,
+  sharedAudioContext,
   siteAudioDiagnostics: () => ({
     contextState: audio.ctx?.state || "not-created",
     masterGain: Number(audio.master?.gain.value || 0),
