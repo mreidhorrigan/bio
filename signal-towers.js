@@ -10535,13 +10535,7 @@
         return;
       this.appliedSpatialGain = target;
       const gain = this.spatialGain.gain, now = this.ctx.currentTime, seconds = Math.max(0, Number(duration) || 0);
-      if (typeof gain.cancelAndHoldAtTime === "function") gain.cancelAndHoldAtTime(now);
-      else {
-        const held = gain.value;
-        gain.cancelScheduledValues(now);
-        gain.setValueAtTime(held, now);
-      }
-      if (seconds) gain.linearRampToValueAtTime(target, now + seconds);
+      if (seconds) gain.setTargetAtTime(target, now, Math.max(5e-3, seconds / 3));
       else gain.setValueAtTime(target, now);
     }
     setSpatialAttenuation({ gain = 1, cutoffHz = 18e3, q = 0.55 } = {}, gainDuration = 0.14, filterDuration = 0.42) {
@@ -10554,15 +10548,11 @@
       this.appliedSpatialCutoff = cutoff;
       this.appliedSpatialQ = targetQ;
       const now = this.ctx.currentTime, seconds = Math.max(0, Number(filterDuration) || 0), frequency = this.spatialFilter.frequency;
-      if (typeof frequency.cancelAndHoldAtTime === "function") frequency.cancelAndHoldAtTime(now);
-      else {
-        const held = Math.max(40, frequency.value);
-        frequency.cancelScheduledValues(now);
-        frequency.setValueAtTime(held, now);
-      }
-      if (seconds) frequency.exponentialRampToValueAtTime(cutoff, now + seconds);
-      else frequency.setValueAtTime(cutoff, now);
-      this.spatialFilter.Q.setTargetAtTime(targetQ, now, 0.02);
+      if (!cutoffUnchanged && seconds)
+        frequency.setTargetAtTime(cutoff, now, Math.max(5e-3, seconds / 3));
+      else if (!cutoffUnchanged)
+        frequency.setValueAtTime(cutoff, now);
+      if (!qUnchanged) this.spatialFilter.Q.setTargetAtTime(targetQ, now, 0.02);
     }
     lifecycle(action, payload = {}) {
       this.onLifecycle?.(action, payload);
@@ -12946,7 +12936,7 @@
   var ROOM = "signal-towers";
   var QUERY_KEY = "signals";
   var MAX_TOWERS = 24;
-  var BRIDGE_BUILD = "20260805-chrome-audio-4";
+  var BRIDGE_BUILD = "20260806-chrome-audio-5";
   var ensemble = new ClientEnsemble();
   var runtimes = /* @__PURE__ */ new Map();
   var sharedAudioContext = null;
