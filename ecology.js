@@ -264,6 +264,7 @@
 
   /* --- engine hooks -------------------------------------------------------- */
   ECO.update = function (dt, api) {
+    const perfStart = window.MH_PERF ? performance.now() : 0;
     ECO.hub = api.hub; ECO.villageR = api.villageR;                   // set BEFORE init so spawns can anchor to the plaza
     if (!ECO.inited) init(api.P);
     ECO.now = api.t;
@@ -293,6 +294,7 @@
     while (ECO.facc >= floraDt && fg-- > 0) { ECO.facc -= floraDt; fieldsStep(floraDt); }
 
     ECO.stats.grazers = ECO.grazers.length; ECO.stats.predators = ECO.predators.length;
+    if (window.MH_PERF) window.MH_PERF.mark("ecology", performance.now() - perfStart);
   };
 
   ECO.groundTint = function (tx, ty) {

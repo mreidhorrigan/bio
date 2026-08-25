@@ -34,3 +34,6 @@ house-style-private/
 # Local double-click helpers to commit/push edits. Personal tools; never published.
 /commit.command
 /push.command
+
+# Rust compiler intermediates (browser-ready artifacts under /wasm are tracked).
+/rust/target/

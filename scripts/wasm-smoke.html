@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>WASM smoke test</title>
+<output id="result">pending</output>
+<iframe id="homepage" src="../?wasm=1&amp;theme=technurture" hidden></iframe>
+<script type="module">
+  const result = document.querySelector("#result");
+  try {
+    const world = await import("../wasm/world/world_core.js");
+    await world.default();
+    const fallbackCaught = await import("../wasm/world/intentionally-missing.js").then(() => false, () => true);
+    const frame = document.querySelector("#homepage");
+    let homepageReady = false;
+    for (let attempt = 0; attempt < 50 && !homepageReady; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      homepageReady = !!(frame.contentWindow.MH_ISO && frame.contentWindow.MH_WASM?.state.world === "ready" && frame.contentDocument.querySelector("canvas"));
+    }
+    const ok = world.abi_version() === 1 && world.smoke_add(20, 22) === 42 && fallbackCaught && homepageReady;
+    result.textContent = ok ? "PASS" : "FAIL";
+    result.dataset.abi = String(world.abi_version());
+    result.dataset.sum = String(world.smoke_add(20, 22));
+    result.dataset.fallback = String(fallbackCaught);
+    result.dataset.homepage = String(!!homepageReady);
+  } catch (error) {
+    result.textContent = "ERROR: " + error;
+  }
+</script>

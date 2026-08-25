@@ -958,6 +958,8 @@ function update(dt) {
 
 function loop(ts) {
   let dt = (ts - last) / 1000; if (dt > 0.05) dt = 0.05;
+  const perf = window.MH_PERF;
+  if (perf) perf.mark("frame", ts - last);
   last = ts; tnow = ts / 1000;
   frameMs += ((dt * 1000) - frameMs) * 0.1;                 // smoothed frame time (no effect on capable machines)
   // Adaptive scenery degrade WITH HYSTERESIS: step the skip UP only when clearly slow and DOWN only
@@ -966,8 +968,12 @@ function loop(ts) {
   // plants" (and it persisted across a theme switch because perfSkip is global). One step per frame.
   if (perfSkip < 2 && frameMs > (perfSkip === 0 ? 33 : 48)) perfSkip++;
   else if (perfSkip > 0 && frameMs < (perfSkip === 2 ? 38 : 24)) perfSkip--;
+  const updateStart = perf ? performance.now() : 0;
   if (mode === "walking") update(dt);
+  if (perf) perf.mark("update", performance.now() - updateStart);
+  const renderStart = perf ? performance.now() : 0;
   render(); updateHUD();
+  if (perf) perf.mark("canvas", performance.now() - renderStart);
   requestAnimationFrame(loop);
 }
 
@@ -1050,6 +1056,7 @@ function render() {
 
   // ---- actor pass: props + signposts + monument + kiosks + player, depth-sorted ----
   /** @type {{depth:number, draw:()=>void}[]} */ const actors = [];
+  const prepareStart = window.MH_PERF ? performance.now() : 0;
   for (let s = sMin; s <= sMax; s++) {
     const a = Math.max(txMin, s - tyMax), b = Math.min(txMax, s - tyMin);
     for (let tx = a; tx <= b; tx++) {
@@ -1093,6 +1100,10 @@ function render() {
   // ecology entities (optional layer; see ecology.js / window.MH_ECO)
   if (ecoOn && window.MH_ECO.actors) window.MH_ECO.actors((depth, drawFn) => actors.push({ depth, draw: () => drawFn(ctx) }), ECO_API);
   actors.sort((p, q) => p.depth - q.depth);
+  if (window.MH_PERF) {
+    window.MH_PERF.mark("prepare", performance.now() - prepareStart);
+    window.MH_PERF.mark("actors", actors.length);
+  }
   for (const a of actors) a.draw();
 
   if (T.darkness) {                                     // gloom: ONE multiply by a dark MAP, bright inside the slime's view-cone AND at each bauble, so the
