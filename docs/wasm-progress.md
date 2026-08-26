@@ -50,6 +50,6 @@ Scaling measurements remain a required gate before removing any fallback and wil
 - Generated release artifacts remain compatible with the existing static Pages deployment; no framework, cross-origin isolation, threads, deployment workflow, push, or public deployment was introduced.
 - Documentation and README now describe build, feature flags, memory/event contracts, benchmarks, and stop decisions.
 - Chrome and Firefox automation is complete. Matt manually opened `index.html` in Safari on 2026-08-26 and reported that it seemed solid, closing the Safari/local-review gate without enabling persistent remote automation.
-- The legacy paths remain intentionally present as explicit comparison and failure fallbacks. No public push or deployment has occurred.
+- The legacy paths remain intentionally present as explicit comparison and failure fallbacks. After local Safari review and the release checks below passed, the migration was published on 2026-08-26.
 - The canonical Musebots pipeline now verifies two byte-identical Rust/WASM builds and two byte-identical signal-tower bundle builds, rejects missing or stale deployment artifacts, and retains the native audio fallback in the bundle loaded asynchronously after the page `load` event.
 - The signal-tower selector now exposes a prominent **Done building** action that closes the selector and build mode together, eliminating the hidden-toolbar workaround.
