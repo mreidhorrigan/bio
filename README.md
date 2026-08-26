@@ -134,9 +134,14 @@ After changing the underlying Musebots, regenerate the checked-in website bundle
 ```sh
 cd "/Users/matthorrigan/Documents/OneDrive - Simon Fraser University (1sfu)/Work/2026_Musebots/web-musebots"
 npm run website:towers
+npm run website:verify
 ```
 
 Run the website-side integration check with `node --test signal-towers.test.mjs`.
+`website:verify` performs two clean Rust/WASM builds and two clean Musebots bundle
+builds, requires byte-identical outputs, and rejects a stale or incomplete website
+distribution. The generated tower bundle—including its native audio fallback—still
+loads asynchronously only after the core page's `load` event.
 
 ## WASM development
 

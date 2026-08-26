@@ -655,6 +655,11 @@ function wireInput() {
     window.MH_MUSEBOTS.restore(BUILDINGS);
     window.MH_MUSEBOTS.updateListener?.(player.x, player.y, P, BUILDINGS);
   });
+  // The Musebot picker covers the build toolbar while it is open. Its explicit
+  // “Done building” action closes that modal and exits build mode in one step.
+  window.addEventListener("mh-signal-finish-build", () => {
+    if (buildMode) toggleBuild();
+  });
 }
 
 /** @param {KeyboardEvent} e */

@@ -22,9 +22,12 @@ test("the site loads and integrates the generated signal-tower bundle", async ()
   assert.match(engine, /placementCursor\(buildTool\)/);
   assert.match(engine, /MH_MUSEBOTS\.updateListener\(player\.x, player\.y, P, BUILDINGS\)/);
   assert.match(engine, /mh-musebots-ready/);
+  assert.match(engine, /mh-signal-finish-build/);
   assert.match(engine, /state\.beat/);
   assert.match(buildings, /drawSignalTower/);
   assert.match(buildings, /state\.beat/);
   assert.match(bundle, /signal-towers/);
   assert.match(bundle, /Choose a Musebot/);
+  assert.match(bundle, /Done building/);
+  assert.match(bundle, /mh-signal-finish-build/);
 });

@@ -12967,7 +12967,7 @@
   var ROOM = "signal-towers";
   var QUERY_KEY = "signals";
   var MAX_TOWERS = 24;
-  var BRIDGE_BUILD = "20260826-wasm-dsp-1";
+  var BRIDGE_BUILD = "20260826-wasm-dsp-2";
   var ensemble = new ClientEnsemble();
   var runtimes = /* @__PURE__ */ new Map();
   var sharedAudioContext = null;
@@ -13324,6 +13324,9 @@
     <p class="mh-signal-help">Each tower hosts one independent agent. Towers on this page share a clock and Musebot Protocol room.</p>
     <label class="mh-signal-search-label">Find a bot<input class="mh-signal-search" type="search" autocomplete="off"></label>
     <div class="mh-signal-list"></div>
+    <div class="mh-signal-actions">
+      <button class="mh-signal-done" type="button">Done building</button>
+    </div>
   </div>`;
     const style = document.createElement("style");
     style.textContent = `
@@ -13331,6 +13334,7 @@
     #mh-signal-selector[hidden]{display:none}.mh-signal-panel{position:relative;width:min(620px,94vw);max-height:86vh;overflow:auto;background:#fff;color:#20242a;border:1px solid #d9d9d9;border-radius:24px 7px 24px 7px;padding:22px;box-shadow:0 20px 70px rgba(0,0,0,.38)}
     .mh-signal-close{position:absolute;right:12px;top:10px;border:0;background:transparent;font-size:26px;cursor:pointer}.mh-signal-kicker{margin:0 0 5px;font-size:11px;font-weight:800;letter-spacing:.15em;color:#5b2a86}.mh-signal-panel h2{margin:0 0 7px}.mh-signal-help{margin:0 28px 16px 0;line-height:1.45;color:#555}
     .mh-signal-search-label{display:grid;gap:5px;font-size:12px;font-weight:800}.mh-signal-search{font:inherit;font-size:15px;padding:9px 11px;border:1px solid #bbb;border-radius:10px}.mh-signal-list{display:grid;gap:6px;margin-top:12px}.mh-signal-option{text-align:left;border:1px solid #ddd;background:#f8f9fb;border-radius:14px 5px 14px 5px;padding:9px 11px;cursor:pointer}.mh-signal-option:hover,.mh-signal-option:focus{background:#c3f0ff;outline:none}.mh-signal-option strong,.mh-signal-option small{display:block}.mh-signal-option small{margin-top:2px;color:#666}.mh-signal-category{margin:12px 0 2px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#5b2a86}
+    .mh-signal-actions{position:sticky;bottom:-22px;margin:16px -22px -22px;padding:12px 22px;background:linear-gradient(transparent,#fff 24%)}.mh-signal-done{width:100%;border:1px solid #5b2a86;background:#5b2a86;color:#fff;border-radius:14px 5px 14px 5px;padding:10px 14px;font:800 14px var(--mh-ui,system-ui,sans-serif);cursor:pointer}.mh-signal-done:hover,.mh-signal-done:focus-visible{background:#452066;outline:2px solid #c3f0ff;outline-offset:2px}
   `;
     document.head.append(style);
     document.body.append(overlay);
@@ -13369,6 +13373,11 @@
     };
     input.oninput = render;
     selector.onclick = (event) => {
+      if (event.target.closest(".mh-signal-done")) {
+        selector.hidden = true;
+        window.dispatchEvent(new CustomEvent("mh-signal-finish-build"));
+        return;
+      }
       if (event.target === selector || event.target.closest(".mh-signal-close")) {
         selector.hidden = true;
         return;
