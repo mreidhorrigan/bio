@@ -49,5 +49,5 @@ Scaling measurements remain a required gate before removing any fallback and wil
 
 - Generated release artifacts remain compatible with the existing static Pages deployment; no framework, cross-origin isolation, threads, deployment workflow, push, or public deployment was introduced.
 - Documentation and README now describe build, feature flags, memory/event contracts, benchmarks, and stop decisions.
-- Chrome and Firefox validation is complete. Automated Safari validation is pending because Safari refuses WebDriver sessions until its persistent “Allow remote automation” security setting is enabled; Codex did not silently change that setting.
-- The legacy paths remain intentionally present until Matt completes local visual/audible review. No public push or deployment is authorized before that review.
+- Chrome and Firefox automation is complete. Matt manually opened `index.html` in Safari on 2026-08-26 and reported that it seemed solid, closing the Safari/local-review gate without enabling persistent remote automation.
+- The legacy paths remain intentionally present as explicit comparison and failure fallbacks. No public push or deployment has occurred.
