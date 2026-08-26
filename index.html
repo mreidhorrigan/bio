@@ -27,6 +27,8 @@
   <script src="performance-monitor.js" defer></script>
   <script src="engine.js" defer></script>
   <script src="wasm-runtime.js" defer></script>
+  <script src="world-bridge.js" defer></script>
+  <script src="wasm-audio.js" defer></script>
   <script src="content.js" defer></script>
   <script src="ecology.js" defer></script>
   <script src="buildings.js" defer></script>
@@ -40,7 +42,7 @@
       var script = document.createElement("script");
       // Keep file:// Chrome from reusing an older audio graph after the
       // generated tower bundle changes.
-      script.src = "signal-towers.js?v=20260806-chrome-audio-5"; script.async = true;
+      script.src = "signal-towers.js?v=20260826-wasm-dsp-1"; script.async = true;
       document.body.appendChild(script);
     }, { once: true });
   </script>

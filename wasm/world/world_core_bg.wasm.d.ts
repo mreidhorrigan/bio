@@ -2,14 +2,27 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export const __wbg_seededrng_free: (a: number, b: number) => void;
+export const __wbg_worldcore_free: (a: number, b: number) => void;
 export const abi_version: () => number;
 export const circles_overlap: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => number;
 export const seededrng_new: (a: number) => number;
 export const seededrng_next_f64: (a: number) => number;
 export const seededrng_next_u32: (a: number) => number;
 export const smoke_add: (a: number, b: number) => number;
+export const worldcore_configure: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => void;
+export const worldcore_entity_count: (a: number) => number;
+export const worldcore_flora_len: (a: number) => number;
+export const worldcore_flora_ptr: (a: number) => number;
+export const worldcore_flora_snapshot: (a: number) => [number, number];
+export const worldcore_new: (a: number, b: number, c: number, d: number, e: number, f: number) => number;
+export const worldcore_population: (a: number, b: number) => number;
+export const worldcore_render_len: (a: number) => number;
+export const worldcore_render_ptr: (a: number) => number;
+export const worldcore_render_snapshot: (a: number) => [number, number];
+export const worldcore_step: (a: number, b: number, c: number, d: number) => void;
 export const wrap: (a: number, b: number) => number;
 export const wrapped_delta: (a: number, b: number) => number;
 export const wrapped_distance: (a: number, b: number, c: number, d: number, e: number) => number;
 export const __wbindgen_externrefs: WebAssembly.Table;
+export const __wbindgen_free: (a: number, b: number, c: number) => void;
 export const __wbindgen_start: () => void;

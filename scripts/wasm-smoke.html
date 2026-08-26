@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <title>WASM smoke test</title>
 <output id="result">pending</output>
-<iframe id="homepage" src="../?wasm=1&amp;theme=technurture" hidden></iframe>
+<iframe id="homepage" src="../?wasm=1&amp;worker=1&amp;theme=technurture" hidden></iframe>
 <script type="module">
   const result = document.querySelector("#result");
   try {
@@ -13,7 +13,7 @@
     let homepageReady = false;
     for (let attempt = 0; attempt < 50 && !homepageReady; attempt++) {
       await new Promise((resolve) => setTimeout(resolve, 100));
-      homepageReady = !!(frame.contentWindow.MH_ISO && frame.contentWindow.MH_WASM?.state.world === "ready" && frame.contentDocument.querySelector("canvas"));
+      homepageReady = !!(frame.contentWindow.MH_ISO && frame.contentWindow.MH_WASM?.state.world === "ready" && frame.contentWindow.MH_WASM?.worldBridge?.snapshot?.length && frame.contentDocument.querySelector("canvas"));
     }
     const ok = world.abi_version() === 1 && world.smoke_add(20, 22) === 42 && fallbackCaught && homepageReady;
     result.textContent = ok ? "PASS" : "FAIL";

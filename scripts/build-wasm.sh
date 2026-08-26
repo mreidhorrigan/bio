@@ -12,4 +12,5 @@ command -v wasm-bindgen >/dev/null 2>&1 || {
 cargo build --manifest-path "$manifest" --target wasm32-unknown-unknown --release
 wasm-bindgen "$repo_dir/rust/target/wasm32-unknown-unknown/release/world_core.wasm" --target web --out-dir "$repo_dir/wasm/world" --out-name world_core
 wasm-bindgen "$repo_dir/rust/target/wasm32-unknown-unknown/release/dsp_core.wasm" --target web --out-dir "$repo_dir/wasm/audio" --out-name dsp_core
+node "$repo_dir/scripts/build-audio-worklet.mjs"
 echo "Built browser WASM in wasm/world and wasm/audio"

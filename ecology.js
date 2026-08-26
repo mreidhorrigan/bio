@@ -63,6 +63,9 @@
     acc: 0, facc: 0, grid: new Map(), ncells: 1,
     stats: { grazers: 0, predators: 0, flora: 0 },
   };
+  // Development-only scaling gate used by repeatable local benchmarks.
+  const scale = Number(new URLSearchParams(location.search).get("ecoScale")) || 1;
+  let scaleApplied = false;
 
   /* --- helpers ------------------------------------------------------------- */
   const wi = (v) => { const P = ECO.P; v = Math.floor(v) % P; return v < 0 ? v + P : v; };
@@ -265,7 +268,27 @@
   /* --- engine hooks -------------------------------------------------------- */
   ECO.update = function (dt, api) {
     const perfStart = window.MH_PERF ? performance.now() : 0;
+    if (!scaleApplied) {
+      scaleApplied = true;
+      if ([2, 5, 10].includes(scale)) {
+        ECO.cfg.motes *= scale; ECO.cfg.moteCap *= scale;
+        ECO.cfg.grazerStart *= scale; ECO.cfg.grazerCap *= scale;
+        ECO.cfg.predatorStart *= scale; ECO.cfg.predatorCap *= scale;
+        ECO.cfg.fireflies *= scale;
+      }
+    }
     ECO.hub = api.hub; ECO.villageR = api.villageR;                   // set BEFORE init so spawns can anchor to the plaza
+    const wasmBridge = window.MH_WASM && window.MH_WASM.worldBridge;
+    if (wasmBridge && wasmBridge.enabled) {
+      wasmBridge.ensure(api.P, ECO.cfg, api.hub, api.villageR);
+      wasmBridge.step(dt, api.player);
+      if (wasmBridge.ready && wasmBridge.snapshot) {
+        ECO.P = api.P; ECO.now = api.t;
+        ECO.stats.grazers = wasmBridge.populations[1]; ECO.stats.predators = wasmBridge.populations[2];
+        if (window.MH_PERF) window.MH_PERF.mark("ecology", performance.now() - perfStart);
+        return;
+      }
+    }
     if (!ECO.inited) init(api.P);
     ECO.now = api.t;
     const c = ECO.cfg, P = ECO.P;
@@ -298,14 +321,27 @@
   };
 
   ECO.groundTint = function (tx, ty) {
-    if (!ECO.inited || !ECO.showFlora) return null;
-    const f = ECO.flora[fidx(tx, ty)];
+    const wasmBridge = window.MH_WASM && window.MH_WASM.worldBridge;
+    const wasmFlora = wasmBridge && wasmBridge.ready && wasmBridge.flora;
+    if ((!ECO.inited && !wasmFlora) || !ECO.showFlora) return null;
+    const f = wasmFlora ? wasmFlora[wi(ty) * ECO.P + wi(tx)] : ECO.flora[fidx(tx, ty)];
     if (f < 0.3) return "rgba(86,66,42," + ((0.3 - f) * 0.9).toFixed(3) + ")";       // grazed / bare
     if (f > 0.74) return "rgba(72,150,70," + ((f - 0.74) * 0.7).toFixed(3) + ")";    // lush
     return null;
   };
 
   ECO.actors = function (push, api) {
+    const wasmBridge = window.MH_WASM && window.MH_WASM.worldBridge;
+    if (wasmBridge && wasmBridge.ready && wasmBridge.snapshot) {
+      const records = wasmBridge.snapshot, W = api.W, H = api.H;
+      for (let i = 0; i < records.length; i += 10) {
+        const e = { x: records[i], y: records[i + 1], vx: records[i + 2], vy: records[i + 3], e: records[i + 4], phase: records[i + 6], rest: records[i + 7], dormant: !!records[i + 8], eat: records[i + 9] };
+        const p = api.place(e.x, e.y); if (p.x < -24 || p.x > W + 24 || p.y < -26 || p.y > H + 18) continue;
+        const painter = records[i + 5] === 0 ? drawMote : records[i + 5] === 1 ? drawGrazer : records[i + 5] === 2 ? drawPredator : drawFirefly;
+        push(p.depth, (g) => painter(g, p.x, p.y, e));
+      }
+      return;
+    }
     if (!ECO.inited) return;
     const W = api.W, H = api.H;
     const vis = (e, fn) => { const p = api.place(e.x, e.y); if (p.x < -24 || p.x > W + 24 || p.y < -26 || p.y > H + 18) return; push(p.depth, (g) => fn(g, p.x, p.y, e)); };
@@ -385,7 +421,10 @@
     }
   }
 
-  ECO.reset = function () { ECO.inited = false; };   // re-init with the current cfg (used on theme switch)
+  ECO.reset = function () {
+    ECO.inited = false;
+    if (window.MH_WASM && window.MH_WASM.worldBridge) window.MH_WASM.worldBridge.reset();
+  };   // re-init with the current cfg (used on theme switch)
 
   window.MH_ECO = ECO;
 })();

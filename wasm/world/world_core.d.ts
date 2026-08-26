@@ -13,6 +13,26 @@ export class SeededRng {
     next_u32(): number;
 }
 
+/**
+ * Authoritative, allocation-bounded ecology state. Browser input enters once per
+ * step and render state leaves as one packed Float32Array-compatible buffer.
+ */
+export class WorldCore {
+    free(): void;
+    [Symbol.dispose](): void;
+    configure(grazer_cap: number, predator_cap: number, predator_dormant: boolean, mote_speed: number, grazer_speed: number, predator_speed: number, firefly_speed: number, turn: number, curiosity: number, hub_x: number, hub_y: number, village_radius: number): void;
+    entity_count(): number;
+    flora_len(): number;
+    flora_ptr(): number;
+    flora_snapshot(): Float32Array;
+    constructor(period: number, seed: number, motes: number, grazers: number, predators: number, fireflies: number);
+    population(kind: number): number;
+    render_len(): number;
+    render_ptr(): number;
+    render_snapshot(): Float32Array;
+    step(dt: number, player_x: number, player_y: number): void;
+}
+
 export function abi_version(): number;
 
 export function circles_overlap(ax: number, ay: number, ar: number, bx: number, by: number, br: number, period: number): boolean;
@@ -30,16 +50,29 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_seededrng_free: (a: number, b: number) => void;
+    readonly __wbg_worldcore_free: (a: number, b: number) => void;
     readonly abi_version: () => number;
     readonly circles_overlap: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => number;
     readonly seededrng_new: (a: number) => number;
     readonly seededrng_next_f64: (a: number) => number;
     readonly seededrng_next_u32: (a: number) => number;
     readonly smoke_add: (a: number, b: number) => number;
+    readonly worldcore_configure: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => void;
+    readonly worldcore_entity_count: (a: number) => number;
+    readonly worldcore_flora_len: (a: number) => number;
+    readonly worldcore_flora_ptr: (a: number) => number;
+    readonly worldcore_flora_snapshot: (a: number) => [number, number];
+    readonly worldcore_new: (a: number, b: number, c: number, d: number, e: number, f: number) => number;
+    readonly worldcore_population: (a: number, b: number) => number;
+    readonly worldcore_render_len: (a: number) => number;
+    readonly worldcore_render_ptr: (a: number) => number;
+    readonly worldcore_render_snapshot: (a: number) => [number, number];
+    readonly worldcore_step: (a: number, b: number, c: number, d: number) => void;
     readonly wrap: (a: number, b: number) => number;
     readonly wrapped_delta: (a: number, b: number) => number;
     readonly wrapped_distance: (a: number, b: number, c: number, d: number, e: number) => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;
+    readonly __wbindgen_free: (a: number, b: number, c: number) => void;
     readonly __wbindgen_start: () => void;
 }
 

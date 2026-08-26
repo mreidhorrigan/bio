@@ -42,6 +42,124 @@ export class SeededRng {
 if (Symbol.dispose) SeededRng.prototype[Symbol.dispose] = SeededRng.prototype.free;
 
 /**
+ * Authoritative, allocation-bounded ecology state. Browser input enters once per
+ * step and render state leaves as one packed Float32Array-compatible buffer.
+ */
+export class WorldCore {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        WorldCoreFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_worldcore_free(ptr, 0);
+    }
+    /**
+     * @param {number} grazer_cap
+     * @param {number} predator_cap
+     * @param {boolean} predator_dormant
+     * @param {number} mote_speed
+     * @param {number} grazer_speed
+     * @param {number} predator_speed
+     * @param {number} firefly_speed
+     * @param {number} turn
+     * @param {number} curiosity
+     * @param {number} hub_x
+     * @param {number} hub_y
+     * @param {number} village_radius
+     */
+    configure(grazer_cap, predator_cap, predator_dormant, mote_speed, grazer_speed, predator_speed, firefly_speed, turn, curiosity, hub_x, hub_y, village_radius) {
+        wasm.worldcore_configure(this.__wbg_ptr, grazer_cap, predator_cap, predator_dormant, mote_speed, grazer_speed, predator_speed, firefly_speed, turn, curiosity, hub_x, hub_y, village_radius);
+    }
+    /**
+     * @returns {number}
+     */
+    entity_count() {
+        const ret = wasm.worldcore_entity_count(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+     * @returns {number}
+     */
+    flora_len() {
+        const ret = wasm.worldcore_flora_len(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+     * @returns {number}
+     */
+    flora_ptr() {
+        const ret = wasm.worldcore_flora_ptr(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+     * @returns {Float32Array}
+     */
+    flora_snapshot() {
+        const ret = wasm.worldcore_flora_snapshot(this.__wbg_ptr);
+        var v1 = getArrayF32FromWasm0(ret[0], ret[1]).slice();
+        wasm.__wbindgen_free(ret[0], ret[1] * 4, 4);
+        return v1;
+    }
+    /**
+     * @param {number} period
+     * @param {number} seed
+     * @param {number} motes
+     * @param {number} grazers
+     * @param {number} predators
+     * @param {number} fireflies
+     */
+    constructor(period, seed, motes, grazers, predators, fireflies) {
+        const ret = wasm.worldcore_new(period, seed, motes, grazers, predators, fireflies);
+        this.__wbg_ptr = ret;
+        WorldCoreFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * @param {number} kind
+     * @returns {number}
+     */
+    population(kind) {
+        const ret = wasm.worldcore_population(this.__wbg_ptr, kind);
+        return ret >>> 0;
+    }
+    /**
+     * @returns {number}
+     */
+    render_len() {
+        const ret = wasm.worldcore_render_len(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+     * @returns {number}
+     */
+    render_ptr() {
+        const ret = wasm.worldcore_render_ptr(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+     * @returns {Float32Array}
+     */
+    render_snapshot() {
+        const ret = wasm.worldcore_render_snapshot(this.__wbg_ptr);
+        var v1 = getArrayF32FromWasm0(ret[0], ret[1]).slice();
+        wasm.__wbindgen_free(ret[0], ret[1] * 4, 4);
+        return v1;
+    }
+    /**
+     * @param {number} dt
+     * @param {number} player_x
+     * @param {number} player_y
+     */
+    step(dt, player_x, player_y) {
+        wasm.worldcore_step(this.__wbg_ptr, dt, player_x, player_y);
+    }
+}
+if (Symbol.dispose) WorldCore.prototype[Symbol.dispose] = WorldCore.prototype.free;
+
+/**
  * @returns {number}
  */
 export function abi_version() {
@@ -131,6 +249,22 @@ function __wbg_get_imports() {
 const SeededRngFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_seededrng_free(ptr, 1));
+const WorldCoreFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_worldcore_free(ptr, 1));
+
+function getArrayF32FromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    return getFloat32ArrayMemory0().subarray(ptr / 4, ptr / 4 + len);
+}
+
+let cachedFloat32ArrayMemory0 = null;
+function getFloat32ArrayMemory0() {
+    if (cachedFloat32ArrayMemory0 === null || cachedFloat32ArrayMemory0.byteLength === 0) {
+        cachedFloat32ArrayMemory0 = new Float32Array(wasm.memory.buffer);
+    }
+    return cachedFloat32ArrayMemory0;
+}
 
 function getStringFromWasm0(ptr, len) {
     return decodeText(ptr >>> 0, len);
@@ -163,6 +297,7 @@ function __wbg_finalize_init(instance, module) {
     wasmInstance = instance;
     wasm = instance.exports;
     wasmModule = module;
+    cachedFloat32ArrayMemory0 = null;
     cachedUint8ArrayMemory0 = null;
     wasm.__wbindgen_start();
     return wasm;

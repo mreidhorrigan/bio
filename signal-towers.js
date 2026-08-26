@@ -10202,11 +10202,12 @@
   var midiRoutes = new MidiRouteRegistry();
   var nextMidiRoute = 1;
   var AudioEngine = class {
-    constructor({ clientOnly = false, context = null, dynamics = true, monitorOutput = false } = {}) {
+    constructor({ clientOnly = false, context = null, dynamics = true, monitorOutput = false, dspFactory = null } = {}) {
       this.clientOnly = clientOnly;
       this.ctx = context;
       this.dynamics = dynamics;
       this.monitorOutput = monitorOutput;
+      this.dspFactory = dspFactory;
       this.activeGraphs = /* @__PURE__ */ new Set();
       this.mpeEnabled = true;
       this.mpeBendRange = 48;
@@ -10247,6 +10248,17 @@
           this.outputSamples = new Float32Array(this.outputAnalyser.fftSize);
           this.spatialGain.connect(this.outputAnalyser).connect(this.ctx.destination);
         } else this.spatialGain.connect(this.ctx.destination);
+      }
+      if (resume && this.dspFactory && !this.dspNode && !this.dspInitialization) {
+        this.dspInitialization = Promise.resolve(this.dspFactory(this.ctx)).then((node) => {
+          this.dspNode = node;
+          node.connect(this.master);
+          this.report("wasm_dsp_ready", { sampleRate: this.ctx.sampleRate });
+          return node;
+        }).catch((error) => {
+          this.report("wasm_dsp_fallback", { message: String(error?.message || error) });
+          return null;
+        });
       }
       if (resume && this.ctx.state !== "running") {
         const resumed = this.ctx.resume();
@@ -10599,8 +10611,24 @@
         (this.eventTime || this.ctx.currentTime) + offset
       );
     }
+    scheduleDsp(model, note, duration, gain, offset = 0, paramA = 0, paramB = 0, extra = {}) {
+      if (!this.dspNode || this.muted || !this.master) return false;
+      const start = this.eventStart(offset);
+      this.dspNode.schedule([{
+        model,
+        frequency: midiHz(note),
+        velocity: Math.max(0, Math.min(1, gain * 8)),
+        duration,
+        offsetSeconds: Math.max(0, start - this.ctx.currentTime),
+        paramA,
+        paramB,
+        ...extra
+      }]);
+      return true;
+    }
     voice(note, duration, gain, type = "sine", offset = 0, expression = {}) {
       if (!this.ctx || this.muted || !this.master) return;
+      const wasmNote = this.tunePitch(note);
       const nominalNote = note, web = EXPRESSION_CONFIG.webAudio;
       note = this.tunePitch(note);
       const sourceVelocity = Number.isFinite(Number(expression.velocity)) ? Number(expression.velocity) : Math.min(1, Math.sqrt(Math.max(0, gain) / 0.16)), performedVelocity = this.performanceVelocity(sourceVelocity), performance2 = expressivePerformance({
@@ -10685,6 +10713,7 @@
     noise(duration, gain, filterHz = 6e3, offset = 0) {
       if (!this.ctx || this.muted) return;
       gain *= this.velocityGain || 1;
+      if (this.scheduleDsp(1, 69, duration, gain, offset, filterHz < 180 ? 2 : filterHz < 3e3 ? 1 : 0, filterHz)) return;
       const length = Math.ceil(this.ctx.sampleRate * duration), buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate), data = buffer.getChannelData(0);
       for (let i = 0; i < length; i++) data[i] = random() * 2 - 1;
       const source = this.ctx.createBufferSource(), filter = this.ctx.createBiquadFilter(), amp = this.ctx.createGain(), now = this.eventStart(offset);
@@ -11075,6 +11104,7 @@
         return;
       }
       const ratios = model.ratios || [1, 2, 3], gains = model.gains || [1, 0.3, 0.15];
+      if (this.scheduleDsp(2, this.tunePitch(note), duration, 0.018 * velocity, 0, 0, 0, { ratios, gains })) return;
       for (let index = 0; index < ratios.length; index++)
         this.voice(
           note + 12 * Math.log2(Math.max(0.01, ratios[index])),
@@ -11146,6 +11176,7 @@
         this.midiNote(carrier, duration, velocity, void 0, 0, expression);
         return;
       }
+      if (this.scheduleDsp(3, this.tunePitch(carrier), duration, 0.014 + 0.032 * velocity, 0, modulatorRatio, index)) return;
       this.voice(
         carrier,
         duration,
@@ -12936,7 +12967,7 @@
   var ROOM = "signal-towers";
   var QUERY_KEY = "signals";
   var MAX_TOWERS = 24;
-  var BRIDGE_BUILD = "20260806-chrome-audio-5";
+  var BRIDGE_BUILD = "20260826-wasm-dsp-1";
   var ensemble = new ClientEnsemble();
   var runtimes = /* @__PURE__ */ new Map();
   var sharedAudioContext = null;
@@ -13097,7 +13128,8 @@
       this.audio = new AudioEngine({
         clientOnly: true,
         context: sharedAudioContext,
-        monitorOutput: true
+        monitorOutput: true,
+        dspFactory: window.MH_WASM?.audio?.enabled ? window.MH_WASM.audio.createNode : null
       });
       this.audio.setPerformanceGain(1);
       this.recentAudioEvents = [];
@@ -13392,6 +13424,7 @@
         lastAudioTickAgeMs: Number.isFinite(runtime.lastAudioTickAt) ? Math.round(performance.now() - runtime.lastAudioTickAt) : null,
         audioEventCount: runtime.audioEventCount,
         outputLevel: runtime.audio.outputLevel?.(),
+        dspState: runtime.audio.dspNode ? "ready" : runtime.audio.dspInitialization ? "loading-or-fallback" : "legacy",
         contextTime: runtime.audio.ctx?.currentTime,
         recentAudioEvents: runtime.recentAudioEvents.map((event) => ({ ...event })),
         lastAudioEventAgeMs: Number.isFinite(runtime.lastAudioEventAt) ? Math.round(performance.now() - runtime.lastAudioEventAt) : null

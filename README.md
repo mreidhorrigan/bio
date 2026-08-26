@@ -138,6 +138,16 @@ npm run website:towers
 
 Run the website-side integration check with `node --test signal-towers.test.mjs`.
 
+## WASM development
+
+Rust/WASM accelerates the optional ecology and custom Signal Tower DSP while the site remains a static GitHub Pages artifact. Build both release cores and generated worklet with:
+
+```sh
+./scripts/build-wasm.sh
+```
+
+Serve the repository over HTTP. Worker-owned ecology is the default; use `?wasmWorld=0` for legacy comparison, `?perf=1&ecoScale=10` for development scaling, and `?wasmAudio=0` to force native audio fallback. Run Rust checks from `rust/`, `node scripts/benchmark-dsp.mjs` for DSP scaling, and the `test:bio-wasm-*` / `test:bio-firefox-wasm` commands in the canonical `web-musebots` project for browser integration. Generated files under `wasm/` and `signal-towers.js` are checked-in distribution artifacts, not canonical source.
+
 ## Quick start: fork and make it yours
 
 1. **Fork** this repo on GitHub.

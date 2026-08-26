@@ -1,0 +1,36 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>AudioWorklet WASM smoke test</title>
+<button id="start" type="button">Start audio smoke</button>
+<output id="result">idle</output>
+<script src="../wasm-runtime.js"></script>
+<script src="../wasm-audio.js"></script>
+<script type="module">
+  const result = document.querySelector("#result");
+  async function run() { try {
+    result.textContent = "pending";
+    const context = new AudioContext();
+    const node = await MH_WASM.audio.createNode(context, { maxVoices: 128, seed: 7 });
+    const gain = context.createGain(); gain.gain.value = 0; node.connect(gain).connect(context.destination);
+    node.schedule([
+      { model: 0, frequency: 220, velocity: 0.5, duration: 2 },
+      { model: 1, frequency: 110, velocity: 0.2, duration: 2, paramA: 1 },
+      { model: 2, frequency: 110, velocity: 0.2, duration: 2, ratios: [1, 2, 3, 5], gains: [1, 0.4, 0.2, 0.1] },
+      { model: 3, frequency: 220, velocity: 0.2, duration: 2, paramA: 2, paramB: 4 },
+    ]);
+    await context.resume();
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const probe = await node.renderProbe();
+    const diagnostics = await node.diagnostics();
+    const ok = MH_WASM.state.audio === "ready" && probe.activeVoices > 0 && probe.peak > 0;
+    result.textContent = ok ? "PASS" : "FAIL";
+    result.dataset.state = MH_WASM.state.audio;
+    result.dataset.voices = diagnostics.activeVoices;
+    result.dataset.queued = diagnostics.queuedEvents;
+    result.dataset.peak = probe.peak;
+    await context.close();
+  } catch (error) {
+    result.textContent = "ERROR: " + error;
+  } }
+  document.querySelector("#start").addEventListener("click", run, { once: true });
+</script>

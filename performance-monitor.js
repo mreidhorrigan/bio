@@ -3,7 +3,7 @@
   const enabled = new URLSearchParams(location.search).get("perf") === "1";
   if (!enabled) return;
   const limit = 3600;
-  const samples = { frame: [], update: [], ecology: [], prepare: [], canvas: [], actors: [] };
+  const samples = { frame: [], update: [], ecology: [], prepare: [], canvas: [], actors: [], worker: [] };
   let longTasks = 0, longTaskMs = 0;
   const add = (name, value) => {
     const values = samples[name];
@@ -33,7 +33,10 @@
         renderPreparation: summary(samples.prepare), canvas: summary(samples.canvas), actors: summary(samples.actors),
         longTasks: { count: longTasks, durationMs: longTaskMs },
         heap: performance.memory ? { used: performance.memory.usedJSHeapSize, total: performance.memory.totalJSHeapSize, limit: performance.memory.jsHeapSizeLimit } : null,
-        ecologyPopulation: window.MH_ECO ? { motes: window.MH_ECO.motes.length, grazers: window.MH_ECO.grazers.length, predators: window.MH_ECO.predators.length, fireflies: window.MH_ECO.fireflies.length } : null,
+        worker: window.MH_WASM?.worldBridge?.ready ? { ...summary(samples.worker), latestMs: window.MH_WASM.worldBridge.workerStepMs, snapshots: window.MH_WASM.worldBridge.snapshots } : null,
+        ecologyPopulation: window.MH_WASM?.worldBridge?.ready
+          ? { motes: window.MH_WASM.worldBridge.populations[0], grazers: window.MH_WASM.worldBridge.populations[1], predators: window.MH_WASM.worldBridge.populations[2], fireflies: window.MH_WASM.worldBridge.populations[3] }
+          : window.MH_ECO ? { motes: window.MH_ECO.motes.length, grazers: window.MH_ECO.grazers.length, predators: window.MH_ECO.predators.length, fireflies: window.MH_ECO.fireflies.length } : null,
       };
     },
     reset() { for (const values of Object.values(samples)) values.length = 0; longTasks = 0; longTaskMs = 0; },
