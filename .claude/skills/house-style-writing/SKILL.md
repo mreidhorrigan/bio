@@ -82,7 +82,14 @@ sentence**. Keep it lowercase when what follows is a fragment or a list.
 - ✓ fragment: `Upload two things: a roster and a layout.`
 - ✓ list: `Supported formats: plain text, CSV, Canvas export.`
 
-### 6. Default to Chicago.
+### 6. No hyphenated “-level” modifiers.
+
+Treat every hyphenated adjective ending in `-level` as prohibited LLM jargon,
+including `workflow-level`, `process-level`, `output-level`, and `task-level`.
+Name the exact scope, evidence, object, or relationship instead. Do not replace
+one `-level` compound with another.
+
+### 7. Default to Chicago.
 
 For anything these house rules don't cover (hyphenation, number style, quotation
 and punctuation placement, capitalization edge cases), follow the **Chicago Manual
