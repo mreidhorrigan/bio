@@ -9,6 +9,11 @@
     <title>Seat Planner</title>
     <!-- the one site-wide menubar (links + dropdowns live in this file) -->
     <script src="menubar.js" defer="defer"></script>
+    <!-- English/French switch. Not deferred: the tool scripts below run at parse
+         time and ask MH_I18N for their words, and a blocking pair this small also
+         spares a French visitor a flash of English. i18n-fr.js holds the French. -->
+    <script src="i18n.js"></script>
+    <script src="i18n-fr.js"></script>
     <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); the inline
      :root below keeps only Seat Planner's page-specific tokens and may override -->
     <link rel="stylesheet" href="brand/brand.css">
@@ -1033,13 +1038,24 @@ integrity flag</textarea>
     return seats.filter(s => !empty.has(s));
   }
 
+  /* Bilingual text (i18n.js, loaded in the head). say() returns one string now.
+     sayIn() also remembers the element, so the language switch re-renders it.
+     Both fall back to the English they are given. */
+  const say = (key, en, vars) => window.MH_I18N ? window.MH_I18N.t(key, en, vars)
+    : String(en).replace(/\{(\w+)\}/g, (whole, k) => (vars && k in vars ? String(vars[k]) : whole));
+  const sayIn = (el, key, en, vars, opts) => {
+    if (window.MH_I18N) return window.MH_I18N.live(el, key, en, vars, opts);
+    if (el) { const text = say(key, en, vars); if (opts && opts.html) el.innerHTML = text; else el.textContent = text; }
+    return el;
+  };
+
   // ── Grade formatting (source-aware) ──────────────────────────────────────────
   function formatGradeBadge(g) {
     if (g === null || g === undefined) return '';
     return gradeSource === 'canvas' ? (Math.round(g) + '%') : ('Gr. ' + g);
   }
   function formatGradeTitle(g) {
-    return gradeSource === 'canvas' ? (Math.round(g) + '%') : ('Grade ' + g);
+    return gradeSource === 'canvas' ? (Math.round(g) + '%') : (say("seats.grade", "Grade {g}", { g: g }));
   }
 
   function showError(msg) { errorMsg.textContent = msg; errorMsg.classList.add('visible'); }
@@ -1053,22 +1069,22 @@ integrity flag</textarea>
   function updateNotice() {
     const parts = [];
     if (layoutData === DEFAULT_LAYOUT)
-      parts.push('<strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps, 35 seats total. Upload a layout CSV above to override.');
+      parts.push(say("seats.noticeDefault", '<strong>Default layout active:</strong> 5 rows × 9 columns with two aisle gaps, 35 seats total. Upload a layout CSV above to override.'));
 
     let accentMode = false;
     if (rankingEnabled) {
       if (rosterHasScores) {
-        parts.push('<strong>Ranking on:</strong> lower scores are placed toward the bottom of the chart. Shuffling is disabled while ranking.');
+        parts.push(say("seats.noticeRank", '<strong>Ranking on:</strong> lower scores are placed toward the bottom of the chart. Shuffling is disabled while ranking.'));
         accentMode = true;
       } else {
-        parts.push('<strong>Ranking on,</strong> but no gradebook scores were found in this roster, so students will be spread evenly.');
+        parts.push(say("seats.noticeRankNoScores", '<strong>Ranking on,</strong> but no gradebook scores were found in this roster, so students will be spread evenly.'));
       }
     }
     if (flaggingEnabled) {
       if (rosterHasNotes)
-        parts.push('<strong>Flagging on:</strong> students whose notes contain a term are seated at the bottom-most seats.');
+        parts.push(say("seats.noticeFlag", '<strong>Flagging on:</strong> students whose notes contain a term are seated at the bottom-most seats.'));
       else
-        parts.push('<strong>Flagging on,</strong> but this roster has no notes to match.');
+        parts.push(say("seats.noticeFlagNoNotes", '<strong>Flagging on,</strong> but this roster has no notes to match.'));
     }
 
     mainNotice.className = accentMode ? 'notice grade-mode' : 'notice';
@@ -1091,11 +1107,14 @@ integrity flag</textarea>
       rosterHasNotes  = result.hasNotes;
 
       const bits = [];
-      if (result.hasScores) bits.push(canvas ? 'scores detected' : 'grades detected');
-      if (result.hasNotes)  bits.push('notes detected');
-      const origin = canvas ? ' from Canvas gradebook' : '';
-      statusStudents.textContent = `${studentsData.length} students loaded${origin}` +
-        (bits.length ? ' · ' + bits.join(', ') : '');
+      if (result.hasScores) bits.push(canvas ? say("seats.scoresDetected", "scores detected")
+                                             : say("seats.gradesDetected", "grades detected"));
+      if (result.hasNotes)  bits.push(say("seats.notesDetected", "notes detected"));
+      const origin = canvas ? say("seats.fromCanvas", " from Canvas gradebook") : '';
+      sayIn(statusStudents, "seats.loaded", "{n} students loaded{origin}{extra}", {
+        n: studentsData.length, origin: origin,
+        extra: bits.length ? ' · ' + bits.join(', ') : ''
+      });
       cardStudents.classList.add('loaded');
       checkReady();
       updateNotice();
@@ -1111,7 +1130,8 @@ integrity flag</textarea>
     reader.onload = ev => {
       layoutData = parseCSV(ev.target.result);
       const seats = layoutData.flat().filter(c => c.toUpperCase() === 'X').length;
-      statusLayout.textContent = `${layoutData.length} rows × ${layoutData[0].length} cols, ${seats} seats`;
+      sayIn(statusLayout, "seats.layoutLoaded", "{rows} rows × {cols} cols, {seats} seats",
+            { rows: layoutData.length, cols: layoutData[0].length, seats: seats });
       cardLayout.classList.add('loaded');
       updateNotice();
     };
@@ -1159,10 +1179,12 @@ integrity flag</textarea>
       const lines = ev.target.result.split(/\r?\n/).map(l => l.split(',')[0].trim()).filter(Boolean);
       if (lines.length) {
         flagTermsEl.value = lines.join('\n');
-        flagTermsHint.textContent = `loaded ${lines.length} term${lines.length !== 1 ? 's' : ''} from ${file.name}`;
+        sayIn(flagTermsHint, lines.length === 1 ? "seats.termsLoadedOne" : "seats.termsLoaded",
+              lines.length === 1 ? "loaded {n} term from {file}" : "loaded {n} terms from {file}",
+              { n: lines.length, file: file.name });
         if (flaggingEnabled && previewSection.classList.contains('visible')) assign();
       } else {
-        flagTermsHint.textContent = 'no terms found in that file';
+        sayIn(flagTermsHint, "seats.noTerms", "no terms found in that file");
       }
     };
     reader.readAsText(file);
@@ -1180,8 +1202,8 @@ integrity flag</textarea>
       for (let c = 0; c < layoutData[r].length; c++)
         if (layoutData[r][c] && layoutData[r][c].toUpperCase() === 'X') seats.push([r, c]);
 
-    if (!seats.length)                         { showError('No seats found. Make sure the layout CSV has cells containing "X".'); return; }
-    if (!studentsData || !studentsData.length) { showError('No student names found.'); return; }
+    if (!seats.length)                         { showError(say("seats.errNoSeats", 'No seats found. Make sure the layout CSV has cells containing "X".')); return; }
+    if (!studentsData || !studentsData.length) { showError(say("seats.errNoNames", "No student names found.")); return; }
 
     // Resolve the optional features from the toggles + terms.
     const terms = getFlagTerms();
@@ -1253,16 +1275,17 @@ integrity flag</textarea>
 
   // ── Render preview ─────────────────────────────────────────────────────────
   function renderPreview(totalSeats, totalStudents, assigned, rankActive, flagsActive) {
-    statsRow.innerHTML = `
-      <div class="stat"><span class="stat-value">${totalStudents}</span><span class="stat-label">students</span></div>
-      <div class="stat"><span class="stat-value">${totalSeats}</span><span class="stat-label">seats</span></div>
-      <div class="stat"><span class="stat-value">${assigned}</span><span class="stat-label">assigned</span></div>
-      <div class="stat"><span class="stat-value">${totalSeats - assigned}</span><span class="stat-label">empty seats</span></div>
-    `;
+    sayIn(statsRow, "seats.stats", `
+      <div class="stat"><span class="stat-value">{students}</span><span class="stat-label">students</span></div>
+      <div class="stat"><span class="stat-value">{seats}</span><span class="stat-label">seats</span></div>
+      <div class="stat"><span class="stat-value">{assigned}</span><span class="stat-label">assigned</span></div>
+      <div class="stat"><span class="stat-value">{empty}</span><span class="stat-label">empty seats</span></div>
+    `, { students: totalStudents, seats: totalSeats, assigned: assigned, empty: totalSeats - assigned },
+       { html: true });
 
     detailsVisible = false;
     gridTable.classList.add('details-off');
-    btnToggle.textContent = 'Show Details';
+    sayIn(btnToggle, "seats.showDetails", "Show Details");
     btnToggle.classList.remove('active');
 
     rebuildTable();
@@ -1297,8 +1320,9 @@ integrity flag</textarea>
           td.className = 'cell-filled' + (flagged ? ' has-flag' : '');
 
           const gradeLabel = grade !== null ? ' · ' + formatGradeTitle(grade) : '';
-          const flagLabel  = flagged ? ' · ⚑ integrity flag' : '';
-          td.title = `${val}${gradeLabel}${flagLabel} (drag to swap)`;
+          const flagLabel  = flagged ? say("seats.flagLabel", " · ⚑ integrity flag") : '';
+          td.title = say("seats.cellTitle", "{name}{grade}{flag} (drag to swap)",
+                         { name: val, grade: gradeLabel, flag: flagLabel });
 
           const inner = document.createElement('div');
           inner.className = 'cell-inner';
@@ -1322,7 +1346,7 @@ integrity flag</textarea>
               const marker = document.createElement('span');
               marker.className = 'flag-marker';
               marker.textContent = '⚑';
-              marker.title = 'Academic integrity flag';
+              marker.title = say("seats.flagTitle", "Academic integrity flag");
               badgesRow.appendChild(marker);
             }
 
@@ -1428,18 +1452,32 @@ integrity flag</textarea>
 
   function updateSwapLog(info) {
     if (!info) {
-      swapLogEl.innerHTML = swapCount > 0
-        ? `<span class="swap-badge">${swapCount} swap${swapCount!==1?'s':''}</span><span class="swap-log-text">chart modified</span>`
-        : `<span class="swap-log-text" style="opacity:0.45">no swaps yet</span>`;
+      if (swapCount > 0)
+        sayIn(swapLogEl, swapCount === 1 ? "seats.swapsOne" : "seats.swaps",
+              swapCount === 1 ? '<span class="swap-badge">{n} swap</span><span class="swap-log-text">chart modified</span>'
+                              : '<span class="swap-badge">{n} swaps</span><span class="swap-log-text">chart modified</span>',
+              { n: swapCount }, { html: true });
+      else
+        sayIn(swapLogEl, "seats.noSwaps", '<span class="swap-log-text" style="opacity:0.45">no swaps yet</span>',
+              null, { html: true });
       return;
     }
-    const verb = info.isUndo ? 'undid swap of' : 'swapped';
-    const a = info.nameA || 'empty seat';
-    const b = info.nameB || 'empty seat';
-    swapLogEl.innerHTML = `<span class="swap-badge">${swapCount} swap${swapCount!==1?'s':''}</span><span class="swap-log-text">${verb} <strong>${a}</strong> ↔ <strong>${b}</strong></span>`;
+    const verb = info.isUndo ? say("seats.undid", "undid swap of") : say("seats.swapped", "swapped");
+    const a = info.nameA || say("seats.emptySeat", "empty seat");
+    const b = info.nameB || say("seats.emptySeat", "empty seat");
+    sayIn(swapLogEl, swapCount === 1 ? "seats.swapLineOne" : "seats.swapLine",
+          swapCount === 1 ? '<span class="swap-badge">{n} swap</span><span class="swap-log-text">{verb} <strong>{a}</strong> ↔ <strong>{b}</strong></span>'
+                          : '<span class="swap-badge">{n} swaps</span><span class="swap-log-text">{verb} <strong>{a}</strong> ↔ <strong>{b}</strong></span>',
+          { n: swapCount, verb: verb, a: a, b: b }, { html: true });
   }
 
   function syncUndoBtn() { btnUndo.disabled = swapHistory.length === 0; }
+
+  // The language switch: the notice and the chart's own labels are prose.
+  document.addEventListener('mh:lang', () => {
+    updateNotice();
+    if (previewSection.classList.contains('visible')) rebuildTable();
+  });
 
   btnUndo.addEventListener('click', () => {
     if (!swapHistory.length) return;
@@ -1458,11 +1496,11 @@ integrity flag</textarea>
     detailsVisible = !detailsVisible;
     if (detailsVisible) {
       gridTable.classList.remove('details-off');
-      btnToggle.textContent = 'Hide Details';
+      sayIn(btnToggle, "seats.hideDetails", "Hide Details");
       btnToggle.classList.add('active');
     } else {
       gridTable.classList.add('details-off');
-      btnToggle.textContent = 'Show Details';
+      sayIn(btnToggle, "seats.showDetails", "Show Details");
       btnToggle.classList.remove('active');
     }
   });
@@ -1487,14 +1525,18 @@ integrity flag</textarea>
   // ── Download PDF (via print) ────────────────────────────────────────────────
   btnPdf.addEventListener('click', () => {
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' });
-    const timeStr = now.toLocaleTimeString('en-CA', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    const locale  = say("seats.locale", "en-CA");
+    const dateStr = now.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' });
+    const timeStr = now.toLocaleTimeString(locale, { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     printMeta.innerHTML =
-      `${totalStudentsGlobal} students · ${totalSeatsGlobal} seats<br>` +
-      `${assignedGlobal} assigned · ${totalSeatsGlobal - assignedGlobal} empty` +
-      (rankActiveGlobal ? `<br>Ranked by gradebook score` : '') +
-      (swapCount > 0 ? `<br>${swapCount} manual swap${swapCount!==1?'s':''}` : '') +
-      `<br>Generated ${dateStr} at ${timeStr}`;
+      say("seats.printCounts", "{students} students · {seats} seats<br>{assigned} assigned · {empty} empty", {
+        students: totalStudentsGlobal, seats: totalSeatsGlobal,
+        assigned: assignedGlobal, empty: totalSeatsGlobal - assignedGlobal
+      }) +
+      (rankActiveGlobal ? '<br>' + say("seats.printRanked", "Ranked by gradebook score") : '') +
+      (swapCount > 0 ? '<br>' + say(swapCount === 1 ? "seats.printSwapsOne" : "seats.printSwaps",
+                                    swapCount === 1 ? "{n} manual swap" : "{n} manual swaps", { n: swapCount }) : '') +
+      '<br>' + say("seats.printGenerated", "Generated {date} at {time}", { date: dateStr, time: timeStr });
 
     printHeader.style.display = 'block';
     setTimeout(() => {

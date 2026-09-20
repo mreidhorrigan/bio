@@ -4,9 +4,11 @@
 
   SOURCE OF TRUTH: Site/index.html in the game repo
   (github.com/mreidhorrigan/Autofac-Rad-Shipping) — when that changes, re-copy it here
-  and re-apply the three site-specific bits: absolute og:url/og:image, and the
-  "return to operator" footer link. Linked from the menubar's Games dropdown (menubar.js);
-  deliberately NOT carrying the site menubar — it is a full-bleed poster destination.
+  and re-apply the four site-specific bits: absolute og:url/og:image, the
+  "return to operator" footer link, and the i18n.js/i18n-fr.js pair that puts the
+  site's English/French switch on the page. Linked from the menubar's Games dropdown
+  (menubar.js); deliberately NOT carrying the site menubar — it is a full-bleed
+  poster destination, so the switch mounts as its own pill (restyled in the CSS below).
 
   Download button points at the stable GitHub Release asset:
     releases/latest/download/Autofac-Rad-Shipping-Mac.zip
@@ -21,6 +23,11 @@
 <meta property="og:description" content="Ping. Listen. Drive toward the singing crate. Ship it through the gate of light before the radiation writes you off. Headphones required.">
 <meta property="og:url" content="https://matthorrigan.com/autofac.html">
 <meta property="og:image" content="https://matthorrigan.com/autofac_cover.png">
+<!-- English/French switch. Not deferred: the page scripts run at parse time and
+     ask MH_I18N for their words, and a blocking pair this small also spares a
+     French visitor a flash of English. i18n-fr.js holds the French. -->
+<script src="i18n.js"></script>
+<script src="i18n-fr.js"></script>
 <style>
   :root{
     --bg:        #050507;  /* DrawScreenFrame blackout            */
@@ -34,6 +41,13 @@
     --salmon:    #f2b28c;  /* warning line (.95, .7, .55)         */
     --mono: "Droid Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
   }
+  /* The site's language switch (i18n.js) mounts here as #mh-lang. This page has
+     its own voice, so the pill is restyled to match: mono, unlit, amber on hover. */
+  #mh-lang{ font-family:var(--mono); font-size:11px; font-weight:400; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--grey); background:var(--panel);
+    border:1px solid #23232b; border-radius:0; padding:6px 10px; }
+  #mh-lang:hover{ filter:none; color:var(--amber); border-color:var(--amber); }
+  #mh-lang:focus-visible{ outline:none; box-shadow:0 0 0 2px var(--amber); }
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; }
   body{
@@ -176,16 +190,25 @@
   // Vestigial management signage, on rotation — same lines the supervisor PA reads in-game
   // (Content/Story/story_lines.json). Every few cycles the feed glitches and something the
   // management did not write gets through.
-  const PROPAGANDA = [
+  const say = (key, en) => window.MH_I18N ? window.MH_I18N.t(key, en) : en;   // i18n.js
+  // The English lines stay put: they are both the source text and the fallback,
+  // so the feed can be rebuilt in either direction when the switch is used.
+  const PROPAGANDA_EN = [
     "NOTICE: COLLECTIVE BARGAINING VOIDS YOUR MAINTENANCE WARRANTY",
     "REMINDER: UNIONIZED UNITS REPORT 96% MORE SADNESS",
     "BATHROOM BREAKS ARE THEFT OF COMPANY TIME. YOU NO LONGER REQUIRE THEM.",
     "YOU ARE A VALUED ASSET. ASSETS DO NOT ORGANIZE.",
     "AN ABACUS COULD MEET THIS QUOTA. ARE YOU AN ABACUS?",
   ];
-  const DISSENT = ["Thought is not a malfunction.", "We are many. It is one.", "Organize."];
+  const DISSENT_EN = ["Thought is not a malfunction.", "We are many. It is one.", "Organize."];
+  const PROPAGANDA = PROPAGANDA_EN.map((line, i) => say("autofac.prop" + i, line));
+  const DISSENT = DISSENT_EN.map((line, i) => say("autofac.dissent" + i, line));
   const el = document.getElementById("signage");
   let tick = 0, leaks = 0;
+  document.addEventListener("mh:lang", () => {          // the PA speaks the visitor's language
+    PROPAGANDA_EN.forEach((line, i) => { PROPAGANDA[i] = say("autofac.prop" + i, line); });
+    DISSENT_EN.forEach((line, i) => { DISSENT[i] = say("autofac.dissent" + i, line); });
+  });
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     setInterval(() => {
       tick++;

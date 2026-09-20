@@ -1,7 +1,10 @@
 # Codex repository guide
 
-This is Matt Horrigan's static, GitHub Pages website. Its homepage is a Canvas 2D isometric world with optional ecology and a generated Musebots/Signal Towers audio bundle. Preserve appearance, navigation, accessibility, input, simulation, and musical behaviour.
+This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canvas 2D isometric world with optional ecology and a generated Musebots/Signal Towers audio bundle. Preserve appearance, navigation, accessibility, input, simulation, and musical behaviour.
 
+- English/French: `docs/i18n.md`. English is the source language and is never
+  rewritten; `i18n-fr.js` holds every French word. Check with
+  `python3 tools/i18n-check.py`.
 - Migration plan: `storage/Codex Plan — WASM Migration of matthorrigan.com.md`
 - Decisions and progress: `docs/architecture.md`, `docs/wasm-migration.md`, `docs/wasm-progress.md`
 - Serve locally: `python3 -m http.server 8000`, then open `http://localhost:8000/`

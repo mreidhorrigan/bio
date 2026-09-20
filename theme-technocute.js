@@ -128,7 +128,7 @@
         g.save(); g.shadowColor = U.hexA(CYAN, 0.9); g.shadowBlur = 8;
         bRect(g, sx - 44, sy + 19, 88, 21, CYAN, 0); g.restore();
         g.strokeStyle = BLACK; g.lineWidth = 2.5; g.strokeRect(sx - 44, sy + 19, 88, 21);
-        g.fillStyle = BLACK; g.font = "900 12px var(--mh-ui)"; g.fillText("ENTER →", sx, sy + 29.5);
+        g.fillStyle = BLACK; g.font = "900 12px var(--mh-ui)"; g.fillText(U.tr("world.enterArrow", "ENTER →"), sx, sy + 29.5);   // the engine translates it, or hands it back
       }
     },
 

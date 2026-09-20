@@ -94,7 +94,22 @@ Everything below those lists is styling. Leave it alone.
 projects. Replace them with yours or delete them, then remove their links from
 `content.js` and `menubar.js`.
 
-## 7. Your domain
+## 7. The French (or no French at all)
+
+Every page carries a switch that turns it into French. The English lives in the
+pages themselves and is never rewritten, so the switch is entirely additive:
+
+- `i18n-fr.js` holds every French word on the site, and nothing else. Rewrite it
+  with your own words, or **delete it** and remove the two `i18n*.js` script tags
+  to ship an English-only site. Nothing else breaks either way.
+- `i18n.js` is the machinery. It knows no French. Leave it alone.
+- Another language is one more `i18n-<code>.js` calling `MH_I18N.register()`.
+
+[`docs/i18n.md`](docs/i18n.md) explains the dictionary format, and
+`python3 tools/i18n-check.py` tells you which of your rules no longer match your
+markup.
+
+## 8. Your domain
 
 To use a custom domain, put it in `CNAME` (one line, no `https://`) and point your
 domain's DNS at GitHub Pages. To use the free github.io address instead, delete the
@@ -110,6 +125,7 @@ fork breaks. Do not touch them unless you really mean to:
   skins.
 - `ecology.js`, `buildings.js`: the living world the skins draw.
 - `brand/`: the shared colours and type.
+- `i18n.js`: the language switch (the French words live in `i18n-fr.js`).
 - The boot script at the bottom of `index.html`.
 
 Want a different look? Tweak the colours at the top of one of the `theme-*.js`
@@ -121,9 +137,9 @@ This template is shared under **Creative Commons Attribution-ShareAlike 4.0
 International (CC BY-SA 4.0).** Two things come with that, and swapping in your own
 content does not change them:
 
-1. **Credit Matt Horrigan.** A sample line for your footer or your repo's README:
+1. **Credit M. Reid Horrigan.** A sample line for your footer or your repo's README:
 
-   > Walkable isometric site engine by Matt Horrigan (https://matthorrigan.com),
+   > Walkable isometric site engine by M. Reid Horrigan (https://matthorrigan.com),
    > used under CC BY-SA 4.0. Changes were made.
 
 2. **Share alike.** Your version stays under CC BY-SA 4.0, so the next person can

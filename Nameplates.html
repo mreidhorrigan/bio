@@ -6,6 +6,11 @@
 <title>Nameplates</title>
 <!-- the one site-wide menubar (links + dropdowns live in this file) -->
 <script src="menubar.js" defer></script>
+<!-- English/French switch. Not deferred: the tool scripts below run at parse
+     time and ask MH_I18N for their words, and a blocking pair this small also
+     spares a French visitor a flash of English. i18n-fr.js holds the French. -->
+<script src="i18n.js"></script>
+<script src="i18n-fr.js"></script>
 <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); Nameplates
      uses only shared tokens, so it has no page-specific :root of its own -->
 <link rel="stylesheet" href="brand/brand.css">
@@ -451,7 +456,7 @@
   <!-- ── Print ── -->
   <div class="toolbar" id="toolbar" style="display:none;">
     <button class="btn" id="btn-print" type="button">Print nameplates</button>
-    <span class="kbd-hint">or press <kbd>Cmd</kbd>+<kbd>P</kbd> and save as PDF. <span id="per-page-hint">Three names per page.</span></span>
+    <span class="kbd-hint"><span class="print-hint">or press <kbd>Cmd</kbd>+<kbd>P</kbd> and save as PDF.</span> <span id="per-page-hint">Three names per page.</span></span>
   </div>
 
   <!-- ── The sheets (filled by JS; the print target) ── -->
@@ -697,6 +702,17 @@
     a3:      { w: 297,             h: 420,            css: '297mm 420mm' }
   };
 
+  /* Bilingual text (i18n.js, loaded in the head). say() returns one string now.
+     sayIn() also remembers the element, so the language switch re-renders it.
+     Both fall back to the English they are given. */
+  const say = (key, en, vars) => window.MH_I18N ? window.MH_I18N.t(key, en, vars)
+    : String(en).replace(/\{(\w+)\}/g, (whole, k) => (vars && k in vars ? String(vars[k]) : whole));
+  const sayIn = (el, key, en, vars, opts) => {
+    if (window.MH_I18N) return window.MH_I18N.live(el, key, en, vars, opts);
+    if (el) { const text = say(key, en, vars); if (opts && opts.html) el.innerHTML = text; else el.textContent = text; }
+    return el;
+  };
+
   function perPageFor(key) {
     const p = PAGE_SIZES[key] || PAGE_SIZES.letter;
     return Math.max(1, Math.round((p.h / MM_PER_IN) / STRIP_IN));
@@ -704,7 +720,7 @@
 
   // Small-number word for the per-page hint ("Three names per page.").
   function countWord(n) {
-    const words = ['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
+    const words = say("plates.numbers", "zero one two three four five six seven eight nine ten").split(" ");
     const w = words[n] || String(n);
     return w.charAt(0).toUpperCase() + w.slice(1);
   }
@@ -757,7 +773,7 @@
       input.type = 'text';
       input.className = 'first-input';
       input.value = e.first;
-      input.setAttribute('aria-label', 'First name for ' + e.orig);
+      input.setAttribute('aria-label', say("plates.firstNameFor", "First name for {name}", { name: e.orig }));
       input.addEventListener('input', () => { entries[i].first = input.value; renderPlates(); });
       tdInput.appendChild(input);
 
@@ -766,7 +782,8 @@
       drop.type = 'button';
       drop.className = 'drop-btn';
       drop.textContent = e.skip ? '↺' : '✕';     // ↺ to restore, ✕ to remove
-      drop.title = e.skip ? 'Add this name back' : 'Leave this name out';
+      drop.title = e.skip ? say("plates.restore", "Add this name back")
+                          : say("plates.omit", "Leave this name out");
       drop.setAttribute('aria-label', drop.title);
       drop.addEventListener('click', () => { entries[i].skip = !entries[i].skip; renderReview(); renderPlates(); });
       tdDrop.appendChild(drop);
@@ -812,7 +829,9 @@
     document.documentElement.style.setProperty('--sheet-aspect', p.w + ' / ' + p.h);
     // print: rewrite @page so the printed page matches the preview
     pageStyle.textContent = '@page { size: ' + p.css + '; margin: 0; }';
-    perPageHint.textContent = countWord(perPage) + ' name' + (perPage === 1 ? '' : 's') + ' per page.';
+    sayIn(perPageHint, perPage === 1 ? "plates.perPageOne" : "plates.perPage",
+          perPage === 1 ? "{count} name per page." : "{count} names per page.",
+          { count: countWord(perPage) });
     renderPlates();
   }
 
@@ -823,26 +842,29 @@
     reader.onload = ev => {
       let rows;
       try { rows = parseCSV(ev.target.result); }
-      catch (err) { showError('That file could not be read as text. Try a .csv or .txt export.'); return; }
+      catch (err) { showError(say("plates.errNotText", "That file could not be read as text. Try a .csv or .txt export.")); return; }
 
       entries = buildEntries(rows).map(e => ({ orig: e.orig, first: e.first, skip: false }));
 
       if (!entries.length) {
-        showError('No student names were found. Upload a Canvas gradebook export or a plain name list.');
+        showError(say("plates.errNoNames", "No student names were found. Upload a Canvas gradebook export or a plain name list."));
         statusRoster.textContent = '';
         parseNote.style.display = reviewWrap.style.display = optionsRow.style.display = toolbar.style.display = 'none';
         plates.innerHTML = '';
         return;
       }
 
-      const kind = isCanvasGradebook(rows) ? 'Canvas gradebook' : 'name list';
-      statusRoster.textContent = entries.length + ' name' + (entries.length === 1 ? '' : 's') +
-        ' loaded from a ' + kind + '.';
+      const kind = isCanvasGradebook(rows)
+        ? say("plates.kindCanvas", "Canvas gradebook")
+        : say("plates.kindList", "name list");
+      sayIn(statusRoster, entries.length === 1 ? "plates.loadedOne" : "plates.loaded",
+            entries.length === 1 ? "{n} name loaded from a {kind}." : "{n} names loaded from a {kind}.",
+            { n: entries.length, kind: kind });
       parseNote.style.display = reviewWrap.style.display = optionsRow.style.display = toolbar.style.display = '';
       renderReview();
       renderPlates();
     };
-    reader.onerror = () => showError('That file could not be read.');
+    reader.onerror = () => showError(say("plates.errRead", "That file could not be read."));
     reader.readAsText(file);
   }
 
@@ -877,6 +899,9 @@
   // Re-fit on resize (preview width changes) and before/after print.
   let resizeTimer;
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitAll, 120); });
+  // The language switch: redraw the row labels, which are written from say().
+  document.addEventListener('mh:lang', renderReview);
+
   window.addEventListener('beforeprint', fitAll);
   window.addEventListener('afterprint', fitAll);
 

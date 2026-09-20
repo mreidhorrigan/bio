@@ -6,6 +6,11 @@
 <title>Exam Timer</title>
 <!-- the one site-wide menubar (links + dropdowns live in this file) -->
 <script src="menubar.js" defer></script>
+<!-- English/French switch. Not deferred: the tool scripts below run at parse
+     time and ask MH_I18N for their words, and a blocking pair this small also
+     spares a French visitor a flash of English. i18n-fr.js holds the French. -->
+<script src="i18n.js"></script>
+<script src="i18n-fr.js"></script>
 <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); Exam Timer
      uses only shared tokens, so it has no page-specific :root of its own -->
 <link rel="stylesheet" href="brand/brand.css">
@@ -734,6 +739,18 @@
   "use strict";
 
   const $ = (id) => document.getElementById(id);
+
+  /* Bilingual text (i18n.js, loaded in the head). say() returns one string now.
+     sayIn() also remembers the element, so the language switch re-renders it
+     without the page redrawing itself. Both fall back to the English they are
+     given, so the tool still works with i18n.js removed. */
+  const say = (key, en, vars) => window.MH_I18N ? window.MH_I18N.t(key, en, vars)
+    : String(en).replace(/\{(\w+)\}/g, (whole, k) => (vars && k in vars ? String(vars[k]) : whole));
+  const sayIn = (el, key, en, vars, opts) => {
+    if (window.MH_I18N) return window.MH_I18N.live(el, key, en, vars, opts);
+    if (el) { const text = say(key, en, vars); if (opts && opts.html) el.innerHTML = text; else el.textContent = text; }
+    return el;
+  };
   const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 
   // ── Default rules (from midterm_coversheet.docx; punctuation set in house style) ──
@@ -758,6 +775,22 @@
     ],
     warning: "NOT FOLLOWING THESE RULES WILL RESULT IN A ZERO (0) MARK FOR THE TEST & A MISCONDUCT REPORT."
   };
+
+  /** The stock rules in the visitor's language. DEFAULT_RULES above stays the
+   *  English original: it is also the yardstick for "has anyone edited these?". */
+  function defaultRules() {
+    return {
+      intro: say("timer.rules.intro", DEFAULT_RULES.intro),
+      list: DEFAULT_RULES.list.map((line, i) => say("timer.rules." + i, line)),
+      warning: say("timer.rules.warning", DEFAULT_RULES.warning)
+    };
+  }
+  /** True while the rules are still the stock ones, word for word. Someone who
+   *  has written their own rules keeps them, in either language. */
+  function rulesAreStock() {
+    try { return JSON.stringify(settings.rules) === JSON.stringify(DEFAULT_RULES); }
+    catch (e) { return false; }
+  }
 
   const STORE_KEY = "examtimer.v1";
 
@@ -928,25 +961,27 @@
 
     // State chip.
     stateChip.classList.remove("running", "finished");
-    if (state === "idle")      { stateChip.textContent = "Ready"; }
-    else if (state === "running") { stateChip.textContent = "Running"; stateChip.classList.add("running"); }
-    else if (state === "paused")  { stateChip.textContent = "Paused"; }
-    else if (state === "finished"){ stateChip.textContent = "Time is up"; stateChip.classList.add("finished"); }
+    if (state === "idle")      { sayIn(stateChip, "timer.ready", "Ready"); }
+    else if (state === "running") { sayIn(stateChip, "timer.running", "Running"); stateChip.classList.add("running"); }
+    else if (state === "paused")  { sayIn(stateChip, "timer.paused", "Paused"); }
+    else if (state === "finished"){ sayIn(stateChip, "timer.up", "Time is up"); stateChip.classList.add("finished"); }
 
     // Ends-at line.
     if (state === "running") {
-      endsAt.innerHTML = `Ends at <strong>${fmtClock(new Date(endTs))}</strong>`;
+      sayIn(endsAt, "timer.endsAt", "Ends at <strong>{time}</strong>",
+            { time: fmtClock(new Date(endTs)) }, { html: true });
     } else if (state === "paused") {
-      endsAt.innerHTML = `Paused with <strong>${fmt(remainingMs)}</strong> left`;
+      sayIn(endsAt, "timer.pausedWith", "Paused with <strong>{left}</strong> left",
+            { left: fmt(remainingMs) }, { html: true });
     } else {
       endsAt.textContent = "";
     }
 
     // Buttons.
     btnStart.style.display = (state === "finished") ? "none" : "";
-    if (state === "idle")      btnStart.textContent = "Start";
-    else if (state === "running") btnStart.textContent = "Pause";
-    else if (state === "paused")  btnStart.textContent = "Resume";
+    if (state === "idle")      sayIn(btnStart, "timer.start", "Start");
+    else if (state === "running") sayIn(btnStart, "timer.pause", "Pause");
+    else if (state === "paused")  sayIn(btnStart, "timer.resume", "Resume");
     btnStart.disabled = (state === "idle" && readInputsMs() === 0);
 
     btnReset.disabled = (state === "idle");
@@ -962,7 +997,8 @@
     document.querySelectorAll(".preset").forEach((b) => { b.disabled = lockInputs; });
 
     syncPresetHighlight();
-    fsLabel.textContent = (state === "finished") ? "Time is up" : "Exam time remaining";
+    if (state === "finished") sayIn(fsLabel, "timer.up", "Time is up");
+    else sayIn(fsLabel, "timer.remaining", "Exam time remaining");
     fitTime();
   }
 
@@ -990,7 +1026,8 @@
       if (entryMs < total && (total - ms) >= entryMs) {
         entryFired = true;
         playMilestone();
-        showBanner(`Entry is now closed. No entry after ${Math.round(entryMs / 60000)} minutes.`, false);
+        showBanner(say("timer.entryClosed", "Entry is now closed. No entry after {min} minutes.",
+                       { min: Math.round(entryMs / 60000) }), false);
       }
     }
     if (chkFinal.checked && !finalFired) {
@@ -998,7 +1035,8 @@
       if (ms <= finalMs) {
         finalFired = true;
         playMilestone();
-        showBanner(`Final ${Math.round(finalMs / 60000)} minutes. No leaving the room.`, true);
+        showBanner(say("timer.finalWarning", "Final {min} minutes. No leaving the room.",
+                       { min: Math.round(finalMs / 60000) }), true);
       }
     }
   }
@@ -1087,7 +1125,7 @@
 
   // ── Rules rendering ───────────────────────────────────────────────────────────
   function renderRules() {
-    const r = settings.rules;
+    const r = rulesAreStock() ? defaultRules() : settings.rules;
     $("rules-intro").textContent = r.intro || "";
     const ol = $("rules-list");
     ol.innerHTML = "";
@@ -1100,7 +1138,7 @@
   }
 
   function openRulesEditor() {
-    const r = settings.rules;
+    const r = rulesAreStock() ? defaultRules() : settings.rules;   // edit what is on screen
     $("edit-intro").value = r.intro || "";
     $("edit-list").value = (r.list || []).join("\n");
     $("edit-warning").value = r.warning || "";
@@ -1150,7 +1188,8 @@
 
   document.addEventListener("fullscreenchange", () => {
     document.body.classList.toggle("fs", !!document.fullscreenElement);
-    btnFull.textContent = document.fullscreenElement ? "Exit fullscreen" : "Fullscreen";
+    if (document.fullscreenElement) sayIn(btnFull, "timer.exitFullscreen", "Exit fullscreen");
+    else sayIn(btnFull, "timer.fullscreen", "Fullscreen");
     requestAnimationFrame(fitTime);
   });
 
@@ -1163,6 +1202,9 @@
   btnSilence.addEventListener("click", () => { stopAlarm(); render(); });
   btnTest.addEventListener("click", () => { ensureAudio(); playMotif(); });
   btnFull.addEventListener("click", toggleFullscreen);
+
+  // The language switch: the stock rules are prose, so they change with it.
+  document.addEventListener("mh:lang", renderRules);
 
   [inpH, inpM, inpS].forEach((el) => {
     el.addEventListener("input", () => { if (state === "idle") render(); });
@@ -1213,7 +1255,7 @@
   $("btn-cancel-rules").addEventListener("click", closeRulesEditor);
   $("btn-save-rules").addEventListener("click", saveRules);
   $("btn-reset-rules").addEventListener("click", () => {
-    if (confirm("Reset the exam rules to the default cover-sheet rules?")) {
+    if (confirm(say("timer.confirmReset", "Reset the exam rules to the default cover-sheet rules?"))) {
       settings.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
       saveSettings();
       renderRules();

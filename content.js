@@ -22,7 +22,7 @@
   const ext = ` target="_blank" rel="noopener"`;
 
   window.MH_CONTENT = {
-    title: "Matt Horrigan",
+    title: "M. Reid Horrigan",
     // The home kiosk. The engine sends the slime here on Space / Enter.
     home: 0,
     kiosks: [
@@ -30,12 +30,19 @@
         title: "About",
         page: { url: `${B}about.html` },                       // the About page (menubar and all). NOT index.html: index IS this world (would recurse).
         html: `
-          <p><span class="mh-big">How do you work? Can I see?</span></p>
-          <p>Hi. I'm Matthew Horrigan, a communication scholar. I research media
-          production cultures: how the work of making the images and sounds that
-          fill public life gets organised, managed, and felt by the people who do it.</p>
-          <p>I teach writing, podcasting, and video alongside theories of labour and
-          management, and I came to it from an earlier career in sound design and code.</p>`,
+          <p><span class="mh-big">How do you work?</span></p>
+          <p>Hi. I'm M. Reid Horrigan, researcher of media production cultures.</p>
+          <p>I teach critical writing and theory along with communication skills in media
+          that include podcasting, games, video, and music. Working with more than two
+          thousand postsecondary students since 2016, I've developed new methods to
+          promote academic integrity, effective and accountable use of artificial
+          intelligence, and creative ideation.</p>
+          <p>In addition to teaching, I'm currently working on three major research
+          projects: a monograph on <em>Voiceshifting</em>, the technical and aesthetic
+          process of changing voices electronically to communicate characters and
+          personae; a monograph adapting my ethnographic dissertation on Vancouver's
+          motion picture production cultures; and the Musebots, a multi-agent music
+          generation system whose origins predate the GPT revolution.</p>`,
       },
       {
         title: "Toolbox",

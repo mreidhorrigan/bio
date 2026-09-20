@@ -38,6 +38,7 @@ a friend fork this, replace the content, and keep a working walkable site.
 | `Matt.jpg` | The portrait used by `classic.html`. |
 | `index.html`, `classic.html`, `site.webmanifest` | Page titles, the meta description, and the app name. |
 | The tool and game pages | `toolbox.html`, `MCQer.html`, `SeatPlanner.html`, `ExamTimer.html`, `Nameplates.html`, `autofac.html`, `Rock_Walls_and_Damp.html`, and the favicons. These are Matt's projects. Replace or remove them. |
+| `i18n-fr.js` | Every French word on the site, in one file. The English lives in the pages themselves; this is only the translation. Delete it and the site is English again. |
 | `CNAME` | Your custom domain (or delete it to use the github.io address). |
 
 ### Engine and design system (keep this: it is the template)
@@ -52,6 +53,7 @@ a friend fork this, replace the content, and keep a working walkable site.
 | `buildings.js` | Procedural slime-world dwellings the skins draw. |
 | `signal-towers.js` | Generated, self-contained browser bundle for playable Musebot signal towers. Its source of truth is `web-musebots/integrations/bio-signal-towers.js`; do not hand-edit the bundle. |
 | `index.html` (the boot script) | Wires the engine, content, ecology, and themes together and picks the starting skin. |
+| `i18n.js` | The English/French switch. Lays a translation over a page and takes it off again, so English is never rewritten. It knows no French: another language is one more `i18n-<code>.js`. See [`docs/i18n.md`](docs/i18n.md). |
 | `brand/` | The house design tokens (colours, type, the "leaf" corner) shared across the whole site. |
 
 ### How they connect
@@ -64,6 +66,19 @@ content meet at exactly one line: `MH_ISO.start(skin)`.
 Paths inside `content.js` are base-aware through `window.MH_SITE` (set in
 `index.html`), so the same content file works from the site root or from a dev
 folder without edits.
+
+## English and French
+
+Every page carries a switch that turns it into French. English is the source
+language and is never rewritten: each page keeps its own English markup, `i18n.js`
+overlays the French from `i18n-fr.js`, and switching back restores the original
+nodes. A visitor stays in English until they press the switch, which then
+remembers the choice and makes the URL shareable (`?lang=fr`).
+
+The French uses inclusive wording throughout, reworded rather than marked with a
+point médian. The conventions are stated at the top of `i18n-fr.js`, and
+[`docs/i18n.md`](docs/i18n.md) explains how to add a string and how to check the
+translation still matches the markup (`python3 tools/i18n-check.py`).
 
 ## Musebot signal towers
 
@@ -165,9 +180,12 @@ Serve the repository over HTTP. Worker-owned ecology is the default; use `?wasmW
    `classic.html`, and the name in `site.webmanifest`.
 5. **Edit the menubar links:** open `menubar.js` and change the arrays near the top
    (`GAMES`, `TOOLS`, `MUSIC`, the Home/About/CV row, `Research`).
-6. **Set your domain:** put your domain in `CNAME`, or delete `CNAME` to use the
+6. **Replace or drop the French:** `i18n-fr.js` holds Matt's words in French.
+   Rewrite it for your own, or delete the file and the `i18n*.js` script tags to
+   ship an English-only site.
+7. **Set your domain:** put your domain in `CNAME`, or delete `CNAME` to use the
    github.io address.
-7. **Leave the engine alone:** do not touch `engine.js`, the `theme-*.js` files,
+8. **Leave the engine alone:** do not touch `engine.js`, the `theme-*.js` files,
    `ecology.js`, `buildings.js`, or `brand/`. The site keeps working. If you want a
    different look, tweak a skin rather than rewriting it.
 
@@ -182,9 +200,9 @@ full legal code.
 
 That license asks two things of anyone who reuses this:
 
-- **Credit** Matt Horrigan. A sample line:
+- **Credit** M. Reid Horrigan. A sample line:
 
-  > Walkable isometric site engine by Matt Horrigan (https://matthorrigan.com),
+  > Walkable isometric site engine by M. Reid Horrigan (https://matthorrigan.com),
   > used under CC BY-SA 4.0. Changes were made.
 
 - **Share alike.** Your version, and anything you build from it, stays under
@@ -195,4 +213,4 @@ it does not change either requirement: keep the credit and keep the license.
 
 ## Credits
 
-Design, engine, and themes by Matt Horrigan ([matthorrigan.com](https://matthorrigan.com)).
+Design, engine, and themes by M. Reid Horrigan ([matthorrigan.com](https://matthorrigan.com)).

@@ -6,6 +6,11 @@
     <title>Pitch Shifter</title>
     <!-- the one site-wide menubar (links + dropdowns live in this file) -->
     <script src="menubar.js" defer></script>
+    <!-- English/French switch. Not deferred: the page scripts run at parse time and
+         ask MH_I18N for their words, and a blocking pair this small also spares a
+         French visitor a flash of English. i18n-fr.js holds the French. -->
+    <script src="i18n.js"></script>
+    <script src="i18n-fr.js"></script>
     <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…) -->
     <link rel="stylesheet" href="brand/brand.css">
     <style>
@@ -172,6 +177,11 @@
         const audioFileInput = document.getElementById('audioFile');
         const loadButton = document.getElementById('loadButton');
         const statusDiv = document.getElementById('status');
+
+        /* Bilingual text (i18n.js, loaded in the head): one string, now, falling
+           back to the English it is given. */
+        const say = (key, en, vars) => window.MH_I18N ? window.MH_I18N.t(key, en, vars)
+            : String(en).replace(/\{(\w+)\}/g, (whole, k) => (vars && k in vars ? String(vars[k]) : whole));
         const mainControls = document.getElementById('mainControls');
         const layersContainer = document.getElementById('layersContainer');
         const addLayerButton = document.getElementById('addLayer');
@@ -191,7 +201,7 @@
         loadButton.addEventListener('click', function() {
             const file = audioFileInput.files[0];
             if (!file) {
-                showStatus('Please select an audio file first.');
+                showStatus(say("pitch.pickFile", "Please select an audio file first."));
                 return;
             }
 
@@ -229,19 +239,19 @@
             layerDiv.id = layerId;
 
             layerDiv.innerHTML = `
-                <h3>Layer ${layers.length + 1} <span class="remove-layer" data-id="${layerId}">×</span></h3>
+                <h3>${say("pitch.layer", "Layer {n}", { n: layers.length + 1 })} <span class="remove-layer" data-id="${layerId}">×</span></h3>
                 <div>
-                    <label>Cents: </label>
+                    <label>${say("pitch.cents", "Cents: ")}</label>
                     <input type="range" class="cents-slider" min="-1200" max="1200" value="${centsValue}">
                     <span class="cents-value">${centsValue}</span>
                 </div>
                 <div>
-                    <label>Playback Rate: </label>
+                    <label>${say("pitch.rate", "Playback Rate: ")}</label>
                     <input type="range" class="playback-rate-slider" min="0.5" max="2" step="0.01" value="${playbackRateValue}">
                     <span class="playback-rate-value">${playbackRateValue.toFixed(2)}</span>
                 </div>
                 <div>
-                    <label>Effective Rate: </label>
+                    <label>${say("pitch.effective", "Effective Rate: ")}</label>
                     <span class="effective-rate">${playbackRateValue.toFixed(2)}</span>
                     <span class="relationship-info" style="margin-left: 10px;">
                         (rate = 2^(cents/1200))
@@ -363,7 +373,7 @@
 
             if (!audioBuffer) {
                 console.error('No audio buffer loaded');
-                showStatus('No audio loaded');
+                showStatus(say("pitch.noAudio", "No audio loaded"));
                 return;
             }
 

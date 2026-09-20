@@ -10,6 +10,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- the one site-wide menubar (links + dropdowns live in this file) -->
   <script src="menubar.js" defer></script>
+  <!-- English/French switch. Not deferred: the tool scripts below run at parse
+       time and ask MH_I18N for their words, and a blocking pair this small also
+       spares a French visitor a flash of English. i18n-fr.js holds the French. -->
+  <script src="i18n.js"></script>
+  <script src="i18n-fr.js"></script>
   <!-- canonical house tokens (--ink/--accent/--leaf*/--focus/fonts…); the inline
        :root below keeps only MCQer's page-specific tokens and may override -->
   <link rel="stylesheet" href="brand/brand.css">
@@ -433,7 +438,6 @@
   const statusEl    = document.getElementById('status');
   const previewEl   = document.getElementById('preview');
   const previewList = document.getElementById('preview-list');
-  const qCountEl    = document.getElementById('q-count');
   const versionRow  = document.getElementById('version-row');
   const btnMinus    = document.getElementById('btn-minus');
   const btnPlus     = document.getElementById('btn-plus');
@@ -461,6 +465,20 @@
   let uploadedImages     = {};     // { 'filename.png': dataUrl } for [Image: …] fallback
 
   // ── Utilities ─────────────────────────────────────────────────────────────
+  /* Bilingual text (i18n.js, loaded in the head). say() returns one string now.
+     sayIn() also remembers the element, so the language switch re-renders it.
+     Both fall back to the English they are given.
+     Note: the [Question.] / [Answer.] tags are this tool's INPUT SYNTAX, typed
+     into the source document, so they are keywords and stay as they are. Only
+     the prose around them is translated. */
+  const say = (key, en, vars) => window.MH_I18N ? window.MH_I18N.t(key, en, vars)
+    : String(en).replace(/\{(\w+)\}/g, (whole, k) => (vars && k in vars ? String(vars[k]) : whole));
+  const sayIn = (el, key, en, vars, opts) => {
+    if (window.MH_I18N) return window.MH_I18N.live(el, key, en, vars, opts);
+    if (el) { const text = say(key, en, vars); if (opts && opts.html) el.innerHTML = text; else el.textContent = text; }
+    return el;
+  };
+
   function setStatus(msg, type) { statusEl.textContent = msg; statusEl.className = type; }
   function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function shuffle(arr) {
@@ -630,8 +648,8 @@
     const name   = file.name.toLowerCase();
     const isDocx = name.endsWith('.docx');
     const isText = name.endsWith('.txt') || name.endsWith('.md') || name.endsWith('.markdown');
-    if (!isDocx && !isText) { setStatus('Upload a .docx, .md, or .txt file.', 'error'); return; }
-    setStatus('Reading questions…', 'info');
+    if (!isDocx && !isText) { setStatus(say("mcq.errType", "Upload a .docx, .md, or .txt file."), 'error'); return; }
+    setStatus(say("mcq.reading", "Reading questions…"), 'info');
     resetOutputsUI();
     sourceBaseName = file.name.replace(/\.(docx|markdown|md|txt)$/i, '').trim() || 'exam';
 
@@ -646,14 +664,14 @@
         .then(richParas => {
           parsedQuestions = parseAllParagraphs(stripVersionXParagraph(richParas));
           const allQ = collectAllQuestions(parsedQuestions);
-          if (!allQ.length) { setStatus('No valid [Question.] paragraphs found.', 'error'); return; }
+          if (!allQ.length) { setStatus(say("mcq.errNone", "No valid [Question.] paragraphs found."), 'error'); return; }
 
           setStatus(...summarizeParse(parsedQuestions, allQ));
           renderPreview();
           showOutputsUI(file.name);
           updateVersionUI();
         })
-        .catch(err => setStatus('Error reading file: ' + err.message, 'error'));
+        .catch(err => setStatus(say("mcq.errRead", "Error reading file: {message}", { message: err.message }), 'error'));
     };
     if (isDocx) reader.readAsArrayBuffer(file);
     else        reader.readAsText(file);
@@ -722,12 +740,12 @@
     const noOpt = allQ.length - mcq;
     const onlyN = allQ.filter(q => q.onlyVersion).length;
 
-    const parts = [`Found ${allQ.length} question(s)`];
-    if (noOpt)         parts.push(`${mcq} MCQ, ${noOpt} without options`);
-    if (onlyN)         parts.push(`${onlyN} version-specific`);
-    if (count('option-pool'))   parts.push(`${count('option-pool')} option pool(s)`);
-    if (count('scramble-pool')) parts.push(`${count('scramble-pool')} scramble pool(s)`);
-    if (count('pagebreak'))     parts.push(`${count('pagebreak')} page break(s)`);
+    const parts = [say("mcq.found", "Found {n} question(s)", { n: allQ.length })];
+    if (noOpt)         parts.push(say("mcq.partNoOptions", "{mcq} MCQ, {plain} without options", { mcq: mcq, plain: noOpt }));
+    if (onlyN)         parts.push(say("mcq.partOnly", "{n} version-specific", { n: onlyN }));
+    if (count('option-pool'))   parts.push(say("mcq.partOptionPools", "{n} option pool(s)", { n: count('option-pool') }));
+    if (count('scramble-pool')) parts.push(say("mcq.partScramblePools", "{n} scramble pool(s)", { n: count('scramble-pool') }));
+    if (count('pagebreak'))     parts.push(say("mcq.partPageBreaks", "{n} page break(s)", { n: count('pagebreak') }));
     const summary = parts[0] + (parts.length > 1 ? ' (' + parts.slice(1).join(', ') + ')' : '');
 
     const empty = items.filter(i =>
@@ -735,9 +753,9 @@
     const short = items.filter(i =>
       i.type === 'option-pool' && i.questions.length > 0 && i.questions.length < i.take);
 
-    if (empty.length) return [`Warning: ${empty.length} pool(s) have no valid [Option.] [Question.] paragraphs. ` + summary, 'error'];
-    if (short.length) return ['Warning: a pool has fewer questions than its "take" number, so questions will repeat across versions. ' + summary, 'error'];
-    return [summary + '. Ready to generate.', 'success'];
+    if (empty.length) return [say("mcq.warnEmptyPool", "Warning: {n} pool(s) have no valid [Option.] [Question.] paragraphs. ", { n: empty.length }) + summary, 'error'];
+    if (short.length) return [say("mcq.warnShortPool", 'Warning: a pool has fewer questions than its "take" number, so questions will repeat across versions. ') + summary, 'error'];
+    return [summary + say("mcq.ready", ". Ready to generate."), 'success'];
   }
 
   // Show/hide helpers for the post-upload UI.
@@ -761,14 +779,14 @@
 
   function handleCoversheetFile(file) {
     if (!file.name.toLowerCase().endsWith('.pdf')) {
-      setStatus('Coversheet must be a PDF file.', 'error'); return;
+      setStatus(say("mcq.errCover", "Coversheet must be a PDF file."), 'error'); return;
     }
     const reader = new FileReader();
     reader.onload = e => {
       coversheetPdfBytes = e.target.result;
       dropC.classList.add('has-file');
       dropC.innerHTML = `<p><span class="file-name">✓ ${escHtml(file.name)}</span></p>
-        <p class="hint">Will be prepended to all PDF outputs</p>`;
+        <p class="hint">${say("mcq.coverChosen", "Will be prepended to all PDF outputs")}</p>`;
     };
     reader.readAsArrayBuffer(file);
   }
@@ -789,7 +807,7 @@
     Promise.all(files.map(readImageAsDataUrl)).then(() => {
       const names = Object.keys(uploadedImages);
       dropImg.classList.add('has-file');
-      dropImg.innerHTML = `<p><span class="file-name">✓ ${names.length} image(s)</span></p>
+      dropImg.innerHTML = `<p><span class="file-name">✓ ${say("mcq.imagesChosen", "{n} image(s)", { n: names.length })}</span></p>
         <p class="hint">${escHtml(names.join(', '))}</p>`;
     });
   }
@@ -1087,13 +1105,16 @@
   }
 
   // ── Preview ───────────────────────────────────────────────────────────────
+  // The language switch: the preview's own words are prose (the tags are not).
+  document.addEventListener('mh:lang', () => { if (parsedQuestions.length) renderPreview(); });
+
   function renderPreview() {
     previewList.innerHTML = '';
     let qNum = 0;
 
     function optsHtmlFor(q) {
-      if (q.type === 'paragraph') return '<span class="no-opts">[Paragraph] scenario text</span>';
-      if (!q.distractors || q.distractors.length === 0) return '<span class="no-opts">No options (unscrambled)</span>';
+      if (q.type === 'paragraph') return '<span class="no-opts">[Paragraph] ' + say("mcq.scenarioText", "scenario text") + '</span>';
+      if (!q.distractors || q.distractors.length === 0) return '<span class="no-opts">' + say("mcq.noOptions", "No options (unscrambled)") + '</span>';
       const ans = q.answer ? escHtml(runsText(q.answer)) : '';
       const dis = q.distractors.map(d => escHtml(runsText(d))).join(' | ');
       return `✔ ${ans} &nbsp;|&nbsp; ${dis}`;
@@ -1110,8 +1131,8 @@
         const header = document.createElement('div');
         header.className = 'q-item';
         const desc = isScramble
-          ? `Scramble pool: all ${item.questions.length} included, order shuffled per version`
-          : `Option pool: each version takes ${item.take} of ${item.questions.length}`;
+          ? say("mcq.scramblePool", "Scramble pool: all {n} included, order shuffled per version", { n: item.questions.length })
+          : say("mcq.optionPool", "Option pool: each version takes {take} of {n}", { take: item.take, n: item.questions.length });
         header.innerHTML = `<div class="q-text is-pool">↳ ${desc}</div>`;
         previewList.appendChild(header);
         item.questions.forEach(q => {
@@ -1144,7 +1165,8 @@
         previewList.appendChild(div);
       }
     });
-    qCountEl.textContent = qNum;
+    sayIn(previewEl.querySelector('.preview-header'), "mcq.questionsFound",
+          'Questions found (<span id="q-count">{n}</span>)', { n: qNum }, { html: true });
     previewEl.style.display = 'block';
   }
 
@@ -1340,9 +1362,9 @@
       children: [new Paragraph({
         alignment: AlignmentType.CENTER,
         children: [
-          new TextRun('Page '),
+          new TextRun(say("mcq.pageWord", "Page ")),
           new TextRun({ children: [PageNumber.CURRENT] }),
-          new TextRun(' of '),
+          new TextRun(say("mcq.pageOf", " of ")),
           new TextRun({ children: [PageNumber.TOTAL_PAGES] })
         ]
       })]
@@ -1528,7 +1550,7 @@
       doc.setPage(pg);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
-      doc.text(`Page ${pg} of ${total}`, pageW / 2, pageH - marginB / 2, { align: 'center' });
+      doc.text(say("mcq.pageOfN", "Page {page} of {total}", { page: pg, total: total }), pageW / 2, pageH - marginB / 2, { align: 'center' });
     }
 
     return doc.output('arraybuffer');
@@ -1569,13 +1591,13 @@
   btnGenerate.addEventListener('click', async () => {
     btnGenerate.disabled = true;
     progressWrap.style.display = 'block';
-    setProgress(0, 'Starting…');
+    setProgress(0, say("mcq.starting", "Starting…"));
 
     try {
       const lib = window.docx;
-      if (!lib) throw new Error('docx library failed to load. Check your internet connection.');
-      if (!window.PDFLib) throw new Error('pdf-lib failed to load. Check your internet connection.');
-      if (!window.jspdf) throw new Error('jsPDF failed to load. Check your internet connection.');
+      if (!lib) throw new Error(say("mcq.errDocxLib", "docx library failed to load. Check your internet connection."));
+      if (!window.PDFLib) throw new Error(say("mcq.errPdfLib", "pdf-lib failed to load. Check your internet connection."));
+      if (!window.jspdf) throw new Error(say("mcq.errJsPdf", "jsPDF failed to load. Check your internet connection."));
 
       const { Packer } = lib;
       const versionLabels = VERSION_LABELS.slice(0, numVersions);
@@ -1615,7 +1637,7 @@
         const keyName  = `${base}_answerKey_${lbl}`;
         const formName = `${base}_testForm_${lbl}`;
 
-        setProgress(Math.round(step / totalSteps * 100), `Building Version ${lbl}…`);
+        setProgress(Math.round(step / totalSteps * 100), say("mcq.building", "Building Version {v}…", { v: lbl }));
 
         // Build para lists (shared scramble per version — key and form match)
         const paras = buildVersionParas(lbl, poolAssignments, keepSet);
@@ -1652,22 +1674,23 @@
         await downloadBlob(formPdfBlob,  `${formName}.pdf`);  tick(`↓ ${formName} pdf`);
       }
 
-      setProgress(100, 'Done!');
+      setProgress(100, say("mcq.done", "Done!"));
       // Note any cap that actually bit, so the user can confirm it took effect.
       const standaloneQs = parsedQuestions.filter(p => p.type === 'question');
       const mcqTotal     = standaloneQs.filter(isMcqQ).length;
       const writtenTotal = standaloneQs.filter(isWrittenQ).length;
       const poolCut      = maxWritten && pools.some(p => p.type === 'option-pool' && p.take > maxWritten);
       const capNote = [];
-      if (maxMcq && mcqTotal > maxMcq)                          capNote.push(`${maxMcq} of ${mcqTotal} MCQs`);
-      if (maxWritten && (writtenTotal > maxWritten || poolCut)) capNote.push(`${maxWritten} written answers`);
+      if (maxMcq && mcqTotal > maxMcq)                          capNote.push(say("mcq.capMcq", "{used} of {total} MCQs", { used: maxMcq, total: mcqTotal }));
+      if (maxWritten && (writtenTotal > maxWritten || poolCut)) capNote.push(say("mcq.capWritten", "{n} written answers", { n: maxWritten }));
       setStatus(
-        `✓ ${numVersions * 4} files downloaded: ${numVersions} versions × (answer_key + test_form) × (docx + pdf).` +
-        (capNote.length ? ` Capped to ${capNote.join(' and ')}.` : ''),
+        say("mcq.downloaded", "✓ {files} files downloaded: {versions} versions × (answer_key + test_form) × (docx + pdf).",
+            { files: numVersions * 4, versions: numVersions }) +
+        (capNote.length ? say("mcq.capped", " Capped to {what}.", { what: capNote.join(say("mcq.and", " and ")) }) : ''),
         'success'
       );
     } catch (err) {
-      setStatus('Error: ' + err.message, 'error');
+      setStatus(say("mcq.error", "Error: {message}", { message: err.message }), 'error');
       console.error(err);
     } finally {
       btnGenerate.disabled = false;

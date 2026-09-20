@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Matt Horrigan</title>
-  <meta name="description" content="Matt Horrigan, communication scholar: a walkable isometric homepage.">
+  <title>M. Reid Horrigan</title>
+  <meta name="description" content="M. Reid Horrigan, researcher of media production cultures: a walkable isometric homepage.">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -23,6 +23,12 @@
 <body>
   <noscript><div class="ns"><p>This walkable homepage needs JavaScript.<br>
     Read the <a href="about.html">About page</a> instead.</p></div></noscript>
+
+  <!-- English/French switch. Not deferred: the tool scripts below run at parse
+       time and ask MH_I18N for their words, and a blocking pair this small also
+       spares a French visitor a flash of English. i18n-fr.js holds the French. -->
+  <script src="i18n.js"></script>
+  <script src="i18n-fr.js"></script>
 
   <script src="performance-monitor.js" defer></script>
   <script src="engine.js" defer></script>

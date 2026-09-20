@@ -3,11 +3,11 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
-    <title>Toolbox: Matt Horrigan</title>
+    <title>Toolbox: M. Reid Horrigan</title>
     <meta name="viewport" content="width=device-width,
       initial-scale=1.0">
     <meta name="description" content="Small, free, browser-based tools
-      Matt Horrigan built for teaching.">
+      M. Reid Horrigan built for teaching.">
     <link rel="apple-touch-icon" sizes="180x180"
       href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32"
@@ -16,6 +16,11 @@
       href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
     <script src="menubar.js" defer="defer"></script>
+    <!-- English/French switch. Not deferred: the tool scripts below run at parse
+         time and ask MH_I18N for their words, and a blocking pair this small also
+         spares a French visitor a flash of English. i18n-fr.js holds the French. -->
+    <script src="i18n.js"></script>
+    <script src="i18n-fr.js"></script>
     <link rel="stylesheet" href="brand/brand.css">
     <style>
     :root{ --leaf:16px 4px 16px 4px / 7px 2px 7px 2px; --leaf-lg:22px 6px 22px 6px / 12px 4px 12px 4px; }

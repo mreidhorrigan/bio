@@ -121,6 +121,36 @@ let introEl, cardEl, cardTitleEl, cardBodyEl, hudEl, compassEl, compassArrowEl,
     compassDistEl, progressEl, startBtn, pickerEl, navbarEl;
 
 /* ----------------------------------------------------------------------------
+   2b. WORDS — the engine is written in English and stays that way. i18n.js, when
+   the page loads it, hands back the visitor's language for a given key; with no
+   i18n.js (a fork that took the engine and not the switch) every call returns the
+   English text it was given, so the world behaves exactly as it always has.
+   -------------------------------------------------------------------------- */
+
+/** @param {string} key @param {string} english @param {Object} [vars] */
+function tr(key, english, vars) {
+  if (window.MH_I18N) return window.MH_I18N.t(key, english, vars);
+  if (!vars) return english;
+  return String(english).replace(/\{(\w+)\}/g, (whole, name) =>
+    Object.prototype.hasOwnProperty.call(vars, name) ? String(vars[name]) : whole);
+}
+
+/** A kiosk's name in the visitor's language, keyed by its English one. Names of
+ *  works (No Phenomenon, Autofac) have no entry, so they come back unchanged. */
+function kioskTitle(english) { return tr("kiosk." + english + ".title", english); }
+
+/** Redraw every word the engine itself put on the screen, after a switch. */
+function relabel() {
+  EXHIBITS.forEach((ex) => { if (ex.titleEn) ex.title = kioskTitle(ex.titleEn); });
+  if (navbarEl) buildNavbar();
+  const chip = document.getElementById("mh-tagline");
+  if (chip && T) chip.textContent = tr("theme." + T.id + ".tagline", T.tagline);
+  if (mode === "card" && openIndex >= 0) renderCard(openIndex);   // the open card too
+  buildPicker();                                                  // colour tooltips
+  updateHUD();                                                    // the "n / m seen" counter, now rather than next frame
+}
+
+/* ----------------------------------------------------------------------------
    3. DOM  — the engine builds its own canvas / HUD / intro / modal, so a themed
    page is a thin loader. Structural CSS here; skin CSS comes from the theme.
    -------------------------------------------------------------------------- */
@@ -148,7 +178,7 @@ function buildDOM() {
     <div id="mh-switcher" class="mh-switcher mh-faded" role="group" aria-label="Choose a skin"></div>
     <div id="mh-mark" title="matthorrigan.com — same place, different light"><span>MH</span></div>
     <div id="mh-buildbar" class="mh-buildbar mh-faded" role="toolbar" aria-label="Build tools">
-      <button class="mh-tool mh-cur" type="button" data-tool="move"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M12 4V20M4 12H20M12 4l-2.5 2.5M12 4l2.5 2.5M12 20l-2.5-2.5M12 20l2.5-2.5M4 12l2.5-2.5M4 12l2.5 2.5M20 12l-2.5-2.5M20 12l-2.5 2.5"/></svg>Move</button>
+      <button class="mh-tool mh-cur" type="button" data-tool="move"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M12 4V20M4 12H20M12 4l-2.5 2.5M12 4l2.5 2.5M12 20l-2.5-2.5M12 20l2.5-2.5M4 12l2.5-2.5M4 12l2.5 2.5M20 12l-2.5-2.5M20 12l-2.5 2.5"/></svg><span class="mh-tool-label">Move</span></button>
       <button class="mh-tool" type="button" data-tool="house">Plant a house.</button>
       <button class="mh-tool" type="button" data-tool="tree">Build a tree.</button>
       <button class="mh-tool" type="button" data-tool="signal">Raise a signal tower.</button>
@@ -159,7 +189,7 @@ function buildDOM() {
     <div id="mh-intro" class="mh-overlay">
       <div class="mh-panel">
         <div class="mh-kicker" id="mh-themechip"></div>
-        <h1 id="mh-title">Matt Horrigan</h1>
+        <h1 id="mh-title">M. Reid Horrigan</h1>
         <p class="mh-tagline" id="mh-tagline"></p>
         <button id="mh-start" class="mh-btn">Enter ›</button>
         <div class="mh-legend" id="mh-legend">
@@ -222,10 +252,10 @@ function buildDOM() {
   buildbarEl = byId("mh-buildbar");
   buildToggleEl = byId("mh-buildtoggle");
 
-  byId("mh-themechip").textContent = T.name;
-  byId("mh-tagline").textContent = T.tagline;
-  byId("mh-title").textContent = (CONTENT && CONTENT.title) || "Matt Horrigan";
-  document.title = ((CONTENT && CONTENT.title) || "Matt Horrigan") + " · " + T.name;
+  byId("mh-themechip").textContent = T.name;                       // the skin's own coined name: never translated
+  byId("mh-tagline").textContent = tr("theme." + T.id + ".tagline", T.tagline);
+  byId("mh-title").textContent = (CONTENT && CONTENT.title) || "M. Reid Horrigan";
+  document.title = ((CONTENT && CONTENT.title) || "M. Reid Horrigan") + " · " + T.name;
   if (!T.wayfinding.recall) byId("mh-legend").lastElementChild.remove();
 
   // base-aware chrome links (see window.MH_SITE; defaults keep dev paths working)
@@ -401,7 +431,7 @@ function buildPicker() {
     const b = document.createElement("button");
     b.className = "mh-swatch" + (i === avatarIndex ? " mh-sel" : "");
     b.style.background = col;
-    b.title = "Colour " + (i + 1);
+    b.title = tr("world.colour", "Colour {n}", { n: i + 1 });
     b.addEventListener("click", () => {
       avatarIndex = i; sfx.pick();
       Array.from(pickerEl.children).forEach((el, k) => el.classList.toggle("mh-sel", k === i));
@@ -416,7 +446,7 @@ function buildNavbar() {
   if (!T.navbar) { navbarEl.remove(); navbarEl = null; return; }
   navbarEl.innerHTML = "";
   const home = document.createElement("button");
-  home.type = "button"; home.className = "mh-navchip mh-navhome"; home.textContent = "◇ Plaza";
+  home.type = "button"; home.className = "mh-navchip mh-navhome"; home.textContent = tr("world.plaza", "◇ Plaza");
   home.addEventListener("click", () => { if (mode === "walking") recallHome(); });
   navbarEl.appendChild(home);
   EXHIBITS.forEach((ex, i) => {
@@ -584,7 +614,8 @@ function buildHub() {
     return {
       tx: HX + T.ringRadius * Math.cos(ang),
       ty: HY + T.ringRadius * Math.sin(ang),
-      title: it.title, accent: T.accents[i % T.accents.length], slot: i, visited: false,
+      titleEn: it.title, title: kioskTitle(it.title),
+      accent: T.accents[i % T.accents.length], slot: i, visited: false,
     };
   });
   player.x = HX; player.y = HY + 1.8; player.fx = 0; player.fy = 1;   // spawn on the plaza, clear of the central beacon
@@ -616,7 +647,8 @@ function rebuildSpurs() {
       const r = T.ringRadius + step * (j + 1);
       EXHIBITS.push({
         tx: HX + r * Math.cos(ang), ty: HY + r * Math.sin(ang),
-        title: sats[j].title, accent: gate.accent, slot: 90 + s * 13 + j * 7,   // slot is only a visual seed for houses
+        titleEn: sats[j].title, title: kioskTitle(sats[j].title),   // a work's own name: the dictionary leaves it alone
+        accent: gate.accent, slot: 90 + s * 13 + j * 7,   // slot is only a visual seed for houses
         url: sats[j].url, satellite: true, visited: false,
       });
     }
@@ -697,8 +729,8 @@ function onKeyDown(e) {
   else if (k === "e") { if (activeIndex >= 0) openCard(activeIndex); }
   else if (k === "enter") { navTo((CONTENT && CONTENT.home) || 0); }   // Enter → the About kiosk
   else if (k === "g" || k === "h") { if (T.wayfinding.recall) recallHome(); }
-  else if (k === "c") { avatarIndex = (avatarIndex + 1) % T.avatarColors.length; sfx.pick(); toast("Colour " + (avatarIndex + 1)); }
-  else if (k === "m") { audio.setMuted(!audio.muted); toast(audio.muted ? "Sound off" : "Sound on"); }
+  else if (k === "c") { avatarIndex = (avatarIndex + 1) % T.avatarColors.length; sfx.pick(); toast(tr("world.colour", "Colour {n}", { n: avatarIndex + 1 })); }
+  else if (k === "m") { audio.setMuted(!audio.muted); toast(audio.muted ? tr("world.soundOff", "Sound off") : tr("world.soundOn", "Sound on")); }
   else if (k === "t") { cycleSkin(); }   // cycle to the next skin (live)
   else if (k === "b") { toggleBuild(); } // build mode (rearrange / add buildings)
 }
@@ -732,7 +764,7 @@ function onPointer(e) {
       window.MH_MUSEBOTS.openSelector(building, BUILDINGS);
       return;
     }
-    toast("Press B (✎ Build) to move or remove buildings"); return;
+    toast(tr("world.pressBuild", "Press B (✎ Build) to move or remove buildings")); return;
   }
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
 }
@@ -759,7 +791,7 @@ function recallHome() {
   auto.active = true; auto.goal = -1; auto.warp = false;
   auto.tx = nearImg(HX, player.x); auto.ty = nearImg(HY, player.y);
   auto.lastDist = Infinity; auto.stuck = 0;
-  toast("Heading back to the plaza");
+  toast(tr("world.heading", "Heading back to the plaza"));
 }
 
 function startGame() {
@@ -779,7 +811,8 @@ function toggleBuild() {
   if (buildbarEl) buildbarEl.classList.toggle("mh-faded", !buildMode);
   if (buildToggleEl) buildToggleEl.classList.toggle("mh-on", buildMode);
   refreshBuildTools();
-  toast(buildMode ? "Build mode — drag to move; pick a tool to add or remove" : "Build mode off");
+  toast(buildMode ? tr("world.buildOn", "Build mode — drag to move; pick a tool to add or remove")
+                  : tr("world.buildOff", "Build mode off"));
 }
 function onBuildTool(e) {
   const b = e.target && e.target.closest && e.target.closest(".mh-tool"); if (!b) return;
@@ -834,7 +867,7 @@ function buildPointerDown(sx, sy) {
     const d = decorAtScreen(sx, sy); if (d >= 0) { drag = { kind: "decor", i: d }; updateBuildCursor(); }
   } else if (buildTool === "house" || buildTool === "tree" || buildTool === "signal") {
     const w = screenToWorld(sx, sy), tx = wrap(Math.round(w.x)), ty = wrap(Math.round(w.y));
-    if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast("Something is already built here"); return; }   // one structure per tile
+    if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast(tr("world.occupied", "Something is already built here")); return; }   // one structure per tile
     const building = { tx, ty, type: buildTool };
     if (buildTool === "signal" && window.MH_MUSEBOTS) building.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS);
     BUILDINGS.push(building); saveLayout(); sfx.pick();
@@ -1354,7 +1387,7 @@ function drawToast() {
 
 function updateHUD() {
   const v = EXHIBITS.filter((e) => e.visited).length;
-  progressEl.textContent = `${v} / ${EXHIBITS.length} seen`;
+  progressEl.textContent = tr("world.progress", "{v} / {n} seen", { v: v, n: EXHIBITS.length });
 
   // nav-bar shows when you wander out of sight OR when you open the ☰ menu (mobile-friendly)
   if (navbarEl) navbarEl.classList.toggle("mh-faded", !(mode === "walking" && (kiosksOut || menuOpen)));
@@ -1382,6 +1415,7 @@ function updateHUD() {
 function openExternal(url) {
   // a plain new TAB: no features string (a features string makes Safari treat it as a blockable
   // popup window). Must be called SYNCHRONOUSLY from a user gesture or iPad/iPhone will block it.
+  if (window.MH_I18N) url = window.MH_I18N.href(url);   // French mode opens the French page
   try { const w = window.open(url, "_blank"); if (w) { try { w.opener = null; } catch (e) { /* _blank is noopener by default on modern browsers */ } } }
   catch (e) { /* headless / blocked: ignore */ }
 }
@@ -1424,7 +1458,7 @@ function opensAsCard(i) {
 }
 function renderCard(i) {
   const k = CONTENT.kiosks[i];
-  cardTitleEl.textContent = k.title;
+  cardTitleEl.textContent = kioskTitle(k.title);
   byId("mh-cardInner").style.setProperty("--mh-card-accent", EXHIBITS[i].accent);  // accent → kiosk colour
   showCardBack(false);
   const page = k.page;
@@ -1433,7 +1467,7 @@ function renderCard(i) {
     renderToc(page);
   } else {                                        // the themed prose card
     setCardWide(false); setCardClean(false);
-    cardBodyEl.innerHTML = k.html || "";
+    cardBodyEl.innerHTML = tr("kiosk." + k.title + ".html", k.html || "");
     cardBodyEl.scrollTop = 0;
   }
 }
@@ -1509,7 +1543,7 @@ function defPaintKiosk(g, sx, sy, ex, active, env) {
   g.fillStyle = hexA(ex.accent, active ? 1 : 0.8); g.font = "800 22px " + uiFont();
   g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(String(ex.slot + 1), sx, by + sh / 2);
   label(g, ex.title, sx, by - 10, 14, "#eef2f7");
-  if (active) { roundRect(sx - 44, by - 38, 88, 24, 12, hexA(ex.accent, 0.95), null); g.fillStyle = "#06121f"; g.font = "700 12px " + uiFont(); g.fillText("Press E", sx, by - 26); }
+  if (active) { roundRect(sx - 44, by - 38, 88, 24, 12, hexA(ex.accent, 0.95), null); g.fillStyle = "#06121f"; g.font = "700 12px " + uiFont(); g.fillText(tr("world.pressE", "Press E"), sx, by - 26); }
   if (ex.visited) { g.fillStyle = "#4dcb53"; g.beginPath(); g.arc(bx + sw - 3, by + 3, 7, 0, Math.PI * 2); g.fill(); }
 }
 function defPaintAvatar(g, sx, sy, a) {
@@ -1732,6 +1766,12 @@ function start(themeOrId, content) {
   function boot() {
     buildDOM(); buildHub(); buildNavbar(); buildPicker(); refreshSwitcher(); wireInput(); resize();
     applyEcology();
+    // The world's chrome exists now: let i18n.js translate it, and redraw the
+    // engine's own words whenever the visitor uses the switch.
+    if (window.MH_I18N) {
+      window.MH_I18N.apply();
+      document.addEventListener("mh:lang", relabel);
+    }
     startGame();          // no "enter" page — land straight in the world (audio wakes on first input)
     last = performance.now(); requestAnimationFrame(loop);
   }
@@ -1764,7 +1804,7 @@ function switchTheme(id) {
   rebuildSpurs();                                  // grow or clear the Music/Games house-roads for the new world
   avatarIndex = avatarIndex % T.avatarColors.length;
   buildPicker(); if (navbarEl) buildNavbar(); refreshSwitcher();
-  document.title = ((CONTENT && CONTENT.title) || "Matt Horrigan") + " · " + T.name;
+  document.title = ((CONTENT && CONTENT.title) || "M. Reid Horrigan") + " · " + T.name;
   persistSkin(id); reflectSkinInURL(id); applyEcology();
   sfx.pick();
   toast(T.name);
@@ -1905,7 +1945,7 @@ window.MH_ISO = {
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period
   biome: biomeAt,                              // coarse biome for a canonical tile
-  util: { diamond, poly, roundRect, shadow, label, shade, mix, hexA, clamp, hash01, noise01, wrap, wrapDelta },
+  util: { diamond, poly, roundRect, shadow, label, shade, mix, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
   get TILE() { return { W: TILE_W, H: TILE_H }; },
 };
 
