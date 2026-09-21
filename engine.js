@@ -2041,6 +2041,7 @@ window.MH_ISO = {
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period
   biome: biomeAt,                              // coarse biome for a canonical tile
+  onWater,                                     // the same wading test the player uses (ecology.js gives its zoogs the same)
   util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
   get TILE() { return { W: TILE_W, H: TILE_H }; },
 };

@@ -152,6 +152,7 @@
   }
 
   function thinkGrazer(e, c, dtS, px, py) {
+    e.wet = !!(window.MH_ISO.onWater && window.MH_ISO.onWater(e.x, e.y));   // in open water? the engine's own test
     if (e.rest > 0) { e.rest -= dtS; setVel(e, 0, 0, 0); }             // resting: ease to a stop (still browses below)
     else {
       const fi = fidx(e.x, e.y), hereF = ECO.flora[fi], hereFear = ECO.fear[fi];
@@ -173,7 +174,7 @@
       if (pd < 1.6) { dx -= pdx / pd; dy -= pdy / pd; }
       else if (pd < c.sight) { dx += (pdx / pd) * 0.5 * c.curiosity; dy += (pdy / pd) * 0.5 * c.curiosity; }
       if (Math.abs(dx) < 1e-3 && Math.abs(dy) < 1e-3) { dx = e.vx; dy = e.vy; }
-      setVel(e, dx, dy, c.grazerSpeed);
+      setVel(e, dx, dy, c.grazerSpeed * (e.wet ? 0.5 : 1));            // wading is slow, exactly as it is for the player
       if (Math.random() < c.restChance * (1 + 2 * (restingN / Math.max(1, n))) * dtS) e.rest = rnd(1.5, 4);   // settle together
     }
     // browse + re-seed as it roams (mutualism) + metabolise + breed / starve
@@ -330,6 +331,11 @@
     return null;
   };
 
+  /** In open water? The engine's own test, so a zoog wades on exactly the tiles
+   *  the player wades on. Asked at draw time because the WASM world integrates
+   *  positions itself and knows nothing about terrain. */
+  function wetAt(e) { return !!(window.MH_ISO.onWater && window.MH_ISO.onWater(e.x, e.y)); }
+
   ECO.actors = function (push, api) {
     ECO.theme = api.theme || ECO.theme;      // the predator picks its palette from the skin
     const wasmBridge = window.MH_WASM && window.MH_WASM.worldBridge;
@@ -338,6 +344,7 @@
       for (let i = 0; i < records.length; i += 10) {
         const e = { x: records[i], y: records[i + 1], vx: records[i + 2], vy: records[i + 3], e: records[i + 4], phase: records[i + 6], rest: records[i + 7], dormant: !!records[i + 8], eat: records[i + 9] };
         const p = api.place(e.x, e.y); if (p.x < -24 || p.x > W + 24 || p.y < -26 || p.y > H + 18) continue;
+        if (records[i + 5] === 1) e.wet = wetAt(e);                                    // zoogs wade
         const painter = records[i + 5] === 0 ? drawMote : records[i + 5] === 1 ? drawGrazer : records[i + 5] === 2 ? drawPredator : drawFirefly;
         push(p.depth, (g) => painter(g, p.x, p.y, e));
       }
@@ -347,7 +354,7 @@
     const W = api.W, H = api.H;
     const vis = (e, fn) => { const p = api.place(e.x, e.y); if (p.x < -24 || p.x > W + 24 || p.y < -26 || p.y > H + 18) return; push(p.depth, (g) => fn(g, p.x, p.y, e)); };
     for (const e of ECO.motes) vis(e, drawMote);
-    for (const e of ECO.grazers) vis(e, drawGrazer);
+    for (const e of ECO.grazers) { e.wet = wetAt(e); vis(e, drawGrazer); }
     for (const e of ECO.predators) vis(e, drawPredator);
     for (const e of ECO.fireflies) vis(e, drawFirefly);
   };
@@ -379,14 +386,22 @@
 
   function drawGrazer(g, x, y, e) {
     const p = ZOOG[ECO.theme] || ZOOG.technoscure, h = heading(e), ph = e.phase || 0;
-    const speed = Math.hypot(e.vx || 0, e.vy || 0);
-    const hop = speed > 0.6 ? Math.max(0, Math.sin(ECO.now * 7 + ph * 6)) * 2.6 : 0;   // bounding, and landing again
-    const by = y - hop, R = 9;
-    U.shadow(g, x, y, 6 - hop * 0.8);
+    const speed = Math.hypot(e.vx || 0, e.vy || 0), wet = !!e.wet;
+    // In water it wades instead of bounding: no hop, and the pulse widens into
+    // the same gooey wobble the player's slime gets (engine.js defPaintAvatar).
+    const hop = (!wet && speed > 0.6) ? Math.max(0, Math.sin(ECO.now * 7 + ph * 6)) * 2.6 : 0;
+    const wob = wet ? 1 + 0.16 * Math.sin(ECO.now * 4.4 + ph * 5) : 1;
+    const sink = wet ? 1.6 : 0;                         // sat down into the water, not standing on it
+    const by = y - hop + sink, R = 9;
+    if (wet) {                                          // the player's ripple ring, at zoog scale
+      const ph2 = (ECO.now * 1.4 + ph) % 1;
+      g.save(); g.strokeStyle = "rgba(191,232,255,0.4)"; g.lineWidth = 1.1;
+      g.beginPath(); g.ellipse(x, y + 1, 5 + ph2 * 6, 2.2 + ph2 * 2.6, 0, 0, 6.2832); g.stroke(); g.restore();
+    } else U.shadow(g, x, y, 6 - hop * 0.8);            // no cast shadow on open water
     g.beginPath();                                      // a low furtive tuft, flat on the ground
     for (let i = 0; i <= 14; i++) {
-      const a = Math.PI + (i / 14) * Math.PI, rr = R * 0.62 * (1 + 0.16 * Math.sin(i * 2.3 + ph * 7));
-      const vx = x + Math.cos(a) * rr, vy = by + Math.sin(a) * rr * 0.86;
+      const a = Math.PI + (i / 14) * Math.PI, rr = R * 0.62 * wob * (1 + 0.16 * Math.sin(i * 2.3 + ph * 7));
+      const vx = x + Math.cos(a) * rr, vy = by + Math.sin(a) * rr * 0.86 * (wet ? 0.8 : 1);
       i ? g.lineTo(vx, vy) : g.moveTo(vx, vy);
     }
     g.closePath();

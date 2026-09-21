@@ -30,6 +30,12 @@ export class WorldCore {
     render_len(): number;
     render_ptr(): number;
     render_snapshot(): Float32Array;
+    /**
+     * One byte per tile of the P x P torus, 1 where a tile is open water.
+     * The engine computes it with the same test the player wades by, so a
+     * grazer slows down exactly where the player's slime does.
+     */
+    set_water(mask: Uint8Array): void;
     step(dt: number, player_x: number, player_y: number): void;
 }
 
@@ -67,12 +73,14 @@ export interface InitOutput {
     readonly worldcore_render_len: (a: number) => number;
     readonly worldcore_render_ptr: (a: number) => number;
     readonly worldcore_render_snapshot: (a: number) => [number, number];
+    readonly worldcore_set_water: (a: number, b: number, c: number) => void;
     readonly worldcore_step: (a: number, b: number, c: number, d: number) => void;
     readonly wrap: (a: number, b: number) => number;
     readonly wrapped_delta: (a: number, b: number) => number;
     readonly wrapped_distance: (a: number, b: number, c: number, d: number, e: number) => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
+    readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_start: () => void;
 }
 

@@ -106,6 +106,7 @@ pub struct WorldCore {
     hub_x: f32,
     hub_y: f32,
     village_radius: f32,
+    water: Vec<u8>,
 }
 
 #[wasm_bindgen]
@@ -139,6 +140,7 @@ impl WorldCore {
             predator_cap: (predators.max(2) * 3) as usize,
             predator_dormant: false,
             mote_speed: 1.5,
+            water: Vec::new(),
             grazer_speed: 1.0,
             predator_speed: 1.25,
             firefly_speed: 0.6,
@@ -288,7 +290,28 @@ impl WorldCore {
     }
 }
 
+#[wasm_bindgen]
 impl WorldCore {
+    /// One byte per tile of the P x P torus, 1 where a tile is open water.
+    /// The engine computes it with the same test the player wades by, so a
+    /// grazer slows down exactly where the player's slime does.
+    pub fn set_water(&mut self, mask: &[u8]) {
+        let want = (self.period as usize) * (self.period as usize);
+        self.water = if mask.len() == want { mask.to_vec() } else { Vec::new() };
+    }
+}
+
+impl WorldCore {
+    fn on_water(&self, x: f32, y: f32) -> bool {
+        if self.water.is_empty() {
+            return false;
+        }
+        let p = self.period as usize;
+        let tx = (x.round() as i64).rem_euclid(p as i64) as usize;
+        let ty = (y.round() as i64).rem_euclid(p as i64) as usize;
+        self.water[ty * p + tx] != 0
+    }
+
     fn speed(&self, kind: u8) -> f32 {
         match kind {
             0 => self.mote_speed,
@@ -377,6 +400,9 @@ impl WorldCore {
             let pdy = Self::delta(period, player_y - current.y);
             let player_distance = pdx.hypot(pdy).max(0.001);
             let mut speed = self.speed(current.kind);
+            if current.kind == 1 && self.on_water(current.x, current.y) {
+                speed *= 0.5; // wading, as the player does
+            }
             match current.kind {
                 0 => {
                     let mut separation_x = 0.0;

@@ -149,6 +149,17 @@ export class WorldCore {
         return v1;
     }
     /**
+     * One byte per tile of the P x P torus, 1 where a tile is open water.
+     * The engine computes it with the same test the player wades by, so a
+     * grazer slows down exactly where the player's slime does.
+     * @param {Uint8Array} mask
+     */
+    set_water(mask) {
+        const ptr0 = passArray8ToWasm0(mask, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.worldcore_set_water(this.__wbg_ptr, ptr0, len0);
+    }
+    /**
      * @param {number} dt
      * @param {number} player_x
      * @param {number} player_y
@@ -278,6 +289,13 @@ function getUint8ArrayMemory0() {
     return cachedUint8ArrayMemory0;
 }
 
+function passArray8ToWasm0(arg, malloc) {
+    const ptr = malloc(arg.length * 1, 1) >>> 0;
+    getUint8ArrayMemory0().set(arg, ptr / 1);
+    WASM_VECTOR_LEN = arg.length;
+    return ptr;
+}
+
 let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 cachedTextDecoder.decode();
 const MAX_SAFARI_DECODE_BYTES = 2146435072;
@@ -291,6 +309,8 @@ function decodeText(ptr, len) {
     }
     return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
 }
+
+let WASM_VECTOR_LEN = 0;
 
 let wasmModule, wasmInstance, wasm;
 function __wbg_finalize_init(instance, module) {

@@ -12,6 +12,7 @@ self.onmessage = async ({ data }) => {
       world.configure(data.grazerCap, data.predatorCap, data.predatorDormant,
         data.moteSpeed, data.grazerSpeed, data.predatorSpeed, data.fireflySpeed,
         data.turn, data.curiosity, data.hubX, data.hubY, data.villageRadius);
+      if (data.water) world.set_water(new Uint8Array(data.water));   // where grazers have to wade
       stepCount = 0;
       self.postMessage({ type: "ready" });
       publish(true);

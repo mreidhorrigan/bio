@@ -7,6 +7,18 @@
   let worker = null, signature = "", inFlight = false, recycle = null;
   const bridge = {
     enabled, ready: false, failed: false, snapshot: null, flora: null, populations: [0, 0, 0, 0], workerStepMs: 0, snapshots: 0,
+    /** One byte per tile, 1 where the engine says a tile is open water. The
+     *  world is deterministic, so this is built once per configuration. */
+    waterMask(period) {
+      const test = window.MH_ISO && window.MH_ISO.onWater;
+      if (!test) return null;
+      const mask = new Uint8Array(period * period);
+      let any = 0;
+      for (let ty = 0; ty < period; ty++)
+        for (let tx = 0; tx < period; tx++)
+          if (test(tx, ty)) { mask[ty * period + tx] = 1; any++; }
+      return any ? mask : null;
+    },
     ensure(period, cfg, hub, villageRadius) {
       if (!this.enabled || this.failed) return;
       const nextSignature = [period, cfg.motes, cfg.grazerStart, cfg.grazerCap, cfg.predatorStart, cfg.predatorCap, cfg.predatorDormant, cfg.fireflies || 0, cfg.moteSpeed, cfg.grazerSpeed, cfg.predatorSpeed, cfg.fireflySpeed, cfg.turn, cfg.curiosity, hub.x, hub.y, villageRadius].join(":");
@@ -27,7 +39,8 @@
       };
       worker.onerror = (event) => fail(event.message || "world worker failed");
       const seed = crypto.getRandomValues(new Uint32Array(1))[0];
-      worker.postMessage({ type: "init", period, seed, motes: cfg.motes, grazers: cfg.grazerStart, grazerCap: cfg.grazerCap, predators: cfg.predatorStart, predatorCap: cfg.predatorCap, predatorDormant: !!cfg.predatorDormant, fireflies: cfg.fireflies || 0, moteSpeed: cfg.moteSpeed, grazerSpeed: cfg.grazerSpeed, predatorSpeed: cfg.predatorSpeed, fireflySpeed: cfg.fireflySpeed, turn: cfg.turn, curiosity: cfg.curiosity, hubX: hub.x, hubY: hub.y, villageRadius });
+      const water = this.waterMask(period);
+      worker.postMessage({ type: "init", period, seed, water: water ? water.buffer : null, motes: cfg.motes, grazers: cfg.grazerStart, grazerCap: cfg.grazerCap, predators: cfg.predatorStart, predatorCap: cfg.predatorCap, predatorDormant: !!cfg.predatorDormant, fireflies: cfg.fireflies || 0, moteSpeed: cfg.moteSpeed, grazerSpeed: cfg.grazerSpeed, predatorSpeed: cfg.predatorSpeed, fireflySpeed: cfg.fireflySpeed, turn: cfg.turn, curiosity: cfg.curiosity, hubX: hub.x, hubY: hub.y, villageRadius });
     },
     step(dt, player) {
       if (!worker || !this.ready || inFlight) return;

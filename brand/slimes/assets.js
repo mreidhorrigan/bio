@@ -122,6 +122,7 @@
     reduced: () => reduce,
     hub: () => ({ x: P / 2, y: P / 2, period: P }),
     biome: biomeAt,
+    onWater: (x, y) => biomeAt(Math.round(x), Math.round(y)) === "water",   // engine.js also excludes the plaza; the gallery has none
     util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
     get TILE() { return { W: TILE_W, H: TILE_H }; },
     // the site's engine also exposes start/switchTheme/audio; a gallery needs none of it
