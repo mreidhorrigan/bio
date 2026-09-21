@@ -32,9 +32,19 @@ DRIVER = """<!doctype html><meta charset="utf-8"><title>capture</title>
 <script>
 const WANT = %(want)s, LIST = %(list)s, FPS = %(fps)s, N = %(frames)d, T0 = %(t0)s;
 function api(w) {
-  for (const k of ["MH_ASSETS","MH_TOWER_PAGE","MH_SLIME2D_PAGE","MH_SHOG_PAGE","MH_PREY_PAGE"])
-    if (w[k] && typeof w[k].redraw === "function") return w[k];
-  return null;
+  // Every sheet loads the shared harness (assets.js), so MH_ASSETS exists even
+  // where it owns nothing: on those pages it was never booted and its redraw
+  // paints an empty list. Take the one that actually has panels.
+  const names = ["MH_ASSETS","MH_TOWER_PAGE","MH_SLIME2D_PAGE","MH_SHOG_PAGE","MH_PREY_PAGE"];
+  let fallback = null;
+  for (const k of names) {
+    const a = w[k];
+    if (!a || typeof a.redraw !== "function") continue;
+    const n = typeof a.panels === "function" ? a.panels().length : 0;
+    if (n > 0) return a;
+    fallback = fallback || a;
+  }
+  return fallback;
 }
 function caption(fig) {
   const c = fig.querySelector("figcaption");
@@ -61,10 +71,23 @@ function go() {
     const cv = fig.querySelector("canvas");
     out.matched = caption(fig);
     out.size = [cv.width, cv.height];
+    out.owner = A.__name || "";
+    // A panel's background is CSS on the element, not paint in the bitmap, so a
+    // bare toDataURL gives a transparent cut-out and the GIF fills it with
+    // whatever the encoder fancies. Composite each frame onto that colour.
+    const bg = getComputedStyle(cv).backgroundColor;
+    const off = document.createElement("canvas");
+    off.width = cv.width; off.height = cv.height;
+    const og = off.getContext("2d");
+    out.background = bg;
     out.frames = [];
     for (let i = 0; i < N; i++) {
       A.redraw(T0 + i / FPS);                    // our clock, not the wall's
-      out.frames.push(cv.toDataURL("image/png"));
+      og.globalCompositeOperation = "source-over";
+      og.fillStyle = (bg && bg !== "rgba(0, 0, 0, 0)") ? bg : "#ffffff";
+      og.fillRect(0, 0, off.width, off.height);
+      og.drawImage(cv, 0, 0);
+      out.frames.push(off.toDataURL("image/png"));
     }
   } catch (e) { out.error = String(e && e.message || e); }
   document.getElementById("out").textContent = JSON.stringify(out);
@@ -90,8 +113,10 @@ def run(args):
         "frames": frames,
         "t0": float(args.t0),
         "settle": int(args.settle),
-        # tall enough that no panel is culled by the sheets' viewport check
-        "height": 20000,
+        # A normal window is fine: redraw(t) paints every panel whether or not
+        # it is scrolled into view, and toDataURL reads a canvas that is off
+        # screen. Forcing a 20000px iframe at 2x only made Chrome crawl.
+        "height": 1000,
     }
     with tempfile.TemporaryDirectory() as tmp:
         driver = os.path.join(tmp, "driver.html")
@@ -101,7 +126,7 @@ def run(args):
             CHROME, "--headless", "--disable-gpu", "--allow-file-access-from-files",
             "--force-device-scale-factor=%s" % args.scale,
             "--window-size=1400,1000",
-            "--virtual-time-budget=%d" % (8000 + frames * 120),
+            "--virtual-time-budget=%d" % (8000 + frames * 400),
             "--dump-dom", "file://" + driver,
         ]
         dom = subprocess.run(cmd, capture_output=True, text=True, timeout=600).stdout
@@ -126,8 +151,9 @@ def run(args):
         raw = base64.b64decode(url.split(",", 1)[1])
         with open(os.path.join(args.frames, "f%04d.png" % i), "wb") as fh:
             fh.write(raw)
-    print("%s: %d frames at %sx%s -> %s"
-          % (data["matched"], len(data["frames"]), data["size"][0], data["size"][1], args.frames),
+    print("%s: %d frames at %sx%s on %s -> %s"
+          % (data["matched"], len(data["frames"]), data["size"][0], data["size"][1],
+             data.get("background", "?"), args.frames),
           file=sys.stderr)
 
 
