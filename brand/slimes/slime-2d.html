@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The slime in 2D</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; --mh-ui: system-ui, sans-serif; }
+    body { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 4rem; color: #261139; background: #f6f4ee; }
+    h1 { margin-bottom: .3rem; }
+    h2 { margin: 2.6rem 0 .2rem; font-size: 1.3rem; }
+    p { max-width: 46rem; }
+    .lede { margin-top: 0; }
+    .grid { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.1rem; align-items: flex-start; }
+    .panel { margin: 0; background: white; border: 2px solid #b294d6; border-radius: 18px 6px; overflow: hidden; }
+    .panel canvas { display: block; }
+    figcaption { padding: .5rem .7rem .6rem; font-size: .8rem; line-height: 1.35; }
+    figcaption strong { display: block; }
+    figcaption span { color: #5b4a6b; }
+    .swatches table { border-collapse: collapse; margin: .7rem .7rem 0; }
+    .swatches th { text-align: left; font-weight: 600; font-size: .8rem; padding: .18rem .6rem .18rem 0; color: #5b4a6b; }
+    .swatches i { display: inline-block; width: 1.5rem; height: 1.5rem; border: 1px solid rgba(0,0,0,.25); border-radius: 4px; margin-right: .2rem; vertical-align: middle; }
+    .warn { padding: 1rem; background: #fff3cd; border: 2px solid #d6a800; border-radius: 12px; }
+    a { color: #5b2a86; }
+  </style>
+  <script src="slime-2d.js"></script>
+  <script src="slime-2d-page.js"></script>
+</head>
+<body>
+  <main>
+    <p><a href="index.html">All extracted views</a></p>
+    <h1>The slime in 2D</h1>
+    <p class="lede">The slime as a body rather than a sprite: free, falling, landing, and lying on ground that is not flat.</p>
+    <p>The site's avatar is a squashing ellipse that always stands on a level tile. This is a proposal for the same creature with a skin and a volume. In a vacuum it is a circle with the eye in the middle, because nothing is pulling on it. Falling, it tapers upward into a slight teardrop. On the ground, its underside takes the shape of what it is lying on while its top stays a dome.</p>
+    <p>The underside is found by rolling a disc along the ground and tracing the curve its belly makes. That one radius is the slime's surface tension, and it decides everything interesting: a small disc creeps into every crack, a large one spans them, so bridging a gap and draping over a boulder come from the same rule rather than from special cases. The painter is <code>slime-2d.js</code>, standalone and dependency-free.</p>
+  </main>
+  <script>window.MH_SLIME2D_PAGE.boot();</script>
+</body>
+</html>

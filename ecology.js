@@ -331,6 +331,7 @@
   };
 
   ECO.actors = function (push, api) {
+    ECO.theme = api.theme || ECO.theme;      // the predator picks its palette from the skin
     const wasmBridge = window.MH_WASM && window.MH_WASM.worldBridge;
     if (wasmBridge && wasmBridge.ready && wasmBridge.snapshot) {
       const records = wasmBridge.snapshot, W = api.W, H = api.H;
@@ -362,62 +363,153 @@
     g.save(); g.globalAlpha = blink; g.shadowColor = "rgba(255,225,120,0.95)"; g.shadowBlur = 11;
     g.fillStyle = "#ffe79a"; g.beginPath(); g.arc(x, y - 6, 2.1, 0, Math.PI * 2); g.fill(); g.restore();
   }
+  /* --- the prey: zoogs ----------------------------------------------------
+     Adopted from brand/slimes/prey-proposals.html, design E. Lovecraft's
+     zoogs: the small furtive things of the enchanted wood, all eyes and no
+     shape, that swarm and vanish. One entity is one zoog; the knot of them is
+     what the flock does by itself.
+
+     Its base IS the ground line, so it sits on the world rather than hovering
+     over it, and the only time one leaves the ground is mid-bound, when its
+     shadow tightens under it.                                                */
+  const ZOOG = {
+    technurture: { body: "#d9c79a", deep: "#a8916a", pale: "#f2e7c8", eye: "#2a2118" },
+    technoscure: { body: "#8f8a72", deep: "#4a4636", pale: "#c3bb9a", eye: "#e8dfc0" },
+  };
+
   function drawGrazer(g, x, y, e) {
-    U.shadow(g, x, y, 6);
-    const h = heading(e);
-    g.lineJoin = "round";
-    g.fillStyle = "#d9c79a"; g.beginPath(); g.ellipse(x, y - 5, 6, 4.2, 0, 0, Math.PI * 2); g.fill();
-    g.lineWidth = 1.5; g.strokeStyle = INK; g.stroke();              // dark-ink outline, like the avatar slime (scaled down)
-    g.fillStyle = "#b9a578"; g.beginPath(); g.ellipse(x - h.hx * 2, y - 6.5, 3.4, 2.6, 0, 0, Math.PI * 2); g.fill();
-    g.lineWidth = 1.3; g.strokeStyle = INK; g.stroke();
-    g.fillStyle = "#2a2118"; g.beginPath(); g.arc(x + h.hx * 4, y - 6 + h.hy * 2, 1.1, 0, Math.PI * 2); g.fill();
+    const p = ZOOG[ECO.theme] || ZOOG.technoscure, h = heading(e), ph = e.phase || 0;
+    const speed = Math.hypot(e.vx || 0, e.vy || 0);
+    const hop = speed > 0.6 ? Math.max(0, Math.sin(ECO.now * 7 + ph * 6)) * 2.6 : 0;   // bounding, and landing again
+    const by = y - hop, R = 9;
+    U.shadow(g, x, y, 6 - hop * 0.8);
+    g.beginPath();                                      // a low furtive tuft, flat on the ground
+    for (let i = 0; i <= 14; i++) {
+      const a = Math.PI + (i / 14) * Math.PI, rr = R * 0.62 * (1 + 0.16 * Math.sin(i * 2.3 + ph * 7));
+      const vx = x + Math.cos(a) * rr, vy = by + Math.sin(a) * rr * 0.86;
+      i ? g.lineTo(vx, vy) : g.moveTo(vx, vy);
+    }
+    g.closePath();
+    g.fillStyle = p.body; g.fill();
+    g.lineWidth = 1.5; g.lineJoin = "round"; g.strokeStyle = INK; g.stroke();
+    g.strokeStyle = "rgba(0,0,0,0.3)"; g.lineWidth = 0.9;   // a few tufts of fur at the hem
+    for (let i = -1; i <= 1; i++) { const fx = x + i * R * 0.3; g.beginPath(); g.moveTo(fx, by); g.lineTo(fx + i * 0.7, by - R * 0.18); g.stroke(); }
+    const eyes = 3 + (((ph * 997) | 0) % 2);            // 3..4 eyes, stable per beast, blinking out of step
+    for (let i = 0; i < eyes; i++) {
+      const u = (i / (eyes - 1 || 1)) - 0.5;
+      const ex = x + u * R * 0.66 + h.hx * 1.4, ey = by - R * 0.42 + Math.abs(u) * R * 0.1 + h.hy * 0.8;
+      if (Math.sin(ECO.now * 3 + i * 2 + ph * 11) <= -0.72) continue;
+      g.fillStyle = p.pale; g.beginPath(); g.arc(ex, ey, 1.5, 0, 6.2832); g.fill();
+      g.fillStyle = p.eye; g.beginPath(); g.arc(ex + h.hx * 0.4, ey + h.hy * 0.4, 0.75, 0, 6.2832); g.fill();
+    }
   }
-  // A hunched, jagged dark mass with slug-mould EYESTALKS — markedly larger than its prey, no snout.
-  // Silhouette is drawn vertex-by-vertex (no array alloc) and shaped by stable per-beast state (e.phase) + heading.
-  // When dormant (technurture) it's a rooted, inert "scary plant": frozen (no gulp pulse), calmer body, dim half-lidded eyes, anchor roots.
+
+  /* --- the predator: a shoggoth ------------------------------------------
+     Adopted from brand/slimes/shoggoth-proposals.html, design C, "iridescent
+     bulk". A protoplasmic mass that forms and reabsorbs its organs, so eyes
+     open on its surface, hold, and sink back in, and an oil-slick sheen slides
+     across it so its colour is never twice the same. It has tentacles and no
+     mouth: nothing on it is allowed to read as a face.
+
+     It keeps what the old hunched predator established, because the world
+     already teaches those signs: near-black against the greens, an amber eye,
+     and, where a theme roots it (technurture's predatorDormant), anchor roots
+     and half-lidded eyes instead of limbs.
+
+     Drawn cheaply on purpose. Up to cfg.predatorCap of these paint every frame,
+     so the silhouette is 26 samples and each tentacle is four round-capped
+     segments: ink pass first, then gel, which is how the rest of the world gets
+     its outline.                                                             */
+  const SHOG = {
+    technurture: { body: "#2b2a34", deep: "#141318", sheen: "#c890ff", rim: "#3d4a4a", eye: "#ffcf3a" },
+    technoscure: { body: "#1d2228", deep: "#0a0d10", sheen: "#5fe0c8", rim: "#2f4a44", eye: "#ffb24a" },
+    dormant:     { body: "#46303a", deep: "#2a1c22", sheen: null,      rim: "#4a3b3f", eye: "#7c5f2c" },
+  };
+
+  function shogPal(dorm) { return dorm ? SHOG.dormant : (SHOG[ECO.theme] || SHOG.technoscure); }
+
+  /** One eye on the surface: opens, holds, sinks back in. Phase keeps each
+   *  eye on its own clock, seeded per beast so a shoggoth looks like itself. */
+  function shogEye(g, x, y, r, phase, pal, dorm, hx, hy) {
+    const life = (ECO.now * 0.33 + phase) % 1;
+    const open = dorm ? 0.75 : life < 0.12 ? life / 0.12 : life > 0.72 ? Math.max(0, (0.92 - life) / 0.2) : 1;
+    if (open <= 0.05) return;
+    const rr = r * open;
+    g.fillStyle = pal.eye; g.beginPath(); g.ellipse(x, y, rr, rr * (0.6 + 0.4 * open), 0, 0, 6.2832); g.fill();
+    g.lineWidth = 1.2; g.strokeStyle = INK; g.stroke();
+    if (dorm) { g.lineWidth = 1.3; g.beginPath(); g.moveTo(x - rr * 1.1, y - 0.2); g.lineTo(x + rr * 1.1, y - 0.2); g.stroke(); return; }
+    g.fillStyle = INK; g.beginPath(); g.arc(x + hx * rr * 0.4, y + hy * rr * 0.4, rr * 0.45, 0, 6.2832); g.fill();
+  }
+
+  /** A tapered limb: round-capped segments, ink under gel. Round at both ends,
+   *  and rooted inside the body, so no hard corner shows where it joins. */
+  function shogLimb(g, bx, by, ang, len, wide, phase, pal) {
+    const M = 4, curl = Math.sin(ECO.now * 1.1 + phase * 6) * 0.5;
+    const px = [bx], py = [by];
+    let x = bx, y = by;
+    for (let i = 1; i <= M; i++) {
+      const u = i / M, a = ang + curl * u * 1.5;
+      x += Math.cos(a) * (len / M); y += Math.sin(a) * (len / M);
+      px.push(x); py.push(y);
+    }
+    g.lineCap = "round"; g.lineJoin = "round";
+    for (let pass = 0; pass < 2; pass++) {
+      g.strokeStyle = pass ? pal.body : INK;
+      for (let i = 0; i < M; i++) {
+        g.lineWidth = (wide * (1 - i / M) + 0.7) * 2 + (pass ? 0 : 2.2);
+        g.beginPath(); g.moveTo(px[i], py[i]); g.lineTo(px[i + 1], py[i + 1]); g.stroke();
+      }
+    }
+  }
+
   function drawPredator(g, x, y, e) {
-    const dorm = e.dormant;
-    const k = (!dorm && e.eat > 0) ? 1 + 0.22 * Math.sin((1 - e.eat / 0.4) * Math.PI) : 1;   // gulp/pulse as it absorbs prey (frozen when dormant)
+    const dorm = e.dormant, pal = shogPal(dorm);
+    const k = (!dorm && e.eat > 0) ? 1 + 0.22 * Math.sin((1 - e.eat / 0.4) * Math.PI) : 1;   // swells as it absorbs prey
     U.shadow(g, x, y, 16);
-    const h = heading(e), ph = e.phase || 0, cy = y - 12, R = 16 * k, N = 11;
-    if (dorm) {                                                       // anchor roots splaying into the ground (under the body)
+    const h = heading(e), ph = e.phase || 0, cy = y - 12, R = 16 * k, N = 26;
+    const wob = dorm ? 0.4 : 1;
+
+    if (dorm) {                                                       // rooted: anchors instead of limbs
       g.strokeStyle = INK; g.lineCap = "round"; g.lineJoin = "round"; g.lineWidth = 2.3;
       for (let r = -1; r <= 1; r++) { g.beginPath(); g.moveTo(x + r * 2.5, y - 5); g.quadraticCurveTo(x + r * 6, y - 1, x + r * 9, y + 3); g.stroke(); }
+    } else {
+      for (let j = 0; j < 3; j++) {                                   // limbs behind the mass
+        const a = 2.36 + j * 0.79;
+        shogLimb(g, x + Math.cos(a) * R * 0.5, cy + R * 0.3, a, R * 0.8, R * 0.12, ph + j, pal);
+      }
     }
-    g.beginPath();
-    for (let i = 0; i < N; i++) {                                    // jagged, asymmetric, hunched outline
-      const a = -Math.PI / 2 + (i / N) * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a);
-      const jag = 1 + (i & 1 ? -0.28 : 0.16) + 0.13 * Math.cos(i * 1.7 + ph);     // alternating spikes + per-beast jitter
-      const vx = x + ca * R * jag * (1 + 0.18 * h.hx * ca);                        // lean toward heading
-      const vy = cy + sa * (sa < 0 ? R * 0.78 : R * 0.5) * jag;                    // tall hunched crown, flatter belly
+
+    g.beginPath();                                                    // the mass: a slow protoplasmic wander
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * 6.2832;
+      const kk = 1 + 0.13 * wob * Math.sin(a * 3 + ECO.now * 0.7 + ph)
+                   + 0.08 * wob * Math.sin(a * 5 - ECO.now * 0.5 + ph * 2);
+      const vx = x + Math.cos(a) * R * kk * (1 + 0.16 * h.hx * Math.cos(a));
+      const vy = cy + Math.sin(a) * R * kk * (Math.sin(a) < 0 ? 0.8 : 0.55);
       i === 0 ? g.moveTo(vx, vy) : g.lineTo(vx, vy);
     }
     g.closePath();
-    g.fillStyle = dorm ? "#46303a" : "#5e1a24"; g.fill();                          // dormant: a muted, drained, planty tone
-    g.lineWidth = 2; g.strokeStyle = INK; g.lineJoin = "round"; g.stroke();        // dark-ink outline, like the avatar slime
-    g.fillStyle = "#350c14"; g.beginPath(); g.ellipse(x - h.hx * 2, cy + R * 0.22, R * 0.55, R * 0.25, 0, 0, Math.PI * 2); g.fill();   // belly shadow (interior form)
-    // slug-mould EYESTALKS: a fan of curved tendrils rising forward from the hunch, each tipped with an eye (no idle motion)
-    const nx = -h.hy, ny = h.hx;                                     // body-perpendicular (iso "shoulders")
-    const stalks = 2 + (((e.phase * 997) | 0) % 3);                  // 2..4 eyestalks, stable per beast (from e.phase, not per-frame rng)
-    const bx0 = x + h.hx * 3.5, by0 = cy - R * 0.48 + h.hy * 1.5, half = (stalks - 1) / 2;
-    g.lineCap = "round"; g.lineJoin = "round";
-    for (let j = 0; j < stalks; j++) {
-      const t = j - half, wob = Math.cos(j * 1.9 + ph), side = t > 0 ? 1 : t < 0 ? -1 : 0;
-      const bx = bx0 + nx * t * 2.4, by = by0 + ny * t * 2.4;        // fanned root on the crown
-      const len = 10.5 + 1.6 * wob;
-      const tx = bx + h.hx * 4 + nx * t * 1.6, ty = by - len + h.hy * 3;            // tip leans forward + outward, and up
-      const mx = (bx + tx) / 2 + side * (2.2 + 0.6 * wob), my = (by + ty) / 2 - 1.2;   // bowed sideways → slug-eyestalk curve
-      g.strokeStyle = INK; g.lineWidth = 2.6; g.beginPath(); g.moveTo(bx, by); g.quadraticCurveTo(mx, my, tx, ty); g.stroke();   // dark-ink outer (avatar shape family)
-      g.strokeStyle = "#4a131d"; g.lineWidth = 1.3; g.beginPath(); g.moveTo(bx, by); g.quadraticCurveTo(mx, my, tx, ty); g.stroke();   // dark-red core
-      if (dorm) {                                                   // dim, half-lidded eye — asleep but watching
-        g.fillStyle = "#7c5f2c"; g.beginPath(); g.arc(tx, ty, 1.7, 0, Math.PI * 2); g.fill();
-        g.lineWidth = 1.2; g.strokeStyle = INK; g.stroke();         // ink outline (shape family)
-        g.lineWidth = 1.4; g.strokeStyle = INK; g.beginPath(); g.moveTo(tx - 1.9, ty - 0.2); g.lineTo(tx + 1.9, ty - 0.2); g.stroke();   // heavy lid across the eye
-      } else {
-        g.fillStyle = "#ffcf3a"; g.beginPath(); g.arc(tx, ty, 2.0, 0, Math.PI * 2); g.fill();   // amber eye at the tip
-        g.lineWidth = 1.3; g.strokeStyle = INK; g.stroke();         // ink outline on the eye (shape family)
-        g.fillStyle = "#160806"; g.beginPath(); g.arc(tx + h.hx * 0.7, ty + h.hy * 0.7, 0.9, 0, Math.PI * 2); g.fill();   // pupil looks toward heading
+    const grd = g.createLinearGradient(x - R, cy - R, x + R, cy + R);
+    const shift = pal.sheen ? (Math.sin(ECO.now * 0.4 + ph * 3) + 1) / 2 : 0;
+    grd.addColorStop(0, pal.deep);
+    if (pal.sheen) grd.addColorStop(Math.max(0.05, 0.25 + shift * 0.2), pal.sheen);
+    grd.addColorStop(Math.min(0.95, 0.55 + shift * 0.2), pal.body);
+    grd.addColorStop(1, pal.deep);
+    g.fillStyle = grd; g.fill();
+    g.lineWidth = 2; g.strokeStyle = INK; g.lineJoin = "round"; g.stroke();
+
+    if (!dorm) {                                                      // limbs in front of the mass
+      for (let j = 0; j < 2; j++) {
+        const a = 0.5 + j * 0.8;
+        shogLimb(g, x + Math.cos(a) * R * 0.5, cy + R * 0.34, a, R * 0.85, R * 0.12, ph + 5 + j, pal);
       }
+    }
+
+    const eyes = 2 + (((ph * 997) | 0) % 3);                          // 2..4, stable per beast
+    for (let j = 0; j < eyes; j++) {
+      const a = (ph * 6.28 + j * 2.4) % 6.2832, d = 0.25 + ((j * 0.31 + ph) % 0.5);
+      shogEye(g, x + Math.cos(a) * R * d, cy + Math.sin(a) * R * d * 0.7,
+              2.4 + (j % 2) * 0.8, ph + j * 0.37, pal, dorm, h.hx, h.hy);
     }
   }
 

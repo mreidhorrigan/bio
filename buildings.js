@@ -243,8 +243,91 @@
     }
   }
 
+  /* ---- signal towers -----------------------------------------------------
+     The slime skins get a COLONISED MAST: the mast stays, because a Musebot
+     tower is the one built thing in a grown world, but the world climbs it.
+     Bureaucore keeps the plain mast below. Palettes per skin:                */
+  var TOWER_SKIN = {
+    technurture: { foot: "#3fa882", ooze: "#2f8a68", mast: null, rung: "#8fc4b4",   // mast null = C.ink
+                   vine: "#3f7a3a", bud: "#56a04e", budGlow: null, rust: null, bead: null, cone: false },
+    technoscure: { foot: "#1c4738", ooze: "#14342a", mast: "#14160f", rung: "#cdbf9a",  // bone rungs survive the night multiply
+                   vine: "#1f5a3a", bud: "#26533c", budGlow: "#7fffc0", rust: "#7a2e2e", bead: "#5fe0c8", cone: true },
+  };
+
+  /* The state a tower shows. Unassigned is UNLIT rather than the old violet,
+     which was the SPORES violet in both slime skins, so an idle tower read as
+     a large sporecap; unlit also gives a visitor a reason to click it. Error
+     blinks, so no state depends on colour alone. */
+  function towerLamp(state, t) {
+    var s = state.state, beat = Math.max(0, Math.min(1, state.beat || 0));
+    if (s === "error") return { col: "#ff6b78", lit: true, beat: 0, dim: RM() ? 1 : 0.45 + 0.55 * (Math.sin(t * 3.4) > 0 ? 1 : 0.15) };
+    if (s === "playing") return { col: "#7afcff", lit: true, beat: beat, dim: 1 };
+    if (s === "ready") return { col: "#7afcff", lit: true, beat: 0, dim: 1 };
+    return { col: "#5d6f66", lit: false, beat: 0, dim: 1 };
+  }
+
+  /** The lamp itself: no housing, so nothing hard-angled sits under the bulb. */
+  function towerFixture(C, x, y, L) {
+    var g = C.g;
+    if (!L.lit) {
+      g.fillStyle = "#3d5248"; g.beginPath(); g.arc(x, y - 2, 3.6, 0, 6.2832); g.fill();
+      g.strokeStyle = "rgba(255,255,255,0.22)"; g.lineWidth = 1; g.stroke();
+      return;
+    }
+    glow(g, x, y - 2, 5 + L.beat * 4, L.col, 18 + L.beat * 12, 0.92 * L.dim);
+    g.strokeStyle = rgba(L.col, 0.45 * L.dim); g.lineWidth = 1.4;
+    for (var r = 12; r <= 22; r += 10) { g.beginPath(); g.arc(x, y - 2, r, Math.PI * 1.12, Math.PI * 1.88); g.stroke(); }
+    if (L.beat > 0 && !RM()) {
+      g.save(); g.globalAlpha = L.beat; g.strokeStyle = L.col; g.lineWidth = 2;
+      g.beginPath(); g.arc(x, y - 2, 11 + (1 - L.beat) * 16, 0, 6.2832); g.stroke(); g.restore();
+    }
+  }
+
+  function drawColonisedMast(C, b, S) {
+    var g = C.g, sx = C.sx, sy = C.sy, t = C.t, L = towerLamp(towerState(b), t), i, k, y;
+    shadowPool(g, sx, sy, 18);
+    g.fillStyle = rgba(S.foot, 0.9);                                    // a gel footing, not blue steel
+    g.beginPath(); g.ellipse(sx, sy, 16, 7.5, 0, 0, 6.2832); g.fill();
+    g.fillStyle = rgba(S.ooze, 0.9);                                    // ooze creeping up the feet
+    for (i = -1; i <= 1; i += 2) { g.beginPath(); g.ellipse(sx + i * 7, sy - 2, 4.5, 3, 0, 0, 6.2832); g.fill(); }
+    if (S.bead) glow(g, sx - 6, sy - 2, 1.4, S.bead, 8, 0.5);
+    g.strokeStyle = S.mast || C.ink; g.lineWidth = S.mast ? 3.5 : 3;
+    g.beginPath(); g.moveTo(sx, sy - 3); g.lineTo(sx, sy - 68); g.stroke();
+    for (i = 0, y = sy - 12; y >= sy - 60; y -= 12, i++) {
+      g.strokeStyle = S.rung; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(sx - 9, y); g.lineTo(sx + 9, y); g.stroke();
+      if (S.rust && C.R(40 + i) > 0.55) {                               // rust bleeding from a joint
+        g.strokeStyle = rgba(S.rust, 0.7); g.lineWidth = 1.5;
+        g.beginPath(); g.moveTo(sx - 1.5, y + 1); g.lineTo(sx - 1.5, y + 5 + C.R(50 + i) * 4); g.stroke();
+      }
+    }
+    for (i = 0; i < 3; i++) {                                           // vines up the lower two thirds
+      var x0 = sx - 7 + i * 7, sway = RM() ? 0 : Math.sin(t * 1.2 + i * 1.7) * 1.5, top = sy - 30 - i * 9;
+      g.strokeStyle = S.vine; g.lineWidth = 1.8; g.beginPath(); g.moveTo(x0, sy - 2);
+      for (k = 1; k <= 4; k++) g.quadraticCurveTo(x0 + (k % 2 ? 3.4 : -3.4) + sway, sy - (sy - top) * (k - 0.5) / 4, x0 + sway * 0.5, sy - (sy - top) * k / 4);
+      g.stroke();
+      for (k = 1; k < 4; k++) {
+        var bx = x0 + sway, by = sy - (sy - top) * k / 4;
+        g.fillStyle = S.bud; g.beginPath(); g.arc(bx, by, 2.1, 0, 6.2832); g.fill();
+        if (S.budGlow && (i + k) % 2 === 0) glow(g, bx, by, 1.2, S.budGlow, 7, 0.55);
+      }
+    }
+    if (S.cone && L.lit && !RM()) {                                     // after dark the lamp reaches the ground
+      var cone = g.createLinearGradient(sx, sy - 70, sx, sy);
+      cone.addColorStop(0, rgba(L.col, 0.26 * L.dim)); cone.addColorStop(1, rgba(L.col, 0));
+      g.fillStyle = cone;
+      g.beginPath(); g.moveTo(sx - 5, sy - 69); g.lineTo(sx + 5, sy - 69); g.lineTo(sx + 21, sy + 2); g.lineTo(sx - 21, sy + 2); g.closePath(); g.fill();
+    }
+    towerFixture(C, sx, sy - 70, L);
+  }
+
+  function towerState(b) { return window.MH_MUSEBOTS ? window.MH_MUSEBOTS.stateFor(b.uid) : { state: "unassigned" }; }
+  function RM() { return !!(window.MH_ISO && window.MH_ISO.reduced && window.MH_ISO.reduced()); }
+
   function drawSignalTower(C, b) {
-    var g = C.g, sx = C.sx, sy = C.sy, state = window.MH_MUSEBOTS ? window.MH_MUSEBOTS.stateFor(b.uid) : { state: "unassigned" };
+    var S = TOWER_SKIN[C.theme];
+    if (S) { drawColonisedMast(C, b, S); return; }
+    var g = C.g, sx = C.sx, sy = C.sy, state = towerState(b);
     shadowPool(g, sx, sy, 18);
     g.fillStyle = rgba("#26344a", 0.88); g.beginPath(); g.ellipse(sx, sy, 15, 7, 0, 0, 6.2832); g.fill();
     g.strokeStyle = C.ink; g.lineWidth = 3; g.beginPath(); g.moveTo(sx, sy - 3); g.lineTo(sx, sy - 68); g.stroke();
@@ -264,7 +347,7 @@
     var u = env.util;
     var tx = Math.round((b && b.tx) || 0), ty = Math.round((b && b.ty) || 0);
     var C = {
-      g: g, u: u, ink: env.ink || "#16261c", t: env.t || 0, biome: env.biome || null, tx: tx, ty: ty, sx: sx, sy: sy,
+      g: g, u: u, ink: env.ink || "#16261c", t: env.t || 0, biome: env.biome || null, theme: env.theme || null, tx: tx, ty: ty, sx: sx, sy: sy,
       // deterministic per-tile rng: a distinct integer salt -> a stable value in [0,1)
       R: function (salt) { return u.hash01((tx * 101 + salt * 131) | 0, (ty * 97 + salt * 167) | 0); }
     };

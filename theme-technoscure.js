@@ -201,7 +201,7 @@
       // (a couple of letters dead, one flickering). The whole sign buzzes and browns-out, each
       // broken in its OWN way (seeded by slot). Lit by ONE board-shaped bloom, not per-letter blur.
       const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, near = active ? 1.35 : 1;
-      const NEON = NEONS[(u.hash01(slot * 3 + 1, 7) * NEONS.length) | 0];   // this sign's tube colour
+      const NEON = ex.accentB ? ex.accent : NEONS[(u.hash01(slot * 3 + 1, 7) * NEONS.length) | 0];   // this sign's tube colour (a junction burns the blend of its two roads)
       g.font = "800 16px 'Arial Narrow','Helvetica Neue',Impact,sans-serif";   // condensed display = marquee tubes
       const label = ex.title.toUpperCase(), n = label.length, GAP = 2;
       let tw = 0; for (let i = 0; i < n; i++) tw += g.measureText(label[i]).width + GAP; tw = Math.max(0, tw - GAP);   // tube-gap layout, no array
@@ -223,7 +223,9 @@
       //    The board (next) covers its core, leaving a neon halo around the SIGN — the whole marquee's
       //    glow in a single shadowBlur (this replaces the old per-letter + per-bulb blur that cost fps).
       g.save(); g.shadowColor = NEON; g.shadowBlur = (9 + buzz * 13) * near;
-      g.fillStyle = u.hexA(NEON, 0.3 + 0.4 * buzz); rrPath(g, x0, y0, bw, bh, rr); g.fill(); g.restore();
+      if (ex.accentB) { g.globalAlpha = 0.3 + 0.4 * buzz; g.fillStyle = u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02); }
+      else g.fillStyle = u.hexA(NEON, 0.3 + 0.4 * buzz);
+      rrPath(g, x0, y0, bw, bh, rr); g.fill(); g.restore();
 
       // 3) rusted backing board — dark, grimy, chipped; the neon pops against this
       const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
@@ -250,6 +252,9 @@
         }
       }
 
+      // a junction's tubes run the gradient between its two roads' colours, across the whole board
+      const tubeGrad = ex.accentB ? u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02) : null;
+
       // 5) the neon-TUBE label: crisp glass tubes (no per-letter blur — the bloom behind glows them).
       //    A couple of letters are dead, one flickers; dead letters keep cold glass so it stays readable.
       g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round"; g.lineCap = "round";
@@ -263,7 +268,8 @@
         if (!RM() && !dead && n >= 2 && i === flickI) lit = Math.sin(t * 17 + slot) > -0.2 ? 1 : 0.16;   // the flickering letter
         if (lit > 0.05) {
           const gl = buzz * lit;
-          g.lineWidth = 3.2; g.strokeStyle = u.hexA(NEON, 0.5 + 0.45 * gl); g.strokeText(ch, gx, bcy);   // neon glass tube (colour carries it; the bloom adds glow)
+          if (tubeGrad) { g.save(); g.globalAlpha = 0.5 + 0.45 * gl; g.lineWidth = 3.2; g.strokeStyle = tubeGrad; g.strokeText(ch, gx, bcy); g.restore(); }
+          else { g.lineWidth = 3.2; g.strokeStyle = u.hexA(NEON, 0.5 + 0.45 * gl); g.strokeText(ch, gx, bcy); }   // neon glass tube (colour carries it; the bloom adds glow)
           g.lineWidth = 1.2; g.strokeStyle = u.hexA("#f6fffb", 0.55 + 0.4 * gl); g.strokeText(ch, gx, bcy);   // hot inner filament
         } else { g.lineWidth = 2; g.strokeStyle = "rgba(150,160,152,0.26)"; g.strokeText(ch, gx, bcy); }   // burnt-out: cold dead glass
         cx += cw + GAP;

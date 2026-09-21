@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prey proposals</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; --mh-ui: system-ui, sans-serif; }
+    body { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 4rem; color: #261139; background: #f6f4ee; }
+    h1 { margin-bottom: .3rem; }
+    h2 { margin: 2.6rem 0 .2rem; font-size: 1.3rem; }
+    p { max-width: 46rem; }
+    .lede { margin-top: 0; }
+    .grid { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.1rem; align-items: flex-start; }
+    .panel { margin: 0; background: white; border: 2px solid #b294d6; border-radius: 18px 6px; overflow: hidden; }
+    .panel canvas { display: block; }
+    figcaption { padding: .5rem .7rem .6rem; font-size: .8rem; line-height: 1.35; }
+    figcaption strong { display: block; }
+    figcaption span { color: #5b4a6b; }
+    .swatches table { border-collapse: collapse; margin: .7rem .7rem 0; }
+    .swatches th { text-align: left; font-weight: 600; font-size: .8rem; padding: .18rem .6rem .18rem 0; color: #5b4a6b; }
+    .swatches i { display: inline-block; width: 1.5rem; height: 1.5rem; border: 1px solid rgba(0,0,0,.25); border-radius: 4px; margin-right: .2rem; vertical-align: middle; }
+    .warn { padding: 1rem; background: #fff3cd; border: 2px solid #d6a800; border-radius: 12px; }
+    a { color: #5b2a86; }
+  </style>
+  <!-- 1. the harness installs window.MH_ISO before anything asks for it -->
+  <script src="assets.js"></script>
+  <!-- 2. the canonical sources, loaded in place (not copied) -->
+  <script src="../../theme-technocute.js"></script>
+  <script src="../../theme-technurture.js"></script>
+  <script src="../../theme-technoscure.js"></script>
+  <script src="../../buildings.js"></script>
+  <!-- 3. the proposed creature, and this page's grid -->
+  <script src="shoggoth-proposals.js"></script>
+  <script src="prey-proposals.js"></script>
+  <script src="prey-proposals-page.js"></script>
+</head>
+<body>
+  <main>
+    <p><a href="index.html">All extracted views</a></p>
+    <h1>Prey proposals</h1>
+    <p class="lede">What the shoggoths hunt: six designs, each a direct reference to a creature from public-domain science fiction. <strong>E, the zoogs, were adopted</strong> and are now the slimeverse's grazers.</p>
+    <p>The predator is a shoggoth now, so the prey should answer it: something the same imagination would put in the same landscape. Each is drawn in this world's vocabulary, a gel body with a 2px ink silhouette and per-beast variation from a hash, rather than in its original illustrator's.</p>
+    <p><strong>On the sources.</strong> Wells's <em>The First Men in the Moon</em> (1901) and Burroughs's <em>A Princess of Mars</em> (1912) are unambiguously public domain in the US, so the mooncalf, the Selenite and the thoat need no further thought. Lovecraft's creatures are the complicated ones: <em>At the Mountains of Madness</em> (1936) and <em>The Dream-Quest of Unknown Kadath</em> (1943) fall in the window where US copyright had to be renewed, and the Mythos is treated as public domain in practice, but that rests on non-renewal rather than on age. The zoogs are the adopted design, so that check applies to them: they come from <em>Dream-Quest</em>, whose publication history is the one worth confirming. The other five stay here as the roads not taken.</p>
+  </main>
+  <script>window.MH_PREY_PAGE.boot();</script>
+</body>
+</html>

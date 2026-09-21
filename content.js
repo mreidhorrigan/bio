@@ -98,5 +98,17 @@
           </ul>`,
       },
     ],
+
+    // Where two paths MEET. A junction grows a house on the bisector between two
+    // gateway kiosks, with a short paved link from the end of each of their roads,
+    // so the walk out along either one arrives at the same door. `between` names
+    // the gateways by their English titles.
+    junctions: [
+      {
+        title: "Musebots",
+        between: ["Music", "Games"],
+        url: "https://vimeo.com/1228633944",   // Musebots Connectivity Demo: LAN, WAN, browser, DAW
+      },
+    ],
   };
 })();

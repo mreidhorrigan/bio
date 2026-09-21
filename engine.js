@@ -656,6 +656,70 @@ function rebuildSpurs() {
     for (let r = T.hubRadius - 0.3; r <= rEnd; r += 0.33)
       SPUR_TILES.add(wrap(Math.round(HX + r * Math.cos(ang))) + "," + wrap(Math.round(HY + r * Math.sin(ang))));
   }
+  buildJunctions(step);
+}
+
+/** Pave a straight line between two world points, a tile every third of a step. */
+function paveLine(x0, y0, x1, y1) {
+  const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 0.33));
+  for (let i = 0; i <= n; i++)
+    SPUR_TILES.add(wrap(Math.round(x0 + ((x1 - x0) * i) / n)) + "," + wrap(Math.round(y0 + ((y1 - y0) * i) / n)));
+}
+
+/** A junction is a house two roads share: it sits on the bisector between two
+ *  gateway kiosks, and a short paved link runs to it from the end of each of
+ *  their spurs, so walking out along either road arrives at the same door.
+ *  See CONTENT.junctions. Called from rebuildSpurs, after the spurs exist. */
+function buildJunctions(step) {
+  const js = CONTENT.junctions;
+  if (!js || !js.length) return;
+  for (let k = 0; k < js.length; k++) {
+    const j = js[k];
+    const gates = (j.between || []).map((name) => {
+      const i = CONTENT.kiosks.findIndex((it) => it.title === name);
+      return i < 0 ? null : { i, ex: EXHIBITS[i], sats: (CONTENT.kiosks[i].satellites || []).length };
+    }).filter(Boolean);
+    if (gates.length < 2) continue;                              // needs two roads to join
+
+    let vx = 0, vy = 0;                                          // the bisector: sum the gateways' unit vectors
+    for (const g of gates) {
+      const a = Math.atan2(g.ex.ty - HY, g.ex.tx - HX);
+      vx += Math.cos(a); vy += Math.sin(a);
+    }
+    const mag = Math.hypot(vx, vy);
+    if (mag < 1e-6) continue;                                    // opposite spokes have no bisector to speak of
+    const ang = Math.atan2(vy / mag, vx / mag);
+    // Two roads leaving one plaza diverge, so they are closest at their inner
+    // ends: the junction sits just outside the kiosk ring, where the gap between
+    // the branches is smallest, and a short link reaches each road from there.
+    const r = T.ringRadius + 1.2;
+    let jx = HX + r * Math.cos(ang), jy = HY + r * Math.sin(ang);
+    if (T.biomes) {                                              // keep the house out of the water: nudge to the nearest dry tile
+      outer:
+      for (const dr of [0, 0.9, -0.9, 1.8, -1.8, 2.7, -2.7]) {
+        for (const da of [0, 0.07, -0.07, 0.14, -0.14, 0.22, -0.22]) {
+          const x = HX + (r + dr) * Math.cos(ang + da), y = HY + (r + dr) * Math.sin(ang + da);
+          if (biomeAt(Math.round(x), Math.round(y)) !== "water") { jx = x; jy = y; break outer; }
+        }
+      }
+    }
+
+    EXHIBITS.push({
+      tx: jx, ty: jy,
+      titleEn: j.title, title: kioskTitle(j.title),
+      accent: j.accent || mixHex(gates[0].ex.accent, gates[1].ex.accent, 0.5),   // one colour, for painters that need one
+      accentA: gates[0].ex.accent, accentB: gates[1].ex.accent,                   // the two ends, for the sign's gradient
+      slot: 900 + k * 11,
+      url: j.url, satellite: true, junction: true, visited: false,
+    });
+
+    for (const g of gates) {                                     // link each road to the shared house at its nearest point
+      const a = Math.atan2(g.ex.ty - HY, g.ex.tx - HX);
+      const jr = Math.hypot(jx - HX, jy - HY), half = Math.abs(Math.atan2(Math.sin(a - ang), Math.cos(a - ang)));
+      const foot = clamp(jr * Math.cos(half), T.hubRadius, T.ringRadius + step * g.sats);   // the perpendicular foot, kept on the paved road
+      paveLine(HX + foot * Math.cos(a), HY + foot * Math.sin(a), jx, jy);
+    }
+  }
 }
 
 /* ----------------------------------------------------------------------------
@@ -1596,7 +1660,7 @@ function defPaintAvatar(g, sx, sy, a) {
  *  theme's ink. A theme can override with paintBuilding for its own look. */
 function defPaintBuilding(g, sx, sy, b, env) {
   if (window.MH_BUILD && window.MH_BUILD.paint) {                // procedural generator (buildings.js): each one different
-    window.MH_BUILD.paint(g, sx, sy, b, { t: env.t, biome: env.biome, ink: T.avatarInk || "#3a3a3a", util: window.MH_ISO.util });
+    window.MH_BUILD.paint(g, sx, sy, b, { t: env.t, biome: env.biome, theme: T.id, ink: T.avatarInk || "#3a3a3a", util: window.MH_ISO.util });
     return;
   }
   const ink = T.avatarInk || "#3a3a3a", s1 = hash01((b.tx * 7 + 3) | 0, (b.ty * 5 + 1) | 0), s2 = hash01((b.ty * 3 + 2) | 0, (b.tx * 9 + 4) | 0);
@@ -1707,6 +1771,30 @@ function mix(h1, h2, t) {
   const g = Math.round(((a >> 8) & 255) * (1 - t) + ((b >> 8) & 255) * t);
   const bl = Math.round((a & 255) * (1 - t) + (b & 255) * t);
   return `rgb(${r},${g},${bl})`;
+}
+/** blend two #rrggbb by t, returning #rrggbb (mix() returns rgb(), which shade/hexA cannot re-read) */
+function mixHex(h1, h2, t) {
+  const a = parseInt(h1.slice(1), 16), b = parseInt(h2.slice(1), 16);
+  const r = Math.round(((a >> 16) & 255) * (1 - t) + ((b >> 16) & 255) * t);
+  const g = Math.round(((a >> 8) & 255) * (1 - t) + ((b >> 8) & 255) * t);
+  const bl = Math.round((a & 255) * (1 - t) + (b & 255) * t);
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + bl).toString(16).slice(1);
+}
+/** A sign's fill. Normally the exhibit's accent, shaded light to dark. Where a
+ *  junction joins two roads, a gradient running from one road's accent to the
+ *  other's, so the sign says which two paths meet there. */
+function accentFill(g, ex, x0, y0, w, h, lo, hi) {
+  lo = lo == null ? 0.32 : lo; hi = hi == null ? -0.18 : hi;
+  if (!ex.accentB || !ex.accentA) {
+    const v = g.createLinearGradient(0, y0, 0, y0 + h);
+    v.addColorStop(0, shade(ex.accent, lo)); v.addColorStop(1, shade(ex.accent, hi));
+    return v;
+  }
+  const d = g.createLinearGradient(x0, y0, x0 + w, y0 + h);
+  d.addColorStop(0, shade(ex.accentA, lo));
+  d.addColorStop(0.5, mixHex(ex.accentA, ex.accentB, 0.5));
+  d.addColorStop(1, shade(ex.accentB, hi));
+  return d;
 }
 function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; }
 function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
@@ -1922,6 +2010,7 @@ const ECO_API = {
   get player() { return player; },           // live {x,y} in canonical tiles
   get hub() { return { x: HX, y: HY }; },     // plaza centre
   get villageR() { return T.ringRadius + 2; }, // predators keep outside this radius of the hub
+  get theme() { return T.id; },               // which skin is painting (the predator picks its palette)
   get P() { return P; },                      // torus period
   get t() { return tnow; },
   get W() { return W; }, get H() { return H; },
@@ -1942,10 +2031,17 @@ window.MH_ISO = {
     muted: audio.muted,
   }),
   themes: () => [...REGISTRY.values()].map((t) => ({ id: t.id, name: t.name })),
+  /** a read-only snapshot of what the world has placed: kiosks, their road-houses,
+   *  and any junction house two roads share (see CONTENT.junctions) */
+  exhibits: () => EXHIBITS.map((e) => ({
+    title: e.titleEn, tx: +e.tx.toFixed(2), ty: +e.ty.toFixed(2),
+    satellite: !!e.satellite, junction: !!e.junction, url: e.url || null,
+  })),
+  pavedTiles: () => SPUR_TILES.size,
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period
   biome: biomeAt,                              // coarse biome for a canonical tile
-  util: { diamond, poly, roundRect, shadow, label, shade, mix, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
+  util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
   get TILE() { return { W: TILE_W, H: TILE_H }; },
 };
 

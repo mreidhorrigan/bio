@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signal tower proposals</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; --mh-ui: system-ui, sans-serif; }
+    body { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 4rem; color: #261139; background: #f6f4ee; }
+    h1 { margin-bottom: .3rem; }
+    h2 { margin: 2.6rem 0 .2rem; font-size: 1.3rem; }
+    p { max-width: 46rem; }
+    .lede { margin-top: 0; }
+    .grid { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.1rem; align-items: flex-start; }
+    .panel { margin: 0; background: white; border: 2px solid #b294d6; border-radius: 18px 6px; overflow: hidden; }
+    .panel canvas { display: block; }
+    figcaption { padding: .5rem .7rem .6rem; font-size: .8rem; line-height: 1.35; }
+    figcaption strong { display: block; }
+    figcaption span { color: #5b4a6b; }
+    .swatches table { border-collapse: collapse; margin: .7rem .7rem 0; }
+    .swatches th { text-align: left; font-weight: 600; font-size: .8rem; padding: .18rem .6rem .18rem 0; color: #5b4a6b; }
+    .swatches i { display: inline-block; width: 1.5rem; height: 1.5rem; border: 1px solid rgba(0,0,0,.25); border-radius: 4px; margin-right: .2rem; vertical-align: middle; }
+    .warn { padding: 1rem; background: #fff3cd; border: 2px solid #d6a800; border-radius: 12px; }
+    a { color: #5b2a86; }
+  </style>
+  <!-- 1. the same harness assets.html uses: it installs window.MH_ISO -->
+  <script src="assets.js"></script>
+  <!-- 2. the canonical sources, loaded in place (not copied) -->
+  <script src="../../theme-technocute.js"></script>
+  <script src="../../theme-technurture.js"></script>
+  <script src="../../theme-technoscure.js"></script>
+  <script src="../../buildings.js"></script>
+  <!-- 3. the proposed painters, and this page's grid -->
+  <script src="tower-proposals.js"></script>
+  <script src="tower-proposals-page.js"></script>
+</head>
+<body>
+  <main>
+    <p><a href="index.html">All extracted views</a></p>
+    <h1>Signal tower proposals</h1>
+    <p class="lede">Signal-tower styles for the two slime skins, each drawn beside the tower the world uses today, in all four states.</p>
+    <p><strong>A and A-night are now live.</strong> The tower used to be the only structure with no per-theme painter: one routine drew the same steel mast in every skin, while houses, growths, kiosks, props, monuments, signposts and ground all changed with the skin. <code>buildings.js</code> now branches on the skin, so the two slime worlds grow over their masts and bureaucore keeps the plain one. The <strong>Live</strong> row is that shipped painter, loaded from the repository, so it should match A above it. B, C, D, E and F stay here as the alternatives that were not taken.</p>
+    <p><strong>The states.</strong> Every proposal uses one revised vocabulary: <em>unassigned</em> is an unlit fixture rather than today's violet, which is the same violet as the sporecap props in both skins; <em>ready</em> is a steady lamp; <em>playing</em> adds the beat; <em>error</em> blinks, so it does not rely on colour alone. An unlit idle tower also gives a visitor a reason to click it.</p>
+  </main>
+  <script>window.MH_TOWER_PAGE.boot();</script>
+</body>
+</html>

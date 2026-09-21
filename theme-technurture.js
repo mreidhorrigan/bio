@@ -230,8 +230,7 @@
       g.save(); if (!RM()) { g.shadowColor = CONN; g.shadowBlur = 5; } g.strokeStyle = CONN; g.lineWidth = 4; g.lineCap = "round";   // the special connector
       g.beginPath(); g.moveTo(sx, topY - 4); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.4, bcx, y0 + bh - 1); g.stroke(); g.restore();
       g.save(); if (!RM()) { g.shadowColor = U.hexA(ex.accent, 0.85); g.shadowBlur = active ? 14 : 8; }   // the pill's OWN soft aura (not a separate shape)
-      const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
-      bg.addColorStop(0, U.shade(ex.accent, 0.32)); bg.addColorStop(1, U.shade(ex.accent, -0.18));
+      const bg = U.accentFill(g, ex, x0, y0, bw, bh, 0.32, -0.18);   // a junction's sign runs from one road's colour to the other's
       leafPath(g, x0, y0, bw, bh); g.fillStyle = bg; g.fill();                                   // the brand "leaf" tag shape — matches the flags used for items site-wide
       g.shadowBlur = 0; g.lineWidth = active ? 2.6 : 1.8; g.strokeStyle = U.hexA(GOLD, active ? 1 : 0.82); g.lineJoin = "round"; g.stroke(); g.restore();
       g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
