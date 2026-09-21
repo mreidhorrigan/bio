@@ -28,7 +28,7 @@ refuses a file, the fix is a smaller pixel size rather than a different format.
 
 ## Rebuilding
 
-    sh brand/vimeo/make-vimeo-assets.sh
+    sh brand/backstage/vimeo/make-vimeo-assets.sh
 
 Needs `librsvg` (`brew install librsvg`) and macOS's `sips`. The script derives
 every crop from the artwork's bounds inside the favicon grid rather than framing

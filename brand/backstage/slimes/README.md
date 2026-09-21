@@ -22,8 +22,8 @@ lifted out whole. They can therefore drift: the canonical sources remain
 `engine.js` and `slime-widget.js`, and a change there must be ported here.
 
 `assets.html` takes the other approach. It **loads the canonical sources** by
-relative path (`../../theme-technocute.js`, `../../theme-technurture.js`,
-`../../theme-technoscure.js`, `../../buildings.js`, `../../ecology.js`) and gives
+relative path (`../../../theme-technocute.js`, `../../../theme-technurture.js`,
+`../../../theme-technoscure.js`, `../../../buildings.js`, `../../../ecology.js`) and gives
 them a small stub of the engine, so it cannot drift: it is the site's own code,
 drawn on small canvases instead of one big one. Only `assets.js` is a copy, and
 only of engine.js's toolbox (`hash01`, `noise01`, `shade`, `mix`, `mixHex`,

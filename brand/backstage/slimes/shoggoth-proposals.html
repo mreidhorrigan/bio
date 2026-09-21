@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prey proposals</title>
+  <title>Shoggoth proposals</title>
   <style>
     :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; --mh-ui: system-ui, sans-serif; }
     body { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 4rem; color: #261139; background: #f6f4ee; }
@@ -26,23 +26,22 @@
   <!-- 1. the harness installs window.MH_ISO before anything asks for it -->
   <script src="assets.js"></script>
   <!-- 2. the canonical sources, loaded in place (not copied) -->
-  <script src="../../theme-technocute.js"></script>
-  <script src="../../theme-technurture.js"></script>
-  <script src="../../theme-technoscure.js"></script>
-  <script src="../../buildings.js"></script>
+  <script src="../../../theme-technocute.js"></script>
+  <script src="../../../theme-technurture.js"></script>
+  <script src="../../../theme-technoscure.js"></script>
+  <script src="../../../buildings.js"></script>
   <!-- 3. the proposed creature, and this page's grid -->
   <script src="shoggoth-proposals.js"></script>
-  <script src="prey-proposals.js"></script>
-  <script src="prey-proposals-page.js"></script>
+  <script src="shoggoth-proposals-page.js"></script>
 </head>
 <body>
   <main>
     <p><a href="index.html">All extracted views</a></p>
-    <h1>Prey proposals</h1>
-    <p class="lede">What the shoggoths hunt: six designs, each a direct reference to a creature from public-domain science fiction. <strong>E, the zoogs, were adopted</strong> and are now the slimeverse's grazers.</p>
-    <p>The predator is a shoggoth now, so the prey should answer it: something the same imagination would put in the same landscape. Each is drawn in this world's vocabulary, a gel body with a 2px ink silhouette and per-beast variation from a hash, rather than in its original illustrator's.</p>
-    <p><strong>On the sources.</strong> Wells's <em>The First Men in the Moon</em> (1901) and Burroughs's <em>A Princess of Mars</em> (1912) are unambiguously public domain in the US, so the mooncalf, the Selenite and the thoat need no further thought. Lovecraft's creatures are the complicated ones: <em>At the Mountains of Madness</em> (1936) and <em>The Dream-Quest of Unknown Kadath</em> (1943) fall in the window where US copyright had to be renewed, and the Mythos is treated as public domain in practice, but that rests on non-renewal rather than on age. The zoogs are the adopted design, so that check applies to them: they come from <em>Dream-Quest</em>, whose publication history is the one worth confirming. The other five stay here as the roads not taken.</p>
+    <h1>Shoggoth proposals</h1>
+    <p class="lede">A monster for the walkable world, proposed six ways. <strong>C, the iridescent bulk, was adopted</strong> and is now the slimeverse's predator, in place of the hunched thing with eyestalks.</p>
+    <p>The world already has one citizen made of gel: a slime with a single eye, an ink outline and a lit interior. A shoggoth is what that is when there is far too much of it. Lovecraft supplies the constant across all six: a protoplasmic mass that forms and reabsorbs its organs, so eyes open on the surface, hold a moment, and sink back in.</p>
+    <p>Each design is built from the vocabulary already in the world, so it reads as native rather than imported: gel gradients, a 2px ink silhouette, glowing beads, a slow wobble, and per-instance variation from <code>hash01</code>, so the same shoggoth always looks like itself. The painters take the same <code>(C, b)</code> context <code>buildings.js</code> builds. C now lives in <code>ecology.js</code> as <code>drawPredator</code>, sized for an ecology beast and cut down to suit a dozen of them painting at once; the other five stay here as the roads not taken.</p>
   </main>
-  <script>window.MH_PREY_PAGE.boot();</script>
+  <script>window.MH_SHOG_PAGE.boot();</script>
 </body>
 </html>

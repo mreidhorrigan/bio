@@ -681,24 +681,22 @@ function buildJunctions(step) {
     }).filter(Boolean);
     if (gates.length < 2) continue;                              // needs two roads to join
 
-    let vx = 0, vy = 0;                                          // the bisector: sum the gateways' unit vectors
+    // The house sits at the MIDPOINT OF THE ENDS of the two roads: the mean of
+    // their last houses' positions, which is equidistant from both by
+    // construction. (A bisector at some radius is not: the two roads are
+    // different lengths, so the same angle sits nearer the shorter one.)
+    let jx = 0, jy = 0;
     for (const g of gates) {
-      const a = Math.atan2(g.ex.ty - HY, g.ex.tx - HX);
-      vx += Math.cos(a); vy += Math.sin(a);
+      const a = Math.atan2(g.ex.ty - HY, g.ex.tx - HX), re = T.ringRadius + step * g.sats;
+      jx += HX + re * Math.cos(a); jy += HY + re * Math.sin(a);
     }
-    const mag = Math.hypot(vx, vy);
-    if (mag < 1e-6) continue;                                    // opposite spokes have no bisector to speak of
-    const ang = Math.atan2(vy / mag, vx / mag);
-    // Two roads leaving one plaza diverge, so they are closest at their inner
-    // ends: the junction sits just outside the kiosk ring, where the gap between
-    // the branches is smallest, and a short link reaches each road from there.
-    const r = T.ringRadius + 1.2;
-    let jx = HX + r * Math.cos(ang), jy = HY + r * Math.sin(ang);
+    jx /= gates.length; jy /= gates.length;
     if (T.biomes) {                                              // keep the house out of the water: nudge to the nearest dry tile
       outer:
-      for (const dr of [0, 0.9, -0.9, 1.8, -1.8, 2.7, -2.7]) {
-        for (const da of [0, 0.07, -0.07, 0.14, -0.14, 0.22, -0.22]) {
-          const x = HX + (r + dr) * Math.cos(ang + da), y = HY + (r + dr) * Math.sin(ang + da);
+      for (const rad of [0, 0.9, 1.8, 2.7]) {
+        for (let k = 0; k < 8; k++) {
+          const a = (k / 8) * Math.PI * 2;
+          const x = jx + rad * Math.cos(a), y = jy + rad * Math.sin(a);
           if (biomeAt(Math.round(x), Math.round(y)) !== "water") { jx = x; jy = y; break outer; }
         }
       }
@@ -713,11 +711,9 @@ function buildJunctions(step) {
       url: j.url, satellite: true, junction: true, visited: false,
     });
 
-    for (const g of gates) {                                     // link each road to the shared house at its nearest point
-      const a = Math.atan2(g.ex.ty - HY, g.ex.tx - HX);
-      const jr = Math.hypot(jx - HX, jy - HY), half = Math.abs(Math.atan2(Math.sin(a - ang), Math.cos(a - ang)));
-      const foot = clamp(jr * Math.cos(half), T.hubRadius, T.ringRadius + step * g.sats);   // the perpendicular foot, kept on the paved road
-      paveLine(HX + foot * Math.cos(a), HY + foot * Math.sin(a), jx, jy);
+    for (const g of gates) {                                     // link each road's end to the shared house
+      const a = Math.atan2(g.ex.ty - HY, g.ex.tx - HX), re = T.ringRadius + step * g.sats;
+      paveLine(HX + re * Math.cos(a), HY + re * Math.sin(a), jx, jy);
     }
   }
 }

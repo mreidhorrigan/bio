@@ -9,7 +9,7 @@
  * current tower so they can be compared before anything reaches the world.
  *
  * The page loads the same way assets.html does: assets.js installs the engine
- * stub, then the canonical ../../theme-*.js and ../../buildings.js load in
+ * stub, then the canonical ../../../theme-*.js and ../../../buildings.js load in
  * place. The CURRENT row is therefore the live tower, not a copy of it. Only
  * the proposals below are new code, and they are written to drop into
  * buildings.js unchanged: each takes the same (C, b) context that

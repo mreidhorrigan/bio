@@ -37,3 +37,7 @@ house-style-private/
 
 # Rust compiler intermediates (browser-ready artifacts under /wasm are tracked).
 /rust/target/
+
+# backstage output: generated GIFs and scratch recordings
+brand/backstage/gif/
+brand/backstage/*.mov

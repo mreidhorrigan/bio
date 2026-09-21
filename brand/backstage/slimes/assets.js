@@ -8,11 +8,11 @@
  * .register — and then assets.html loads the CANONICAL sources by relative
  * path:
  *
- *     ../../theme-technocute.js    kiosks, monument, signposts, ground (bureaucore)
- *     ../../theme-technurture.js   the same, plus flora, for the daylight slimeworld
- *     ../../theme-technoscure.js   the same, after nightfall
- *     ../../buildings.js           houses, alien growths, signal towers
- *     ../../ecology.js             motes, fireflies, grazers, predators
+ *     ../../../theme-technocute.js    kiosks, monument, signposts, ground (bureaucore)
+ *     ../../../theme-technurture.js   the same, plus flora, for the daylight slimeworld
+ *     ../../../theme-technoscure.js   the same, after nightfall
+ *     ../../../buildings.js           houses, alien growths, signal towers
+ *     ../../../ecology.js             motes, fireflies, grazers, predators
  *
  * So the gallery cannot drift from the site: it IS the site's code, drawn on
  * small canvases instead of one big one. Only the harness below is a copy, and

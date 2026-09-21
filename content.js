@@ -68,8 +68,8 @@
         title: "Music",
         page: { url: `${B}about.html?menu=Music` },            // open the About page with the Music dropdown deployed (new tab)
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Music" gateway opens the menu)
-          { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },
           { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
+          { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },   // the road's end: the Musebots house meets it
         ],
         html: `
           <p>In an earlier artistic career I was a sound designer and programmer, writing

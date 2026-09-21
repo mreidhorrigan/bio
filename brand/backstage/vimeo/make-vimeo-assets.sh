@@ -1,12 +1,12 @@
 #!/bin/sh
-# Rebuild the Vimeo-ready rasters from brand/favicon-slime.svg.
+# Rebuild the Vimeo-ready rasters from brand/backstage/favicon-slime.svg.
 #
 # Vimeo takes JPEG, PNG and GIF, never SVG, so the vector logo has to be
 # rasterised. Every file at the top level is a transparent PNG; flattened
 # copies go in opaque-fallback/. Run this from anywhere; it writes into its
 # own directory.
 #
-#   sh brand/vimeo/make-vimeo-assets.sh
+#   sh brand/backstage/vimeo/make-vimeo-assets.sh
 #
 # Needs librsvg (brew install librsvg) for the SVG, and sips (macOS) for JPEG.
 set -e
