@@ -1,0 +1,63 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D outdoors: is the lake's photo free of a hatch?</title>
+<meta name="budget" content="12000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html?skin=technurture" style="width:1280px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Stands on a lake's shore facing out over it, stops the clock, and measures the
+// fine grain of the water: the mean second difference between neighbouring
+// pixels (|a - 2b + c|, across and down), only on water-coloured pixels, in
+// bands from near to far. The photo read at full size by a far sample, which
+// covers many of its pixels, aliased into a fine regular hatch ("seams"); read
+// from a copy of the right size the grain stays about as fine near as far.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, W = w.MH_V3D, E = W.engine;
+    W.pause();
+    const cv = w.document.getElementById("view"), g = cv.getContext("2d");
+    for (const view of ["technurture", "technoscure"]) {
+      const skin = view === "pond" ? "technurture" : view;
+      W.setSkin(skin); W.load("outdoors");
+      const S = W.S(); let best = null;
+      if (view === "pond") {                                   // the village pond, a pool with the photo drawn as a pattern
+        const P = W.pools()[0];
+        if (!P) { say("pond: MISSING"); continue; }
+        best = { x: P.x, z: P.z - P.rz - 8, a: 0 };
+      }
+      for (let k = 0; k < 4000 && !best && view !== "pond"; k++) {
+        const a = k * 2.399, r = 120 + (k % 60) * 5, x = Math.sin(a) * r, z = Math.cos(a) * r;
+        let wet = 0; for (let d = 6; d <= 60; d += 6) if (S.floorAt(x + Math.sin(a) * d, z + Math.cos(a) * d) < -0.6) wet++;
+        if (S.floorAt(x, z) > 0.3 && wet >= 9) best = { x, z, a };
+      }
+      if (!best) { say(view + ": a lake to face MISSING"); continue; }
+      W.me.x = best.x; W.me.z = best.z; W.me.yaw = best.a;
+      for (let i = 0; i < 90; i++) W.tick(0.016);
+      W.tick(0);
+      const hy = Math.round((cv.clientHeight / 2 + E.fov * Math.tan(E.cam.pitch)) * (cv.height / cv.clientHeight));
+      const bands = [[0.004, 0.03, "far"], [0.03, 0.1, "middle"], [0.1, 0.3, "near"]], out = [];
+      for (const [a0, a1, name] of bands) {
+        const y0 = hy + Math.round(a0 * cv.height), y1 = Math.min(cv.height - 2, hy + Math.round(a1 * cv.height));
+        if (y1 - y0 < 3) continue;
+        const d = g.getImageData(0, y0, cv.width, y1 - y0).data, W4 = cv.width * 4;
+        const lum = (i) => 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2];
+        const wet = (i) => d[i + 2] > d[i] + 12;             // blue over red: water, in both skins
+        // a lattice repeats: pixels a period apart match better than pixels half a period apart
+        const per = {}; for (const P of [2, 3, 4, 5, 6, 8]) { let a = 0, c = 0; for (let y = 2; y < y1 - y0 - 10; y += 2) for (let x = 4; x < cv.width - 12; x += 3) { const i = (y * cv.width + x) * 4; if (!wet(i) || !wet(i + P * 4) || !wet(i + P * W4)) continue; a += Math.abs(lum(i) - lum(i + P * 4)) + Math.abs(lum(i) - lum(i + P * W4)); c++; } per[P] = c ? a / c : 0; }
+        say("    " + view + " " + name + ": difference at a distance of " + Object.keys(per).map((P) => P + "px " + per[P].toFixed(2)).join(", "));
+        let s = 0, n = 0;
+        for (let y = 1; y < y1 - y0 - 1; y++) for (let x = 4; x < cv.width - 4; x += 2) {
+          const i = (y * cv.width + x) * 4;
+          if (!wet(i) || !wet(i - 4) || !wet(i + 4) || !wet(i - W4) || !wet(i + W4)) continue;
+          s += Math.abs(lum(i - 4) - 2 * lum(i) + lum(i + 4)) + Math.abs(lum(i - W4) - 2 * lum(i) + lum(i + W4)); n++;
+        }
+        if (n > 200) out.push([name, s / n, n]);
+      }
+      if (!out.length) { say(view + ": water on screen MISSING"); continue; }
+      const worst = Math.max(...out.map((o) => o[1]));
+      say(view + ": the water's grain " + out.map((o) => o[0] + " " + o[1].toFixed(2) + " (" + o[2] + " px)").join(", ") + (worst < 6 ? "" : " NO (a hatch)"));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

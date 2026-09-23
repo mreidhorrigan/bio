@@ -1,0 +1,37 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The site's Slimeverse 3D page on a phone</title>
+<meta name="budget" content="12000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=village" style="width:390px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// A phone held upright (390 by 800). The lens must see the village, not a
+// sliver of it (the slime took most of the width); the language switch must be
+// a pill, not a panel the height of the screen; the place's name must be in
+// the page's language.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine, d = w.document;
+    W.pause(); for (let i = 0; i < 60; i++) W.tick(0.016);
+    const across = 2 * Math.atan(E.W / 2 / E.fov) * 180 / Math.PI;
+    const v = E.view([W.me.x, W.me.y + W.me.R * 0.5, W.me.z]), slimeW = 2 * W.me.R * E.fov / v[2];
+    say("the lens: " + across.toFixed(0) + " degrees across" + (across >= 38 ? "" : " NO (a sliver)") + "; the slime " + (100 * slimeW / E.W).toFixed(0) + "% of the width" + (slimeW / E.W < 0.3 ? "" : " NO (too close)"));
+    const pill = d.getElementById("mh-lang");
+    if (pill) { const r = pill.getBoundingClientRect(); say("the language switch: " + Math.round(r.width) + " by " + Math.round(r.height) + " px, bottom at " + Math.round(r.bottom) + (r.height < 50 ? "" : " NO (stretched)")); }
+    else say("the language switch: MISSING");
+    // the controls, as the iso village's: Menu opens the building chips, in English on an English page
+    const menu = d.getElementById("menu"), nav = d.getElementById("navbar");
+    if (!menu || !nav) say("the menu: MISSING");
+    else {
+      menu.click();
+      const chips = Array.from(nav.children).map((c) => c.textContent);
+      say("the menu: " + (nav.hidden ? "stays shut NO" : chips.length + " chips: " + chips.join(", ")) + (chips.some((c) => /place|Boutique|grotte/.test(c)) ? " NO (French in English)" : ""));
+      menu.click();
+      const r = menu.getBoundingClientRect(), p = d.getElementById("mh-lang"), q = p && p.getBoundingClientRect();
+      if (q && !(q.right < r.left || q.left > r.right || q.bottom < r.top || q.top > r.bottom)) say("the language switch covers the menu NO");
+    }
+    say("no sound or place-name buttons: " + (d.getElementById("sound") || d.getElementById("where") ? "one is still there NO" : "yes"));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

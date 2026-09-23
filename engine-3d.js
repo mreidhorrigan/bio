@@ -218,9 +218,10 @@
     g.lineTo(l[0], l[1]);
   }
   /** The brand's leaf corner (brand/brand.css --leaf): a sweep top-left and
-   *  bottom-right, near-square at the other two. For plaques and boards. */
-  function leafPath(g, x, y, w, h) {
-    const Sx = Math.min(16, w / 2), Sy = Math.min(7, h / 2), sx = Math.min(4, w / 2), sy = Math.min(2, h / 2);
+   *  bottom-right, near-square at the other two. For plaques and boards. `k`
+   *  scales the corners with the board (engine.js util.leafPath is the same). */
+  function leafPath(g, x, y, w, h, k = 1) {
+    const Sx = Math.min(16 * k, w / 2), Sy = Math.min(7 * k, h / 2), sx = Math.min(4 * k, w / 2), sy = Math.min(2 * k, h / 2);
     const r = x + w, b = y + h;
     g.beginPath();
     g.moveTo(x + Sx, y);

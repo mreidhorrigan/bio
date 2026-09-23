@@ -80,7 +80,29 @@
      reads as something seen rather than drawn. Used sparingly: deep pools
      only, never the ground or the creatures. A page that cannot load it gets
      the drawn water it had before.                                          */
-  const PHOTO = { img: /** @type {HTMLImageElement|null} */ (null), ready: false, pat: /** @type {any} */ (null), patCtx: null };
+  const PHOTO = { img: /** @type {HTMLImageElement|null} */ (null), ready: false, patCtx: /** @type {any} */ (null),
+    mips: /** @type {HTMLCanvasElement[]|null} */ (null), pats: /** @type {any[]} */ ([]) };
+  /** The photo at the size it is drawn: a pattern shrinks the full photo with no
+   *  smaller copies to read from, and aliased into a fine hatch on the water. So
+   *  the pattern is made from the copy (each half the last) nearest in size.
+   *  Returns [pattern, that copy's width over the photo's]. */
+  function photoPattern(g, shownW) {
+    const img = /** @type {HTMLImageElement} */ (PHOTO.img);
+    if (!PHOTO.mips) {
+      PHOTO.mips = [];
+      let src = /** @type {CanvasImageSource} */ (img), w = img.width, h = img.height;
+      for (let L = 0; L < 6 && w >= 8; L++) {
+        const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+        const c = /** @type {CanvasRenderingContext2D} */ (cv.getContext("2d")); c.imageSmoothingQuality = "high"; c.drawImage(src, 0, 0, w, h);
+        PHOTO.mips.push(cv); src = cv; w = Math.max(1, w >> 1); h = Math.max(1, h >> 1);
+      }
+    }
+    if (PHOTO.patCtx !== g) { PHOTO.pats = []; PHOTO.patCtx = g; }
+    let L = 0;
+    while (L < PHOTO.mips.length - 1 && PHOTO.mips[L + 1].width >= shownW) L++;
+    if (!PHOTO.pats[L]) PHOTO.pats[L] = g.createPattern(PHOTO.mips[L], "repeat");
+    return [PHOTO.pats[L], PHOTO.mips[L].width / img.width];
+  }
   const PHOTO_W = 26;                                          // world units one copy of the photo spans on the water
   (function loadPhoto() {
     if (typeof Image === "undefined") return;
@@ -121,9 +143,11 @@
   /** The iso world's shape, for a place that is the iso world walked in 3D:
    *  its tile in world units (the iso tile is 5.2 slime radii across the
    *  ground; 16 units is 5.16), its torus in tiles (technurture's
-   *  worldPeriod), and its plaza, kiosk ring and spur step in tiles
-   *  (engine.js DEFAULTS and rebuildSpurs). probes/__scale.html checks them. */
-  const ISO = { tile: 16, period: 58, hub: 3.1, ring: 3.5, spur: 2.5 };
+   *  worldPeriod), and its plaza, kiosk ring and spur step in tiles, and how
+   *  far a road-house stands to the side of its road, alternate houses on
+   *  alternate sides (engine.js DEFAULTS, rebuildSpurs and SPUR_SIDE).
+   *  probes/__scale.html checks them. */
+  const ISO = { tile: 16, period: 58, hub: 3.1, ring: 3.5, spur: 2.5, side: 1 };
   const size = (name) => { const s = SIZES[name], k = UNIT * (s.enter ? ENTER : 1); return { w: s.w * k, h: s.h * k }; };
   /** The dwelling's outline, from the iso painter's own curve (paintKiosk):
    *  from the base at half-width 1 it bulges to 1.12 near half height and
@@ -147,7 +171,10 @@
 
   function create(canvas, opts) {
     opts = opts || {};
-    const E = M.create(canvas);
+    // the lens: from the height, as the engine's own, unless the window is narrow
+    // (a phone held upright), where the height's lens saw a sliver and the slime
+    // filled the screen; there the width sets it too
+    const E = M.create(canvas, { fov: (w, h) => Math.max(300, Math.min(h * 1.05, w * 1.2)) });
     const reduce = E.reduce;
     /** @type {any} */
     let S = null, id = "";
@@ -356,13 +383,12 @@
             // across), tiled, and squashed as the pool is squashed in view, so
             // it keeps its grain instead of being blown up over the whole pool
             const img = /** @type {HTMLImageElement} */ (PHOTO.img), w = rt - lf, h = Math.max(1, bot - top);
-            if (!PHOTO.pat || PHOTO.patCtx !== g) { PHOTO.pat = g.createPattern(img, "repeat"); PHOTO.patCtx = g; }
             const kx = (w / (2 * p.rx)) * (PHOTO_W / img.width), ky = kx * (h / w) * (p.rx / p.rz);
+            const [pat, sc] = photoPattern(g, Math.min(kx, ky) * img.width * E.dpr);   // the copy for the smaller of the two squashes: the one that aliases
             g.save(); g.clip();
-            if (PHOTO.pat && PHOTO.pat.setTransform) {
-              const m = new DOMMatrix([kx, 0, 0, ky, lf, top]);
-              PHOTO.pat.setTransform(m);
-              g.fillStyle = PHOTO.pat; g.fillRect(lf, top, w, h);
+            if (pat && pat.setTransform) {
+              pat.setTransform(new DOMMatrix([kx / sc, 0, 0, ky / sc, lf, top]));
+              g.fillStyle = pat; g.fillRect(lf, top, w, h);
             } else g.drawImage(img, lf, top, w, h);
             if (photo.tint) { g.fillStyle = photo.tint; g.fillRect(lf, top, w, h); }
             // deep in the middle, so the photo shows there; the water's own colour toward the shore
@@ -538,7 +564,10 @@
       // On the front, at the brand's six tenths up the dome: from behind, where the
       // camera rides, it is out of sight, as it should be; the pool shows it, and
       // so does the slime turning to face the camera (the user's call, 2026-09-22,
-      // having tried it up near the crown).
+      // having tried it up near the crown). In the reflection the eye always
+      // shows, foreshortened as it turns away: strictly, from behind, a mirror
+      // under the slime shows its back too, but the reflection is where the
+      // visitor looks for the eye.
       const R = me.R, EL = Math.acos(0.6);
       let nx = Math.sin(me.yaw) * Math.sin(EL), ny = Math.cos(EL), nz = Math.cos(me.yaw) * Math.sin(EL);
       let px = me.x + nx * R * 0.97, py = me.y + me.bob + ny * R * 0.97, pz = me.z + nz * R * 0.97;
@@ -547,9 +576,9 @@
       if (v[2] <= E.near) return;
       const tc = [E.cam.x - px, E.cam.y - py, E.cam.z - pz], tm = Math.hypot(tc[0], tc[1], tc[2]) || 1;
       const facing = (nx * tc[0] + ny * tc[1] + nz * tc[2]) / tm;
-      if (facing < 0.02) return;
+      if (facing < 0.02 && !Mi) return;
       const p = E.screen(v), k = E.fov / v[2];
-      const r = R * (3.5 / 13) * k, squeeze = clamp(0.35 + facing * 0.65, 0.35, 1);
+      const r = R * (3.5 / 13) * k, squeeze = clamp(0.35 + Math.abs(facing) * 0.65, 0.35, 1);
       g.fillStyle = "#fff"; g.beginPath(); g.ellipse(p[0], p[1], r * squeeze, r * 0.96, 0, 0, TAU); g.fill();
       const ink = (S.slime || GEL).ink;
       g.lineWidth = Math.max(0.8, R * (1.3 / 13) * k); g.strokeStyle = ink; g.stroke();
@@ -1026,9 +1055,10 @@
       const w = g.measureText(label).width + px * 1.1, h = px * 1.45, x0 = sx - w / 2, y0 = sy - h / 2, bw = Math.max(1.5, px * 0.16);
       g.globalAlpha = 1 - (e.fog ? e.fog.t : 0);
       vacuole(g, s, sx, y0 - bw, w + 2 * bw, h + 2 * bw, "plain");
-      g.fillStyle = "#111111"; g.fillRect(x0 - bw, y0 - bw, w + 2 * bw, h + 2 * bw);
+      const kL = clamp(h / 30, 0.3, 2);                                          // the brand leaf, as the iso plate wears it
+      M.leafPath(g, x0 - bw, y0 - bw, w + 2 * bw, h + 2 * bw, kL); g.fillStyle = "#111111"; g.fill();
       const near = Math.hypot(wrapD(s.x - me.x), wrapD(s.z - me.z)) < 30;          // the plate lights cyan when the slime is near, as the active kiosk's does
-      g.fillStyle = near ? "#c3f0ff" : "#ffffff"; g.fillRect(x0, y0, w, h);
+      M.leafPath(g, x0, y0, w, h, kL); g.fillStyle = near ? "#c3f0ff" : "#ffffff"; g.fill();
       g.fillStyle = "#111111"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(label, sx, sy + px * 0.04);
       g.globalAlpha = 1;
     }

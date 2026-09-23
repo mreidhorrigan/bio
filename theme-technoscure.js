@@ -47,11 +47,6 @@
     g.strokeStyle = "rgba(180,200,170,0.06)"; g.lineWidth = 1.5; g.beginPath(); g.moveTo(sx - 48, sy); g.lineTo(sx, sy - 24); g.lineTo(sx + 48, sy); g.stroke();
     g.strokeStyle = "rgba(0,0,0,0.3)"; g.beginPath(); g.moveTo(sx - 48, sy); g.lineTo(sx, sy + 24); g.lineTo(sx + 48, sy); g.stroke();
   }
-  /** trace a rounded rect onto the current path (the marquee board + its shaped neon bloom). */
-  function rrPath(g, x, y, w, h, r) {
-    g.beginPath();
-    g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
-  }
 
   /** The damaged marquee: a neon tube sign with dead letters, per-letter blur.
    *  `topY` is the top of whatever it labels, so a dwelling, a tower or the
@@ -67,12 +62,10 @@
     g.font = "800 16px 'Arial Narrow','Helvetica Neue',Impact,sans-serif";   // condensed display = marquee tubes
     const label = ex.title.toUpperCase(), n = label.length, GAP = 2;
     let tw = 0; for (let i = 0; i < n; i++) tw += g.measureText(label[i]).width + GAP; tw = Math.max(0, tw - GAP);   // tube-gap layout, no array
-    const bw = Math.max(58, tw + 30), bh = 34, rr = 5;
+    const bw = Math.max(58, tw + 30), bh = 34;
     const bcx = sx + sway, bcy = topY - 50, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
     const sr = ex.signRect || (ex.signRect = { x: 0, y: 0, w: 0, h: 0 });   // hand the BOARD rect to the engine's
-    // the board and the vacuole it floats on (vacuole.js) are one lit patch in the gloom
-    const lift = window.MH_VACUOLE ? (() => { const v = window.MH_VACUOLE.sizeFor(bw, bh); return v.gap + v.ry * 2; })() : 0;
-    sr.x = x0; sr.y = y0 - lift; sr.w = bw; sr.h = bh + lift;                // gloom-reveal so the bright patch is the sign's shape, not a round halo (reused object, no per-frame alloc)
+    sr.x = x0; sr.y = y0; sr.w = bw; sr.h = bh;                               // gloom-reveal so the bright patch is the sign's shape, not a round halo (reused object, no per-frame alloc); the board only: its vacuole stays in the dark
     // BUZZ: a mains hum with occasional brown-out dropouts. Steady "lit" when motion is reduced.
     let buzz = 1;
     if (!RM()) { const ft = t * 7.3 + slot * 2.1, w = Math.sin(ft) + 0.7 * Math.sin(ft * 2.7 + 1.3); buzz = w < -1.15 ? 0.1 : 0.66 + 0.34 * Math.sin(ft * 4.1); }
@@ -83,7 +76,7 @@
     g.strokeStyle = u.hexA(NEON, 0.35); g.lineWidth = 1.4;
     g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke(); g.restore();
 
-    if (window.MH_VACUOLE) window.MH_VACUOLE.draw(g, bcx, y0, bw, bh, "night", RM() ? 0 : t);   // it floats on a vacuole, faintly lit by its own neon
+    if (window.MH_VACUOLE) window.MH_VACUOLE.draw(g, bcx, y0, bw, bh, "night", RM() ? 0 : t);   // it floats on a vacuole, unlit: only the neon glows
 
     // 2) ONE shaped neon bloom: a single blurred rounded-rect in the sign's colour, BOARD-shaped.
     //    The board (next) covers its core, leaving a neon halo around the SIGN — the whole marquee's
@@ -91,14 +84,14 @@
     g.save(); g.shadowColor = NEON; g.shadowBlur = (9 + buzz * 13) * near;
     if (ex.accentB) { g.globalAlpha = 0.3 + 0.4 * buzz; g.fillStyle = u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02); }
     else g.fillStyle = u.hexA(NEON, 0.3 + 0.4 * buzz);
-    rrPath(g, x0, y0, bw, bh, rr); g.fill(); g.restore();
+    u.leafPath(g, x0, y0, bw, bh); g.fill(); g.restore();
 
     // 3) rusted backing board — dark, grimy, chipped; the neon pops against this
     const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
     bg.addColorStop(0, "#231b12"); bg.addColorStop(0.55, "#15100a"); bg.addColorStop(1, "#0b0805");
-    g.fillStyle = bg; rrPath(g, x0, y0, bw, bh, rr); g.fill();
+    g.fillStyle = bg; u.leafPath(g, x0, y0, bw, bh); g.fill();
     g.fillStyle = "rgba(74,52,30,0.16)"; for (let i = 0; i < 3; i++) { const rx = x0 + 6 + u.hash01(slot + i, 11) * (bw - 12); g.fillRect(rx, y0 + 2, 1.5, bh - 4); }   // rust streaks
-    g.lineWidth = 1.4; g.strokeStyle = u.hexA(BONE, 0.16); rrPath(g, x0, y0, bw, bh, rr); g.stroke();   // pitted metal frame
+    g.lineWidth = 1.4; g.strokeStyle = u.hexA(BONE, 0.16); u.leafPath(g, x0, y0, bw, bh); g.stroke();   // pitted metal frame
     const chipX = x0 + 10 + u.hash01(slot, 19) * (bw - 28);   // a bitten-out chunk of the top edge (cuts the frame)
     g.fillStyle = "#0b0805"; g.beginPath(); g.moveTo(chipX, y0 - 1); g.lineTo(chipX + 10, y0 - 1); g.lineTo(chipX + 5, y0 + 5); g.closePath(); g.fill();
     const cyk = y0 + 5 + u.hash01(slot, 37) * (bh - 12);   // a hairline crack
@@ -294,7 +287,7 @@
     paintSignpost(g, sx, sy, dir, dist, info) {
       g.strokeStyle = "#1a140c"; g.lineWidth = 2.4; g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx, sy - 26); g.stroke();
       const w = 40, h = 15, bx = dir > 0 ? sx - 6 : sx - w + 6, by = sy - 30;
-      u.roundRect(bx, by, w, h, 4, "#11180f", TEAL);
+      u.leafPath(g, bx, by, w, h, 0.55); g.fillStyle = "#11180f"; g.fill(); g.strokeStyle = TEAL; g.lineWidth = 2; g.stroke();   // the brand leaf
       g.fillStyle = GOLD; g.font = "700 11px " + u.displayFont(); g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText((dir > 0 ? "→ " : "← ") + dist, bx + w / 2, by + h / 2);
       glow(g, sx + (dir > 0 ? -6 : 6), sy - 22, 2, GOLD, 8);

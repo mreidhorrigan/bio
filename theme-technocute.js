@@ -15,6 +15,11 @@
   const CYAN = "#c3f0ff", VIO = "#5b2a86", ORG = "#f28b46", ROSE = "#cb4d79", GRN = "#4dcb53", TEAL = "#2a8186", GOLD = "#ba962c";
   const LEAF = "16px 4px 16px 4px / 7px 2px 7px 2px", LEAF_LG = "22px 6px 22px 6px / 12px 4px 12px 4px", LEAF_SM = "8px 3px 8px 3px / 5px 2px 5px 2px";
 
+  /** a flat plate with a black edge, in the brand's leaf (small corners: the skin stays plain) */
+  function bLeaf(g, x, y, w, h, fill, bw) {
+    U.leafPath(g, x - bw, y - bw, w + 2 * bw, h + 2 * bw, 0.6); g.fillStyle = BLACK; g.fill();
+    U.leafPath(g, x, y, w, h, 0.6 * Math.max(0.4, 1 - bw / 8)); g.fillStyle = fill; g.fill();
+  }
   function bRect(g, x, y, w, h, fill, bw) { g.fillStyle = BLACK; g.fillRect(x - bw, y - bw, w + 2 * bw, h + 2 * bw); g.fillStyle = fill; g.fillRect(x, y, w, h); }
   /** a flat iso box (top + two side faces), black-edged. (sx,sy) = front-bottom point. */
   function box(g, sx, sy, hw, h, top) {
@@ -33,7 +38,7 @@
     g.font = "800 13px " + U.displayFont();
     const tw = g.measureText(ex.title.toUpperCase()).width + 14, by = topY - 26;
     if (window.MH_VACUOLE) window.MH_VACUOLE.draw(g, sx, by - 2, tw + 4, 22, "plain", 0);   // a plain white balloon holds the plate up (vacuole.js)
-    bRect(g, sx - tw / 2, by, tw, 18, active ? CYAN : "#fff", 2);
+    bLeaf(g, sx - tw / 2, by, tw, 18, active ? CYAN : "#fff", 2);
     g.fillStyle = BLACK; g.textAlign = "center"; g.textBaseline = "middle";
     g.fillText(ex.title.toUpperCase(), sx, by + 9);
   }
@@ -144,8 +149,8 @@
     paintSignpost(g, sx, sy, dir, dist, info) {
       bRect(g, sx - 2, sy - 26, 4, 26, BLACK, 0);
       const w = 38, h = 16, bx = dir > 0 ? sx - 6 : sx - w + 6, by = sy - 30;
-      g.fillStyle = BLACK; g.fillRect(bx + 4, by + 4, w, h);
-      bRect(g, bx, by, w, h, CYAN, 2.5);
+      U.leafPath(g, bx + 4, by + 4, w, h, 0.6); g.fillStyle = BLACK; g.fill();
+      bLeaf(g, bx, by, w, h, CYAN, 2.5);
       g.fillStyle = BLACK; g.font = "900 11px " + U.uiFont(); g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText((dir > 0 ? "▶ " : "◀ ") + dist, bx + w / 2, by + h / 2);
     },

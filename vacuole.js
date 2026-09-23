@@ -12,8 +12,8 @@
    MH_VACUOLE.draw(g, cx, boardTop, bw, bh, style, t)
      cx, boardTop   the middle of the sign's top edge, in canvas pixels
      bw, bh         the sign board's width and height, in canvas pixels
-     style          "gel" (the slime skins by day), "night" (gloomthmaxx: dim,
-                    faintly lit by its neon), "plain" (bureaucore: a flat white
+     style          "gel" (the slime skins by day), "night" (gloomthmaxx: dim and
+                    unlit, a shape in the dark), "plain" (bureaucore: a flat white
                     balloon with a black edge, as plain as the skin)
      t              seconds, for the bob and the drift inside; 0 holds it still
    Draw it before the board, so the board covers the threads' ends.
@@ -22,19 +22,21 @@
   const TAU = Math.PI * 2;
   const STYLES = {
     gel:   { fill: "rgba(200,245,225,0.34)", rim: "rgba(63,125,94,0.8)", thread: "rgba(38,58,40,0.7)", sheen: "rgba(255,255,255,0.55)", organelle: "rgba(79,163,115,0.5)" },
-    night: { fill: "rgba(95,224,200,0.1)", rim: "rgba(95,224,200,0.42)", thread: "rgba(160,190,170,0.35)", sheen: "rgba(200,255,240,0.22)", organelle: "rgba(95,224,200,0.3)" },
+    night: { fill: "rgba(40,48,44,0.28)", rim: "rgba(92,104,96,0.5)", thread: "rgba(92,104,96,0.45)", sheen: "rgba(150,160,155,0.12)", organelle: "rgba(70,82,76,0.4)" },
     plain: { fill: "#ffffff", rim: "#111111", thread: "#111111", sheen: null, organelle: null },
   };
-  /** The balloon's size for a board: wide enough to plausibly lift it. */
+  /** The balloon's size for a board: quite small, a float rather than a canopy,
+   *  so it hides next to nothing of what stands behind (about half the board's
+   *  height across, all told). */
   function sizeFor(bw, bh) {
-    const rx = Math.max(bh * 0.72, Math.min(bw * 0.3, bh * 1.35));
-    return { rx, ry: rx * 1.1, gap: bh * 0.45 };
+    const rx = Math.max(bh * 0.2, Math.min(bw * 0.07, bh * 0.28));
+    return { rx, ry: rx * 1.1, gap: bh * 0.2 };
   }
   function draw(g, cx, boardTop, bw, bh, style, t) {
     const S = STYLES[style] || STYLES.gel, { rx, ry, gap } = sizeFor(bw, bh);
     const bob = t ? Math.sin(t * 1.3 + cx * 0.01) * bh * 0.05 : 0;
     const by = boardTop - gap - ry + bob;                      // the balloon's middle
-    const lw = Math.max(0.8, bh * 0.06);
+    const lw = Math.max(0.6, bh * 0.03);
     g.save();
     g.lineCap = "round"; g.lineJoin = "round";
     // two threads, from the board's top edge to the balloon's knot

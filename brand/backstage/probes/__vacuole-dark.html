@@ -1,0 +1,46 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Gloomthmaxx: the vacuoles stay in the dark</title>
+<meta name="budget" content="14000">
+<iframe id="f" src="/index.html?theme=gloomthmaxx" style="width:1280px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// In gloomthmaxx only a sign's board lifts the gloom; the vacuole it floats on
+// is unlit. For each sign on screen, compares the mean brightness of the box
+// where its balloon floats (the board's width, above it) with a box the same
+// size beside it, and with the board itself. A lit square over the balloon
+// (the reveal stretched over it) makes the box above far brighter than beside.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, iso = w.MH_ISO;
+    const cv = w.document.querySelector("canvas"), g = cv.getContext("2d"), k = cv.width / cv.clientWidth;
+    const lum = (x, y, bw, bh) => {
+      x = Math.round(x * k); y = Math.round(y * k); bw = Math.round(bw * k); bh = Math.round(bh * k);
+      if (x < 0 || y < 0 || x + bw > cv.width || y + bh > cv.height || bw < 2 || bh < 2) return null;
+      const d = g.getImageData(x, y, bw, bh).data; let s = 0;
+      for (let i = 0; i < d.length; i += 4) s += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+      return s / (d.length / 4);
+    };
+    const signs = iso.exhibits().filter((e) => e.signRect && e.signRect.w > 0);
+    let n = 0, bad = 0;
+    for (const e of signs) {
+      const r = e.signRect, V = w.MH_VACUOLE.sizeFor(r.w, r.h), lift = V.gap + V.ry * 2;
+      // the board's own neon halo lights both sides of it alike; a reveal stretched
+      // over the balloon lights only above. So above is compared with the same
+      // box the same distance below the board (the tether and a dark roof)
+      const above = lum(r.x, r.y - lift, r.w, lift * 0.8), board = lum(r.x, r.y, r.w, r.h);
+      const beside = lum(r.x, r.y + r.h + lift * 0.2, r.w, lift * 0.8);
+      if (r.h > 40) { n++; bad++; say(e.title + ": the sign's lit rect is " + Math.round(r.h) + " px tall, over its balloon NO"); continue; }
+      if (above == null || beside == null || board == null) continue;
+      const hits = (x, y, bw, bh) => signs.some((o) => o !== e && o.signRect.x < x + bw && o.signRect.x + o.signRect.w > x && o.signRect.y < y + bh && o.signRect.y + o.signRect.h > y);
+      if (hits(r.x, r.y - lift, r.w, lift * 0.8)) { say(e.title + ": another sign's board is over its balloon, not measured"); continue; }
+      n++;
+      const lit = above - beside > 12;
+      if (lit) bad++;
+      say(e.title + ": the balloon's box " + above.toFixed(1) + ", as far below the board " + beside.toFixed(1) + ", the board " + board.toFixed(1) + (lit ? " NO (a lit patch over the balloon)" : ""));
+    }
+    say(n ? n + " signs on screen, " + bad + " with a lit patch over the balloon" : "signs on screen: none MISSING");
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 5000));
+</script>

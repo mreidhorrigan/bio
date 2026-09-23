@@ -74,7 +74,7 @@
       {
         title: "Public Writing",
         satellites: [   // the two kinds, each its own house along the road
-          { title: "Criticism", url: `${B}criticism.html` },
+          // { title: "Criticism", url: `${B}criticism.html` },   // its house is off the village for now (2026-09-22); the page and its links stay
           // not a dwelling: the glossary is underground, so its house is the
           // shaft you go down. engine.js draws it with drawWellhead().
           { title: "Glossary", url: `${B}glossary.html`, structure: "wellhead" },
@@ -86,6 +86,8 @@
             <li><a href="${B}glossary.html"${ext}>Glossary</a>: the terms I keep using, defined, with an antiglossary of everything they leave out.</li>
           </ul>`,
       },
+      /* The Store is off the village for now (2026-09-22), until there are things
+         to sell: the user will say when it goes back. Uncomment to restore.
       {
         title: "Store",
         underConstruction: true,     // the engine bands the kiosk and says so on the sign
@@ -95,6 +97,7 @@
           the tools, the games, and the music. Until then, everything is free where
           it stands.</p>`,
       },
+      */
       {
         title: "Music",
         page: { url: `${B}about.html?menu=Music` },            // open the About page with the Music dropdown deployed (new tab)

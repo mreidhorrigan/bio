@@ -867,8 +867,8 @@
   // Said in words. The lexicon's marks (★ coined, ↗ extended, ↺ borrowed) stay in
   // the data as provenance, but a bare arrow on the card explains nothing.
   const KIND = {
-    coinage: ["glossary.kind.coinage", "a coinage of mine"],
-    "extended-coinage": ["glossary.kind.extendedCoinage", "mine, coined on somebody else's term"],
+    coinage: ["glossary.kind.coinage", "a neologism of mine"],
+    "extended-coinage": ["glossary.kind.extendedCoinage", "mine, neologized on somebody else's term"],
     extended: ["glossary.kind.extended", "someone else's term, extended"],
     borrowed: ["glossary.kind.borrowed", "borrowed, and put to work"],
     plain: ["glossary.kind.plain", "in use throughout"],

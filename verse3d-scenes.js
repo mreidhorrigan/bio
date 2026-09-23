@@ -567,13 +567,12 @@
 
     function buildFurniture() {
       const fl = (x, z) => floorAt(x, z);
-      // the table: a gel mushroom, a book open on it and a lamp
+      // the table: a gel mushroom
       if (ctx.ahead(TABLE.x, TABLE.z, 6)) {
         const y = fl(TABLE.x, TABLE.z);
         E.organic(M.shapes.ball(TABLE.x, y + 1.3, TABLE.z, 0.9, 1.4, 0.9, 3, 8, false), vgrad("#8fd8b8", "#3c8a68"), P.ink, 1, { layer: 2, inkPx: 4 });
         E.organic(M.shapes.ball(TABLE.x, y + 2.8, TABLE.z, TABLE.r, 0.55, TABLE.r * 0.8, 4, 14, false), vgrad("#b8ecd2", "#4f9a78"), P.ink, 1.1, { layer: 2, bias: 0.5, after: sheen(0.3) });
-        // (the open book that lay here is gone, at the user's request)
-        E.organic(M.shapes.ball(TABLE.x + 1.6, y + 3.9, TABLE.z + 0.6, 0.55, 0.6, 0.55, 3, 8, false), "#ffe6a0", rgba(P.ink, 0.6), 1, { layer: 2, bias: 3, inkPx: 3, after: halo("#ffd98a", 2) });
+        // (the open book that lay here is gone, and the lamp globe that floated over it, both at the user's request)
       }
       // lamps on stalks
       for (const [x, z] of LAMPS) {
@@ -796,7 +795,9 @@
       gates.push(g);
       HOUSES.push({ title: k.title, x: g.x, z: g.z, gate: true, slot: i, accent, item: { kind: "kiosk", title: k.title, kiosk: k } });
       (k.satellites || []).forEach((sat, j) => {
-        const r = (ISO.ring + ISO.spur * (j + 1)) * TILE, x = Math.cos(ang) * r, z = Math.sin(ang) * r;
+        // beside the road, alternate houses on alternate sides, as the iso village stands them (engine.js SPUR_SIDE)
+        const r = (ISO.ring + ISO.spur * (j + 1)) * TILE, side = (j % 2 ? -1 : 1) * (ISO.side || 0) * TILE;
+        const x = Math.cos(ang) * r - side * Math.sin(ang), z = Math.sin(ang) * r + side * Math.cos(ang);
         if (sat.structure === "wellhead") wellAt = { x, z, title: sat.title, accent, item: { kind: "link", title: sat.title, url: sat.url } };
         else HOUSES.push({ title: sat.title, x, z, satellite: true, slot: 90 + i * 13 + j * 7, accent, item: { kind: "link", title: sat.title, url: sat.url } });
       });
@@ -938,10 +939,22 @@
         const dx = wD(toWorld(tw.tx) - E.cam.x), dz = wD(toWorld(tw.ty) - E.cam.z);
         if (dx * dx + dz * dz < (FOG1 + 30) * (FOG1 + 30)) lamps.push({ x: E.cam.x + dx, z: E.cam.z + dz, r: 3, k: 0.6 });
       }
+      // each lamp in the cells of a coarse grid it reaches, so a ground sample
+      // (tens of thousands a frame) asks only the lamps of its own cell
+      lampCells.clear();
+      for (const q of lamps) {
+        const reach = q.r + 18, i0 = Math.floor((q.x - reach) / LCELL), i1 = Math.floor((q.x + reach) / LCELL), j0 = Math.floor((q.z - reach) / LCELL), j1 = Math.floor((q.z + reach) / LCELL);
+        for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) {
+          const k = i * 4096 + j; let c = lampCells.get(k);
+          if (!c) lampCells.set(k, (c = []));
+          c.push(q);
+        }
+      }
     }
+    const LCELL = 32, lampCells = new Map();
     let LB = 0, LW = 0;                                      // the last lightAt's parts: the slime's pale light, the windows' warm one
     function lightAt(x, z) {
-      const dx = x - me.x, dz = z - me.z, d = Math.hypot(dx, dz);
+      const dx = x - me.x, dz = z - me.z, d = Math.sqrt(dx * dx + dz * dz);
       let L = clamp(1.15 - d / 16, 0, 1);                     // the slime's own glow
       const sy = Math.sin(me.yaw), cy = Math.cos(me.yaw), f = dx * sy + dz * cy;
       if (f > 0 && f < 90) {                                   // its beam: a cone ahead, fading with distance
@@ -950,7 +963,8 @@
       }
       LB = L > 1 ? 1 : L;
       let W = 0;
-      for (const q of lamps) {
+      const near = lampCells.get(Math.floor(x / LCELL) * 4096 + Math.floor(z / LCELL));
+      if (near) for (const q of near) {
         const ex = x - q.x, ez = z - q.z, reach = q.r + 18;
         if (ex > reach || ex < -reach || ez > reach || ez < -reach) continue;   // cheap test first: most samples are far from any house
         const e = Math.sqrt(ex * ex + ez * ez) - q.r;
@@ -970,38 +984,56 @@
       const img = V.PHOTO.img;
       if (!V.PHOTO.ready || !img) return null;
       try {
-        const cv = document.createElement("canvas"); cv.width = img.width; cv.height = img.height;
-        const g = /** @type {CanvasRenderingContext2D} */ (cv.getContext("2d")); g.drawImage(img, 0, 0);
-        PH = { w: img.width, h: img.height, d: g.getImageData(0, 0, img.width, img.height).data };
+        // the photo and smaller copies of it, each half the last, as the ground has:
+        // a far sample covers many of the photo's pixels, and reading one of them
+        // aliased the lake into a fine hatch, so a far sample reads a smaller copy
+        const levels = [];
+        let w = img.width, h = img.height;
+        for (let L = 0; L < 6 && w >= 4 && h >= 4; L++, w = Math.max(1, w >> 1), h = Math.max(1, h >> 1)) {
+          const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+          const g = /** @type {CanvasRenderingContext2D} */ (cv.getContext("2d"));
+          g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
+          g.drawImage(levels.length ? levels[levels.length - 1].cv : img, 0, 0, w, h);
+          levels.push({ cv, w, h, d: g.getImageData(0, 0, w, h).data });
+        }
+        PH = { w: img.width, h: img.height, levels };
       } catch (e) { PH = { w: 0 }; }
       return PH;
     };
-    const PHOTO_W = 30, airC = rgbOf(P.air), skyC = rgbOf(P.sky), deepC = rgbOf(SK.water || "#2f8a98"), shallowC = rgbOf(P.shallow);
+    const PH_SOFT = (window.__PH_SOFT || 1), PHOTO_W = 30, airC = rgbOf(P.air), skyC = rgbOf(P.sky), deepC = rgbOf(SK.water || "#2f8a98"), shallowC = rgbOf(P.shallow);
     const col = [0, 0, 0], bed = [0, 0, 0];
     // Two ways to show the distance, kept both. "focus" (the default): the haze
     // only closes off the far edge, and things come into view out of focus.
     // "mist" (the earlier way, kept for places or moods that want it): a haze
     // that starts nearer, with everything sharp.
     const MIST = ctx.distance === "mist";
+    const GRES = NIGHT ? 5 : 4;                              // screen pixels a ground sample covers: the dark needs fewer
     const FOG0 = MIST ? (FLAT ? 150 : NIGHT ? 90 : 120) : (FLAT ? 185 : NIGHT ? 90 : 175), FOG1 = SEEN * 0.94;
     function groundShade(x, z, hh, t, dy) {
       // the ground a sample covers: across, t * 4 / fov; along the ray, that over the ray's slope, which
       // near the horizon is many times more. Detail is read for the larger, or far roads and shores alias and swim.
-      const fp = (t * 4) / E.fov / Math.max(0.03, -dy);
+      const fp = (t * GRES) / E.fov / Math.max(0.03, -dy);
+      // at night, ground beyond every light ends up mostly dark: read it cheaply
+      // (the smallest copy, no photo), which is most of the night's samples
+      const Ln = NIGHT ? lightAt(x, z) : 1, dim = Ln <= 0;
       // past the focus the ground is read from a smaller copy: soft, as the things standing on it are
-      const lvl = Math.min(3, (fp < 3 ? 0 : fp < 6 ? 1 : fp < 12 ? 2 : 3) + (!MIST && t > 130 ? 1 : 0));
+      const lvl = dim ? 3 : Math.min(3, (fp < 3 ? 0 : fp < 6 ? 1 : fp < 12 ? 2 : 3) + (!MIST && t > 130 ? 1 : 0));
       const ground = hh > LEVEL + 0.001 || FLAT ? hh : heightAt(x, z);
       sampleRGB(lvl, x, z, col);
       if (!FLAT && ground < LEVEL) {
-        const depth = LEVEL - ground, ph = photoPixels();
+        const depth = LEVEL - ground, ph = dim ? null : photoPixels();
         for (let k = 0; k < 3; k++) bed[k] = col[k];
         let pr = deepC[0], pg = deepC[1], pb = deepC[2];
         if (ph && ph.w) {
           const tt = ctx.reduce ? 0 : E.t;
-          let u = (x / PHOTO_W) * ph.w + Math.sin(z * 0.21 + tt * 1.3) * 2.2, v = (z / PHOTO_W) * ph.w + Math.sin(x * 0.17 + tt) * 1.6;
-          u -= ph.w * Math.floor(u / ph.w); v -= ph.h * Math.floor(v / ph.h);
-          const o = ((v | 0) * ph.w + (u | 0)) * 4, pk = NIGHT ? 0.35 : 0.62;
-          pr = ph.d[o] * pk + deepC[0] * (1 - pk); pg = ph.d[o + 1] * pk + deepC[1] * (1 - pk); pb = ph.d[o + 2] * pk + deepC[2] * (1 - pk);
+          // the copy whose pixel is a little larger than the ground this sample
+          // covers (PH_SOFT): neighbouring samples then differ smoothly, where
+          // the photo's own grain, one pixel a sample, drew the sample grid as a lattice
+          const L = Math.min(ph.levels.length - 1, Math.max(0, Math.floor(Math.log2(Math.max(1, fp * (ph.w / PHOTO_W) * PH_SOFT))))), m = ph.levels[L], sc = m.w / ph.w;
+          let u = ((x / PHOTO_W) * ph.w + Math.sin(z * 0.21 + tt * 1.3) * 2.2) * sc, v = ((z / PHOTO_W) * ph.w + Math.sin(x * 0.17 + tt) * 1.6) * sc;
+          u -= m.w * Math.floor(u / m.w); v -= m.h * Math.floor(v / m.h);
+          const o = (Math.min(m.h - 1, v | 0) * m.w + Math.min(m.w - 1, u | 0)) * 4, pk = NIGHT ? 0.35 : 0.62;
+          pr = m.d[o] * pk + deepC[0] * (1 - pk); pg = m.d[o + 1] * pk + deepC[1] * (1 - pk); pb = m.d[o + 2] * pk + deepC[2] * (1 - pk);
         }
         const w = clamp(depth / 1.6, 0, 1), s = 1 - w;
         col[0] = (bed[0] * 0.45 + shallowC[0] * 0.55) * s + pr * w;
@@ -1014,7 +1046,7 @@
       }
       let f = (t - FOG0) / (FOG1 - FOG0); f = f <= 0 ? 0 : f >= 1 ? 1 : f * f * (3 - 2 * f);
       if (NIGHT && f < 1) {                                    // the haze already took it: no light to look for
-        f = Math.max(f, DARK * (1 - lightAt(x, z)));
+        f = Math.max(f, DARK * (1 - Ln));
         // and the light itself shows on the ground, as the iso beam is drawn over the dark
         const b = LB * 0.34 * (1 - f * 0.5), w = LW * 0.26;
         col[0] += beamC[0] * b + warmC[0] * w; col[1] += beamC[1] * b + warmC[1] * w; col[2] += beamC[2] * b + warmC[2] * w;
@@ -1338,7 +1370,7 @@
       }
       // past the haze's end the ground is the air itself: one steady colour, nothing to swim
       const airPacked = (255 << 24) | ((airC[2] & 255) << 16) | ((airC[1] & 255) << 8) | (airC[0] & 255);
-      E.heightfield({ res: 4, base: 0.5, far: FOG1, farColour: airPacked, height: FLAT ? () => 0.6 : (x, z) => Math.max(LEVEL, heightAt(x, z)), shade: groundShade });
+      E.heightfield({ res: GRES, base: 0.5, far: FOG1, farColour: airPacked, height: FLAT ? () => 0.6 : (x, z) => Math.max(LEVEL, heightAt(x, z)), shade: groundShade });
     }
     /** Night: the fog is the dark, and it lifts where there is light. By day and
      *  on the board it is the haze, from FOG0 out. */

@@ -91,6 +91,7 @@ def tidy(s):
     s = re.sub(r"\[\[(.+?)\]\]", r"\1", s)
     s = re.sub(r"\s*\(see [^)]+\)", "", s)
     s = re.sub(r"\s*\(cf\. [^)]+\)", "", s)
+    s = re.sub(r"\bcoined\b", "neologized", s)       # the site's word for it (the user's call, 2026-09-22)
     return s.strip(" ;·")
 
 

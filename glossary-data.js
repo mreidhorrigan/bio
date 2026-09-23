@@ -755,7 +755,7 @@ window.MH_GLOSSARY = {
   {
    "id": "",
    "term": "Autovoyeurism",
-   "gloss": "A camera that watches the player's own avatar, and a name for what that does to playing: the player is put in the position of a spectator of themselves. The word came out of the loop passes rather than out of M.'s drafts, and it is already in use elsewhere: Peter de Bolla coined it in 1995 for the pleasure of seeing while being seen.",
+   "gloss": "A camera that watches the player's own avatar, and a name for what that does to playing: the player is put in the position of a spectator of themselves. The word came out of the loop passes rather than out of M.'s drafts, and it is already in use elsewhere: Peter de Bolla neologized it in 1995 for the pleasure of seeing while being seen.",
    "glossFr": "Une caméra qui regarde l'avatar de la personne qui joue, et un nom pour ce que cela fait au jeu : la personne qui joue est mise en position de spectatrice d'elle-même. Le mot est venu des passes plutôt que des brouillons de M., et il est déjà en usage ailleurs : Peter de Bolla l'a forgé en 1995 pour le plaisir de voir tout en étant l'objet d'un regard.",
    "why": "it appears nowhere in M.'s own drafts, only in the Claude notes, and the word is Peter de Bolla's (1995) for seeing while being seen.",
    "termFr": "L'autovoyeurisme",

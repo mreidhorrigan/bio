@@ -32,6 +32,8 @@
   if (!V || !cv) return;
   const I18N = window.MH_I18N;
   const t = (key, en, vars) => (I18N ? I18N.t(key, en, vars) : en);
+  /** Words the page writes, kept in the reader's language: a switch re-renders them. */
+  const say = (el, key, en, vars) => { if (!el) return; if (I18N && I18N.live) I18N.live(el, key, en, vars); else el.textContent = en; };
   const ALIAS = { bureaucore: "technocute", gloomthmaxx: "technoscure" }, SHARE = { technocute: "bureaucore", technoscure: "gloomthmaxx" };
   const SKINS = ["technurture", "technoscure", "technocute"];
   const PLACE = { village: "outdoors", house: "indoors", cave: "cave" }, PLACE_NAME = { outdoors: "village", indoors: "house", cave: "cave" };
@@ -82,14 +84,9 @@
   }
 
   /* ── the view ─────────────────────────────────────────────────────────── */
-  const where = document.getElementById("where");
   const W = V.create(cv, {
     skin, doors: "menus", onOpen,
-    onScene(id) {
-      const base = id.split("@")[0];
-      if (where) where.textContent = base === "outdoors" ? t("slimeverse3d.village", "The village") : base === "indoors" ? t("slimeverse3d.house", "The Slimeverse 3D house") : t("slimeverse3d.cave", "The cave");
-      reflect(true);
-    },
+    onScene() { reflect(true); },
   });
   // @ts-ignore: for probes and the console
   window.MH_SLIMEVERSE3D = W;
@@ -149,7 +146,7 @@
   W.run();
   setInterval(() => reflect(false), 500);
 
-  /* ── skins, sound ─────────────────────────────────────────────────────── */
+  /* ── skins ────────────────────────────────────────────────────────────── */
   const chips = Array.from(document.querySelectorAll("[data-skin]"));
   const showSkin = (k) => { for (const b of chips) b.setAttribute("aria-pressed", String(b.getAttribute("data-skin") === k)); };
   showSkin(W.skin());
@@ -160,10 +157,29 @@
     reflect(true);
     cv.focus({ preventScroll: true });
   });
-  const soundBtn = document.getElementById("sound");
-  if (soundBtn) soundBtn.addEventListener("click", () => {
-    const on = W.muted();
-    W.setMuted(!on); soundBtn.setAttribute("aria-pressed", String(on));
-    soundBtn.textContent = on ? t("slimeverse3d.soundOn", "Sound on") : t("slimeverse3d.soundOff", "Sound off");
+
+  /* ── the menu: the buildings, as the iso village's Menu lists them ─── */
+  const menuBtn = document.getElementById("menu"), navbar = document.getElementById("navbar");
+  const C = window.MH_CONTENT;
+  if (menuBtn && navbar && C) {
+    const chip = (key, en, vars, go) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "navchip";
+      say(b, key, en, vars); b.addEventListener("click", () => { showMenu(false); go(); }); navbar.appendChild(b);
+    };
+    chip("world.plaza", "◇ Plaza", null, () => W.load("outdoors", "start"));
+    C.kiosks.forEach((k, i) => {
+      const title = t("kiosk." + k.title + ".title", k.title);
+      chip("slimeverse3d.navchip", "{n}. {title}", { n: i + 1, title }, () => onOpen({ kind: "kiosk", title: k.title, kiosk: k }, { click: true }));
+    });
+    const showMenu = (on) => { navbar.hidden = !on; menuBtn.setAttribute("aria-expanded", String(on)); };
+    menuBtn.addEventListener("click", () => showMenu(navbar.hidden));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !navbar.hidden) showMenu(false); });
+  }
+  // M mutes and unmutes, as in the iso village
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey && !(e.target instanceof HTMLInputElement)) W.setMuted(!W.muted());
   });
+  // the keys hint makes way once the visitor has moved
+  const keys = document.querySelector(".keys");
+  if (keys) { const hide = () => keys.classList.add("gone"); ["keydown", "pointerdown"].forEach((ev) => window.addEventListener(ev, hide, { once: true })); setTimeout(hide, 12000); }
 })();

@@ -1,5 +1,5 @@
 <!DOCTYPE html><meta charset="utf-8"><title>3D views: the keys, pressed for real</title>
-<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html?skin=technurture" style="width:1100px;height:900px;border:0"></iframe>
 <pre id="out">running</pre>
 <script>
 // Presses the keys the way a visitor does (keydown and keyup on the page) and
@@ -35,13 +35,14 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     W.tick(0.016);
     let dz = W.me.z - lastZ; dz -= per * Math.round(dz / per);   // across the seam the position jumps a whole period
     travelled += Math.abs(dz); lastZ = W.me.z;
-    if (travelled > per / 2 && Math.hypot(W.me.x, W.me.z) < 30) break;   // round the world and back on the plaza: a lap
+    // round the world and back to the kiosk ring (a kiosk may stand across the road there, as the ring's spacing falls)
+    if (travelled > per / 2 && Math.hypot(W.me.x, W.me.z) < (w.MH_VERSE3D.ISO.ring + 1.5) * w.MH_VERSE3D.ISO.tile) break;
     if (Math.abs(dz) < 0.05) { if (!stalls) say("  held up at " + W.me.x.toFixed(1) + "," + W.me.z.toFixed(1)); stalls++; }
   }
   d.dispatchEvent(new w.KeyboardEvent("keyup", { key: "ArrowUp", bubbles: true }));
   d.dispatchEvent(new w.KeyboardEvent("keyup", { key: "Shift", bubbles: true }));
   const home = Math.hypot(W.me.x, W.me.z + 60 - 40);
-  say("a lap of the world along the road: travelled " + travelled.toFixed(0) + " of " + per + " units, " + stalls + " frames held up" + (travelled >= per - 160 && Math.hypot(W.me.x, W.me.z) < 32 && stalls < 30 ? " (back on the plaza from the other side)" : " NO") + ", now " + Math.hypot(W.me.x, W.me.z).toFixed(0) + " from the plaza's centre");
+  say("a lap of the world along the road: travelled " + travelled.toFixed(0) + " of " + per + " units, " + stalls + " frames held up" + (travelled >= per - 200 && Math.hypot(W.me.x, W.me.z) < (w.MH_VERSE3D.ISO.ring + 1.5) * w.MH_VERSE3D.ISO.tile && stalls < 30 ? " (back at the kiosk ring from the other side)" : " NO") + ", now " + Math.hypot(W.me.x, W.me.z).toFixed(0) + " from the plaza's centre");
   // the cave is a ring: walk round it and come past the shaft again, with no wall in the way.
   // Three walkers, not one straight line: each drifts from side to side on its own slow
   // rhythm, jitters its heading, and hurries or dawdles by turns, as visitors do (seeded,
@@ -89,8 +90,17 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     proto.ellipse = function () { lastEll = arguments; return ellOrig.apply(this, arguments); };
     proto.fill = function () { if ((this.fillStyle === "#ffffff" || this.fillStyle === "#fff") && lastEll && this.globalAlpha === 1) eyeWhite++; lastEll = null; return fillOrig.apply(this, arguments); };
     W.tick(0.016);
-    proto.fill = fillOrig; proto.ellipse = ellOrig;
     say("the slime's eye, from behind: " + (eyeWhite ? "shows NO (it is on the front)" : "out of sight, as it should be"));
+    // in the bath, still from behind: the reflection shows it
+    const P = W.pools()[0];
+    if (P) {
+      proto.fill = fillOrig; W.me.x = P.x; W.me.z = P.z - 1; W.me.yaw = 0; for (let i = 0; i < 60; i++) W.tick(0.016);
+      proto.fill = function () { if ((this.fillStyle === "#ffffff" || this.fillStyle === "#fff") && lastEll && this.globalAlpha === 1) eyeWhite++; lastEll = null; return fillOrig.apply(this, arguments); };
+      eyeWhite = 0; W.tick(0.016);
+      say("in the bath, from behind: the eye " + (eyeWhite ? "shows in the reflection" : "does not show in the reflection NO") + (W.me.pool ? "" : " (not in the water NO)"));
+      if (!eyeWhite) { let any = 0; proto.fill = function () { if (/^#fff/.test(String(this.fillStyle))) any++; return fillOrig.apply(this, arguments); }; W.tick(0.016); say("    (white fills of any kind that frame: " + any + ", slime at " + W.me.x.toFixed(1) + "," + W.me.z.toFixed(1) + " yaw " + W.me.yaw.toFixed(2) + ", pool at " + P.x.toFixed(1) + "," + P.z.toFixed(1) + ")"); }
+    } else say("the bath: MISSING");
+    proto.fill = fillOrig; proto.ellipse = ellOrig;
   }
   say("focus was on: " + (d.activeElement && d.activeElement.tagName));
   document.title = "done";

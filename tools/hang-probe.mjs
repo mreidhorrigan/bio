@@ -45,18 +45,18 @@ await Promise.all(["Runtime.enable", "Log.enable", "Page.enable", "Debugger.enab
 send("Page.navigate", { url });
 console.log(at(), "navigating to", url);
 
-let lastAnswer = Date.now(), reported = false;
+let lastAnswer = Date.now(), reported = 0;   // stacks printed so far: up to four, four seconds apart, to tell a loop from a slow stretch
 while (Date.now() - t0 < seconds * 1000) {
   const ping = send("Runtime.evaluate", { expression: "1" }).then(() => { lastAnswer = Date.now(); });
   await Promise.race([ping, sleep(1000)]);
   await sleep(Math.max(0, 1000 - (Date.now() - lastAnswer)));
-  if (!reported && Date.now() - lastAnswer > 3000) {
-    reported = true;
+  if (reported < 4 && Date.now() - lastAnswer > 3000 + reported * 4000) {
+    reported++;
     console.log(at(), "MAIN THREAD NOT ANSWERING for", ((Date.now() - lastAnswer) / 1000).toFixed(1) + "s; pausing it");
     send("Debugger.pause");
     for (let i = 0; i < 50 && !paused; i++) await sleep(100);
     if (paused) {
-      for (const f of paused.callFrames.slice(0, 15)) console.log("   at", f.functionName || "(anonymous)", f.url.split("/").pop() + ":" + (f.location.lineNumber + 1) + ":" + (f.location.columnNumber + 1));
+      for (const f of paused.callFrames.slice(0, 8)) console.log("   at", f.functionName || "(anonymous)", f.url.split("/").pop() + ":" + (f.location.lineNumber + 1) + ":" + (f.location.columnNumber + 1));
       await send("Debugger.resume"); paused = null;
     } else console.log("   (could not pause it)");
   }

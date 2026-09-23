@@ -684,6 +684,7 @@ function buildHub() {
  *  stays on the ring; the houses march straight outward from it, and the spur between is
  *  paved as road. Gated on T.spurRoads (now on for every skin), so the same house geometry
  *  appears in all worlds. Idempotent and rebuilt on every world-switch. */
+const SPUR_SIDE = 1;                                  // tiles a road-house stands off its road's middle (verse3d.js ISO.side)
 function rebuildSpurs() {
   if (EXHIBITS.length > CONTENT.kiosks.length) EXHIBITS.length = CONTENT.kiosks.length;  // drop any houses from a previous world
   SPUR_TILES.clear();
@@ -694,9 +695,12 @@ function rebuildSpurs() {
     if (!sats || !sats.length || !gate) continue;
     const ang = Math.atan2(gate.ty - HY, gate.tx - HX);          // straight out from the plaza, through the gateway kiosk
     for (let j = 0; j < sats.length; j++) {
-      const r = T.ringRadius + step * (j + 1);
+      // the houses stand beside the road, alternate houses on alternate sides:
+      // in a line down its middle, a road running up the screen stacked each
+      // house and its sign onto the one behind it
+      const r = T.ringRadius + step * (j + 1), side = (j % 2 ? -1 : 1) * SPUR_SIDE;
       EXHIBITS.push({
-        tx: HX + r * Math.cos(ang), ty: HY + r * Math.sin(ang),
+        tx: HX + r * Math.cos(ang) - side * Math.sin(ang), ty: HY + r * Math.sin(ang) + side * Math.cos(ang),
         titleEn: sats[j].title, title: kioskTitle(sats[j].title),   // a work's own name: the dictionary leaves it alone
         accent: gate.accent, slot: 90 + s * 13 + j * 7,   // slot is only a visual seed for houses
         url: sats[j].url, satellite: true, visited: false,
@@ -1830,6 +1834,21 @@ function roundRect(x, y, w, h, r, fill, stroke) {
   ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
   if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
 }
+/** The brand's leaf corner (brand/brand.css --leaf): a sweep top-left and
+ *  bottom-right, near-square at the other two, as engine-3d.js draws it. `k`
+ *  scales the corners (1: a board's, about half: a small tag's). Traces the
+ *  path only; the caller fills and strokes. */
+function leafPath(g, x, y, w, h, k = 1) {
+  const Sx = Math.min(16 * k, w / 2), Sy = Math.min(7 * k, h / 2), sx = Math.min(4 * k, w / 2), sy = Math.min(2 * k, h / 2);
+  const r = x + w, b = y + h;
+  g.beginPath();
+  g.moveTo(x + Sx, y);
+  g.lineTo(r - sx, y); g.quadraticCurveTo(r, y, r, y + sy);
+  g.lineTo(r, b - Sy); g.quadraticCurveTo(r, b, r - Sx, b);
+  g.lineTo(x + sx, b); g.quadraticCurveTo(x, b, x, b - sy);
+  g.lineTo(x, y + Sy); g.quadraticCurveTo(x, y, x + Sx, y);
+  g.closePath();
+}
 function shadow(g, cx, cy, rx) { g.save(); g.fillStyle = "rgba(0,0,0,0.28)"; g.beginPath(); g.ellipse(cx, cy, rx, rx * 0.5, 0, 0, Math.PI * 2); g.fill(); g.restore(); }
 function label(g, text, x, y, size, color) {
   g.font = "700 " + size + "px " + uiFont(); g.textAlign = "center"; g.textBaseline = "alphabetic";
@@ -2262,6 +2281,7 @@ window.MH_ISO = {
     title: e.titleEn, tx: +e.tx.toFixed(2), ty: +e.ty.toFixed(2),
     satellite: !!e.satellite, junction: !!e.junction, url: e.url || null, structure: e.structure || null,
     underConstruction: !!e.underConstruction,
+    signRect: e.signRect ? { x: e.signRect.x, y: e.signRect.y, w: e.signRect.w, h: e.signRect.h } : null,   // the board as last drawn, in CSS pixels
   })),
   pavedTiles: () => SPUR_TILES.size,
   player: () => ({ x: player.x, y: player.y, fx: player.fx, fy: player.fy }),   // read-only: where the slime is standing, and which way it faces
@@ -2284,7 +2304,7 @@ window.MH_ISO = {
   solidAt: (tx, ty) => buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(Math.round(e.tx)) === wrap(tx) && wrap(Math.round(e.ty)) === wrap(ty)),
   /** Re-send the solid mask after the visitor builds or clears something. */
   refreshObstacles: () => { const b = window.MH_WASM && window.MH_WASM.worldBridge; if (b && b.sendSolid) b.sendSolid(); },
-  util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr, uiFont, displayFont },
+  util: { diamond, poly, roundRect, leafPath, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr, uiFont, displayFont },
   get TILE() { return { W: TILE_W, H: TILE_H }; },
 };
 

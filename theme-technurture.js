@@ -260,7 +260,7 @@
     paintSignpost(g, sx, sy, dir, dist, info) {
       g.strokeStyle = IRON; g.lineWidth = 2.4; g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx, sy - 26); g.stroke();
       const w = 40, h = 15, bx = dir > 0 ? sx - 6 : sx - w + 6, by = sy - 30;
-      U.roundRect(bx, by, w, h, 4, CREAM, "#b98a2a");
+      U.leafPath(g, bx, by, w, h, 0.55); g.fillStyle = CREAM; g.fill(); g.strokeStyle = "#b98a2a"; g.lineWidth = 2; g.stroke();   // the brand leaf
       g.fillStyle = TEAL; g.font = "700 11px " + U.displayFont(); g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText((dir > 0 ? "→ " : "← ") + dist, bx + w / 2, by + h / 2);
       glow(g, sx + (dir > 0 ? -6 : 6), sy - 22, 2.4, GOLD2, 8);

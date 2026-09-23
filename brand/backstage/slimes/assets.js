@@ -66,6 +66,17 @@
     if (stroke) { g.strokeStyle = stroke; g.lineWidth = 1; g.stroke(); }
   }
   function poly(g, pts, fill) { g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) g.lineTo(pts[i][0], pts[i][1]); g.closePath(); if (fill) { g.fillStyle = fill; g.fill(); } }
+  /** The brand's leaf corner, as engine.js util.leafPath traces it. */
+  function leafPath(g, x, y, w, h, k = 1) {
+    const Sx = Math.min(16 * k, w / 2), Sy = Math.min(7 * k, h / 2), sx = Math.min(4 * k, w / 2), sy = Math.min(2 * k, h / 2);
+    const r = x + w, b = y + h;
+    g.beginPath(); g.moveTo(x + Sx, y);
+    g.lineTo(r - sx, y); g.quadraticCurveTo(r, y, r, y + sy);
+    g.lineTo(r, b - Sy); g.quadraticCurveTo(r, b, r - Sx, b);
+    g.lineTo(x + sx, b); g.quadraticCurveTo(x, b, x, b - sy);
+    g.lineTo(x, y + Sy); g.quadraticCurveTo(x, y, x + Sx, y);
+    g.closePath();
+  }
   function roundRect(x, y, w, h, r, fill, stroke) {
     const c = target; if (!c) return;
     c.beginPath(); c.moveTo(x + r, y);
@@ -124,7 +135,7 @@
     hub: () => ({ x: P / 2, y: P / 2, period: P }),
     biome: biomeAt,
     onWater: (x, y) => biomeAt(Math.round(x), Math.round(y)) === "water",   // engine.js also excludes the plaza; the gallery has none
-    util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr, uiFont, displayFont },
+    util: { diamond, poly, roundRect, leafPath, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr, uiFont, displayFont },
     get TILE() { return { W: TILE_W, H: TILE_H }; },
     // the site's engine also exposes start/switchTheme/audio; a gallery needs none of it
     start() {}, switchTheme() {}, cycle() {},
