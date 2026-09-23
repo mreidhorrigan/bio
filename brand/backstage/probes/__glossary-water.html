@@ -1,0 +1,86 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const errs = [];
+document.getElementById("f").addEventListener("load", () => {
+  const w = document.getElementById("f").contentWindow;
+  w.addEventListener("error", (e) => errs.push(e.message));
+  setTimeout(() => {
+    const A = w.MH_GLOSSARY_WORLD;
+    try {
+      const P = A.pools();
+      say("pools found: " + P.length);
+      say("widths: " + P.slice(0, 8).map(q => Math.round(q.width)).join(", ") + (P.length > 8 ? " ..." : ""));
+      say("every pool's shores meet the line: " + (P.every(q => A.ground(q.lo) < q.level + 0.6 && A.ground(q.hi) < q.level + 0.6) ? "true" : "NO")
+        + "; water depth at the bottom " + P.map(q => (A.ground(q.x) - q.level).toFixed(1)).join(","));
+      // wade through one and watch the surface move
+      const q = P[0];
+      A.me.flying = false;
+      A.go(q.x - q.width / 2); for (let i = 0; i < 400; i++) A.tick(0.016);   // arrive and stop
+      let before = q.h.slice(0);
+      A.go(q.x); for (let i = 0; i < 40; i++) A.tick(0.016);                  // wade in
+      let moved = 0; for (let i = 0; i < q.n; i++) moved += Math.abs(q.h[i] - before[i]);
+      say("surface displacement after wading in: " + moved.toFixed(3));
+      // and it settles
+      A.go(A.me.x); for (let i = 0; i < 500; i++) A.tick(0.016);             // stand still
+      let amp = 0; for (let i = 0; i < q.n; i++) amp = Math.max(amp, Math.abs(q.h[i]));
+      say("amplitude after six seconds of stillness: " + amp.toFixed(3) + " (damping works if this is small)");
+      say("no runaway: " + q.h.every(v => Number.isFinite(v) && Math.abs(v) <= q.amp + 0.001));
+      // islands: a pool whose floor comes up through the surface shows its water
+      // in runs, and the drawing must agree with the model along a row just
+      // under the surface: water where the floor is lower, rock where it is not
+      const S = A.side, runs = P.map((qq) => S.wetRuns(qq));
+      const isl = P.findIndex((qq, k) => runs[k] > 1);
+      say("pools broken by islands: " + runs.filter((r) => r > 1).length + " of " + P.length + " (runs " + runs.join(",") + ")");
+      if (isl >= 0) {
+        const qi = P[isl];
+        A.go(qi.x); for (let i = 0; i < 500; i++) A.tick(0.016);              // stand in the middle, let it settle
+        const d = document.getElementById("f").contentDocument, cv = d.getElementById("crawl"), g = cv.getContext("2d");
+        const L = A.layout(), scale = cv.width / L.W;                        // canvas px per world unit
+        const row = Math.round((qi.level + 3) * scale);
+        // Wet columns are found by drawing the frame with and without the water
+        // and diffing, so moss, light and the rock's own colours cannot confuse
+        // the test. The frame is still, so the two renders differ only in water.
+        const withW = g.getImageData(0, row, cv.width, 1).data.slice(0);
+        const orig = S.drawWater; S.drawWater = () => {}; A.tick(0); 
+        const without = g.getImageData(0, row, cv.width, 1).data;
+        S.drawWater = orig; A.tick(0);
+        let mism = 0, checked = 0, wetPx = 0;
+        const where = [];
+        const posts = A.marks.filter((m) => m.side === "glossary").map((m) => m.x);
+        for (let sx = 0; sx < L.W; sx += 2) {
+          const wxx = L.cam + sx - L.W / 2;
+          if (wxx < qi.lo + 6 || wxx > qi.hi - 6) continue;                  // inside the pool, clear of its rims (a basin is not symmetric about its low point)
+          if (Math.abs(wxx - A.me.x) < 22) continue;                         // the slime stands in front of the water
+          if (posts.some((px) => Math.abs(wxx - px) < 5)) continue;           // so does a word's post
+          const shouldWet = A.ground(wxx) > qi.level + 3 + 1.5;
+          const shouldDry = A.ground(wxx) < qi.level + 3 - 1.5;
+          if (!shouldWet && !shouldDry) continue;                           // too close to the shoreline to judge
+          const k = Math.round(sx * scale) * 4;
+          const isWet = Math.abs(withW[k] - without[k]) + Math.abs(withW[k + 1] - without[k + 1]) + Math.abs(withW[k + 2] - without[k + 2]) > 12;
+          if (isWet) wetPx++;
+          checked++; if (isWet !== shouldWet) { mism++; if (where.length < 8) where.push(Math.round(wxx - qi.x) + (isWet ? "w" : "d")); }
+        }
+        {                                                                   // the runs the engine sees, for diagnosis
+          const wxq = (i) => qi.lo + i * qi.dx, runsX = [];
+          let inRun = false, a0 = 0;
+          for (let i = 0; i < qi.n; i++) {
+            const w = A.ground(wxq(i)) > qi.level + qi.h[i];
+            if (w && !inRun) a0 = wxq(i);
+            if (!w && inRun) runsX.push(Math.round(a0 - qi.x) + ".." + Math.round(wxq(i - 1) - qi.x));
+            inRun = w;
+          }
+          if (inRun) runsX.push(Math.round(a0 - qi.x) + ".." + Math.round(wxq(qi.n - 1) - qi.x));
+          say("  the engine's wet runs, offsets from the centre: " + runsX.join("  ") + "; samples span " + Math.round(qi.lo - qi.x) + ".." + Math.round(qi.lo + (qi.n - 1) * qi.dx - qi.x) + " of the pool's " + Math.round(qi.lo - qi.x) + ".." + Math.round(qi.hi - qi.x));
+          say("  floor below the level at the disagreeing columns: " + where.map((w) => { const off = parseInt(w, 10); return (A.ground(qi.x + off) - qi.level).toFixed(1); }).join(" "));
+        }
+        say("island pool " + isl + ": along a row 3 under the surface, drawing and model disagree at " + mism + " of " + checked + " columns (" + wetPx + " wet)" + (mism <= checked * 0.04 ? "" : " NO") + (where.length ? "; first offsets from the pool's centre: " + where.join(" ") : ""));
+      }
+    } catch (e) { say("EXCEPTION " + e.message + " @ " + (e.stack||"").split("\n")[1]); }
+    say("errors: " + (errs.length ? errs.join(" | ") : "none"));
+    document.title = "done";
+  }, 1400);
+});
+</script>

@@ -121,6 +121,51 @@ let introEl, cardEl, cardTitleEl, cardBodyEl, hudEl, compassEl, compassArrowEl,
     compassDistEl, progressEl, startBtn, pickerEl, navbarEl;
 
 /* ----------------------------------------------------------------------------
+   2a. REGISTRIES — the two places a fork adds a kind of thing to the world.
+
+   STRUCTURES are how a kiosk that is not a dwelling is drawn. content.js names
+   one per satellite (structure: "wellhead"); the render pass looks the name up
+   here and falls back to the skin's paintKiosk. Add one with
+   MH_ISO.registerStructure(name, painter(g, sx, sy, ex, active, env)).
+
+   BUILD_TOOLS are what the ✎ Build bar offers: one button, one cursor glyph,
+   one hit-box, and the hooks a type needs when it is placed, tapped or removed.
+   The painter for a type lives in buildings.js (MH_BUILD.register). Add one
+   with MH_ISO.registerBuildTool({ id, label, glyph, hitTop, place, tap, remove }).
+   -------------------------------------------------------------------------- */
+
+/** @type {Map<string, (g:CanvasRenderingContext2D, sx:number, sy:number, ex:any, active:boolean, env:any) => void>} */
+const STRUCTURES = new Map();
+function registerStructure(name, painter) { STRUCTURES.set(name, painter); }
+
+/** @typedef {{id:string, label:string, glyph:string, hitTop?:number, place?:(b:any)=>void, placed?:(b:any)=>void, tap?:(b:any)=>boolean, remove?:(b:any)=>void}} BuildTool */
+/** @type {BuildTool[]} */
+const BUILD_TOOLS = [
+  { id: "house", label: "Plant a house.", hitTop: 44,
+    glyph: '<path d="M8 13l7-6 7 6v9H8z" fill="#ffd37a"/><path d="M6 14l9-8 9 8" fill="none" stroke="#17202a" stroke-width="2"/>' },
+  { id: "tree", label: "Build a tree.", hitTop: 44,
+    glyph: '<path d="M15 11v12" stroke="#17202a" stroke-width="3"/><circle cx="15" cy="9" r="6" fill="#73d98b" stroke="#17202a" stroke-width="1.5"/>' },
+  { id: "signal", label: "Raise a signal tower.", hitTop: 96,
+    glyph: '<path d="M15 7v17M10 24h10M11 13h8M12 18h6" stroke="#17202a" stroke-width="2"/><circle cx="15" cy="6" r="3" fill="#7afcff" stroke="#17202a"/>',
+    // a tower is a Musebot: it needs an id, opens its selector when placed or tapped, and tells the bundle when it goes
+    place(b) { if (window.MH_MUSEBOTS) b.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS); },
+    placed(b) { if (window.MH_MUSEBOTS) window.MH_MUSEBOTS.openSelector(b, BUILDINGS); },
+    tap(b) { if (!window.MH_MUSEBOTS) return false; window.MH_MUSEBOTS.openSelector(b, BUILDINGS); return true; },
+    remove(b) { if (window.MH_MUSEBOTS) window.MH_MUSEBOTS.remove(b); } },
+];
+const toolOf = (id) => BUILD_TOOLS.find((t) => t.id === id) || null;
+function registerBuildTool(def) {
+  if (!def || !def.id || toolOf(def.id)) return;
+  BUILD_TOOLS.push(def);
+  if (buildbarEl) {                                  // the bar exists: grow it in place, before Remove
+    const b = document.createElement("button");
+    b.className = "mh-tool"; b.type = "button"; b.dataset.tool = def.id; b.textContent = def.label;
+    const remove = buildbarEl.querySelector('[data-tool="delete"]');
+    if (remove) buildbarEl.insertBefore(b, remove); else buildbarEl.appendChild(b);
+  }
+}
+
+/* ----------------------------------------------------------------------------
    2b. WORDS — the engine is written in English and stays that way. i18n.js, when
    the page loads it, hands back the visitor's language for a given key; with no
    i18n.js (a fork that took the engine and not the switch) every call returns the
@@ -176,12 +221,10 @@ function buildDOM() {
     <a id="mh-back" href="index.html" title="Back to the design gallery">‹ designs</a>
     <nav id="mh-navbar" class="mh-navbar mh-faded" aria-label="Jump to a section"></nav>
     <div id="mh-switcher" class="mh-switcher mh-faded" role="group" aria-label="Choose a skin"></div>
-    <div id="mh-mark" title="matthorrigan.com — same place, different light"><span>MH</span></div>
+    <div id="mh-mark" title="matthorrigan.com: same place, different light"><span>MH</span></div>
     <div id="mh-buildbar" class="mh-buildbar mh-faded" role="toolbar" aria-label="Build tools">
       <button class="mh-tool mh-cur" type="button" data-tool="move"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M12 4V20M4 12H20M12 4l-2.5 2.5M12 4l2.5 2.5M12 20l-2.5-2.5M12 20l2.5-2.5M4 12l2.5-2.5M4 12l2.5 2.5M20 12l-2.5-2.5M20 12l-2.5 2.5"/></svg><span class="mh-tool-label">Move</span></button>
-      <button class="mh-tool" type="button" data-tool="house">Plant a house.</button>
-      <button class="mh-tool" type="button" data-tool="tree">Build a tree.</button>
-      <button class="mh-tool" type="button" data-tool="signal">Raise a signal tower.</button>
+      ${BUILD_TOOLS.map((t) => `<button class="mh-tool" type="button" data-tool="${t.id}">${t.label}</button>`).join("\n      ")}
       <button class="mh-tool" type="button" data-tool="delete">✕ Remove</button>
       <button class="mh-tool mh-tool-done" type="button" data-tool="done">Done</button>
     </div>
@@ -224,7 +267,7 @@ function buildDOM() {
 
     <div id="mh-hud" class="mh-hidden">
       <div class="mh-hud-right">
-        <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu — jump to a building">☰ Menu</button>
+        <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu: jump to a building">☰ Menu</button>
         <button id="mh-buildtoggle" class="mh-hudbtn" type="button" title="Rearrange the buildings (B)">✎ Build</button>
         <button id="mh-compass" class="mh-compass mh-hidden" title="Walk back to the plaza (G)">
           <span class="mh-needle" id="mh-needle">›</span>
@@ -474,9 +517,15 @@ function warpAndOpen(i) {
   const ex = EXHIBITS[i]; if (!ex) return;
   const dx = nearImg(ex.tx, player.x) - player.x, dy = nearImg(ex.ty, player.y) - player.y;
   const d = Math.hypot(dx, dy) || 1, stop = Math.max(0, d - (T.interact || 1.2));   // pull up just in front of the building, not on top of it
-  auto.active = true; auto.goal = -1; auto.warp = true;
-  auto.tx = player.x + (dx / d) * stop; auto.ty = player.y + (dy / d) * stop;
-  auto.lastDist = Infinity; auto.stuck = 0;
+  // Move BEFORE the card opens, not after. This used to queue an animated warp
+  // and open the card in the same breath, but update() only runs while walking,
+  // so the warp sat pending behind the card and fired the moment it closed: the
+  // camera lurched across the world at warp speed, which reads as the screen
+  // shaking. The slide was never visible from here anyway.
+  player.x = wrap(player.x + (dx / d) * stop);
+  player.y = wrap(player.y + (dy / d) * stop);
+  player.fx = dx / d; player.fy = dy / d;                    // and face what you came to read
+  auto.active = false; auto.warp = false; auto.goal = -1;
   openCard(i);
 }
 
@@ -616,13 +665,14 @@ function buildHub() {
       ty: HY + T.ringRadius * Math.sin(ang),
       titleEn: it.title, title: kioskTitle(it.title),
       accent: T.accents[i % T.accents.length], slot: i, visited: false,
+      underConstruction: !!it.underConstruction,
     };
   });
   player.x = HX; player.y = HY + 1.8; player.fx = 0; player.fy = 1;   // spawn on the plaza, clear of the central beacon
   restorePlayerFromURL();
   activeIndex = prevActive = currentTarget = -1;
   // build-mode is a per-session sandbox: placed buildings do NOT persist across a refresh,
-  // and the kiosks always return to their even ring. Clear any saved layout on load.
+  // and the kiosks always return to their even ring. Older builds saved a layout; drop it.
   BUILDINGS.length = 0;
   try { if (window.localStorage) window.localStorage.removeItem("mh-layout"); } catch (e) { /* fine */ }
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.restore) window.MH_MUSEBOTS.restore(BUILDINGS);
@@ -650,6 +700,7 @@ function rebuildSpurs() {
         titleEn: sats[j].title, title: kioskTitle(sats[j].title),   // a work's own name: the dictionary leaves it alone
         accent: gate.accent, slot: 90 + s * 13 + j * 7,   // slot is only a visual seed for houses
         url: sats[j].url, satellite: true, visited: false,
+        structure: sats[j].structure || null,   // "wellhead" for a page that is underground
       });
     }
     const rEnd = T.ringRadius + step * sats.length + 0.7;        // pave the spur from the hub edge out to the last house
@@ -732,7 +783,7 @@ function wireInput() {
   window.addEventListener("blur", () => { keys.up = keys.down = keys.left = keys.right = false; });
   canvas.addEventListener("pointerdown", onPointer);
   canvas.tabIndex = -1;
-  startBtn.addEventListener("click", startGame);
+  startBtn.addEventListener("click", () => startGame(true));
   byId("mh-cardClose").addEventListener("click", closeCard);
   byId("mh-cardBack").addEventListener("click", () => { if (openIndex >= 0) renderCard(openIndex); });
   cardEl.addEventListener("click", (e) => { if (e.target === cardEl) closeCard(); });
@@ -757,10 +808,10 @@ function wireInput() {
 /** @param {KeyboardEvent} e */
 function onKeyDown(e) {
   const k = e.key.toLowerCase();
-  audio.resume();
+  audio.ensure(); audio.resume();                   // a key is a gesture: sound may start now
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
   if (mode === "intro") {
-    if (!startBtn.disabled && ["enter", " ", "w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) { e.preventDefault(); startGame(); }
+    if (!startBtn.disabled && ["enter", " ", "w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) { e.preventDefault(); startGame(true); }
     return;
   }
   if (mode === "card") {
@@ -819,11 +870,8 @@ function onPointer(e) {
   tapDown = null;
   const decor = decorAtScreen(sx, sy);
   if (decor >= 0) {
-    const building = BUILDINGS[decor];
-    if (building && building.type === "signal" && window.MH_MUSEBOTS) {
-      window.MH_MUSEBOTS.openSelector(building, BUILDINGS);
-      return;
-    }
+    const building = BUILDINGS[decor], tool = building && toolOf(building.type);
+    if (tool && tool.tap && tool.tap(building)) return;
     toast(tr("world.pressBuild", "Press B (✎ Build) to move or remove buildings")); return;
   }
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
@@ -854,8 +902,11 @@ function recallHome() {
   toast(tr("world.heading", "Heading back to the plaza"));
 }
 
-function startGame() {
-  audio.ensure(); audio.resume(); sfx.open(2);
+/** Land in the world. Sound is only started from a gesture (the Enter button or
+ *  a key): browsers refuse an AudioContext made before one and say so in the
+ *  console on every load, and the site lands straight in the world without any. */
+function startGame(gesture) {
+  if (gesture) { audio.ensure(); audio.resume(); sfx.open(2); }
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
   introEl.classList.add("mh-hidden"); hudEl.classList.remove("mh-hidden");
   mode = "walking"; last = performance.now();
@@ -871,7 +922,7 @@ function toggleBuild() {
   if (buildbarEl) buildbarEl.classList.toggle("mh-faded", !buildMode);
   if (buildToggleEl) buildToggleEl.classList.toggle("mh-on", buildMode);
   refreshBuildTools();
-  toast(buildMode ? tr("world.buildOn", "Build mode — drag to move; pick a tool to add or remove")
+  toast(buildMode ? tr("world.buildOn", "Build mode: drag to move, or pick a tool to add or remove")
                   : tr("world.buildOff", "Build mode off"));
 }
 function onBuildTool(e) {
@@ -899,11 +950,7 @@ function eraserCursor() {
 /** Compact structure silhouette: clicking will place this tool. */
 function placementCursor(tool) {
   if (_buildCursors[tool]) return _buildCursors[tool];
-  const glyph = tool === "house"
-    ? '<path d="M8 13l7-6 7 6v9H8z" fill="#ffd37a"/><path d="M6 14l9-8 9 8" fill="none" stroke="#17202a" stroke-width="2"/>'
-    : tool === "tree"
-      ? '<path d="M15 11v12" stroke="#17202a" stroke-width="3"/><circle cx="15" cy="9" r="6" fill="#73d98b" stroke="#17202a" stroke-width="1.5"/>'
-      : '<path d="M15 7v17M10 24h10M11 13h8M12 18h6" stroke="#17202a" stroke-width="2"/><circle cx="15" cy="6" r="3" fill="#7afcff" stroke="#17202a"/>';
+  const def = toolOf(tool), glyph = (def && def.glyph) || '<circle cx="15" cy="15" r="6" fill="#ffd37a" stroke="#17202a" stroke-width="2"/>';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">${glyph}</svg>`;
   return _buildCursors[tool] = typeof encodeURIComponent === "function"
     ? `url('data:image/svg+xml,${encodeURIComponent(svg)}') 15 28, pointer`
@@ -917,7 +964,7 @@ function updateBuildCursor() {
   if (buildMode) {
     if (buildTool === "move") c = drag ? "grabbing" : "grab";
     else if (buildTool === "delete") c = eraserCursor();
-    else if (buildTool === "house" || buildTool === "tree" || buildTool === "signal") c = placementCursor(buildTool);
+    else if (toolOf(buildTool)) c = placementCursor(buildTool);
   }
   canvas.style.cursor = c;
 }
@@ -925,18 +972,19 @@ function buildPointerDown(sx, sy) {
   if (buildTool === "move") {
     const k = kioskAtScreen(sx, sy); if (k >= 0) { drag = { kind: "kiosk", i: k }; updateBuildCursor(); return; }
     const d = decorAtScreen(sx, sy); if (d >= 0) { drag = { kind: "decor", i: d }; updateBuildCursor(); }
-  } else if (buildTool === "house" || buildTool === "tree" || buildTool === "signal") {
+  } else if (toolOf(buildTool)) {
+    const tool = toolOf(buildTool);
     const w = screenToWorld(sx, sy), tx = wrap(Math.round(w.x)), ty = wrap(Math.round(w.y));
     if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast(tr("world.occupied", "Something is already built here")); return; }   // one structure per tile
     const building = { tx, ty, type: buildTool };
-    if (buildTool === "signal" && window.MH_MUSEBOTS) building.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS);
-    BUILDINGS.push(building); saveLayout(); sfx.pick();
-    if (buildTool === "signal" && window.MH_MUSEBOTS) window.MH_MUSEBOTS.openSelector(building, BUILDINGS);
+    if (tool.place) tool.place(building);
+    BUILDINGS.push(building); saveLayout(); sfx.pick(); window.MH_ISO.refreshObstacles();
+    if (tool.placed) tool.placed(building);
   } else if (buildTool === "delete") {
     const d = decorAtScreen(sx, sy); if (d >= 0) {
-      const building = BUILDINGS[d];
-      if (building && window.MH_MUSEBOTS) window.MH_MUSEBOTS.remove(building);
-      BUILDINGS.splice(d, 1); saveLayout(); sfx.close();
+      const building = BUILDINGS[d], tool = building && toolOf(building.type);
+      if (tool && tool.remove) tool.remove(building);
+      BUILDINGS.splice(d, 1); saveLayout(); sfx.close(); window.MH_ISO.refreshObstacles();
     }
   }
 }
@@ -957,17 +1005,15 @@ function decorAtScreen(sx, sy) {
   let pick = -1, best = -Infinity;
   for (let i = 0; i < BUILDINGS.length; i++) {
     const b = BUILDINGS[i], c = toScreen(nearImg(b.tx, player.x), nearImg(b.ty, player.y));
-    const top = b.type === "signal" ? 96 : 44;
+    const top = (toolOf(b.type) || {}).hitTop || 44;
     if (sx >= c.x - 28 && sx <= c.x + 28 && sy >= c.y - top && sy <= c.y + 12) { const d = b.tx + b.ty; if (d > best) { best = d; pick = i; } }
   }
   return pick;
 }
+/** The layout changed. It is a per-session sandbox (see buildHub), so nothing is
+ *  written to storage; only the tower bundle, which encodes towers in the URL, is told. */
 function saveLayout() {
-  try { if (window.localStorage) window.localStorage.setItem("mh-layout", JSON.stringify({ kiosks: EXHIBITS.map((e) => ({ tx: e.tx, ty: e.ty })), buildings: BUILDINGS })); } catch (e) { /* fine */ }
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.reflect) window.MH_MUSEBOTS.reflect(BUILDINGS);
-}
-function loadLayout() {
-  try { if (!window.localStorage) return null; const s = window.localStorage.getItem("mh-layout"); return s ? JSON.parse(s) : null; } catch (e) { return null; }
 }
 
 /* ----------------------------------------------------------------------------
@@ -1009,6 +1055,13 @@ function update(dt) {
       const exX = nearImg(ex.tx, nx), exY = nearImg(ex.ty, ny);
       let ox = nx - exX, oy = ny - exY; const d = Math.hypot(ox, oy);
       if (d < T.obstacle) { if (d < 1e-4) { ox = 1; oy = 0; } nx = exX + (ox / (d || 1)) * T.obstacle; ny = exY + (oy / (d || 1)) * T.obstacle; }
+    }
+    if (!auto.warp && ecoActive() && window.MH_ECO.bodies) {   // creatures are solid: you cannot walk through a zoog
+      window.MH_ECO.bodies((wx, wy, rad) => {
+        const bx = nearImg(wx, nx), by = nearImg(wy, ny);
+        let ox = nx - bx, oy = ny - by; const d = Math.hypot(ox, oy);
+        if (d < rad) { if (d < 1e-4) { ox = 1; oy = 0; } nx = bx + (ox / (d || 1)) * rad; ny = by + (oy / (d || 1)) * rad; }
+      });
     }
     if (T.monument !== false && !auto.warp) {             // the central beacon is solid (warp ignores it)
       const mx = nearImg(HX, nx), my = nearImg(HY, ny);
@@ -1055,7 +1108,7 @@ function update(dt) {
    -------------------------------------------------------------------------- */
 
 function loop(ts) {
-  let dt = (ts - last) / 1000; if (dt > 0.05) dt = 0.05;
+  let dt = (ts - last) / 1000; if (!(dt > 0)) dt = 0; else if (dt > 0.05) dt = 0.05;
   const perf = window.MH_PERF;
   if (perf) perf.mark("frame", ts - last);
   last = ts; tnow = ts / 1000;
@@ -1188,7 +1241,7 @@ function render() {
     const ex = EXHIBITS[i], kx = nearImg(ex.tx, player.x), ky = nearImg(ex.ty, player.y), c = toScreen(kx, ky);
     const active = i === activeIndex;
     const biome = T.biomes ? biomeAt(Math.round(ex.tx), Math.round(ex.ty)) : null;
-    actors.push({ depth: kx + ky, draw: () => { if (T.kioskGlow !== false) drawKioskGlow(c.x, c.y, ex, active); (T.paintKiosk || defPaintKiosk)(ctx, c.x, c.y, ex, active, { t: tnow, index: i, biome }); } });
+    actors.push({ depth: kx + ky, draw: () => { if (T.kioskGlow !== false) drawKioskGlow(c.x, c.y, ex, active); const st = ex.structure && STRUCTURES.get(ex.structure); if (st) st(ctx, c.x, c.y, ex, active, { t: tnow, index: i, biome }); else (T.paintKiosk || defPaintKiosk)(ctx, c.x, c.y, ex, active, { t: tnow, index: i, biome }); if (ex.underConstruction) drawUnderConstruction(ctx, c.x, c.y, ex); } });
   }
   // player
   {
@@ -1212,12 +1265,15 @@ function render() {
     for (const ex of EXHIBITS) {                        // keep each kiosk's BAUBLE legible even when the slime isn't looking at it
       const c = toScreen(nearImg(ex.tx, player.x), nearImg(ex.ty, player.y));
       if (c.x < -90 || c.x > W + 90 || c.y < -160 || c.y > H + 90) continue;
+      const tr2 = ex.tagRect;                           // the under-construction tag is a lit sign too
+      if (tr2) {
+        const sp = revealSprite(tr2.w + 6, tr2.h + 6, "tag");
+        dctx.drawImage(sp.cv, tr2.x - 3 - sp.pad, tr2.y - 3 - sp.pad, sp.w, sp.h);
+      }
       const sr = ex.signRect;
       if (sr) {                                         // reveal a patch the SHAPE of the sign (a soft rounded-rect), not a round halo
-        dctx.save(); dctx.shadowColor = "rgba(255,255,255,0.85)"; dctx.shadowBlur = 26; dctx.fillStyle = "rgba(255,255,255,0.9)";
-        const x = sr.x - 4, y = sr.y - 4, w = sr.w + 8, h = sr.h + 8, r = 8;
-        dctx.beginPath(); dctx.moveTo(x + r, y); dctx.arcTo(x + w, y, x + w, y + h, r); dctx.arcTo(x + w, y + h, x, y + h, r); dctx.arcTo(x, y + h, x, y, r); dctx.arcTo(x, y, x + w, y, r); dctx.closePath(); dctx.fill();
-        dctx.restore();
+        const sp = revealSprite(sr.w + 8, sr.h + 8, "sign");
+        dctx.drawImage(sp.cv, sr.x - 4 - sp.pad, sr.y - 4 - sp.pad, sp.w, sp.h);
       } else {                                          // fallback (no stashed sign rect): a soft round pool above the kiosk
         const by = c.y - 100, sp = dctx.createRadialGradient(c.x, by, 2, c.x, by, 55);
         sp.addColorStop(0, "rgba(255,255,255,0.92)"); sp.addColorStop(0.6, "rgba(255,255,255,0.5)"); sp.addColorStop(1, "rgba(255,255,255,0)");
@@ -1330,6 +1386,34 @@ function fireflyGlow() {
   grad.addColorStop(0, "rgba(255,240,176,0.95)"); grad.addColorStop(0.45, "rgba(255,226,140,0.4)"); grad.addColorStop(1, "rgba(255,226,140,0)");
   g.fillStyle = grad; g.fillRect(0, 0, s, s);
   fireflyGlowCv = cv; return cv;
+}
+const _reveals = new Map();
+/** A lit patch the shape of a sign, its blur baked ONCE per size. The darkness
+ *  pass used to blur these live, under the "lighter" composite the dark map is
+ *  built with, and a canvas without a GPU pays that blur over the whole frame
+ *  for every sign, every frame: seconds a frame in headless Chrome, and a real
+ *  cost on any machine drawing in software. A sprite is one drawImage. */
+function revealSprite(w, h, kind) {
+  const key = kind + ":" + Math.round(w) + "x" + Math.round(h) + "@" + dpr;
+  let sp = _reveals.get(key);
+  if (sp) return sp;
+  const pad = kind === "tag" ? 26 : 32, W2 = Math.ceil(w + pad * 2), H2 = Math.ceil(h + pad * 2);
+  const cv = document.createElement("canvas");
+  cv.width = Math.ceil(W2 * dpr); cv.height = Math.ceil(H2 * dpr);
+  const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (kind === "tag") {
+    c.shadowColor = "rgba(255,236,170,0.9)"; c.shadowBlur = 22; c.fillStyle = "rgba(255,240,190,0.92)";
+    c.fillRect(pad, pad, w, h);
+  } else {
+    c.shadowColor = "rgba(255,255,255,0.85)"; c.shadowBlur = 26; c.fillStyle = "rgba(255,255,255,0.9)";
+    const x = pad, y = pad, r = 8;
+    c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); c.fill();
+  }
+  sp = { cv, pad, w: W2, h: H2 };
+  if (_reveals.size > 80) _reveals.clear();              // sizes drift with the words; never let this grow
+  _reveals.set(key, sp);
+  return sp;
 }
 let darkCv = null, dctx = null;
 function ensureDarkCv() {
@@ -1561,6 +1645,7 @@ function renderToc(page) {
 
 function closeCard() {
   sfx.close(); cardEl.classList.add("mh-hidden"); mode = "walking"; last = performance.now();
+  auto.active = false; auto.warp = false;              // never let a queued move fire on close
   if (cardBodyEl) cardBodyEl.innerHTML = "";        // unload any embedded page/iframe
   setCardWide(false); setCardClean(false); showCardBack(false);
   try { canvas.focus(); } catch (_) { /* ignore */ }
@@ -1751,7 +1836,26 @@ function label(g, text, x, y, size, color) {
   g.lineWidth = 4; g.strokeStyle = "rgba(0,0,0,0.6)"; g.strokeText(text, x, y); g.fillStyle = color; g.fillText(text, x, y);
 }
 function toast(msg) { toastText = msg; toastUntil = tnow + 1.6; }
-function uiFont() { return getComputedStyle(document.documentElement).getPropertyValue("--mh-ui").trim() || "system-ui, sans-serif"; }
+/* A canvas font string must be a REAL font shorthand: ctx.font = "13px var(--x)"
+ * is invalid and is silently ignored, leaving whatever font was set last. So the
+ * skins' display and UI faces are resolved here and handed to painters as plain
+ * families. Cached per skin, since a painter asks every frame. */
+let _fontCache = { key: "", ui: "", display: "" };
+function _fonts() {
+  const key = (T && T.id) || "";
+  if (_fontCache.key !== key) {
+    const cs = getComputedStyle(document.documentElement);
+    _fontCache = {
+      key,
+      ui: cs.getPropertyValue("--mh-ui").trim() || "system-ui, sans-serif",
+      display: cs.getPropertyValue("--mh-display").trim() || "",
+    };
+  }
+  return _fontCache;
+}
+function uiFont() { return _fonts().ui; }
+/** The skin's display face, for headings and kiosk numbers. Falls back to the UI face. */
+function displayFont() { return _fonts().display || uiFont(); }
 
 /** lighten(amt>0)/darken(amt<0) a #rrggbb */
 function shade(hex, amt) {
@@ -1776,6 +1880,110 @@ function mixHex(h1, h2, t) {
   const bl = Math.round((a & 255) * (1 - t) + (b & 255) * t);
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + bl).toString(16).slice(1);
 }
+/** A kiosk that is not open yet says so on the map, not only in its card. Drawn
+ *  over the skin's own kiosk so every world labels it identically: a hazard band
+ *  and the words, at the foot of the sign. */
+/** A WELLHEAD, for a kiosk whose page is underground: a gel collar round a black
+ *  shaft, a domed cap on two bowed posts, a windlass, and a rope going down. It
+ *  replaces the kiosk body rather than sitting on it, and every shape is rounded,
+ *  because nothing in the slimeverse has a corner. Colours come from the
+ *  exhibit's own accent and the skin's ink, so it suits all three skins. */
+function drawWellhead(g, sx, sy, ex, active, env) {
+  const ink = T.avatarInk || "#16261c", gel = ex.accent || "#4FA373";
+  const t = (env && env.t) || 0, sway = reduce ? 0 : Math.sin(t * 0.9) * 2.2;
+  shadow(g, sx, sy, 30);
+  // the shaft: a hole, dark at its centre
+  const hole = g.createRadialGradient(sx, sy - 6, 2, sx, sy - 6, 30);
+  hole.addColorStop(0, "#050806"); hole.addColorStop(0.62, "#0b120d"); hole.addColorStop(1, shade(gel, -0.62));
+  g.fillStyle = hole;
+  g.beginPath(); g.ellipse(sx, sy - 6, 30, 13, 0, 0, Math.PI * 2); g.fill();
+  // the collar: a gel ring of rounded lobes, lit from above
+  for (let i = 0; i < 11; i++) {
+    const a = (i / 11) * Math.PI * 2, lx = sx + Math.cos(a) * 33, ly = sy - 6 + Math.sin(a) * 14.5;
+    const lg = g.createLinearGradient(0, ly - 7, 0, ly + 6);
+    lg.addColorStop(0, shade(gel, 0.24)); lg.addColorStop(1, shade(gel, -0.26));
+    g.fillStyle = lg;
+    g.beginPath(); g.ellipse(lx, ly, 8, 6.2, a, 0, Math.PI * 2); g.fill();
+    g.lineWidth = 1.6; g.strokeStyle = ink; g.stroke();
+  }
+  g.fillStyle = "rgba(255,255,255,0.3)";                          // a gel sheen on the near lobes
+  g.beginPath(); g.ellipse(sx - 12, sy + 4, 7, 2.6, -0.3, 0, Math.PI * 2); g.fill();
+  // two bowed posts and a domed cap
+  g.lineCap = "round"; g.lineJoin = "round";
+  for (const side of [-1, 1]) {
+    g.strokeStyle = ink; g.lineWidth = 6.5;
+    g.beginPath(); g.moveTo(sx + side * 24, sy - 12);
+    g.quadraticCurveTo(sx + side * 27, sy - 40, sx + side * 20, sy - 56); g.stroke();
+    g.strokeStyle = shade(gel, -0.1); g.lineWidth = 3.6;
+    g.beginPath(); g.moveTo(sx + side * 24, sy - 13);
+    g.quadraticCurveTo(sx + side * 27, sy - 40, sx + side * 20, sy - 55); g.stroke();
+  }
+  const cap = g.createLinearGradient(0, sy - 82, 0, sy - 54);
+  cap.addColorStop(0, shade(gel, 0.3)); cap.addColorStop(1, shade(gel, -0.22));
+  g.fillStyle = cap;
+  g.beginPath();
+  g.moveTo(sx - 30, sy - 54);
+  g.quadraticCurveTo(sx, sy - 84, sx + 30, sy - 54);
+  g.quadraticCurveTo(sx, sy - 46, sx - 30, sy - 54);
+  g.closePath(); g.fill();
+  g.lineWidth = 2; g.strokeStyle = ink; g.stroke();
+  // the windlass, and the rope down the shaft
+  g.strokeStyle = ink; g.lineWidth = 5;
+  g.beginPath(); g.moveTo(sx - 21, sy - 47); g.lineTo(sx + 21, sy - 47); g.stroke();
+  g.strokeStyle = shade(gel, 0.14); g.lineWidth = 2.6;
+  g.beginPath(); g.moveTo(sx - 20, sy - 47); g.lineTo(sx + 20, sy - 47); g.stroke();
+  g.strokeStyle = ink; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(sx + 21, sy - 47); g.quadraticCurveTo(sx + 29, sy - 47 + sway, sx + 27, sy - 38 + sway); g.stroke();
+  g.strokeStyle = "#d8cfa8"; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(sx, sy - 45);
+  g.quadraticCurveTo(sx + sway * 0.5, sy - 26, sx + sway * 0.3, sy - 8); g.stroke();
+  // a little growth round the rim, so it belongs to the ground it sits in
+  g.fillStyle = shade(gel, -0.34);
+  for (let i = -2; i <= 2; i++) {
+    g.beginPath(); g.ellipse(sx + i * 17, sy + 9, 7, 3, i * 0.2, 0, Math.PI * 2); g.fill();
+  }
+  // The sign is the skin's own, the same one every other house wears: each theme
+  // exposes paintKioskSign, so the wellhead is labelled in that skin's format
+  // rather than in one invented here. topY is the top of the cap: the curve's
+  // apex at 69 above the base, not its control point at 84, or the skin's
+  // connector hangs in the air short of the roof.
+  const CAP_TOP = sy - 69;
+  if (T.paintKioskSign) T.paintKioskSign(g, sx, CAP_TOP, ex, active, env || { t: 0 });
+  else label(g, ex.title, sx, CAP_TOP - 8, 14, "#eef2f7");
+}
+
+registerStructure("wellhead", drawWellhead);
+
+function drawUnderConstruction(g, sx, sy, ex) {
+  const label = tr("world.underConstruction", "UNDER CONSTRUCTION");
+  g.save();
+  g.font = "800 10px " + uiFont();
+  const w = Math.max(96, g.measureText(label).width + 16), h = 15, x = sx - w / 2, y = sy - 4;
+  g.fillStyle = "#1a1a1a"; g.fillRect(x - 2, y - 2, w + 4, h + 4);          // ink plate, so it reads on any ground
+  g.save();                                                                 // hazard stripes, kept inside the plate
+  g.beginPath(); g.rect(x, y, w, h); g.clip();
+  g.fillStyle = "#f0b62a"; g.fillRect(x, y, w, h);
+  g.fillStyle = "#1a1a1a";
+  for (let i = 0; i < Math.ceil(w / 10) + 1; i++) {
+    g.beginPath();
+    g.moveTo(x + i * 10, y + h); g.lineTo(x + i * 10 + 5, y);
+    g.lineTo(x + i * 10 + 10, y); g.lineTo(x + i * 10 + 5, y + h);
+    g.closePath(); g.fill();
+  }
+  g.restore();
+  g.fillStyle = "#1a1a1a"; g.fillRect(x, y + h * 0.28, w, h * 0.44);
+  g.fillStyle = "#ffe08a"; g.textAlign = "center"; g.textBaseline = "middle";
+  g.fillText(label, sx, y + h / 2 + 0.5);
+  g.restore();
+  // After dark the engine multiplies the whole scene toward black, so a sign has
+  // to be listed as lit or it disappears. Stash the rect the same way the night
+  // skin's marquee does; the gloom pass reveals both.
+  if (ex) {
+    const r = ex.tagRect || (ex.tagRect = { x: 0, y: 0, w: 0, h: 0 });
+    r.x = x - 2; r.y = y - 2; r.w = w + 4; r.h = h + 4;
+  }
+}
+
 /** A sign's fill. Normally the exhibit's accent, shaded light to dark. Where a
  *  junction joins two roads, a gradient running from one road's accent to the
  *  other's, so the sign says which two paths meet there. */
@@ -1883,6 +2091,7 @@ function switchTheme(id) {
   T.worldPeriod = liveP; T.hubRadius = liveHub; T.ringRadius = liveRing;
   TILE_W = T.tileW; TILE_H = T.tileH;                                 // (all skins share 96×48)
   const sk = document.getElementById("mh-theme"); if (sk) sk.textContent = T.css || "";
+  _fontCache.key = "";                               // the new skin brings its own faces
   document.documentElement.style.background = T.bgCss; document.body.style.background = T.bgCss;
   EXHIBITS.forEach((ex, i) => { ex.accent = T.accents[i % T.accents.length]; });
   rebuildSpurs();                                  // grow or clear the Music/Games house-roads for the new world
@@ -1993,7 +2202,11 @@ function applyEcology() {
   E.enabled = !!(cfg && cfg.enabled);
   if (cfg && cfg.cfg) Object.assign(E.cfg, cfg.cfg);
   if (cfg && cfg.showFlora != null) E.showFlora = cfg.showFlora;
-  if (E.reset) E.reset();
+  // Reconfigure, do not reset: a change of skin should find the same creatures
+  // standing where they stood. Only the skin's own atmosphere (fireflies, motes)
+  // is brought to its new count.
+  if (E.reconfigure) E.reconfigure();
+  else if (E.reset) E.reset();
 }
 
 /* ----------------------------------------------------------------------------
@@ -2018,6 +2231,8 @@ const ECO_API = {
 // expose helpers a theme may want to reuse (iso math, colour, primitives)
 window.MH_ISO = {
   register, start, switchTheme: requestSwitch, cycle: cycleSkin, timeDefaultSkin, resolveSkin,
+  registerStructure, registerBuildTool,           // see 2a. REGISTRIES
+  buildTools: () => BUILD_TOOLS.map((t) => t.id),
   setMusebotAudioActive,
   sharedAudioContext,
   siteAudioDiagnostics: () => ({
@@ -2029,16 +2244,47 @@ window.MH_ISO = {
   themes: () => [...REGISTRY.values()].map((t) => ({ id: t.id, name: t.name })),
   /** a read-only snapshot of what the world has placed: kiosks, their road-houses,
    *  and any junction house two roads share (see CONTENT.junctions) */
+  /** a read-only snapshot of what visitors have built (signal towers and the rest):
+   *  the 3D view stands the same things at the same tiles */
+  buildings: () => BUILDINGS.map((b) => ({ type: b.type, uid: b.uid || null, tx: b.tx, ty: b.ty, botToken: b.botToken || "" })),
+  /** the skin in use, by id */
+  skin: () => T.id,
+  /** Put the slime at a tile, facing (fx, fy): another view of the same world
+   *  hands the walk back here, at the spot it reached. */
+  placePlayer(x, y, fx, fy) {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    player.x = wrap(x); player.y = wrap(y);
+    const m = Math.hypot(fx || 0, fy || 0);
+    if (m > 1e-6) { player.fx = fx / m; player.fy = fy / m; }
+    // (the address catches up on the engine's own schedule: a view syncing every frame must not rewrite it every frame)
+  },
   exhibits: () => EXHIBITS.map((e) => ({
     title: e.titleEn, tx: +e.tx.toFixed(2), ty: +e.ty.toFixed(2),
-    satellite: !!e.satellite, junction: !!e.junction, url: e.url || null,
+    satellite: !!e.satellite, junction: !!e.junction, url: e.url || null, structure: e.structure || null,
+    underConstruction: !!e.underConstruction,
   })),
   pavedTiles: () => SPUR_TILES.size,
+  player: () => ({ x: player.x, y: player.y, fx: player.fx, fy: player.fy }),   // read-only: where the slime is standing, and which way it faces
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period
   biome: biomeAt,                              // coarse biome for a canonical tile
-  onWater,                                     // the same wading test the player uses (ecology.js gives its zoogs the same)
-  util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
+  onWater,                                     // the same wading test the player uses
+  /** Water under a BODY, not under a tile centre. onWater rounds to the nearest
+   *  tile, so a creature at the rim of a pond tests wet while it stands on the
+   *  grass that is drawn over that tile's edge: it splashed on dry ground. A
+   *  body counts as in the water only when its footprint is inside one. */
+  inWaterDeep: (x, y) => {
+    if (!T.biomes) return false;
+    const r = 0.38;
+    return onWater(x, y) && onWater(x + r, y + r) && onWater(x - r, y - r)
+        && onWater(x + r, y - r) && onWater(x - r, y + r);
+  },
+  /** A tile a body cannot walk into: a placed dwelling or growth, or a kiosk.
+   *  The world's creatures slide along these; see world-bridge.js. */
+  solidAt: (tx, ty) => buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(Math.round(e.tx)) === wrap(tx) && wrap(Math.round(e.ty)) === wrap(ty)),
+  /** Re-send the solid mask after the visitor builds or clears something. */
+  refreshObstacles: () => { const b = window.MH_WASM && window.MH_WASM.worldBridge; if (b && b.sendSolid) b.sendSolid(); },
+  util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr, uiFont, displayFont },
   get TILE() { return { W: TILE_W, H: TILE_H }; },
 };
 

@@ -149,6 +149,46 @@ export class WorldCore {
         return v1;
     }
     /**
+     * Change the tunables WITHOUT moving anything. configure() is world setup:
+     * it scatters the predators around the plaza so a visitor meets them, which
+     * is right at birth and wrong at a change of skin, where the creatures
+     * should be found exactly where they were left.
+     * @param {number} grazer_cap
+     * @param {number} predator_cap
+     * @param {boolean} predator_dormant
+     * @param {number} mote_speed
+     * @param {number} grazer_speed
+     * @param {number} predator_speed
+     * @param {number} firefly_speed
+     * @param {number} turn
+     * @param {number} curiosity
+     */
+    retune(grazer_cap, predator_cap, predator_dormant, mote_speed, grazer_speed, predator_speed, firefly_speed, turn, curiosity) {
+        wasm.worldcore_retune(this.__wbg_ptr, grazer_cap, predator_cap, predator_dormant, mote_speed, grazer_speed, predator_speed, firefly_speed, turn, curiosity);
+    }
+    /**
+     * Bring one kind to a target count without disturbing the others: the skins
+     * carry different atmospheres (fireflies after dark, none by day) but the
+     * creatures already standing in the world keep their places, so a change of
+     * skin does not teleport the population.
+     * @param {number} kind
+     * @param {number} target
+     */
+    set_population(kind, target) {
+        wasm.worldcore_set_population(this.__wbg_ptr, kind, target);
+    }
+    /**
+     * One byte per tile, 1 where a dwelling, a growth or a kiosk stands. A
+     * creature slides along these rather than walking through them. Sent
+     * again whenever the visitor builds or clears something.
+     * @param {Uint8Array} mask
+     */
+    set_solid(mask) {
+        const ptr0 = passArray8ToWasm0(mask, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.worldcore_set_solid(this.__wbg_ptr, ptr0, len0);
+    }
+    /**
      * One byte per tile of the P x P torus, 1 where a tile is open water.
      * The engine computes it with the same test the player wades by, so a
      * grazer slows down exactly where the player's slime does.

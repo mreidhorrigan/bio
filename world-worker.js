@@ -9,13 +9,23 @@ self.onmessage = async ({ data }) => {
     if (data.type === "init") {
       wasm = await init();
       world = new WorldCore(data.period, data.seed, data.motes, data.grazers, data.predators, data.fireflies);
-      world.configure(data.grazerCap, data.predatorCap, data.predatorDormant,
+      world.retune(data.grazerCap, data.predatorCap, data.predatorDormant,
         data.moteSpeed, data.grazerSpeed, data.predatorSpeed, data.fireflySpeed,
-        data.turn, data.curiosity, data.hubX, data.hubY, data.villageRadius);
+        data.turn, data.curiosity);        // retune, not configure: configure moves them
       if (data.water) world.set_water(new Uint8Array(data.water));   // where grazers have to wade
+      if (data.solid) world.set_solid(new Uint8Array(data.solid));   // what every body has to go around
       stepCount = 0;
       self.postMessage({ type: "ready" });
       publish(true);
+    } else if (data.type === "configure" && world) {
+      world.retune(data.grazerCap, data.predatorCap, data.predatorDormant,
+        data.moteSpeed, data.grazerSpeed, data.predatorSpeed, data.fireflySpeed,
+        data.turn, data.curiosity);        // retune, not configure: configure moves them
+      world.set_population(0, data.motes);            // the skin's atmosphere, counted up or down
+      world.set_population(3, data.fireflies);        // the creatures keep their places
+      publish(true);
+    } else if (data.type === "solid" && world) {
+      world.set_solid(data.mask ? new Uint8Array(data.mask) : new Uint8Array(0));   // the visitor built or cleared something
     } else if (data.type === "step" && world) {
       const started = performance.now();
       world.step(data.dt, data.playerX, data.playerY);

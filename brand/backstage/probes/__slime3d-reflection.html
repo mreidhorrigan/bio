@@ -1,0 +1,59 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D reflection, level and upright</title>
+<iframe id="f" src="/slime3d.html" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Walk the slime into a pool so it stirs the water under itself, then compare
+// two ways of mirroring its body. The old way flipped each point through the
+// wave beneath it; the engine now flips through the level and reads the waves
+// where the eye's ray meets the water. A reflection should stay upright: the
+// best-fit plane through how far each point is displaced should be flat.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, A = w.MH_SLIME3D, E = A.engine;
+  A.pause();
+  const p = A.pools[0], sh = A.shoreline(p);
+  A.me.z = (sh.lo + sh.hi) / 2 - 8; A.me.x = A.centre(A.me.z); A.me.yaw = 0;
+  A.controls.keys.fwd = true;
+  for (let i = 0; i < 40; i++) A.tick(0.016);                // wade: the field is stirred under the body
+  A.controls.keys.fwd = false;
+  for (let i = 0; i < 6; i++) A.tick(0.016);
+  const M = { level: p.level, surface: (x, z) => A.waterY(p, x, z) };
+  // the body's points, as the world builds them
+  const R = A.me.R, pts = [];
+  for (let i = 0; i <= 8; i++) for (let j = 0; j < 16; j++) {
+    const a = (Math.PI / 2) * (i / 8), t = (Math.PI * 2) * (j / 16);
+    const x = A.me.x + Math.sin(a) * Math.cos(t) * R, z = A.me.z + Math.sin(a) * Math.sin(t) * R;
+    pts.push([x, A.me.y + Math.cos(a) * R, z]);
+  }
+  // least-squares plane d = a*x + b*z + c through each point's displacement
+  function tilt(disp) {
+    let sx = 0, sz = 0, sd = 0, sxx = 0, szz = 0, sxz = 0, sxd = 0, szd = 0, n = pts.length;
+    pts.forEach((q, i) => { const x = q[0] - A.me.x, z = q[2] - A.me.z, d = disp[i];
+      sx += x; sz += z; sd += d; sxx += x * x; szz += z * z; sxz += x * z; sxd += x * d; szd += z * d; });
+    const mx = sx / n, mz = sz / n, md = sd / n;
+    const cxx = sxx / n - mx * mx, czz = szz / n - mz * mz, cxz = sxz / n - mx * mz, cxd = sxd / n - mx * md, czd = szd / n - mz * md;
+    const det = cxx * czz - cxz * cxz || 1e-9, a = (cxd * czz - czd * cxz) / det, b = (czd * cxx - cxd * cxz) / det;
+    return Math.atan(Math.hypot(a, b)) * 180 / Math.PI;
+  }
+  const flat = (q) => 2 * p.level - Math.max(q[1], p.level);
+  const oldDisp = pts.map((q) => (2 * M.surface(q[0], q[2]) - q[1]) - (2 * p.level - q[1]));
+  const base = E.mirrorBase(M, pts);                          // the item's bob is shared by every point, so it tilts nothing
+  const newDisp = pts.map((q) => E.mirrorPoint(M, q, base)[1] - flat(q));
+  let fieldMax = 0;
+  for (let k = 0; k < p.h.length; k++) fieldMax = Math.max(fieldMax, Math.abs(p.h[k]));
+  say("the pool's wave field is stirred to " + fieldMax.toFixed(2) + " units" + (fieldMax > 0.05 ? "" : " NO (wading did not stir it)"));
+  const to = tilt(oldDisp), tn = tilt(newDisp);
+  say("reflection tilt, flipping through the wave under each point (old): " + to.toFixed(1) + " degrees");
+  say("reflection tilt, flipping through the level (now): " + tn.toFixed(1) + " degrees" + (tn < 3 ? "" : " NO (the reflection leans)"));
+  const spread = Math.max(...newDisp) - Math.min(...newDisp);
+  say("how far the waves shiver the reflection's points: " + spread.toFixed(2) + " units" + (spread <= 0.45 ? "" : " NO (too torn)"));
+  const sub = pts.filter((q) => q[1] < p.level).length;
+  say("points under the water, lifted to the waterline before the flip: " + sub + " of " + pts.length);
+  // the frame still paints, with the reflection in it
+  A.tick(0.016);
+  const refl = E.tally.items;
+  say("items in the frame: " + refl + ", errors: none");
+  document.title = "done";
+}, 1200));
+window.addEventListener("error", (e) => { document.getElementById("out").textContent += "\nEXCEPTION " + e.message; });
+</script>

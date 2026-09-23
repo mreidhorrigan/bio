@@ -1,0 +1,41 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D outdoors: does the far distance swim?</title>
+<meta name="budget" content="12000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Walks the slime slowly straight ahead and compares each frame with the one
+// before in the band just under the horizon. A camera that moves a little
+// should change the far distance a little: large frame-to-frame changes there,
+// in blocks, are the "swimming" of aliased far things and far ground.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, W = w.MH_V3D, E = W.engine;
+    W.pause();
+    const cv = w.document.getElementById("view"), g = cv.getContext("2d");
+    for (const skin of ["technurture", "technoscure"]) {
+      W.setSkin(skin); W.load("outdoors");
+      W.me.x = 0; W.me.z = -130; W.me.yaw = Math.PI * 0.8; for (let i = 0; i < 90; i++) W.tick(0.016);
+      const hy = (cv.clientHeight / 2 + E.fov * Math.tan(E.cam.pitch)) / cv.clientHeight;
+      const y0 = Math.round((hy - 0.01) * cv.height), h = Math.round(0.07 * cv.height);
+      let prev = null, sum = 0, big = 0, n = 0;
+      for (let f = 0; f < 40; f++) {
+        // a slow, even glide with the clock stopped: the viewpoint is all that changes (no bob, no sway, no creatures moving)
+        const sx = Math.sin(W.me.yaw) * 0.25, sz = Math.cos(W.me.yaw) * 0.25;
+        W.me.speed = 0; W.me.x += sx; W.me.z += sz; E.cam.x += sx; E.cam.z += sz;
+        W.tick(0);
+        const d = g.getImageData(0, y0, cv.width, h).data;
+        if (prev) {
+          let s = 0, b = 0, m = 0;
+          for (let i = 0; i < d.length; i += 4 * 3) { const dd = Math.abs(d[i] - prev[i]) + Math.abs(d[i + 1] - prev[i + 1]) + Math.abs(d[i + 2] - prev[i + 2]); s += dd; if (dd > 60) { b++; if (f === 20 && b <= 8 && skin === "technurture") { const px = (i / 4) % cv.width, py = Math.floor(i / 4 / cv.width); say("    jump at x " + px + " y " + (py + y0) + " (horizon " + Math.round(hy * cv.height) + ", far band from depth " + (E.focus ? E.focus.far : "-") + "): " + [prev[i], prev[i + 1], prev[i + 2]].join(",") + " to " + [d[i], d[i + 1], d[i + 2]].join(",")); } } m++; }
+          sum += s / m; big += b / m; n++;
+        }
+        prev = d;
+      }
+      say(skin + ": under the horizon, mean change between frames " + (sum / n).toFixed(2) + ", pixels jumping (a change over 60) " + (100 * big / n).toFixed(2) + "%" + (big / n < 0.01 ? "" : " NO (the distance swims)"));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

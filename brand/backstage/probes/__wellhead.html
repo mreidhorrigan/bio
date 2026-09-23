@@ -1,0 +1,25 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/index.html?theme=technurture" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  const ex = w.MH_ISO.exhibits();
+  const g1 = ex.find(e => e.title === "Glossary");
+  say("Glossary house: " + JSON.stringify({ title: g1.title, satellite: g1.satellite, structure: g1.structure }));
+  say("other satellites' structure: " + ex.filter(e => e.satellite).map(e => e.title + "=" + e.structure).join(", "));
+  // warp near it with the nav chip for Public Writing, then look for the shaft
+  const chip = [...d.querySelectorAll(".mh-navchip")].find(b => /Public Writing/.test(b.textContent));
+  say("nav chip: " + (chip ? chip.textContent.trim() : "not found"));
+  if (chip) chip.click();
+  setTimeout(() => {
+    const cv = d.querySelector("canvas"), g = cv.getContext("2d");
+    const im = g.getImageData(0, 0, cv.width, cv.height).data;
+    let dark = 0, n = 0;
+    for (let i = 0; i < im.length; i += 4 * 17) { n++; if (im[i] < 22 && im[i+1] < 26 && im[i+2] < 22) dark++; }
+    say("very dark pixels on screen: " + dark + " of " + n + " sampled (the shaft is the only near-black thing in daylight)");
+    document.title = "done";
+  }, 2500);
+}, 1800));
+</script>

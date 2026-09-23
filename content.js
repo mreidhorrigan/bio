@@ -29,6 +29,9 @@
       {
         title: "About",
         page: { url: `${B}about.html` },                       // the About page (menubar and all). NOT index.html: index IS this world (would recurse).
+        satellites: [   // the CV is a house on the About road: it is about me, not a place of its own
+          { title: "CV", url: `${B}Horrigan_CV.html` },
+        ],
         html: `
           <p><span class="mh-big">How do you work?</span></p>
           <p>Hi. I'm M. Reid Horrigan, researcher of media production cultures.</p>
@@ -42,7 +45,10 @@
           process of changing voices electronically to communicate characters and
           personae; a monograph adapting my ethnographic dissertation on Vancouver's
           motion picture production cultures; and the Musebots, a multi-agent music
-          generation system whose origins predate the GPT revolution.</p>`,
+          generation system whose origins predate the GPT revolution.</p>
+          <p>The full record, with degrees, publications, talks, and teaching, is in
+          the <a href="${B}Horrigan_CV.html"${ext}>CV</a>, which also stands as a house
+          along this road. There is a <a href="${B}Horrigan_CV.pdf"${ext}>PDF</a>.</p>`,
       },
       {
         title: "Toolbox",
@@ -57,12 +63,37 @@
           </ul>`,
       },
       {
-        title: "CV",
-        page: { url: `${B}Horrigan_CV.html` },                 // the real CV page
+        title: "Research",
+        page: { url: `${B}research.html` },                    // summaries of the publications
         html: `
-          <p>The full record: degrees, publications, talks, and teaching.</p>
-          <p>Read the <a href="${B}Horrigan_CV.html"${ext}>CV in your browser</a>, or
-          download the <a href="${B}Horrigan_CV.pdf"${ext}>PDF</a>.</p>`,
+          <p>Short summaries of what I have published and what I am writing, in
+          plain terms.</p>
+          <p>Read the <a href="${B}research.html"${ext}>summaries</a>, or the full
+          record in the <a href="${B}Horrigan_CV.html"${ext}>CV</a>.</p>`,
+      },
+      {
+        title: "Public Writing",
+        satellites: [   // the two kinds, each its own house along the road
+          { title: "Criticism", url: `${B}criticism.html` },
+          // not a dwelling: the glossary is underground, so its house is the
+          // shaft you go down. engine.js draws it with drawWellhead().
+          { title: "Glossary", url: `${B}glossary.html`, structure: "wellhead" },
+        ],
+        html: `
+          <p>Writing for readers outside the academy:</p>
+          <ul>
+            <li><a href="${B}criticism.html"${ext}>Criticism</a>: reviews of art, performance, games, and sound.</li>
+            <li><a href="${B}glossary.html"${ext}>Glossary</a>: the terms I keep using, defined, with an antiglossary of everything they leave out.</li>
+          </ul>`,
+      },
+      {
+        title: "Store",
+        underConstruction: true,     // the engine bands the kiosk and says so on the sign
+        html: `
+          <p><strong>Under construction.</strong> There is no store yet.</p>
+          <p>When there is one, it will sell the things this site already gives away:
+          the tools, the games, and the music. Until then, everything is free where
+          it stands.</p>`,
       },
       {
         title: "Music",
@@ -83,18 +114,20 @@
         page: { url: `${B}about.html?menu=Games` },            // open the About page with the Games dropdown deployed (new tab)
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Games" gateway opens the menu)
           { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
-          { title: "Autofac", url: `${B}autofac.html` },
+          // { title: "Autofac", url: `${B}autofac.html` },   // off the site for now: still an experiment (2026-09-22)
           { title: "Clod Bathos", url: "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/" },
           { title: "Audiogames (CGSA)", url: "https://cgsa2026-audio-presentation.onrender.com" },
+          { title: "Slimeverse 3D", url: `${B}slimeverse3d.html` },   // this village, walkable in three dimensions: the house leads into it
         ],
 
         html: `
           <p>Games and interactive pieces:</p>
           <ul>
             <li><a href="${B}Rock_Walls_and_Damp.html"${ext}>Rock Walls and Damp</a>:a hypertext piece.</li>
-            <li><a href="${B}autofac.html"${ext}>Autofac: Rad Shipping</a>.</li>
+            <!-- Autofac: Rad Shipping (autofac.html) is off the site for now: still an experiment -->
             <li><a href="https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"${ext}>Clod Bathos, Superior Machine</a>.</li>
             <li><a href="https://cgsa2026-audio-presentation.onrender.com"${ext}>Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>
+            <li><a href="${B}slimeverse3d.html"${ext}>Slimeverse 3D</a>: this village, walkable in three dimensions.</li>
           </ul>`,
       },
     ],

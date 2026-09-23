@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two views, one world</title>
+  <meta name="description" content="A proposal: the village's isometric world and its 3D view on one page, switched between without the signal towers or their sound stopping.">
+  <style>
+    :root { color-scheme: light; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0d120e; font: 15px/1.4 system-ui, sans-serif; }
+    #iso, #view3d { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; display: block; transition: opacity 0.35s ease; }
+    #view3d { opacity: 0; pointer-events: none; cursor: grab; touch-action: none; }
+    body.in3d #view3d { opacity: 1; pointer-events: auto; }
+    body.in3d #iso { opacity: 0; pointer-events: none; }
+    #switch { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 5; font: 700 15px system-ui, sans-serif;
+      padding: 9px 18px; color: #f6f4ee; background: #261139; border: 2px solid #b294d6; border-radius: 16px 4px 16px 4px / 7px 2px 7px 2px; cursor: pointer; }
+    #switch:focus-visible { outline: 3px solid #c3f0ff; outline-offset: 2px; }
+    #note { position: fixed; left: 12px; top: 10px; z-index: 5; color: #dce6f0; background: rgba(10,14,11,.62); padding: 5px 9px; border-radius: 7px 2px;
+      font: 600 12px ui-monospace, Menlo, monospace; pointer-events: none; display: none; }
+    body.in3d #note { display: block; }
+    @media (prefers-reduced-motion: reduce) { #iso, #view3d { transition: none; } }
+  </style>
+  <script src="../../../engine-3d.js"></script>
+  <script src="../../../vacuole.js"></script>
+  <script src="../../../verse3d.js"></script>
+  <script>window.MH_SITE = { base: "../../../" };</script>
+  <script src="../../../content.js"></script>
+  <script src="../../../verse3d-scenes.js"></script>
+  <script src="views-page.js" defer></script>
+</head>
+<body>
+  <iframe id="iso" title="The village, isometric"></iframe>
+  <canvas id="view3d" tabindex="0" role="img" aria-label="The same village in three dimensions, over the slime's shoulder."></canvas>
+  <div id="note"></div>
+  <button type="button" id="switch">Walk it in 3D</button>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html><meta charset="utf-8"><title>l</title><pre id="out">start</pre>
+<iframe id="f" src="/index.html?theme=technoscure" style="width:1100px;height:760px;border:0"></iframe>
+<script>
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument, o = {};
+  try {
+    const ISO = w.MH_ISO;
+    d.getElementById("mh-start").click();
+    setTimeout(() => {
+      const P = ISO.hub().period, T = ISO.TILE, cv = d.querySelector("canvas");
+      const iso = (x, y) => ({ x: (x - y) * (T.W / 2), y: (x + y) * (T.H / 2) });
+      const near = (c, pv) => c + Math.round((pv - c) / P) * P;
+      const p = ISO.player(), k = ISO.exhibits().find(e => e.title === "Store");
+      const ps = iso(p.x, p.y), ks = iso(near(k.tx, p.x), near(k.ty, p.y));
+      const cx = cv.clientWidth / 2 - ps.x + ks.x, cy = cv.clientHeight / 2 - ps.y - 26 + ks.y;
+      const dpr = cv.width / cv.clientWidth;
+      const g = cv.getContext("2d");
+      const box = (x0, y0, w0, h0) => {
+        const px = g.getImageData(Math.round(x0*dpr), Math.round(y0*dpr), Math.round(w0*dpr), Math.round(h0*dpr)).data;
+        let s = 0, n = 0, peak = 0;
+        for (let i = 0; i < px.length; i += 4) { const l = (px[i]*0.3 + px[i+1]*0.6 + px[i+2]*0.1); s += l; n++; if (l > peak) peak = l; }
+        return { mean: +(s/n).toFixed(1), peak: +peak.toFixed(1) };
+      };
+      o.storeOnScreen = cx > 0 && cx < cv.clientWidth && cy > 0 && cy < cv.clientHeight;
+      o.tagArea = box(cx - 60, cy - 12, 120, 22);        // where drawUnderConstruction paints
+      o.groundNearby = box(cx - 60, cy + 40, 120, 22);   // open ground just below it
+      o.tagIsLit = o.tagArea.peak > o.groundNearby.peak * 1.6;
+      document.getElementById("out").textContent = JSON.stringify(o, null, 1);
+    }, 1600);
+  } catch (e) { document.getElementById("out").textContent = JSON.stringify({ err: String(e) }); }
+}, 2600));
+</script>

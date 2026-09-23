@@ -1,0 +1,76 @@
+<!DOCTYPE html><meta charset="utf-8"><title>probe</title>
+<iframe id="f" src="/glossary.html" style="width:1180px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const log = [];
+function say(k, v) { log.push(k + ": " + v); document.getElementById("out").textContent = log.join("\n"); }
+const f = document.getElementById("f");
+function nap(ms) { return new Promise(r => setTimeout(r, ms)); }
+f.addEventListener("load", async () => {
+  const w = f.contentWindow, d = f.contentDocument;
+  await nap(900);
+  try {
+    say("errors", w.__err || "none");
+    const A = w.MH_GLOSSARY_WORLD;
+    say("world api", A ? "present" : "MISSING");
+    say("markers", A.marks.length + " (world " + A.width() + "px)");
+    say("dt count", d.querySelectorAll("dl.words dt").length);
+    say("dd count", d.querySelectorAll("dl.words dd").length);
+    say("counts filled", [...d.querySelectorAll("[data-count]")].map(n => n.textContent).join("/"));
+    const cv = d.getElementById("crawl");
+    say("canvas px", cv.width + "x" + cv.height + " css " + Math.round(cv.getBoundingClientRect().width) + "x" + Math.round(cv.getBoundingClientRect().height));
+    say("body class", d.body.className || "(none)");
+    say("hero height", Math.round(d.getElementById("hero").getBoundingClientRect().height) + " vs window " + w.innerHeight);
+    say("dock visible", !d.getElementById("dock").hidden);
+    const g = cv.getContext("2d");
+    function sample(tag) {
+      const im = g.getImageData(0, 0, cv.width, cv.height).data;
+      const seen = new Set(); let sum = 0;
+      for (let i = 0; i < im.length; i += 4 * 97) { seen.add(im[i] + "," + im[i+1] + "," + im[i+2]); sum += im[i] + im[i+1] + im[i+2]; }
+      say(tag, "distinct " + seen.size + ", mean " + Math.round(sum / (im.length / (4*97)) / 3));
+      return sum / (im.length / (4 * 97)) / 3;
+    }
+    const bright0 = sample("frame idle");
+    // walk to a few markers by moving the body directly, then let a frame run
+    function run(n) { for (let k = 0; k < n; k++) A.tick(0.016); }
+    A.me.flying = false; run(4);
+    for (const i of [0, 7, 51]) {
+      A.me.x = A.marks[i].x;
+      run(3);
+      say("at glossary #" + i, JSON.stringify(A.at()) + " | card: " + d.querySelector("#entry h3").textContent);
+    }
+    const penIdx = A.marks.findIndex(m => m.side === "penumbra");
+    A.me.x = A.marks[penIdx + 3].x; A.tick(20); run(20);
+    say("in the penumbra", JSON.stringify(A.at()) + " | card class: " + d.getElementById("entry").className);
+    say("card kind", (d.querySelector("#entry .kind") ? d.querySelector("#entry .kind").textContent : "(none: a penumbra card carries no kind line)").slice(0, 60));
+    say("dusk", A.dusk().toFixed(2));
+    const bright1 = sample("frame penumbra");
+    say("darkened", (bright0 - bright1).toFixed(1) + " (want a big positive number)");
+    // ground continuity: no cliffs the body cannot walk
+    let worst = 0, at = 0;
+    for (let x = 40; x < A.width() - 40; x += 2) { const d2 = Math.abs(A.ground(x + 2) - A.ground(x)); if (d2 > worst) { worst = d2; at = x; } }
+    say("steepest 2px step", worst.toFixed(2) + "px at x=" + Math.round(at));
+    // the list buttons address real markers
+    const b = d.querySelector('dl.words dt button[data-side="penumbra"][data-i="5"]');
+    b.click(); run(360);
+    say("list click", b.textContent.slice(0, 40) + " -> " + JSON.stringify(A.at()));
+    // walking the whole line: does the body ever leave the ground it molds to?
+    A.me.x = 60; run(2);
+    let gap = 0, gapAt = 0, dips = 0;
+    for (let x = 60; x < A.width() - 60; x += 7) {
+      A.me.x = x; A.tick(0.016);
+      const s2 = w.MH_SLIME2D.shape({ x: x, y: A.ground(x), r: 15, ground: A.ground, tension: 0.55, contact: 1 });
+      let lo = Infinity, pen = 0;
+      for (let i = 0; i < s2.xs.length; i++) {
+        lo = Math.min(lo, Math.abs(s2.bot[i] - A.ground(s2.xs[i])));
+        pen = Math.max(pen, s2.bot[i] - A.ground(s2.xs[i]));
+      }
+      if (lo > gap) { gap = lo; gapAt = x; }
+      if (pen > dips) dips = pen;
+    }
+    say("widest float above ground", gap.toFixed(2) + "px at x=" + Math.round(gapAt));
+    say("deepest cut into ground", dips.toFixed(2) + "px");
+  } catch (e) { say("EXCEPTION", e && e.message + " @ " + (e.stack || "").split("\n")[1]); }
+  document.title = "done";
+});
+</script>

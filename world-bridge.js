@@ -4,13 +4,42 @@
   if (!wasm) return;
   const query = new URLSearchParams(location.search);
   const enabled = query.get("worker") !== "0" && query.get("wasmWorld") !== "0";
-  let worker = null, signature = "", inFlight = false, recycle = null;
+  let worker = null, signature = "", inFlight = false, recycle = null, lastPeriod = 0;
   const bridge = {
     enabled, ready: false, failed: false, snapshot: null, flora: null, populations: [0, 0, 0, 0], workerStepMs: 0, snapshots: 0,
+    /** One byte per tile, 1 where a body cannot go: a dwelling, a growth or a
+     *  kiosk. Unlike the water mask this changes while the visitor builds, so
+     *  it can be re-sent on its own with sendSolid(). */
+    solidMask(period) {
+      const test = window.MH_ISO && window.MH_ISO.solidAt;
+      if (!test) return null;
+      const mask = new Uint8Array(period * period);
+      let any = 0;
+      for (let ty = 0; ty < period; ty++)
+        for (let tx = 0; tx < period; tx++)
+          if (test(tx, ty)) { mask[ty * period + tx] = 1; any++; }
+      return any ? mask : null;
+    },
+    /** Hand the running world a new skin's tunables. No re-init, no respawn. */
+    reconfigure(cfg, hub, villageRadius) {
+      if (!worker || !this.ready) return;
+      worker.postMessage({ type: "configure",
+        grazerCap: cfg.grazerCap, predatorCap: cfg.predatorCap, predatorDormant: !!cfg.predatorDormant,
+        moteSpeed: cfg.moteSpeed, grazerSpeed: cfg.grazerSpeed, predatorSpeed: cfg.predatorSpeed,
+        fireflySpeed: cfg.fireflySpeed, turn: cfg.turn, curiosity: cfg.curiosity,
+        hubX: (hub && hub.x) || 0, hubY: (hub && hub.y) || 0, villageRadius: villageRadius || 0,
+        motes: cfg.motes | 0, fireflies: (cfg.fireflies || 0) | 0 });
+    },
+    sendSolid() {
+      if (!worker || !this.ready || !lastPeriod) return;
+      const mask = this.solidMask(lastPeriod);
+      worker.postMessage({ type: "solid", mask: mask ? mask.buffer : null });
+    },
     /** One byte per tile, 1 where the engine says a tile is open water. The
      *  world is deterministic, so this is built once per configuration. */
     waterMask(period) {
-      const test = window.MH_ISO && window.MH_ISO.onWater;
+      // the same test the ripple uses, so a zoog never wades without splashing
+      const test = window.MH_ISO && (window.MH_ISO.inWaterDeep || window.MH_ISO.onWater);
       if (!test) return null;
       const mask = new Uint8Array(period * period);
       let any = 0;
@@ -21,7 +50,10 @@
     },
     ensure(period, cfg, hub, villageRadius) {
       if (!this.enabled || this.failed) return;
-      const nextSignature = [period, cfg.motes, cfg.grazerStart, cfg.grazerCap, cfg.predatorStart, cfg.predatorCap, cfg.predatorDormant, cfg.fireflies || 0, cfg.moteSpeed, cfg.grazerSpeed, cfg.predatorSpeed, cfg.fireflySpeed, cfg.turn, cfg.curiosity, hub.x, hub.y, villageRadius].join(":");
+      // Only the WORLD's shape rebuilds it. The skin's tunables (speeds, caps,
+      // dormancy, atmosphere) are sent to the running world instead, so a change
+      // of skin finds the same creatures standing where they stood.
+      const nextSignature = String(period);
       if (worker && signature === nextSignature) return;
       if (worker) worker.terminate();
       signature = nextSignature; this.ready = false; this.snapshot = null; this.flora = null; inFlight = false; recycle = null;
@@ -39,8 +71,10 @@
       };
       worker.onerror = (event) => fail(event.message || "world worker failed");
       const seed = crypto.getRandomValues(new Uint32Array(1))[0];
+      lastPeriod = period;
       const water = this.waterMask(period);
-      worker.postMessage({ type: "init", period, seed, water: water ? water.buffer : null, motes: cfg.motes, grazers: cfg.grazerStart, grazerCap: cfg.grazerCap, predators: cfg.predatorStart, predatorCap: cfg.predatorCap, predatorDormant: !!cfg.predatorDormant, fireflies: cfg.fireflies || 0, moteSpeed: cfg.moteSpeed, grazerSpeed: cfg.grazerSpeed, predatorSpeed: cfg.predatorSpeed, fireflySpeed: cfg.fireflySpeed, turn: cfg.turn, curiosity: cfg.curiosity, hubX: hub.x, hubY: hub.y, villageRadius });
+      const solid = this.solidMask(period);
+      worker.postMessage({ type: "init", period, seed, water: water ? water.buffer : null, solid: solid ? solid.buffer : null, motes: cfg.motes, grazers: cfg.grazerStart, grazerCap: cfg.grazerCap, predators: cfg.predatorStart, predatorCap: cfg.predatorCap, predatorDormant: !!cfg.predatorDormant, fireflies: cfg.fireflies || 0, moteSpeed: cfg.moteSpeed, grazerSpeed: cfg.grazerSpeed, predatorSpeed: cfg.predatorSpeed, fireflySpeed: cfg.fireflySpeed, turn: cfg.turn, curiosity: cfg.curiosity, hubX: hub.x, hubY: hub.y, villageRadius });
     },
     step(dt, player) {
       if (!worker || !this.ready || inFlight) return;

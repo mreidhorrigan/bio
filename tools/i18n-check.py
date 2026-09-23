@@ -30,7 +30,10 @@ from html.parser import HTMLParser
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = ["index.html", "about.html", "toolbox.html", "MCQer.html", "SeatPlanner.html",
+# The homepage loads in the calm skin: the night skin renders too slowly on a
+# CPU for headless Chrome, and the switch and its rules are the same in every skin.
+PAGES = ["index.html?theme=technocute", "about.html", "toolbox.html", "research.html", "criticism.html",
+         "glossary.html", "slime3d.html", "slimeverse3d.html", "MCQer.html", "SeatPlanner.html",
          "ExamTimer.html", "Nameplates.html", "autofac.html", "pitch-shift.html",
          "Horrigan_CV.html"]
 # Identical in both languages on purpose: names, keys, units, symbols.
@@ -105,12 +108,13 @@ HARNESS = """<!doctype html><meta charset="utf-8"><title>i18n check</title>
 """
 
 
-def stale_rules(base, page, tmpdir):
-    """Ask the page's own runtime which French rules matched nothing."""
+def stale_rules(base, url, tmpdir):
+    """Ask the page's own runtime which French rules matched nothing. `url` is
+    the page with its French query already on it."""
     name = "._i18n_check.html"
     path = os.path.join(tmpdir, name)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(HARNESS % (page + "?lang=fr"))
+        fh.write(HARNESS % url)
     try:
         html = dom(base + name)
     finally:
@@ -161,9 +165,11 @@ def main():
         return [sel for sel in shared if sel not in missing]
 
     for page in pages:
-        if not os.path.exists(os.path.join(ROOT, page)):
+        name = page.split("?")[0]                       # the file: rules are filed under it
+        if not os.path.exists(os.path.join(ROOT, name)):
             continue
-        en, fr = dom(base + page), dom(base + page + "?lang=fr")
+        sep = "&" if "?" in page else "?"
+        en, fr = dom(base + page), dom(base + page + sep + "lang=fr")
         notes = []
         if "mh-langbtn" not in en:
             notes.append("no language switch in English")
@@ -171,11 +177,11 @@ def main():
             notes.append("no language switch in French")
         if not re.search(r'<html[^>]*\blang="fr"', fr):
             notes.append("<html lang> did not become fr")
-        stale = stale_rules(base, page, ROOT)
+        stale = stale_rules(base, page + sep + "lang=fr", ROOT)
         if isinstance(stale, list) and stale and isinstance(stale[0], dict):
             for entry in stale:
                 shared.setdefault(entry["sel"], 0)
-            mine = [e["sel"] for e in stale if e["scope"] == page]
+            mine = [e["sel"] for e in stale if e["scope"] == name]
             if mine:
                 notes.append("%d rule(s) match nothing: %s" % (len(mine), ", ".join(mine)))
         elif stale:
@@ -183,7 +189,7 @@ def main():
         matched.update(sel for sel in all_shared(stale) if True)
         ven, vfr = visible(en), visible(fr)
         same = [t for t in set(ven) & set(vfr) if not KEEP.match(t)]
-        print(("%-22s %s" % (page, "; ".join(notes) if notes else "ok")))
+        print(("%-22s %s" % (name, "; ".join(notes) if notes else "ok")))
         if notes:
             bad += 1
         for t in sorted(same, key=len, reverse=True)[:40]:

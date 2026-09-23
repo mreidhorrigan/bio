@@ -1,0 +1,80 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The site's Slimeverse 3D page</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+let stage = 0;
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => { try { stage++ === 0 ? first() : second(); } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; } }, 1500));
+function first() {
+  const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, d = w.document;
+  if (!W) { say("page: MISSING"); document.title = "done"; return; }
+  W.pause();
+  const opened = []; w.open = (u) => { opened.push(u); return null; };      // a new tab, caught
+  say("starts in: " + W.scene() + (W.scene() === "indoors" ? " (the Slimeverse 3D house)" : " NO"));
+  // out through the door: to the Slimeverse 3D house's own door in the village
+  const door = W.S().portals.find((q) => q.to === "outdoors");
+  W.me.x = door.x; W.me.z = door.z + 0.02; for (let i = 0; i < 50; i++) W.tick(0.016);
+  const O = W.S(), home = O.entries.home;
+  say("out the door: in the " + W.scene() + ", " + Math.hypot(W.me.x - home.x, W.me.z - home.z).toFixed(1) + " from the Slimeverse 3D house's door" + (W.scene() === "outdoors" && Math.hypot(W.me.x - home.x, W.me.z - home.z) < 3 ? "" : " NO"));
+  // another house's door: its card, as the iso village opens it
+  // (every kiosk in content.js has a page of its own now, so a kiosk's door offers its page, as a road-house's does)
+  const other = O.portals.find((q) => q.open && q.open.kind === "kiosk");
+  const anyLink = O.portals.find((q) => q.open && q.open.kind === "link" && !/glossary/.test(q.open.url));
+  for (const [name, q] of [["a kiosk (" + (other && other.open.title) + ")", other], ["a road-house (" + (anyLink && anyLink.open.title) + ")", anyLink]]) {
+    if (!q) { say(name + ": MISSING"); continue; }
+    d.getElementById("card").hidden = true;
+    W.load("outdoors", "start"); for (let i = 0; i < 3; i++) W.tick(0.016);
+    W.me.x = q.x; W.me.z = q.z; W.me.speed = 0; for (let i = 0; i < 3; i++) W.tick(0.016);
+    const card = d.getElementById("card");
+    say("walked into " + name + ": its card " + (card.hidden ? "stays shut NO" : "opens, titled " + d.getElementById("card-title").textContent) + ", still in the " + W.scene() + (W.scene().startsWith("outdoors") ? "" : " NO"));
+  }
+  d.getElementById("card").hidden = true;
+  // the wellhead: the Glossary
+  const well = O.portals.find((q) => q.open && /glossary/.test(q.open.url || ""));
+  say("the wellhead opens: " + (well ? well.open.title + " (" + well.open.url + ")" : "NOTHING NO"));
+  // a click on a house opens its page straight away (a click may open a tab)
+  W.load("outdoors", "start"); for (let i = 0; i < 60; i++) W.tick(0.016);
+  const E = W.engine, cl = O.clickables().find((c) => c.item && c.item.kind === "link" && E.project([c.x, O.floorAt(c.x, c.z) + c.h * 0.4, c.z]));
+  let clicked = false;
+  if (cl) {
+    const p = E.project([cl.x, O.floorAt(cl.x, cl.z) + cl.h * 0.4, cl.z]);
+    const before = opened.length; W.controls.onTap(p[0], p[1]); clicked = opened.length > before;
+    // the ray stops at the first house in its way, which may stand in front of the one aimed at
+    const url = opened[opened.length - 1], hit = O.clickables().find((c) => c.item && (c.item.url || (c.item.kiosk && c.item.kiosk.page && c.item.kiosk.page.url)) === url);
+    say("a click toward the house " + cl.item.title + (clicked ? " opens the page of the house it meets first, " + (hit ? hit.item.title : "?") + ": " + url + (hit ? "" : " NO") : " opens nothing NO"));
+  } else say("a house in view to click: none (the view looks elsewhere)");
+  // the hatch in the house: down to the cave
+  W.load("indoors", "door"); for (let i = 0; i < 3; i++) W.tick(0.016);
+  const hatch = W.S().portals.find((q) => q.to === "cave");
+  const st = W.S().entries.start; W.me.x = st.x; W.me.z = st.z; W.tick(0.016);
+  W.me.x = hatch.x + (st.x - hatch.x) * 0.02; W.me.z = hatch.z + (st.z - hatch.z) * 0.02; W.me.speed = 0; W.tick(0.016);
+  for (let i = 0; i < 50; i++) W.tick(0.016);
+  say("down the hatch: in the " + W.scene() + (W.scene() === "cave" ? "" : " NO"));
+  // skins: the slime stays where it is, and the shoggoths where they stood, waking
+  W.load("outdoors", "start"); W.me.x = 120; W.me.z = -40; for (let i = 0; i < 5; i++) W.tick(0.016);
+  const shogs = W.shoggoths().map((s) => [s.x, s.z, s.dormant]), px = W.me.x, pz = W.me.z;
+  W.setSkin("technoscure"); for (let i = 0; i < 2; i++) W.tick(0.016);
+  const moved = Math.hypot(W.me.x - px, W.me.z - pz), after = W.shoggoths();
+  const kept = shogs.every(([x, z], i) => Math.hypot(after[i].x - x, after[i].z - z) < 2);
+  say("day to night: the slime moved " + moved.toFixed(2) + (moved < 1 ? "" : " NO") + "; the " + shogs.length + " shoggoths " + (kept ? "stayed where they stood" : "moved NO") + ", rooted by day " + shogs.every((s) => s[2]) + ", awake now " + after.slice(0, shogs.length).every((s) => !s.dormant) + (shogs.every((s) => s[2]) && after.slice(0, shogs.length).every((s) => !s.dormant) ? "" : " NO"));
+  let mem = null; try { mem = w.localStorage.getItem("mh-skin"); } catch (e) {}
+  // the address, as the iso world's: theme, place, slime
+  W.tick(0.016);
+  for (let i = 0; i < 40; i++) W.tick(0.016);
+  const u = new URL(w.location.href);
+  say("the address: theme=" + u.searchParams.get("theme") + " place=" + u.searchParams.get("place") + " slime=" + u.searchParams.get("slime"));
+  // reload from an address in the village: the slime stands at that tile
+  window.__tile = O.tileOf(W.me.x, W.me.z);
+  F.src = "/slimeverse3d.html?theme=gloomthmaxx&place=village&slime=" + (window.__tile[0] + 3).toFixed(3) + "," + (window.__tile[1] - 2).toFixed(3);
+}
+function second() {
+  const w = F.contentWindow, W = w.MH_SLIMEVERSE3D;
+  W.pause();
+  const t = W.S().tileOf(W.me.x, W.me.z), want = [window.__tile[0] + 3, window.__tile[1] - 2];
+  say("from an address in the village: " + W.scene() + " at tile " + t[0].toFixed(2) + "," + t[1].toFixed(2) + " (asked " + want[0].toFixed(2) + "," + want[1].toFixed(2) + ")" + (W.scene() === "outdoors@technoscure" && Math.hypot(t[0] - want[0], t[1] - want[1]) < 0.3 ? "" : " NO"));
+  say("errors: none");
+  document.title = "done";
+}
+</script>

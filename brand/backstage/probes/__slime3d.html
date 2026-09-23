@@ -1,0 +1,143 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D cave probe</title>
+<iframe id="f" src="/slime3d.html" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Does the 3D cave hold together? The camera must stay inside the rock at
+// every sample, the slime must sit in the middle of the frame, the water must
+// move and settle, the walls must hold the slime in, the hooks for props,
+// creatures and signs must add things, and no frame may throw.
+const out = document.getElementById("out"), f = document.getElementById("f");
+const say = (t) => { out.textContent += "\n" + t; };
+const errs = [];
+f.addEventListener("load", () => {
+  const w = f.contentWindow;
+  w.addEventListener("error", (e) => errs.push(e.message));
+  setTimeout(() => {
+    const A = w.MH_SLIME3D;
+    try {
+      say("api: " + (A ? "present" : "MISSING"));
+      A.pause();
+      say("corridor " + A.end + " long, dark from " + A.darkFrom + ", pools " + A.pools.length + ", props " + A.props());
+      // the camera, at ten places, facing along the corridor and across it
+      let outside = 0, offscreen = 0, worstBoom = 999, n = 0, minW = 999, maxW = 0;
+      for (const z of [26, 200, 480, 700, 1000, 1180, 1400, 1800, 2200, 2500]) {
+        for (const yaw of [0, 0.9, -0.9]) {
+          A.me.z = z; A.me.x = A.centre(z) + (yaw ? 8 * Math.sign(yaw) : 0); A.me.yaw = yaw;
+          for (let i = 0; i < 120; i++) A.tick(0.016);
+          const c = A.cam;
+          if (!A.inside(c.x, c.y, c.z)) outside++;
+          worstBoom = Math.min(worstBoom, A.boom());
+          const b = A.bodyBox();
+          if (!b || b.x + b.w / 2 < b.W * 0.3 || b.x + b.w / 2 > b.W * 0.7 || b.y + b.h / 2 < b.H * 0.3 || b.y + b.h / 2 > b.H * 0.75) offscreen++;
+          if (b) { minW = Math.min(minW, b.w); maxW = Math.max(maxW, b.w); }
+          n++;
+        }
+      }
+      say("camera inside the cave at " + (n - outside) + " of " + n + " samples" + (outside ? " (NO: " + outside + " outside)" : ""));
+      say("slime centred in frame at " + (n - offscreen) + " of " + n + (offscreen ? " (NO: " + offscreen + " off-centre)" : "") + ", body width " + minW + " to " + maxW + " px");
+      say("shortest boom " + worstBoom.toFixed(0) + " (asked " + A.dist() + ")");
+      // frame cost, and what a frame draws
+      A.me.z = 300; A.me.x = A.centre(300); A.me.yaw = 0;
+      for (let i = 0; i < 80; i++) A.tick(0.016);
+      const t0 = performance.now(); for (let i = 0; i < 30; i++) A.tick(0.016); const ms = (performance.now() - t0) / 30;
+      say("a frame in the lit half: " + A.tally.drawn + " items drawn of " + A.tally.items + ", " + ms.toFixed(1) + " ms each in this headless run");
+      A.me.z = A.darkFrom + 400; for (let i = 0; i < 80; i++) A.tick(0.016);
+      const t1 = performance.now(); for (let i = 0; i < 30; i++) A.tick(0.016); const ms2 = (performance.now() - t1) / 30;
+      say("a frame in the dark half: " + A.tally.drawn + " items drawn, " + ms2.toFixed(1) + " ms");
+      // the walls hold it in
+      A.me.x = 999; A.me.speed = 10; A.tick(0.016);
+      const lim = A.centre(A.me.z) + A.halfWidth(A.me.z) - 6.5;
+      say("pushed at the wall: x " + A.me.x.toFixed(1) + " against a limit of " + lim.toFixed(1) + (Math.abs(A.me.x - lim) < 0.01 ? "" : " NO"));
+      // water: disturbed by wading, settles when still
+      const p = A.pools[1] || A.pools[0];
+      A.me.z = (p.lo + p.hi) / 2; A.me.x = A.centre(A.me.z); A.me.speed = 0; A.me.yaw = 0;
+      for (let i = 0; i < 90; i++) A.tick(0.016);
+      A.me.speed = 17; for (let i = 0; i < 30; i++) { A.controls.keys.fwd = true; A.tick(0.016); }
+      A.controls.keys.fwd = false;
+      let hi = -9, lo = 9; for (let k = 0; k < p.h.length; k++) { hi = Math.max(hi, p.h[k]); lo = Math.min(lo, p.h[k]); }
+      say("wading: the surface spans " + (hi - lo).toFixed(3) + " across the pool" + (hi - lo > 0.05 ? "" : " NO (it did not move)"));
+      say("wet: the slime knows it is in a pool: " + (A.me.pool ? "yes" : "NO"));
+      A.me.speed = 0; for (let i = 0; i < 380; i++) A.tick(0.016);
+      let amp = 0; for (let k = 0; k < p.h.length; k++) amp = Math.max(amp, Math.abs(p.h[k]));
+      say("after six still seconds the surface is within " + amp.toFixed(4) + " of level" + (amp < 0.01 ? "" : " NO"));
+      // the rocks are solid: stand inside a boulder and be pushed out of it
+      const rock = A.propList.find((q) => q.kind === "boulder");
+      A.me.x = rock.x; A.me.z = rock.z; A.me.speed = 0; A.controls.keys.fwd = true; A.tick(0.016); A.controls.keys.fwd = false;
+      const away = Math.hypot(A.me.x - rock.x, A.me.z - rock.z);
+      say("standing in a boulder of radius " + rock.r.toFixed(1) + ": pushed to " + away.toFixed(2) + " away" + (away >= rock.r ? "" : " NO"));
+      // the water reflects what stands round it
+      A.me.z = (p.lo + p.hi) / 2 + 6; A.me.x = A.centre(A.me.z); for (let i = 0; i < 60; i++) A.tick(0.016);
+      const items = A.tally.items, mirrorFn = A.engine.mirror;
+      A.engine.mirror = () => {}; A.tick(0);
+      say("reflections add " + (items - A.tally.items) + " items over the pool" + (items - A.tally.items > 20 ? "" : " NO"));
+      A.engine.mirror = mirrorFn; A.tick(0);
+      const sh = A.shoreline(p), widths = sh.left.map((q, i) => sh.right[i][0] - q[0]);
+      const ends = Math.max(widths[0], widths[widths.length - 1]), widest = Math.max.apply(null, widths);
+      say("shoreline: " + widths.length + " slices, widest " + widest.toFixed(1) + ", at the ends " + ends.toFixed(1) + ", corridor there " + (2 * A.halfWidth(p.z)).toFixed(1) + (ends < widest * 0.35 && widest < 2 * A.halfWidth(p.z) - 2 ? "" : " NO (a slab, not a lens)"));
+      const N = A.waterNormal(p, A.me.x, A.me.z);
+      say("surface normal under the slime: " + N.map((v) => v.toFixed(3)).join(", ") + (Math.abs(N[1]) > 0.9 ? "" : " NO"));
+      // a tap on the floor ahead walks the slime there
+      A.me.z = 300; A.me.x = A.centre(300); A.me.yaw = 0; A.me.speed = 0; for (let i = 0; i < 100; i++) A.tick(0.016);
+      const hit = A.floorHit(A.engine.W / 2, A.engine.H * 0.62), z0 = A.me.z;
+      say("a click at the middle of the frame lands on the floor at " + (hit ? "z " + hit.z.toFixed(0) + ", x " + hit.x.toFixed(1) : "nothing NO"));
+      if (hit) { A.controls.onTap(A.engine.W / 2, A.engine.H * 0.62); for (let i = 0; i < 400; i++) A.tick(0.016); }
+      say("after the click the slime walked from z " + z0.toFixed(0) + " to " + A.me.z.toFixed(0) + (hit && Math.abs(A.me.z - hit.z) < 3 ? " (arrived)" : " NO"));
+      // turning round: the world ahead is built whichever way the body faces
+      A.me.z = 600; A.me.x = A.centre(600); A.me.yaw = 0; A.me.speed = 0; for (let i = 0; i < 120; i++) A.tick(0.016);
+      const facingOn = A.tally.drawn;
+      A.me.yaw = Math.PI; for (let i = 0; i < 160; i++) A.tick(0.016);
+      const facingBack = A.tally.drawn;
+      say("items drawn facing along the cave " + facingOn + ", facing back " + facingBack + (facingBack > facingOn * 0.6 ? "" : " NO (the world behind is not built)"));
+      // the eye: seen from behind, and in the pool's reflection
+      const eyes = []; const origArc = A.engine.g.__proto__.ellipse;
+      A.me.z = (p.lo + p.hi) / 2 + 8; A.me.x = A.centre(A.me.z); A.me.yaw = 0; for (let i = 0; i < 120; i++) A.tick(0.016);
+      const proto = Object.getPrototypeOf(A.engine.g), fillOrig = proto.fill;   // every context in the page, the reflection layer too
+      let whites = 0;
+      proto.fill = function () { if (this.fillStyle === "#ffffff" || this.fillStyle === "#fff") whites++; return fillOrig.apply(this, arguments); };
+      A.tick(0.016); const fromBehind = whites;
+      A.me.yaw = Math.PI; whites = 0; A.tick(0.016);           // turned to face the camera, before the camera swings round
+      proto.fill = fillOrig;
+      say("white fills over the pool: from behind " + fromBehind + " (the two sheens; the eye faces away, so neither it nor its reflection shows), facing the camera " + whites + " (the eye and its reflection added)" + (fromBehind === 2 && whites >= 4 ? "" : " NO"));
+      // every click goes somewhere: the ceiling, a wall, and the air ahead all resolve, and a rock is never the goal
+      A.me.z = 300; A.me.x = A.centre(300); A.me.yaw = 0; A.me.speed = 0; A.me.goal = null; for (let i = 0; i < 120; i++) A.tick(0.016);
+      const roofClick = A.floorHit(A.engine.W / 2, 4), wallClick = A.floorHit(20, A.engine.H / 2), airClick = A.floorHit(A.engine.W / 2, A.engine.H * 0.3);
+      say("clicks on the ceiling, a wall and the air ahead resolve to: " + [roofClick, wallClick, airClick].map((h) => (h ? "z" + h.z.toFixed(0) : "nothing")).join(", ") + (roofClick && wallClick && airClick ? "" : " NO"));
+      const rock2 = A.propList.find((q) => q.kind === "boulder" && q.z > 320 && q.z < 520);
+      if (rock2) {
+        const pr = A.engine.project([rock2.x, A.floorAt(rock2.x, rock2.z) + 1, rock2.z]);
+        const onRock = pr ? A.floorHit(pr[0], pr[1]) : null;
+        say("a click on a boulder resolves " + (onRock ? Math.hypot(onRock.x - rock2.x, onRock.z - rock2.z).toFixed(1) + " from its centre (radius " + rock2.r.toFixed(1) + ")" : "to nothing") + (onRock && Math.hypot(onRock.x - rock2.x, onRock.z - rock2.z) >= rock2.r ? "" : " NO"));
+        A.me.goal = { x: rock2.x, z: rock2.z }; A.me.goalBest = Infinity; A.me.stuck = 0;   // an unreachable goal, set by force
+        let gaveUp = -1; for (let i = 0; i < 600; i++) { A.tick(0.016); if (!A.me.goal) { gaveUp = i; break; } }
+        say("a goal inside a rock is given up after " + (gaveUp < 0 ? "never NO" : (gaveUp * 0.016).toFixed(1) + " s"));
+      }
+      // a body's size does not depend on how finely it is sampled
+      const H3 = w.MH_3D, area = (pts) => { const h = H3.hull(pts.map((q) => [q[0], q[2]])); let a = 0; for (let i = 0; i < h.length; i++) { const q = h[i], r2 = h[(i + 1) % h.length]; a += q[0] * r2[1] - r2[0] * q[1]; } return Math.abs(a) / 2; };
+      const coarse = area(H3.shapes.ball(0, 0, 0, 3, 3, 3, 2, 5, false)), fine = area(H3.shapes.ball(0, 0, 0, 3, 3, 3, 4, 10, false)), truth = Math.PI * 9;
+      say("a rock's footprint sampled coarsely " + (coarse / truth * 100).toFixed(0) + "% of the true area, finely " + (fine / truth * 100).toFixed(0) + "%" + (Math.abs(coarse - fine) / truth < 0.05 ? "" : " NO (it would change size on approach)"));
+      // the hooks (measured on a still camera: a moving one changes what is built)
+      for (let i = 0; i < 200; i++) A.tick(0.016);
+      A.tick(0); const before = A.tally.items;
+      A.addSign({ x: A.centre(A.me.z + 30), z: A.me.z + 30, text: "A sign", sub: "and a line under it" });
+      A.tick(0);
+      say("addSign adds " + (A.tally.items - before) + " items to the frame" + (A.tally.items - before >= 2 ? "" : " NO"));
+      const propsBefore = A.props();
+      A.defineProp("column", { chance: 0.3, edge: 0.3, make: () => ({}), build(q, P) { A.engine.face([[q.x - 1, A.floorAt(q.x, q.z), q.z], [q.x + 1, A.floorAt(q.x, q.z), q.z], [q.x + 1, A.roofAt(q.x, q.z), q.z], [q.x - 1, A.roofAt(q.x, q.z), q.z]], P.rock, P.ink, 1, { layer: 2 }); } });
+      A.repopulate();
+      say("defineProp + repopulate: " + propsBefore + " props became " + A.props() + (A.props() !== propsBefore ? "" : " NO"));
+      A.tick(0); const creaturesBefore = A.tally.items;
+      A.addCreature({ build() { A.engine.billboard([A.me.x, A.me.y + 8, A.me.z], (g, x, y) => { g.fillRect(x, y, 2, 2); }, { layer: 2 }); } });
+      A.tick(0);
+      say("addCreature adds to the frame: " + (A.tally.items > creaturesBefore ? "yes" : "NO"));
+      // and the world's colour does not depend on where the camera is
+      const d = f.contentDocument, cv = d.getElementById("stage"), g = cv.getContext("2d");
+      const patch = () => { const im = g.getImageData(0, 0, cv.width, cv.height).data; let s = 0, m = 0; for (let i = 0; i < im.length; i += 4 * 53) { s += im[i] + im[i + 1] + im[i + 2]; m++; } return s / m / 3; };
+      A.me.z = 300; A.me.x = A.centre(300); A.me.speed = 0; for (let i = 0; i < 200; i++) A.tick(0.016);
+      const a1 = patch(); for (let i = 0; i < 4; i++) A.tick(0.016); const a2 = patch();
+      say("standing still, the frame's mean brightness moved by " + Math.abs(a1 - a2).toFixed(3) + " over four frames" + (Math.abs(a1 - a2) < 0.5 ? "" : " NO"));
+    } catch (e) { say("EXCEPTION " + e.message + " @ " + (e.stack || "").split("\n")[1]); }
+    say("errors: " + (errs.length ? errs.join(" | ") : "none"));
+    document.title = "done";
+  }, 1200);
+});
+</script>

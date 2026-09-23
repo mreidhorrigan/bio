@@ -1,0 +1,51 @@
+<!doctype html><meta charset="utf-8"><title>s</title><pre id="out">start</pre>
+<iframe id="f" src="/index.html?theme=technoscure" style="width:1100px;height:760px;border:0"></iframe>
+<script>
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument, o = {};
+  try {
+    const ISO = w.MH_ISO;
+    d.getElementById("mh-start").click();
+    setTimeout(() => {
+      const P = ISO.hub().period, T = ISO.TILE, cv = d.querySelector("canvas");
+      const iso = (x, y) => ({ x: (x - y) * (T.W / 2), y: (x + y) * (T.H / 2) });
+      const near = (c, pv) => c + Math.round((pv - c) / P) * P;
+      const p = ISO.player();
+      // the kiosk furthest away that still opens a card, so the warp is a real one
+      const cards = ISO.exhibits().filter(e => !e.satellite && ["Store", "Public Writing"].includes(e.title));
+      cards.sort((a, b) => Math.hypot(b.tx-p.x, b.ty-p.y) - Math.hypot(a.tx-p.x, a.ty-p.y));
+      const k = cards[0];
+      o.target = k.title;
+      o.distanceBefore = +Math.hypot(near(k.tx,p.x)-p.x, near(k.ty,p.y)-p.y).toFixed(2);
+      const ps = iso(p.x, p.y), ks = iso(near(k.tx, p.x), near(k.ty, p.y));
+      const W = cv.clientWidth, H = cv.clientHeight;
+      const opts = { clientX: W/2 - ps.x + ks.x, clientY: H/2 - ps.y - 26 + ks.y, bubbles: true, pointerId: 1, isPrimary: true };
+      cv.dispatchEvent(new w.PointerEvent("pointerdown", opts));
+      cv.dispatchEvent(new w.PointerEvent("pointerup", opts));
+      const afterTap = ISO.player();
+      o.tapMoved = +Math.hypot(afterTap.x-p.x, afterTap.y-p.y).toFixed(2);
+      o.cardOpened = !d.getElementById("mh-card").classList.contains("mh-hidden");
+      setTimeout(() => {
+        const before = ISO.player();
+        d.getElementById("mh-cardClose").click();
+        let n = 0, maxStep = 0, prev = before;
+        const iv = setInterval(() => {
+          const q = ISO.player();
+          maxStep = Math.max(maxStep, Math.hypot(q.x-prev.x, q.y-prev.y)); prev = q;
+          if (++n > 45) {
+            clearInterval(iv);
+            o.lurchOnClose = +maxStep.toFixed(3);
+            o.totalMovedAfterClose = +Math.hypot(prev.x-before.x, prev.y-before.y).toFixed(3);
+            // is the tag lit? count warm pixels on the canvas
+            const px = cv.getContext("2d").getImageData(0,0,cv.width,cv.height).data;
+            let warm = 0;
+            for (let i = 0; i < px.length; i += 4) if (px[i] > 180 && px[i+1] > 140 && px[i+2] < 150) warm++;
+            o.warmTagPixels = warm;
+            document.getElementById("out").textContent = JSON.stringify(o, null, 1);
+          }
+        }, 16);
+      }, 800);
+    }, 900);
+  } catch (e) { document.getElementById("out").textContent = JSON.stringify({ err: String(e) }); }
+}, 2400));
+</script>

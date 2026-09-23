@@ -1,0 +1,30 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, A = w.MH_GLOSSARY_WORLD;
+  const WW = A.width();
+  // a vine seen from just before the seam and from just after must be the same vine
+  const vs = WW / Math.round(WW / 62);
+  let worst = 0, at = 0;
+  for (let k = -3; k <= 3; k++) {
+    const x = k * vs;                       // the same circuit position, two ways
+    const a = 34 + ((Math.abs(Math.sin(((x % WW) + WW) % WW * 0.037)) * 78) | 0);
+    const b = 34 + ((Math.abs(Math.sin(((x + WW) % WW) * 0.037)) * 78) | 0);
+    if (Math.abs(a - b) > worst) { worst = Math.abs(a - b); at = x; }
+  }
+  say("vine length seen from either side of the seam differs by: " + worst + "px");
+  // and the drawn picture either side of the seam should match
+  A.me.flying = false;
+  function frame(x) { A.me.x = x; A.tick(0.016); A.tick(0.016);
+    const cv = document.getElementById("f").contentDocument.getElementById("crawl");
+    return cv.getContext("2d").getImageData(0, 0, cv.width, 260).data; }
+  const before = frame(WW - 1), after = frame(0);
+  let diff = 0; for (let i = 0; i < before.length; i += 4 * 53) diff += Math.abs(before[i] - after[i]);
+  say("ceiling band across the seam, mean channel difference: " + (diff / (before.length / (4*53))).toFixed(2));
+  say("(a jump would show as a large number; a 1px camera step is a small one)");
+  document.title = "done";
+}, 1300));
+</script>

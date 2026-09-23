@@ -1,0 +1,48 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html?term=voiceshifting" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const log = []; const say = (k, v) => { log.push(k + ": " + v); document.getElementById("out").textContent = log.join("\n"); };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  try {
+    const A = w.MH_GLOSSARY_WORLD;
+    say("arrived at", JSON.stringify(A.at()) + " from ?term=voiceshifting");
+    say("card", d.querySelector("#entry h3").textContent);
+    say("url now", w.location.search);
+    const cite = d.querySelector("#entry .cite");
+    say("cite button", cite ? cite.textContent : "MISSING");
+    // the citation text, without needing the clipboard
+    cite.click();
+    setTimeout(() => {
+      say("button after", cite.textContent);
+      say("the citation", A.cite("voiceshifting"));
+      // walking to another entry restamps the address
+      const m = A.find("technopacity");
+      say("looked up", m ? m.e.term + " at x=" + Math.round(m.x) : "NOT FOUND");
+      A.go(m.x); for (let i = 0; i < 140; i++) A.tick(0.016);
+      say("walked to", JSON.stringify(A.at()) + " (slime at x=" + Math.round(A.me.x) + "), url " + w.location.search);
+      // a note in the cave gets ?note=
+      const n = A.marks.filter(x => x.side === "penumbra")[3];
+      A.go(n.x); for (let i = 0; i < 140; i++) A.tick(0.016);
+      say("cave entry", JSON.stringify(A.at()) + " (slime at x=" + Math.round(A.me.x) + "), url " + w.location.search);
+      setTimeout(() => {
+        say("cave citation", A.cite(n.e.slug));
+        say("list anchor exists", !!d.getElementById("t-voiceshifting") + " / " + !!d.getElementById("t-n01"));
+        document.title = "done";
+      }, 60);
+    }, 80);
+  } catch (e) { say("EXCEPTION", e.message); document.title = "done"; }
+}, 1000));
+</script>
+<script>
+// second pass: the per-entry cite buttons in the word list
+window.addEventListener("load", () => setTimeout(() => {
+  const d = document.getElementById("f").contentDocument;
+  const buttons = d.querySelectorAll('dl.words dt button[data-cite]');
+  const pre = document.getElementById("out");
+  pre.textContent += "\nlist cite buttons: " + buttons.length;
+  if (buttons.length) { buttons[0].click();
+    setTimeout(() => { pre.textContent += "\nfirst one now reads: " + buttons[0].textContent; }, 60); }
+}, 2400));
+</script>

@@ -1,0 +1,24 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:900px;height:600px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  say("no param, empty storage -> lang is: " + w.MH_I18N.lang);
+  say("h1 reads: " + d.querySelector("h1").textContent);
+  try { say("stored choice: " + JSON.stringify(w.localStorage.getItem("mh-lang"))); }
+  catch (e) { say("storage unreadable: " + e.message); }
+  // now simulate a visitor clicking the switch, then coming back with no param
+  try { w.localStorage.setItem("mh-lang", "fr"); say("set storage to fr, reloading..."); } catch (e) {}
+  const f2 = document.createElement("iframe");
+  f2.src = "/glossary.html"; f2.style.cssText = "width:900px;height:600px;border:0";
+  f2.addEventListener("load", () => setTimeout(() => {
+    say("after a remembered choice -> lang is: " + f2.contentWindow.MH_I18N.lang);
+    say("h1 reads: " + f2.contentDocument.querySelector("h1").textContent);
+    try { f2.contentWindow.localStorage.removeItem("mh-lang"); } catch (e) {}
+    document.title = "done";
+  }, 900));
+  document.body.append(f2);
+}, 900));
+</script>

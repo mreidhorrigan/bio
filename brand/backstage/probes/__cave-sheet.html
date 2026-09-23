@@ -1,0 +1,23 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/brand/backstage/slimes/cave-proposals.html" style="width:1180px;height:2700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  const P = w.MH_CAVE_PAGE;
+  say("painter errors: " + (P.errors().length ? P.errors().join(" | ") : "none"));
+  say("panels: " + P.panels().length);
+  say("slime painter: " + (w.MH_SLIME2D ? "loaded" : "MISSING"));
+  let blank = [];
+  for (const p of P.panels()) {
+    const im = p.ctx.getImageData(0, 0, p.canvas.width, p.canvas.height).data;
+    const seen = new Set();
+    for (let i = 0; i < im.length; i += 4 * 101) seen.add(im[i] + "," + im[i+1] + "," + im[i+2]);
+    if (seen.size < 8) blank.push(p.name + " (" + seen.size + " colours)");
+  }
+  say("panels that did not paint: " + (blank.length ? blank.join(" | ") : "none"));
+  say("sections: " + [...d.querySelectorAll("h2")].map(h => h.textContent).join(" / "));
+  document.title = "done";
+}, 1800));
+</script>

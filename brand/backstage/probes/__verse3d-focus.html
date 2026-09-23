@@ -1,0 +1,72 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D outdoors: the distance in soft focus, and a camera that does not jump</title>
+<meta name="budget" content="14000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+/* Depth of field: the same frame drawn with the focus and without it. The
+   distance (the band under the horizon) should lose fine detail, the near
+   ground (the bottom of the frame) should not, and far things must still be
+   there (counted by the engine, not dropped).
+   The camera: walk the slime past houses, round one and along a row, and
+   measure the largest jump the camera makes in one frame against how far the
+   slime moved. A boom that snaps shorter at a house corner jumps. */
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, W = w.MH_V3D, E = W.engine;
+    W.pause();
+    const cv = w.document.getElementById("view"), g = cv.getContext("2d");
+    // fine detail in a band of rows: the mean step between neighbouring pixels
+    const detail = (y0, y1) => {
+      const d = g.getImageData(0, Math.round(y0 * cv.height), cv.width, Math.round((y1 - y0) * cv.height)).data;
+      let s = 0, n = 0;
+      for (let i = 4; i < d.length; i += 4 * 3) { s += Math.abs(d[i] - d[i - 4]) + Math.abs(d[i + 1] - d[i - 3]); n++; }
+      return s / n;
+    };
+    for (const skin of ["technurture", "technoscure", "technocute"]) {
+      W.setSkin(skin); W.load("outdoors");
+      W.me.x = 0; W.me.z = -120; W.me.yaw = Math.PI; for (let i = 0; i < 60; i++) W.tick(0.016);   // out past the ring, facing away
+      const horizon = cv.clientHeight / 2 + E.fov * Math.tan(E.cam.pitch), hy = horizon / cv.clientHeight;
+      const focus = E.focus;
+      W.tick(0.016);
+      const farOn = detail(hy + 0.005, hy + 0.22), nearOn = detail(0.85, 0.98), counted = (E.tally.far || 0) + (E.tally.mid || 0);
+      E.focus = null; W.tick(0);
+      const farOff = detail(hy + 0.005, hy + 0.22), nearOff = detail(0.85, 0.98);
+      E.focus = focus;
+      say(skin + ": detail under the horizon " + farOff.toFixed(2) + " sharp, " + farOn.toFixed(2) + " in focus mode" + (farOn < farOff * 0.97 || counted === 0 ? "" : " NO (the distance is not softer)") +
+        "; near ground " + nearOff.toFixed(2) + " vs " + nearOn.toFixed(2) + (Math.abs(nearOn - nearOff) <= nearOff * 0.15 + 0.2 ? "" : " NO (the near ground changed)") +
+        "; " + counted + " far and middle things drawn soft" + (counted > 0 || skin === "technocute" ? "" : " NO"));
+    }
+    // the camera past houses: a circle round the first house, close, then a line along the ring
+    W.setSkin("technurture"); W.load("outdoors");
+    const H = W.S().houses[0], R = H.r + 9;
+    let worst = 0, worstAt = "", total = 0, frames = 0, prev = null, lastStep = null;
+    const K = W.controls.keys;
+    const walk = (n, setup) => {
+      setup();
+      for (let i = 0; i < 120; i++) W.tick(0.016);              // let the camera settle behind the body after it is put there
+      prev = [E.cam.x, E.cam.y, E.cam.z, W.me.x, W.me.z]; lastStep = null;
+      for (let i = 0; i < n; i++) {
+        W.tick(0.016);
+        const step = [E.cam.x - prev[0], E.cam.y - prev[1], E.cam.z - prev[2]];
+        // a jump is a jerk: the camera's step changing sharply from one frame to the next
+        // (swinging round a turning body is steady motion, and is not one)
+        if (lastStep) {
+          const jerk = Math.hypot(step[0] - lastStep[0], step[1] - lastStep[1], step[2] - lastStep[2]);
+          if (jerk > worst) { const fi = E.followInfo || {}; worst = jerk; worstAt = "frame " + i + ", step " + Math.hypot(...step).toFixed(2) + " after " + Math.hypot(...lastStep).toFixed(2) + "; boom " + (fi.boom || 0).toFixed(1) + " clear " + (fi.s || 0).toFixed(1) + " rock " + (fi.sHard || 0).toFixed(1) + (fi.snapped ? " snapped" : ""); }
+        }
+        total += Math.hypot(...step); frames++;
+        lastStep = step; prev = [E.cam.x, E.cam.y, E.cam.z, W.me.x, W.me.z];
+      }
+      K.fwd = K.left = K.right = false;
+    };
+    // round the house: walk forward, turning, keeping close
+    walk(420, () => { W.me.x = H.x + R; W.me.z = H.z; W.me.yaw = 0; K.fwd = true; K.left = true; });
+    // along the ring of houses, past their doors
+    walk(420, () => { W.me.x = 0; W.me.z = -70; W.me.yaw = Math.PI / 2; K.fwd = true; K.left = false; });
+    say("camera past houses: the sharpest change in its step from one frame to the next " + worst.toFixed(2) + " units (" + worstAt + "), mean step " + (total / frames).toFixed(2) + (worst < 0.6 ? "" : " NO (a jump)"));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

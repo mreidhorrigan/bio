@@ -1,0 +1,38 @@
+<!DOCTYPE html><meta charset="utf-8"><meta name="budget" content="3000"><title>The slimeverse in 3D, a still</title>
+<style>body{margin:0;overflow:hidden}</style>
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="position:absolute;left:0;top:0;width:1280px;height:820px;border:0"></iframe>
+<script>
+// Freezes one place (#outdoors, #indoors, #cave, #pool, #pool-front, #pond, #pond-plain, #field, #lake; any of them after night- or bureau- for those skins) after a
+// short walk, for a screenshot that tools/frame-stats.py can put in numbers:
+//   python3 tools/run-probes.py --shot '__verse3d-shot.html#outdoors' out.png
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const W = document.getElementById("f").contentWindow.MH_V3D; let want = (location.hash || "#outdoors").slice(1);
+  W.pause();
+  const d = document.getElementById("f").contentDocument, st = d.createElement("style");   // the view alone, filling the frame
+  st.textContent = "body{margin:0;padding:0;max-width:none} main>*:not(.stage){display:none} .stage{border:0;border-radius:0} #view{height:820px} .readout{display:none}";
+  d.head.appendChild(st); W.engine.size();
+  // a skin by prefix: night- (gloomthmaxx) or bureau- (bureaucore), e.g. #night-outdoors, #bureau-indoors
+  const skinOf = { night: "technoscure", bureau: "technocute" }, pre = want.split("-")[0];
+  if (skinOf[pre]) { W.setSkin(skinOf[pre]); want = want.slice(pre.length + 1) || "outdoors"; }
+  const id = want.startsWith("pool") ? "indoors" : want.startsWith("pond") || want === "field" || want === "lake" ? "outdoors" : want;
+  W.load(id);
+  if (want === "field" || want === "lake") {                // out in the fields, away from the village, facing away from it
+    const S = W.S(); let best = null;
+    for (let k = 0; k < 3000 && !best; k++) {
+      const a = k * 2.399, r = 180 + (k % 40) * 4, x = Math.sin(a) * r, z = Math.cos(a) * r;
+      const lake = S.floorAt(x + Math.sin(a) * 40, z + Math.cos(a) * 40) < -1;
+      if (S.floorAt(x, z) > 0.5 && (want === "lake" ? lake : !lake)) best = { x, z, a };
+    }
+    if (best) { W.me.x = best.x; W.me.z = best.z; W.me.yaw = best.a; }
+  }
+  if (want.startsWith("pond")) {                       // the big pond, seen across from its south shore
+    const P = W.pools()[0]; W.me.x = P.x; W.me.z = P.z - P.rz - 8; W.me.yaw = 0;
+  }
+  if (want.startsWith("pool")) {                       // the slime in the bath, from behind or turned to the camera
+    const P = W.pools()[0]; W.me.x = P.x; W.me.z = P.z - 2; W.me.yaw = want === "pool-front" ? Math.PI * 0.8 : 0.3;
+  }
+  if (want === "pond-plain") { const V = document.getElementById("f").contentWindow.MH_VERSE3D; V.PHOTO.ready = false; }   // the same frame without the photo
+  for (let i = 0; i < 120; i++) W.tick(0.016);
+  if (want === "pool-front") { W.me.yaw = Math.PI; W.tick(0.016); }
+}, 400));
+</script>

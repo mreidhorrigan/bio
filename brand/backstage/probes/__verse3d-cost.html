@@ -1,0 +1,17 @@
+<!DOCTYPE html><meta charset="utf-8"><meta name="budget" content="1500"><title>The slimeverse in 3D, frame cost</title>
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Ticks one place N times (#place:N in the URL) and stops, walking. Time the
+// whole headless run against #place:0 and the difference is N frames of CPU:
+// virtual time freezes the page's own clocks, so the cost is measured outside.
+//   time python3 tools/run-probes.py '__verse3d-cost.html#outdoors:300'
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const W = document.getElementById("f").contentWindow.MH_V3D;
+  const [id, n] = (location.hash || "#outdoors:0").slice(1).split(":");
+  W.pause(); W.load(id || "outdoors"); W.controls.keys.fwd = true;
+  if (/nofocus/.test(location.hash)) W.engine.focus = null;   // #place:N:nofocus: the same frames without the depth of field
+  for (let i = 0; i < +n; i++) { W.controls.keys.left = (i % 240) < 50; W.tick(0.016); }
+  document.getElementById("out").textContent = "ticked " + n + " frames of " + id + ", " + W.engine.tally.drawn + " items drawn in the last";
+}, 300));
+</script>

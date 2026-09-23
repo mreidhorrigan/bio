@@ -1,0 +1,31 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const errs = [];
+document.getElementById("f").addEventListener("load", () => {
+  const w = document.getElementById("f").contentWindow;
+  w.addEventListener("error", (e) => errs.push(e.message));
+  setTimeout(() => {
+    const A = w.MH_GLOSSARY_WORLD;
+    try {
+      const pen = A.marks.filter(m => m.side === "penumbra");
+      const glo = A.marks.filter(m => m.side === "glossary");
+      say("living half: " + glo.length + ", dark half: " + pen.length);
+      for (const m of [glo[0], glo[Math.floor(glo.length/2)], glo[glo.length-1], pen[0], pen[3], pen[pen.length-1]]) {
+        A.go(m.x); for (let i = 0; i < 6; i++) A.tick(0.016);
+      }
+      say("walked both halves with no throw");
+      A.go(pen[5].x); for (let i = 0; i < 200; i++) A.tick(0.016);
+      say("standing in the dark: " + JSON.stringify(A.at()) + ", dusk " + A.dusk().toFixed(2));
+      say("roof: living " + Math.round(A.roofAt(glo[3].x)) + ", dark " + Math.round(A.roofAt(pen[3].x)) + ", at the way in " + Math.round(A.roofAt(0)));
+      say("floor at the way in: " + Math.round(A.ground(0)) + " vs mid-cave " + Math.round(A.ground(pen[3].x)));
+      let worst = 0; for (let x = 0; x < A.width(); x += 2) worst = Math.max(worst, Math.abs(A.ground(x+2) - A.ground(x)));
+      say("steepest 2px step: " + worst.toFixed(2));
+      say("seam: " + A.ground(0).toFixed(2) + " = " + A.ground(A.width()).toFixed(2));
+    } catch (e) { say("EXCEPTION: " + e.message + " @ " + (e.stack||"").split("\n")[1]); }
+    setTimeout(() => { say("window errors: " + (errs.length ? errs.join(" | ") : "none")); document.title = "done"; }, 200);
+  }, 1200);
+});
+</script>

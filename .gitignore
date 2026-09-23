@@ -41,3 +41,6 @@ house-style-private/
 # backstage output: generated GIFs and scratch recordings
 brand/backstage/gif/
 brand/backstage/*.mov
+
+# Python bytecode from the backstage scripts
+__pycache__/

@@ -74,6 +74,7 @@
   }
   function shadow(g, cx, cy, rx) { g.save(); g.fillStyle = "rgba(0,0,0,0.28)"; g.beginPath(); g.ellipse(cx, cy, rx, rx * 0.5, 0, 0, Math.PI * 2); g.fill(); g.restore(); }
   function uiFont() { return getComputedStyle(document.documentElement).getPropertyValue("--mh-ui").trim() || "system-ui, sans-serif"; }
+  function displayFont() { return getComputedStyle(document.documentElement).getPropertyValue("--mh-display").trim() || uiFont(); }
   function label(g, text, x, y, size, color) {
     g.font = "700 " + size + "px " + uiFont(); g.textAlign = "center"; g.textBaseline = "alphabetic";
     g.lineWidth = 4; g.strokeStyle = "rgba(0,0,0,0.6)"; g.strokeText(text, x, y); g.fillStyle = color; g.fillText(text, x, y);
@@ -123,7 +124,7 @@
     hub: () => ({ x: P / 2, y: P / 2, period: P }),
     biome: biomeAt,
     onWater: (x, y) => biomeAt(Math.round(x), Math.round(y)) === "water",   // engine.js also excludes the plaza; the gallery has none
-    util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr },
+    util: { diamond, poly, roundRect, shadow, label, shade, mix, mixHex, accentFill, hexA, clamp, hash01, noise01, wrap, wrapDelta, tr, uiFont, displayFont },
     get TILE() { return { W: TILE_W, H: TILE_H }; },
     // the site's engine also exposes start/switchTheme/audio; a gallery needs none of it
     start() {}, switchTheme() {}, cycle() {},

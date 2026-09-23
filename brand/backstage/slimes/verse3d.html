@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slimeverse in 3D</title>
+  <meta name="description" content="A proposal: the village, a dwelling and the cave, walkable in three dimensions on the site's 3D engine, with shoggoths and zoogs.">
+  <style>
+    :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; }
+    body { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 4rem; color: #261139; background: #f6f4ee; }
+    h1 { margin-bottom: .3rem; }
+    h2 { margin: 2.2rem 0 .3rem; font-size: 1.25rem; }
+    p, li { max-width: 46rem; }
+    .lede { margin-top: 0; }
+    a { color: #5b2a86; }
+    .tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.2rem 0 .7rem; }
+    .tabs button { font: inherit; padding: .4rem .95rem; color: #261139; background: white; border: 2px solid #b294d6;
+      border-radius: 16px 4px 16px 4px / 7px 2px 7px 2px; cursor: pointer; }
+    .tabs button[aria-pressed="true"] { background: #261139; color: #f6f4ee; border-color: #261139; }
+    .tabs button:focus-visible { outline: 3px solid #5b2a86; outline-offset: 2px; }
+    .stage { position: relative; border: 2px solid #b294d6; border-radius: 18px 6px; overflow: hidden; background: #0d120e; }
+    #view { display: block; width: 100%; height: clamp(380px, 68vh, 660px); cursor: grab; touch-action: none; }
+    #view:active { cursor: grabbing; }
+    #view:focus-visible { outline: 3px solid #5b2a86; outline-offset: -4px; }
+    .readout { position: absolute; left: 12px; top: 10px; display: flex; gap: .5rem; flex-wrap: wrap; pointer-events: none; }
+    .readout span { font: 600 .74rem/1 ui-monospace, Menlo, monospace; color: #dce6f0; background: rgba(10,14,11,.62);
+      padding: 5px 8px; border-radius: 7px 2px; }
+    .keys { font-size: .9rem; color: #5b4a6b; }
+    .warn { padding: 1rem; background: #fff3cd; border: 2px solid #d6a800; border-radius: 12px; }
+    code { font-size: .92em; }
+  </style>
+  <!-- the site's renderer, loaded in place rather than copied -->
+  <script src="../../../engine-3d.js"></script>
+  <script src="../../../vacuole.js"></script>
+  <script src="../../../verse3d.js"></script>
+  <!-- the site's own content, so the village outdoors is the iso world's village -->
+  <script>window.MH_SITE = { base: "../../../" };</script>
+  <script src="../../../content.js"></script>
+  <script src="../../../verse3d-scenes.js"></script>
+  <script src="verse3d-page.js" defer></script>
+</head>
+<body>
+  <main>
+    <p><a href="index.html">All extracted views</a></p>
+    <h1>The slimeverse in three dimensions</h1>
+    <p class="lede">Three places on the one 3D engine: the village outdoors, the
+      inside of a house, and the cave under the Glossary. They join up the way
+      they would in the world. Every house lets you in, the Glossary's wellhead
+      and the hatch indoors both lead down, and the rope under the shaft leads
+      back up.</p>
+
+    <div class="tabs" role="group" aria-label="Choose a skin">
+      <button type="button" data-skin="technurture" aria-pressed="true">Slimeverse by day</button>
+      <button type="button" data-skin="technoscure" aria-pressed="false">Gloomthmaxx</button>
+      <button type="button" data-skin="technocute" aria-pressed="false">Bureaucore</button>
+      <button type="button" id="sound" aria-pressed="true">Sound on</button>
+    </div>
+    <div class="tabs" role="group" aria-label="Choose a place">
+      <button type="button" data-scene="outdoors" aria-pressed="true">Outdoors</button>
+      <button type="button" data-scene="indoors" aria-pressed="false">Indoors</button>
+      <button type="button" data-scene="cave" aria-pressed="false">The cave</button>
+    </div>
+    <div class="stage">
+      <canvas id="view" tabindex="0" role="img"
+        aria-label="A walkable view in three dimensions, over the slime's shoulder, of the place chosen above."></canvas>
+      <div class="readout">
+        <span id="where" aria-live="polite">Outdoors</span>
+        <span id="life"></span>
+        <span id="hud"></span>
+      </div>
+    </div>
+    <p class="keys">Arrow keys or W and S to walk, A and D to turn, and shift to
+      hurry. Drag to look around, click to walk somewhere, and scroll over the
+      view to pull the camera in or out. The keys belong to the view only while
+      it is on screen.</p>
+    <p class="warn" id="fail" hidden></p>
+
+    <h2>The three skins</h2>
+    <p>Each skin of the village's isometric world has its 3D version, with the
+      same world, the same things in the same places, and each thing drawn
+      the way that skin draws it. Slimeverse by day has gel dwellings, plants
+      and lakes. Gloomthmaxx is the same world after dark: keep to the light,
+      where the slime's beam, the warm windows and the neon signs are. Bureaucore
+      is a flat paper board of black-edged blocks, with nothing else on it.</p>
+
+    <h2>What is in each place</h2>
+    <ul>
+      <li><strong>Outdoors.</strong> The village's isometric world, walked in
+        three dimensions: the same world that goes on forever, the plaza and
+        its monument, a house for every place in the village on the same ring
+        and the same roads, the Glossary's wellhead, the same biomes, lakes
+        where the isometric world has water, and its plants on the same
+        ground. Knots of zoogs graze, and shoggoths hunt them on their
+        tentacles.</li>
+      <li><strong>Indoors.</strong> Any house, from the inside and at the same
+        size (its door leads back out where you came in): lobes of gel lit from within, a skylight,
+        shelves of books, a table, lamps, a gel bath, a spore-cap in a pot, and
+        a hatch down to the cave. Three zoogs live here. No shoggoth comes
+        in.</li>
+      <li><strong>The cave.</strong> The corridor from <code>slime3d.html</code>,
+        shorter and round-edged: the living half with zoogs in it, then the dark
+        half with the shoggoths and the drifting lights.</li>
+    </ul>
+
+    <h2>How it is built</h2>
+    <p>Nothing here is wired into the site. The renderer is
+      <code>engine-3d.js</code>, the same file <code>slime3d.html</code> uses.
+      <code>verse3d.js</code> is what the places share: the slime, the camera,
+      water, the shoggoths, the zoogs, the ways between places, and the
+      plaques. <code>verse3d-scenes.js</code> holds the three places, each a
+      ground, a palette and what stands on it. Only the place on screen runs,
+      and the view stops drawing when it is scrolled away.</p>
+    <p>Every pool reflects what stands over it, flipped through the water's
+      level. The waves move a reflection as they would on a pond, but never
+      tilt it, and the slime's eye shows in the water only when a mirror would
+      show it. Deep water shows the photo the village's lakes use, under its
+      own colour.</p>
+    <p>Everything that stands up is solid, the creatures included. Each thing
+      is the size and shape it is in the village's isometric view, measured
+      against one table in slime radii. A building you can walk into is drawn
+      larger than its icon so that it holds a room, and it is the same size
+      from outside and in.</p>
+  </main>
+</body>
+</html>

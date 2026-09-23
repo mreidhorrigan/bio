@@ -1,0 +1,36 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D cave, real time</title>
+<iframe id="f" src="/slime3d.html" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Real frame times (run WITHOUT a virtual time budget: `--timeout=9000`), and
+// the slime's contrast against what surrounds it on screen.
+const out = document.getElementById("out"), f = document.getElementById("f");
+const say = (t) => { out.textContent += "\n" + t; };
+f.addEventListener("load", () => setTimeout(() => {
+  const w = f.contentWindow, A = w.MH_SLIME3D, d = f.contentDocument;
+  if (!A) { say("MISSING api"); return; }
+  A.controls.keys.fwd = true;                                   // walk, so the world streams
+  let frames = 0, t0 = 0, worst = 0, lastT = 0;
+  function tick(now) {
+    if (!t0) t0 = now;
+    if (lastT) worst = Math.max(worst, now - lastT);
+    lastT = now; frames++;
+    if (now - t0 < 4000) { w.requestAnimationFrame(tick); return; }
+    A.controls.keys.fwd = false;
+    const ms = (now - t0) / frames;
+    say("walked " + frames + " frames in 4 s: " + ms.toFixed(1) + " ms per frame (" + (1000 / ms).toFixed(0) + " fps), worst gap " + worst.toFixed(0) + " ms");
+    say("items drawn in the last frame: " + A.tally.drawn + " of " + A.tally.items);
+    // contrast: the body's middle against the ground either side of it
+    A.pause(); A.tick(0.016);
+    const cv = d.getElementById("stage"), g = cv.getContext("2d"), dpr = cv.width / cv.clientWidth, b = A.bodyBox();
+    const mean = (x, y, s) => { const im = g.getImageData(Math.round(x * dpr), Math.round(y * dpr), Math.round(s * dpr), Math.round(s * dpr)).data; const c = [0, 0, 0]; for (let i = 0; i < im.length; i += 4) { c[0] += im[i]; c[1] += im[i + 1]; c[2] += im[i + 2]; } const n = im.length / 4; return c.map((v) => v / n); };
+    const body = mean(b.x + b.w / 2 - 6, b.y + b.h / 2 - 6, 12);
+    const left = mean(b.x - 40, b.y + b.h * 0.7, 14), right = mean(b.x + b.w + 26, b.y + b.h * 0.7, 14);
+    const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]).toFixed(0);
+    say("body rgb " + body.map(Math.round).join(",") + "; ground left " + left.map(Math.round).join(",") + ", right " + right.map(Math.round).join(","));
+    say("colour distance body to ground: " + dist(body, left) + " and " + dist(body, right) + " (of 441)" + (Math.min(dist(body, left), dist(body, right)) > 60 ? "" : " NO"));
+    document.title = "done";
+  }
+  w.requestAnimationFrame(tick);
+}, 800));
+</script>

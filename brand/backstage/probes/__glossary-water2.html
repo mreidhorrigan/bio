@@ -1,0 +1,29 @@
+<!DOCTYPE html><meta charset="utf-8"><title>2D water, one column</title>
+<iframe id="f" src="/glossary.html" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// At an island pool, read the pixels down one column with and without the
+// water, to see where the water is actually painted and what covers it.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, A = w.MH_GLOSSARY_WORLD, S = A.side;
+  const P = A.pools(), qi = P.find((q) => S.wetRuns(q) > 1) || P[0];
+  A.me.flying = false; A.go(qi.x); for (let i = 0; i < 500; i++) A.tick(0.016);
+  const d = document.getElementById("f").contentDocument, cv = d.getElementById("crawl"), g = cv.getContext("2d");
+  const L = A.layout(), scale = cv.width / L.W;
+  say("pool at x=" + Math.round(qi.x) + " level " + qi.level.toFixed(1) + " lo..hi " + Math.round(qi.lo - qi.x) + ".." + Math.round(qi.hi - qi.x) + " n=" + qi.n + " dx=" + qi.dx.toFixed(1) + " zoom " + L.zoom + " W " + L.W);
+  const col = (off) => {
+    const wxx = qi.x + off, sx = L.W / 2 + (wxx - L.cam);
+    const px = (y) => { const im = g.getImageData(Math.round(sx * scale), Math.round(y * scale), 1, 1).data; return im[0] + "," + im[1] + "," + im[2]; };
+    const rows = [-4, 0, 3, 6, 10, 14];
+    const withW = rows.map((r) => px(qi.level + r));
+    const orig = S.drawWater; S.drawWater = () => {}; A.tick(0);
+    const without = rows.map((r) => px(qi.level + r));
+    S.drawWater = orig; A.tick(0);
+    say("offset " + off + ": ground is " + (A.ground(wxx) - qi.level).toFixed(1) + " below the level; screen x " + Math.round(sx));
+    rows.forEach((r, i) => say("   row level" + (r >= 0 ? "+" : "") + r + ": with water " + withW[i] + (withW[i] === without[i] ? "  (same without: covered or unpainted)" : "  without " + without[i])));
+  };
+  for (const off of [-200, -40, 60, 140, 180]) col(off);
+  document.title = "done";
+}, 1400));
+</script>

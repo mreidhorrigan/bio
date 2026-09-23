@@ -1,0 +1,51 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  const A = w.MH_GLOSSARY_WORLD;
+  say("focus on load: " + (d.activeElement === d.body ? "the page body, nothing clicked" : d.activeElement.tagName));
+  const key = (type, k, target) => target.dispatchEvent(new w.KeyboardEvent(type, { key: k, bubbles: true }));
+  // right arrow, sent to the document, with nothing ever clicked
+  const x0 = A.me.x;
+  key("keydown", "ArrowRight", d.body);
+  for (let i = 0; i < 40; i++) A.tick(0.016);
+  key("keyup", "ArrowRight", d.body);
+  say("right arrow with no click: moved " + Math.round(A.me.x - x0) + "px");
+  const x1 = A.me.x;
+  key("keydown", "ArrowLeft", d.body); key("keydown", "Shift", d.body);
+  for (let i = 0; i < 40; i++) A.tick(0.016);
+  key("keyup", "ArrowLeft", d.body); key("keyup", "Shift", d.body);
+  say("left arrow with shift: moved " + Math.round(A.me.x - x1) + "px (hurried)");
+  // typing into a control must NOT drive the slime
+  const btn = d.querySelector('dl.words dt button');
+  btn.focus();
+  const x2 = A.me.x;
+  key("keydown", "ArrowRight", btn);
+  for (let i = 0; i < 30; i++) A.tick(0.016);
+  key("keyup", "ArrowRight", btn);
+  say("arrow while a list button has focus: moved " + Math.round(A.me.x - x2) + "px (a button has no use for an arrow, so the arrows stay the world's)");
+  // the cases the report named: freshly clicked, and clicked away from a menu
+  const cv = d.getElementById("crawl");
+  cv.dispatchEvent(new w.PointerEvent("pointerdown", { clientX: 600, clientY: 400, bubbles: true }));
+  w.dispatchEvent(new w.PointerEvent("pointerup", { bubbles: true }));
+  const x3 = A.me.x;
+  key("keydown", "ArrowRight", d.activeElement || d.body);
+  for (let i = 0; i < 40; i++) A.tick(0.016);
+  key("keyup", "ArrowRight", d.activeElement || d.body);
+  say("after clicking the world: focus is " + (d.activeElement && d.activeElement.id ? "#" + d.activeElement.id : d.activeElement.tagName)
+      + ", moved " + Math.round(A.me.x - x3) + "px");
+  const menu = d.querySelector(".mh-dd > summary, .mh-nav a, #mh-menubar a");
+  if (menu) {
+    menu.focus();
+    const x4 = A.me.x;
+    key("keydown", "ArrowLeft", menu);
+    for (let i = 0; i < 40; i++) A.tick(0.016);
+    key("keyup", "ArrowLeft", menu);
+    say("after clicking a menu item (" + menu.tagName.toLowerCase() + "): moved " + Math.abs(Math.round(A.me.x - x4)) + "px");
+  } else say("no menubar item found to test");
+  document.title = "done";
+}, 1300));
+</script>

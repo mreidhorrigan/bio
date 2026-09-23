@@ -53,6 +53,96 @@
     g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
   }
 
+  /** The damaged marquee: a neon tube sign with dead letters, per-letter blur.
+   *  `topY` is the top of whatever it labels, so a dwelling, a tower or the
+   *  glossary's wellhead all wear the same sign. */
+  function kioskSign(g, sx, topY, ex, active, env) {
+    const t = (env && env.t) || 0, slot = ex.slot || 0;
+    // THE menu item — a DAMAGED NEON MARQUEE salvaged from an abandoned amusement park:
+    // a rusted, chipped board ringed by half-dead bulbs, the label burning in glass neon TUBES
+    // (a couple of letters dead, one flickering). The whole sign buzzes and browns-out, each
+    // broken in its OWN way (seeded by slot). Lit by ONE board-shaped bloom, not per-letter blur.
+    const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, near = active ? 1.35 : 1;
+    const NEON = ex.accentB ? ex.accent : NEONS[(u.hash01(slot * 3 + 1, 7) * NEONS.length) | 0];   // this sign's tube colour (a junction burns the blend of its two roads)
+    g.font = "800 16px 'Arial Narrow','Helvetica Neue',Impact,sans-serif";   // condensed display = marquee tubes
+    const label = ex.title.toUpperCase(), n = label.length, GAP = 2;
+    let tw = 0; for (let i = 0; i < n; i++) tw += g.measureText(label[i]).width + GAP; tw = Math.max(0, tw - GAP);   // tube-gap layout, no array
+    const bw = Math.max(58, tw + 30), bh = 34, rr = 5;
+    const bcx = sx + sway, bcy = topY - 50, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
+    const sr = ex.signRect || (ex.signRect = { x: 0, y: 0, w: 0, h: 0 });   // hand the BOARD rect to the engine's
+    // the board and the vacuole it floats on (vacuole.js) are one lit patch in the gloom
+    const lift = window.MH_VACUOLE ? (() => { const v = window.MH_VACUOLE.sizeFor(bw, bh); return v.gap + v.ry * 2; })() : 0;
+    sr.x = x0; sr.y = y0 - lift; sr.w = bw; sr.h = bh + lift;                // gloom-reveal so the bright patch is the sign's shape, not a round halo (reused object, no per-frame alloc)
+    // BUZZ: a mains hum with occasional brown-out dropouts. Steady "lit" when motion is reduced.
+    let buzz = 1;
+    if (!RM()) { const ft = t * 7.3 + slot * 2.1, w = Math.sin(ft) + 0.7 * Math.sin(ft * 2.7 + 1.3); buzz = w < -1.15 ? 0.1 : 0.66 + 0.34 * Math.sin(ft * 4.1); }
+
+    // 1) connector — a rusted pole from house to board, faintly neon-lit at the seam
+    g.save(); g.lineCap = "round"; g.strokeStyle = "#1b160e"; g.lineWidth = 4.5;
+    g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke();
+    g.strokeStyle = u.hexA(NEON, 0.35); g.lineWidth = 1.4;
+    g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke(); g.restore();
+
+    if (window.MH_VACUOLE) window.MH_VACUOLE.draw(g, bcx, y0, bw, bh, "night", RM() ? 0 : t);   // it floats on a vacuole, faintly lit by its own neon
+
+    // 2) ONE shaped neon bloom: a single blurred rounded-rect in the sign's colour, BOARD-shaped.
+    //    The board (next) covers its core, leaving a neon halo around the SIGN — the whole marquee's
+    //    glow in a single shadowBlur (this replaces the old per-letter + per-bulb blur that cost fps).
+    g.save(); g.shadowColor = NEON; g.shadowBlur = (9 + buzz * 13) * near;
+    if (ex.accentB) { g.globalAlpha = 0.3 + 0.4 * buzz; g.fillStyle = u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02); }
+    else g.fillStyle = u.hexA(NEON, 0.3 + 0.4 * buzz);
+    rrPath(g, x0, y0, bw, bh, rr); g.fill(); g.restore();
+
+    // 3) rusted backing board — dark, grimy, chipped; the neon pops against this
+    const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
+    bg.addColorStop(0, "#231b12"); bg.addColorStop(0.55, "#15100a"); bg.addColorStop(1, "#0b0805");
+    g.fillStyle = bg; rrPath(g, x0, y0, bw, bh, rr); g.fill();
+    g.fillStyle = "rgba(74,52,30,0.16)"; for (let i = 0; i < 3; i++) { const rx = x0 + 6 + u.hash01(slot + i, 11) * (bw - 12); g.fillRect(rx, y0 + 2, 1.5, bh - 4); }   // rust streaks
+    g.lineWidth = 1.4; g.strokeStyle = u.hexA(BONE, 0.16); rrPath(g, x0, y0, bw, bh, rr); g.stroke();   // pitted metal frame
+    const chipX = x0 + 10 + u.hash01(slot, 19) * (bw - 28);   // a bitten-out chunk of the top edge (cuts the frame)
+    g.fillStyle = "#0b0805"; g.beginPath(); g.moveTo(chipX, y0 - 1); g.lineTo(chipX + 10, y0 - 1); g.lineTo(chipX + 5, y0 + 5); g.closePath(); g.fill();
+    const cyk = y0 + 5 + u.hash01(slot, 37) * (bh - 12);   // a hairline crack
+    g.strokeStyle = "rgba(0,0,0,0.5)"; g.lineWidth = 0.7; g.beginPath(); g.moveTo(x0 + 4, cyk); g.lineTo(x0 + bw * 0.42, cyk + 3); g.lineTo(x0 + bw * 0.58, cyk - 2); g.stroke();
+
+    // 4) marquee BULBS ringing top & bottom — some warm-lit, most burnt out, a few flicker.
+    //    Plain bright dots (no per-bulb blur): the sign bloom above already carries the glow.
+    const per = Math.max(4, Math.round((bw - 10) / 11));
+    for (let i = 0; i <= per; i++) {
+      const fx = x0 + 5 + (i / per) * (bw - 10);
+      for (let row = 0; row < 2; row++) {
+        const fy = row ? y0 + bh - 3.5 : y0 + 3.5, hb = u.hash01(slot * 5 + i * 2 + row, 41);
+        let on = hb > 0.42;   // most bulbs are dead
+        if (on && !RM() && u.hash01(slot + i + row, 53) < 0.22) on = Math.sin(t * 11 + i + slot + row * 2) > -0.3;   // a few flicker
+        if (on) { g.fillStyle = hb > 0.7 ? "#ffcf6a" : NEON; g.beginPath(); g.arc(fx, fy, 1.9, 0, Math.PI * 2); g.fill(); g.fillStyle = "rgba(255,255,255,0.7)"; g.beginPath(); g.arc(fx - 0.4, fy - 0.5, 0.7, 0, Math.PI * 2); g.fill(); }   // lit bulb + hot centre
+        else { g.fillStyle = "#191510"; g.beginPath(); g.arc(fx, fy, 1.5, 0, Math.PI * 2); g.fill(); g.strokeStyle = "rgba(120,110,90,0.18)"; g.lineWidth = 0.7; g.stroke(); }   // a dead socket
+      }
+    }
+
+    // a junction's tubes run the gradient between its two roads' colours, across the whole board
+    const tubeGrad = ex.accentB ? u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02) : null;
+
+    // 5) the neon-TUBE label: crisp glass tubes (no per-letter blur — the bloom behind glows them).
+    //    A couple of letters are dead, one flickers; dead letters keep cold glass so it stays readable.
+    g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round"; g.lineCap = "round";
+    const deadA = (u.hash01(slot * 7 + 2, 29) * n) | 0, deadB = (u.hash01(slot * 11 + 5, 31) * n) | 0;
+    const flickI = (u.hash01(slot * 13 + 1, 23) * n) | 0;
+    let cx = bcx - tw / 2;
+    for (let i = 0; i < n; i++) {
+      const ch = label[i], cw = g.measureText(ch).width, gx = cx + cw / 2;
+      const dead = n >= 3 && (i === deadA || i === deadB);
+      let lit = dead ? 0 : 1;
+      if (!RM() && !dead && n >= 2 && i === flickI) lit = Math.sin(t * 17 + slot) > -0.2 ? 1 : 0.16;   // the flickering letter
+      if (lit > 0.05) {
+        const gl = buzz * lit;
+        if (tubeGrad) { g.save(); g.globalAlpha = 0.5 + 0.45 * gl; g.lineWidth = 3.2; g.strokeStyle = tubeGrad; g.strokeText(ch, gx, bcy); g.restore(); }
+        else { g.lineWidth = 3.2; g.strokeStyle = u.hexA(NEON, 0.5 + 0.45 * gl); g.strokeText(ch, gx, bcy); }   // neon glass tube (colour carries it; the bloom adds glow)
+        g.lineWidth = 1.2; g.strokeStyle = u.hexA("#f6fffb", 0.55 + 0.4 * gl); g.strokeText(ch, gx, bcy);   // hot inner filament
+      } else { g.lineWidth = 2; g.strokeStyle = "rgba(150,160,152,0.26)"; g.strokeText(ch, gx, bcy); }   // burnt-out: cold dead glass
+      cx += cw + GAP;
+    }
+    if (ex.visited) glow(g, x0 + bw - 2, y0 - 2, 3, "#5fe0c8", 8);
+  }
+
   const theme = {
     id: "technoscure",
     name: "technoscure/gloomthmaxx",
@@ -170,6 +260,8 @@
       g.fillStyle = "#dffff6"; g.beginPath(); g.arc(sx, sy - 78, 3, 0, Math.PI * 2); g.fill();
     },
 
+    paintKioskSign: kioskSign,
+
     paintKiosk(g, sx, sy, ex, active, env) {
       const t = env.t, b = bio(env.biome), slot = ex.slot, dy = active ? -2 : 0;
       const s1 = u.hash01(slot * 13 + 3, slot * 7 + 5), s2 = u.hash01(slot * 5 + 9, slot * 11 + 2);
@@ -196,92 +288,14 @@
       g.fillStyle = u.shade(b.wall, -0.18);
       for (const ddx of [-ww * 0.62, -ww * 0.05, ww * 0.5]) { g.beginPath(); g.moveTo(sx + ddx - 2.5, baseY - 1); g.quadraticCurveTo(sx + ddx, baseY + 9, sx + ddx + 2.5, baseY - 1); g.lineTo(sx + ddx + 2.5, baseY - 6); g.lineTo(sx + ddx - 2.5, baseY - 6); g.closePath(); g.fill(); }
       if (b.snow) { g.fillStyle = "rgba(200,214,224,0.45)"; g.beginPath(); g.ellipse(sx + wob, topY + 4, ww * 0.5, 6, 0, Math.PI, 0); g.fill(); }
-      // THE menu item — a DAMAGED NEON MARQUEE salvaged from an abandoned amusement park:
-      // a rusted, chipped board ringed by half-dead bulbs, the label burning in glass neon TUBES
-      // (a couple of letters dead, one flickering). The whole sign buzzes and browns-out, each
-      // broken in its OWN way (seeded by slot). Lit by ONE board-shaped bloom, not per-letter blur.
-      const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, near = active ? 1.35 : 1;
-      const NEON = ex.accentB ? ex.accent : NEONS[(u.hash01(slot * 3 + 1, 7) * NEONS.length) | 0];   // this sign's tube colour (a junction burns the blend of its two roads)
-      g.font = "800 16px 'Arial Narrow','Helvetica Neue',Impact,sans-serif";   // condensed display = marquee tubes
-      const label = ex.title.toUpperCase(), n = label.length, GAP = 2;
-      let tw = 0; for (let i = 0; i < n; i++) tw += g.measureText(label[i]).width + GAP; tw = Math.max(0, tw - GAP);   // tube-gap layout, no array
-      const bw = Math.max(58, tw + 30), bh = 34, rr = 5;
-      const bcx = sx + sway, bcy = topY - 50, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
-      const sr = ex.signRect || (ex.signRect = { x: 0, y: 0, w: 0, h: 0 });   // hand the BOARD rect to the engine's
-      sr.x = x0; sr.y = y0; sr.w = bw; sr.h = bh;                              // gloom-reveal so the bright patch is the sign's shape, not a round halo (reused object, no per-frame alloc)
-      // BUZZ: a mains hum with occasional brown-out dropouts. Steady "lit" when motion is reduced.
-      let buzz = 1;
-      if (!RM()) { const ft = t * 7.3 + slot * 2.1, w = Math.sin(ft) + 0.7 * Math.sin(ft * 2.7 + 1.3); buzz = w < -1.15 ? 0.1 : 0.66 + 0.34 * Math.sin(ft * 4.1); }
-
-      // 1) connector — a rusted pole from house to board, faintly neon-lit at the seam
-      g.save(); g.lineCap = "round"; g.strokeStyle = "#1b160e"; g.lineWidth = 4.5;
-      g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke();
-      g.strokeStyle = u.hexA(NEON, 0.35); g.lineWidth = 1.4;
-      g.beginPath(); g.moveTo(sx, topY - 3); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.55, bcx, y0 + bh); g.stroke(); g.restore();
-
-      // 2) ONE shaped neon bloom: a single blurred rounded-rect in the sign's colour, BOARD-shaped.
-      //    The board (next) covers its core, leaving a neon halo around the SIGN — the whole marquee's
-      //    glow in a single shadowBlur (this replaces the old per-letter + per-bulb blur that cost fps).
-      g.save(); g.shadowColor = NEON; g.shadowBlur = (9 + buzz * 13) * near;
-      if (ex.accentB) { g.globalAlpha = 0.3 + 0.4 * buzz; g.fillStyle = u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02); }
-      else g.fillStyle = u.hexA(NEON, 0.3 + 0.4 * buzz);
-      rrPath(g, x0, y0, bw, bh, rr); g.fill(); g.restore();
-
-      // 3) rusted backing board — dark, grimy, chipped; the neon pops against this
-      const bg = g.createLinearGradient(0, y0, 0, y0 + bh);
-      bg.addColorStop(0, "#231b12"); bg.addColorStop(0.55, "#15100a"); bg.addColorStop(1, "#0b0805");
-      g.fillStyle = bg; rrPath(g, x0, y0, bw, bh, rr); g.fill();
-      g.fillStyle = "rgba(74,52,30,0.16)"; for (let i = 0; i < 3; i++) { const rx = x0 + 6 + u.hash01(slot + i, 11) * (bw - 12); g.fillRect(rx, y0 + 2, 1.5, bh - 4); }   // rust streaks
-      g.lineWidth = 1.4; g.strokeStyle = u.hexA(BONE, 0.16); rrPath(g, x0, y0, bw, bh, rr); g.stroke();   // pitted metal frame
-      const chipX = x0 + 10 + u.hash01(slot, 19) * (bw - 28);   // a bitten-out chunk of the top edge (cuts the frame)
-      g.fillStyle = "#0b0805"; g.beginPath(); g.moveTo(chipX, y0 - 1); g.lineTo(chipX + 10, y0 - 1); g.lineTo(chipX + 5, y0 + 5); g.closePath(); g.fill();
-      const cyk = y0 + 5 + u.hash01(slot, 37) * (bh - 12);   // a hairline crack
-      g.strokeStyle = "rgba(0,0,0,0.5)"; g.lineWidth = 0.7; g.beginPath(); g.moveTo(x0 + 4, cyk); g.lineTo(x0 + bw * 0.42, cyk + 3); g.lineTo(x0 + bw * 0.58, cyk - 2); g.stroke();
-
-      // 4) marquee BULBS ringing top & bottom — some warm-lit, most burnt out, a few flicker.
-      //    Plain bright dots (no per-bulb blur): the sign bloom above already carries the glow.
-      const per = Math.max(4, Math.round((bw - 10) / 11));
-      for (let i = 0; i <= per; i++) {
-        const fx = x0 + 5 + (i / per) * (bw - 10);
-        for (let row = 0; row < 2; row++) {
-          const fy = row ? y0 + bh - 3.5 : y0 + 3.5, hb = u.hash01(slot * 5 + i * 2 + row, 41);
-          let on = hb > 0.42;   // most bulbs are dead
-          if (on && !RM() && u.hash01(slot + i + row, 53) < 0.22) on = Math.sin(t * 11 + i + slot + row * 2) > -0.3;   // a few flicker
-          if (on) { g.fillStyle = hb > 0.7 ? "#ffcf6a" : NEON; g.beginPath(); g.arc(fx, fy, 1.9, 0, Math.PI * 2); g.fill(); g.fillStyle = "rgba(255,255,255,0.7)"; g.beginPath(); g.arc(fx - 0.4, fy - 0.5, 0.7, 0, Math.PI * 2); g.fill(); }   // lit bulb + hot centre
-          else { g.fillStyle = "#191510"; g.beginPath(); g.arc(fx, fy, 1.5, 0, Math.PI * 2); g.fill(); g.strokeStyle = "rgba(120,110,90,0.18)"; g.lineWidth = 0.7; g.stroke(); }   // a dead socket
-        }
-      }
-
-      // a junction's tubes run the gradient between its two roads' colours, across the whole board
-      const tubeGrad = ex.accentB ? u.accentFill(g, ex, x0, y0, bw, bh, 0.18, 0.02) : null;
-
-      // 5) the neon-TUBE label: crisp glass tubes (no per-letter blur — the bloom behind glows them).
-      //    A couple of letters are dead, one flickers; dead letters keep cold glass so it stays readable.
-      g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round"; g.lineCap = "round";
-      const deadA = (u.hash01(slot * 7 + 2, 29) * n) | 0, deadB = (u.hash01(slot * 11 + 5, 31) * n) | 0;
-      const flickI = (u.hash01(slot * 13 + 1, 23) * n) | 0;
-      let cx = bcx - tw / 2;
-      for (let i = 0; i < n; i++) {
-        const ch = label[i], cw = g.measureText(ch).width, gx = cx + cw / 2;
-        const dead = n >= 3 && (i === deadA || i === deadB);
-        let lit = dead ? 0 : 1;
-        if (!RM() && !dead && n >= 2 && i === flickI) lit = Math.sin(t * 17 + slot) > -0.2 ? 1 : 0.16;   // the flickering letter
-        if (lit > 0.05) {
-          const gl = buzz * lit;
-          if (tubeGrad) { g.save(); g.globalAlpha = 0.5 + 0.45 * gl; g.lineWidth = 3.2; g.strokeStyle = tubeGrad; g.strokeText(ch, gx, bcy); g.restore(); }
-          else { g.lineWidth = 3.2; g.strokeStyle = u.hexA(NEON, 0.5 + 0.45 * gl); g.strokeText(ch, gx, bcy); }   // neon glass tube (colour carries it; the bloom adds glow)
-          g.lineWidth = 1.2; g.strokeStyle = u.hexA("#f6fffb", 0.55 + 0.4 * gl); g.strokeText(ch, gx, bcy);   // hot inner filament
-        } else { g.lineWidth = 2; g.strokeStyle = "rgba(150,160,152,0.26)"; g.strokeText(ch, gx, bcy); }   // burnt-out: cold dead glass
-        cx += cw + GAP;
-      }
-      if (ex.visited) glow(g, x0 + bw - 2, y0 - 2, 3, "#5fe0c8", 8);
+      kioskSign(g, sx, topY, ex, active, env);   // the damaged marquee above it
     },
 
     paintSignpost(g, sx, sy, dir, dist, info) {
       g.strokeStyle = "#1a140c"; g.lineWidth = 2.4; g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx, sy - 26); g.stroke();
       const w = 40, h = 15, bx = dir > 0 ? sx - 6 : sx - w + 6, by = sy - 30;
       u.roundRect(bx, by, w, h, 4, "#11180f", TEAL);
-      g.fillStyle = GOLD; g.font = "700 11px var(--mh-display)"; g.textAlign = "center"; g.textBaseline = "middle";
+      g.fillStyle = GOLD; g.font = "700 11px " + u.displayFont(); g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText((dir > 0 ? "→ " : "← ") + dist, bx + w / 2, by + h / 2);
       glow(g, sx + (dir > 0 ? -6 : 6), sy - 22, 2, GOLD, 8);
     },

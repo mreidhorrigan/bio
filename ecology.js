@@ -152,7 +152,7 @@
   }
 
   function thinkGrazer(e, c, dtS, px, py) {
-    e.wet = !!(window.MH_ISO.onWater && window.MH_ISO.onWater(e.x, e.y));   // in open water? the engine's own test
+    e.wet = wetAt(e);                                                  // in open water? deep enough to be seen in it
     if (e.rest > 0) { e.rest -= dtS; setVel(e, 0, 0, 0); }             // resting: ease to a stop (still browses below)
     else {
       const fi = fidx(e.x, e.y), hereF = ECO.flora[fi], hereFear = ECO.fear[fi];
@@ -294,7 +294,7 @@
     ECO.now = api.t;
     const c = ECO.cfg, P = ECO.P;
     // integrate every frame (smooth motion), wrap onto the torus — dormant "plant" predators never move
-    const step = (arr) => { for (const e of arr) { if (e.dormant) continue; e.x = wpos(e.x + e.vx * dt); e.y = wpos(e.y + e.vy * dt); } };
+    const step = (arr) => { for (const e of arr) { if (e.dormant) continue; stepBody(e, dt); } };
     step(ECO.motes); step(ECO.fireflies); step(ECO.grazers); step(ECO.predators);
 
     ECO.acc += dt;
@@ -334,19 +334,53 @@
   /** In open water? The engine's own test, so a zoog wades on exactly the tiles
    *  the player wades on. Asked at draw time because the WASM world integrates
    *  positions itself and knows nothing about terrain. */
-  function wetAt(e) { return !!(window.MH_ISO.onWater && window.MH_ISO.onWater(e.x, e.y)); }
+  function wetAt(e) { const t = window.MH_ISO.inWaterDeep || window.MH_ISO.onWater; return !!(t && t(e.x, e.y)); }
+
+  /** Every body in the world, for whoever needs to collide with one: visit is
+   *  called with (x, y, radius) in canonical tiles. The engine uses it to stop
+   *  the player walking through a creature. Reads the WASM snapshot when that
+   *  is what is running, and the JS arrays otherwise. */
+  ECO.bodies = function (visit) {
+    const bridge = window.MH_WASM && window.MH_WASM.worldBridge;
+    if (bridge && bridge.ready && bridge.snapshot) {
+      const r = bridge.snapshot;
+      for (let i = 0; i < r.length; i += RECORD) {
+        const K = KINDS[r[i + 5]];
+        if (K && K.radius) visit(r[i], r[i + 1], K.radius(!!r[i + 8]));
+      }
+      return;
+    }
+    for (const e of ECO.grazers) if (e.alive) visit(e.x, e.y, KINDS[1].radius(false));
+    for (const e of ECO.predators) if (e.alive) visit(e.x, e.y, KINDS[2].radius(!!e.dormant));
+  };
+
+  /** Slide along a solid tile rather than entering it. The same rule the Rust
+   *  world follows, for the JS fallback path: refuse one axis at a time, so a
+   *  body skims a wall instead of shivering against it. */
+  function stepBody(e, dt) {
+    const solid = window.MH_ISO && window.MH_ISO.solidAt;
+    const nx = wpos(e.x + e.vx * dt), ny = wpos(e.y + e.vy * dt);
+    if (!solid) { e.x = nx; e.y = ny; return; }
+    if (solid(Math.round(e.x), Math.round(e.y))) { e.x = nx; e.y = ny; return; }   // already inside: walk out freely
+    if (!solid(Math.round(nx), Math.round(ny))) { e.x = nx; e.y = ny; return; }
+    if (!solid(Math.round(nx), Math.round(e.y))) { e.x = nx; e.vy *= 0.6; return; }
+    if (!solid(Math.round(e.x), Math.round(ny))) { e.y = ny; e.vx *= 0.6; return; }
+    e.vx *= 0.4; e.vy *= 0.4;                                        // cornered: stop, do not bounce
+  }
 
   ECO.actors = function (push, api) {
     ECO.theme = api.theme || ECO.theme;      // the predator picks its palette from the skin
     const wasmBridge = window.MH_WASM && window.MH_WASM.worldBridge;
     if (wasmBridge && wasmBridge.ready && wasmBridge.snapshot) {
       const records = wasmBridge.snapshot, W = api.W, H = api.H;
-      for (let i = 0; i < records.length; i += 10) {
+      for (let i = 0; i < records.length; i += RECORD) {
+        const K = KINDS[records[i + 5]];
+        if (!K) continue;
+        const p = api.place(records[i], records[i + 1]);                                // cull before building anything
+        if (p.x < -24 || p.x > W + 24 || p.y < -26 || p.y > H + 18) continue;
         const e = { x: records[i], y: records[i + 1], vx: records[i + 2], vy: records[i + 3], e: records[i + 4], phase: records[i + 6], rest: records[i + 7], dormant: !!records[i + 8], eat: records[i + 9] };
-        const p = api.place(e.x, e.y); if (p.x < -24 || p.x > W + 24 || p.y < -26 || p.y > H + 18) continue;
-        if (records[i + 5] === 1) e.wet = wetAt(e);                                    // zoogs wade
-        const painter = records[i + 5] === 0 ? drawMote : records[i + 5] === 1 ? drawGrazer : records[i + 5] === 2 ? drawPredator : drawFirefly;
-        push(p.depth, (g) => painter(g, p.x, p.y, e));
+        if (K.wades) e.wet = wetAt(e);
+        push(p.depth, (g) => K.draw(g, p.x, p.y, e));
       }
       return;
     }
@@ -371,7 +405,7 @@
     g.fillStyle = "#ffe79a"; g.beginPath(); g.arc(x, y - 6, 2.1, 0, Math.PI * 2); g.fill(); g.restore();
   }
   /* --- the prey: zoogs ----------------------------------------------------
-     Adopted from brand/slimes/prey-proposals.html, design E. Lovecraft's
+     Adopted from brand/backstage/slimes/prey-proposals.html, design E. Lovecraft's
      zoogs: the small furtive things of the enchanted wood, all eyes and no
      shape, that swarm and vanish. One entity is one zoog; the knot of them is
      what the flock does by itself.
@@ -420,7 +454,7 @@
   }
 
   /* --- the predator: a shoggoth ------------------------------------------
-     Adopted from brand/slimes/shoggoth-proposals.html, design C, "iridescent
+     Adopted from brand/backstage/slimes/shoggoth-proposals.html, design C, "iridescent
      bulk". A protoplasmic mass that forms and reabsorbs its organs, so eyes
      open on its surface, hold, and sink back in, and an oil-slick sheen slides
      across it so its colour is never twice the same. It has tentacles and no
@@ -527,6 +561,38 @@
               2.4 + (j % 2) * 0.8, ph + j * 0.37, pal, dorm, h.hx, h.hy);
     }
   }
+
+  /* --- the kinds, by the number the packed record carries ---------------------
+     The Rust core (rust/world-core/src/lib.rs) and this fallback agree on these
+     four. A new creature is one row here with its painter, one arm in the Rust
+     think() and speed(), and a population in the skins' ecology cfg. RECORD is
+     the width of one entity in the snapshot: x, y, vx, vy, energy, kind, phase,
+     rest, dormant, eat. */
+  const RECORD = 10;
+  const KINDS = [
+    { name: "mote", draw: drawMote },
+    { name: "zoog", draw: drawGrazer, wades: true, radius: () => 0.34 },
+    { name: "shoggoth", draw: drawPredator, radius: (dormant) => (dormant ? 0.62 : 0.55) },   // wider when rooted
+    { name: "firefly", draw: drawFirefly },
+  ];
+  ECO.kinds = KINDS;
+
+  /** A change of skin, without a change of world. Speeds, caps and dormancy
+   *  follow the new skin; the creatures keep their positions. Only the skin's
+   *  atmosphere (motes by day, fireflies after dark) is counted up or down. */
+  ECO.reconfigure = function () {
+    const c = ECO.cfg;
+    const bridge = window.MH_WASM && window.MH_WASM.worldBridge;
+    if (bridge && bridge.reconfigure) bridge.reconfigure(c, ECO.hub, ECO.villageR);
+    if (!ECO.inited) return;                       // the JS path has nothing to carry yet
+    for (const e of ECO.predators) e.dormant = !!c.predatorDormant;
+    const trim = (arr, pool, target, tag) => {
+      while (arr.length > target) { const e = arr.pop(); e.alive = false; pool.push(e); }
+      while (arr.length < target) spawn(arr, pool, rnd(0, ECO.P), rnd(0, ECO.P), 1);
+    };
+    trim(ECO.motes, ECO.pools.m, c.motes | 0);
+    trim(ECO.fireflies, ECO.pools.f, (c.fireflies || 0) | 0);
+  };
 
   ECO.reset = function () {
     ECO.inited = false;

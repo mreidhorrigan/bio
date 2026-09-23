@@ -1,0 +1,30 @@
+<!DOCTYPE html><meta charset="utf-8">
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+let done = 0;
+["technurture", "technocute"].forEach((skin) => {
+  const f = document.createElement("iframe");
+  f.src = "/index.html?theme=" + skin;
+  f.style.cssText = "width:1000px;height:700px;border:0";
+  const errs = [];
+  f.addEventListener("load", () => {
+    f.contentWindow.addEventListener("error", (e) => errs.push(e.message));
+    setTimeout(() => {
+      const w = f.contentWindow;
+      try {
+        const has = !!(w.MH_ISO && w.MH_ISO.themes);
+        const ex = w.MH_ISO.exhibits(), g1 = ex.find(e => e.title === "Glossary");
+        say(skin + ": structure " + g1.structure + ", exhibits " + ex.length);
+        const cv = f.contentDocument.querySelector("canvas");
+        const im = cv.getContext("2d").getImageData(0, 0, cv.width, cv.height).data;
+        let seen = new Set();
+        for (let i = 0; i < im.length; i += 4 * 199) seen.add(im[i] + "," + im[i+1] + "," + im[i+2]);
+        say("  world paints: " + seen.size + " colours, errors: " + (errs.length ? errs.join(" | ") : "none"));
+      } catch (e) { say(skin + " EXCEPTION " + e.message); }
+      if (++done === 2) document.title = "done";
+    }, 2200);
+  });
+  document.body.append(f);
+});
+</script>

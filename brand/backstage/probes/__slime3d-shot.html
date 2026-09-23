@@ -1,0 +1,18 @@
+<!DOCTYPE html><meta charset="utf-8"><style>body{margin:0}</style>
+<iframe id="f" src="/slime3d.html" style="width:1280px;height:820px;border:0"></iframe>
+<script>
+// Put the slime somewhere in the cave and freeze the frame for a screenshot.
+// Add #lit, #water, #turn, #dark or #deep to the URL.
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const A = document.getElementById("f").contentWindow.MH_SLIME3D;
+  const where = (location.hash || "#lit").slice(1);
+  const p = A.pools[1] || A.pools[0];
+  const at = { lit: 210, water: (p.lo + p.hi) / 2 - 8, turn: 430, dark: A.darkFrom + 380, deep: A.darkFrom + 900 }[where];
+  A.me.z = at; A.me.x = A.centre(at);
+  if (where === "turn") { A.me.yaw = 0.6; }
+  for (let i = 0; i < 200; i++) A.tick(0.016);
+  if (where === "water") { A.controls.keys.fwd = true; for (let i = 0; i < 40; i++) A.tick(0.016); A.controls.keys.fwd = false; }
+  A.pause();
+  document.title = "done";
+}, 900));
+</script>

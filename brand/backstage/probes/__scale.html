@@ -1,0 +1,181 @@
+<!DOCTYPE html><meta charset="utf-8"><title>One size for each thing, in every view</title>
+<meta name="budget" content="14000">
+<iframe id="iso" src="/brand/backstage/slimes/assets.html" style="width:900px;height:600px;border:0"></iframe>
+<iframe id="v3" src="/brand/backstage/slimes/verse3d.html" style="width:900px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+/* The method, tested. Every thing the world draws has one size, kept in
+   MH_VERSE3D.SIZES in slime radii (its half-width w and height h). Here each
+   view is MEASURED, not read from its constants:
+
+   iso   the skins' own painters (loaded by assets.html) draw each thing alone
+         on a blank canvas; its opaque pixels give its half-width and its
+         height above the foot, in units of the iso slime's radius
+   3D    each place of verse3d.html is built whole once, and every item tagged
+         with a thing is collected; its points give the same two numbers, in
+         units of the 3D slime's measured half-width
+
+   Then: the table must agree with the iso drawing (it is where the numbers
+   came from); each 3D thing must agree with the table in shape (h / w) and in
+   scale (w), the enterable ones at the table's ENTER factor; and a thing seen
+   in two places (the dwelling outside and its room inside, the well's mouth
+   and the shaft's opening under it) must be one size in both.            */
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const f2 = (v) => v.toFixed(2);
+const within = (a, b, tol) => Math.abs(a / b - 1) <= tol;
+const verdict = (ok, why) => (ok ? "" : " NO (" + why + ")");
+let ready = 0;
+for (const id of ["iso", "v3"]) document.getElementById(id).addEventListener("load", () => { if (++ready === 2) setTimeout(run, 1500); });
+
+/** Opaque pixels of one painter drawn alone at (x, y) on a blank canvas. */
+function paintAlone(w, paint) {
+  const cv = w.document.createElement("canvas"); cv.width = 400; cv.height = 400;
+  const g = cv.getContext("2d");
+  paint(g, 200, 300);
+  const d = g.getImageData(0, 0, 400, 400).data, rows = [];
+  for (let y = 0; y < 400; y++) { const r = []; for (let x = 0; x < 400; x++) if (d[(y * 400 + x) * 4 + 3] > 200) r.push(x); rows.push(r); }
+  return rows;                                  // shadows and glows are translucent, so they drop out
+}
+function bboxAbove(rows, footY, skip) {
+  let minY = Infinity, minX = Infinity, maxX = -Infinity;
+  for (let y = 0; y <= footY; y++) for (const x of rows[y]) { if (skip && skip(x, y)) continue; minY = Math.min(minY, y); minX = Math.min(minX, x); maxX = Math.max(maxX, x); }
+  return { w: (maxX - minX) / 2, h: footY - minY };
+}
+
+async function run() {
+  try {
+    const iso = document.getElementById("iso").contentWindow, v3 = document.getElementById("v3").contentWindow;
+    const V = v3.MH_VERSE3D, W = v3.MH_V3D, ECO = iso.MH_ECO;
+    if (!V || !W || !ECO) { say("views: MISSING"); return; }
+    /* ── the iso view ── */
+    const src = await (await fetch("/engine.js")).text();
+    const m = /function defPaintAvatar[\s\S]*?r = (\d+(?:\.\d+)?)/.exec(src);
+    if (!m) { say("iso slime radius: MISSING (defPaintAvatar changed shape)"); return; }
+    const U = +m[1];
+    say("iso unit: the slime's radius, " + U + " px (engine.js defPaintAvatar)");
+    ECO.theme = "technurture"; ECO.now = 0;
+    const zoogK = ECO.kinds.find((k) => k.name === "zoog"), shogK = ECO.kinds.find((k) => k.name === "shoggoth");
+    const isoZ = bboxAbove(paintAlone(iso, (g, x, y) => zoogK.draw(g, x, y, { vx: 1e-3, vy: 0, phase: 0.31, wet: false })), 300);
+    // the mass alone: a waking shoggoth's tentacles reach out into the iso ground
+    // plane, which a height above the foot cannot separate from the body, so it
+    // is measured in its rooted pose, the same mass with only short roots below
+    const isoS = bboxAbove(paintAlone(iso, (g, x, y) => shogK.draw(g, x, y, { vx: 1e-3, vy: 0, phase: 0.31, dormant: true, eat: 0 })), 300);
+    const T = iso.MH_ASSETS.themes().get("technurture");
+    let dw = 0, dh = 0;
+    for (let slot = 0; slot < 5; slot++) {                   // five dwellings: their sizes vary with the slot
+      const rows = paintAlone(iso, (g, x, y) => T.paintKiosk(g, x, y, { slot, title: "Xx", accent: "#f0b62a", visited: false }, false, { t: 0, biome: "grass", W: 400, H: 400 }));
+      // the body only: the sign floats above it, joined by a connector 4 px wide at the centre
+      let top = 300;
+      for (let y = 300; y > 0; y--) { const n = rows[y].filter((x) => Math.abs(x - 200) > 4).length; if (n > 6) top = y; else if (top - y > 2) break; }
+      let span = 0;
+      for (let y = top; y <= 300; y++) { const r = rows[y].filter((x) => Math.abs(x - 200) > 4 || true); if (r.length) span = Math.max(span, (r[r.length - 1] - r[0]) / 2); }
+      dw += span / 5; dh += (300 - top) / 5;
+    }
+    const isoM = { zoog: { w: isoZ.w / U, h: isoZ.h / U }, shoggoth: { w: isoS.w / U, h: isoS.h / U }, dwelling: { w: dw / U, h: dh / U } };
+
+    /* ── the ground itself: the tile and the torus ── */
+    // an iso tile is a 2:1 diamond tileW across; one tile step along the ground
+    // runs half a tile across and a quarter down, which on the ground plane
+    // (the iso view squashes depth by half) is tileW/2 times the square root of 2
+    const tw = +(/tileW:\s*(\d+)/.exec(src) || [0, 0])[1], isoTile = (tw / 2) * Math.SQRT2 / U;
+    say("iso tile: " + tw + " px wide, " + f2(isoTile) + " slime radii along the ground; 3D tile " + f2(V.ISO.tile / V.UNIT) + (within(V.ISO.tile / V.UNIT, isoTile, 0.05) ? "" : " NO"));
+    const tp = T.worldPeriod;
+    say("iso torus (technurture worldPeriod): " + tp + " tiles; 3D " + V.ISO.period + (tp === V.ISO.period ? "" : " NO"));
+
+    /* ── the 3D view ── */
+    W.pause();
+    const E = W.engine, got = new Map();
+    const grab = (pts, o) => {
+      if (!o || !o.tag) return;
+      let b = got.get(o.tag);
+      if (!b) got.set(o.tag, (b = { tag: o.tag, x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity, z0: Infinity, z1: -Infinity, sx: 0, sz: 0, n: 0 }));
+      for (const p of pts) { b.x0 = Math.min(b.x0, p[0]); b.x1 = Math.max(b.x1, p[0]); b.y0 = Math.min(b.y0, p[1]); b.y1 = Math.max(b.y1, p[1]); b.z0 = Math.min(b.z0, p[2]); b.z1 = Math.max(b.z1, p[2]); b.sx += p[0]; b.sz += p[2]; b.n++; }
+    };
+    const measure = (scene) => {
+      W.load(scene); for (let i = 0; i < 20; i++) W.tick(0.016);
+      got.clear();
+      const keep = {};
+      for (const k of ["organic", "face", "custom", "line"]) { keep[k] = E[k]; E[k] = function (pts) { const o = arguments[k === "line" ? 3 : k === "custom" ? 2 : 4]; grab(pts, o); return keep[k].apply(E, arguments); }; }
+      W.ctx.measuring = true; W.tick(0.016); W.ctx.measuring = false;
+      Object.assign(E, keep);
+      const S = W.S(), out = {};
+      for (const b of got.values()) {
+        if (b.n === 0) continue;
+        const cx = (b.x0 + b.x1) / 2, cz = (b.z0 + b.z1) / 2, foot = b.tag.kind === "room" || b.tag.kind === "well" || b.tag.kind === "shaft" ? b.y0 : S.floorAt(cx, cz);
+        const r = { w: Math.max(b.x1 - b.x0, b.z1 - b.z0) / 2, h: b.y1 - foot, tag: b.tag };
+        (out[b.tag.kind] = out[b.tag.kind] || []).push(r);
+      }
+      return out;
+    };
+    const median = (a, k) => { const v = a.map((r) => r[k]).sort((p, q) => p - q); return v[v.length >> 1]; };
+    const places = {};
+    for (const id of ["outdoors", "indoors", "cave"]) places[id] = measure(id);
+    const unit = places.outdoors.slime[0].w;
+    say("3D unit: the slime's measured half-width, " + f2(unit) + " world units (the table says " + V.UNIT + ")" + verdict(within(unit, V.UNIT, 0.12), "the slime itself is off"));
+
+    /* ── the table against the iso drawing ── */
+    say("\nthing       iso w   h   table w   h   3D w   h    shape h/w: iso  3D");
+    for (const name of ["zoog", "shoggoth", "dwelling"]) {
+      const t = V.SIZES[name], I = isoM[name];
+      const all = [].concat(...Object.values(places).map((p) => p[name] || []));
+      const D = { w: median(all, "w") / unit, h: median(all, "h") / unit };
+      const k = t.enter ? V.ENTER : 1;
+      // a dwelling is measured at its bulge; the table keeps its base, so compare bulge to bulge
+      const bulge = name === "dwelling" ? Math.max(...Array.from({ length: 50 }, (_, i) => V.DWELL(i / 50))) : 1;
+      say(name.padEnd(10) + "  " + f2(I.w) + " " + f2(I.h) + "    " + f2(t.w * bulge) + " " + f2(t.h) + "    " + f2(D.w / k) + " " + f2(D.h / k) +
+        "      " + f2(I.h / I.w) + "  " + f2(D.h / D.w) + (t.enter ? "   (3D shown divided by ENTER " + V.ENTER + ")" : ""));
+      const tolT = name === "shoggoth" ? 0.2 : 0.15;
+      say("  table matches the iso drawing: " + (within(t.w * bulge, I.w, tolT) && within(t.h, I.h, tolT) ? "yes" : "NO (update SIZES." + name + ")"));
+      say("  3D shape matches (h/w within 20%): " + (within(D.h / D.w, I.h / I.w, 0.2) ? "yes" : "NO"));
+      say("  3D scale matches (w within 20%" + (t.enter ? ", after ENTER" : "") + "): " + (within(D.w / k, I.w, 0.2) ? "yes" : "NO"));
+    }
+
+    /* ── bureaucore's block: its iso box against the 3D one ── */
+    {
+      const TC = iso.MH_ASSETS.themes().get("technocute");
+      const rows = paintAlone(iso, (g, x, y) => TC.paintKiosk(g, x, y, { slot: 0, title: "", accent: "#5b2a86", visited: false }, false, { t: 0 }));   // an empty title: its banner is narrower than the box
+      // the box alone: under its banner (a white plate on black, 26 px above the top), its shadow translucent
+      let top = 300; for (let y = 300; y > 0; y--) { if (rows[y].length > 20) top = y; else if (top - y > 1) break; }   // the banner starts two rows up
+      let span = 0; for (let y = top; y <= 300; y++) if (rows[y].length) span = Math.max(span, (rows[y][rows[y].length - 1] - rows[y][0]) / 2);
+      // a box's screen half-width is its footprint's half-diagonal: side = half-width / 48 tiles (the tile's own half-width)
+      // its height is the vertical edge: from the base to the top face, less the top face's diamond (half the half-width)
+      const isoSide = (span - 2) / 48 * V.ISO.tile / V.UNIT, isoH = (300 - top - span * 0.5) / U;
+      W.setSkin("technocute"); W.load("outdoors");
+      got.clear();
+      const keep = {};
+      for (const k of ["organic", "face", "custom", "line"]) { keep[k] = E[k]; E[k] = function (pts) { const o = arguments[k === "line" ? 3 : k === "custom" ? 2 : 4]; grab(pts, o); return keep[k].apply(E, arguments); }; }
+      W.ctx.measuring = true; W.tick(0.016); W.ctx.measuring = false;
+      Object.assign(E, keep);
+      const b = [...got.values()].find((v) => v.tag.block);
+      if (!b) say("bureaucore block: MISSING");
+      else {
+        const side = Math.max(b.x1 - b.x0, b.z1 - b.z0) / V.UNIT / V.ENTER, h = (b.y1 - b.y0) / V.UNIT / V.ENTER;
+        say("\nbureaucore block, side and height in slime radii: iso " + f2(isoSide) + " by " + f2(isoH) + ", 3D " + f2(side) + " by " + f2(h) + " (divided by ENTER)" +
+          (within(side, isoSide, 0.15) && within(h, isoH, 0.2) ? "" : " NO"));
+      }
+      W.setSkin("technurture");
+    }
+
+    /* ── the same thing in two places ── */
+    const home = (places.outdoors.dwelling || []).find((r) => r.tag.home), room = (places.indoors.room || [])[0];
+    if (!home || !room) say("\nhome or room: MISSING");
+    else {
+      say("\nthe dwelling with the lit door: outside " + f2(home.w) + " wide, " + f2(home.h) + " high; its room inside " + f2(room.w) + " by " + f2(room.h));
+      say("  inside fits outside, one wall's thickness in: " + (home.w - room.w > 0 && home.w - room.w < 2 && home.h - room.h > 0 && home.h - room.h < 2 ? "yes" : "NO"));
+    }
+    // the window: the dwelling shows one outside, a little round from its door; the room inside has that pane, on the same side
+    {
+      W.load("outdoors"); const q = W.S().houses[0]; W.load("indoors"); const R = W.S();
+      const signed = (u, v) => Math.atan2(u[0] * v[1] - u[1] * v[0], u[0] * v[0] + u[1] * v[1]) * 180 / Math.PI;
+      const out = signed([Math.sin(q.door), Math.cos(q.door)], [Math.sin(q.win), Math.cos(q.win)]);
+      const ins = (R.panes || []).map((p) => signed(R.doorDir, p));
+      say("windows: outside one, turned " + out.toFixed(1) + " degrees from the door; inside " + ins.length + (ins.length ? ", turned " + ins.map((v) => v.toFixed(1)).join(", ") : "") + (ins.length === 1 && Math.abs(ins[0] - out) < 1 ? " (the same window)" : " NO"));
+    }
+    const well = (places.outdoors.well || [])[0], shaft = (places.cave.shaft || [])[0];
+    if (!well || !shaft) say("well or shaft: MISSING");
+    else say("the well's mouth " + f2(well.w) + ", the daylight under it in the cave " + f2(shaft.w) + (within(shaft.w, well.w, 0.15) ? " (one hole)" : " NO"));
+    say("\nerrors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}
+</script>

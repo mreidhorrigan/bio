@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title>Slimeverse 3D: M. Reid Horrigan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The village of M. Reid Horrigan's site, walkable in three dimensions: the same houses, roads and lakes as the isometric village, entered from the Slimeverse 3D house.">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <!-- English/French switch, the pair every page carries. Not deferred: a
+         blocking pair this small spares a French visitor a flash of English. -->
+    <script src="i18n.js"></script>
+    <script src="i18n-fr.js"></script>
+    <!-- engine-3d.js renders; verse3d.js is the slimeverse's runtime (the slime,
+         water, creatures, ways between places); verse3d-scenes.js holds the
+         places, the village read from content.js. -->
+    <script src="engine-3d.js" defer="defer"></script>
+    <script src="vacuole.js" defer="defer"></script>
+    <script src="verse3d.js" defer="defer"></script>
+    <script>window.MH_SITE = { base: "" };</script>
+    <script src="content.js" defer="defer"></script>
+    <script src="verse3d-scenes.js" defer="defer"></script>
+    <script src="slimeverse3d-page.js" defer="defer"></script>
+    <link rel="stylesheet" href="brand/brand.css">
+    <style>
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{ margin:0; font-family:var(--sans-font); color:var(--ink); background:#0d120e; overflow:hidden; }
+    #stage{ position:fixed; inset:0; display:block; width:100%; height:100%; cursor:grab; touch-action:none; }
+    #stage:active{ cursor:grabbing; }
+    #stage:focus-visible{ outline:3px solid var(--focus); outline-offset:-4px; }
+    .bar{ position:fixed; left:12px; right:12px; top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; z-index:3; pointer-events:none; }
+    .bar > *{ pointer-events:auto; }
+    .chip{ font:600 .86rem/1 var(--sans-font); padding:8px 12px; color:#dce6f0; background:rgba(16,21,31,.78); border:1.5px solid rgba(220,230,240,.35);
+      border-radius:var(--leaf-sm); text-decoration:none; cursor:pointer; }
+    .chip[aria-pressed="true"]{ background:#dce6f0; color:#10151f; }
+    .chip:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+    .where{ font:600 .78rem/1 var(--mono-font); color:#dce6f0; background:rgba(10,14,11,.6); padding:6px 9px; border-radius:var(--leaf-sm); }
+    .keys{ position:fixed; left:12px; bottom:12px; right:12px; max-width:min(560px,90vw); margin:0; padding:8px 12px;
+      font-size:.86rem; line-height:1.45; color:#b9c8da; background:rgba(16,21,31,.7); border-radius:var(--leaf-sm); z-index:2; }
+    /* the card a house opens, as the iso village's does: its menu, its words, or its page */
+    #card{ position:fixed; inset:0; z-index:5; display:grid; place-items:center; padding:18px; background:rgba(8,10,14,.55); }
+    #card[hidden]{ display:none; }
+    .card{ width:min(560px,94vw); max-height:84vh; overflow:auto; background:#fbf8f1; color:var(--ink); border:2px solid #5b2a86;
+      border-radius:var(--leaf-lg); padding:18px 20px 16px; box-shadow:0 18px 50px rgba(0,0,0,.45); position:relative; }
+    .card h2{ margin:0 0 10px; font-family:var(--body-font); font-variant-caps:small-caps; }
+    .card .close{ position:absolute; right:10px; top:8px; border:0; background:transparent; font-size:26px; line-height:1; cursor:pointer; color:var(--ink); }
+    .card .go{ display:inline-block; margin-top:6px; padding:9px 16px; background:#5b2a86; color:#fff; border-radius:var(--leaf-sm); text-decoration:none; font-weight:700; }
+    .card .toc a{ display:block; padding:7px 0; color:#5b2a86; font-weight:600; }
+    #mh-lang{ top:auto; bottom:12px; right:12px; }
+    @media (max-width:620px){ .keys{ display:none; } }
+  </style>
+  </head>
+  <body>
+    <canvas id="stage" tabindex="0" role="img"
+            aria-label="The village in three dimensions, seen from behind the slime: the same houses, roads and lakes as the isometric village."></canvas>
+    <div class="bar">
+      <a class="chip" id="back" href="index.html">Back to the village</a>
+      <button type="button" class="chip" data-skin="technurture" aria-pressed="false">Technurture</button>
+      <button type="button" class="chip" data-skin="technoscure" aria-pressed="false">Gloomthmaxx</button>
+      <button type="button" class="chip" data-skin="technocute" aria-pressed="false">Bureaucore</button>
+      <button type="button" class="chip" id="sound" aria-pressed="true">Sound on</button>
+      <span class="where" id="where" aria-live="polite"></span>
+    </div>
+    <p class="keys">Arrow keys or W and S to walk, A and D to turn, and shift to hurry. Drag
+      to look around, and click to walk somewhere. Walk into a house, or click it, to open
+      it, as in the village.</p>
+    <div id="card" hidden>
+      <div class="card" role="dialog" aria-modal="true" aria-labelledby="card-title">
+        <button type="button" class="close" aria-label="Close">×</button>
+        <h2 id="card-title"></h2>
+        <div id="card-body"></div>
+      </div>
+    </div>
+  </body>
+</html>

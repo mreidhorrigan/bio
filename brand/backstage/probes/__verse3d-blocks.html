@@ -1,0 +1,41 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D outdoors: how blocky is the far distance?</title>
+<meta name="budget" content="9000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The far distance is drawn small and scaled up (depth of field). Drawn too
+// small it breaks into blocks, which crawl as the view moves ("swimming"). A
+// block edge lies on the grid of the small canvas: in the band under the
+// horizon, the share of strong horizontal steps that fall on that grid, above
+// the share a smooth picture would have by chance, measures it.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, W = w.MH_V3D, E = W.engine;
+    W.pause(); W.load("outdoors");
+    W.me.x = 0; W.me.z = -130; W.me.yaw = Math.PI * 0.8; for (let i = 0; i < 90; i++) W.tick(0.016);
+    const cv = w.document.getElementById("view"), g = cv.getContext("2d");
+    const hy = cv.height / cv.clientHeight * (cv.clientHeight / 2 + E.fov * Math.tan(E.cam.pitch));
+    const band = () => g.getImageData(0, Math.round(hy), cv.width, Math.round(cv.height * 0.12)).data;
+    const blocky = (grid) => {
+      const d = band(), W2 = cv.width; let on = 0, all = 0;
+      for (let i = 4; i < d.length; i += 4) {
+        const x = (i / 4) % W2; if (x === 0) continue;
+        const dd = Math.abs(d[i] - d[i - 4]) + Math.abs(d[i + 1] - d[i - 3]) + Math.abs(d[i + 2] - d[i - 2]);
+        if (dd > 24) { all++; if (x % grid === 0) on++; }
+      }
+      return all ? on / all : 0;
+    };
+    const keep = E.focus;
+    for (const [name, scale] of [["far things at a quarter size (before)", [1 / 4, 1 / 2]], ["at half size (now)", [1 / 2, 1 / 1.4]], ["no depth of field", null]]) {
+      E.focus = scale ? Object.assign({}, keep, { scale }) : null; W.tick(0);
+      const px = Math.round(1 / (scale ? scale[0] : 1) * (cv.width / cv.clientWidth));   // the far band's block, in canvas pixels
+      const g4 = blocky(Math.max(2, px)), chance = 1 / Math.max(2, px);
+      say(name + ": " + (100 * g4).toFixed(1) + "% of strong steps on the " + Math.max(2, px) + "-pixel grid, " + (100 * chance).toFixed(1) + "% by chance");
+    }
+    E.focus = keep;
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

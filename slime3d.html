@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>Over its shoulder: M. Reid Horrigan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <meta name="description" content="A prototype: a walkable cave in three dimensions, seen from behind the slime.">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <!-- English/French switch, the pair every page carries. Not deferred: a
+         blocking pair this small spares a French visitor a flash of English. -->
+    <script src="i18n.js"></script>
+    <script src="i18n-fr.js"></script>
+    <!-- engine-3d.js is the renderer and camera; slime3d.js is this cave. -->
+    <script src="engine-3d.js" defer="defer"></script>
+    <script src="slime3d.js" defer="defer"></script>
+    <link rel="stylesheet" href="brand/brand.css">
+    <style>
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{ margin:0; font-family:var(--sans-font); color:var(--ink); background:#0d120e; overflow:hidden; }
+    .stage{ position:relative; width:100%; height:100svh; min-height:420px; overflow:hidden; }
+    #stage{ display:block; width:100%; height:100%; background:#0d120e; cursor:grab; touch-action:none; }
+    #stage:active{ cursor:grabbing; }
+    #stage:focus-visible{ outline:3px solid var(--focus); outline-offset:-4px; }
+    .intro{ position:absolute; top:18px; left:max(18px,calc(50vw - 480px)); right:18px; max-width:min(520px,86vw);
+      padding:12px 16px 14px; border-radius:var(--leaf-lg); background:rgba(16,21,31,.8);
+      backdrop-filter:blur(3px); color:#dce6f0; }
+    .intro h1{ font-family:var(--body-font); font-variant-caps:small-caps; font-size:clamp(20px,3.4vw,28px); margin:0 0 4px; }
+    .intro p{ margin:0; font-size:.95rem; line-height:1.5; color:#b9c8da; }
+    .intro .keys{ margin-top:8px; font-size:.86rem; color:#8fa0b6; }
+    #hud{ position:absolute; right:14px; top:14px; font:600 .72rem/1 var(--mono-font);
+      color:#8fa0b6; background:rgba(10,14,11,.6); padding:5px 8px; border-radius:var(--leaf-sm); }
+    #mh-lang{ top:auto; bottom:14px; }
+    @media (max-width:620px){ .intro{ left:12px; right:12px; padding:10px 13px 12px; } }
+  </style>
+  </head>
+  <body>
+    <section class="stage">
+      <canvas id="stage" tabindex="0" role="img"
+              aria-label="A prototype view of a cave in three dimensions, seen from behind the slime as it walks a corridor of rock, water, and growth."></canvas>
+      <div class="intro">
+        <h1>Over its shoulder</h1>
+        <p>The cave itself, from behind the creature, with nothing written in
+          it. A template: the world moves and reads correctly, and whatever it
+          ends up carrying can be dropped in. Nothing else on the site points
+          here yet.</p>
+        <p class="keys">Arrow keys or W and S to walk, A and D to turn, and shift
+          to hurry. Drag to look around, and scroll to pull the camera in or out.</p>
+      </div>
+      <div id="hud" hidden></div>
+    </section>
+  </body>
+</html>

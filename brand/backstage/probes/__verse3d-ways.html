@@ -1,0 +1,46 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D ways between places, traced</title><meta name="budget" content="60000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Walks onto each way out, several times from a fresh start and after the
+// creatures have moved about, and traces where the slime ends up and whether
+// the fade began. A way out must work however the place's creatures stand.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+  const W = document.getElementById("f").contentWindow.MH_V3D; W.pause();
+  for (const id of ["outdoors", "indoors", "cave"]) { try { W.load(id); } catch (e) { say("loading " + id + ": EXCEPTION " + e.message + " " + (e.stack || "").split("\n").slice(0, 3).join(" | ")); } }
+  const tick = (n) => { for (let i = 0; i < n; i++) W.tick(0.016); };
+  let bad = 0;
+  // every way out of every place, found by where it leads (the outdoors has a door on every house)
+  const ways = [];
+  for (const skin of ["technurture", "technoscure", "technocute"]) {
+    W.setSkin(skin);
+    for (const id of ["outdoors", "indoors", "cave"]) { W.load(id); W.S().portals.forEach((q, i) => ways.push([skin, id, i, q.to])); }
+  }
+  for (const [skin, from, pick, want0] of ways) {
+    W.setSkin(skin);
+    const want = W.S && (window.frames[0].MH_VERSE3D.scenes[want0 + "@" + skin] ? want0 + "@" + skin : want0);
+    for (let run = 0; run < (from === "outdoors" ? 1 : 2); run++) {
+      W.load(from); tick(run * 200 + 3);
+      const q = W.S().portals[pick], st = W.S().entries.start;
+      W.me.x = st.x; W.me.z = st.z; tick(3);
+      W.me.x = q.x + (st.x - q.x) * 0.02; W.me.z = q.z + (st.z - q.z) * 0.02; W.me.speed = 0; tick(1);   // on the way's centre, a hair toward the start, so any push is back that way
+      const d = Math.hypot(W.me.x - q.x, W.me.z - q.z), fading = W.fading();
+      tick(50);
+      if (W.scene() !== want) { bad++; say(skin + ": " + from + " way " + pick + " run " + run + ": ended in " + W.scene() + ", slime " + d.toFixed(2) + " from the way's centre (radius " + q.r.toFixed(2) + "), fading " + fading + " NO"); }
+    }
+  }
+  // no place may start the slime inside one of its own ways out: that way would never arm
+  for (const skin of ["technurture", "technoscure", "technocute"]) for (const id of ["outdoors", "indoors", "cave"]) {
+    W.setSkin(skin); W.load(id); const S = W.S();
+    for (const [name, e] of Object.entries(S.entries)) for (const q of S.portals) {
+      const d = Math.hypot(e.x - q.x, e.z - q.z);
+      if (d < q.r + 1) { bad++; say(id + " entry " + name + " stands " + d.toFixed(1) + " from a way to " + q.to + " (radius " + q.r.toFixed(1) + ") NO"); }
+    }
+  }
+  say(bad ? bad + " ways failed" : "every way out works (" + ways.length + " of them), and no entry stands in one");
+  } catch (e) { say("EXCEPTION " + e.message + " " + e.stack); }
+  document.title = "done";
+}, 1200));
+</script>

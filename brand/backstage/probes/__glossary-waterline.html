@@ -1,0 +1,33 @@
+<!DOCTYPE html><meta charset="utf-8"><title>2D cave waterline</title>
+<iframe id="f" src="/glossary.html" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// ONE waterline for the cave: where does it fall for each flooded share of the
+// floor, and what does it do to the two halves? For each: the line (relative to
+// the floor line BASE), the share of the living and of the dark half under water,
+// the pools, and how deep the walk gets in each half.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, A = w.MH_GLOSSARY_WORLD, S = A.side;
+  const W = A.width(), L = A.layout(), was = S.water.flood, wasLine = S.water.line;
+  const halves = () => {
+    let lit = 0, litWet = 0, dark = 0, darkWet = 0, litDeep = 0, darkDeep = 0;
+    for (let x = 0; x < W; x += 5) {
+      const d = A.caveT(x) > 0.5, wet = A.ground(x) > S.level, depth = A.ground(x) - S.level;
+      if (d) { dark++; if (wet) { darkWet++; darkDeep = Math.max(darkDeep, depth); } }
+      else { lit++; if (wet) { litWet++; litDeep = Math.max(litDeep, depth); } }
+    }
+    return "living " + Math.round(100 * litWet / lit) + "% wet (deepest " + litDeep.toFixed(0) + "), dark " + Math.round(100 * darkWet / dark) + "% wet (deepest " + darkDeep.toFixed(0) + ")";
+  };
+  for (const flood of [0.05, 0.1, 0.15, 0.2, 0.3]) {
+    S.water.line = null; S.water.flood = flood; S.findPools();
+    const P = A.pools();
+    say("flood " + flood + ": line at BASE" + (S.level - L.BASE >= 0 ? "+" : "") + (S.level - L.BASE).toFixed(1) + "; " + halves() + "; " + P.length + " pools, widths " + P.map((q) => Math.round(q.width)).join(","));
+  }
+  S.water.line = wasLine; S.water.flood = was; S.findPools();
+  const P = A.pools();
+  say("chosen: line BASE" + (S.level - L.BASE >= 0 ? "+" : "") + (S.level - L.BASE).toFixed(1) + "; all pools share it: " + (P.every((q) => q.level === S.level) ? "yes" : "NO") + "; a pool through the seam: " + (P.some((q) => q.lo < 0 || q.hi > W) ? "yes" : "no"));
+  say("way in dry: " + (A.ground(0) < S.level ? "yes" : "NO (the entrance is under water)"));
+  document.title = "done";
+}, 1400));
+</script>

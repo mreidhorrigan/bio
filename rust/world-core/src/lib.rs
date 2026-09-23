@@ -107,6 +107,7 @@ pub struct WorldCore {
     hub_y: f32,
     village_radius: f32,
     water: Vec<u8>,
+    solid: Vec<u8>,
 }
 
 #[wasm_bindgen]
@@ -141,6 +142,7 @@ impl WorldCore {
             predator_dormant: false,
             mote_speed: 1.5,
             water: Vec::new(),
+            solid: Vec::new(),
             grazer_speed: 1.0,
             predator_speed: 1.25,
             firefly_speed: 0.6,
@@ -173,12 +175,53 @@ impl WorldCore {
 
     pub fn step(&mut self, dt: f32, player_x: f32, player_y: f32) {
         let dt = dt.clamp(0.0, 0.05);
-        for entity in &mut self.entities {
-            if entity.dormant {
+        let period = self.period;
+        let has_solid = !self.solid.is_empty();
+        for index in 0..self.entities.len() {
+            if self.entities[index].dormant {
                 continue;
             }
-            entity.x = (entity.x + entity.vx * dt).rem_euclid(self.period);
-            entity.y = (entity.y + entity.vy * dt).rem_euclid(self.period);
+            let (ox, oy, vx, vy) = {
+                let e = &self.entities[index];
+                (e.x, e.y, e.vx, e.vy)
+            };
+            let nx = (ox + vx * dt).rem_euclid(period);
+            let ny = (oy + vy * dt).rem_euclid(period);
+            if !has_solid {
+                let e = &mut self.entities[index];
+                e.x = nx;
+                e.y = ny;
+                continue;
+            }
+            // Refuse to enter a solid tile one axis at a time, so a body SLIDES
+            // along a wall. Letting it enter and shoving it back out is exactly
+            // what makes a creature shiver against a house.
+            // A body ALREADY inside a solid tile (born there, or a dwelling
+            // raised on top of it) must be free to walk out. Only entering is
+            // refused; otherwise it sits in the wall forever.
+            if self.is_solid(ox, oy) {
+                let e = &mut self.entities[index];
+                e.x = nx;
+                e.y = ny;
+                continue;
+            }
+            let blocked = self.is_solid(nx, ny);
+            let free_x = !self.is_solid(nx, oy);
+            let free_y = !self.is_solid(ox, ny);
+            let e = &mut self.entities[index];
+            if !blocked {
+                e.x = nx;
+                e.y = ny;
+            } else if free_x {
+                e.x = nx;
+                e.vy *= 0.6;
+            } else if free_y {
+                e.y = ny;
+                e.vx *= 0.6;
+            } else {
+                e.vx *= 0.4;
+                e.vy *= 0.4;
+            }
         }
         self.accumulator += dt;
         let sim_dt = 1.0 / 6.0;
@@ -297,11 +340,109 @@ impl WorldCore {
     /// grazer slows down exactly where the player's slime does.
     pub fn set_water(&mut self, mask: &[u8]) {
         let want = (self.period as usize) * (self.period as usize);
-        self.water = if mask.len() == want { mask.to_vec() } else { Vec::new() };
+        self.water = if mask.len() == want {
+            mask.to_vec()
+        } else {
+            Vec::new()
+        };
+    }
+
+    /// Change the tunables WITHOUT moving anything. configure() is world setup:
+    /// it scatters the predators around the plaza so a visitor meets them, which
+    /// is right at birth and wrong at a change of skin, where the creatures
+    /// should be found exactly where they were left.
+    #[allow(clippy::too_many_arguments)]
+    pub fn retune(
+        &mut self,
+        grazer_cap: u32,
+        predator_cap: u32,
+        predator_dormant: bool,
+        mote_speed: f32,
+        grazer_speed: f32,
+        predator_speed: f32,
+        firefly_speed: f32,
+        turn: f32,
+        curiosity: f32,
+    ) {
+        self.grazer_cap = grazer_cap.max(1) as usize;
+        self.predator_cap = predator_cap.max(1) as usize;
+        self.predator_dormant = predator_dormant;
+        self.mote_speed = mote_speed.max(0.0);
+        self.grazer_speed = grazer_speed.max(0.0);
+        self.predator_speed = predator_speed.max(0.0);
+        self.firefly_speed = firefly_speed.max(0.0);
+        self.turn = turn.clamp(0.01, 1.0);
+        self.curiosity = curiosity.max(0.0);
+        for index in 0..self.entities.len() {
+            let kind = self.entities[index].kind;
+            let speed = self.speed(kind);
+            let magnitude = self.entities[index]
+                .vx
+                .hypot(self.entities[index].vy)
+                .max(0.0001);
+            self.entities[index].vx = self.entities[index].vx / magnitude * speed;
+            self.entities[index].vy = self.entities[index].vy / magnitude * speed;
+            if kind == 2 {
+                self.entities[index].dormant = predator_dormant;
+                if predator_dormant {
+                    self.entities[index].vx = 0.0;
+                    self.entities[index].vy = 0.0;
+                }
+            }
+        }
+        self.pack_render();
+    }
+
+    /// Bring one kind to a target count without disturbing the others: the skins
+    /// carry different atmospheres (fireflies after dark, none by day) but the
+    /// creatures already standing in the world keep their places, so a change of
+    /// skin does not teleport the population.
+    pub fn set_population(&mut self, kind: u8, target: usize) {
+        let mut have = self.population(kind);
+        while have < target {
+            let energy = if kind == 2 { 1.4 } else { 1.0 }; // as the constructor seeds them
+            self.spawn(kind, energy);
+            have += 1;
+        }
+        if have > target {
+            let mut excess = have - target;
+            for entity in self.entities.iter_mut().rev() {
+                if excess == 0 {
+                    break;
+                }
+                if entity.kind == kind && entity.alive {
+                    entity.alive = false;
+                    excess -= 1;
+                }
+            }
+        }
+        self.pack_render();
+    }
+
+    /// One byte per tile, 1 where a dwelling, a growth or a kiosk stands. A
+    /// creature slides along these rather than walking through them. Sent
+    /// again whenever the visitor builds or clears something.
+    pub fn set_solid(&mut self, mask: &[u8]) {
+        let want = (self.period as usize) * (self.period as usize);
+        self.solid = if mask.len() == want {
+            mask.to_vec()
+        } else {
+            Vec::new()
+        };
     }
 }
 
 impl WorldCore {
+    fn is_solid(&self, x: f32, y: f32) -> bool {
+        if self.solid.is_empty() {
+            return false;
+        }
+        let p = self.period as usize;
+        let tx = (x.round() as i64).rem_euclid(p as i64) as usize;
+        let ty = (y.round() as i64).rem_euclid(p as i64) as usize;
+        self.solid[ty * p + tx] != 0
+    }
+
     fn on_water(&self, x: f32, y: f32) -> bool {
         if self.water.is_empty() {
             return false;

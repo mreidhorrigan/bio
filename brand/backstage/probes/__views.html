@@ -1,0 +1,51 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Two views, one world: towers carried across</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/brand/backstage/slimes/views.html?theme=technurture" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Gives the iso world two signal towers (by extending what MH_ISO.buildings()
+// reports, which is where the 3D view reads them), walks into the 3D view, and
+// checks: the towers stand in 3D at their tiles, the
+// slime starts where the iso slime stood, the towers' listener follows the 3D
+// slime, the map stops drawing while 3D shows, and walking back hands the
+// iso slime the spot the 3D one reached.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, VW = w.MH_VIEWS, isoW = w.document.getElementById("iso").contentWindow;
+    const I = isoW.MH_ISO, B = isoW.MH_MUSEBOTS;
+    if (!VW || !I) { say("views: MISSING"); document.title = "done"; return; }
+    // two towers where build mode could have raised them
+    const hub = I.hub();
+    const blds = I.buildings();
+    const raise = [{ type: "signal", uid: "s1", tx: hub.x + 6, ty: hub.y - 2, botToken: "" }, { type: "signal", uid: "s2", tx: hub.x - 5, ty: hub.y + 7, botToken: "" }];
+    say("iso world up, " + blds.length + " buildings before");
+    let listened = 0;
+    if (B && B.updateListener) { const orig = B.updateListener; B.updateListener = function () { listened++; return orig.apply(this, arguments); }; }
+    const W = VW.W;
+    // the 3D view reads the towers from MH_ISO.buildings(): report the two with the rest
+    const origBuildings = I.buildings;
+    I.buildings = () => origBuildings().concat(raise);
+    const p0 = I.player();
+    VW.toggle();
+    for (let i = 0; i < 30; i++) W.tick(0.016);
+    const S = W.S(), t = S.tileOf(W.me.x, W.me.z);
+    say("into 3D: the slime starts at tile " + t[0].toFixed(2) + "," + t[1].toFixed(2) + " where the iso slime stood at " + p0.x.toFixed(2) + "," + p0.y.toFixed(2) + (Math.hypot(t[0] - p0.x, t[1] - p0.y) < 0.3 ? "" : " NO"));
+    say("towers standing in 3D, as solids: " + S.dynSolids.length + " of " + raise.length + (S.dynSolids.length === raise.length ? "" : " NO"));
+    const at = S.fromTile(raise[0].tx, raise[0].ty);
+    say("the first at world " + at[0].toFixed(0) + "," + at[1].toFixed(0) + ", its solid at " + S.dynSolids[0].x.toFixed(0) + "," + S.dynSolids[0].z.toFixed(0) + (Math.hypot(at[0] - S.dynSolids[0].x, at[1] - S.dynSolids[0].z) < 0.01 ? "" : " NO"));
+    say("the towers' listener placed from the 3D slime " + listened + " times in 30 frames" + (listened >= 20 || !B ? "" : " NO"));
+    W.controls.keys.fwd = true; for (let i = 0; i < 90; i++) W.tick(0.016); W.controls.keys.fwd = false;
+    const t1 = S.tileOf(W.me.x, W.me.z);
+    setTimeout(() => {
+      const hidden = w.document.getElementById("iso").style.display === "none";
+      say("while 3D shows, the map stops drawing: " + (hidden ? "yes" : "NO"));
+      VW.toggle();
+      const p1 = I.player();
+      say("back on the map, the iso slime stands where the 3D one walked to: " + p1.x.toFixed(2) + "," + p1.y.toFixed(2) + " vs " + t1[0].toFixed(2) + "," + t1[1].toFixed(2) + (Math.hypot(((p1.x - t1[0]) % hub.period + hub.period * 1.5) % hub.period - hub.period / 2, ((p1.y - t1[1]) % hub.period + hub.period * 1.5) % hub.period - hub.period / 2) < 0.3 ? "" : " NO"));
+      say("errors: none");
+      document.title = "done";
+    }, 500);
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 3000));
+</script>

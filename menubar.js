@@ -24,7 +24,7 @@
   var GAMES = [
     ["Rock walls and damp—these match our dream; but, Rector, the cold is new.",
      "Rock_Walls_and_Damp.html"],
-    ["Autofac: Rad Shipping", "autofac.html"],
+    // ["Autofac: Rad Shipping", "autofac.html"],   // off the site for now: still an experiment (2026-09-22)
     ["Clod Bathos, Superior Machine",
      "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"],
     ["Appraising the Pedagogical Value of Audiogames (CGSA 2026)",
@@ -49,8 +49,12 @@
     ["No Phenomenon", "https://nophenomenon.bandcamp.com/"],
     ["SoundCloud", "https://soundcloud.com/matt_horrigan"]
   ];
+  var WRITING = [
+    ["Criticism", "criticism.html"],
+    ["Glossary", "glossary.html"]
+  ];
   var LINKS_AFTER_DROPDOWNS = [
-    ["Research", "https://scholar.google.ca/citations?user=g8USNu8AAAAJ&hl=en"]
+    ["Research", "research.html"]     // the summaries; Google Scholar is linked from that page
   ];
 
   /* All menubar metrics are pinned in px ON PURPOSE: pages set different root font
@@ -172,6 +176,7 @@
     nav.appendChild(dropdown("Games", GAMES));
     nav.appendChild(dropdown("Tools", TOOLS));
     nav.appendChild(dropdown("Music", MUSIC));
+    nav.appendChild(dropdown("Writing", WRITING));
     LINKS_AFTER_DROPDOWNS.forEach(function (l) { nav.appendChild(link(l[0], l[1])); });
     return nav;
   }

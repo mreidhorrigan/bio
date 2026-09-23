@@ -89,11 +89,26 @@ including `workflow-level`, `process-level`, `output-level`, and `task-level`.
 Name the exact scope, evidence, object, or relationship instead. Do not replace
 one `-level` compound with another.
 
-### 7. Default to Chicago.
+### 7. The serial comma, always.
+
+Three or more items in a series take a comma before the conjunction. It is the
+house comma, not a preference to be weighed each time.
+
+- ✓ `plain text, CSV, and Canvas export`
+- ✗ `plain text, CSV and Canvas export`
+- ✓ `It builds the world, places the kiosks, and moves the avatar.`
+
+It earns its keep on the sentences where the last two items would otherwise
+read as one thing: `the tools, the games, and the music` is three offerings,
+`the tools, the games and the music` can be read as two.
+
+### 8. Default to Chicago.
 
 For anything these house rules don't cover (hyphenation, number style, quotation
 and punctuation placement, capitalization edge cases), follow the **Chicago Manual
 of Style**. The house rules above win wherever they speak; Chicago fills the rest.
+Chicago prescribes the serial comma too, so rule 7 is Chicago made explicit
+rather than an exception to it.
 
 ## Workflow when editing site copy
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D water, seen over its rim</title>
+<iframe id="f" src="/slime3d.html" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Stand short of a pool so the camera looks at it across its near rim, and
+// check two things in the frame: the floor between camera and pool is drawn as
+// floor (no water over the rim), and the bottom rows of the frame are floor,
+// not sky (the world must be built from behind the camera).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, A = w.MH_SLIME3D;
+  A.pause();
+  const p = A.pools[1] || A.pools[0], sh = A.shoreline(p);
+  A.me.z = sh.lo - 14; A.me.x = A.centre(A.me.z); A.me.yaw = 0; A.dist(58);
+  for (let i = 0; i < 150; i++) A.tick(0.016);
+  const d = document.getElementById("f").contentDocument, cv = d.getElementById("stage"), g = cv.getContext("2d");
+  const k = cv.width / cv.clientWidth, P = A.pal(A.me.z);
+  const rgb = (c) => { const m = /(\d+),\s*(\d+),\s*(\d+)/.exec(c); return m ? [+m[1], +m[2], +m[3]] : [0, 0, 0]; };
+  const air = rgb(P.air), dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  // the bottom rows: how many pixels are the sky's colour
+  const rows = g.getImageData(0, cv.height - Math.round(6 * k), cv.width, Math.round(6 * k)).data;
+  let sky = 0, n = 0;
+  for (let i = 0; i < rows.length; i += 4 * 7) { n++; if (dist([rows[i], rows[i + 1], rows[i + 2]], air) < 12) sky++; }
+  say("bottom of the frame: " + sky + " of " + n + " sampled pixels are the sky's colour" + (sky < n * 0.02 ? "" : " NO (the floor is not built under the camera)"));
+  // the rim: the floor between the camera and the pool's first visible water, projected
+  const rimZ = sh.lo - 2, rimX = A.centre(rimZ), pr = A.engine.project([rimX, A.floorAt(rimX, rimZ) + 0.3, rimZ]);
+  const before = g.getImageData(Math.round(pr[0] * k), Math.round(pr[1] * k), 1, 1).data;
+  A.engine.mirror = () => {};
+  const orig = A.layers.indexOf(A.layers.find((f) => f.name === "buildWater"));
+  const saved = A.layers[orig]; A.layers[orig] = () => {}; A.tick(0); 
+  const after = g.getImageData(Math.round(pr[0] * k), Math.round(pr[1] * k), 1, 1).data;
+  A.layers[orig] = saved; A.tick(0);
+  say("the rim just before the pool, with and without water: " + [before[0], before[1], before[2]].join(",") + " vs " + [after[0], after[1], after[2]].join(",") + (dist(before, after) < 6 ? " (no water painted over it)" : " NO (water paints over the rim)"));
+  say("rows of the pool the camera can see: measured by the frame above");
+  document.title = "done";
+}, 1200));
+</script>

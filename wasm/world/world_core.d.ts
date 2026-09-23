@@ -31,6 +31,26 @@ export class WorldCore {
     render_ptr(): number;
     render_snapshot(): Float32Array;
     /**
+     * Change the tunables WITHOUT moving anything. configure() is world setup:
+     * it scatters the predators around the plaza so a visitor meets them, which
+     * is right at birth and wrong at a change of skin, where the creatures
+     * should be found exactly where they were left.
+     */
+    retune(grazer_cap: number, predator_cap: number, predator_dormant: boolean, mote_speed: number, grazer_speed: number, predator_speed: number, firefly_speed: number, turn: number, curiosity: number): void;
+    /**
+     * Bring one kind to a target count without disturbing the others: the skins
+     * carry different atmospheres (fireflies after dark, none by day) but the
+     * creatures already standing in the world keep their places, so a change of
+     * skin does not teleport the population.
+     */
+    set_population(kind: number, target: number): void;
+    /**
+     * One byte per tile, 1 where a dwelling, a growth or a kiosk stands. A
+     * creature slides along these rather than walking through them. Sent
+     * again whenever the visitor builds or clears something.
+     */
+    set_solid(mask: Uint8Array): void;
+    /**
      * One byte per tile of the P x P torus, 1 where a tile is open water.
      * The engine computes it with the same test the player wades by, so a
      * grazer slows down exactly where the player's slime does.
@@ -73,6 +93,9 @@ export interface InitOutput {
     readonly worldcore_render_len: (a: number) => number;
     readonly worldcore_render_ptr: (a: number) => number;
     readonly worldcore_render_snapshot: (a: number) => [number, number];
+    readonly worldcore_retune: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => void;
+    readonly worldcore_set_population: (a: number, b: number, c: number) => void;
+    readonly worldcore_set_solid: (a: number, b: number, c: number) => void;
     readonly worldcore_set_water: (a: number, b: number, c: number) => void;
     readonly worldcore_step: (a: number, b: number, c: number, d: number) => void;
     readonly wrap: (a: number, b: number) => number;

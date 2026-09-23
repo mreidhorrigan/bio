@@ -1,0 +1,17 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:1180px;height:820px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  const A = w.MH_GLOSSARY_WORLD;
+  const b = d.querySelectorAll('dl.words dt button[data-cite]')[0];
+  say("button slug: " + b.getAttribute("data-cite"));
+  say("resolves to: " + (A.find(b.getAttribute("data-cite")) ? A.find(b.getAttribute("data-cite")).e.term : "NOT FOUND"));
+  say("citation: " + String(A.cite(b.getAttribute("data-cite"))).slice(0, 80));
+  b.click();
+  setTimeout(() => { say("label 150ms after the click: " + b.textContent); }, 150);
+  setTimeout(() => { say("label 600ms after the click: " + b.textContent); document.title = "done"; }, 600);
+}, 1400));
+</script>

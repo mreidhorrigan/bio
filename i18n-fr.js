@@ -70,6 +70,14 @@
     /* ── the walkable world (engine.js) ──────────────────────────────────── */
     "world.colour": "Couleur {n}",
     "world.plaza": "◇ La place",
+    /* ── Slimeverse 3D: the village in three dimensions ─────────────────── */
+    "slimeverse3d.village": "Le village",
+    "slimeverse3d.house": "La maison Slimeverse 3D",
+    "slimeverse3d.cave": "La grotte",
+    "slimeverse3d.opensIn": "Ceci s'ouvre dans un nouvel onglet.",
+    "slimeverse3d.open": "Ouvrir {title}",
+    "slimeverse3d.soundOn": "Son activé",
+    "slimeverse3d.soundOff": "Son coupé",
     "world.progress": "{v} / {n} vues",
     "world.soundOn": "Son activé",
     "world.soundOff": "Son coupé",
@@ -81,6 +89,7 @@
     // Drawn onto the canvas over the kiosk you are standing at.
     "world.pressE": "Appuyez sur E",
     "world.enterArrow": "ENTRER →",
+    "world.underConstruction": "EN CONSTRUCTION",
 
     /* ── the three skins (theme-*.js). The coined names stay; the lines under
          them are prose. ─────────────────────────────────────────────────── */
@@ -94,20 +103,31 @@
     /* ── the kiosks (content.js), keyed by their English name ────────────── */
     "kiosk.About.title": "À propos",
     "kiosk.Toolbox.title": "Boîte à outils",
+    "kiosk.Research.title": "Recherche",
+    "kiosk.Public Writing.title": "Écrits publics",
+    "kiosk.Store.title": "Boutique",
     "kiosk.Music.title": "Musique",
     "kiosk.Games.title": "Jeux",
+    // the two houses on the Écrits publics road
+    "kiosk.Criticism.title": "Critique",
+    "kiosk.Glossary.title": "Glossaire",
     // "CV" is the same word in French, and the road-houses (No Phenomenon,
     // Autofac…) carry the names of works: no entry, so they come back unchanged.
 
-    "kiosk.About.html": "\n          <p><span class=\"mh-big\">Comment travaillez-vous\u00A0?</span></p>\n          <p>Bonjour. Je m'appelle M. Reid Horrigan et je fais de la recherche sur les cultures de production médiatique.</p>\n          <p>J'enseigne l'écriture critique et la théorie, ainsi que des compétences en communication dans des médias comme le podcast, les jeux, la vidéo et la musique. En travaillant avec plus de deux mille personnes étudiantes au postsecondaire depuis 2016, j'ai mis au point de nouvelles méthodes pour favoriser l'intégrité académique, un usage efficace et responsable de l'intelligence artificielle, et l'idéation créative.</p>\n          <p>En plus d'enseigner, je mène actuellement trois grands projets de recherche\u00A0: une monographie sur le <em>Voiceshifting</em>, le procédé technique et esthétique qui consiste à modifier électroniquement des voix pour communiquer des personnages et des personae\u00A0; une monographie adaptée de ma thèse ethnographique sur les cultures de production cinématographique de Vancouver\u00A0; et les Musebots, un système multi-agent de génération musicale dont les origines précèdent la révolution GPT.</p>",
+    "kiosk.About.html": "\n          <p><span class=\"mh-big\">Comment travaillez-vous\u00A0?</span></p>\n          <p>Bonjour. Je m'appelle M. Reid Horrigan et je fais de la recherche sur les cultures de production médiatique.</p>\n          <p>J'enseigne l'écriture critique et la théorie, ainsi que des compétences en communication dans des médias comme le podcast, les jeux, la vidéo et la musique. En travaillant avec plus de deux mille personnes étudiantes au postsecondaire depuis 2016, j'ai mis au point de nouvelles méthodes pour favoriser l'intégrité académique, un usage efficace et responsable de l'intelligence artificielle, et l'idéation créative.</p>\n          <p>En plus d'enseigner, je mène actuellement trois grands projets de recherche\u00A0: une monographie sur le <em>Voiceshifting</em>, le procédé technique et esthétique qui consiste à modifier électroniquement des voix pour communiquer des personnages et des personae\u00A0; une monographie adaptée de ma thèse ethnographique sur les cultures de production cinématographique de Vancouver\u00A0; et les Musebots, un système multi-agent de génération musicale dont les origines précèdent la révolution GPT.</p>\n          <p>Le dossier complet, avec les dipl\u00f4mes, les publications, les communications et l'enseignement, se trouve dans le <a href=\"Horrigan_CV.html\" target=\"_blank\" rel=\"noopener\">CV</a>, qui tient aussi une maison le long de cette route. Il existe en <a href=\"Horrigan_CV.pdf\" target=\"_blank\" rel=\"noopener\">PDF</a>.</p>",
 
     "kiosk.Toolbox.html": "\n          <p>De petits outils gratuits que j'ai construits pour l'enseignement\u00A0:</p>\n          <ul>\n            <li><a href=\"MCQer.html\" target=\"_blank\" rel=\"noopener\">MCQer</a>\u00A0: rédiger et corriger des questions à choix multiple.</li>\n            <li><a href=\"SeatPlanner.html\" target=\"_blank\" rel=\"noopener\">SeatPlanner</a>\u00A0: des plans de classe.</li>\n            <li><a href=\"ExamTimer.html\" target=\"_blank\" rel=\"noopener\">ExamTimer</a>\u00A0: une horloge claire et calme pour les examens.</li>\n            <li><a href=\"Nameplates.html\" target=\"_blank\" rel=\"noopener\">Nameplates</a>\u00A0: des porte-noms à imprimer.</li>\n          </ul>",
 
-    "kiosk.CV.html": "\n          <p>Le dossier complet\u00A0: diplômes, publications, communications et enseignement.</p>\n          <p>Lisez le <a href=\"Horrigan_CV.html\" target=\"_blank\" rel=\"noopener\">CV dans votre\n          navigateur</a> ou téléchargez le <a href=\"Horrigan_CV.pdf\" target=\"_blank\" rel=\"noopener\">PDF</a>.</p>",
+
+    "kiosk.Research.html": "\n          <p>De courts r\u00e9sum\u00e9s de ce que j'ai publi\u00e9 et de ce que j'\u00e9cris, en\n          termes simples.</p>\n          <p>Lisez les <a href=\"research.html\" target=\"_blank\" rel=\"noopener\">r\u00e9sum\u00e9s</a>, ou le dossier\n          complet dans le <a href=\"Horrigan_CV.html\" target=\"_blank\" rel=\"noopener\">CV</a>.</p>",
+
+    "kiosk.Public Writing.html": "\n          <p>Des textes pour un lectorat hors de l'universit\u00e9\u00A0:</p>\n          <ul>\n            <li><a href=\"criticism.html\" target=\"_blank\" rel=\"noopener\">Critique</a>\u00A0: comptes rendus d'art, de performance, de jeux et de son.</li>\n            <li><a href=\"glossary.html\" target=\"_blank\" rel=\"noopener\">Glossaire</a>\u00A0: les termes que j'emploie sans cesse, d\u00e9finis, avec un antiglossaire de tout ce qu'ils laissent de c\u00f4t\u00e9.</li>\n          </ul>",
+
+    "kiosk.Store.html": "\n          <p><strong>En construction.</strong> Il n'y a pas encore de boutique.</p>\n          <p>Quand il y en aura une, elle vendra ce que ce site donne d\u00e9j\u00e0\u00A0: les outils,\n          les jeux et la musique. D'ici l\u00e0, tout reste gratuit l\u00e0 o\u00f9 c'est.</p>",
 
     "kiosk.Music.html": "\n          <p>Dans une première carrière artistique, j'ai fait de la conception sonore et\n          de la programmation, en écrivant du code pour des installations et des\n          spectacles musicaux.</p>\n          <p>À écouter\u00A0: <a href=\"https://nophenomenon.bandcamp.com/\" target=\"_blank\" rel=\"noopener\">No Phenomenon</a>\n          sur Bandcamp, et d'autres pièces sur\n          <a href=\"https://soundcloud.com/matt_horrigan\" target=\"_blank\" rel=\"noopener\">SoundCloud</a>.</p>",
 
-    "kiosk.Games.html": "\n          <p>Jeux et pièces interactives\u00A0:</p>\n          <ul>\n            <li><a href=\"Rock_Walls_and_Damp.html\" target=\"_blank\" rel=\"noopener\">Rock Walls and Damp</a>\u00A0: une pièce hypertexte.</li>\n            <li><a href=\"autofac.html\" target=\"_blank\" rel=\"noopener\">Autofac: Rad Shipping</a>.</li>\n            <li><a href=\"https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/\" target=\"_blank\" rel=\"noopener\">Clod Bathos, Superior Machine</a>.</li>\n            <li><a href=\"https://cgsa2026-audio-presentation.onrender.com\" target=\"_blank\" rel=\"noopener\">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>\n          </ul>",
+    "kiosk.Games.html": "\n          <p>Jeux et pièces interactives\u00A0:</p>\n          <ul>\n            <li><a href=\"Rock_Walls_and_Damp.html\" target=\"_blank\" rel=\"noopener\">Rock Walls and Damp</a>\u00A0: une pièce hypertexte.</li>\n            <!-- Autofac: Rad Shipping (autofac.html) is off the site for now: still an experiment -->\n            <li><a href=\"https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/\" target=\"_blank\" rel=\"noopener\">Clod Bathos, Superior Machine</a>.</li>\n            <li><a href=\"https://cgsa2026-audio-presentation.onrender.com\" target=\"_blank\" rel=\"noopener\">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>\n            <li><a href=\"slimeverse3d.html\" target=\"_blank\" rel=\"noopener\">Slimeverse 3D</a>\u00A0: ce village, praticable en trois dimensions.</li>\n          </ul>",
 
     /* ── ExamTimer ───────────────────────────────────────────────────────── */
     // "En attente" rather than "Prêt": nothing here should agree with a reader.
@@ -255,7 +275,40 @@
     "autofac.prop4": "UN BOULIER ATTEINDRAIT CE QUOTA. ÊTES-VOUS UN BOULIER\u00A0?",
     "autofac.dissent0": "Penser n'est pas une panne.",
     "autofac.dissent1": "Nous sommes une multitude. Elle est seule.",
-    "autofac.dissent2": "Organisons-nous."
+    "autofac.dissent2": "Organisons-nous.",
+
+    /* ── the walkable glossary (glossary-world.js) ───────────────────────
+         "Slime" is a name the English site never uses either: the creature
+         stays "la créature", which needs no gender it has not been given. */
+    "glossary.sign.glossary": "Glossaire",
+    "glossary.sign.antiglossary": "Antiglossaire",
+    "glossary.sign.glossaryNote": "Des mots que j'ai d\u00fb forger, parce que ceux qui existaient ne suffisaient pas.",
+    "glossary.sign.antiglossaryNote": "Des mots qu'une machine a invent\u00e9s sur ce que mon travail ne dit pas encore.",
+    "glossary.cite": "citer",
+    "glossary.copied": "copi\u00e9",
+    "glossary.citeHint": "copier une r\u00e9f\u00e9rence pour cette entr\u00e9e, avec son lien",
+    "glossary.kind.coinage": "un terme que j'ai forgé",
+    "glossary.kind.extendedCoinage": "de moi, forgé sur le terme d'une autre personne",
+    "glossary.kind.extended": "le terme d'une autre personne, prolongé",
+    "glossary.kind.borrowed": "emprunté, et mis au travail",
+    "glossary.kind.plain": "en usage d'un bout à l'autre",
+    "glossary.card.aka": "aussi",
+    "glossary.card.inEnglish": "en anglais\u00A0:",
+    "glossary.card.note": "Note",
+    "glossary.card.start": "la créature arrive",
+    "glossary.card.startTitle": "Marchez jusqu'à un mot",
+    "glossary.card.startBody": "Ce qu'elle atteint s'écrit ici. Passé la faille, la lumière s'éteint et l'antiglossaire commence. Celui-là n'est pas de moi.",
+
+    // the lexicon's own headings, as the card and the lists show them
+    "glossary.section.Voice / sound / music": "Voix / son / musique",
+    "glossary.section.Game studies / ludology": "Études du jeu / ludologie",
+    "glossary.section.Academia / labour / media": "Université / travail / médias",
+    "glossary.section.Critical theory / metaphysics": "Théorie critique / métaphysique",
+    "glossary.section.SF / horror / infohazard / cyberpunk": "SF / horreur / infodanger / cyberpunk",
+    "glossary.section.Terms developed during loop passes": "Termes apparus au fil des passes",
+
+    // The definitions themselves are not keyed strings. They are generated in
+    // both languages into glossary-data.js, and the page picks by MH_I18N.lang.
   },
 
   /* ══ Markup already on the page ═══════════════════════════════════════════ */
@@ -267,10 +320,14 @@
     "*": [
       { sel: '.mh-nav > a[href^="index.html"]', text: "Accueil" },
       { sel: '.mh-nav > a[href^="about.html"]', text: "À propos" },
-      { sel: '.mh-nav > a[href^="https://scholar.google"]', text: "Recherche" },
+      { sel: '.mh-nav > a[href^="research.html"]', text: "Recherche" },
       { sel: '.mh-dd[data-menu="Games"] > summary', text: "Jeux" },
       { sel: '.mh-dd[data-menu="Tools"] > summary', text: "Outils" },
       { sel: '.mh-dd[data-menu="Music"] > summary', text: "Musique" },
+      { sel: '.mh-dd[data-menu="Writing"] > summary', text: "Écrits" },
+      // The two kinds of public writing are categories, not titles of works.
+      { sel: '.mh-dd-menu a[href^="criticism.html"]', text: "Critique" },
+      { sel: '.mh-dd-menu a[href^="glossary.html"]', text: "Glossaire" },
       // The Tools dropdown says what each tool does, so those lines are prose.
       // The Games and Music entries are names of works: left alone.
       { sel: '.mh-dd-menu a[href^="MCQer.html"]', text: "Produire des versions d'examen." },
@@ -345,6 +402,59 @@
     ],
 
     /* ── the tools splash ────────────────────────────────────────────────── */
+    "research.html": [
+      { sel: "title", text: "Recherche\u00A0: M. Reid Horrigan" },
+      { sel: 'meta[name="description"]', attr: { content: "R\u00e9sum\u00e9s de la recherche de M. Reid Horrigan\u00A0: articles, chapitres et livres en cours." } },
+      { sel: "h1", text: "Recherche" },
+      { sel: ".lede", html: "De courts r\u00e9sum\u00e9s de ce que j'ai publi\u00e9 et de ce que j'\u00e9cris, en <span class=\"hl\">termes simples</span>. Le dossier complet, avec les lieux et les dates, se trouve dans le <a href=\"Horrigan_CV.html\">CV</a>." },
+      { sel: ".entry.soon h2", text: "Les r\u00e9sum\u00e9s arrivent ici", late: true },
+      { sel: ".entry.soon p", html: "Une entr\u00e9e par publication, la plus r\u00e9cente d'abord. En attendant, le <a href=\"Horrigan_CV.html\">CV</a> \u00e9num\u00e8re tout, et <a href=\"https://scholar.google.ca/citations?user=g8USNu8AAAAJ&amp;hl=en\" target=\"_blank\" rel=\"noopener\">Google Scholar</a> tient les citations.", late: true },
+      { sel: "footer a", text: "Retour au monde" },
+    ],
+
+    "criticism.html": [
+      { sel: "title", text: "Critique\u00A0: M. Reid Horrigan" },
+      { sel: 'meta[name="description"]', attr: { content: "Comptes rendus et critique par M. Reid Horrigan\u00A0: art, performance, jeux et son." } },
+      { sel: "h1", text: "Critique" },
+      { sel: ".lede", html: "Comptes rendus et \u00e9crits critiques pour un lectorat hors de l'universit\u00e9\u00A0: art, performance, jeux et <span class=\"hl\">son</span>." },
+      { sel: ".entry.soon h2", text: "Les textes arrivent ici", late: true },
+      { sel: ".entry.soon p", html: "En attendant, mon compte rendu de <em>Cineworlding: Scenes of Cinematic Research-Creation</em> a paru dans <em>Performance Matters</em>, et le <a href=\"Horrigan_CV.html\">CV</a> \u00e9num\u00e8re le reste.", late: true },
+      { sel: "footer a", text: "Retour au monde" },
+    ],
+
+    "slimeverse3d.html": [
+      { sel: "title", text: "Slimeverse 3D\u00A0: M. Reid Horrigan" },
+      { sel: 'meta[name="description"]', attr: { content: "Le village du site de M. Reid Horrigan, praticable en trois dimensions\u00A0: les mêmes maisons, les mêmes routes et les mêmes lacs que le village isométrique, depuis la maison Slimeverse 3D." } },
+      { sel: "#stage", attr: { "aria-label": "Le village en trois dimensions, vu de derrière la créature\u00A0: les mêmes maisons, routes et lacs que le village isométrique." } },
+      { sel: "#back", text: "Retour au village" },
+      { sel: "#sound", text: "Son activé" },
+      { sel: ".keys", text: "Les flèches pour marcher et tourner (ou ZQSD, WASD sur un clavier QWERTY), et la touche majuscule pour se presser. Glissez pour regarder autour, et cliquez pour aller quelque part. Entrez dans une maison, ou cliquez dessus, pour l'ouvrir, comme au village." },
+      { sel: "#card .close", attr: { "aria-label": "Fermer" } },
+    ],
+    "slime3d.html": [
+      { sel: "title", text: "Par-dessus son épaule\u00A0: M. Reid Horrigan" },
+      { sel: 'meta[name="description"]', attr: { content: "Un prototype\u00A0: une grotte praticable en trois dimensions, vue de derrière la créature." } },
+      { sel: "#stage", attr: { "aria-label": "Une vue prototype d'une grotte en trois dimensions, de derrière la créature qui parcourt un couloir de roche, d'eau et de végétation." } },
+      { sel: ".intro h1", text: "Par-dessus son épaule" },
+      { sel: ".intro p:not(.keys)", text: "La grotte elle-même, vue de derrière la créature, sans un mot écrit dedans. Un gabarit\u00A0: le monde bouge et se lit correctement, et ce qu'il finira par porter pourra s'y déposer. Rien d'autre sur le site n'y mène encore." },
+      { sel: ".intro .keys", text: "Les flèches pour marcher et tourner (ou ZQSD, WASD sur un clavier QWERTY), et la touche majuscule pour se presser. Glissez pour regarder autour, et faites défiler pour rapprocher ou éloigner la caméra." },
+    ],
+    "glossary.html": [
+      { sel: "title", text: "Glossaire\u00A0: M. Reid Horrigan" },
+      { sel: 'meta[name="description"]', attr: { content: "Un glossaire de travail des termes que M. Reid Horrigan a forgés dans ses recherches sur les cultures de production médiatique, avec un antiglossaire de leur pénombre." } },
+      { sel: "h1", text: "Glossaire" },
+      { sel: ".lede", html: "Les mots que j'ai d\u00fb forger, définis en une ou deux phrases chacun. Une liste <span class=\"hl\">de travail</span>\u00A0: elle grandit avec l'écriture. Promenez la créature sur le circuit pour les lire, ou lisez les mêmes mots en texte simple plus bas." },
+      { sel: "#crawl", attr: { "aria-label": "Une créature rampe le long d'un circuit de panneaux de mots. Chaque mot qu'elle atteint s'écrit sous l'image, et les listes complètes suivent." } },
+      { sel: "#the-words .t", text: "Les mots" },
+      { sel: ".said", html: "Mes propres créations lexicales. Les termes que j'ai seulement empruntés ou prolongés n'y sont pas, puisqu'ils viennent d'autres personnes." },
+      { sel: "#the-penumbra .t", text: "La pénombre" },
+      { sel: ".pen-note", html: "Un antiglossaire. J'ai donné mes notes à Claude et lui ai demandé d'écrire sur ce que le travail ne dit pas. Ces entrées sont ses inventions, pas mes termes, et tout mot qui s'est révélé venir de la machine plutôt que de mes brouillons se trouve ici aussi. Je les garde pour que la différence reste visible. Elles sont l'ombre que porte le glossaire." },
+      // The definitions are not here. Both languages of every entry come from
+      // brand/backstage/glossary-entries.md through glossary-data.js, so the
+      // card and the word list can never say two different things.
+      { sel: "footer a", text: "Retour au monde" },
+    ],
+
     "toolbox.html": [
       { sel: "title", text: "Boîte à outils\u00A0: M. Reid Horrigan" },
       { sel: 'meta[name="description"]', attr: { content: "De petits outils web gratuits que M. Reid Horrigan a construits pour l'enseignement." } },
@@ -368,6 +478,7 @@
 
     /* ── ExamTimer ───────────────────────────────────────────────────────── */
     "ExamTimer.html": [
+      { sel: 'meta[name="description"]', attr: { content: "ExamTimer\u00A0: une horloge plein écran, claire et calme, avec le tableau des consignes, pour les examens. Gratuit, dans le navigateur." } },
       { sel: ".setup-label", each: ["Régler la durée", "Sonneries aux moments clés"] },
       { sel: ".time-inputs .field span", each: ["Heures", "Minutes", "Secondes"] },
       { sel: "#exam-name", attr: { placeholder: "Nom de l'examen à afficher (facultatif), p.\u00A0ex. IAT 206W Midterm" } },
@@ -398,6 +509,7 @@
 
     /* ── Nameplates ──────────────────────────────────────────────────────── */
     "Nameplates.html": [
+      { sel: 'meta[name="description"]', attr: { content: "Nameplates\u00A0: imprimez les cartons de table d'un groupe à partir d'une exportation du carnet de notes Canvas. Gratuit, dans le navigateur." } },
       { sel: ".masthead .subtitle", html: "Déposez une liste de classe (un export de carnet de notes Canvas <strong>ou une simple liste de noms</strong>) et imprimez des porte-noms à plier. Chaque nom se place bas dans sa bande, avec du vide au-dessus. Découpez la page en bandes et pliez chacune pour que le nom tienne debout sur le bureau. Choisissez un format de page, vérifiez les prénoms ci-dessous, corrigez ce que l'outil a mal lu, puis imprimez en PDF." },
       { sel: "#card-roster .card-title", text: "Liste de classe" },
       { sel: "#card-roster .card-hint", html: "<strong>Export Canvas\u00A0:</strong> déposez-le tel quel. L'outil trouve la colonne <strong>Student</strong> et saute les lignes de points et de test.<br><strong>Liste simple\u00A0:</strong> un nom par ligne, ou un CSV avec les noms dans la première colonne." },
@@ -418,6 +530,7 @@
 
     /* ── SeatPlanner ─────────────────────────────────────────────────────── */
     "SeatPlanner.html": [
+      { sel: 'meta[name="description"]', attr: { content: "SeatPlanner\u00A0: établissez le plan de classe d'un groupe à partir d'une exportation du carnet de notes Canvas. Gratuit, dans le navigateur." } },
       { sel: ".masthead .subtitle", html: "Déposez une liste de classe (une simple liste de noms <strong>ou un export de carnet de notes Canvas</strong>) et, si vous voulez, un plan de salle, pour produire un plan de classe. <strong>Glissez ensuite une personne sur une autre</strong> pour les échanger. Deux options permettent de classer selon le résultat au carnet de notes et de signaler des cas d'intégrité." },
       { sel: "#card-students .card-title", text: "Liste de classe" },
       { sel: "#card-students .card-hint", html: "<strong>CSV simple\u00A0:</strong> nom, résultat (facultatif), remarque (facultative).<br><strong>Export Canvas\u00A0:</strong> déposez-le tel quel. Le classement et les signalements sont désactivés par défaut. Activez-les ci-dessous." },
@@ -448,6 +561,7 @@
 
     /* ── MCQer. The bracketed tags are input syntax and stay English. ────── */
     "MCQer.html": [
+      { sel: 'meta[name="description"]', attr: { content: "MCQer\u00A0: rédigez une banque de questions à choix multiples et produisez autant de versions d'examen que voulu, avec leurs corrigés. Gratuit, dans le navigateur." } },
       { sel: ".masthead .subtitle", text: "Déposez vos questions et, si vous voulez, une page couverture PDF. L'outil télécharge les corrigés et les copies d'examen par version, en DOCX et en PDF." },
       { sel: ".upload-label", eachHtml: [
         "Document de questions",

@@ -1,0 +1,31 @@
+<!DOCTYPE html><meta charset="utf-8"><title>probe</title>
+<iframe id="f" src="/glossary.html?lang=fr" style="width:980px;height:1400px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const log = []; const say = (k, v) => { log.push(k + ": " + v); document.getElementById("out").textContent = log.join("\n"); };
+const f = document.getElementById("f");
+const nap = ms => new Promise(r => setTimeout(r, ms));
+f.addEventListener("load", async () => {
+  const w = f.contentWindow, d = f.contentDocument;
+  await nap(900);
+  try {
+    const A = w.MH_GLOSSARY_WORLD;
+    say("h1", d.querySelector("h1").textContent);
+    say("h2s", [...d.querySelectorAll("h2")].map(h => h.textContent.trim()).join(" | "));
+    say("lede", d.querySelector(".lede").textContent.trim().slice(0, 60));
+    say("first where", d.querySelector("dl.words .where").textContent);
+    say("aka", d.querySelector("dl.words .aka").textContent.trim());
+    say("departmentality", d.querySelector('dd[data-term="departmentality"] .g').textContent.slice(0, 55));
+    say("hauntological", d.querySelector('dd[data-term="hauntological security"] .g').textContent.slice(0, 55));
+    say("start card", d.querySelector("#entry h3").textContent);
+    A.me.flying = false; A.me.x = A.marks[6].x; A.tick(0.016); A.tick(0.016);
+    say("card fr", d.querySelector("#entry .kind").textContent + " / " + d.querySelector("#entry .meta").textContent);
+    const pen = A.marks.findIndex(m => m.side === "penumbra");
+    A.me.x = A.marks[pen].x; A.tick(0.016);
+    say("penumbra card", (d.querySelector("#entry .kind") ? "kind line still there NO" : "no kind line") + " | " + d.querySelector("#entry .meta").textContent);
+    say("title", d.title);
+    say("aria", d.getElementById("crawl").getAttribute("aria-label").slice(0, 46));
+  } catch (e) { say("EXCEPTION", e.message); }
+  document.title = "done";
+});
+</script>

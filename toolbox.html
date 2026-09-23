@@ -23,16 +23,15 @@
     <script src="i18n-fr.js"></script>
     <link rel="stylesheet" href="brand/brand.css">
     <style>
-    :root{ --leaf:16px 4px 16px 4px / 7px 2px 7px 2px; --leaf-lg:22px 6px 22px 6px / 12px 4px 12px 4px; }
     *{ box-sizing:border-box; }
     /* Base colour lives on <html> so the z-index:-1 .flare cloud shows over it —
        an opaque background on <body> would paint over the negative-z child. */
     html{ background:var(--bg); }
-    body{ margin:0; font-family:-apple-system,"Segoe UI",system-ui,Helvetica,Arial,sans-serif; color:#1a1a1a;
+    body{ margin:0; font-family:-apple-system,"Segoe UI",system-ui,Helvetica,Arial,sans-serif; color:var(--ink);
       background:transparent; padding:84px 18px 4rem; max-width:880px; margin:0 auto; line-height:1.5; }
     h1{ font-family:Tahoma,Arial,sans-serif; font-variant-caps:small-caps; font-size:clamp(28px,5vw,40px); margin: 1.2rem 0 2px; }
     .lede{ max-width:60ch; color:#3a3a3a; font-size:1.05rem; margin:0 0 0.4rem; }
-    .hl{ color:#000; background:#c3f0ff; border-radius:var(--leaf); padding:0 .18em; }
+    .hl{ color:#000; background:var(--brand-cyan); border-radius:var(--mh-leaf); padding:0 .18em; }
     .tools{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:.4rem; }
     .tool{ display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #e2e6ea;
       border-radius:var(--leaf-lg); padding:16px 18px; box-shadow:0 1px 3px rgba(0,0,0,.05);

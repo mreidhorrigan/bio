@@ -1,0 +1,19 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html?lang=fr&term=truins" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = document.getElementById("f").contentDocument;
+  const A = w.MH_GLOSSARY_WORLD;
+  say("board label: " + JSON.stringify(A.at()));
+  say("card heading: " + d.querySelector("#entry h3").textContent);
+  say("card gloss: " + d.querySelector("#entry .gloss").textContent.slice(0, 72));
+  say("list dt: " + d.querySelector('#t-truins button').textContent);
+  say("cite: " + A.cite("truins").slice(0, 96));
+  const n = A.find("eyecology"); A.go(n.x); for (let i = 0; i < 220; i++) A.tick(0.016);
+  say("cave board: " + JSON.stringify(A.at()));
+  say("cave heading: " + d.querySelector("#entry h3").textContent);
+  document.title = "done";
+}, 1400));
+</script>

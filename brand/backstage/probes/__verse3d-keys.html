@@ -1,0 +1,98 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D views: the keys, pressed for real</title>
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Presses the keys the way a visitor does (keydown and keyup on the page) and
+// measures how far the slime goes: forward, back, and turning, in each place.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = w.document, W = w.MH_V3D;
+  W.pause();
+  const press = (key, frames) => {
+    d.dispatchEvent(new w.KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }));
+    for (let i = 0; i < frames; i++) W.tick(0.016);
+    d.dispatchEvent(new w.KeyboardEvent("keyup", { key, bubbles: true }));
+  };
+  for (const id of ["outdoors", "indoors", "cave"]) {
+    W.load(id); for (let i = 0; i < 30; i++) W.tick(0.016);
+    for (const key of ["ArrowUp", "w", "z"]) {
+      W.load(id); for (let i = 0; i < 10; i++) W.tick(0.016);
+      const x0 = W.me.x, z0 = W.me.z, yaw = W.me.yaw;
+      press(key, 60);
+      const along = (W.me.x - x0) * Math.sin(yaw) + (W.me.z - z0) * Math.cos(yaw);
+      say(id + ": " + key + " held for a second moves the slime " + along.toFixed(1) + " forward" + (along > 5 ? "" : " NO"));
+    }
+  }
+  // endless: hurry straight out along the road that crosses the world, all the
+  // way round the torus, and arrive back at the plaza from the other side
+  W.load("outdoors"); for (let i = 0; i < 10; i++) W.tick(0.016);
+  const per = w.MH_VERSE3D.ISO.period * w.MH_VERSE3D.ISO.tile;
+  W.me.x = 0; W.me.z = -100; W.me.yaw = Math.PI; W.tick(0.016);  // on the road past the kiosk ring (a kiosk stands on each road, as in the iso world), facing out
+  let travelled = 0, lastZ = W.me.z, stalls = 0;
+  d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Shift", bubbles: true }));
+  d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true, cancelable: true }));
+  for (let i = 0; i < 2600 && travelled < per + 40; i++) {
+    W.tick(0.016);
+    let dz = W.me.z - lastZ; dz -= per * Math.round(dz / per);   // across the seam the position jumps a whole period
+    travelled += Math.abs(dz); lastZ = W.me.z;
+    if (travelled > per / 2 && Math.hypot(W.me.x, W.me.z) < 30) break;   // round the world and back on the plaza: a lap
+    if (Math.abs(dz) < 0.05) { if (!stalls) say("  held up at " + W.me.x.toFixed(1) + "," + W.me.z.toFixed(1)); stalls++; }
+  }
+  d.dispatchEvent(new w.KeyboardEvent("keyup", { key: "ArrowUp", bubbles: true }));
+  d.dispatchEvent(new w.KeyboardEvent("keyup", { key: "Shift", bubbles: true }));
+  const home = Math.hypot(W.me.x, W.me.z + 60 - 40);
+  say("a lap of the world along the road: travelled " + travelled.toFixed(0) + " of " + per + " units, " + stalls + " frames held up" + (travelled >= per - 160 && Math.hypot(W.me.x, W.me.z) < 32 && stalls < 30 ? " (back on the plaza from the other side)" : " NO") + ", now " + Math.hypot(W.me.x, W.me.z).toFixed(0) + " from the plaza's centre");
+  // the cave is a ring: walk round it and come past the shaft again, with no wall in the way.
+  // Three walkers, not one straight line: each drifts from side to side on its own slow
+  // rhythm, jitters its heading, and hurries or dawdles by turns, as visitors do (seeded,
+  // so a run repeats). Near the shaft they keep to the side away from the rope, as someone
+  // going round would; walking into the rope takes you up it, which is what it is for.
+  for (const seed of [1, 2, 3]) {
+    let r = seed * 9301 + 49297;
+    const rnd = () => { r = (r * 16807) % 2147483647; return r / 2147483647; };
+    W.load("cave"); for (let i = 0; i < 10; i++) W.tick(0.016);
+    const S = W.S(), ring = S.period; let went = 0, last = W.me.z, stuck = 0, drift = rnd() * 6, jitter = 0;
+    const K = W.controls.keys;
+    for (let i = 0; i < 5000 && went < ring + 20; i++) {
+      if (i % 30 === 0) { jitter = (rnd() - 0.5) * 0.7; K.fast = rnd() < 0.6; }
+      const hw = 26, zr = W.me.z - ring * Math.floor(W.me.z / ring), nearShaft = Math.min(Math.abs(zr - 10), Math.abs(zr - 10 - ring)) < 30;
+      let side = Math.sin(i * 0.011 * (1 + seed * 0.3) + drift) * hw * 0.35;
+      if (nearShaft) side = -Math.abs(side) - 4;                // the side away from the rope
+      W.me.yaw = Math.atan2(S.centre(W.me.z + 18) + side - W.me.x, 18) + jitter;
+      K.fwd = true;
+      W.tick(0.016);
+      let dz = W.me.z - last; dz -= ring * Math.round(dz / ring); went += dz; last = W.me.z;
+      if (Math.abs(dz) < 0.02) stuck++;
+    }
+    K.fwd = K.fast = false;
+    say("the cave, walker " + seed + ": " + went.toFixed(0) + " of " + ring + " units round, held up " + stuck + " frames, in " + W.scene() + (went >= ring && stuck < 90 && W.scene() === "cave" ? "" : " NO"));
+  }
+  // the walking sound: count the tones the page starts while the slime walks for two seconds
+  {
+    let tones = 0; const AC = w.AudioContext || w.webkitAudioContext;
+    if (AC) { const orig = AC.prototype.createOscillator; AC.prototype.createOscillator = function () { tones++; return orig.apply(this, arguments); }; }
+    W.load("outdoors"); for (let i = 0; i < 10; i++) W.tick(0.016);
+    d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true, cancelable: true }));
+    const ctx = W.audioContext(); if (ctx && ctx.state !== "running") ctx.resume();
+    const s0 = W.steps();
+    for (let i = 0; i < 125; i++) W.tick(0.016);
+    const due = W.steps() - s0;
+    d.dispatchEvent(new w.KeyboardEvent("keyup", { key: "ArrowUp", bubbles: true }));
+    const st = W.audioContext() ? W.audioContext().state : "none";
+    say("walking sound: " + due + " steps due in two seconds of walking (the iso beat is about 1.9 a second), " + tones + " sounded, the audio " + st + (due >= 3 && due <= 5 ? "" : " NO") + (st !== "running" ? " (headless Chrome holds audio; a browser starts it on the first key)" : ""));
+  }
+  // the eye is on the front: from behind it must not show (a pool, or the slime turning round, shows it)
+  {
+    W.load("indoors"); for (let i = 0; i < 90; i++) W.tick(0.016);   // indoors: no signs, few white things
+    const proto = Object.getPrototypeOf(W.engine.g), fillOrig = proto.fill, ellOrig = proto.ellipse;
+    let eyeWhite = 0, lastEll = null;
+    proto.ellipse = function () { lastEll = arguments; return ellOrig.apply(this, arguments); };
+    proto.fill = function () { if ((this.fillStyle === "#ffffff" || this.fillStyle === "#fff") && lastEll && this.globalAlpha === 1) eyeWhite++; lastEll = null; return fillOrig.apply(this, arguments); };
+    W.tick(0.016);
+    proto.fill = fillOrig; proto.ellipse = ellOrig;
+    say("the slime's eye, from behind: " + (eyeWhite ? "shows NO (it is on the front)" : "out of sight, as it should be"));
+  }
+  say("focus was on: " + (d.activeElement && d.activeElement.tagName));
+  document.title = "done";
+}, 1200));
+</script>

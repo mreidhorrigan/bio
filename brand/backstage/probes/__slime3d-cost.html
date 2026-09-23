@@ -1,0 +1,16 @@
+<!DOCTYPE html><meta charset="utf-8"><meta name="budget" content="1500"><title>3D cave, frame cost</title>
+<iframe id="f" src="/slime3d.html" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Ticks the cave N times (#N in the URL) and stops. Time the whole headless run
+// against #0 and the difference is N frames of CPU: virtual time freezes the
+// page's own clocks, so the cost has to be measured from outside.
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const A = document.getElementById("f").contentWindow.MH_SLIME3D, n = +(location.hash || "#0").slice(1);
+  A.pause();
+  const p = A.pools[1] || A.pools[0];
+  A.me.z = (p.lo + p.hi) / 2 - 6; A.me.x = A.centre(A.me.z); A.controls.keys.fwd = true;
+  for (let i = 0; i < n; i++) A.tick(0.016);
+  document.getElementById("out").textContent = "ticked " + n + " frames, " + A.tally.drawn + " items drawn in the last";
+}, 300));
+</script>

@@ -1,0 +1,137 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The slimeverse in 3D: three places</title>
+<meta name="budget" content="40000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Runs each place of verse3d.html by hand (the page's own loop paused) and
+// checks what the eye cannot: no errors, the camera always in open air, the
+// slime in frame, how much a frame holds, pools that reflect, a hunt that
+// happens, zoogs that shy away, clicks that land, and the ways between places.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const errs = [];
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow;
+  w.addEventListener("error", (e) => errs.push(e.message));
+  const W = w.MH_V3D, E = W && W.engine;
+  if (!W) { say("api: MISSING"); document.title = "done"; return; }
+  W.pause();
+  const tick = (n, dt) => { for (let i = 0; i < n; i++) W.tick(dt || 0.016); };
+  const inFrame = () => { const p = E.project([W.me.x, W.me.y + W.me.R, W.me.z]); return p && p[0] > 0 && p[0] < E.W && p[1] > 0 && p[1] < E.H; };
+  // in open air: inside the place's own shape (rock, walls), and not inside any solid itself
+  // (the camera keeps a unit's margin from solids when it can, but may graze it while it eases past one)
+  const inAir = (x, y, z) => {
+    const S = W.S();
+    if (!S.open(x, y, z)) return false;
+    for (const q of S.solids || []) {
+      const P = S.period, wd = (d) => (P ? d - P * Math.round(d / P) : d);
+      if (q.h && Math.hypot(wd(x - q.x), wd(z - q.z)) < (q.radAt ? q.radAt(Math.max(0, y - S.floorAt(q.x, q.z))) : q.r) && y - S.floorAt(q.x, q.z) < q.h) {
+        say("  inside a solid of radius " + q.r.toFixed(1) + " and height " + q.h.toFixed(1) + (q.dome ? " (a house)" : "") + ", camera " + Math.hypot(wd(x - q.x), wd(z - q.z)).toFixed(1) + " from its middle, " + (y - S.floorAt(q.x, q.z)).toFixed(1) + " up; boom " + (E.followInfo ? E.followInfo.boom.toFixed(1) + " of clear " + E.followInfo.s.toFixed(1) : "?"));
+        return false;
+      }
+    }
+    return true;
+  };
+  const walkAbout = (secs) => {
+    const place = W.scene();
+    let open = 0, framed = 0, n = 0;
+    const K = W.controls.keys;
+    for (let s = 0; s < secs * 60; s++) {
+      K.fwd = true; K.left = (s % 240) < 60; K.right = (s % 240) >= 150 && (s % 240) < 190;
+      W.tick(0.016);
+      if (s % 20 === 0 && !W.fading() && W.scene() === place) { n++; /* (only in the place under test: not mid-fade, nor after walking out through a door or down the hatch) */ if (inAir(E.cam.x, E.cam.y, E.cam.z)) open++; else say("  closed in at " + [E.cam.x, E.cam.y, E.cam.z].map((v) => v.toFixed(1)).join(", ")); if (inFrame()) framed++; }
+      if (W.fading()) { K.fwd = false; tick(60); }
+    }
+    K.fwd = K.left = K.right = false;
+    return { open, framed, n };
+  };
+  try {
+    say("api: present, places " + W.scenes().join(", "));
+    for (const id of ["outdoors", "indoors", "cave"]) {
+      say("=== " + id);
+      W.load(id); tick(90);
+      say("drawn " + E.tally.drawn + " of " + E.tally.items + ", slime in frame: " + (inFrame() ? "yes" : "NO"));
+      // (a frame's cost in milliseconds is measured in a real browser by
+      // __verse3d-cost.html: headless virtual time freezes the clock)
+      const r = walkAbout(8);
+      say("walking about: camera in open air at " + r.open + " of " + r.n + (r.open === r.n ? "" : " NO") + ", slime in frame at " + r.framed + " of " + r.n + (r.framed >= r.n - 1 ? "" : " NO"));
+      // a click at the middle of the lower frame goes somewhere reachable
+      const hit = W.floorHit(E.W / 2, E.H * 0.7);
+      say("a click below the middle lands at " + (hit ? hit.x.toFixed(0) + ", " + hit.z.toFixed(0) + (W.S().walkable(hit.x, hit.z) ? "" : " NO (not walkable)") : "nothing NO"));
+      // the pool: stand the slime beside it facing in, and count reflections
+      // outdoors the water is lakes: stand the slime in the nearest one
+      W.load(id);                                              // (the tests before may have walked it through a door)
+      let P = W.pools()[0];
+      if (!P && W.S().sea) {
+        const S = W.S(); let best = null;
+        for (let k = 0; k < 4000 && !best; k++) { const x = ((k * 37) % 580 - 290) * 1.6, z = ((k * 53) % 580 - 290) * 1.6; if (S.floorAt(x, z) < S.sea.level - 1.2) best = { x, z }; }
+        if (best) P = { x: best.x, z: best.z, rz: 0 };
+      }
+      if (P) {
+        W.load(id); W.me.x = P.x; W.me.z = P.z - P.rz - 10; W.me.yaw = 0; tick(4);
+        W.me.x = P.x; W.me.z = P.z; W.me.speed = 0; tick(80);             // the basin's deepest point
+        if (!W.poolAt(W.me.x, W.me.z)) say("  (put at " + P.x.toFixed(1) + "," + P.z.toFixed(1) + ", now at " + W.me.x.toFixed(1) + "," + W.me.z.toFixed(1) + " in " + W.scene() + ", floor " + W.S().floorAt(W.me.x, W.me.z).toFixed(2) + ")");
+        say("pool: the slime " + (W.poolAt(W.me.x, W.me.z) ? "wades in it" : "stands dry NO") + ", " + E.tally.mirrored + " things reflected" + (E.tally.mirrored > 0 ? "" : " NO"));
+      } else say("pool: none MISSING");
+      // zoogs shy away from the slime
+      // where the slime will be put: beside the zoog, and not on a way out, or the test would leave the place
+      const clearOfWays = (x, zz) => { const b = { x, z: zz, R: W.me.R }; W.S().bound(b); W.collide(b);   // where it really ends up
+        return (W.S().portals || []).every((q) => Math.hypot(b.x - q.x, b.z - q.z) > q.r + 1.5); };
+      let z = null, side = [5, 0];
+      for (const q of W.zoogs()) { if (z || !q.alive) continue; for (const o of [[5, 0], [-5, 0], [0, 5], [0, -5]]) if (!z && clearOfWays(q.x + o[0], q.z + o[1])) { z = q; side = o; } }
+      if (!z) say("no zoog stands clear of the ways out to test: NO");
+      if (z) {
+        W.me.x = z.x + side[0]; W.me.z = z.z + side[1]; W.me.speed = 0; W.S().bound(W.me); W.collide(W.me);
+        const d0 = Math.hypot(z.x - W.me.x, z.z - W.me.z); tick(90);
+        const d1 = Math.hypot(z.x - W.me.x, z.z - W.me.z);
+        say("a zoog " + d0.toFixed(1) + " from the slime is " + d1.toFixed(1) + " away after a second and a half" + (d1 > d0 + 0.5 ? "" : " NO"));   // a small room corners a zoog sooner
+      }
+      say("creatures: " + W.zoogs().length + " zoogs, " + W.shoggoths().length + " shoggoths" + (id === "indoors" && W.shoggoths().length ? " NO (no shoggoth indoors)" : ""));
+      // everything solid: after a walk, nothing stands inside a solid or inside another body
+      W.load(id); walkAbout(6);
+      const S = W.S(), bodies = [W.me].concat(W.shoggoths(), W.zoogs().filter((q) => q.alive));
+      const rOf = (b) => (b === W.me ? b.R * 0.8 : b.kind === "zoog" ? b.R * 0.9 : b.R * 0.85);
+      let inSolid = 0, inBody = 0, worst = 0;
+      for (const b of bodies) for (const q of S.solids || []) { const d = Math.hypot(b.x - q.x, b.z - q.z), need = q.r + b.R * 0.8; if (d < need - 0.05) { inSolid++; worst = Math.max(worst, need - d); } }
+      for (let i = 0; i < bodies.length; i++) for (let j = i + 1; j < bodies.length; j++) { const a = bodies[i], b = bodies[j], d = Math.hypot(a.x - b.x, a.z - b.z); if (d < rOf(a) + rOf(b) - 0.3) { inBody++; say("  overlap: " + (a.kind || "slime") + (a.dormant ? " (rooted)" : "") + " and " + (b.kind || "slime") + ", " + d.toFixed(2) + " apart, need " + (rOf(a) + rOf(b)).toFixed(2) + (b.alive === false ? " (being eaten)" : "")); } }
+      say("solid: " + (S.solids || []).length + " solids, " + bodies.length + " bodies; bodies inside a solid " + inSolid + (inSolid ? " (worst " + worst.toFixed(2) + ") NO" : "") + ", bodies inside each other " + inBody + (inBody ? " NO" : ""));
+      // a click low in the frame never turns the slime round, and the camera holds its heading while it walks
+      W.load(id); tick(60);
+      const yaw0 = E.cam.yaw;
+      W.controls.onTap(E.W / 2, E.H * 0.97);
+      const g = W.me.goal, along = g ? (g.x - W.me.x) * Math.sin(yaw0) + (g.z - W.me.z) * Math.cos(yaw0) : NaN;
+      say("a click at the foot of the frame sends the slime " + (g ? along.toFixed(1) + " ahead" + (along > 0 ? "" : " NO (behind it)") : "nowhere"));
+      W.load(id); tick(60);
+      const yaw1 = E.cam.yaw; let swing = 0;
+      W.controls.onTap(E.W * 0.9, E.H * 0.7);
+      for (let i = 0; i < 60; i++) { W.tick(0.016); let d = E.cam.yaw - yaw1; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; swing = Math.max(swing, Math.abs(d)); }
+      say("walking to a click at the side, the camera turned at most " + swing.toFixed(2) + " radians" + (swing < 0.25 ? "" : " NO"));
+    }
+    // the hunt: outdoors, give the shoggoths a minute
+    W.setSkin("technoscure"); W.load("outdoors");             // after dark, when the shoggoths roam (by day they are rooted)
+    const before = W.stats.eaten;
+    W.me.x = 0; W.me.z = -30;
+    for (let i = 0; i < 60 * 60; i += 4) W.tick(0.064);
+ W.setSkin("technurture");
+    say("the hunt outdoors, at night: " + (W.stats.eaten - before) + " zoogs caught in a minute" + (W.stats.eaten > before ? "" : " NO"));
+    const back = W.zoogs().filter((q) => q.alive).length;
+    say("zoogs alive after it: " + back + " of " + W.zoogs().length + " (the caught come back)");
+    // the ways between places
+    const via = (from, pick, want) => {
+      W.load(from); tick(3);
+      const q = W.S().portals[pick], st = W.S().entries.start;
+      W.me.x = st.x; W.me.z = st.z; tick(3);                               // arm it: stand clear of every way out first
+      W.me.x = q.x + (st.x - q.x) * 0.02; W.me.z = q.z + (st.z - q.z) * 0.02; W.me.speed = 0; tick(50);
+      const got = W.scene();
+      say("from " + from + " by way " + pick + " to " + got + (got === want ? "" : " NO (wanted " + want + ")") + (W.camOpen(E.cam.x, E.cam.y, E.cam.z) ? "" : " NO (camera in rock)"));
+    };
+    const wayTo = (from, to) => { W.load(from); return W.S().portals.findIndex((q) => q.to === to); };
+    via("outdoors", wayTo("outdoors", "indoors"), "indoors");
+    via("outdoors", wayTo("outdoors", "cave"), "cave");
+    via("indoors", wayTo("indoors", "outdoors"), "outdoors");
+    via("indoors", wayTo("indoors", "cave"), "cave");
+    via("cave", wayTo("cave", "outdoors"), "outdoors");
+    say(errs.length ? "EXCEPTION " + errs.join(" | ") : "errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

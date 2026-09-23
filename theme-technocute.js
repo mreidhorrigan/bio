@@ -27,6 +27,17 @@
     g.beginPath(); g.moveTo(sx, sy - h + q); g.lineTo(sx, sy + q); g.moveTo(sx - hw, sy - h); g.lineTo(sx, sy - h + q); g.lineTo(sx + hw, sy - h); g.stroke();
   }
 
+  /** The title banner. `topY` is the top of whatever it labels, so a kiosk, a
+   *  road-house or the glossary's wellhead all get the same plate. */
+  function kioskSign(g, sx, topY, ex, active, env) {
+    g.font = "800 13px " + U.displayFont();
+    const tw = g.measureText(ex.title.toUpperCase()).width + 14, by = topY - 26;
+    if (window.MH_VACUOLE) window.MH_VACUOLE.draw(g, sx, by - 2, tw + 4, 22, "plain", 0);   // a plain white balloon holds the plate up (vacuole.js)
+    bRect(g, sx - tw / 2, by, tw, 18, active ? CYAN : "#fff", 2);
+    g.fillStyle = BLACK; g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillText(ex.title.toUpperCase(), sx, by + 9);
+  }
+
   const theme = {
     id: "technocute",
     name: "technocute/bureaucore",
@@ -109,6 +120,8 @@
 
     /** each kiosk is a little building — a stacked tower with a coloured cap, a number
      *  plate, and a title banner. Height/cap vary by slot so they read as distinct. */
+    paintKioskSign: kioskSign,
+
     paintKiosk(g, sx, sy, ex, active, env) {
       const dy = active ? -2 : 0, accent = ex.accent, slot = ex.slot, H = 46;
       U.poly(g, [[sx + 13, sy + 4], [sx + 34, sy + 15], [sx + 13, sy + 26], [sx - 15, sy + 15]], "rgba(17,17,17,0.85)");  // shadow
@@ -116,19 +129,15 @@
       // big number plate centred on the front face — plaza kiosks only (road-houses aren't numbered)
       if (!ex.satellite) {
         bRect(g, sx - 13, sy - 28 + dy, 26, 26, "#fff", 2.5);
-        g.fillStyle = BLACK; g.font = "900 21px var(--mh-display)"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(String(slot + 1), sx, sy - 15 + dy);
+        g.fillStyle = BLACK; g.font = "900 21px " + U.displayFont(); g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(String(slot + 1), sx, sy - 15 + dy);
       }
-      // title banner above the block
-      g.font = "800 13px var(--mh-display)";
-      const tw = g.measureText(ex.title.toUpperCase()).width + 14, by = sy - H + dy - 26;
-      bRect(g, sx - tw / 2, by, tw, 18, active ? CYAN : "#fff", 2);
-      g.fillStyle = BLACK; g.textBaseline = "middle"; g.fillText(ex.title.toUpperCase(), sx, by + 9);
-      if (ex.visited) { bRect(g, sx + 16, sy - 10 + dy, 12, 12, GRN, 2); g.fillStyle = BLACK; g.font = "900 10px var(--mh-display)"; g.fillText("✓", sx + 22, sy - 3 + dy); }
+      kioskSign(g, sx, sy - H + dy, ex, active, env);   // the title banner above it
+      if (ex.visited) { bRect(g, sx + 16, sy - 10 + dy, 12, 12, GRN, 2); g.fillStyle = BLACK; g.font = "900 10px " + U.displayFont(); g.fillText("✓", sx + 22, sy - 3 + dy); }
       if (active) {
         g.save(); g.shadowColor = U.hexA(CYAN, 0.9); g.shadowBlur = 8;
         bRect(g, sx - 44, sy + 19, 88, 21, CYAN, 0); g.restore();
         g.strokeStyle = BLACK; g.lineWidth = 2.5; g.strokeRect(sx - 44, sy + 19, 88, 21);
-        g.fillStyle = BLACK; g.font = "900 12px var(--mh-ui)"; g.fillText(U.tr("world.enterArrow", "ENTER →"), sx, sy + 29.5);   // the engine translates it, or hands it back
+        g.fillStyle = BLACK; g.font = "900 12px " + U.uiFont(); g.fillText(U.tr("world.enterArrow", "ENTER →"), sx, sy + 29.5);   // the engine translates it, or hands it back
       }
     },
 
@@ -137,7 +146,7 @@
       const w = 38, h = 16, bx = dir > 0 ? sx - 6 : sx - w + 6, by = sy - 30;
       g.fillStyle = BLACK; g.fillRect(bx + 4, by + 4, w, h);
       bRect(g, bx, by, w, h, CYAN, 2.5);
-      g.fillStyle = BLACK; g.font = "900 11px var(--mh-ui)"; g.textAlign = "center"; g.textBaseline = "middle";
+      g.fillStyle = BLACK; g.font = "900 11px " + U.uiFont(); g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText((dir > 0 ? "▶ " : "◀ ") + dist, bx + w / 2, by + h / 2);
     },
   };

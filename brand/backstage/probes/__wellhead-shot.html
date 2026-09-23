@@ -1,0 +1,17 @@
+<!DOCTYPE html><meta charset="utf-8"><style>body{margin:0}</style>
+<iframe id="f" style="width:1200px;height:800px;border:0"></iframe>
+<script>
+const skin = (location.hash || "#technurture").slice(1);
+const f = document.getElementById("f");
+f.src = "/index.html?theme=" + skin;
+f.addEventListener("load", () => setTimeout(() => {
+  const d = f.contentDocument;
+  const chip = [...d.querySelectorAll(".mh-navchip")].find(b => /Public Writing/.test(b.textContent));
+  if (chip) chip.click();
+  setTimeout(() => {                       // close the card the warp opens, keep the world
+    const x = d.querySelector(".mh-card-close, [aria-label='Close'], .mh-close");
+    if (x) x.click();
+    setTimeout(() => { document.title = "done"; }, 1800);
+  }, 2200);
+}, 1500));
+</script>

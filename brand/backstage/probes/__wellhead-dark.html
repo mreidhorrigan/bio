@@ -1,0 +1,24 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/index.html?theme=technoscure" style="width:900px;height:620px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const errs = [];
+document.getElementById("f").addEventListener("load", () => {
+  const w = document.getElementById("f").contentWindow;
+  w.addEventListener("error", (e) => errs.push(e.message));
+  setTimeout(() => {
+    try {
+      const ex = w.MH_ISO.exhibits(), g1 = ex.find(e => e.title === "Glossary");
+      say("gloomthmaxx boots: " + ex.length + " exhibits, Glossary structure " + g1.structure);
+      const cv = document.getElementById("f").contentDocument.querySelector("canvas");
+      const im = cv.getContext("2d").getImageData(0, 0, cv.width, cv.height).data;
+      let seen = new Set();
+      for (let i = 0; i < im.length; i += 4 * 199) seen.add(im[i] + "," + im[i+1] + "," + im[i+2]);
+      say("world painted: " + seen.size + " distinct colours");
+    } catch (e) { say("EXCEPTION " + e.message); }
+    say("errors: " + (errs.length ? errs.join(" | ") : "none"));
+    document.title = "done";
+  }, 2200);
+});
+</script>

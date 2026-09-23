@@ -1,0 +1,31 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="a" src="/glossary.html?lang=fr&term=voiceshifting" style="width:1000px;height:760px;border:0"></iframe>
+<iframe id="b" src="/glossary.html?term=voiceshifting" style="width:1000px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+let n = 0;
+function both() {
+  if (++n < 2) return;
+  setTimeout(() => {
+    const fd = document.getElementById("a").contentDocument, ed = document.getElementById("b").contentDocument;
+    const fw = document.getElementById("a").contentWindow;
+    say("FR card gloss: " + fd.querySelector("#entry .gloss").textContent.slice(0, 96));
+    say("EN card gloss: " + ed.querySelector("#entry .gloss").textContent.slice(0, 96));
+    say("FR list gloss: " + fd.querySelector('dd[data-term="voiceshifting"] .g').textContent.slice(0, 80));
+    say("EN list gloss: " + ed.querySelector('dd[data-term="voiceshifting"] .g').textContent.slice(0, 80));
+    say("FR cite: " + fw.MH_GLOSSARY_WORLD.cite("voiceshifting").slice(0, 120));
+    // a cave entry, title and all
+    const A = fw.MH_GLOSSARY_WORLD, n1 = A.find("n01");
+    A.go(n1.x); for (let i = 0; i < 200; i++) A.tick(0.016);
+    say("FR cave title: " + fd.querySelector("#entry h3").textContent.slice(0, 74));
+    say("FR cave gloss: " + fd.querySelector("#entry .gloss").textContent.slice(0, 90));
+    say("FR cite label: " + fd.querySelector("#entry .cite").textContent);
+    const nbsp = fd.querySelector("#entry .gloss").textContent.indexOf(" ") >= 0;
+    say("no-break space in the French card: " + nbsp);
+    document.title = "done";
+  }, 400);
+}
+document.getElementById("a").addEventListener("load", both);
+document.getElementById("b").addEventListener("load", both);
+</script>

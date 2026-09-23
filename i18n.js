@@ -18,9 +18,11 @@
    own. Another language is one more i18n-<code>.js calling MH_I18N.register().
 
    CHOOSING A LANGUAGE
-     ?lang=fr in the URL wins, so a French link is shareable, then the visitor's
-     remembered choice, then English. A browser set to French is not enough on
-     its own: nobody is moved off the English site without asking.
+     ?lang=fr in the URL wins, so a French link is shareable, then the choice the
+     visitor made earlier in THIS visit, then English. The site's default is
+     English every time somebody arrives: the switch is remembered for the visit
+     (sessionStorage), not for ever. A browser set to French is not enough on its
+     own either: nobody is moved off the English site without asking.
 
    FOR PAGE CODE
      MH_I18N.t(key, english, vars)         one string, now
@@ -53,11 +55,15 @@
       return v ? v.trim().toLowerCase().slice(0, 2) : null;
     } catch (e) { return null; }      // no URLSearchParams: fall through to storage
   }
+  // The choice lasts for the visit, not for ever: sessionStorage, so the site's
+  // default is English every time somebody arrives, and a reader who switched to
+  // French keeps it while they browse. A shared ?lang=fr link still works.
   function remembered() {
-    try { return localStorage.getItem(STORE); } catch (e) { return null; }
+    try { return sessionStorage.getItem(STORE); } catch (e) { return null; }
   }
   function remember(code) {
-    try { localStorage.setItem(STORE, code); } catch (e) { /* private mode: fine */ }
+    try { sessionStorage.setItem(STORE, code); } catch (e) { /* private mode: fine */ }
+    try { localStorage.removeItem(STORE); } catch (e) { /* clear the old sticky one */ }
   }
   /** The language actually in force: what was asked for, if we can speak it. */
   function current() { return (want === SOURCE || dicts[want]) ? want : SOURCE; }

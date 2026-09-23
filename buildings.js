@@ -353,11 +353,20 @@
     };
     C.pick = function (arr, salt) { return arr[Math.floor(C.R(salt) * arr.length)]; };
     g.save();
-    try { if (b && b.type === "tree") drawTree(C); else if (b && b.type === "signal") drawSignalTower(C, b); else drawHouse(C); }  // unknown types -> a dwelling
+    try { (PAINTERS[(b && b.type) || "house"] || drawHouse)(C, b); }   // unknown types -> a dwelling
     finally { g.restore(); }
   }
 
+  /* ---- the painters, by building type. A new kind of building is one
+     register() call here (or from another script) plus a tool in engine.js's
+     BUILD_TOOLS so the ✎ Build bar can place it. --------------------------- */
+  var PAINTERS = {};
+  function register(type, painter) { PAINTERS[type] = painter; }
+  register("house", drawHouse);
+  register("tree", drawTree);
+  register("signal", drawSignalTower);
+
   var root = typeof window !== "undefined" ? window
     : typeof globalThis !== "undefined" ? globalThis : this;
-  root.MH_BUILD = { paint: paint };
+  root.MH_BUILD = { paint: paint, register: register, types: function () { return Object.keys(PAINTERS); } };
 })();

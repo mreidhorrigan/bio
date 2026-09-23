@@ -1,0 +1,16 @@
+<!DOCTYPE html><meta charset="utf-8"><style>body{margin:0}</style>
+<iframe id="f" src="/glossary.html" style="width:1280px;height:820px;border:0"></iframe>
+<script>
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const A = document.getElementById("f").contentWindow.MH_GLOSSARY_WORLD;
+  const C = A.cave(), where = location.hash.slice(1) || "day";
+  const g = A.marks.filter(m => m.side === "glossary"), p = A.marks.filter(m => m.side === "penumbra");
+  const P = A.pools(), island = P.find((q) => A.side.wetRuns(q) > 1) || P[0];
+  const at = { day: g[6].x, coin: g[g.length - 5].x, entry: C.entryX - 40,
+               deep: p[8].x, exit: C.exitX + 30, wayin: 0, pool: island.x }[where];
+  A.me.flying = false; A.go(at);
+  for (let i = 0; i < 120; i++) A.tick(0.016);
+  A.pause();                                   // hold still for the camera
+  document.title = "done";
+}, 900));
+</script>

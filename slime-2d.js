@@ -156,11 +156,20 @@
     const reduce = !!o.reduce;
     const rx = s.rx, ry = s.ry;
 
-    if (o.ground && !reduce) {                  // contact shadow, tight where it touches
+    if (o.ground && !reduce) {                  // contact shadow: a band lying ON the ground under the footprint
       g.save(); g.globalAlpha = 0.22; g.fillStyle = "#000";
       let lo = Infinity, hi = -Infinity;
       for (let i = 0; i < s.xs.length; i++) if (Math.abs(s.bot[i] - o.ground(s.xs[i])) < 1.2) { lo = Math.min(lo, s.xs[i]); hi = Math.max(hi, s.xs[i]); }
-      if (hi > lo) { g.beginPath(); g.ellipse((lo + hi) / 2, o.ground((lo + hi) / 2) + 1, (hi - lo) / 2 + 2, 2.6, 0, 0, Math.PI * 2); g.fill(); }
+      if (hi > lo) {
+        // It follows the ground rather than sitting at one height: an ellipse
+        // placed at the ground under the body's middle fell into every dip the
+        // body bridged and floated there, detached, below it.
+        const a = lo - 2, b = hi + 2, M = 14;
+        g.beginPath();
+        for (let i = 0; i <= M; i++) { const x = a + (b - a) * (i / M), y = o.ground(x) + 1; i ? g.lineTo(x, y) : g.moveTo(x, y); }
+        for (let i = M; i >= 0; i--) { const x = a + (b - a) * (i / M), u = (i / M) * 2 - 1; g.lineTo(x, o.ground(x) + 1 + 2.6 * Math.sqrt(Math.max(0, 1 - u * u))); }
+        g.closePath(); g.fill();
+      }
       g.restore();
     }
 

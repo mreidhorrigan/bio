@@ -1,0 +1,27 @@
+<!DOCTYPE html><meta charset="utf-8">
+<iframe id="f" src="/glossary.html" style="width:900px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const A = document.getElementById("f").contentWindow.MH_GLOSSARY_WORLD, WW = A.width();
+  let roofWorst = 0, groundWorst = 0, caveWorst = 0, entryWorst = 0;
+  for (let d = -400; d <= 400; d += 1) {          // the same point, addressed two ways
+    const a = d, b = d + WW;
+    roofWorst = Math.max(roofWorst, Math.abs(A.roofAt(a) - A.roofAt(b)));
+    groundWorst = Math.max(groundWorst, Math.abs(A.ground(a) - A.ground(b)));
+    caveWorst = Math.max(caveWorst, Math.abs(A.caveT(a) - A.caveT(b)));
+    entryWorst = Math.max(entryWorst, Math.abs(A.entryT(a) - A.entryT(b)));
+  }
+  say("across the seam, worst disagreement over 800px:");
+  say("  roof     " + roofWorst.toFixed(4) + "px");
+  say("  floor    " + groundWorst.toFixed(4) + "px");
+  say("  darkness " + caveWorst.toFixed(4));
+  say("  way in   " + entryWorst.toFixed(4));
+  // and the roof must be continuous, no step anywhere on the circuit
+  let step = 0, at = 0;
+  for (let x = 0; x < WW; x += 1) { const s = Math.abs(A.roofAt(x + 1) - A.roofAt(x)); if (s > step) { step = s; at = x; } }
+  say("steepest 1px change in the ceiling: " + step.toFixed(2) + "px at x=" + Math.round(at));
+  document.title = "done";
+}, 1200));
+</script>

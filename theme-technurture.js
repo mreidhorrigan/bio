@@ -55,6 +55,32 @@
   /** Trace the brand "leaf" tag onto the current path: the asymmetric corner used to flag
    *  items throughout the site (menubar pills, cards, favicon) — top-left & bottom-right
    *  sweep, top-right & bottom-left near-square. Radii echo --mh-leaf (16x7 / 4x2). */
+  /** THE menu item: ONE clean pill sign, joined to the structure below it by a
+   *  connector in a single SPECIAL colour (so it never reads as part of the map).
+   *  No overlaid shapes, no halo. `topY` is the top of whatever it labels, so a
+   *  house, a tower or the glossary's wellhead all get the same sign.          */
+  function kioskSign(g, sx, topY, ex, active, env) {
+    const t = (env && env.t) || 0, slot = ex.slot || 0;
+    const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, CONN = "#ff6e8c";
+    g.font = "700 16px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif";
+    const label = ex.title;                                   // the theme's usual display serif
+    const bw = Math.max(48, g.measureText(label).width + 26), bh = 30;
+    const bcx = sx + sway, bcy = topY - 48, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
+    g.save(); if (!RM()) { g.shadowColor = CONN; g.shadowBlur = 5; }
+    g.strokeStyle = CONN; g.lineWidth = 4; g.lineCap = "round";                // the connector
+    g.beginPath(); g.moveTo(sx, topY - 4);
+    g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.4, bcx, y0 + bh - 1); g.stroke(); g.restore();
+    g.save(); if (!RM()) { g.shadowColor = U.hexA(ex.accent, 0.85); g.shadowBlur = active ? 14 : 8; }
+    if (window.MH_VACUOLE) window.MH_VACUOLE.draw(g, bcx, y0, bw, bh, "gel", RM() ? 0 : t);   // it floats on a vacuole (vacuole.js)
+    const bg = U.accentFill(g, ex, x0, y0, bw, bh, 0.32, -0.18);
+    leafPath(g, x0, y0, bw, bh); g.fillStyle = bg; g.fill();                   // the brand leaf tag
+    g.shadowBlur = 0; g.lineWidth = active ? 2.6 : 1.8;
+    g.strokeStyle = U.hexA(GOLD, active ? 1 : 0.82); g.lineJoin = "round"; g.stroke(); g.restore();
+    g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
+    g.lineWidth = 3.5; g.strokeStyle = "rgba(12,30,18,0.9)"; g.strokeText(label, bcx, bcy);
+    g.fillStyle = "#fff"; g.fillText(label, bcx, bcy);
+  }
+
   function leafPath(g, x, y, w, h) {
     const Sx = Math.min(16, w / 2), Sy = Math.min(7, h / 2);   // sweeping corners (TL, BR)
     const sx2 = Math.min(4, w / 2), sy2 = Math.min(2, h / 2);  // near-square corners (TR, BL)
@@ -197,6 +223,8 @@
     },
 
     /** each kiosk is a BUILDING that wears its biome — vines, adobe, snow, stilts. */
+    paintKioskSign: kioskSign,
+
     paintKiosk(g, sx, sy, ex, active, env) {
       const t = env.t, b = bio(env.biome), slot = ex.slot, dy = active ? -2 : 0;
       const s1 = U.hash01(slot * 13 + 3, slot * 7 + 5), s2 = U.hash01(slot * 5 + 9, slot * 11 + 2);
@@ -221,21 +249,7 @@
       g.fillStyle = U.shade(b.wall, -0.12);
       for (const ddx of [-ww * 0.62, -ww * 0.05, ww * 0.5]) { g.beginPath(); g.moveTo(sx + ddx - 2.5, baseY - 1); g.quadraticCurveTo(sx + ddx, baseY + 9, sx + ddx + 2.5, baseY - 1); g.lineTo(sx + ddx + 2.5, baseY - 6); g.lineTo(sx + ddx - 2.5, baseY - 6); g.closePath(); g.fill(); }   // ooze drips
       if (b.snow) { g.fillStyle = "rgba(255,255,255,0.6)"; g.beginPath(); g.ellipse(sx + wob, topY + 4, ww * 0.5, 6, 0, Math.PI, 0); g.fill(); }
-      // THE menu item — ONE clean pill sign, joined to the house by a connector in a single
-      // SPECIAL colour (so it never reads as part of the map). No overlaid shapes, no halo.
-      const sway = RM() ? 0 : Math.sin(t * 1.2 + slot) * 6, CONN = "#ff6e8c";
-      g.font = "700 16px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif"; const label = ex.title;   // the theme's usual display serif (Comic Sans clashed)
-      const bw = Math.max(48, g.measureText(label).width + 26), bh = 30;
-      const bcx = sx + sway, bcy = topY - 48, x0 = bcx - bw / 2, y0 = bcy - bh / 2;
-      g.save(); if (!RM()) { g.shadowColor = CONN; g.shadowBlur = 5; } g.strokeStyle = CONN; g.lineWidth = 4; g.lineCap = "round";   // the special connector
-      g.beginPath(); g.moveTo(sx, topY - 4); g.quadraticCurveTo(sx + sway * 0.5, bcy + bh * 0.4, bcx, y0 + bh - 1); g.stroke(); g.restore();
-      g.save(); if (!RM()) { g.shadowColor = U.hexA(ex.accent, 0.85); g.shadowBlur = active ? 14 : 8; }   // the pill's OWN soft aura (not a separate shape)
-      const bg = U.accentFill(g, ex, x0, y0, bw, bh, 0.32, -0.18);   // a junction's sign runs from one road's colour to the other's
-      leafPath(g, x0, y0, bw, bh); g.fillStyle = bg; g.fill();                                   // the brand "leaf" tag shape — matches the flags used for items site-wide
-      g.shadowBlur = 0; g.lineWidth = active ? 2.6 : 1.8; g.strokeStyle = U.hexA(GOLD, active ? 1 : 0.82); g.lineJoin = "round"; g.stroke(); g.restore();
-      g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
-      g.lineWidth = 3.5; g.strokeStyle = "rgba(12,30,18,0.9)"; g.strokeText(label, bcx, bcy);   // dark outline → readable on any accent
-      g.fillStyle = "#fff"; g.fillText(label, bcx, bcy);
+      kioskSign(g, sx, topY, ex, active, env);
       if (ex.visited) glow(g, sx + ww * 0.6, baseY - hh * 0.55, 3.5, GOLD2, 8);
       if (active) {
         const f = RM() ? 0.8 : 0.6 + 0.4 * Math.sin(t * 8);
@@ -247,7 +261,7 @@
       g.strokeStyle = IRON; g.lineWidth = 2.4; g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx, sy - 26); g.stroke();
       const w = 40, h = 15, bx = dir > 0 ? sx - 6 : sx - w + 6, by = sy - 30;
       U.roundRect(bx, by, w, h, 4, CREAM, "#b98a2a");
-      g.fillStyle = TEAL; g.font = "700 11px var(--mh-display)"; g.textAlign = "center"; g.textBaseline = "middle";
+      g.fillStyle = TEAL; g.font = "700 11px " + U.displayFont(); g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText((dir > 0 ? "→ " : "← ") + dist, bx + w / 2, by + h / 2);
       glow(g, sx + (dir > 0 ? -6 : 6), sy - 22, 2.4, GOLD2, 8);
     },
