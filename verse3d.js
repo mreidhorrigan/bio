@@ -43,8 +43,9 @@
    { name: { x, z, yaw } }, portals [{ x, z, r, to, entry }], signs, life
    { zoogs, shoggoths, dormant, spot(rand), night(x, z), motes }, and camera
    { dist, height(x, z) }, fogFrom (where the fog starts; it is whole at
-   0.94 of seen), pal().sky for water open to the sky, and waterPhoto
-   { tint, over } to lay the water photo under its deep pools. ctx carries the engine, the slime, the hashes, and
+   0.94 of seen), and pal().sky for water open to the sky. (The iso lakes'
+   water photo was tried here and taken out: on a surface seen in depth it
+   aliased into seams. The iso map keeps it.) ctx carries the engine, the slime, the hashes, and
    helpers for distance, detail and the water.
 
    One scene runs at a time, and a scene that is not showing costs nothing:
@@ -72,46 +73,6 @@
     dormant: { body: "#46303a", deep: "#2a1c22", sheen: null, eye: "#7c5f2c" },
   };
   const SHOG_INK = "#141217";
-
-  /* ── the one photograph ──────────────────────────────────────────────────
-     The iso lakes are filled with a photo of real water (water.webp at the
-     site root, engine.js ensureWaterImg). Deep water here shows the same
-     photo under its colour, so the three views share it, and so the water
-     reads as something seen rather than drawn. Used sparingly: deep pools
-     only, never the ground or the creatures. A page that cannot load it gets
-     the drawn water it had before.                                          */
-  const PHOTO = { img: /** @type {HTMLImageElement|null} */ (null), ready: false, patCtx: /** @type {any} */ (null),
-    mips: /** @type {HTMLCanvasElement[]|null} */ (null), pats: /** @type {any[]} */ ([]) };
-  /** The photo at the size it is drawn: a pattern shrinks the full photo with no
-   *  smaller copies to read from, and aliased into a fine hatch on the water. So
-   *  the pattern is made from the copy (each half the last) nearest in size.
-   *  Returns [pattern, that copy's width over the photo's]. */
-  function photoPattern(g, shownW) {
-    const img = /** @type {HTMLImageElement} */ (PHOTO.img);
-    if (!PHOTO.mips) {
-      PHOTO.mips = [];
-      let src = /** @type {CanvasImageSource} */ (img), w = img.width, h = img.height;
-      for (let L = 0; L < 6 && w >= 8; L++) {
-        const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
-        const c = /** @type {CanvasRenderingContext2D} */ (cv.getContext("2d")); c.imageSmoothingQuality = "high"; c.drawImage(src, 0, 0, w, h);
-        PHOTO.mips.push(cv); src = cv; w = Math.max(1, w >> 1); h = Math.max(1, h >> 1);
-      }
-    }
-    if (PHOTO.patCtx !== g) { PHOTO.pats = []; PHOTO.patCtx = g; }
-    let L = 0;
-    while (L < PHOTO.mips.length - 1 && PHOTO.mips[L + 1].width >= shownW) L++;
-    if (!PHOTO.pats[L]) PHOTO.pats[L] = g.createPattern(PHOTO.mips[L], "repeat");
-    return [PHOTO.pats[L], PHOTO.mips[L].width / img.width];
-  }
-  const PHOTO_W = 26;                                          // world units one copy of the photo spans on the water
-  (function loadPhoto() {
-    if (typeof Image === "undefined") return;
-    const here = (document.currentScript && document.currentScript.src) || location.href;
-    const img = new Image();
-    img.onload = () => { PHOTO.ready = true; };
-    img.src = new URL("water.webp", here).href;             // beside this file, at the site root
-    PHOTO.img = img;
-  })();
 
   /* ── one size for each thing, in every view ─────────────────────────────
      The site draws the same world three ways: the isometric village
@@ -367,39 +328,15 @@
           ring.push([x, waterY(p, x, z), z]);
         }
         const pad = S.mirrorPad || 30;                          // how far round the pool things are looked for to reflect
-        E.mirror(ring, { surface: (x, z) => waterY(p, x, z), level: p.level, alpha: S.mirrorAlpha || 0.36,
+        E.mirror(ring, { surface: (x, z) => waterY(p, x, z), level: p.level, alpha: S.mirrorAlpha || 0.36, minLayer: S.mirrorMinLayer,
           x0: p.x - p.rx - pad, x1: p.x + p.rx + pad, z0: p.z - p.rz - pad, z1: p.z + p.rz + pad });
         const depth = clamp((p.level - S.floorAt(p.x, p.z)) / 2.4, 0, 1);
         // grazing water is a mirror: under the sky it shows the sky, in a cave the dark
         const far = P.sky ? rgba(mix(P.sky, P.shallow, 0.3), 0.9) : rgba(mix(P.deep, P.shallow, 0.18), 0.84), mid = rgba(mix(P.shallow, P.deep, 0.3 + 0.55 * depth), 0.6), near = rgba(P.shallow, 0.3);
-        const photo = S.waterPhoto && PHOTO.ready && depth > 0.5 ? S.waterPhoto : null;
-        const mid3 = photo ? E.project([p.x, p.level, p.z]) : null;
         E.custom(ring, (g, sp, e) => {
           let top = Infinity, bot = -Infinity, lf = Infinity, rt = -Infinity;
           for (const q of sp) { if (q[1] < top) top = q[1]; if (q[1] > bot) bot = q[1]; if (q[0] < lf) lf = q[0]; if (q[0] > rt) rt = q[0]; }
           M.traceRing(g, sp);
-          if (photo && rt - lf > 6) {
-            // the photo lies on the water at a fixed size (PHOTO_W world units
-            // across), tiled, and squashed as the pool is squashed in view, so
-            // it keeps its grain instead of being blown up over the whole pool
-            const img = /** @type {HTMLImageElement} */ (PHOTO.img), w = rt - lf, h = Math.max(1, bot - top);
-            const kx = (w / (2 * p.rx)) * (PHOTO_W / img.width), ky = kx * (h / w) * (p.rx / p.rz);
-            const [pat, sc] = photoPattern(g, Math.min(kx, ky) * img.width * E.dpr);   // the copy for the smaller of the two squashes: the one that aliases
-            g.save(); g.clip();
-            if (pat && pat.setTransform) {
-              pat.setTransform(new DOMMatrix([kx / sc, 0, 0, ky / sc, lf, top]));
-              g.fillStyle = pat; g.fillRect(lf, top, w, h);
-            } else g.drawImage(img, lf, top, w, h);
-            if (photo.tint) { g.fillStyle = photo.tint; g.fillRect(lf, top, w, h); }
-            // deep in the middle, so the photo shows there; the water's own colour toward the shore
-            const cx = mid3 ? mid3[0] : (lf + rt) / 2, cy = mid3 ? mid3[1] : (top + bot) / 2;
-            const rg = g.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.55);
-            rg.addColorStop(0, rgba(P.shallow, 0)); rg.addColorStop(0.6, rgba(P.shallow, 0.05)); rg.addColorStop(1, rgba(P.shallow, 0.55));
-            g.fillStyle = rg; g.fillRect(lf, top, w, h);
-            g.restore();
-            M.traceRing(g, sp);
-            g.globalAlpha = photo.over == null ? 0.55 : photo.over;   // the drawn water, thinned over the photo
-          }
           const gr = g.createLinearGradient(0, top, 0, Math.max(top + 1, bot));
           gr.addColorStop(0, far); gr.addColorStop(0.55, mid); gr.addColorStop(1, near);
           g.fillStyle = gr; g.fill();
@@ -565,10 +502,10 @@
       // On the front, at the brand's six tenths up the dome: from behind, where the
       // camera rides, it is out of sight, as it should be; the pool shows it, and
       // so does the slime turning to face the camera (the user's call, 2026-09-22,
-      // having tried it up near the crown). In the reflection the eye always
-      // shows, foreshortened as it turns away: strictly, from behind, a mirror
-      // under the slime shows its back too, but the reflection is where the
-      // visitor looks for the eye.
+      // having tried it up near the crown). The reflection shows it by the same
+      // rule, seen as the mirror sees it: when the slime turns side-on or toward
+      // the camera. (Drawing it there always, even from behind, put the eye on
+      // top of the slime, since the reflection is laid over the pool last.)
       const R = me.R, EL = Math.acos(0.6);
       let nx = Math.sin(me.yaw) * Math.sin(EL), ny = Math.cos(EL), nz = Math.cos(me.yaw) * Math.sin(EL);
       let px = me.x + nx * R * 0.97, py = me.y + me.bob + ny * R * 0.97, pz = me.z + nz * R * 0.97;
@@ -577,13 +514,18 @@
       if (v[2] <= E.near) return;
       const tc = [E.cam.x - px, E.cam.y - py, E.cam.z - pz], tm = Math.hypot(tc[0], tc[1], tc[2]) || 1;
       const facing = (nx * tc[0] + ny * tc[1] + nz * tc[2]) / tm;
-      if (facing < 0.02 && !Mi) return;
+      // and the camera in front of the slime's middle, along its heading: the body
+      // is a squashed dome, not the sphere the eye's normal assumes, so a camera
+      // high behind it (the phone's tilt) passed the test above and saw the eye
+      // through the body
+      const ahead = (E.cam.x - me.x) * Math.sin(me.yaw) + (E.cam.z - me.z) * Math.cos(me.yaw);
+      if (facing < 0.02 || ahead < me.R * 0.3) return;
       const p = E.screen(v), k = E.fov / v[2];
-      const r = R * (3.5 / 13) * k, squeeze = clamp(0.35 + Math.abs(facing) * 0.65, 0.35, 1);
+      const r = R * (3.5 / 13) * k, squeeze = clamp(0.35 + facing * 0.65, 0.35, 1);
       eyesDrawn[Mi ? "mirror" : "body"]++;
       // the reflection is drawn at a third or so; the eye, the brightest thing on
-      // the slime, keeps more of itself there, or it vanished into the water
-      if (Mi) g.globalAlpha = Math.min(1, g.globalAlpha * 2.4);
+      // the slime, keeps a little more of itself there, or it vanished into the water
+      if (Mi) g.globalAlpha = Math.min(1, g.globalAlpha * 1.6);
       g.fillStyle = "#fff"; g.beginPath(); g.ellipse(p[0], p[1], r * squeeze, r * 0.96, 0, 0, TAU); g.fill();
       const ink = (S.slime || GEL).ink;
       g.lineWidth = Math.max(0.8, R * (1.3 / 13) * k); g.strokeStyle = ink; g.stroke();
@@ -1213,12 +1155,24 @@
       const list = S.clickables ? S.clickables() : null;
       if (!list || !list.length || !opts.onOpen) return null;
       const [o, d] = E.ray(sx, sy);
+      let wall = -1;                                             // where the ray met a house's wall
+      // what stands between the camera and the slime is drawn see-through (E.see):
+      // the visitor sees past it, so the click goes past it too
+      const near = Math.hypot(E.cam.x - me.x, E.cam.y - me.y - me.R, E.cam.z - me.z) - me.R, clear = new Set();   // the houses the ray entered in front of the slime: see-through, the whole of each
       for (let t = 1; t < S.seen; t += 0.8) {
+        if (wall >= 0 && t > wall + 6) return null;              // a wall, and no door in it just there: nothing opens
         const x = o[0] + d[0] * t, y = o[1] + d[1] * t, z = o[2] + d[2] * t;
         if (y < S.floorAt(x, z) - 0.5) return null;              // into the ground first: the click is for walking
         for (const q of list) {
           const r = Math.hypot(wrapD(x - q.x), wrapD(z - q.z)), up = y - S.floorAt(q.x, q.z);
-          if (up >= 0 && up <= q.h && r <= (q.radAt ? q.radAt(up) : q.r)) return q;
+          if (up >= 0 && up <= q.h && r <= (q.radAt ? q.radAt(up) : q.r)) {
+            if (q.item) return q;
+            if (t < near) clear.add(q);                          // a see-through house, in front of the slime
+            if (clear.has(q)) continue;
+            // a wall: a door is set in it, and a dwelling's wall bulges out past
+            // its doorway, so look a little further in before calling it a wall
+            if (wall < 0) wall = t;
+          }
         }
       }
       return null;
@@ -1452,6 +1406,8 @@
       pools: () => pools, zoogs: () => zoogs, shoggoths: () => shogs,
       floorHit, poolAt, waterY, inPool, collide, camOpen,
       tick: (dt) => { E.dt = dt || 0.016; E.t += E.dt; frame(E.dt); },
+      /** What a click at canvas point (sx, sy) meets: a clickable, or null. For probes. */
+      clickAt: (sx, sy) => clickHit(sx, sy),
       /** How many times the slime's eye has been drawn, on the body and in reflections. */
       eyes: () => Object.assign({}, eyesDrawn),
       /** A tick without the drawing: for probes that walk a long way. */
@@ -1464,5 +1420,5 @@
     return W;
   }
 
-  window.MH_VERSE3D = { PHOTO, ISO, create, defineScene, scenes: SCENES, hash, hash2, GEL, ZOOG, SHOG, UNIT, ENTER, SIZES, size, DWELL };
+  window.MH_VERSE3D = { ISO, create, defineScene, scenes: SCENES, hash, hash2, GEL, ZOOG, SHOG, UNIT, ENTER, SIZES, size, DWELL };
 })();

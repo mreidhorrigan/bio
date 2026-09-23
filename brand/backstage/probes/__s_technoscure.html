@@ -41,11 +41,11 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
             let warm = 0;
             for (let i = 0; i < px.length; i += 4) if (px[i] > 180 && px[i+1] > 140 && px[i+2] < 150) warm++;
             o.warmTagPixels = warm;
-            document.getElementById("out").textContent = JSON.stringify(o, null, 1);
+            document.getElementById("out").textContent = JSON.stringify(o, null, 1); document.title = "done";
           }
         }, 16);
       }, 800);
     }, 900);
-  } catch (e) { document.getElementById("out").textContent = JSON.stringify({ err: String(e) }); }
+  } catch (e) { document.getElementById("out").textContent = JSON.stringify({ err: String(e) }); document.title = "done"; }
 }, 2400));
 </script>

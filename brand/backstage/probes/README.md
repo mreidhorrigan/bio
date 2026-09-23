@@ -24,6 +24,7 @@ answer a question the eye cannot:
 | `__verse3d-keys.html` | Presses the walk keys as a visitor does (keydown on the page) in each place and measures how far the slime goes, then hurries it a whole lap of the outdoor torus along the road and back onto the plaza from the other side. Three walkers go round the cave ring with wandering steering and must come back to the rope; the eye must be out of sight from behind; and walking must make its sound. |
 | `__slimeverse3d.html` | The site's `slimeverse3d.html`: it starts in the Slimeverse 3D house, the door leads out beside that house, a kiosk and a road-house open their cards, the wellhead opens the Glossary, a click opens the page of the house it meets, the hatch leads to the cave, a change of skin keeps the slime and the shoggoths where they stood, and the address round-trips (theme, place, tile). |
 | `__slimeverse3d-phone.html` | The site's 3D page at 390 by 800: the lens sees the village (over 38 degrees), the language switch is a pill, Menu opens the building chips in the page's language, a finger turns the slime, a pinch and the − button zoom, the zoom survives a door, and a tap still walks. |
+| `__verse3d-door.html` | Indoors, in each skin's room (the same room): a zoog pressed against the doorway, seen from across the room, changes the pixels there, so the door is never drawn over it. |
 | `__vacuole-dark.html` | Gloomthmaxx: over each sign's balloon the scene is as dark as the same box below the board (the sign's gloom reveal covers its board only). On the old theme every sign failed. |
 | `__verse3d-lake.html` | The lake's fine grain, near to far, in two skins, and pixel differences at 2 to 8 px apart, for a lattice. |
 | `__verse3d-swim.html` | Glides the camera with the clock stopped and counts pixels jumping just under the horizon: the far distance must not swim. |
@@ -43,9 +44,20 @@ root and open them from there. The glossary ones have to be served rather than
 opened from disk: the page draws SVG scenery onto its canvas, which taints the
 canvas on a `file://` origin and blocks the pixel reads these probes make.
 
-    python3 tools/run-probes.py                     # every probe, from the repo root
+    node tools/probe-runner.mjs                     # every probe, gently: the way to run them
+    python3 tools/run-probes.py                     # every probe, the old way (one Chrome each, virtual time)
     node tools/frame-probe.mjs <url> 8 walk [profile]   # real-time frame evenness (and the CPU's top functions)
     node tools/hang-probe.mjs <url> 30              # where a page stalls, if it does
+
+`probe-runner.mjs` runs the same probes with the same verdicts, but gently:
+one Chrome for the run, each tab closed the moment its probe says "done",
+real time (a probe waiting on a timer sits idle), macOS background priority
+(taskpolicy -b, so the efficiency cores and the machine's other work come
+first), a probe that throws fails at once, and a page that never writes fails
+after 20 s. It prints each probe's CPU, costliest last. It may take longer on
+the clock; it never crowds the machine. Most of a probe's cost is painting, so
+a probe that only asks where things went should step the world (`W.step`)
+rather than tick it.
 
 Probes that load the 3D workshop pin `?skin=technurture`: the page otherwise
 picks its skin by the time of day, and the night skin costs several times more

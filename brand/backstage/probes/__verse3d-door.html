@@ -1,0 +1,41 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Indoors: the doorway never covers what is in the room</title>
+<meta name="budget" content="8000">
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html?skin=technurture" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The room's shell (walls, panes, the door) is drawn under everything in the
+// room, since the camera never leaves it. A zoog pressed against the doorway,
+// seen from across the room, must be painted after the doorway: the probe
+// records the order the engine draws in (the door's gradient fill against the
+// zoog's fill), in each skin's room, which is the same room in all three.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, W = w.MH_V3D, E = W.engine;
+    W.pause();
+    for (const skin of ["technurture", "technoscure", "technocute"]) {
+      W.setSkin(skin); W.load("indoors"); for (let i = 0; i < 20; i++) W.tick(0.016);
+      const S = W.S(), [dx, dz] = S.doorDir, R = Math.hypot(W.me.x, W.me.z) + 30;
+      // the slime across the room, facing the door; a zoog right at the doorway
+      W.me.x = -dx * 6; W.me.z = -dz * 6; W.me.yaw = Math.atan2(dx, dz);
+      const z = W.zoogs()[0];
+      for (let i = 0; i < 40; i++) { z.x = dx * 14; z.z = dz * 14; z.vx = z.vz = 0; W.tick(0.016); }
+      z.x = dx * 14; z.z = dz * 14;
+      const zp = E.project([z.x, z.y + z.R * 0.6, z.z]);
+      // the pixels round the zoog's middle, with it there and with it gone: if the
+      // doorway were drawn over it, the two would be alike
+      const cv = E.g.canvas, k = cv.width / cv.clientWidth, g = E.g;
+      const box = () => { const x = Math.round(zp[0] * k) - 4, y = Math.round(zp[1] * k) - 4; return Array.from(g.getImageData(x, y, 9, 9).data); };
+      if (!zp) { say(skin + ": a zoog at the doorway is off screen MISSING"); continue; }
+      W.tick(0); const withZoog = box();
+      const keep = [z.x, z.z]; z.x = 0; z.z = 0; W.tick(0); const without = box(); z.x = keep[0]; z.z = keep[1];
+      let diff = 0; for (let i = 0; i < withZoog.length; i += 4) diff += Math.abs(withZoog[i] - without[i]) + Math.abs(withZoog[i + 1] - without[i + 1]) + Math.abs(withZoog[i + 2] - without[i + 2]);
+      diff /= withZoog.length / 4;
+      // and is the doorway behind it? the same box with the zoog gone shows the door's pale day (or the dark)
+      say(skin + ": a zoog at the doorway " + (diff > 20 ? "shows over the door (it changes the pixels there by " + diff.toFixed(0) + ")" : "is hidden NO (the pixels differ by only " + diff.toFixed(1) + ")"));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

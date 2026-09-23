@@ -10,7 +10,8 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
   try {
   const W = document.getElementById("f").contentWindow.MH_V3D; W.pause();
   for (const id of ["outdoors", "indoors", "cave"]) { try { W.load(id); } catch (e) { say("loading " + id + ": EXCEPTION " + e.message + " " + (e.stack || "").split("\n").slice(0, 3).join(" | ")); } }
-  const tick = (n) => { for (let i = 0; i < n; i++) W.tick(0.016); };
+  // where each walk ends is all this asks: the world steps without painting (W.step), a fifth of the cost
+  const tick = (n) => { for (let i = 0; i < n; i++) (W.step || W.tick)(0.016); };
   let bad = 0;
   // every way out of every place, found by where it leads (the outdoors has a door on every house)
   const ways = [];

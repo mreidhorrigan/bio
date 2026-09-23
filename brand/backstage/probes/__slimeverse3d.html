@@ -34,17 +34,27 @@ function first() {
   // the wellhead: the Glossary
   const well = O.portals.find((q) => q.open && /glossary/.test(q.open.url || ""));
   say("the wellhead opens: " + (well ? well.open.title + " (" + well.open.url + ")" : "NOTHING NO"));
-  // a click on a house opens its page straight away (a click may open a tab)
+  // a click on a house's DOOR opens its page (a click may open a tab); a click on its wall opens nothing
   W.load("outdoors", "start"); for (let i = 0; i < 60; i++) W.tick(0.016);
-  const E = W.engine, cl = O.clickables().find((c) => c.item && c.item.kind === "link" && E.project([c.x, O.floorAt(c.x, c.z) + c.h * 0.4, c.z]));
-  let clicked = false;
-  if (cl) {
-    const p = E.project([cl.x, O.floorAt(cl.x, cl.z) + cl.h * 0.4, cl.z]);
-    const before = opened.length; W.controls.onTap(p[0], p[1]); clicked = opened.length > before;
-    // the ray stops at the first house in its way, which may stand in front of the one aimed at
-    const url = opened[opened.length - 1], hit = O.clickables().find((c) => c.item && (c.item.url || (c.item.kiosk && c.item.kiosk.page && c.item.kiosk.page.url)) === url);
-    say("a click toward the house " + cl.item.title + (clicked ? " opens the page of the house it meets first, " + (hit ? hit.item.title : "?") + ": " + url + (hit ? "" : " NO") : " opens nothing NO"));
-  } else say("a house in view to click: none (the view looks elsewhere)");
+  const E = W.engine, all = O.clickables(), doors = all.filter((c) => c.item && c.item.kind === "link");
+  const inView = (c, up) => { const p = E.project([c.x, O.floorAt(c.x, c.z) + up, c.z]); return p && p[0] > 20 && p[0] < E.W - 20 && p[1] > 20 && p[1] < E.H - 20 ? p : null; };
+  // stand in front of a road-house's door, facing it, as a visitor clicking it would
+  // (the clickables list each house's door in the houses' order, as entries.house<i> do)
+  const i0 = all.findIndex((c) => c.item && c.item.kind === "link" && !/glossary|slimeverse3d/.test(c.item.url || ""));
+  const en = O.entries["house" + i0];
+  W.me.x = en.x + Math.sin(en.yaw) * 14; W.me.z = en.z + Math.cos(en.yaw) * 14; W.me.yaw = en.yaw + Math.PI; W.me.speed = 0;
+  for (let i = 0; i < 90; i++) W.tick(0.016);
+  const dr = all[i0].item && inView(all[i0], all[i0].h * 0.4) ? all[i0] : null;
+  if (dr) {
+    const p = inView(dr, dr.h * 0.4), before = opened.length;
+    const met = W.clickAt(p[0], p[1]);
+    if (!met || met.item !== dr.item) say("  (the click meets " + (met ? met.item ? "the door of " + met.item.title : "a wall" : "nothing") + " NO)");
+    W.controls.onTap(p[0], p[1]);
+    const url = opened[opened.length - 1], hit = all.find((c) => c.item && (c.item.url || (c.item.kiosk && c.item.kiosk.page && c.item.kiosk.page.url)) === url);
+    say("a click on the door of " + dr.item.title + (opened.length > before ? " opens the page of " + (hit ? hit.item.title : "?") + ": " + url : " opens nothing NO"));
+    const body = all.find((c) => !c.item && Math.hypot(c.x - dr.x, c.z - dr.z) < 40), q = body && inView(body, body.h * 0.85);
+    if (q) { const b2 = opened.length; W.controls.onTap(q[0], q[1]); say("a click high on its wall: " + (opened.length > b2 ? "opens " + opened[opened.length - 1] + " NO (only the door should)" : "opens nothing")); }
+  } else say("a door in view to click: none (the view looks elsewhere)");
   // the hatch in the house: down to the cave
   W.load("indoors", "door"); for (let i = 0; i < 3; i++) W.tick(0.016);
   const hatch = W.S().portals.find((q) => q.to === "cave");

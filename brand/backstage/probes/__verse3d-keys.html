@@ -91,12 +91,27 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     proto.fill = function () { if ((this.fillStyle === "#ffffff" || this.fillStyle === "#fff") && lastEll && this.globalAlpha === 1) eyeWhite++; lastEll = null; return fillOrig.apply(this, arguments); };
     const b0 = W.eyes().body; W.tick(0.016);
     say("the slime's eye, from behind: " + (W.eyes().body > b0 ? "shows NO (it is on the front)" : "out of sight, as it should be"));
-    // in the bath, still from behind: the reflection shows it (the runtime counts the eyes it draws)
+    // from behind and above, as a phone's tilt puts the camera, swung either way, in the night village
+    {
+      W.setSkin("technoscure"); W.load("outdoors"); for (let i = 0; i < 20; i++) W.tick(0.016);
+      let seen = 0;
+      for (const look of [-1.1, -0.5, 0, 0.5, 1.1]) {
+        W.controls.tilt = 0.6; W.controls.look = look; for (let i = 0; i < 90; i++) W.tick(0.016);
+        const e0 = W.eyes(); W.tick(0.016); const e1 = W.eyes(); if (e1.body > e0.body || e1.mirror > e0.mirror) seen++;
+      }
+      W.controls.tilt = 0; W.controls.look = 0;
+      say("the eye from behind and high above, in gloomthmaxx, looking five ways: " + (seen ? "shows " + seen + " times NO (through the body)" : "never shows"));
+      W.setSkin("technurture"); W.load("indoors"); for (let i = 0; i < 90; i++) W.tick(0.016);
+    }
+    // in the bath: from behind, the eye shows nowhere (the reflection, laid over the pool
+    // last, once put it on top of the slime); turned toward the camera, the pool shows it
     const P = W.pools()[0];
     if (P) {
       proto.fill = fillOrig; W.me.x = P.x; W.me.z = P.z - 1; W.me.yaw = 0; for (let i = 0; i < 60; i++) W.tick(0.016);
       const e0 = W.eyes(); W.tick(0.016); const e1 = W.eyes();
-      say("in the bath, from behind: the eye " + (e1.mirror > e0.mirror ? "shows in the reflection" : "does not show in the reflection NO") + (e1.body > e0.body ? ", and on the body NO" : ", not on the body") + (W.me.pool ? "" : " (not in the water NO)"));
+      say("in the bath, from behind: the eye " + (e1.mirror > e0.mirror || e1.body > e0.body ? "shows NO (through the slime)" : "out of sight, body and reflection"));
+      W.me.yaw = Math.PI; const e2 = W.eyes(); W.tick(0.016); const e3 = W.eyes();   // one frame: the camera has not swung round yet
+      say("in the bath, turned to the camera: the eye " + (e3.mirror > e2.mirror ? "shows in the reflection" : "not in the reflection NO") + (e3.body > e2.body ? " and on the body" : ", not on the body NO") + (W.me.pool ? "" : " (not in the water NO)"));
     } else say("the bath: MISSING");
     proto.fill = fillOrig; proto.ellipse = ellOrig;
   }

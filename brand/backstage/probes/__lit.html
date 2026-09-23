@@ -10,7 +10,9 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       const P = ISO.hub().period, T = ISO.TILE, cv = d.querySelector("canvas");
       const iso = (x, y) => ({ x: (x - y) * (T.W / 2), y: (x + y) * (T.H / 2) });
       const near = (c, pv) => c + Math.round((pv - c) / P) * P;
-      const p = ISO.player(), k = ISO.exhibits().find(e => e.title === "Store");
+      // the under-construction tag's light: on whichever kiosk is under construction (the Store was, and is off the village for now)
+      const p = ISO.player(), k = ISO.exhibits().find(e => e.underConstruction);
+      if (!k) { document.getElementById("out").textContent = "no kiosk is under construction now: nothing to light, nothing to check"; document.title = "done"; return; }
       const ps = iso(p.x, p.y), ks = iso(near(k.tx, p.x), near(k.ty, p.y));
       const cx = cv.clientWidth / 2 - ps.x + ks.x, cy = cv.clientHeight / 2 - ps.y - 26 + ks.y;
       const dpr = cv.width / cv.clientWidth;
@@ -25,8 +27,8 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       o.tagArea = box(cx - 60, cy - 12, 120, 22);        // where drawUnderConstruction paints
       o.groundNearby = box(cx - 60, cy + 40, 120, 22);   // open ground just below it
       o.tagIsLit = o.tagArea.peak > o.groundNearby.peak * 1.6;
-      document.getElementById("out").textContent = JSON.stringify(o, null, 1);
+      document.getElementById("out").textContent = JSON.stringify(o, null, 1); document.title = "done";
     }, 1600);
-  } catch (e) { document.getElementById("out").textContent = JSON.stringify({ err: String(e) }); }
+  } catch (e) { document.getElementById("out").textContent = JSON.stringify({ err: String(e) }); document.title = "done"; }
 }, 2600));
 </script>

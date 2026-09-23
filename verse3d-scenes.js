@@ -345,7 +345,6 @@
     const lim = (b, z) => halfWidth(z) - 3.4 - (b.R || 3.1);
     return {
       name: "The cave", seen: SEEN, floorAt, ceilAt: roofAt, pal, pools, solids,
-      waterPhoto: { tint: "rgba(6,24,26,0.5)", over: 0.45 },   // the same photo, in the dark of a cave
       period: END,                                             // a ring: the runtime wraps it
       centre,                                                  // for probes: the ring's middle line
       walkable: (x, z) => Math.abs(x - centre(z)) < halfWidth(z),
@@ -379,7 +378,9 @@
      skins draw a dwelling as a fat translucent mound lit from within, so
      inside it is warm: the wall is lobes of lit gel, the dome closes to a
      skylight, and the door shows the day beyond it. No shoggoth comes in.   */
-  function interior(NIGHT) { return { name: "Indoors", setup(ctx) {
+  function interior(DARK_OUT) { return { name: "Indoors", setup(ctx) {
+    const NIGHT = false;                                       // the room itself is always technurture's, lit by day
+    // DARK_OUT: the night outside, seen through the pane and the open door
     const { E } = ctx, M = M3;
     // the room is the dwelling's own outline, less a wall's thickness
     const R0 = HOUSE.r - 0.8, TOP = HOUSE.h - 0.8, SEEN = 64, SEG = 36;
@@ -465,6 +466,10 @@
       E.organic(M.shapes.disc(TABLE.x, TABLE.z, TABLE.r * 1.6, 16, (px, pz) => floorAt(px, pz) + 0.14, (j) => 0.08 * Math.sin(j * 1.7)), P.moss, P.ink, 0.8, { layer: 0, stable: true, bias: 2, inkPx: 6, rough: { tufts: 22, depth: 0.04, seed: 3 } });
     }
     function buildWalls() {
+      // The whole shell (walls, panes, the door, the crown) is drawn on layer 1,
+      // under everything in the room: the camera never leaves the room, so the
+      // shell is always behind what stands in it. Sorted by depth with them, the
+      // doorway was drawn over a zoog standing near it.
       // the shell, in rows up the outline: out past the floor's edge where the
       // mound bulges, then in to the skylight
       const SKY = 3.2, FS = [0, 0.18, 0.34, 0.48, 0.6, 0.7, 0.79, 0.87, 0.93];
@@ -475,7 +480,7 @@
           const h0 = FS[i] * TOP, h1 = FS[i + 1] * TOP, r0 = Math.max(SKY, wallAt(h0)), r1 = Math.max(SKY, wallAt(h1));
           const y0 = i === 0 ? floorAt(ca * R0, sa * R0) - 0.3 : h0;
           const col = i < 3 ? P.wall : i < 6 ? P.roof : P.roofSteps[5];
-          E.face([[ca * r0, y0, sa * r0], [ca * r1, h1 + 0.3, sa * r1], [cb * r1, h1 + 0.3, sb * r1], [cb * r0, y0, sb * r0]], col, null, 0, { layer: 2, bias: -8, tag: ROOM });
+          E.face([[ca * r0, y0, sa * r0], [ca * r1, h1 + 0.3, sa * r1], [cb * r1, h1 + 0.3, sb * r1], [cb * r0, y0, sb * r0]], col, null, 0, { layer: 1, bias: -8, tag: ROOM });
         }
       }
       // lobes of lit gel, three rows up the wall, none across the door, the panes or the shelves
@@ -495,7 +500,7 @@
           // a fixed order among neighbours: upper rows over lower, odd columns over
           // even. Stacked lobes lie at almost the same depth, and sorting them by
           // depth alone swapped them as the camera moved: their edges flickered
-          E.organic(pts, vgrad(P.wallHi[Math.floor(k2 * 7.99)], P.wallLo), P.ink, 0.8, { layer: 2, inkPx: 7, bias: row * 0.6 + (k & 1) * 0.3 });
+          E.organic(pts, vgrad(P.wallHi[Math.floor(k2 * 7.99)], P.wallLo), P.ink, 0.8, { layer: 1, inkPx: 7, bias: row * 0.6 + (k & 1) * 0.3 });
         }
       }
       // the panes: lit gel set into the wall at the height of the windows outside
@@ -506,7 +511,7 @@
         for (let j = 0; j < 14; j++) { const t = TAU * (j / 14); pts.push([x0 + -sa * Math.cos(t) * HOUSE.winRx, h + Math.sin(t) * HOUSE.winRy, z0 + ca * Math.cos(t) * HOUSE.winRx]); }
         // from inside, the pane shows the outside: the day's pale sky, or the night (the warm
         // yellow is the window seen from outside, lit from within, not the view out of it)
-        E.organic(pts, NIGHT ? vgrad("#16261e", "#070b08") : vgrad("#bfe3db", "#d8ecd2"), P.ink, 1, { layer: 2, bias: 1, inkPx: 4, lit: !NIGHT, after: NIGHT ? null : halo("#eaf6d8", 1.3) });
+        E.organic(pts, DARK_OUT ? vgrad("#16261e", "#070b08") : vgrad("#bfe3db", "#d8ecd2"), P.ink, 1, { layer: 1, bias: 1, inkPx: 4, lit: !DARK_OUT, after: DARK_OUT ? null : halo("#eaf6d8", 1.3) });
       }
       // the door: the day outside, the same arch as the doorway seen from the plaza
       {
@@ -520,16 +525,16 @@
         if (ctx.ahead(0, -R0, 8)) E.custom(pts, (g, sp) => {
           g.beginPath(); g.moveTo(sp[0][0], sp[0][1]); for (let i = 1; i < sp.length; i++) g.lineTo(sp[i][0], sp[i][1]); g.closePath();
           let top = Infinity, bot = -Infinity; for (const q of sp) { top = Math.min(top, q[1]); bot = Math.max(bot, q[1]); }
-          const gr = g.createLinearGradient(0, top, 0, bot); gr.addColorStop(0, NIGHT ? "#0a120c" : "#bfe3db"); gr.addColorStop(0.7, NIGHT ? "#050806" : "#d8ecd2"); gr.addColorStop(1, NIGHT ? "#10271f" : "#6f9e88");
+          const gr = g.createLinearGradient(0, top, 0, bot); gr.addColorStop(0, DARK_OUT ? "#0a120c" : "#bfe3db"); gr.addColorStop(0.7, DARK_OUT ? "#050806" : "#d8ecd2"); gr.addColorStop(1, DARK_OUT ? "#10271f" : "#6f9e88");
           g.fillStyle = gr; g.fill(); g.lineWidth = 2; g.strokeStyle = P.ink; g.stroke();
-        }, { layer: 2, bias: 1 });
+        }, { layer: 1, bias: 1 });
       }
       // the crown of the dome
       {
         const pts = [];
         for (let j = 0; j < 18; j++) { const t = TAU * (j / 18); pts.push([Math.cos(t) * 3.2, ceilAt(Math.cos(t) * 3.2, Math.sin(t) * 3.2) + 0.2, Math.sin(t) * 3.2]); }
         // the crown closes over: no skylight, as none shows on the dwelling outside
-        E.face(pts, P.roofSteps[6], null, 0, { layer: 2, bias: -4, tag: ROOM });
+        E.face(pts, P.roofSteps[6], null, 0, { layer: 1, bias: -4, tag: ROOM });
       }
     }
     /* ── archived (2026-09-22, at the user's request) ──────────────────────
@@ -546,23 +551,23 @@
         for (let j = 0; j <= 6; j++) { const a = lerp(SHELF.a0, SHELF.a1, j / 6); plank.push([Math.cos(a) * (R0 - 0.3), fl(Math.cos(a) * R0, Math.sin(a) * R0) + h, Math.sin(a) * (R0 - 0.3)]); }
         for (let j = 6; j >= 0; j--) { const a = lerp(SHELF.a0, SHELF.a1, j / 6); plank.push([Math.cos(a) * (R0 - 1.8), fl(Math.cos(a) * R0, Math.sin(a) * R0) + h, Math.sin(a) * (R0 - 1.8)]); }
         if (!ctx.ahead(plank[3][0], plank[3][2], 6)) continue;
-        E.face(plank, "#7a5a35", P.ink, 1, { layer: 2, bias: -2 });
+        E.face(plank, "#7a5a35", P.ink, 1, { layer: 1, bias: -2 });
         for (let j = 0; j < 12; j++) {
           const a0 = lerp(SHELF.a0, SHELF.a1, (j + 0.1) / 12), a1 = lerp(SHELF.a0, SHELF.a1, (j + 0.85) / 12), kk = hash2(h * 7, j);
           if (kk < 0.12) continue;                               // a gap on the shelf
           const tall = 1.2 + kk * 0.7, d = R0 - 1, y = fl(Math.cos(a0) * R0, Math.sin(a0) * R0) + h;
           E.face([[Math.cos(a0) * d, y, Math.sin(a0) * d], [Math.cos(a1) * d, y, Math.sin(a1) * d], [Math.cos(a1) * d, y + tall, Math.sin(a1) * d], [Math.cos(a0) * d, y + tall, Math.sin(a0) * d]],
-            BOOK[Math.floor(kk * 7.99)], P.ink, 0.8, { layer: 2, bias: -1 });
+            BOOK[Math.floor(kk * 7.99)], P.ink, 0.8, { layer: 1, bias: -1 });
         }
       }
     }
     // eslint-disable-next-line no-unused-vars
     function archivedWindlass(y) {
         const top = y + 5, crank = ctx.reduce ? 0 : E.t * 0.8;
-        for (const s of [-1, 1]) E.line([[HATCH.x + s * WX, y, HATCH.z], [HATCH.x + s * WX, top, HATCH.z]], "#6a4a2a", 0.3, { layer: 2, world: true });
-        E.line([[HATCH.x - WX, top - 0.5, HATCH.z], [HATCH.x + WX + 0.8, top - 0.5, HATCH.z]], "#8a6a3e", 0.26, { layer: 2, world: true });
-        E.line([[HATCH.x + WX + 0.8, top - 0.5, HATCH.z], [HATCH.x + WX + 0.8, top - 0.5 + Math.sin(crank) * 1, HATCH.z + Math.cos(crank) * 1]], "#6a4a2a", 0.18, { layer: 2, world: true });
-        E.line([[HATCH.x, top - 0.5, HATCH.z], [HATCH.x, y - 1, HATCH.z]], "#b98a52", 0.1, { layer: 2, bias: 2, world: true });
+        for (const s of [-1, 1]) E.line([[HATCH.x + s * WX, y, HATCH.z], [HATCH.x + s * WX, top, HATCH.z]], "#6a4a2a", 0.3, { layer: 1, world: true });
+        E.line([[HATCH.x - WX, top - 0.5, HATCH.z], [HATCH.x + WX + 0.8, top - 0.5, HATCH.z]], "#8a6a3e", 0.26, { layer: 1, world: true });
+        E.line([[HATCH.x + WX + 0.8, top - 0.5, HATCH.z], [HATCH.x + WX + 0.8, top - 0.5 + Math.sin(crank) * 1, HATCH.z + Math.cos(crank) * 1]], "#6a4a2a", 0.18, { layer: 1, world: true });
+        E.line([[HATCH.x, top - 0.5, HATCH.z], [HATCH.x, y - 1, HATCH.z]], "#b98a52", 0.1, { layer: 1, bias: 2, world: true });
     }
 
     function buildFurniture() {
@@ -612,6 +617,7 @@
       panes: WINDOWS.map((a) => [Math.cos(a), Math.sin(a)]), doorDir: [Math.cos(DOOR_A), Math.sin(DOOR_A)],   // for probes: the room's pane and door
       pools: [{ x: BATH.x, z: BATH.z, rx: BATH.r, rz: BATH.r, depth: 1.5 }],
       mirrorAlpha: 0.42, mirrorPad: 10,                           // a small room: the bath need only look nearby
+      mirrorMinLayer: 1,                                         // and it shows the shell (layer 1) as well as what stands in the room
       walkable: (x, z) => dist(x, z) < R0 - 1,
       bound(b) { const d = dist(b.x, b.z), l = lim(b); if (d > l) { b.x *= l / d; b.z *= l / d; } },
       open: (x, y, z) => y > floorAt(x, z) + 1.2 && y < TOP - 1.5 && dist(x, z) < wallAt(y) - 1.2,
@@ -635,55 +641,13 @@
       build() { buildFloor(); buildWalls(); buildFurniture(); },
     };
   } }; }
+  // The slime's house is the same room in every skin: technurture's, the house
+  // the slime lives in. Only what looks outside changes, the pane and the open
+  // door, which are dark when gloomthmaxx's night is out there (the user's call,
+  // 2026-09-23; bureaucore's paper box room was retired for it).
   V.defineScene("indoors", interior(false));
   V.defineScene("indoors@technoscure", interior(true));
-
-  /* ── bureaucore's inside: the block's own box ────────────────────────────
-     A block in bureaucore (see BLOCK below) is a tall narrow box, so its
-     inside is a tall narrow office: paper walls with fat black edges, a desk
-     and a filing cabinet in the house violet, the door back out. Nothing
-     else, as the skin has nothing else. */
-  V.defineScene("indoors@technocute", { name: "Indoors", setup(ctx) {
-    /* ── bureaucore's inside: the block's own box ────────────────────────
-       A block (BLOCK, below) is a tall narrow box, so its inside is a tall
-       narrow room: paper walls with fat black edges, and one way out, a door
-       framed in black with an EXIT plate over it, as plain as the skin. */
-    const { E } = ctx;
-    const H = BLOCK.half - 0.4, TOP = BLOCK.h - 0.4, BLK = "#111111", PAPER = "#f4f0e6", PAPER2 = "#ece5d4";
-    const floorAt = () => 0, ceilAt = () => TOP, pal = () => ({ air: PAPER, ink: BLK, board: "#fff", boardInk: BLK, text: BLK, glint: "#fff", shallow: "#c3f0ff", deep: "#8ab" });
-    const DW = 2.2, DH = 8;                                    // the doorway, half its width and its height
-    function build() {
-      E.face([[-H - 0.4, 0, -H - 0.4], [H + 0.4, 0, -H - 0.4], [H + 0.4, 0, H + 0.4], [-H - 0.4, 0, H + 0.4]], PAPER2, null, 0, { layer: -1 });
-      const cs = [[-H, -H], [H, -H], [H, H], [-H, H]];
-      for (let k = 0; k < 4; k++) {                            // the walls, and the ceiling
-        const p = cs[k], q = cs[(k + 1) % 4];
-        E.face([[p[0], 0, p[1]], [q[0], 0, q[1]], [q[0], TOP, q[1]], [p[0], TOP, p[1]]], k & 1 ? PAPER : M3.shade(PAPER, -0.05), BLK, 0.14, { layer: 2, bias: -6, world: true, maxPx: 3, tag: ROOMB });
-      }
-      E.face(cs.map((c) => [c[0], TOP, c[1]]), M3.shade(PAPER, -0.08), BLK, 0.14, { layer: 2, bias: -6, world: true, maxPx: 3, tag: ROOMB });
-      const z = -H + 0.05;                                     // the way out: a dark doorway in a black frame, and its plate
-      E.face([[-DW - 0.35, 0, z], [DW + 0.35, 0, z], [DW + 0.35, DH + 0.35, z], [-DW - 0.35, DH + 0.35, z]], BLK, null, 0, { layer: 2, bias: -5.5 });
-      E.face([[-DW, 0, z + 0.02], [DW, 0, z + 0.02], [DW, DH, z + 0.02], [-DW, DH, z + 0.02]], "#2a2a2a", null, 0, { layer: 2, bias: -5 });
-    }
-    const ROOMB = { kind: "room" };
-    const lim = (b) => H - 0.3 - (b.R || 3.1) * 0.8;
-    return {
-      name: "Indoors", seen: 60, floorAt, ceilAt, pal, pools: [], signStyle: "plate", slime: V.SKINS.technocute.slime, audio: { root: 277.18 },
-      solids: [],
-      signs: [{ x: 0, z: -H + 0.4, y: DH + 1.6, text: "Exit", post: false }],
-      walkable: (x, z) => Math.abs(x) < H && Math.abs(z) < H,
-      bound(b) { const l = lim(b); b.x = clamp(b.x, -l, l); b.z = clamp(b.z, -l, l); },
-      open: (x, y, z) => Math.abs(x) < H - 0.8 && Math.abs(z) < H - 0.8 && y > 1 && y < TOP - 1,
-      // you come in facing the room, the door behind you; turn round and walk to it
-      entries: { door: { x: 0, z: 0.8, yaw: 0 }, start: { x: 0, z: 0.8, yaw: 0 } },
-      // the way out fires as the slime reaches the door's wall: the room is too small for one that reaches further
-      portals: [{ x: 0, z: -H + 1.2, r: 2.6, to: "outdoors", entry: "back" }],
-      life: {},
-      fog: () => ({ t: 0, colour: PAPER }),
-      camera: { dist: 14, height: (dist) => Math.min(dist * 0.42, 8) },
-      sky(g) { g.fillStyle = PAPER; g.fillRect(0, 0, E.W, E.H); },
-      build,
-    };
-  } });
+  V.defineScene("indoors@technocute", interior(false));
 
   /* ══════════════════════════ THE SKINS OF THE ISO WORLD ══════════════════════
      Each skin of the iso world has its 3D version, built by isoWorld below from
@@ -977,30 +941,7 @@
     const beamC = rgbOf("#cfeee0"), warmC = rgbOf("#ffb24a");   // the iso slime's avatarGlow, and the windows' warm light
     const DARK = 0.86;                                       // how far toward the dark an unlit thing goes (the iso map's #242424)
 
-    /* ── water: the iso lakes' photo, under the lakes ─────────────────── */
-    let PH = null;
-    const photoPixels = () => {
-      if (PH) return PH;
-      const img = V.PHOTO.img;
-      if (!V.PHOTO.ready || !img) return null;
-      try {
-        // the photo and smaller copies of it, each half the last, as the ground has:
-        // a far sample covers many of the photo's pixels, and reading one of them
-        // aliased the lake into a fine hatch, so a far sample reads a smaller copy
-        const levels = [];
-        let w = img.width, h = img.height;
-        for (let L = 0; L < 6 && w >= 4 && h >= 4; L++, w = Math.max(1, w >> 1), h = Math.max(1, h >> 1)) {
-          const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
-          const g = /** @type {CanvasRenderingContext2D} */ (cv.getContext("2d"));
-          g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
-          g.drawImage(levels.length ? levels[levels.length - 1].cv : img, 0, 0, w, h);
-          levels.push({ cv, w, h, d: g.getImageData(0, 0, w, h).data });
-        }
-        PH = { w: img.width, h: img.height, levels };
-      } catch (e) { PH = { w: 0 }; }
-      return PH;
-    };
-    const PH_SOFT = (window.__PH_SOFT || 1), PHOTO_W = 30, airC = rgbOf(P.air), skyC = rgbOf(P.sky), deepC = rgbOf(SK.water || "#2f8a98"), shallowC = rgbOf(P.shallow);
+    const airC = rgbOf(P.air), skyC = rgbOf(P.sky), deepC = rgbOf(SK.water || "#2f8a98"), shallowC = rgbOf(P.shallow);
     const col = [0, 0, 0], bed = [0, 0, 0];
     // Two ways to show the distance, kept both. "focus" (the default): the haze
     // only closes off the far edge, and things come into view out of focus.
@@ -1014,27 +955,19 @@
       // near the horizon is many times more. Detail is read for the larger, or far roads and shores alias and swim.
       const fp = (t * GRES) / E.fov / Math.max(0.03, -dy);
       // at night, ground beyond every light ends up mostly dark: read it cheaply
-      // (the smallest copy, no photo), which is most of the night's samples
+      // (the smallest copy), which is most of the night's samples
       const Ln = NIGHT ? lightAt(x, z) : 1, dim = Ln <= 0;
       // past the focus the ground is read from a smaller copy: soft, as the things standing on it are
       const lvl = dim ? 3 : Math.min(3, (fp < 3 ? 0 : fp < 6 ? 1 : fp < 12 ? 2 : 3) + (!MIST && t > 130 ? 1 : 0));
       const ground = hh > LEVEL + 0.001 || FLAT ? hh : heightAt(x, z);
       sampleRGB(lvl, x, z, col);
       if (!FLAT && ground < LEVEL) {
-        const depth = LEVEL - ground, ph = dim ? null : photoPixels();
+        const depth = LEVEL - ground;
         for (let k = 0; k < 3; k++) bed[k] = col[k];
-        let pr = deepC[0], pg = deepC[1], pb = deepC[2];
-        if (ph && ph.w) {
-          const tt = ctx.reduce ? 0 : E.t;
-          // the copy whose pixel is a little larger than the ground this sample
-          // covers (PH_SOFT): neighbouring samples then differ smoothly, where
-          // the photo's own grain, one pixel a sample, drew the sample grid as a lattice
-          const L = Math.min(ph.levels.length - 1, Math.max(0, Math.floor(Math.log2(Math.max(1, fp * (ph.w / PHOTO_W) * PH_SOFT))))), m = ph.levels[L], sc = m.w / ph.w;
-          let u = ((x / PHOTO_W) * ph.w + Math.sin(z * 0.21 + tt * 1.3) * 2.2) * sc, v = ((z / PHOTO_W) * ph.w + Math.sin(x * 0.17 + tt) * 1.6) * sc;
-          u -= m.w * Math.floor(u / m.w); v -= m.h * Math.floor(v / m.h);
-          const o = (Math.min(m.h - 1, v | 0) * m.w + Math.min(m.w - 1, u | 0)) * 4, pk = NIGHT ? 0.35 : 0.62;
-          pr = m.d[o] * pk + deepC[0] * (1 - pk); pg = m.d[o + 1] * pk + deepC[1] * (1 - pk); pb = m.d[o + 2] * pk + deepC[2] * (1 - pk);
-        }
+        // the deep water's own colour, with a slow broad swell of tone across it:
+        // tens of units a wave, far coarser than a sample, so it cannot alias
+        const tt = ctx.reduce ? 0 : E.t, sw = 1 + 0.07 * Math.sin(x * 0.045 + z * 0.03 + tt * 0.35) * Math.sin(z * 0.05 - x * 0.02 - tt * 0.27);
+        const pr = deepC[0] * sw, pg = deepC[1] * sw, pb = deepC[2] * sw;
         const w = clamp(depth / 1.6, 0, 1), s = 1 - w;
         col[0] = (bed[0] * 0.45 + shallowC[0] * 0.55) * s + pr * w;
         col[1] = (bed[1] * 0.45 + shallowC[1] * 0.55) * s + pg * w;
@@ -1417,9 +1350,16 @@
       things: () => HOUSES.map((q) => ({ kind: "house", title: q.title, tx: tileX(q.x), ty: tileZ(q.z) }))
         .concat([{ kind: "wellhead", title: wellAt.title, tx: tileX(wellAt.x), ty: tileZ(wellAt.z) }]),
       tileOf: (x, z) => [tileX(x), tileZ(z)],
-      // what a click opens, where the doors open menus: every house, and the wellhead
-      clickables: () => (ctx.doors === "menus" ? HOUSES.map((q) => ({ x: q.x, z: q.z, r: q.block ? q.r * 1.2 : q.r * 1.06, h: q.h, radAt: q.block ? null : (up) => houseRad(q, up), item: q.item }))
-        .concat(wellAt.item ? [{ x: wellAt.x, z: wellAt.z, r: WELLHEAD.collar + WELLHEAD.lobe, h: WELLHEAD.capTop, item: wellAt.item }] : []) : []),
+      // what a click opens, where the doors open menus: a house's DOOR (a column
+      // the doorway's width and height, standing in its wall), and the wellhead.
+      // The houses themselves come after, with no item: a click that meets a
+      // wall first opens nothing, and cannot reach a door behind it.
+      clickables: () => (ctx.doors === "menus" ? HOUSES.map((q) => {
+        const d = doorAt(q, -0.6);
+        return q.block ? { x: d[0], z: d[1], r: q.r * 0.36, h: q.h * 0.38, item: q.item }
+          : { x: d[0], z: d[1], r: q.r * 0.32, h: HOUSE.doorH + HOUSE.arch, item: q.item };
+      }).concat(wellAt.item ? [{ x: wellAt.x, z: wellAt.z, r: WELLHEAD.collar + WELLHEAD.lobe, h: WELLHEAD.capTop, item: wellAt.item }] : [])
+        .concat(HOUSES.map((q) => ({ x: q.x, z: q.z, r: q.block ? q.r * 1.2 : q.r * 1.06, h: q.h, radAt: q.block ? null : (up) => houseRad(q, up), item: null }))) : []),
       walkable: () => true,
       bound() {},
       open: (x, y, z) => y > floorAt(x, z) + 1.5 && y < 160,

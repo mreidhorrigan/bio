@@ -298,8 +298,22 @@ hatch still leads down to the cave, and the cave leads nowhere else for now.
   smeared a sixtieth of a second apart, at each crest of the walk, through a
   lowpass at 900 Hz. The page has a sound switch.
 - **The eye** is on the slime's front, so from behind the camera does not see
-  it. The reflection always shows it, a little brighter than the rest of the
-  reflection (`W.eyes()` counts the eyes drawn, for probes).
+  it, however high the camera rides: it also needs the camera ahead of the
+  slime's middle, since the body is a squashed dome, not the sphere the eye's
+  normal assumes. The reflection shows it by the same rule, as a mirror would
+  (`W.eyes()` counts the eyes drawn, for probes).
+- **Clicks enter only by a door**: a house's clickable is a column the doorway's
+  size in its wall. The house bodies follow in the list with no item, so a click
+  on a wall opens nothing; a ray that meets a wall looks a little further in,
+  for a dwelling bulges out past its doorway; and a house the ray entered in
+  front of the slime is drawn see-through, so the click passes it.
+- **The slime's house is the same room in every skin**, technurture's. Only the
+  pane and the open door follow the skin, dark in gloomthmaxx's night.
+  Bureaucore's paper box room is retired (git history has it). The shell
+  (walls, pane, door, crown) is drawn on layer 1, under everything in the room,
+  so the doorway never covers a zoog beside it.
+- **3D water has no photo.** The iso lakes' photo was tried on the 3D lakes and
+  pools and taken out: seen in depth it aliased into seams. The iso map keeps it.
 - **The controls** follow the iso village's: "☰ Menu" (building chips at the
   top) and the way back bottom right, the skins bottom centre, M to mute. On a
   touch screen a finger dragged sideways turns the slime (`C.turn`), two fingers
@@ -307,7 +321,8 @@ hatch still leads down to the cave, and the cave leads nowhere else for now.
   (`C.pref`) on each place's own camera distance, kept through doors and
   remembered (`mh-3d-zoom`); a phone starts at 1.4. The lens takes the window's
   width into account, so a phone held upright sees the village.
-- **Probes that walk far** use `W.step()`, a frame without the painting.
+- **Probes that walk far** use `W.step()`, a frame without the painting
+  (`__verse3d-ways` fell from 290 s of CPU to 2.4 s).
 
 **Adoption path.** The cave here is `slime3d.js`'s corridor carried over, and
 the slime, its water and its reflection are the same code in both files. If

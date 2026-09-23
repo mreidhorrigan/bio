@@ -31,7 +31,7 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
   if (want.startsWith("pool")) {                       // the slime in the bath, from behind or turned to the camera
     const P = W.pools()[0]; W.me.x = P.x; W.me.z = P.z - 2; W.me.yaw = want === "pool-front" ? Math.PI * 0.8 : 0.3;
   }
-  if (want === "pond-plain") { const V = document.getElementById("f").contentWindow.MH_VERSE3D; V.PHOTO.ready = false; }   // the same frame without the photo
+  // (#pond-plain, the pond without the water photo, is now just #pond: 3D water has no photo)   // the same frame without the photo
   for (let i = 0; i < 120; i++) W.tick(0.016);
   if (want === "pool-front") { W.me.yaw = Math.PI; W.tick(0.016); }
 }, 400));
