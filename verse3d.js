@@ -560,6 +560,7 @@
      *  radius 3.5/13 of the body's, pupil 1.8/13, six tenths up the dome, on the
      *  front. In a pool it is flipped with the body's points, so a reflection
      *  shows it exactly when a mirror would. */
+    const eyesDrawn = { body: 0, mirror: 0 };                  // counted, for probes
     function slimeEye(g, Mi, base) {
       // On the front, at the brand's six tenths up the dome: from behind, where the
       // camera rides, it is out of sight, as it should be; the pool shows it, and
@@ -579,6 +580,10 @@
       if (facing < 0.02 && !Mi) return;
       const p = E.screen(v), k = E.fov / v[2];
       const r = R * (3.5 / 13) * k, squeeze = clamp(0.35 + Math.abs(facing) * 0.65, 0.35, 1);
+      eyesDrawn[Mi ? "mirror" : "body"]++;
+      // the reflection is drawn at a third or so; the eye, the brightest thing on
+      // the slime, keeps more of itself there, or it vanished into the water
+      if (Mi) g.globalAlpha = Math.min(1, g.globalAlpha * 2.4);
       g.fillStyle = "#fff"; g.beginPath(); g.ellipse(p[0], p[1], r * squeeze, r * 0.96, 0, 0, TAU); g.fill();
       const ink = (S.slime || GEL).ink;
       g.lineWidth = Math.max(0.8, R * (1.3 / 13) * k); g.strokeStyle = ink; g.stroke();
@@ -1256,6 +1261,7 @@
         }
       }
       me.yaw += turn * dt * 1.9;
+      if (C.turn) { me.yaw += C.turn; C.turn = 0; me.goal = null; }   // a finger turning the body (engine-3d controls): it stops a walk to a tap
       const top = k.fast ? 34 : 17;
       me.speed += (want * top - me.speed) * Math.min(1, dt * 6);
       me.pool = poolAt(me.x, me.z);
@@ -1368,7 +1374,7 @@
       if (typeof entry === "object" && entry) { S.bound(me); collide(me); }   // a spot carried from elsewhere: kept inside this place
       me.y = S.floorAt(me.x, me.z);
       C.look = 0; C.tilt = 0;
-      if (S.camera && S.camera.dist) C.dist = S.camera.dist;
+      C.dist = clamp((S.camera && S.camera.dist || 58) * C.pref, C.min, C.max);   // the place's own distance, times the visitor's zoom
       E.focus = S.focus || null;                               // depth of field, where the place asks for it
       // The fog reaches the air's full colour a little short of where the scene
       // stops drawing, measured as distance from the camera (not view depth, which
@@ -1386,7 +1392,9 @@
 
     const hud = opts.hud || null;
     let fps = 60, cost = 0;
-    function frame(dt) {
+    /** One frame: the world moves (step), then it is drawn, unless `paint` is
+     *  false (a probe walking thousands of frames that only asks where things went). */
+    function frame(dt, paint = true) {
       if (fade) {                                                // out, load the next scene, and back in
         fade.t += dt;
         if (!fade.loaded && fade.t >= 0.28) { load(fade.to, fade.entry); fade.loaded = true; }
@@ -1394,6 +1402,7 @@
       }
       const t0 = performance.now();
       step(dt);
+      if (!paint) return;
       // floor blobs sort along the way the camera faces, snapped to eight headings
       const oct = Math.round(E.cam.yaw / (Math.PI / 4)) * (Math.PI / 4);
       E.stableAxis = [Math.sin(oct), Math.cos(oct)];
@@ -1443,6 +1452,10 @@
       pools: () => pools, zoogs: () => zoogs, shoggoths: () => shogs,
       floorHit, poolAt, waterY, inPool, collide, camOpen,
       tick: (dt) => { E.dt = dt || 0.016; E.t += E.dt; frame(E.dt); },
+      /** How many times the slime's eye has been drawn, on the body and in reflections. */
+      eyes: () => Object.assign({}, eyesDrawn),
+      /** A tick without the drawing: for probes that walk a long way. */
+      step: (dt) => { E.dt = dt || 0.016; E.t += E.dt; frame(E.dt, false); },
       run: () => E.run(frame), pause: E.pause, resume: () => E.run(frame),
       cost: () => cost, boom: () => boom, fading: () => !!fade,
       setMuted(m) { sound.muted = !!m; if (sound.master && sound.ctx) sound.master.gain.setTargetAtTime(m ? 0 : 0.8, sound.ctx.currentTime, 0.02); if (!m) soundOn(); },

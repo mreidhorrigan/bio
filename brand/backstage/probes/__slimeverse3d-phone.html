@@ -29,6 +29,28 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       const r = menu.getBoundingClientRect(), p = d.getElementById("mh-lang"), q = p && p.getBoundingClientRect();
       if (q && !(q.right < r.left || q.left > r.right || q.bottom < r.top || q.top > r.bottom)) say("the language switch covers the menu NO");
     }
+    // touch, as a phone sends it: one finger turns the slime, two pinch the zoom, a tap walks
+    const P = (type, id, x, y) => cv.dispatchEvent(new w.PointerEvent(type, { pointerId: id, pointerType: "touch", clientX: x, clientY: y, bubbles: true, isPrimary: id === 1 }));
+    const U = (id, x, y) => w.dispatchEvent(new w.PointerEvent("pointerup", { pointerId: id, pointerType: "touch", clientX: x, clientY: y, bubbles: true }));
+    const cv = d.getElementById("stage");
+    let y0 = W.me.yaw;
+    P("pointerdown", 1, 200, 500); for (let x = 200; x >= 80; x -= 20) { P("pointermove", 1, x, 500); W.tick(0.016); } U(1, 80, 500); W.tick(0.016);
+    let turned = W.me.yaw - y0;
+    say("a finger dragged 120 px sideways turns the slime " + (turned * 180 / Math.PI).toFixed(0) + " degrees" + (Math.abs(turned) > 0.5 ? "" : " NO"));
+    const d0 = W.controls.dist;
+    P("pointerdown", 1, 150, 400); P("pointerdown", 2, 250, 400);
+    for (let k = 0; k <= 5; k++) { P("pointermove", 1, 150 - k * 12, 400); P("pointermove", 2, 250 + k * 12, 400); }
+    U(2, 310, 400); U(1, 90, 400); W.tick(0.016);
+    const d1 = W.controls.dist;
+    say("two fingers pinched apart bring the camera from " + d0.toFixed(0) + " to " + d1.toFixed(0) + (d1 < d0 * 0.8 ? "" : " NO") + ", and the slime " + (Math.abs(W.me.yaw - y0 - turned) < 0.01 ? "did not turn" : "turned NO"));
+    d.getElementById("zoom-out").click(); d.getElementById("zoom-out").click();
+    say("the − button twice: " + d1.toFixed(0) + " to " + W.controls.dist.toFixed(0) + (W.controls.dist > d1 * 1.4 ? "" : " NO"));
+    const zd = W.controls.dist; W.load("indoors", "door"); const zi = W.controls.dist; W.load("outdoors", "home");
+    say("the zoom kept through a door: " + zd.toFixed(0) + " out, " + zi.toFixed(0) + " in, " + W.controls.dist.toFixed(0) + " out again" + (Math.abs(W.controls.dist - zd) < 1 ? "" : " NO"));
+    let tapped = 0; const tap0 = W.controls.onTap; W.controls.onTap = (x, y) => { tapped++; tap0(x, y); };
+    P("pointerdown", 1, 195, 600); U(1, 196, 600);
+    W.controls.onTap = tap0;
+    say("a tap still walks: " + (tapped ? "yes" : "NO"));
     say("no sound or place-name buttons: " + (d.getElementById("sound") || d.getElementById("where") ? "one is still there NO" : "yes"));
     say("errors: none");
   } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }

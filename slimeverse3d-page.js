@@ -175,6 +175,19 @@
     menuBtn.addEventListener("click", () => showMenu(navbar.hidden));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !navbar.hidden) showMenu(false); });
   }
+  /* ── the zoom: + and −, as well as the wheel and a pinch ─────────────── */
+  // A phone starts a little farther back: its screen is narrow, and the slime filled it.
+  const ZOOM = "mh-3d-zoom";                                   // the visitor's zoom, as a factor on each place's own distance
+  let saved = NaN;
+  try { saved = Number(window.localStorage && window.localStorage.getItem(ZOOM)); } catch (e) { /* private: fine */ }
+  W.controls.zoom(Number.isFinite(saved) && saved > 0.2 && saved < 5 ? saved : window.innerWidth < 620 ? 1.4 : 1);
+  const keep = () => { try { window.localStorage && window.localStorage.setItem(ZOOM, W.controls.pref.toFixed(3)); } catch (e) { /* fine */ } };
+  for (const [id, f] of [["zoom-in", 1 / 1.25], ["zoom-out", 1.25]]) {
+    const b = document.getElementById(id);
+    if (b) b.addEventListener("click", () => { W.controls.zoom(f); keep(); cv.focus({ preventScroll: true }); });
+  }
+  cv.addEventListener("wheel", () => setTimeout(keep, 0), { passive: true });
+  cv.addEventListener("pointerup", () => setTimeout(keep, 0));
   // M mutes and unmutes, as in the iso village
   document.addEventListener("keydown", (e) => {
     if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey && !(e.target instanceof HTMLInputElement)) W.setMuted(!W.muted());

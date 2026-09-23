@@ -827,7 +827,11 @@
       // o.when() (optional) says whether the keys are the world's just now: a
       // world on a page that also scrolls takes them only while it is in view.
       const C = { keys: { fwd: false, back: false, left: false, right: false, fast: false },
-        look: 0, tilt: 0, dist: o.dist || 50, min: o.minDist || 12, max: o.maxDist || 150 };
+        look: 0, tilt: 0, turn: 0, dist: o.dist || 50, min: o.minDist || 12, max: o.maxDist || 150, pref: 1 };
+      /** Nearer (f < 1) or farther (f > 1), within the limits: the wheel, a pinch, a
+       *  button. C.pref keeps the visitor's own zoom as a factor, so a world can give
+       *  each place its own distance and still honour it. */
+      C.zoom = (f) => { const d = clamp(C.dist * f, C.min, C.max); C.pref *= d / C.dist; C.dist = d; };
       // WASD, and ZQSD for an AZERTY keyboard, where those keys sit.
       const KEY = { ArrowUp: "fwd", w: "fwd", W: "fwd", z: "fwd", Z: "fwd", ArrowDown: "back", s: "back", S: "back",
         ArrowLeft: "left", a: "left", A: "left", q: "left", Q: "left", ArrowRight: "right", d: "right", D: "right" };
@@ -847,25 +851,51 @@
       document.addEventListener("keydown", down);
       document.addEventListener("keyup", up);
       window.addEventListener("blur", drop);
-      let drag = null;
-      const pd = (ev) => { drag = { x: ev.clientX, y: ev.clientY, look: C.look, tilt: C.tilt, moved: 0, t: performance.now() }; try { el.setPointerCapture(ev.pointerId); } catch (e) { /* older Safari */ } ev.preventDefault(); };
-      const pm = (ev) => { if (!drag) return; drag.moved = Math.max(drag.moved, Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y)); C.look = clamp(drag.look + (ev.clientX - drag.x) * 0.006, -1.1, 1.1); C.tilt = clamp(drag.tilt - (ev.clientY - drag.y) * 0.004, -0.5, 0.6); };
+      // A mouse drags to look about, the view swinging back behind the body after.
+      // A finger, as touch games with a camera behind do, drags sideways to TURN
+      // the body (C.turn, which the world takes each frame: there are no keys on
+      // a phone, and a look that swung back left no way to face anywhere) and up
+      // or down to tilt; two fingers pinch to zoom.
+      let drag = null, pinch = null;
+      const touches = new Map();
+      const span = () => { const [a, b] = [...touches.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
+      const pd = (ev) => {
+        if (ev.pointerType === "touch") {
+          touches.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+          if (touches.size === 2) { pinch = { span: span(), dist: C.dist }; if (drag) drag.moved = 99; }   // a pinch is never a tap
+        }
+        if (!drag) drag = { x: ev.clientX, y: ev.clientY, lx: ev.clientX, look: C.look, tilt: C.tilt, moved: 0, t: performance.now(), touch: ev.pointerType === "touch" };
+        try { el.setPointerCapture(ev.pointerId); } catch (e) { /* older Safari */ }
+        ev.preventDefault();
+      };
+      const pm = (ev) => {
+        if (touches.has(ev.pointerId)) touches.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+        if (pinch && touches.size >= 2) { C.zoom(clamp(pinch.dist * pinch.span / span(), C.min, C.max) / C.dist); return; }
+        if (!drag) return;
+        drag.moved = Math.max(drag.moved, Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y));
+        if (drag.touch) { C.turn += (ev.clientX - drag.lx) * 0.009; drag.lx = ev.clientX; }
+        else C.look = clamp(drag.look + (ev.clientX - drag.x) * 0.006, -1.1, 1.1);
+        C.tilt = clamp(drag.tilt - (ev.clientY - drag.y) * 0.004, -0.5, 0.6);
+      };
       // A press that did not move is a TAP: the world gets it as a point on the
       // canvas, in CSS pixels, and can send the body there.
       const pu = (ev) => {
+        touches.delete(ev.pointerId);
+        if (touches.size < 2) pinch = null;
+        if (touches.size) return;                              // a finger still down: the gesture goes on
         if (drag && drag.moved < 6 && C.onTap) {               // however long it was held
           const r = el.getBoundingClientRect();
           C.onTap(ev.clientX - r.left, ev.clientY - r.top);
         }
         drag = null;
       };
-      const wh = (ev) => { C.dist = clamp(C.dist * (1 + Math.sign(ev.deltaY) * 0.12), C.min, C.max); ev.preventDefault(); };
+      const wh = (ev) => { C.zoom(1 + Math.sign(ev.deltaY) * 0.12); ev.preventDefault(); };
       el.addEventListener("pointerdown", pd); el.addEventListener("pointermove", pm);
-      window.addEventListener("pointerup", pu); el.addEventListener("wheel", wh, { passive: false });
+      window.addEventListener("pointerup", pu); window.addEventListener("pointercancel", pu); el.addEventListener("wheel", wh, { passive: false });
       C.dispose = () => {
         document.removeEventListener("keydown", down); document.removeEventListener("keyup", up);
         window.removeEventListener("blur", drop); el.removeEventListener("pointerdown", pd);
-        el.removeEventListener("pointermove", pm); window.removeEventListener("pointerup", pu); el.removeEventListener("wheel", wh);
+        el.removeEventListener("pointermove", pm); window.removeEventListener("pointerup", pu); window.removeEventListener("pointercancel", pu); el.removeEventListener("wheel", wh);
       };
       return C;
     };

@@ -424,9 +424,11 @@
       { sel: "#stage", attr: { "aria-label": "Le village en trois dimensions, vu de derrière la créature\u00A0: les mêmes maisons, routes et lacs que le village isométrique." } },
       { sel: "#back", text: "‹ Le village" },
       { sel: "#menu", text: "☰ Menu" },
+      { sel: "#zoom-in", attr: { "aria-label": "Plus près" } },
+      { sel: "#zoom-out", attr: { "aria-label": "Plus loin" } },
       { sel: ".switcher", attr: { "aria-label": "Choisir un habillage" } },
       { sel: "#navbar", attr: { "aria-label": "Aller à un bâtiment" } },
-      { sel: ".keys", text: "Les flèches pour marcher et tourner (ou ZQSD, WASD sur un clavier QWERTY), et la touche majuscule pour se presser. Glissez pour regarder autour, et cliquez pour aller quelque part. Entrez dans une maison, ou cliquez dessus, pour l'ouvrir, comme au village. M coupe et remet le son." },
+      { sel: ".keys", text: "Les flèches pour marcher et tourner (ou ZQSD, WASD sur un clavier QWERTY), et la touche majuscule pour se presser. Glissez pour regarder autour, cliquez pour aller quelque part, et faites défiler ou prenez + et − pour vous rapprocher ou vous éloigner. Entrez dans une maison, ou cliquez dessus, pour l'ouvrir, comme au village. M coupe et remet le son." },
       { sel: "#card .close", attr: { "aria-label": "Fermer" } },
     ],
     "slime3d.html": [

@@ -32,7 +32,7 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
   d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Shift", bubbles: true }));
   d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true, cancelable: true }));
   for (let i = 0; i < 2600 && travelled < per + 40; i++) {
-    W.tick(0.016);
+    if (W.step) W.step(0.016); else W.tick(0.016);
     let dz = W.me.z - lastZ; dz -= per * Math.round(dz / per);   // across the seam the position jumps a whole period
     travelled += Math.abs(dz); lastZ = W.me.z;
     // round the world and back to the kiosk ring (a kiosk may stand across the road there, as the ring's spacing falls)
@@ -61,7 +61,7 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       if (nearShaft) side = -Math.abs(side) - 4;                // the side away from the rope
       W.me.yaw = Math.atan2(S.centre(W.me.z + 18) + side - W.me.x, 18) + jitter;
       K.fwd = true;
-      W.tick(0.016);
+      if (W.step) W.step(0.016); else W.tick(0.016);           // the walk, not the picture: no painting
       let dz = W.me.z - last; dz -= ring * Math.round(dz / ring); went += dz; last = W.me.z;
       if (Math.abs(dz) < 0.02) stuck++;
     }
@@ -89,16 +89,14 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     let eyeWhite = 0, lastEll = null;
     proto.ellipse = function () { lastEll = arguments; return ellOrig.apply(this, arguments); };
     proto.fill = function () { if ((this.fillStyle === "#ffffff" || this.fillStyle === "#fff") && lastEll && this.globalAlpha === 1) eyeWhite++; lastEll = null; return fillOrig.apply(this, arguments); };
-    W.tick(0.016);
-    say("the slime's eye, from behind: " + (eyeWhite ? "shows NO (it is on the front)" : "out of sight, as it should be"));
-    // in the bath, still from behind: the reflection shows it
+    const b0 = W.eyes().body; W.tick(0.016);
+    say("the slime's eye, from behind: " + (W.eyes().body > b0 ? "shows NO (it is on the front)" : "out of sight, as it should be"));
+    // in the bath, still from behind: the reflection shows it (the runtime counts the eyes it draws)
     const P = W.pools()[0];
     if (P) {
       proto.fill = fillOrig; W.me.x = P.x; W.me.z = P.z - 1; W.me.yaw = 0; for (let i = 0; i < 60; i++) W.tick(0.016);
-      proto.fill = function () { if ((this.fillStyle === "#ffffff" || this.fillStyle === "#fff") && lastEll && this.globalAlpha === 1) eyeWhite++; lastEll = null; return fillOrig.apply(this, arguments); };
-      eyeWhite = 0; W.tick(0.016);
-      say("in the bath, from behind: the eye " + (eyeWhite ? "shows in the reflection" : "does not show in the reflection NO") + (W.me.pool ? "" : " (not in the water NO)"));
-      if (!eyeWhite) { let any = 0; proto.fill = function () { if (/^#fff/.test(String(this.fillStyle))) any++; return fillOrig.apply(this, arguments); }; W.tick(0.016); say("    (white fills of any kind that frame: " + any + ", slime at " + W.me.x.toFixed(1) + "," + W.me.z.toFixed(1) + " yaw " + W.me.yaw.toFixed(2) + ", pool at " + P.x.toFixed(1) + "," + P.z.toFixed(1) + ")"); }
+      const e0 = W.eyes(); W.tick(0.016); const e1 = W.eyes();
+      say("in the bath, from behind: the eye " + (e1.mirror > e0.mirror ? "shows in the reflection" : "does not show in the reflection NO") + (e1.body > e0.body ? ", and on the body NO" : ", not on the body") + (W.me.pool ? "" : " (not in the water NO)"));
     } else say("the bath: MISSING");
     proto.fill = fillOrig; proto.ellipse = ellOrig;
   }

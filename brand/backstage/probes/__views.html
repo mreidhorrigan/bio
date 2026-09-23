@@ -35,7 +35,11 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     const at = S.fromTile(raise[0].tx, raise[0].ty);
     say("the first at world " + at[0].toFixed(0) + "," + at[1].toFixed(0) + ", its solid at " + S.dynSolids[0].x.toFixed(0) + "," + S.dynSolids[0].z.toFixed(0) + (Math.hypot(at[0] - S.dynSolids[0].x, at[1] - S.dynSolids[0].z) < 0.01 ? "" : " NO"));
     say("the towers' listener placed from the 3D slime " + listened + " times in 30 frames" + (listened >= 20 || !B ? "" : " NO"));
+    // walk east, between two kiosks of the ring (walking the way the iso slime faced can
+    // lead into a kiosk's door as the ring's spacing falls, and then there is no spot to hand back)
+    W.me.yaw = Math.PI / 2;
     W.controls.keys.fwd = true; for (let i = 0; i < 90; i++) W.tick(0.016); W.controls.keys.fwd = false;
+    say("  (walked to " + W.scene() + (W.scene().startsWith("outdoors") ? ", still in the village)" : ": NO, through a door)"));
     const t1 = S.tileOf(W.me.x, W.me.z);
     setTimeout(() => {
       const hidden = w.document.getElementById("iso").style.display === "none";

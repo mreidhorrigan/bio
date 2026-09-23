@@ -298,7 +298,16 @@ hatch still leads down to the cave, and the cave leads nowhere else for now.
   smeared a sixtieth of a second apart, at each crest of the walk, through a
   lowpass at 900 Hz. The page has a sound switch.
 - **The eye** is on the slime's front, so from behind the camera does not see
-  it. The reflection shows it.
+  it. The reflection always shows it, a little brighter than the rest of the
+  reflection (`W.eyes()` counts the eyes drawn, for probes).
+- **The controls** follow the iso village's: "☰ Menu" (building chips at the
+  top) and the way back bottom right, the skins bottom centre, M to mute. On a
+  touch screen a finger dragged sideways turns the slime (`C.turn`), two fingers
+  pinch the zoom, a tap walks; + and − zoom too. The zoom is a factor
+  (`C.pref`) on each place's own camera distance, kept through doors and
+  remembered (`mh-3d-zoom`); a phone starts at 1.4. The lens takes the window's
+  width into account, so a phone held upright sees the village.
+- **Probes that walk far** use `W.step()`, a frame without the painting.
 
 **Adoption path.** The cave here is `slime3d.js`'s corridor carried over, and
 the slime, its water and its reflection are the same code in both files. If

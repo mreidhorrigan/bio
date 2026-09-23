@@ -38,6 +38,7 @@
     .hudbtn, .skin, .navchip{ appearance:none; cursor:pointer; line-height:1; white-space:nowrap; text-decoration:none;
       border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); }
     .hudbtn{ font:700 12px var(--sans-font); padding:6px 10px; }
+    .hudbtn.zoom{ min-width:34px; font-size:15px; padding:5px 10px; }     /* a thumb's width on a phone */
     .hudbtn[aria-expanded="true"], .skin[aria-pressed="true"]{ background:#fff; color:#111; border-color:#fff; }
     .switcher{ position:fixed; left:50%; bottom:52px; transform:translateX(-50%); z-index:5; display:flex; flex-wrap:wrap;
       gap:5px; justify-content:center; max-width:96vw; padding:5px; }
@@ -74,7 +75,7 @@
     <canvas id="stage" tabindex="0" role="img"
             aria-label="The village in three dimensions, seen from behind the slime: the same houses, roads and lakes as the isometric village."></canvas>
     <p class="keys">Arrow keys or W and S to walk, A and D to turn, and shift to hurry. Drag
-      to look around, and click to walk somewhere. Walk into a house, or click it, to open
+      to look around, click to walk somewhere, and scroll or use + and − to come nearer or go farther. Walk into a house, or click it, to open
       it, as in the village. M turns the sound off and on.</p>
     <nav class="navbar" id="navbar" aria-label="Jump to a building" hidden></nav>
     <div class="switcher" role="group" aria-label="Choose a skin">
@@ -83,6 +84,8 @@
       <button type="button" class="skin" data-skin="technocute" aria-pressed="false">technocute/bureaucore</button>
     </div>
     <div class="hud">
+      <button type="button" class="hudbtn zoom" id="zoom-in" aria-label="Nearer">+</button>
+      <button type="button" class="hudbtn zoom" id="zoom-out" aria-label="Farther">−</button>
       <a class="hudbtn" id="back" href="index.html">‹ Village</a>
       <button type="button" class="hudbtn" id="menu" aria-expanded="false" aria-controls="navbar">☰ Menu</button>
     </div>
