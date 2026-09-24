@@ -1140,19 +1140,22 @@
     }
     /** One step at each crest of the iso world's walking beat (sin(t * 12) past 0.93). */
     function stepSound() {
-      const moving = Math.abs(me.speed) > 1 && !fade, ph = Math.sin(E.t * 12) > 0.93;
-      // a place with no key of its own (the cave, shared by every skin) takes the skin's (theme-*.js audio.root)
-      if (moving && ph && !sound.lastPhase) sound.steps = (sound.steps || 0) + 1;
+      // one step at each crest of the walking beat (sin(t * 12)), counted by the beat's phase
+      // as the iso world counts it (engine.js update), so the two views step in the same
+      // rhythm and a slow frame that jumps over a crest still takes its step
+      const moving = Math.abs(me.speed) > 1 && !fade, stride = Math.floor((E.t * 12 - Math.PI / 2) / (2 * Math.PI));
+      const due = moving && stride !== sound.lastPhase;
+      sound.lastPhase = stride;
+      if (!due) return;
+      sound.steps = (sound.steps || 0) + 1;
       // The site's earlier step, the slimy one (before the 12f64f8 "subtler sound"
-      // change): a triangle, gain 0.03 through a 0.8 master, a 10 ms attack, and
-      // fired on EVERY frame the beat stood past its crest, which at 60 frames a
-      // second is four blips smeared into one wet "blorp". Scheduled four at 1/60 s
-      // apart here, so it squelches the same whatever the frame rate.
-      if (moving && ph && !sound.lastPhase) {
-        const f = rootNow();
-        for (let i = 0; i < 4; i++) tone(f, 0.022, 0.06, i / 60, "triangle");   // a touch quieter and longer than the site's was: softer
-      }
-      sound.lastPhase = ph ? 1 : 0;
+      // change), and the iso world's again (engine.js sfx.step, the same sound at the
+      // same level: 0.035 through its 0.5 master is 0.022 through this 0.8 one): a
+      // triangle blip four times over, 1/60 s apart, smeared into one wet squelch and
+      // rounded by the low-pass. A place with no key of its own (the cave, shared by
+      // every skin) takes the skin's (theme-*.js audio.root).
+      const f = rootNow();
+      for (let i = 0; i < 4; i++) tone(f, 0.022, 0.06, i / 60, "triangle");
     }
     for (const ev of ["pointerdown", "keydown"]) window.addEventListener(ev, soundOn, { passive: true });
     /* ── sound: what the creatures say ─────────────────────────────────────

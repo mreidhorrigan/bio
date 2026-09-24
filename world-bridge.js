@@ -57,7 +57,11 @@
       if (worker && signature === nextSignature) return;
       if (worker) worker.terminate();
       signature = nextSignature; this.ready = false; this.snapshot = null; this.flora = null; inFlight = false; recycle = null;
-      worker = new Worker("world-worker.js", { type: "module", name: "mh-world" });
+      // A browser that will not start the worker (a page opened from a file, say) throws
+      // here. Unguarded, that broke every frame of the world, its sound with it; now the
+      // world falls back to the JS ecology (ecology.js), as for any other worker failure.
+      try { worker = new Worker("world-worker.js", { type: "module", name: "mh-world" }); }
+      catch (e) { worker = null; fail((e && e.message) || "world worker could not start"); return; }
       worker.onmessage = ({ data }) => {
         if (data.type === "ready") { this.ready = true; wasm.state.world = "ready"; }
         else if (data.type === "snapshot") {

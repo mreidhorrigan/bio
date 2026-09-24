@@ -109,6 +109,7 @@ let kiosksOut = false;                  // are ALL kiosks currently off-screen? 
 let reduce = false;                     // prefers-reduced-motion: themes gate flicker/glitch on this
 const REGISTRY = new Map();             // id -> raw theme, for the live skin-switcher
 let lastPlayerShareAt = 0;              // throttle URL updates while the slime is moving
+let strideWas = 0;                      // which crest of the walking beat was last passed (one step per stride)
 let playerWasMoving = false;
 let started = false, switcherEl = null;
 // build mode (AoE2 / Frostpunk-ish): rearrange the buildings, add decorative ones
@@ -539,6 +540,7 @@ function byId(id) { const el = document.getElementById(id); if (!el) throw new E
 
 const audio = {
   /** @type {AudioContext|null} */ ctx: null, /** @type {GainNode|null} */ master: null, muted: false,
+  /** @type {BiquadFilterNode|null} */ soft: null,              // a low-pass into the master, for the step's rounded squelch
   musebotsActive: false,
   ensure(sharedContext) {
     if (sharedContext && this.ctx !== sharedContext) {
@@ -550,13 +552,17 @@ const audio = {
     if (!this.ctx && !AC) return;
     this.ctx ||= new AC(); this.master = this.ctx.createGain();
     this.master.gain.value = this.muted ? 0 : (this.musebotsActive ? 0.9 : 0.5); this.master.connect(this.ctx.destination);
+    this.soft = null;
+    if (this.ctx.createBiquadFilter) {                        // (a context without filters: the step goes to the master)
+      this.soft = this.ctx.createBiquadFilter(); this.soft.type = "lowpass"; this.soft.frequency.value = 900; this.soft.Q.value = 0.5; this.soft.connect(this.master);
+    }
   },
   resume() {
     if (this.ctx && this.ctx.state !== "running" && this.ctx.state !== "closed")
       this.ctx.resume().catch(() => {});
   },
   setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : (this.musebotsActive ? 0.9 : 0.5), this.ctx.currentTime, 0.02); },
-  /** @param {number} f @param {{delay?:number,dur?:number,gain?:number,type?:OscillatorType}} [o] */
+  /** @param {number} f @param {{delay?:number,dur?:number,gain?:number,type?:OscillatorType,soft?:boolean}} [o] */
   tone(f, o) {
     if (!this.ctx || !this.master || this.muted) return;
     const t = this.ctx.currentTime + (o?.delay ?? 0), dur = o?.dur ?? 0.15,
@@ -564,11 +570,11 @@ const audio = {
       // masters. This is a small cue-only compensation, not musical ducking.
       peak = Math.min(0.32, (o?.gain ?? 0.2) * (this.musebotsActive ? 1.65 : 1));
     const osc = this.ctx.createOscillator(), g = this.ctx.createGain();
-    osc.type = "sine"; osc.frequency.value = f;                  // brief, gentle sine cues in every world
+    osc.type = o?.type || "sine"; osc.frequency.value = f;      // brief, gentle sine cues in every world (the step: a triangle)
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(peak, t + 0.014);        // a soft attack (no click)
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g); g.connect(this.master); osc.start(t); osc.stop(t + dur + 0.03);
+    osc.connect(g); g.connect(o?.soft && this.soft ? this.soft : this.master); osc.start(t); osc.stop(t + dur + 0.03);
   },
 };
 /** @param {number} degree */
@@ -583,7 +589,12 @@ const sfx = {
   close() { audio.tone(noteFreq(1), { gain: 0.07, dur: 0.11 }); audio.tone(noteFreq(0), { delay: 0.07, gain: 0.055, dur: 0.12 }); },
   nav() { audio.tone(noteFreq(2), { gain: 0.045, dur: 0.05 }); },
   pick() { audio.tone(noteFreq(4), { gain: 0.085, dur: 0.09 }); },
-  step() { audio.tone(noteFreq(0), { gain: 0.02, dur: 0.05 }); },
+  // The step, the same sound at the same level as the 3D village's (verse3d.js stepSound;
+  // 0.035 through this 0.5 master is its 0.022 through 0.8), so switching views does not
+  // lose it: a triangle blip four times over, 1/60 s apart, smeared into one wet squelch
+  // and rounded by the low-pass. (It was a pure sine at 262 Hz, which laptop speakers all
+  // but drop: after the 3D step it seemed not to sound at all.) Once per stride (update).
+  step() { for (let i = 0; i < 4; i++) audio.tone(noteFreq(0), { gain: 0.035, dur: 0.06, delay: i / 60, type: "triangle", soft: true }); },
 };
 
 /* ----------------------------------------------------------------------------
@@ -800,6 +811,8 @@ function wireInput() {
   buildbarEl.addEventListener("click", onBuildTool);
   canvas.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
+  // any click or tap's end is a gesture a browser lets start sound (iOS Safari wants one of these)
+  for (const ev of ["click", "touchend"]) window.addEventListener(ev, () => { audio.ensure(); audio.resume(); }, { passive: true });
   window.addEventListener("mh-musebots-ready", () => {
     if (!window.MH_MUSEBOTS) return;
     window.MH_MUSEBOTS.restore(BUILDINGS);
@@ -886,6 +899,7 @@ function onPointer(e) {
 /** Canvas pointer-UP: open a tapped kiosk HERE. iOS Safari & Firefox only honour window.open from a
  *  pointerup/click/touchend gesture, not pointerdown, so another site's new tab must open on release. */
 function onCanvasPointerUp(e) {
+  audio.ensure(); audio.resume();                   // iOS Safari starts audio on a tap's release, not its touch-down
   if (buildMode || mode !== "walking") { tapDown = null; return; }
   const td = tapDown; tapDown = null;
   if (!td || td.ki < 0) return;
@@ -1089,7 +1103,11 @@ function update(dt) {
     }
     player.x = nx; player.y = ny;
     if (performance.now() - lastPlayerShareAt > 500) reflectPlayerInURL();
-    if (player.moving && Math.sin(tnow * 12) > 0.93) sfx.step();
+    // one step at each crest of the walking beat (sin(tnow * 12)), about twice a second: counted
+    // by the beat's phase, so a slow frame that jumps over the crest still takes its step
+    const stride = Math.floor((tnow * 12 - Math.PI / 2) / (2 * Math.PI));
+    if (player.moving && stride !== strideWas) sfx.step();
+    strideWas = stride;
   }
 
   // nearest kiosk in range (using nearest images)
@@ -1559,6 +1577,7 @@ function updateHUD() {
    10. CARD MODAL  — themed content card (trusted inline HTML from content.js)
    -------------------------------------------------------------------------- */
 
+let leaving = false;                    // a page of the site is about to open in this tab
 /** Is this a page of the site itself (a relative link, or this origin)? @param {string} url */
 function sameSite(url) { try { return new URL(url, location.href).origin === location.origin; } catch (e) { return false; } }
 /** Open a page the house opens: About, the CV, the Toolbox, the Music/Games menus, the
@@ -1567,7 +1586,8 @@ function sameSite(url) { try { return new URL(url, location.href).origin === loc
  *  is shown in an in-world iframe. @param {string} url */
 function openPage(url) {
   if (window.MH_I18N) url = window.MH_I18N.href(url);   // French mode opens the French page
-  if (sameSite(url)) { reflectPlayerInURL(); location.href = url; return; }
+  // (after a quarter second, so the house's opening chime is heard: going at once cut it off)
+  if (sameSite(url)) { reflectPlayerInURL(); if (!leaving) { leaving = true; setTimeout(() => { location.href = url; leaving = false; }, 260); } return; }
   // a plain new TAB: no features string (a features string makes Safari treat it as a blockable
   // popup window). Must be called SYNCHRONOUSLY from a user gesture or iPad/iPhone will block it.
   try { const w = window.open(url, "_blank"); if (w) { try { w.opener = null; } catch (e) { /* _blank is noopener by default on modern browsers */ } } }

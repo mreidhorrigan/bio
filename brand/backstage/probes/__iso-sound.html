@@ -1,0 +1,59 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The iso world's sounds: the step, the opening chime</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/index.html?theme=technurture" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The iso world starts its audio on the visitor's first key or tap, plays the
+// step while the slime walks, and a chime when a house opens. The probe counts
+// every tone the page makes (its wave, pitch, and the loudest its gain goes)
+// while it walks with the arrow keys, then opens the Toolbox from the building
+// menu (a page of the site, which replaces the world a moment later). The step
+// was once a sine at a hundredth of full volume, which could not be heard, and
+// a page opening at once cut the chime off; both show here. (Chrome runs muted:
+// the audio is made, not heard; headless may hold the context suspended, which a
+// real key does not.)
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+let stage = 0, tones = [];
+F.addEventListener("load", () => setTimeout(async () => {
+  if (stage++) { report(); return; }
+  try {
+    const w = F.contentWindow, d = w.document, AC = w.AudioContext;
+    const make = AC.prototype.createOscillator, gainOf = AC.prototype.createGain;
+    AC.prototype.createOscillator = function () {
+      const o = make.call(this), rec = { type: "", f: 0, peak: 0, at: performance.now() }; tones.push(rec);
+      const start = o.start, connect = o.connect;
+      o.start = function (...a) { rec.type = o.type; rec.f = o.frequency.value; return start.apply(this, a); };
+      o.connect = function (g, ...a) { if (g && g.gain) rec.g = g; return connect.call(this, g, ...a); };
+      return o;
+    };
+    AC.prototype.createGain = function () {
+      const g = gainOf.call(this), ramp = g.gain.exponentialRampToValueAtTime.bind(g.gain);
+      g.gain.exponentialRampToValueAtTime = (v, t) => { g.__peak = Math.max(g.__peak || 0, v); return ramp(v, t); };
+      return g;
+    };
+    const key = (type, k) => d.dispatchEvent(new w.KeyboardEvent(type, { key: k, bubbles: true, cancelable: true }));
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    key("keydown", "ArrowUp"); await wait(3000); key("keyup", "ArrowUp");
+    const ctx = w.MH_ISO.sharedAudioContext && w.MH_ISO.sharedAudioContext();
+    say("audio: a context, " + (ctx ? ctx.state : "MISSING") + (ctx && ctx.state !== "running" ? " (headless holds it; a real key starts it)" : ""));
+    // the step is the triangle squelch; a sine is another cue (a kiosk coming near)
+    const made = tones.filter((t) => t.f > 0), steps = made.filter((t) => t.type === "triangle"), other = made.length - steps.length;
+    const peak = Math.max(0, ...steps.map((t) => (t.g && t.g.__peak) || 0));
+    say("walking three seconds: " + steps.length + " step blips (" + (steps.length / 4).toFixed(1) + " strides of four), each up to " + peak.toFixed(3) + " before the master; " + other + " other cues"
+      + (steps.length >= 16 ? "" : " NO (too few steps)") + (peak >= 0.03 ? "" : " NO (too quiet to hear)"));
+    // the Toolbox, from the building menu: the chime must start before the page replaces the world
+    window.__before = tones.length; window.__clickAt = performance.now();
+    const chip = [...d.querySelectorAll(".mh-navchip")].find((b) => /Toolbox/.test(b.textContent));
+    if (!chip) { say("the Toolbox chip: MISSING"); document.title = "done"; return; }
+    chip.click();
+    setTimeout(() => { if (stage === 1) { say("opening the Toolbox: the world stayed NO"); document.title = "done"; } }, 6000);
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 2500));
+function report() {
+  const chime = tones.slice(window.__before).filter((t) => t.f > 0);
+  say("opening the Toolbox: " + chime.length + " chime tones before the page changed" + (chime.length >= 2 ? "" : " NO (cut off)") + ", then " + F.contentWindow.location.pathname.split("/").pop());
+  say("errors: none");
+  document.title = "done";
+}
+</script>
