@@ -1435,9 +1435,14 @@
       const cam = S.camera || {};
       if (me.goal) camLook = wrap(viewYaw - me.yaw) + C.look;
       else camLook += (C.look - camLook) * Math.min(1, dt * (reduce ? 60 : 1.2));
-      boom = E.follow(me, { dist: C.dist, height: cam.height ? cam.height(C.dist, me.x, me.z) : Math.min(C.dist * 0.3, 18), aim: 3.4,
+      // The visitor's zoom (C.pref). Farther asks for a longer boom, which walls may cut
+      // short; nearer is a share of the boom the camera can have, so it comes nearer
+      // even in the house, where the walls hold the camera close already (asking there
+      // for a distance under what they allowed changed nothing).
+      const base = C.pref < 1 ? ((S.camera && S.camera.dist) || 58) : C.dist, near = Math.min(1, C.pref);
+      boom = E.follow(me, { dist: base, near, nearMin: me.R * 1.8, height: cam.height ? cam.height(base, me.x, me.z) : Math.min(base * 0.3, 18), aim: 3.4,
         // dropping in, the camera keeps its place in the cave and tilts up the fall to the slime
-        look: camLook, tilt: C.tilt + Math.atan2(me.air, C.dist), inside: camOpen, hard: (x, y, z) => S.open(x, y, z), ease: snap ? 1e6 : reduce ? 60 : 5, step: 2, minDist: 6 });
+        look: camLook, tilt: C.tilt + Math.atan2(me.air, base * near), inside: camOpen, hard: (x, y, z) => S.open(x, y, z), ease: snap ? 1e6 : reduce ? 60 : 5, step: 2, minDist: 6 });
       snap = false;
     }
 
@@ -1500,7 +1505,11 @@
       if (typeof entry === "object" && entry) { S.bound(me); collide(me); }   // a spot carried from elsewhere: kept inside this place
       me.y = S.floorAt(me.x, me.z);
       C.look = 0; C.tilt = 0;
-      C.dist = clamp((S.camera && S.camera.dist || 58) * C.pref, C.min, C.max);   // the place's own distance, times the visitor's zoom
+      // the zoom's range is a share of each place's own distance (a quarter to 2.6 times it):
+      // fixed at 14 to 150 units, the house (whose own distance is about 14) had no nearer
+      const own = (S.camera && S.camera.dist) || 58;
+      C.min = own * 0.25; C.max = own * 2.6; C.pref = clamp(C.pref, 0.25, 2.6);
+      C.dist = clamp(own * C.pref, C.min, C.max);                // the place's own distance, times the visitor's zoom
       E.focus = S.focus || null;                               // depth of field, where the place asks for it
       // The fog reaches the air's full colour a little short of where the scene
       // stops drawing, measured as distance from the camera (not view depth, which

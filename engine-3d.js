@@ -766,7 +766,8 @@
     E.size();
 
     /* ── the camera behind a body ─────────────────────────────────────── */
-    /** Ride behind `target` ({x, y, z, yaw}). o: dist, height, aim (height of
+    /** Ride behind `target` ({x, y, z, yaw}). o: dist, near (a share of the boom, for
+     *  the visitor's zoom in; see below), height, aim (height of
      *  the point looked at, above target.y), look and tilt (the visitor's own
      *  turn and nod, radians), inside(x, y, z) → is this open air, ease (per
      *  second), step (units between boom samples). Returns the boom length. */
@@ -793,6 +794,10 @@
       const sHard = o.hard ? longest(o.hard) : o.inside ? longest(o.inside) : dist;
       let s = sHard;
       if (o.hard && o.inside) while (s > 1.5 && !o.inside(ax + bx * s, ay + h * (s / dist), az + bz * s)) s -= 1;
+      // o.near (below 1): the visitor's "nearer", as a share of the boom the camera can
+      // have. Where walls already hold it close (a small room), asking for a shorter
+      // distance than they allow changed nothing; this brings it nearer from there.
+      if (o.near != null && o.near < 1) s = Math.max(Math.min(o.nearMin || 1.5, s), s * o.near);   // (never nearer than o.nearMin)
       // The boom's length eases too: in fast when something comes between the
       // camera and the body, back out slowly when it has passed. Set at once, a
       // house corner sliding across the boom made the view jump.

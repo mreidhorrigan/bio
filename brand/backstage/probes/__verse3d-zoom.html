@@ -1,0 +1,46 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D: coming nearer and going farther, every way the slime says</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=village" style="width:1000px;height:720px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The slime's tip says "I can come nearer: scroll, or + and −." The probe tries
+// each way (the + and − keys, the + and − buttons, the scroll wheel) and measures
+// the camera's distance from the slime after the view has settled: nearer must be
+// nearer, and farther farther. Cmd or Ctrl with + stays the browser's own zoom.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, d = w.document, W = w.MH_SLIMEVERSE3D, E = W.engine, me = W.me, cv = d.getElementById("stage");
+    W.pause(); W.setMuted(true); W.say("", 0);
+    const settle = () => { for (let i = 0; i < 120; i++) W.step(1 / 60); return Math.hypot(E.cam.x - me.x, E.cam.y - me.y, E.cam.z - me.z); };
+    const key = (k, mods) => d.dispatchEvent(new w.KeyboardEvent("keydown", Object.assign({ key: k, bubbles: true, cancelable: true }, mods || {})));
+    const ways = [
+      ["the + key", () => key("+"), "nearer"], ["the − key", () => key("-"), "farther"],
+      ["the = key (+ unshifted)", () => key("="), "nearer"], ["the + button", () => d.getElementById("zoom-in").click(), "nearer"],
+      ["the − button", () => d.getElementById("zoom-out").click(), "farther"],
+      ["scrolling up", () => cv.dispatchEvent(new w.WheelEvent("wheel", { deltaY: -100, bubbles: true, cancelable: true })), "nearer"],
+      ["scrolling down", () => cv.dispatchEvent(new w.WheelEvent("wheel", { deltaY: 100, bubbles: true, cancelable: true })), "farther"],
+      ["Ctrl with +", () => key("+", { ctrlKey: true }), "the same"],
+    ];
+    for (const [name, act, want] of ways) {
+      const before = settle(); act(); const after = settle();
+      const got = after < before - 0.5 ? "nearer" : after > before + 0.5 ? "farther" : "the same";
+      say(name + ": the camera " + before.toFixed(1) + " → " + after.toFixed(1) + " units from the slime, " + got + (got === want ? "" : " NO (wanted " + want + ")"));
+    }
+    // indoors, in the middle of the room facing the door (the room behind the camera):
+    // the walls hold the camera in already, so a press must bring it nearer from where
+    // it is, not only shorten a boom it cannot use. (At the door the walls leave no room
+    // at all: there the slime does not offer to come nearer; its tip waits for outdoors.)
+    W.load("indoors", "door"); for (let i = 0; i < 10; i++) W.step(1 / 60);
+    { const S = W.S(), dr = S.portals.find((q) => q.to === "outdoors"); me.x = 0; me.z = 0; me.yaw = Math.atan2(dr.x, dr.z); W.controls.zoom(1 / W.controls.pref); }
+    for (const [name, act] of [["indoors, the + key", () => key("+")], ["indoors, the + button", () => d.getElementById("zoom-in").click()], ["indoors, scrolling up", () => cv.dispatchEvent(new w.WheelEvent("wheel", { deltaY: -100, bubbles: true, cancelable: true }))]]) {
+      const before = settle(); act(); const after = settle();
+      const fi = E.followInfo || {};
+      say(name + ": the camera " + before.toFixed(1) + " → " + after.toFixed(1) + " units from the slime (asked " + W.controls.dist.toFixed(1) + ", zoom " + W.controls.pref.toFixed(2) + "; boom " + (fi.boom || 0).toFixed(1) + ", clear " + (fi.s || 0).toFixed(1) + ", rock " + (fi.sHard || 0).toFixed(1) + (fi.snapped ? ", snapped" : "") + ")" + (after < before - 0.5 ? ", nearer" : ", no nearer NO"));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

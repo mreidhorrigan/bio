@@ -217,7 +217,7 @@
     menuBtn.addEventListener("click", () => showMenu(navbar.hidden));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !navbar.hidden) showMenu(false); });
   }
-  /* ── the zoom: + and −, as well as the wheel and a pinch ─────────────── */
+  /* ── the zoom: + and − (buttons and keys), as well as the wheel and a pinch ── */
   // A phone starts a little farther back: its screen is narrow, and the slime filled it.
   const ZOOM = "mh-3d-zoom";                                   // the visitor's zoom, as a factor on each place's own distance
   let saved = NaN;
@@ -228,6 +228,14 @@
     const b = document.getElementById(id);
     if (b) b.addEventListener("click", () => { W.controls.zoom(f); keep(); cv.focus({ preventScroll: true }); });
   }
+  // and the keys + and − (= and -, their unshifted keys, and the number pad's), as the
+  // slime's tip says; with Cmd or Ctrl they stay the browser's own zoom of the page
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.target instanceof HTMLInputElement) return;
+    const f = e.key === "+" || e.key === "=" ? 1 / 1.25 : e.key === "-" || e.key === "_" || e.key === "\u2212" ? 1.25 : 0;
+    if (!f) return;
+    e.preventDefault(); W.controls.zoom(f); keep();
+  });
   cv.addEventListener("wheel", () => setTimeout(keep, 0), { passive: true });
   cv.addEventListener("pointerup", () => setTimeout(keep, 0));
   // M mutes and unmutes, as in the iso village
@@ -272,16 +280,21 @@
     if (C.look || C.tilt || C.turn) used.turn = true;
     if (Math.abs(C.pref - zoom0) > 1e-6) used.zoom = true;
   }, 200);
-  let tip = 0;
+  // A tip waits for a place where it holds: in the house the walls keep the camera as
+  // near as it can come, so "I can come nearer" is told outdoors or in the cave.
+  const holds = { zoom: () => !W.scene().startsWith("indoors") };
+  const told = new Set();
   function nextTip() {
-    while (tip < TIPS.length && used[TIPS[tip][0]]) tip++;
-    if (tip >= TIPS.length) { clearInterval(watch); return; }
-    const [, key, en] = TIPS[tip++];
-    W.say(t(key, en), 3.4);
+    const left = TIPS.filter(([what]) => !used[what] && !told.has(what));
+    if (!left.length) { clearInterval(watch); return; }
+    const ready = left.find(([what]) => !holds[what] || holds[what]());
+    if (!ready) { setTimeout(nextTip, 2000); return; }           // only a tip that waits for elsewhere is left
+    told.add(ready[0]);
+    W.say(t(ready[1], ready[2]), 3.4);
     setTimeout(nextTip, 4100);
   }
   // once a visit, as in the iso world, so switching views does not repeat them
-  let told = false;
-  try { told = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-3d")); if (!told) sessionStorage.setItem("mh-tips-3d", "1"); } catch (e) { /* private: tell them anyway */ }
-  if (!told) setTimeout(nextTip, 1600); else clearInterval(watch);
+  let before = false;
+  try { before = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-3d")); if (!before) sessionStorage.setItem("mh-tips-3d", "1"); } catch (e) { /* private: tell them anyway */ }
+  if (!before) setTimeout(nextTip, 1600); else clearInterval(watch);
 })();
