@@ -1,0 +1,58 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D gloomthmaxx: the neon signs' glow has a soft edge</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=gloomthmaxx&place=village" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The neon marquee's bloom fades to nothing at its edge. It was a round gradient
+// cut off by a flat ellipse, which left a hard rim above and below the board (the
+// user saw it). The probe stands before a few houses at night, paints a frame, and
+// reads a column of pixels above each sign's board (toward its end, clear of the
+// balloon and its threads), up through the bloom into the dark: the bloom must be
+// there (brighter near the board), and no step from one pixel to the next may be
+// sharp. #debug prints the column.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine, me = W.me;
+    W.pause(); W.setMuted(true);
+    const O = W.S(), cv = E.g.canvas, k = cv.width / cv.clientWidth, g = E.g;
+    const lum = (d, i) => 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    let checked = 0;
+    for (let i = 0; i < O.houses.length && checked < 3; i++) {
+      const en = O.entries["house" + i], sg = O.signs[i];
+      if (!en || !sg) continue;
+      // back from the door, facing the house, so its sign stands in the upper middle of the frame
+      W.load(W.scene().split("@")[0], { x: en.x + Math.sin(en.yaw) * 30, z: en.z + Math.cos(en.yaw) * 30, yaw: en.yaw + Math.PI });
+      W.controls.tilt = 0.45;                                   // look up: the sign floats well over the roof
+      for (let j = 0; j < 60; j++) W.step(1 / 60);
+      W.tick(0.016);
+      const P = O.period, sx0 = sg.x + P * Math.round((me.x - sg.x) / P), sz0 = sg.z + P * Math.round((me.z - sg.z) / P);
+      const p = E.project([sx0, sg.y, sz0]);
+      if (!p || p[0] < 40 || p[0] > E.W - 40 || p[1] < 60 || p[1] > E.H - 20) { say("  (" + sg.text + ": " + (p ? "at " + p[0].toFixed(0) + "," + p[1].toFixed(0) : "behind the camera") + ", out of the frame)"); continue; }
+      const px = Math.max(4, Math.min(90, sg.font * E.fov / p[2])), bh = px * 2.1;
+      if (px < 9) continue;                                     // too far to judge
+      // the board's width as the painter works it out (the marquee font, measured), and a column
+      // at 0.42 of it from the middle: clear of the balloon (small, over the middle) and its
+      // threads (which leave the board at 0.26), and inside the glow, whose rim ran above it
+      const label = sg.text.toUpperCase(), c2 = document.createElement("canvas").getContext("2d");
+      c2.font = "800 " + px.toFixed(1) + "px 'Arial Narrow','Helvetica Neue',Impact,sans-serif";
+      let tw = 0; for (const ch of label) tw += c2.measureText(ch).width + px * 0.12;
+      const bw = Math.max(px * 3.6, tw + px * 1.8);
+      const top = p[1] - bh / 2 - 3, span = Math.min(top - 2, bh * 1.9);
+      const x = Math.round((p[0] + bw * 0.42) * k), y1 = Math.round(top * k), y0 = Math.round((top - span) * k);
+      const col = g.getImageData(x, y0, 1, y1 - y0).data, L = [];
+      for (let j = 0; j < col.length; j += 4) L.push(lum(col, j));
+      let jump = 0, jat = 0; for (let j = 1; j < L.length; j++) { const dj = Math.abs(L[j] - L[j - 1]); if (dj > jump) { jump = dj; jat = j; } }
+      if (location.hash === "#debug") say("  column (dark end first, " + (L.length / k).toFixed(0) + " px; the step at " + (jat / k).toFixed(0) + " px): " + L.filter((_, j) => j % Math.max(1, Math.round(k * 3)) === 0).map((v) => v.toFixed(0)).join(" "));
+      const near = L.slice(-4).reduce((a, b) => a + b, 0) / 4, far = L.slice(0, 4).reduce((a, b) => a + b, 0) / 4;
+      checked++;
+      say(sg.text + ": letters " + px.toFixed(0) + " px; above the board the glow goes from " + near.toFixed(0) + " to " + far.toFixed(0) + " in the dark, its sharpest step " + jump.toFixed(1)
+        + (near > far + 4 ? "" : " (no glow) NO") + (jump < 7 ? "" : " (a hard edge) NO"));
+    }
+    if (!checked) say("a sign in view to read: none MISSING");
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

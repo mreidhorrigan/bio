@@ -1036,9 +1036,18 @@
       const from = S.fogFrom || 90, fade = 1 - M.smooth(((e.depth || 0) - from) / (S.seen * 0.94 - from));
       g.globalAlpha = fade;
       vacuole(g, s, sx, y0, bw, bh, "night");
-      const bloom = g.createRadialGradient(sx, sy, bh * 0.4, sx, sy, bw * 0.75);   // the board-shaped bloom, as a gradient
-      bloom.addColorStop(0, rgba(neon, 0.28 + 0.3 * buzz)); bloom.addColorStop(1, rgba(neon, 0));
-      g.fillStyle = bloom; g.beginPath(); g.ellipse(sx, sy, bw * 0.75, bh * 1.3, 0, 0, TAU); g.fill();
+      // The bloom: a glow the board's shape that fades to nothing at its own edge. It
+      // was a round gradient as wide as the board filling a flat ellipse, which cut the
+      // gradient off, still bright, along its top and bottom: a hard rim (the user saw it).
+      // Squashed to the ellipse, the gradient reaches zero exactly where the fill ends,
+      // easing out through its outer half.
+      const rx = bw * 0.75, ry = bh * 1.5, a = 0.28 + 0.3 * buzz;
+      g.save(); g.translate(sx, sy); g.scale(1, ry / rx);
+      const bloom = g.createRadialGradient(0, 0, 0, 0, 0, rx);
+      bloom.addColorStop(0, rgba(neon, a)); bloom.addColorStop(0.35, rgba(neon, a * 0.78));
+      bloom.addColorStop(0.68, rgba(neon, a * 0.28)); bloom.addColorStop(1, rgba(neon, 0));
+      g.fillStyle = bloom; g.beginPath(); g.arc(0, 0, rx, 0, TAU); g.fill();
+      g.restore();
       const bg = g.createLinearGradient(0, y0, 0, y0 + bh);                         // the rusted backing board
       bg.addColorStop(0, "#231b12"); bg.addColorStop(0.55, "#15100a"); bg.addColorStop(1, "#0b0805");
       g.fillStyle = bg; M.leafPath(g, x0, y0, bw, bh); g.fill();

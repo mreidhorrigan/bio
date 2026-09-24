@@ -94,6 +94,12 @@ rules:
   alpha 0.2 to 0.34). The light comes from the top left in every world.
 - Glows are radial-gradient halos (`halo(colour, reach)`, `glowAt`), **never a
   canvas blur or filter**: those cost too much on a software canvas.
+- **A glow fades to nothing exactly at the edge of what it fills.** Shape the
+  gradient to the fill: for an elliptical glow, scale the context so a round
+  gradient becomes the ellipse, and end it at alpha 0 on the rim, easing out
+  through its outer half. A round gradient filling a flat ellipse is cut off
+  while still bright and leaves a hard rim. The gloomthmaxx neon signs had one
+  until 2026-09-23 (`probes/__verse3d-neon.html` checks it).
 - At night, a light source is `lit: true`, so the dark does not swallow it.
 - Fur and lumps come from `o.rough` (`{ tufts, depth, seed, round }`): the
   zoogs are furred, the shoggoths lumpy. Do not draw fuzz by hand.
