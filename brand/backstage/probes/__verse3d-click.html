@@ -1,0 +1,64 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D: a click ahead walks the slime, in every place</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=village" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// A click on the ground ahead of the slime sends it there, outdoors as in the
+// cave and the house, and a click high in the frame (the far distance, the
+// sky, a roof) sends it far that way. The probe clicks at a few heights above
+// the slime on screen, steps the world without painting (W.step), and reports
+// how far the slime went, how long it took, how fast, and where it stopped
+// against where it was sent. It also checks that the village walks at the iso
+// world's pace (theme-*.js speed, in tiles a second, times the tile).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(async () => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, V = w.MH_VERSE3D, E = W.engine, me = W.me;
+    W.pause(); W.setMuted(true);
+    for (const id of ["technurture", "technoscure", "technocute"]) {
+      const src = await (await fetch("/theme-" + id + ".js")).text(), m = /\bspeed:\s*([\d.]+)/.exec(src);
+      const iso = m ? Number(m[1]) : NaN, mine = V.SKINS[id].speed;
+      say(id + ": the iso walk is " + iso + " tiles a second, the 3D village's " + mine + (iso === mine ? "" : " NO"));
+    }
+    const places = [["outdoors", "start"], ["outdoors", "home"], ["outdoors", "well"], ["cave", "start"], ["indoors", "door"]];
+    for (const [place, entry] of places) {
+      for (const up of [60, 120, 200]) {
+        W.load(place, entry);
+        for (let i = 0; i < 90; i++) W.step(1 / 60);
+        const p = E.project([me.x, me.y + me.R * 2, me.z]);
+        if (!p) { say(place + "/" + entry + ": the slime is off screen NO"); continue; }
+        const sx = p[0], sy = p[1] - up;
+        const x0 = me.x, z0 = me.z, clicked = W.clickAt(sx, sy);
+        W.controls.onTap(sx, sy);
+        const goal = me.goal ? { x: me.goal.x, z: me.goal.z } : null;
+        // a click that meets a house's door opens it, as it should: no walk, and not a failure
+        if (!goal) { say(place + "/" + entry + ", " + up + " px above: no walk (" + (clicked ? "the click met the door of " + (clicked.item ? clicked.item.title : "?") + ", which opens it" : "no ground NO") + ")"); continue; }
+        const want = Math.hypot(goal.x - x0, goal.z - z0);
+        let t = 0, top = 0;
+        while (me.goal && t < 12) { W.step(1 / 60); t += 1 / 60; top = Math.max(top, Math.abs(me.speed)); }
+        for (let i = 0; i < 60; i++) W.step(1 / 60);          // and let it come to rest
+        const went = Math.hypot(me.x - x0, me.z - z0), miss = Math.hypot(me.x - goal.x, me.z - goal.z);
+        const walk = W.S().walk || 30;
+        say(place + "/" + entry + ", " + up + " px above: sent " + want.toFixed(1) + " units, went " + went.toFixed(1) + " in " + t.toFixed(2) + " s (top speed " + top.toFixed(1) + " of " + walk.toFixed(1) + "), stopped " + miss.toFixed(1) + " from the spot"
+          // (in the house every click meets the far side of the room, 14 units off: it is that small)
+          + (want < 20 && up >= 120 && place !== "indoors" ? " (a click high in the frame only nudged it) NO" : "") + (miss > 6 ? " NO" : ""));
+      }
+    }
+    // from the plaza's start the monument stands straight ahead: a click beyond it goes round it
+    W.load("outdoors", "start"); for (let i = 0; i < 90; i++) W.step(1 / 60);
+    me.goal = { x: 0, z: 30 }; me.goalBest = Infinity; me.stuck = 0;
+    let t = 0; while (me.goal && t < 12) { W.step(1 / 60); t += 1 / 60; }
+    const miss = Math.hypot(me.x, me.z - 30);
+    say("past the monument, to the far side of the plaza: stopped " + miss.toFixed(1) + " from the spot after " + t.toFixed(2) + " s" + (miss > 6 ? " NO" : ""));
+    // the camera at the village's pace: how far it trails behind its usual distance while the slime runs
+    W.load("outdoors", "home"); for (let i = 0; i < 120; i++) W.step(1 / 60);
+    const flat = () => Math.hypot(E.cam.x - me.x, E.cam.z - me.z), rest = flat();
+    me.goal = { x: me.x + Math.sin(me.yaw) * 200, z: me.z + Math.cos(me.yaw) * 200 }; me.goalBest = Infinity; me.stuck = 0;
+    let most = rest; for (let i = 0; i < 150 && me.goal; i++) { W.step(1 / 60); most = Math.max(most, flat()); }
+    say("the camera, at rest " + rest.toFixed(1) + " units behind the slime, trails at most " + most.toFixed(1) + " at a run (" + ((most / rest - 1) * 100).toFixed(0) + "% farther)");
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

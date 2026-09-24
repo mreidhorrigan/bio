@@ -33,7 +33,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # The homepage loads in the calm skin: the night skin renders too slowly on a
 # CPU for headless Chrome, and the switch and its rules are the same in every skin.
 PAGES = ["index.html?theme=technocute", "about.html", "toolbox.html", "research.html", "criticism.html",
-         "glossary.html", "slime3d.html", "slimeverse3d.html", "MCQer.html", "SeatPlanner.html",
+         "glossary.html", "slime3d.html", "slimeverse3d.html", "musebots.html", "MCQer.html", "SeatPlanner.html",
          "ExamTimer.html", "Nameplates.html", "autofac.html", "pitch-shift.html",
          "Horrigan_CV.html"]
 # Identical in both languages on purpose: names, keys, units, symbols.

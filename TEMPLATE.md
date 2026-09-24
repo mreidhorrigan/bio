@@ -55,6 +55,10 @@ You can have more or fewer than five kiosks. Add or delete whole `{ ... }` block
 `home: 0` means the first kiosk is the one the avatar starts facing. Leave it at `0`
 or point it at another kiosk's position in the list.
 
+`view3d` names the page that shows the same village in 3D (`slimeverse3d.html`).
+The map's 3D button opens it where the avatar stands. Delete the line and the
+button goes with it.
+
 ## 2. `classic.html` and your photo
 
 `classic.html` is the plain bio page, and the "About" kiosk opens it. Replace the

@@ -43,7 +43,8 @@
    { name: { x, z, yaw } }, portals [{ x, z, r, to, entry }], signs, life
    { zoogs, shoggoths, dormant, spot(rand), night(x, z), motes }, and camera
    { dist, height(x, z) }, fogFrom (where the fog starts; it is whole at
-   0.94 of seen), and pal().sky for water open to the sky. (The iso lakes'
+   0.94 of seen), walk (the slime's walking speed there, units a second;
+   WALK where it is left out), and pal().sky for water open to the sky. (The iso lakes'
    water photo was tried here and taken out: on a surface seen in depth it
    aliased into seams. The iso map keeps it.) ctx carries the engine, the slime, the hashes, and
    helpers for distance, detail and the water.
@@ -145,7 +146,8 @@
     const backs = {};
     const stats = { eaten: 0 };
     const me = { kind: "slime", x: 0, z: 0, y: 0, yaw: 0, speed: 0, bob: 0, R: UNIT, pool: null, ripple: 0,
-      goal: /** @type {null|{x:number,z:number}} */ (null), goalBest: Infinity, stuck: 0 };
+      goal: /** @type {null|{x:number,z:number}} */ (null), goalBest: Infinity, stuck: 0,
+      air: 0, vy: 0, landT: /** @type {null|number} */ (null) };   // air: its middle's height over the floor while it drops; landT: time since it landed
 
     /* ── an endless world: the torus ─────────────────────────────────────
        A scene that sets `period` (world units) repeats every period in x and
@@ -454,7 +456,7 @@
       for (const s of shogs) {
         if (s.dormant) continue;
         if (Math.hypot(wrapD(s.x - me.x), wrapD(s.z - me.z)) < bodyR(s) + bodyR(me) + 0.4) {
-          if (s.target) say(s, "teke?!", 1.0);
+          if (s.target) say(s, "teke?!", 1.0, "teke?");
           s.target = null; s.rest = Math.max(s.rest, 2); s.think = 2;
         }
       }
@@ -476,10 +478,19 @@
     /* ── the slime ─────────────────────────────────────────────────────── */
     /** The body's surface: a dome whose underside takes the ground's shape,
      *  squashed by the idle breath and drawn out when it hurries. */
+    /** The drop and the landing, as the body's width and height factors: drawn out
+     *  long as it falls, then flattened where it lands and wobbling back to round,
+     *  as the glossary's slime lands (slime-2d.js squash). */
+    function squashNow() {
+      if (me.air > 0) { const f = clamp(-me.vy / 70, 0, 1); return [1 - 0.14 * f, 1 + 0.3 * f]; }
+      if (me.landT == null) return [1, 1];
+      const q = Math.exp(-me.landT * 5) * Math.cos(me.landT * 17);
+      return [1 + 0.32 * q, 1 - 0.4 * q];
+    }
     function bodyPoints() {
-      const R = me.R, sq = reduce ? 0 : Math.sin(E.t * 3.2) * 0.09;
+      const R = me.R, sq = reduce ? 0 : Math.sin(E.t * 3.2) * 0.09, [kx, ky] = squashNow(), lift = me.air;
       const rush = clamp(Math.abs(me.speed) / 34, 0, 1);
-      const rx = R * (1 + sq), ry = R * (1 - sq * 0.7) * (1 + rush * 0.12);
+      const rx = R * (1 + sq) * kx, ry = R * (1 - sq * 0.7) * (1 + rush * 0.12) * ky;
       const out = [], ROWS = 8, COLS = 16;
       for (let i = 0; i <= ROWS; i++) {
         const a = (Math.PI / 2) * (i / ROWS), lean = Math.sin(a) * rush * 0.5;
@@ -488,7 +499,9 @@
           const x = me.x + Math.sin(a) * Math.cos(t) * rx - Math.sin(me.yaw) * lean;
           const z = me.z + Math.sin(a) * Math.sin(t) * rx - Math.cos(me.yaw) * lean;
           const base = S.floorAt(x, z) + 0.05;
-          out.push([x, i === ROWS ? base : Math.max(base, me.y + me.bob + Math.cos(a) * ry), z]);
+          out.push([x, i === ROWS && !lift ? base : Math.max(base, me.y + lift + me.bob + Math.cos(a) * ry), z]);
+          // in the air it is a whole drop: a rounded underside below its middle, flattening on the floor as it arrives
+          if (lift && i < ROWS) out.push([x, Math.max(base, me.y + lift - Math.cos(a) * ry * 0.75), z]);
         }
       }
       return out;
@@ -508,7 +521,8 @@
       // top of the slime, since the reflection is laid over the pool last.)
       const R = me.R, EL = Math.acos(0.6);
       let nx = Math.sin(me.yaw) * Math.sin(EL), ny = Math.cos(EL), nz = Math.cos(me.yaw) * Math.sin(EL);
-      let px = me.x + nx * R * 0.97, py = me.y + me.bob + ny * R * 0.97, pz = me.z + nz * R * 0.97;
+      const [kx, ky] = squashNow();
+      let px = me.x + nx * R * 0.97 * kx, py = me.y + me.air + me.bob + ny * R * 0.97 * ky, pz = me.z + nz * R * 0.97 * kx;
       if (Mi) { py = E.mirrorPoint(Mi, [px, py, pz], base)[1]; ny = -ny; }
       const v = E.view([px, py, pz]);
       if (v[2] <= E.near) return;
@@ -533,7 +547,7 @@
     }
     function buildPlayer() {
       const pts = bodyPoints(), R = me.R;
-      E.organic(M.shapes.disc(me.x, me.z, R * 1.05, 12, (x, z) => S.floorAt(x, z) + 0.08), "rgba(0,0,0,0.22)", null, 0, { layer: 0, stable: true, bias: 9, inkPx: 1e9 });
+      E.organic(M.shapes.disc(me.x, me.z, R * 1.05 * (1 - Math.min(0.5, me.air / 60)), 12, (x, z) => S.floorAt(x, z) + 0.08), "rgba(0,0,0,0.22)", null, 0, { layer: 0, stable: true, bias: 9, inkPx: 1e9 });
       if (me.pool && me.ripple > 0.02) ripples(me.pool, me.x, me.z, R, me.ripple, Math.min(1, me.ripple * 4), S.pal(me.x, me.z).glint);
       E.organic(pts, (g, bb) => {
         const G = S.slime || GEL;                                // each skin's slime (its iso avatarColors)
@@ -594,7 +608,7 @@
         // running from a shoggoth, now and then it cries out
         if (scared > 0.3 && !(z.say && z.say.t > 0) && Math.random() < dt * 0.9) say(z, Math.random() < 0.5 ? "Yikes!" : "Yeep!", 1.1);
         // a pet zoog (indoors, in the cave) greets the slime when it comes close
-        else if (S.life.greet && !(z.say && z.say.t > 0) && Math.hypot(z.x - me.x, z.z - me.z) < 12 && Math.random() < dt * 0.35) say(z, "blooloo!", 1.2);
+        else if (S.life.greet && !(z.say && z.say.t > 0) && Math.hypot(z.x - me.x, z.z - me.z) < 12 && Math.random() < dt * 0.35) say(z, "blooloo!", 1.2, "blooloo");
         // Curious as well as furtive: now and then, when nothing is chasing it, a
         // zoog comes up to the slime, stops a little short, and looks at it for a
         // while before it goes back to grazing. Otherwise the slime is big to a zoog.
@@ -735,7 +749,7 @@
         s.clock += dt;
         if (s.dormant) {                                         // rooted: it stands where it grew, and still mutters now and then
           s.y = S.floorAt(s.x, s.z);
-          if (!(s.say && s.say.t > 0) && Math.random() < dt * 0.05) say(s, "teketeke", 1.3);
+          if (!(s.say && s.say.t > 0) && Math.random() < dt * 0.05) say(s, "teketeke", 1.3, "teke");
           continue;
         }
         for (const a of s.arms) if (a.anchor) { a.anchor.x = img(a.anchor.x, s.x); a.anchor.z = img(a.anchor.z, s.z); a.age += dt; }
@@ -748,7 +762,7 @@
           for (const z of zoogs) { if (!z.alive) continue; const d = Math.hypot(wrapD(z.x - s.x), wrapD(z.z - s.z)); if (d < best) { best = d; s.target = z; } }
           if (s.target && !had) say(s, "lilililililili!", 1.6);   // it has found one, and gives chase
         }
-        if (!(s.say && s.say.t > 0) && Math.random() < dt * 0.06) say(s, "teketeke", 1.3);   // and now and then, to itself
+        if (!(s.say && s.say.t > 0) && Math.random() < dt * 0.06) say(s, "teketeke", 1.3, "teke");   // and now and then, to itself
         let fx = 0, fz = 0, top = 2.6, mode = "wander";
         const t = s.target;
         if (t && t.alive && s.rest <= 0) {
@@ -919,12 +933,12 @@
        A zoog running from a shoggoth cries "Yikes!" or "Yeep!"; a shoggoth
        mutters "teketeke" now and then, and "lilililililili!" when it finds a
        zoog to chase. Each in a speech bubble over the speaker, kept sharp and
-       lit, so it reads at any distance and in the dark. */
-    function say(who, text, secs) { who.say = { text, t: secs, len: secs }; }
+       lit, so it reads at any distance and in the dark. A pet zoog's "blooloo!"
+       and a shoggoth's "teke" are heard as well (voice, with the sounds). */
+    function say(who, text, secs, heardAs) { who.say = { text, t: secs, len: secs }; if (heardAs) voice(who, heardAs); }
     function buildBubbles() {
       for (const b of zoogs.concat(shogs)) {
         if (!b.say || b.say.t <= 0 || (b.kind === "zoog" && !b.alive)) continue;
-        b.say.t -= E.dt;
         if (!ctx.ahead(b.x, b.z, 6)) continue;
         const top = b.kind === "zoog" ? b.y + ZH + 1.6 : b.y + (b.lift || 0) + size("shoggoth").h + 2.2, sy = b.say, lilt = b.kind === "zoog";
         E.billboard([b.x, top, b.z], (g, sx, py, k, e) => {
@@ -1096,13 +1110,24 @@
         sound.master.connect(soft); soft.connect(sound.ctx.destination);
       } catch (e) { sound.ctx = null; }
     }
-    function tone(f, gain, dur, delay, type) {
-      const c = sound.ctx;
-      if (!c || !sound.master || sound.muted || c.state !== "running") return;
-      const t = c.currentTime + (delay || 0), osc = c.createOscillator(), g = c.createGain();
-      osc.type = type || "sine"; osc.frequency.value = f;
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.018); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);   // a soft attack: no click
-      osc.connect(g); g.connect(sound.master); osc.start(t); osc.stop(t + dur + 0.03);
+    const heard = () => { const c = sound.ctx; return c && sound.master && !sound.muted && c.state === "running" ? c : null; };
+    /** One blip into `out`, its pitch sliding from f0 to f1. */
+    function chirp(out, f0, f1, gain, dur, delay, type) {
+      const c = sound.ctx, t = c.currentTime + (delay || 0), osc = c.createOscillator(), g = c.createGain();
+      osc.type = type || "sine"; osc.frequency.setValueAtTime(f0, t);
+      if (f1 !== f0) osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + Math.min(0.018, dur * 0.4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);   // a soft attack: no click
+      osc.connect(g); g.connect(out); osc.start(t); osc.stop(t + dur + 0.03);
+    }
+    function tone(f, gain, dur, delay, type) { if (heard()) chirp(sound.master, f, f, gain, dur, delay, type); }
+    /** The key of the place, or of the skin where the place has none (the cave, shared by every skin). */
+    const rootNow = () => (S.audio && S.audio.root) || ({ technurture: 261.63, technoscure: 196.0, technocute: 277.18 })[skin] || 261.63;
+    /** Landing from a drop: a soft low plop in the key, then the step's squelch. */
+    function landSound() {
+      if (!heard()) return;
+      const f = rootNow();
+      chirp(sound.master, f * 0.5, f * 0.33, 0.06, 0.16, 0, "sine");
+      for (let i = 0; i < 4; i++) tone(f, 0.022, 0.06, 0.03 + i / 60, "triangle");
     }
     /** One step at each crest of the iso world's walking beat (sin(t * 12) past 0.93). */
     function stepSound() {
@@ -1115,12 +1140,42 @@
       // second is four blips smeared into one wet "blorp". Scheduled four at 1/60 s
       // apart here, so it squelches the same whatever the frame rate.
       if (moving && ph && !sound.lastPhase) {
-        const f = (S.audio && S.audio.root) || ({ technurture: 261.63, technoscure: 196.0, technocute: 277.18 })[skin] || 261.63;
+        const f = rootNow();
         for (let i = 0; i < 4; i++) tone(f, 0.022, 0.06, i / 60, "triangle");   // a touch quieter and longer than the site's was: softer
       }
       sound.lastPhase = ph ? 1 : 0;
     }
     for (const ev of ["pointerdown", "keydown"]) window.addEventListener(ev, soundOn, { passive: true });
+    /* ── sound: what the creatures say ─────────────────────────────────────
+       A zoog's "blooloo!" and a shoggoth's "teke" have a voice as brief as the
+       bubble, in the skin's key: the zoog's two rising bubbles high and round,
+       the shoggoth's clucks low, four for its "teketeke" and two for the "teke?!"
+       of one bumped off its hunt, the second rising, asking. Each is quieter
+       the farther the speaker is from the slime, silent past EAR, and panned to
+       the side the camera sees it on. The other cries stay bubbles only. */
+    const EAR = 90;
+    function voice(who, kind) {
+      const dx = wrapD(who.x - me.x), dz = wrapD(who.z - me.z), near = 1 - Math.hypot(dx, dz) / EAR;
+      if (near < 0.05) return;                                   // out of earshot (and no ramp to a silent zero)
+      sound.voices = (sound.voices || 0) + 1;
+      const c = heard();
+      if (!c) return;
+      const f = rootNow();
+      let out = sound.master;
+      if (c.createStereoPanner) { const p = c.createStereoPanner(); p.pan.value = clamp(Math.sin(Math.atan2(dx, dz) - E.cam.yaw) * 0.8, -0.8, 0.8); p.connect(sound.master); out = p; }
+      if (kind === "blooloo") {
+        const a = 0.05 * near * near;
+        chirp(out, f * 2, f * 2.6, a, 0.1, 0, "sine");                  // bloo
+        chirp(out, f * 2.4, f * 3, a * 0.9, 0.13, 0.12, "sine");         // loo
+      } else {
+        const a = 0.045 * near * near, ask = kind === "teke?";
+        for (let i = 0; i < (ask ? 2 : 4); i++) {
+          const hi = f * (i & 1 ? 0.5 : 0.667);                          // te, ke
+          if (ask && i === 1) chirp(out, f * 0.5, f * 0.9, a, 0.11, 0.09, "triangle");
+          else chirp(out, hi, hi * 0.8, a, 0.05, i * 0.09, "triangle");
+        }
+      }
+    }
 
     /* ── the walk, the camera, the portals ─────────────────────────────── */
     const C = E.controls(canvas, { dist: 58, minDist: 14, maxDist: 150, when: opts.keysWhen });
@@ -1131,11 +1186,20 @@
       let hit = null;
       for (let t = 2; t < S.seen * 1.4; t += 1.5) {
         const x = o[0] + d[0] * t, y = o[1] + d[1] * t, z = o[2] + d[2] * t;
-        if (y <= S.floorAt(x, z) || (S.ceilAt && y >= S.ceilAt(x, z)) || !S.walkable(x, z)) { hit = { x, z }; break; }
+        if (y <= S.floorAt(x, z) || !S.walkable(x, z)) { hit = { x, z }; break; }
+        if (S.ceilAt && y >= S.ceilAt(x, z)) break;
       }
       if (!hit) {
-        if (Math.hypot(d[0], d[2]) < 0.2) return null;
-        hit = { x: o[0] + d[0] * 40, z: o[2] + d[2] * 40 };
+        // No ground under the point: the sky, the far distance, a roof. The
+        // click still says which way, so the body goes that way, and far: the
+        // goal lands well beyond the body. (It was 40 units from the camera,
+        // which stands behind the body, so a click high in the frame only
+        // nudged the body forward.)
+        const h = Math.hypot(d[0], d[2]);
+        if (h < 0.2) return null;
+        const ux = d[0] / h, uz = d[2] / h, along = (me.x - o[0]) * ux + (me.z - o[2]) * uz;
+        const reach = Math.max(0, along) + S.seen * 0.75;
+        hit = { x: o[0] + ux * reach, z: o[2] + uz * reach };
       }
       const b = { x: hit.x, z: hit.z, R: me.R };
       S.bound(b); collide(b);
@@ -1192,46 +1256,112 @@
         h.x = b.x; h.z = b.z;
       }
       viewYaw = me.yaw + camLook - C.look;                    // the heading the camera keeps meanwhile
-      me.goal = h; me.goalBest = Infinity; me.stuck = 0;
+      me.goal = h; me.goalBest = Infinity; me.stuck = 0; me.side = 0;
     };
+
+    /** Which way to head for a goal (a unit direction, dist away): straight at
+     *  it where that way is clear, or else the nearest heading either side that
+     *  is, looking as far ahead as the body goes in a moment. Every solid is
+     *  round to the body (houses, the monument, plants, rooted shoggoths), and
+     *  two standing closer together than the body is wide close the gap between
+     *  them, since no heading through it is clear: the walk goes round both,
+     *  where steering past the nearer one alone wedged it between them. A solid
+     *  the goal stands against is not steered round (the walk arrives), and one
+     *  the body is pressed to blocks only the headings into it, so it can slide
+     *  along it. The side it went round last is tried first, so it does not
+     *  waver between two ways round. It never turns more than 105 degrees from
+     *  the goal (turned round, a walk across a furnished room went out of the
+     *  door): where nothing that near is clear it heads straight at the goal,
+     *  and the solids it meets slide it along, as they always did. */
+    const nearby = [], seenSolid = new Set();
+    function clearWay(ux, uz, dist) {
+      const reach = Math.min(dist, me.R * 4 + Math.abs(me.speed) * 0.35);
+      nearby.length = 0; seenSolid.clear();
+      const add = (x, z, r) => {
+        const rx = x - me.x, rz = z - me.z, clear = r + me.R * 0.8 + 0.2;   // the body's own reach round a solid (collide), and a hair more
+        if (Math.hypot(rx, rz) - clear > reach || Math.hypot(ux * dist - rx, uz * dist - rz) < clear + 1) return;
+        nearby.push(rx, rz, clear);
+      };
+      const i0 = Math.floor((me.x - reach) / GRID), i1 = Math.floor((me.x + reach) / GRID), j0 = Math.floor((me.z - reach) / GRID), j1 = Math.floor((me.z + reach) / GRID);
+      for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) for (const q of grid.get(cellKey(i, j)) || EMPTY) {
+        if (!seenSolid.has(q)) { seenSolid.add(q); add(img(q.x, me.x), img(q.z, me.z), q.r); }
+      }
+      if (S.dynSolids) for (const q of S.dynSolids) add(img(q.x, me.x), img(q.z, me.z), q.r);
+      for (const s of shogs) if (s.dormant) add(img(s.x, me.x), img(s.z, me.z), bodyR(s));
+      const blocked = (dx, dz, look) => {
+        for (let k = 0; k < nearby.length; k += 3) {
+          const rx = nearby[k], rz = nearby[k + 1], cl = nearby[k + 2], a = rx * dx + rz * dz;
+          if (a <= 0) continue;                                   // beside or behind: going past it, or away
+          const t = Math.min(a, look), px = rx - dx * t, pz = rz - dz * t;
+          if (px * px + pz * pz < cl * cl) return true;
+        }
+        return false;
+      };
+      const base = Math.atan2(ux, uz), side = me.side || 1;
+      for (const look of [reach, Math.min(reach, me.R * 2.5)]) {   // far first; hemmed in, just the next few steps
+        for (let k = 0; k <= 7; k++) for (const sg of k ? [side, -side] : [1]) {
+          const a = base + sg * k * (Math.PI / 12);             // fifteen degrees a step, to 105 either side
+          if (!blocked(Math.sin(a), Math.cos(a), look)) { if (k) me.side = sg; return a; }
+        }
+      }
+      return base;
+    }
 
     let boom = 0, snap = true, armed = false;
     /** @type {null | {t:number, to:string, entry:string, loaded:boolean}} */
     let fade = null;
+    /* The walk. Each place sets its own speed (S.walk): the village walks at
+       the iso world's pace, its tiles a second times the tile, so a road takes
+       as long to walk in 3D as in the iso view; rooms and the cave, which have
+       no iso twin, take WALK. Shift hurries. A walk to a click turns quickly
+       (the camera holds its heading meanwhile, so the view does not swing),
+       slows while it faces away, eases in to arrive, and steers round a solid
+       that stands across its way instead of stopping against it. */
+    const WALK = 30;
     function step(dt) {
       const k = C.keys;
-      let turn = (k.right ? 1 : 0) - (k.left ? 1 : 0), want = (k.fwd ? 1 : 0) - (k.back ? 1 : 0);
+      let turn = (k.right ? 1 : 0) - (k.left ? 1 : 0), want = (k.fwd ? 1 : 0) - (k.back ? 1 : 0), turnRate = 1.9;
       if (fade) { turn = 0; want = 0; me.goal = null; }
+      if (me.air > 0) {                                        // dropping in (down the hatch or the well): no walking until it lands
+        me.vy -= 120 * dt; me.air = Math.max(0, me.air + me.vy * dt);
+        turn = 0; want = 0; me.goal = null; C.turn = 0;
+        if (!me.air) { me.vy = 0; me.landT = 0; landSound(); }
+      } else if (me.landT != null && (me.landT += dt) > 1.2) me.landT = null;
       if (turn || want) me.goal = null;
+      const top = (S.walk || WALK) * (k.fast ? 1.6 : 1);
       if (me.goal) {
         const dx = me.goal.x - me.x, dz = me.goal.z - me.z, dist = Math.hypot(dx, dz);
-        if (dist < me.goalBest - 0.08) { me.goalBest = dist; me.stuck = 0; } else me.stuck += dt;
+        if (dist < me.goalBest - dt * 2) { me.goalBest = dist; me.stuck = 0; } else me.stuck += dt;   // progress, whatever the frame rate
         if (dist < 2.2 || me.stuck > 1.2) me.goal = null;
         else {
-          let dy = Math.atan2(dx, dz) - me.yaw;
-          while (dy > Math.PI) dy -= TAU;
-          while (dy < -Math.PI) dy += TAU;
-          turn = clamp(dy * 3, -1, 1); want = Math.abs(dy) < 1.2 ? 1 : 0;
+          const dy = wrap(clearWay(dx / dist, dz / dist, dist) - me.yaw), ahead = Math.max(0, Math.cos(dy));
+          turn = clamp(dy * 3, -1, 1); turnRate = 5;
+          want = ahead * ahead * Math.min(1, dist / (top / 3));
         }
       }
-      me.yaw += turn * dt * 1.9;
+      me.yaw += turn * dt * turnRate;
       if (C.turn) { me.yaw += C.turn; C.turn = 0; me.goal = null; }   // a finger turning the body (engine-3d controls): it stops a walk to a tap
-      const top = k.fast ? 34 : 17;
       me.speed += (want * top - me.speed) * Math.min(1, dt * 6);
       me.pool = poolAt(me.x, me.z);
       if (Math.abs(me.speed) > 0.01) {
         const wet = me.pool ? 0.55 : 1;
-        if (me.pool && Math.abs(me.speed) > 3) disturb(me.pool, me.x, me.z, me.speed * 0.05);
+        if (me.pool && Math.abs(me.speed) > 3) disturb(me.pool, me.x, me.z, clamp(me.speed, -22, 22) * 0.05);   // a faster wade stirs no more than a hurried one did
         if (me.pool) me.ripple = (me.ripple + dt * 0.9) % 1;
-        me.x += Math.sin(me.yaw) * me.speed * dt * wet;
-        me.z += Math.cos(me.yaw) * me.speed * dt * wet;
-        collide(me);
-        S.bound(me);
+        // in steps of at most 1.5 units, so a fast walk on a slow frame cannot pass through a thin solid
+        const run = me.speed * dt * wet, n = Math.max(1, Math.ceil(Math.abs(run) / 1.5));
+        for (let i = 0; i < n; i++) {
+          me.x += Math.sin(me.yaw) * run / n;
+          me.z += Math.cos(me.yaw) * run / n;
+          collide(me);
+          S.bound(me);
+        }
         me.bob = reduce ? 0 : Math.abs(Math.sin(E.t * 7)) * 0.3 * clamp(Math.abs(me.speed) / 17, 0, 1);
       } else { me.bob = 0; if (me.pool) me.ripple = me.ripple > 0.02 ? (me.ripple + dt * 0.9) % 1 : 0; }
       if (!me.pool) me.ripple = 0;
       me.y = S.floorAt(me.x, me.z);
       stepZoogs(dt); stepShoggoths(dt); resolveBodies(); stepWater(dt);
+      for (const b of zoogs) if (b.say) b.say.t -= dt;        // what they say runs its time out here, drawn or not
+      for (const b of shogs) if (b.say) b.say.t -= dt;
       stepSound();
       // portals: armed once the body has stepped clear of every one, so it
       // never arrives in a scene only to be sent straight back
@@ -1266,7 +1396,8 @@
       if (me.goal) camLook = wrap(viewYaw - me.yaw) + C.look;
       else camLook += (C.look - camLook) * Math.min(1, dt * (reduce ? 60 : 1.2));
       boom = E.follow(me, { dist: C.dist, height: cam.height ? cam.height(C.dist, me.x, me.z) : Math.min(C.dist * 0.3, 18), aim: 3.4,
-        look: camLook, tilt: C.tilt, inside: camOpen, hard: (x, y, z) => S.open(x, y, z), ease: snap ? 1e6 : reduce ? 60 : 5, step: 2, minDist: 6 });
+        // dropping in, the camera keeps its place in the cave and tilts up the fall to the slime
+        look: camLook, tilt: C.tilt + Math.atan2(me.air, C.dist), inside: camOpen, hard: (x, y, z) => S.open(x, y, z), ease: snap ? 1e6 : reduce ? 60 : 5, step: 2, minDist: 6 });
       snap = false;
     }
 
@@ -1325,6 +1456,7 @@
       const at = back || (typeof entry === "object" && entry) || (S.entries && (S.entries[entry] || S.entries.start)) || { x: 0, z: 0, yaw: 0 };
       camLook = 0;
       me.x = at.x; me.z = at.z; me.yaw = at.yaw; me.speed = 0; me.goal = null; me.pool = null; me.ripple = 0;
+      me.air = !reduce && at.drop ? at.drop : 0; me.vy = 0; me.landT = null;   // an entry with a drop: the slime falls in (not with reduced motion)
       if (typeof entry === "object" && entry) { S.bound(me); collide(me); }   // a spot carried from elsewhere: kept inside this place
       me.y = S.floorAt(me.x, me.z);
       C.look = 0; C.tilt = 0;
@@ -1363,7 +1495,7 @@
       E.begin();
       S.sky(E.g);
       S.build();
-      E.see = [me.x, me.y + me.R, me.z];                      // what stands between it and the camera is drawn see-through
+      E.see = [me.x, me.y + me.air + me.R, me.z];                      // what stands between it and the camera is drawn see-through
       buildWater(); buildZoogs(); buildShoggoths(); buildMotes(); buildPlayer(); buildSigns(); buildBubbles();
       E.paint();
       if (fade) {
@@ -1416,6 +1548,7 @@
       cost: () => cost, boom: () => boom, fading: () => !!fade,
       setMuted(m) { sound.muted = !!m; if (sound.master && sound.ctx) sound.master.gain.setTargetAtTime(m ? 0 : 0.8, sound.ctx.currentTime, 0.02); if (!m) soundOn(); },
       muted: () => sound.muted, audioContext: () => sound.ctx, steps: () => sound.steps || 0,   // steps sounded (or due, where audio is held)
+      voices: () => sound.voices || 0,                         // the creatures' voices in earshot, sounded or due, likewise
     };
     return W;
   }

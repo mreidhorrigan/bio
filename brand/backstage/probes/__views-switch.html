@@ -1,0 +1,66 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The switch between the iso village and the 3D village, both ways</title>
+<meta name="budget" content="30000">
+<iframe id="f" src="/index.html?theme=technurture&slime=30.0,30.1&keep=me" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The iso world's 3D button opens the 3D village where the slime stands, facing
+// its way, and the 3D village's Isometric link (shown outdoors only) opens the
+// iso world where the 3D slime got to. And the two agree on left and right: a
+// thing to the right of the slime in the iso view is to its right in 3D. The
+// rest of the address rides along both ways (the iso world keeps its signal
+// towers there, under "signals"; a stand-in, "keep", is carried here).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+let stage = 0, isoAt = null;
+F.addEventListener("load", () => setTimeout(() => {
+  try { [iso1, in3d, iso2][stage++](); }
+  catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 2500));
+function iso1() {
+  const w = F.contentWindow, d = w.document, I = w.MH_ISO, b = d.getElementById("mh-view3d");
+  if (!b || b.classList.contains("mh-hidden")) { say("the iso world's 3D button: MISSING"); document.title = "done"; return; }
+  I.placePlayer(30.0, 30.1, 1, -1);                            // on the open plaza, facing up and right on the screen
+  const p = I.player();
+  isoAt = { x: p.x, y: p.y, fx: p.fx, fy: p.fy };
+  say("iso: the 3D button shows; the slime at " + p.x.toFixed(2) + "," + p.y.toFixed(2) + " facing " + p.fx.toFixed(2) + "," + p.fy.toFixed(2));
+  b.click();                                                   // the frame goes to the 3D village
+}
+function in3d() {
+  const w = F.contentWindow, d = w.document, W = w.MH_SLIMEVERSE3D, E = W.engine;
+  W.pause(); W.setMuted(true);
+  const S = W.S(), [tx, ty] = S.tileOf(W.me.x, W.me.z), [fx, fy] = S.tileDir(W.me.yaw);
+  const off = Math.hypot(tx - isoAt.x, ty - isoAt.y), turn = Math.acos(Math.max(-1, Math.min(1, fx * isoAt.fx + fy * isoAt.fy)));
+  say("3D: in the " + W.scene() + (W.scene().startsWith("outdoors") ? "" : " NO") + ", at " + tx.toFixed(2) + "," + ty.toFixed(2) + (off < 0.05 ? "" : " NO (" + off.toFixed(2) + " tiles off)")
+    + ", facing " + fx.toFixed(2) + "," + fy.toFixed(2) + (turn < 0.05 ? "" : " NO"));
+  say("3D: the rest of the address " + (new URL(w.location.href).searchParams.get("keep") === "me" ? "came along" : "was dropped NO"));
+  const iso = d.getElementById("view-iso"), back = d.getElementById("back");
+  say("3D, outdoors: Isometric " + (iso && !iso.hidden ? "shows" : "is hidden NO") + ", ‹ Village " + (back && back.hidden ? "is hidden" : "shows NO"));
+  // left and right: face up the iso screen; the tile two to the iso right (+2,-2) must show right of the
+  // slime, and the tile two up-left (-2, 0) left of it
+  W.me.yaw = S.tileYaw(-1, -1); W.me.speed = 0;
+  for (let i = 0; i < 90; i++) W.step(1 / 60);
+  const [mx, my] = S.tileOf(W.me.x, W.me.z), me = E.project([W.me.x, W.me.y, W.me.z]);
+  const side = (dx, dy) => { const p = S.fromTile(mx + dx, my + dy), q = E.project([p[0], S.floorAt(p[0], p[1]), p[1]]); return q ? q[0] - me[0] : NaN; };
+  const r = side(2, -2), l = side(-2, 0);
+  say("left and right: the iso right shows " + (r > 0 ? "right" : "left NO") + " of the slime in 3D (" + r.toFixed(0) + " px), the iso up-left " + (l < 0 ? "left" : "right NO") + " (" + l.toFixed(0) + " px)");
+  // indoors the switch gives way to ‹ Village
+  W.load("indoors", "door"); for (let i = 0; i < 3; i++) W.step(1 / 60);
+  say("3D, indoors: Isometric " + (iso.hidden ? "is hidden" : "shows NO") + ", ‹ Village " + (back.hidden ? "is hidden NO" : "shows"));
+  // back out, a few steps on, facing a new way; then the switch
+  W.load("outdoors", "start");
+  const O = W.S(), p0 = O.fromTile(isoAt.x + 2.5, isoAt.y - 1);
+  W.load("outdoors", { x: p0[0], z: p0[1], yaw: O.tileYaw(-1, 0) });
+  for (let i = 0; i < 3; i++) W.step(1 / 60);
+  window.__want = O.tileOf(W.me.x, W.me.z).concat(O.tileDir(W.me.yaw));
+  iso.click();                                                 // the frame goes back to the iso world
+}
+function iso2() {
+  const w = F.contentWindow, I = w.MH_ISO, p = I.player(), want = window.__want;
+  const off = Math.hypot(p.x - want[0], p.y - want[1]), turn = Math.acos(Math.max(-1, Math.min(1, p.fx * want[2] + p.fy * want[3])));
+  say("iso again: at " + p.x.toFixed(2) + "," + p.y.toFixed(2) + (off < 0.05 ? "" : " NO (" + off.toFixed(2) + " tiles off)") + ", facing " + p.fx.toFixed(2) + "," + p.fy.toFixed(2) + (turn < 0.05 ? "" : " NO")
+    + ", in " + I.skin() + (I.skin() === "technurture" ? "" : " NO"));
+  say("iso again: the rest of the address " + (new URL(w.location.href).searchParams.get("keep") === "me" ? "came along" : "was dropped NO"));
+  say("errors: none");
+  document.title = "done";
+}
+</script>

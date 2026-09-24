@@ -1,0 +1,79 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D: the drop into the cave, and the rope back up into the house</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=house" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Down the house's hatch the slime drops into the cave under the shaft and
+// lands (drawn out as it falls, flattened as it lands, in view throughout).
+// The rope under the shaft climbs back into the house, beside the hatch: reached
+// straight from the landing, after walking all the way round the ring, and
+// round it the other way. The world is stepped without painting (W.step).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine, me = W.me;
+    W.pause(); W.setMuted(true);
+    const steps = (n) => { for (let i = 0; i < n; i++) W.step(1 / 60); };
+    // into the hatch
+    W.load("indoors", "door"); steps(10);
+    const H = W.S().portals.find((q) => q.to === "cave");
+    // at the rim, where a walk touches it (on the hatch itself its ring of stones pushes the slime off)
+    { const d = Math.hypot(H.x, H.z); me.x = H.x - (H.x / d) * (H.r - 1); me.z = H.z - (H.z / d) * (H.r - 1); me.speed = 0; }
+    let fr = 0; while (W.scene() !== "cave" && fr < 120) { W.step(1 / 60); fr++; }
+    const high = me.air;
+    let last = me.air, rising = 0, framed = 0, n = 0, open = 0, t = 0, pitch = E.cam.pitch, jolt = 0;
+    while ((me.air > 0 || n < 50) && t < 3) {                  // the fall, and a moment past the landing
+      W.step(1 / 60); t += me.air > 0 ? 1 / 60 : 0; n++;
+      jolt = Math.max(jolt, Math.abs(E.cam.pitch - pitch)); pitch = E.cam.pitch;
+      if (me.air === 0) continue;
+      if (me.air > last + 1e-6) rising++;
+      last = me.air;
+      const p = E.project([me.x, me.y + me.air, me.z]);
+      if (p && p[0] > 0 && p[0] < E.W && p[1] > 0 && p[1] < E.H) framed++;
+      if (W.camOpen(E.cam.x, E.cam.y, E.cam.z)) open++;
+    }
+    const landed = me.air === 0 && me.landT != null;
+    say("down the hatch: in the " + W.scene() + ", dropping from " + high.toFixed(1) + " units, landed " + (landed ? "after " + t.toFixed(2) + " s" : "NEVER NO")
+      + (high > 10 ? "" : " (no drop) NO") + (rising ? " (it rose on the way down) NO" : ""));
+    const fallFrames = Math.round(t * 60);
+    say("the fall in view: the slime on screen in " + framed + " of " + fallFrames + " frames, the camera in the open in " + open + (framed >= fallFrames * 0.8 && open === fallFrames ? "" : " NO")
+      + "; the view turns at most " + jolt.toFixed(3) + " radians in a frame" + (jolt < 0.05 ? "" : " NO (a jolt)"));
+    steps(90);
+    say("after landing: " + (me.landT == null ? "settled" : "still wobbling NO") + ", " + (Math.abs(me.speed) < 0.5 ? "standing" : "moving") + ", in the " + W.scene());
+    const land = { x: me.x, z: me.z };
+    // the rope, three ways
+    const S = W.S(), ring = S.period, rope = S.portals.find((q) => q.to === "indoors");
+    const K = W.controls.keys;
+    function toRope(way) {
+      W.load("cave", { x: land.x, z: land.z, yaw: way < 0 ? Math.PI : 0 }); steps(5);
+      let went = 0, last = me.z, i = 0;
+      K.fwd = true;
+      for (; i < 8000 && W.scene().startsWith("cave"); i++) {
+        const zr = me.z - ring * Math.floor(me.z / ring), toShaft = way > 0 ? ring - zr + 10 : zr - 10;   // how far on to the rope, this way round
+        const round = way && Math.abs(went) < ring - 80;      // walking round: keep to the side away from the rope
+        const aheadZ = me.z + way * 18 || me.z + 18;
+        const tx = round ? S.centre(aheadZ) - 8 : img(rope.x, me.x), tz = round ? aheadZ : img(rope.z, me.z);
+        me.yaw = Math.atan2(tx - me.x, tz - me.z);
+        W.step(1 / 60);
+        let dz = me.z - last; dz -= ring * Math.round(dz / ring); went += dz; last = me.z;
+      }
+      K.fwd = false;
+      const got = W.scene();
+      // the fade: let the new place come in
+      steps(60);
+      const hatchAt = W.S().entries && W.S().entries.hatch;
+      const off = hatchAt ? Math.hypot(me.x - hatchAt.x, me.z - hatchAt.z) : NaN;
+      say((way > 0 ? "all the way round the ring" : way < 0 ? "round the ring the other way" : "straight from the landing") + ": walked " + Math.abs(went).toFixed(0) + " units, up the rope into the "
+        + W.scene() + (W.scene().startsWith("indoors") ? "" : " NO") + (hatchAt ? ", " + off.toFixed(1) + " from the hatch's way up" + (off < 4 ? "" : " NO") : " (no way up) NO")
+        + (way && Math.abs(went) < ring - 100 ? " (it never went round) NO" : ""));
+      steps(120);
+      if (!W.scene().startsWith("indoors")) say("  and then it went back down NO");
+    }
+    const img = (v, ref) => ref + (v - ref) - ring * Math.round((v - ref) / ring);
+    toRope(0); toRope(1); toRope(-1);
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

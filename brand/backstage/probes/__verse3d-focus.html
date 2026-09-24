@@ -48,7 +48,8 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       prev = [E.cam.x, E.cam.y, E.cam.z, W.me.x, W.me.z]; lastStep = null;
       for (let i = 0; i < n; i++) {
         W.tick(0.016);
-        const step = [E.cam.x - prev[0], E.cam.y - prev[1], E.cam.z - prev[2]];
+        const step = [E.cam.x - prev[0], E.cam.y - prev[1], E.cam.z - prev[2]], P = W.S().period;
+        if (P) { step[0] -= P * Math.round(step[0] / P); step[2] -= P * Math.round(step[2] / P); }   // across the torus's seam everything moves back a whole period: not a jump
         // a jump is a jerk: the camera's step changing sharply from one frame to the next
         // (swinging round a turning body is steady motion, and is not one)
         if (lastStep) {
@@ -64,7 +65,10 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     walk(420, () => { W.me.x = H.x + R; W.me.z = H.z; W.me.yaw = 0; K.fwd = true; K.left = true; });
     // along the ring of houses, past their doors
     walk(420, () => { W.me.x = 0; W.me.z = -70; W.me.yaw = Math.PI / 2; K.fwd = true; K.left = false; });
-    say("camera past houses: the sharpest change in its step from one frame to the next " + worst.toFixed(2) + " units (" + worstAt + "), mean step " + (total / frames).toFixed(2) + (worst < 0.6 ? "" : " NO (a jump)"));
+    // the limit was 0.6 units at the old pace of 17 units a second: it scales with the village's pace,
+    // since a camera moving five times as far each frame changes its step five times as much in a turn
+    const limit = 0.6 * (W.S().walk || 17) / 17;
+    say("camera past houses: the sharpest change in its step from one frame to the next " + worst.toFixed(2) + " units (" + worstAt + "), mean step " + (total / frames).toFixed(2) + ", limit " + limit.toFixed(2) + (worst < limit ? "" : " NO (a jump)"));
     say("errors: none");
   } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
   document.title = "done";

@@ -74,10 +74,12 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       } else say("pool: none MISSING");
       // zoogs shy away from the slime
       // where the slime will be put: beside the zoog, and not on a way out, or the test would leave the place
-      const clearOfWays = (x, zz) => { const b = { x, z: zz, R: W.me.R }; W.S().bound(b); W.collide(b);   // where it really ends up
-        return (W.S().portals || []).every((q) => Math.hypot(b.x - q.x, b.z - q.z) > q.r + 1.5); };
+      // (and where it really ends up, after the room and the furniture have pushed it, still beside the
+      // zoog: in the small room a spot by the bath came out 7.7 away, too far for the zoog to mind)
+      const clearOfWays = (x, zz, q) => { const b = { x, z: zz, R: W.me.R }; W.S().bound(b); W.collide(b);
+        return Math.hypot(b.x - q.x, b.z - q.z) < 6 && (W.S().portals || []).every((p) => Math.hypot(b.x - p.x, b.z - p.z) > p.r + 1.5); };
       let z = null, side = [5, 0];
-      for (const q of W.zoogs()) { if (z || !q.alive) continue; for (const o of [[5, 0], [-5, 0], [0, 5], [0, -5]]) if (!z && clearOfWays(q.x + o[0], q.z + o[1])) { z = q; side = o; } }
+      for (const q of W.zoogs()) { if (z || !q.alive) continue; for (const o of [[5, 0], [-5, 0], [0, 5], [0, -5]]) if (!z && clearOfWays(q.x + o[0], q.z + o[1], q)) { z = q; side = o; } }
       if (!z) say("no zoog stands clear of the ways out to test: NO");
       if (z) {
         W.me.x = z.x + side[0]; W.me.z = z.z + side[1]; W.me.speed = 0; W.S().bound(W.me); W.collide(W.me);
@@ -129,7 +131,7 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     via("outdoors", wayTo("outdoors", "cave"), "cave");
     via("indoors", wayTo("indoors", "outdoors"), "outdoors");
     via("indoors", wayTo("indoors", "cave"), "cave");
-    via("cave", wayTo("cave", "outdoors"), "outdoors");
+    via("cave", wayTo("cave", "indoors"), "indoors");            // up the rope, into the house beside its hatch
     say(errs.length ? "EXCEPTION " + errs.join(" | ") : "errors: none");
   } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
   document.title = "done";

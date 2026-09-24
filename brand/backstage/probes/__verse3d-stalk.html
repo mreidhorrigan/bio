@@ -1,0 +1,56 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D: a spore-cap's stalk wears an ink outline</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=village" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Everything standing in the 3D world is a fill inside an ink outline, and a
+// spore-cap's stalk is too (engine-3d line o.edge). The probe stands the slime
+// before a spore-cap in the village and in the house (the potted one), paints
+// a frame, and reads one row of pixels across the stalk halfway up: the pale
+// stalk must have a band darker than itself and than the ground on each side.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine, me = W.me;
+    W.pause(); W.setMuted(true);
+    const lum = (d, i) => 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    function across(label, base, top) {
+      const a = E.project(base), b = E.project(top);
+      if (!a || !b) { say(label + ": the stalk is off screen MISSING"); return; }
+      const cv = E.g.canvas, k = cv.width / cv.clientWidth, mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+      const half = 30, row = E.g.getImageData(Math.round((mx - half) * k), Math.round(my * k), Math.round(half * 2 * k), 1).data;
+      const n = row.length / 4, L = [];
+      for (let i = 0; i < n; i++) L.push(lum(row, i * 4));
+      // the stalk: the brightest run near the middle
+      let c = Math.round(n / 2), best = c;
+      for (let i = Math.round(n * 0.3); i < n * 0.7; i++) if (L[i] > L[best]) best = i;
+      c = best;
+      let l = c, r = c;
+      while (l > 0 && L[l - 1] > L[c] - 40) l--;
+      while (r < n - 1 && L[r + 1] > L[c] - 40) r++;
+      const dark = (from, step) => { let m = 255; for (let i = from, j = 0; j < 6 * k && i >= 0 && i < n; i += step, j++) m = Math.min(m, L[i]); return m; };
+      const ground = (from, step) => { let s = 0, m = 0; for (let i = from + step * Math.round(8 * k), j = 0; j < 6 && i >= 0 && i < n; i += step, j++) { s += L[i]; m++; } return m ? s / m : 255; };
+      const dl = dark(l - 1, -1), dr = dark(r + 1, 1), gl = ground(l - 1, -1), gr = ground(r + 1, 1);
+      const ok = dl < L[c] - 60 && dr < L[c] - 60 && dl < gl - 8 && dr < gr - 8;
+      say(label + ": stalk " + ((r - l + 1) / k).toFixed(1) + " px wide at brightness " + L[c].toFixed(0) + "; darkest either side " + dl.toFixed(0) + " and " + dr.toFixed(0)
+        + ", the ground beyond " + gl.toFixed(0) + " and " + gr.toFixed(0) + (ok ? ": outlined" : ": no outline NO"));
+    }
+    // the village: a spore-cap of middling size, the slime a little way before it
+    W.load("outdoors", "start"); for (let i = 0; i < 5; i++) W.step(1 / 60);
+    const O = W.S(), cap = O.flora.find((f) => f.kind === "sporecap" && f.s > 1.6 && f.s < 2.6);
+    if (!cap) say("a spore-cap in the village: MISSING");
+    else {
+      W.load("outdoors", { x: cap.x, z: cap.z - 26, yaw: 0 });
+      for (let i = 0; i < 90; i++) W.step(1 / 60);
+      W.tick(0.016);
+      // the torus may have carried the slime a whole period on: the cap's copy nearest it
+      const P = O.period, cx = cap.x + P * Math.round((me.x - cap.x) / P), cz = cap.z + P * Math.round((me.z - cap.z) / P);
+      const y = O.floorAt(cx, cz), h = 2.6 * cap.s;
+      across("the village's spore-cap (size " + cap.s.toFixed(1) + ")", [cx, y + h * 0.2, cz], [cx, y + h * 0.6, cz]);
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

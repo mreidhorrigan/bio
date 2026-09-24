@@ -49,7 +49,7 @@ function run(skin) {
     let same = 0, n = 0;
     for (let k = 0; k < 400; k++) {
       const tx = (k * 37) % hub.period, ty = (k * 53 + 11) % hub.period;
-      const x = (tx - hub.x) * V.ISO.tile, z = (ty - hub.y) * V.ISO.tile;
+      const [x, z] = S.fromTile(tx, ty);                      // the scene's own conversion (world z runs against ty)
       n++; if (ISO.biome(tx, ty) === S.biomeAt(x, z)) same++;
     }
     say("biomes agree at " + same + " of " + n + " tiles" + (same === n ? "" : " NO"));
@@ -59,7 +59,7 @@ function run(skin) {
       const tx = (k * 37) % hub.period, ty = (k * 53 + 11) % hub.period;
       if (ISO.biome(tx, ty) !== "water" || tx === hub.x || ty === hub.y) continue;
       water++;
-      const x = (tx - hub.x) * V.ISO.tile, z = (ty - hub.y) * V.ISO.tile;
+      const [x, z] = S.fromTile(tx, ty);
       if (W.poolAt(x, z)) wet++;
     }
     say("iso water tiles that are lake in 3D: " + wet + " of " + water + (water && wet >= water * 0.8 ? "" : " NO"));

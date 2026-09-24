@@ -6,7 +6,7 @@
 const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
 let stage = 0;
 const F = document.getElementById("f");
-F.addEventListener("load", () => setTimeout(() => { try { stage++ === 0 ? first() : second(); } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; } }, 1500));
+F.addEventListener("load", () => setTimeout(() => { try { [first, second, third][stage++](); } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; } }, 1500));
 function first() {
   const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, d = w.document;
   if (!W) { say("page: MISSING"); document.title = "done"; return; }
@@ -32,15 +32,19 @@ function first() {
   }
   d.getElementById("card").hidden = true;
   // the wellhead: the Glossary
-  const well = O.portals.find((q) => q.open && /glossary/.test(q.open.url || ""));
-  say("the wellhead opens: " + (well ? well.open.title + " (" + well.open.url + ")" : "NOTHING NO"));
+  // (a road-house's link, or, since the Glossary became a kiosk on the ring, its kiosk's page)
+  const urlOf = (it) => it.url || (it.kiosk && it.kiosk.page && it.kiosk.page.url) || "";
+  const well = O.portals.find((q) => q.open && /glossary/.test(urlOf(q.open)));
+  say("the wellhead opens: " + (well ? well.open.title + " (" + urlOf(well.open) + ")" : "NOTHING NO"));
   // a click on a house's DOOR opens its page (a click may open a tab); a click on its wall opens nothing
   W.load("outdoors", "start"); for (let i = 0; i < 60; i++) W.tick(0.016);
   const E = W.engine, all = O.clickables(), doors = all.filter((c) => c.item && c.item.kind === "link");
   const inView = (c, up) => { const p = E.project([c.x, O.floorAt(c.x, c.z) + up, c.z]); return p && p[0] > 20 && p[0] < E.W - 20 && p[1] > 20 && p[1] < E.H - 20 ? p : null; };
   // stand in front of a road-house's door, facing it, as a visitor clicking it would
-  // (the clickables list each house's door in the houses' order, as entries.house<i> do)
-  const i0 = all.findIndex((c) => c.item && c.item.kind === "link" && !/glossary|slimeverse3d/.test(c.item.url || ""));
+  // (the clickables list each house's door in the houses' order, as entries.house<i> do).
+  // A house linking to another site: that opens a new tab, which the probe catches; a page
+  // of this site opens in the same tab, and is tried last (third), since it leaves the page
+  const i0 = all.findIndex((c) => c.item && c.item.kind === "link" && /^https?:/.test(c.item.url || ""));
   const en = O.entries["house" + i0];
   W.me.x = en.x + Math.sin(en.yaw) * 14; W.me.z = en.z + Math.cos(en.yaw) * 14; W.me.yaw = en.yaw + Math.PI; W.me.speed = 0;
   for (let i = 0; i < 90; i++) W.tick(0.016);
@@ -84,6 +88,22 @@ function second() {
   W.pause();
   const t = W.S().tileOf(W.me.x, W.me.z), want = [window.__tile[0] + 3, window.__tile[1] - 2];
   say("from an address in the village: " + W.scene() + " at tile " + t[0].toFixed(2) + "," + t[1].toFixed(2) + " (asked " + want[0].toFixed(2) + "," + want[1].toFixed(2) + ")" + (W.scene() === "outdoors@technoscure" && Math.hypot(t[0] - want[0], t[1] - want[1]) < 0.3 ? "" : " NO"));
+  // a page of this site opens in the same tab: click the CV house's door
+  const O = W.S(), E = W.engine, all = O.clickables();
+  window.__tabs = 0; w.open = () => { window.__tabs++; return null; };
+  const i1 = all.findIndex((c) => c.item && c.item.kind === "link" && /Horrigan_CV\.html/.test(c.item.url || ""));
+  const en = O.entries["house" + i1];
+  W.me.x = en.x + Math.sin(en.yaw) * 14; W.me.z = en.z + Math.cos(en.yaw) * 14; W.me.yaw = en.yaw + Math.PI; W.me.speed = 0;
+  for (let i = 0; i < 90; i++) W.tick(0.016);
+  const c = all[i1], p = E.project([c.x, O.floorAt(c.x, c.z) + c.h * 0.4, c.z]);
+  if (!p) { say("the CV house's door in view: none NO"); say("errors: none"); document.title = "done"; return; }
+  window.__cvAt = Date.now();
+  W.controls.onTap(p[0], p[1]);                                // the frame goes to the CV
+  setTimeout(() => { if (stage === 2) { say("a click on the CV house's door: the frame stayed on the 3D page NO"); say("errors: none"); document.title = "done"; } }, 6000);
+}
+function third() {
+  const w = F.contentWindow, path = w.location.pathname;
+  say("a click on the CV house's door: " + (/Horrigan_CV\.html$/.test(path) ? "the CV, in the same tab" : "went to " + path + " NO") + (window.__tabs ? " (and a new tab NO)" : ""));
   say("errors: none");
   document.title = "done";
 }

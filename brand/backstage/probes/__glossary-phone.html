@@ -1,0 +1,56 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Glossary on a phone: a card only for a tapped word</title>
+<iframe id="p" src="/glossary.html" style="width:390px;height:720px;border:0"></iframe>
+<iframe id="d" src="/glossary.html" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// On a phone the card would cover the slime, the reader's cursor, so there it
+// shows only for a word the reader taps, once the slime has got to it, and it
+// goes when the slime walks on or the reader taps elsewhere. On a wide screen
+// nothing changes: the card shows whatever word the slime reaches.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+let loaded = 0;
+for (const id of ["p", "d"]) document.getElementById(id).addEventListener("load", () => { if (++loaded === 2) setTimeout(run, 1200); });
+function run() {
+  try {
+    const P = document.getElementById("p").contentWindow, D = document.getElementById("d").contentWindow;
+    const walk = (G, x) => { G.go(x); for (let i = 0; i < 900 && Math.abs(G.me.x - x) > 2; i++) G.tick(1 / 60); for (let i = 0; i < 20; i++) G.tick(1 / 60); };
+    // a tap at a point in the view's own units, as a finger makes it
+    function tap(w, x, y) {
+      const G = w.MH_GLOSSARY_WORLD, cv = w.document.getElementById("crawl"), r = cv.getBoundingClientRect(), L = G.layout();
+      const o = { clientX: r.left + x * (r.width / L.W), clientY: r.top + y * (r.height / L.H), pointerId: 7, pointerType: "touch", isPrimary: true, bubbles: true };
+      cv.dispatchEvent(new w.PointerEvent("pointerdown", o)); w.dispatchEvent(new w.PointerEvent("pointerup", o));
+    }
+    const card = (w) => w.document.getElementById("entry"), shown = (w) => !card(w).hidden;
+    const title = (w) => (card(w).querySelector("h3") || {}).textContent || "";
+
+    // the phone
+    const G = P.MH_GLOSSARY_WORLD; G.pause();
+    say("phone, at the start: the card " + (shown(P) ? "shows NO" : "is hidden"));
+    const words = G.marks.filter((m) => m.side === "glossary");
+    walk(G, words[3].x);
+    say("phone, the slime walked to a word (" + G.at() + ") untapped: the card " + (shown(P) ? "shows NO" : "is hidden"));
+    // tap the next word's board, on screen
+    const m = words[4], L = G.layout();
+    G.tick(1 / 60);
+    const sx = L.screenX(m), gy = G.ground(m.x), by = gy - 44 - m.row * 24 - m.h / 2;
+    tap(P, sx, by);
+    for (let i = 0; i < 600 && Math.abs(G.me.x - m.x) > 2; i++) G.tick(1 / 60);
+    for (let i = 0; i < 10; i++) G.tick(1 / 60);
+    say("phone, tapped the board of " + m.title + ": the slime went " + (Math.abs(G.me.x - m.x) < 3 ? "to it" : "elsewhere NO") + ", and the card "
+      + (shown(P) ? "shows " + title(P) : "is hidden NO"));
+    // a tap on open ground, away from every board: the card goes
+    tap(P, L.W * 0.85, gy + 30);
+    for (let i = 0; i < 5; i++) G.tick(1 / 60);
+    say("phone, then a tap on open ground: the card " + (shown(P) ? "still shows NO" : "is hidden"));
+    for (let i = 0; i < 400; i++) G.tick(1 / 60);
+    say("phone, walking on past words: the card " + (shown(P) ? "shows NO" : "stays hidden") + " (at " + G.at() + ")");
+
+    // the wide screen: as before
+    const H = D.MH_GLOSSARY_WORLD; H.pause();
+    walk(H, H.marks.filter((q) => q.side === "glossary")[3].x);
+    say("wide screen, the slime walked to a word: the card " + (shown(D) ? "shows " + title(D) : "is hidden NO"));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}
+</script>

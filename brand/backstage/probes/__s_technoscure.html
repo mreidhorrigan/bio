@@ -12,7 +12,11 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
       const near = (c, pv) => c + Math.round((pv - c) / P) * P;
       const p = ISO.player();
       // the kiosk furthest away that still opens a card, so the warp is a real one
-      const cards = ISO.exhibits().filter(e => !e.satellite && ["Store", "Public Writing"].includes(e.title));
+      // (a kiosk with no page of its own opens as a card; since 2026-09-23 every kiosk on the
+      // site has a page, so there may be none, and then there is nothing here to test)
+      const kiosks = (w.MH_CONTENT && w.MH_CONTENT.kiosks) || [];
+      const cards = ISO.exhibits().filter((e, i) => !e.satellite && kiosks[i] && !kiosks[i].page);
+      if (!cards.length) { document.getElementById("out").textContent = "no kiosk opens as a card now (each has a page of its own): skipped"; document.title = "done"; return; }
       cards.sort((a, b) => Math.hypot(b.tx-p.x, b.ty-p.y) - Math.hypot(a.tx-p.x, a.ty-p.y));
       const k = cards[0];
       o.target = k.title;

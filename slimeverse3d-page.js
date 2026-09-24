@@ -8,23 +8,31 @@
    walked in 3D, the same village as the isometric one. As in the iso village:
 
      a house          opens its menu or its page when walked into or clicked:
-                      a road-house or a page kiosk its link (a new tab), the
+                      a road-house or a page kiosk its link (a page of this
+                      site in this tab, another site in a new tab), the
                       Music and Games kiosks their menus, a prose kiosk its
                       words; only the Slimeverse 3D house leads inside
      the wellhead     opens the Glossary
-     the hatch        in the Slimeverse 3D house, down to the cave (which, for
-                      now, leads nowhere else)
+     the hatch        in the Slimeverse 3D house, down to the cave, where the
+                      slime drops in under the shaft and lands; the rope there
+                      climbs back up into the house, beside the hatch
 
    THE ADDRESS speaks the iso world's language, so the two views agree:
      ?theme=technurture|gloomthmaxx|bureaucore   (or a registry id; ?skin= too)
      ?slime=x,y       where the slime stands: in the village, iso tiles (the
                       iso world's own ?slime=); in the house or the cave, that
                       place's own units
+     ?facing=fx,fy    in the village, the way it faces, as an iso direction
+                      (with none, up the iso screen, the way the iso view looks)
      ?place=village|house|cave                 (a missing place is the house)
    With no theme in the address, the skin is the one last chosen in the iso
    world (localStorage mh-skin), or the one it would pick by the time of day.
    Choosing a skin here is remembered the same way, and keeps the slime where
    it stands, as the iso world does.
+
+   THE SWITCH between the views: in the village, "Isometric" opens the iso
+   world on the slime's spot, facing its way, and the iso world's "3D" button
+   comes back the same way. Inside, "‹ Village" returns to the house's door.
    ========================================================================== */
 (function () {
   const V = window.MH_VERSE3D;
@@ -55,29 +63,41 @@
   const card = document.getElementById("card"), cardTitle = document.getElementById("card-title"), cardBody = document.getElementById("card-body");
   const close = () => { if (card) card.hidden = true; cv.focus({ preventScroll: true }); };
   if (card) {
-    card.addEventListener("click", (e) => { if (e.target === card || /** @type {HTMLElement} */ (e.target).closest(".close")) close(); });
+    card.addEventListener("click", (e) => {
+      const el = /** @type {HTMLElement} */ (e.target), a = el.closest("a");
+      if (a && !a.getAttribute("target")) reflect(true);      // leaving for a page of the site: the address keeps the spot, for Back
+      if (e.target === card || el.closest(".close")) close();
+    });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !card.hidden) close(); });
   }
   const href = (url) => (I18N && I18N.href ? I18N.href(url) : url);     // the French page in French mode, as the iso world opens it
-  function openTab(url) { try { const w = window.open(href(url), "_blank"); if (w) w.opener = null; } catch (e) { /* blocked: the card's link still works */ } }
+  const sameSite = (url) => { try { return new URL(url, location.href).origin === location.origin; } catch (e) { return false; } };
+  /** Open a page as the iso village does: one of this site's in this tab (the address
+   *  brought up to the slime's spot first, so Back returns to it), another site's in a new tab. */
+  function openPage(url) {
+    if (sameSite(url)) { reflect(true); location.href = href(url); return; }
+    try { const w = window.open(href(url), "_blank"); if (w) w.opener = null; } catch (e) { /* blocked: the card's link still works */ }
+  }
+  const away = (url) => (sameSite(url) ? "" : ' target="_blank" rel="noopener"');
   function showCard(title, html) {
     if (!card || !cardTitle || !cardBody) return;
     cardTitle.textContent = title; cardBody.innerHTML = html; card.hidden = false;
     const first = cardBody.querySelector("a,button"); if (first) /** @type {HTMLElement} */ (first).focus();
   }
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  const linkCard = (title, url) => showCard(title, '<p>' + esc(t("slimeverse3d.opensIn", "This opens in a new tab.")) + '</p><a class="go" href="' + esc(href(url)) + '" target="_blank" rel="noopener">' + esc(t("slimeverse3d.open", "Open {title}", { title })) + "</a>");
+  const linkCard = (title, url) => showCard(title, (sameSite(url) ? "" : '<p>' + esc(t("slimeverse3d.opensIn", "This opens in a new tab.")) + '</p>')
+    + '<a class="go" href="' + esc(href(url)) + '"' + away(url) + '>' + esc(t("slimeverse3d.open", "Open {title}", { title })) + "</a>");
 
   /** What a house opens, as the iso village opens it (engine.js openCard). */
   function onOpen(item, how) {
     if (!item) return;
     const click = !!(how && how.click);
     if (item.url && /slimeverse3d\.html/.test(item.url)) { enterHouse(); return; }   // the house this page lives in: go inside
-    if (item.kind === "link") { if (click) openTab(item.url); else linkCard(item.title, item.url); return; }
+    if (item.kind === "link") { if (click) openPage(item.url); else linkCard(item.title, item.url); return; }
     const k = item.kiosk || {}, page = k.page;
-    if (page && page.url) { if (click) openTab(page.url); else linkCard(item.title, page.url); return; }
+    if (page && page.url) { if (click) openPage(page.url); else linkCard(item.title, page.url); return; }
     if (page && page.toc) {                                    // Music, Games: the menu of links
-      showCard(item.title, '<div class="toc">' + page.toc.map((it) => '<a href="' + esc(href(it.url)) + '" target="_blank" rel="noopener">' + esc(it.label) + "</a>").join("") + "</div>");
+      showCard(item.title, '<div class="toc">' + page.toc.map((it) => '<a href="' + esc(href(it.url)) + '"' + away(it.url) + '>' + esc(it.label) + "</a>").join("") + "</div>");
       return;
     }
     showCard(item.title, t("kiosk." + k.title + ".html", k.html || ""));   // a prose kiosk: its words, in the reader's language
@@ -104,7 +124,8 @@
     let at;
     if (base === "outdoors" && S.tileOf) { const [tx, ty] = S.tileOf(W.me.x, W.me.z); at = tx.toFixed(3) + "," + ty.toFixed(3); }
     else at = W.me.x.toFixed(2) + "," + W.me.z.toFixed(2);
-    const key = base + at + W.skin();
+    const facing = base === "outdoors" && S.tileDir ? S.tileDir(W.me.yaw).map((v) => v.toFixed(2)).join(",") : "";
+    const key = base + at + facing + W.skin();
     if (key === lastAt) return;
     lastAt = key;
     try {
@@ -113,18 +134,33 @@
       u.searchParams.delete("skin");
       u.searchParams.set("place", PLACE_NAME[base] || "house");
       u.searchParams.set("slime", at);
+      if (facing) u.searchParams.set("facing", facing); else u.searchParams.delete("facing");
       history.replaceState(history.state, "", u.href);
     } catch (e) { /* file URL or restricted history */ }
-    // the way back to the village carries the same skin, and the spot: where the slime is, or the house's door
-    const back = document.getElementById("back");
-    if (back) {
-      let tile = null;
-      if (base === "outdoors" && S.tileOf) tile = S.tileOf(W.me.x, W.me.z);
-      else tile = homeTile;                                    // inside: the house's door, in the village's tiles
-      back.setAttribute("href", "index.html?theme=" + (SHARE[W.skin()] || W.skin()) + (tile ? "&slime=" + tile[0].toFixed(3) + "," + tile[1].toFixed(3) : ""));
-    }
+    views(base === "outdoors");
   }
   let homeTile = null;
+  /** The iso world at the spot the slime has reached: in the village, where it
+   *  stands and the way it faces; inside, the house's door. In the skin in use,
+   *  and with the rest of the address as it came (the iso world's signal towers). */
+  function isoHref() {
+    const S = W.S(), out = W.scene().startsWith("outdoors") && S && S.tileOf;
+    const tile = out ? S.tileOf(W.me.x, W.me.z) : homeTile, dir = out && S.tileDir ? S.tileDir(W.me.yaw) : null;
+    let p;
+    try { p = new URL(location.href).searchParams; } catch (e) { p = new URLSearchParams(); }
+    p.delete("place"); p.delete("skin"); p.set("theme", SHARE[W.skin()] || W.skin());
+    if (tile) p.set("slime", tile[0].toFixed(3) + "," + tile[1].toFixed(3)); else p.delete("slime");
+    if (dir) p.set("facing", dir[0].toFixed(3) + "," + dir[1].toFixed(3)); else p.delete("facing");
+    return href("index.html?" + p.toString());
+  }
+  // the switch shows in the village, "‹ Village" inside (in the village it would do the same);
+  // each link is brought up to the moment as it is followed, the slime having moved since
+  const toIso = document.getElementById("view-iso"), back = document.getElementById("back");
+  function views(out) {
+    if (toIso) { toIso.hidden = !out; toIso.setAttribute("href", isoHref()); }
+    if (back) { back.hidden = out; back.setAttribute("href", isoHref()); }
+  }
+  for (const a of [toIso, back]) if (a) a.addEventListener("click", () => a.setAttribute("href", isoHref()));
 
   /* ── the start: where the address says, or inside the house ────────── */
   const place = PLACE[q.get("place") || "house"] || "indoors";
@@ -134,13 +170,17 @@
     const O = W.S(), h = O.entries && O.entries.home;
     if (h && O.tileOf) homeTile = O.tileOf(h.x, h.z);
   }
+  W.setBack("outdoors", "home");                               // the house's door leads out to its own door, however the house was reached (up the cave's rope, say)
   if (place === "outdoors") {
-    if (at.length === 2 && at.every(Number.isFinite)) { const O = W.S(), p = O.fromTile(at[0], at[1]); W.load("outdoors", { x: p[0], z: p[1], yaw: 0 }); }
+    if (at.length === 2 && at.every(Number.isFinite)) {
+      const O = W.S(), p = O.fromTile(at[0], at[1]), f = (q.get("facing") || "").split(",").map(Number);
+      const yaw = f.length === 2 && f.every(Number.isFinite) && Math.hypot(f[0], f[1]) > 1e-6 ? O.tileYaw(f[0], f[1]) : O.tileYaw(-1, -1);
+      W.load("outdoors", { x: p[0], z: p[1], yaw });
+    }
     else W.load("outdoors", "home");
   } else if (place === "cave") {
     W.load("cave", at.length === 2 && at.every(Number.isFinite) ? { x: at[0], z: at[1], yaw: 0 } : "start");
   } else {
-    W.setBack("outdoors", "home");
     W.load("indoors", at.length === 2 && at.every(Number.isFinite) ? { x: at[0], z: at[1], yaw: 0 } : "door");
   }
   W.run();

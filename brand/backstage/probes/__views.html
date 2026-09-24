@@ -37,8 +37,12 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     say("the towers' listener placed from the 3D slime " + listened + " times in 30 frames" + (listened >= 20 || !B ? "" : " NO"));
     // walk east, between two kiosks of the ring (walking the way the iso slime faced can
     // lead into a kiosk's door as the ring's spacing falls, and then there is no spot to hand back)
+    // (about 24 units: at the iso pace a longer walk reaches the ring of kiosks, and a house's edge
+    // is a spot the two views' different solids settle a little differently)
     W.me.yaw = Math.PI / 2;
-    W.controls.keys.fwd = true; for (let i = 0; i < 90; i++) W.tick(0.016); W.controls.keys.fwd = false;
+    const frames = Math.round(24 / ((W.S().walk || 17) * 0.016));
+    W.controls.keys.fwd = true; for (let i = 0; i < frames; i++) W.tick(0.016); W.controls.keys.fwd = false;
+    W.pause(); for (let i = 0; i < 60; i++) W.tick(0.016); W.resume();   // come to rest before noting the spot: at the iso pace it coasts some way
     say("  (walked to " + W.scene() + (W.scene().startsWith("outdoors") ? ", still in the village)" : ": NO, through a door)"));
     const t1 = S.tileOf(W.me.x, W.me.z);
     setTimeout(() => {

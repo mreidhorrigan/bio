@@ -1,0 +1,80 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D: the zoogs' blooloo and the shoggoths' teke are heard, near and not far</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=house" style="width:900px;height:600px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// A pet zoog's "blooloo!" and a shoggoth's "teketeke" (and "teke?!") have a
+// brief voice, heard within EAR (90 units) of the slime. The probe steps the
+// world without painting and counts the voices (W.voices: sounded, or due
+// where the browser holds the audio): some beside a pet zoog in the house and
+// beside a rooted shoggoth in the village, none from the far side of it. The
+// page runs muted (the probe runner's Chrome has no sound at all), but where
+// the browser lets its audio run, the voices are made for real, so a fault in
+// them throws here.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(async () => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, me = W.me;
+    W.pause();
+    // The page's audio is an offline context, which a headless browser does not
+    // hold as it holds a live one: every voice is really made, into a buffer
+    // rendered at the end, where it is measured (and nothing is played).
+    const Off = w.OfflineAudioContext;
+    w.AudioContext = class extends Off { constructor() { super(2, 44100 * 2, 44100); } get state() { return "running"; } resume() { return Promise.resolve(); } };
+    W.setMuted(false);
+    const ac = W.audioContext();
+    say("audio: " + (ac ? "an offline context, rendered at the end" : "none MISSING"));
+    const wrapD = (d, P) => (P ? d - P * Math.round(d / P) : d);
+    const seen = new WeakSet();                             // each thing said is a new object: count each once
+    function listen(secs, keep) { const v0 = W.voices(), words = {}; for (let i = 0; i < secs * 60; i++) { if (keep) keep(i); W.step(1 / 60); for (const b of W.zoogs().concat(W.shoggoths())) if (b.say && !seen.has(b.say)) { seen.add(b.say); words[b.say.text] = (words[b.say.text] || 0) + 1; } } return { n: W.voices() - v0, words }; }
+    const said = (o) => Object.keys(o.words).map((k) => k + " ×" + o.words[k]).join(", ") || "nothing";
+    // the house: stand beside a pet zoog
+    W.load("indoors", "door"); for (let i = 0; i < 30; i++) W.step(1 / 60);
+    const pet = W.zoogs()[0];
+    if (!pet) say("a pet zoog in the house: MISSING");
+    else {
+      // the slime stands still where no way out is near (the door leads out, the hatch down),
+      // and the zoog is brought back beside it now and then
+      const H = W.S(), ways = H.portals || [];
+      let at = null;
+      for (let x = -12; x <= 12 && !at; x += 3) for (let z = -12; z <= 12 && !at; z += 3) {
+        const b = { x, z, R: me.R }; H.bound(b);
+        if (Math.hypot(b.x - x, b.z - z) < 0.01 && ways.every((q) => Math.hypot(q.x - x, q.z - z) > q.r + 8)) at = [x, z];
+      }
+      if (!at) at = [0, 0];
+      const r = listen(40, (i) => { if (i % 20 === 0) { me.x = at[0]; me.z = at[1]; me.speed = 0; me.goal = null; pet.x = at[0] + 6; pet.z = at[1]; } });
+      say("beside a pet zoog for 40 s, in the " + W.scene() + ": heard " + r.n + " voice(s); said " + said(r) + (r.n > 0 && r.words["blooloo!"] && W.scene().startsWith("indoors") ? "" : " NO"));
+    }
+    // the village by day: the shoggoths are rooted, and mutter
+    W.load("outdoors", "start"); for (let i = 0; i < 30; i++) W.step(1 / 60);
+    const O = W.S(), P = O.period, shogs = W.shoggoths();
+    if (!shogs.length) say("a shoggoth in the village: MISSING");
+    else {
+      const s0 = shogs[0];
+      const nearBy = listen(90, (i) => { if (i % 30 === 0) { me.x = s0.x + 20; me.z = s0.z; me.speed = 0; me.goal = null; } });
+      say("20 units from a rooted shoggoth for 90 s: heard " + nearBy.n + " voice(s); the shoggoths said " + said(nearBy) + (nearBy.n > 0 ? "" : " NO"));
+      // a spot far from every shoggoth: silence, whatever they mutter
+      let spot = null;
+      for (let k = 0; k < 400 && !spot; k++) {
+        const x = (k * 97.3) % P - P / 2, z = (k * 211.7) % P - P / 2;
+        if (shogs.every((s) => Math.hypot(wrapD(s.x - x, P), wrapD(s.z - z, P)) > 160)) spot = [x, z];
+      }
+      if (!spot) say("a spot far from every shoggoth: none found MISSING");
+      else {
+        const far = listen(90, (i) => { if (i % 30 === 0) { me.x = spot[0]; me.z = spot[1]; me.speed = 0; me.goal = null; } });
+        const mutters = far.words["teketeke"] || 0;
+        say("160 units from every shoggoth for 90 s: they muttered " + mutters + " time(s), heard " + far.n + (far.n === 0 ? "" : " NO") + (mutters ? "" : " (none muttered: the test proves little)"));
+      }
+    }
+    if (ac) {
+      const buf = await ac.startRendering();
+      let peak = 0;
+      for (let ch = 0; ch < buf.numberOfChannels; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < d.length; i++) peak = Math.max(peak, Math.abs(d[i])); }
+      say("the voices, made: a peak of " + peak.toFixed(3) + (peak > 0.005 && peak < 1 ? "" : " NO"));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

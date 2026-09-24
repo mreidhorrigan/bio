@@ -425,6 +425,13 @@
 
   /* ── the engine: circuit, camera, body, water, and the keys ───────── */
   let active = null;
+  /* On a phone the card covers the slime, and the slime is the reader's
+     cursor: walking past the words must not bury it. There a word's card
+     shows only when the reader taps that word (or asks for it by address or
+     from the word list), once the slime has reached it, and it goes when the
+     slime walks on or the reader taps anywhere else. */
+  const tapOnly = window.matchMedia ? window.matchMedia("(max-width: 620px), (pointer: coarse) and (max-height: 620px)") : null;
+  let pinned = null, reached = false;                        // the word tapped, and whether the slime has got there
   const S = SIDE.create(cv, {
     worldW,
     ground: (x) => ground(x),
@@ -790,7 +797,48 @@
       const d = Math.abs(rd(marks[i].x - S.me.x));
       if (d < bd) { bd = d; best = marks[i]; }
     }
-    if (best && best !== active) { active = best; best.read = true; show(best); }
+    if (best && best !== active) {
+      active = best; best.read = true; show(best);
+      if (best === pinned) reached = true;
+      else if (reached) { pinned = null; reached = false; }  // walked on from the word it showed
+      present();
+    }
+  }
+
+  function present() { card.hidden = !!(tapOnly && tapOnly.matches) && !(pinned && reached && pinned === active); }
+  /** Ask for a word's card (null: none), where cards wait to be asked for. */
+  function pin(m) { pinned = m; reached = !!m && m === active; present(); }
+  /** The word whose board, or its post, is under a point on the canvas, in the
+   *  view's own units: the same geometry marker() draws. */
+  function markAt(px, py) {
+    const pad = 8;
+    let hit = null;
+    for (let i = 0; i < marks.length; i++) {
+      const m = marks[i], sx = screenX(m);
+      if (sx < -220 || sx > S.W + 220) continue;
+      lines(m);
+      let on;
+      if (m.side === "penumbra") {                           // set back, scaled about where it hangs
+        const b = backBand(), gy = b.bottom - m.row * b.gap, top = Math.max(4, gy - m.h), k = BACK_SCALE;
+        on = Math.abs(px - sx) <= m.w / 2 * k + pad && py >= gy + (top - gy) * k - pad && py <= gy + (top + m.h - gy) * k + pad;
+      } else {
+        const gy = ground(m.x), top = gy - 44 - m.row * 24 - m.h;
+        on = (Math.abs(px - sx) <= m.w / 2 + pad && py >= top - pad && py <= top + m.h + pad)
+          || (Math.abs(px - sx) <= 10 && py > top && py <= gy + pad);
+      }
+      if (on && (!hit || m.side === "penumbra")) hit = m;    // a board in the dark hangs in front
+    }
+    return hit;
+  }
+  if (tapOnly) {
+    cv.addEventListener("pointerdown", (ev) => {             // after the engine's own, which aims the walk at the finger
+      if (!tapOnly.matches) return;
+      const r = cv.getBoundingClientRect();
+      const m = markAt((ev.clientX - r.left) * (S.W / r.width), (ev.clientY - r.top) * (S.H / r.height));
+      if (m) S.go(m.x);                                      // to the word itself, not the edge of its board
+      pin(m);
+    });
+    if (tapOnly.addEventListener) tapOnly.addEventListener("change", present); else if (tapOnly.addListener) tapOnly.addListener(present);
   }
 
   /* ── one entry, one address ────────────────────────────────────────────
@@ -915,6 +963,7 @@
   if (bar) bar.addEventListener("pointerdown", (ev) => {
     const r = bar.getBoundingClientRect();
     S.go(clamp((ev.clientX - r.left) / r.width, 0, 1) * worldW);
+    pin(null);
   });
 
   // The plain-text lists are the same words: clicking one sends the slime to it.
@@ -929,7 +978,7 @@
     const side = b.getAttribute("data-side"), i = +b.getAttribute("data-i");
     const m = marks.find((mm) => mm.side === side && mm.i === i);
     if (!m) return;
-    S.go(m.x);
+    S.go(m.x); pin(m);
     cv.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
     cv.focus({ preventScroll: true });
   });
@@ -975,7 +1024,7 @@
       || markFor((location.hash || "").replace(/^#/, ""));
     if (!want) return false;
     S.place(want.x);
-    active = want; want.read = true; show(want, true);
+    active = want; want.read = true; show(want, true); pin(want);
     return true;
   }
 
@@ -993,11 +1042,11 @@
       "Whatever it reaches is written out here. Past the fissure the light goes"
       + " out and the antiglossary begins, which is not mine.")));
   }
-  if (!arrive()) hello();
+  if (!arrive()) { hello(); present(); }
   document.addEventListener("mh:lang", () => { if (active) show(active, true); else hello(); });
   window.addEventListener("hashchange", () => {              // a link into the word list
     const m = markFor((location.hash || "").replace(/^#/, ""));
-    if (m) S.go(m.x);
+    if (m) { S.go(m.x); pin(m); }
   });
 
   cv.hidden = false;                                        // it works: show it

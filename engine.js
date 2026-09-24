@@ -124,7 +124,7 @@ let introEl, cardEl, cardTitleEl, cardBodyEl, hudEl, compassEl, compassArrowEl,
    2a. REGISTRIES — the two places a fork adds a kind of thing to the world.
 
    STRUCTURES are how a kiosk that is not a dwelling is drawn. content.js names
-   one per satellite (structure: "wellhead"); the render pass looks the name up
+   one per satellite or kiosk (structure: "wellhead"); the render pass looks the name up
    here and falls back to the skin's paintKiosk. Add one with
    MH_ISO.registerStructure(name, painter(g, sx, sy, ex, active, env)).
 
@@ -267,6 +267,7 @@ function buildDOM() {
 
     <div id="mh-hud" class="mh-hidden">
       <div class="mh-hud-right">
+        <button id="mh-view3d" class="mh-hudbtn mh-hidden" type="button" title="See this spot in 3D">3D</button>
         <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu: jump to a building">☰ Menu</button>
         <button id="mh-buildtoggle" class="mh-hudbtn" type="button" title="Rearrange the buildings (B)">✎ Build</button>
         <button id="mh-compass" class="mh-compass mh-hidden" title="Walk back to the plaza (G)">
@@ -507,12 +508,12 @@ function navTo(i) {
   if (mode !== "walking") return;
   audio.ensure(); audio.resume();
   menuOpen = false; const m = document.getElementById("mh-menu"); if (m) m.classList.remove("mh-on");
-  if (!opensAsCard(i)) { warpAndOpen(i); return; }   // external kiosk → warp the slime there AND open the page in THIS gesture (popup-safe; the teleport motion plays as the tab opens)
+  if (!opensAsCard(i)) { warpAndOpen(i); return; }   // a kiosk with a page → warp the slime there AND open the page in THIS gesture (another site's new tab is popup-safe only here)
   auto.active = true; auto.goal = i; auto.warp = true; auto.lastDist = Infinity; auto.stuck = 0;
 }
 /** Send the slime WARPING toward kiosk i — as a POSITION target (auto.goal = -1), so its arrival
- *  won't try to re-open it (a deferred open would be popup-blocked) — and open the kiosk's page in
- *  THIS user gesture. The "teleport-to fast move" plays while the new tab opens. */
+ *  won't try to re-open it (a deferred new tab would be popup-blocked) — and open the kiosk's page
+ *  in THIS user gesture. */
 function warpAndOpen(i) {
   const ex = EXHIBITS[i]; if (!ex) return;
   const dx = nearImg(ex.tx, player.x) - player.x, dy = nearImg(ex.ty, player.y) - player.y;
@@ -666,6 +667,7 @@ function buildHub() {
       titleEn: it.title, title: kioskTitle(it.title),
       accent: T.accents[i % T.accents.length], slot: i, visited: false,
       underConstruction: !!it.underConstruction,
+      structure: it.structure || null,                  // a kiosk that is not a dwelling (the Glossary's wellhead)
     };
   });
   player.x = HX; player.y = HY + 1.8; player.fx = 0; player.fy = 1;   // spawn on the plaza, clear of the central beacon
@@ -793,6 +795,7 @@ function wireInput() {
   cardEl.addEventListener("click", (e) => { if (e.target === cardEl) closeCard(); });
   compassEl.addEventListener("click", recallHome);
   byId("mh-menu").addEventListener("click", toggleMenu);
+  if (CONTENT && CONTENT.view3d) { const v = byId("mh-view3d"); v.classList.remove("mh-hidden"); v.addEventListener("click", openView3d); }
   buildToggleEl.addEventListener("click", toggleBuild);
   buildbarEl.addEventListener("click", onBuildTool);
   canvas.addEventListener("pointermove", onPointerMove);
@@ -870,7 +873,7 @@ function onPointer(e) {
   const sx = e.clientX - r.left, sy = e.clientY - r.top;
   if (buildMode) { buildPointerDown(sx, sy); return; }           // build mode: edit buildings, don't walk
   const ki = kioskAtScreen(sx, sy);
-  if (ki >= 0) { tapDown = { sx, sy, ki }; return; }             // a kiosk: OPEN on pointerUP (browsers allow a new tab from pointerup/click, NOT pointerdown — fixes the iOS/Firefox block)
+  if (ki >= 0) { tapDown = { sx, sy, ki }; return; }             // a kiosk: OPEN on pointerUP (browsers allow another site's new tab from pointerup/click, NOT pointerdown — fixes the iOS/Firefox block)
   tapDown = null;
   const decor = decorAtScreen(sx, sy);
   if (decor >= 0) {
@@ -881,7 +884,7 @@ function onPointer(e) {
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
 }
 /** Canvas pointer-UP: open a tapped kiosk HERE. iOS Safari & Firefox only honour window.open from a
- *  pointerup/click/touchend gesture, not pointerdown, so the new tab must be opened on release. */
+ *  pointerup/click/touchend gesture, not pointerdown, so another site's new tab must open on release. */
 function onCanvasPointerUp(e) {
   if (buildMode || mode !== "walking") { tapDown = null; return; }
   const td = tapDown; tapDown = null;
@@ -1556,14 +1559,17 @@ function updateHUD() {
    10. CARD MODAL  — themed content card (trusted inline HTML from content.js)
    -------------------------------------------------------------------------- */
 
-/** Open a URL in a new browser tab. Every page link in the world now opens this way —
- *  About, CV, the Toolbox, the Music/Games menus, and the road-houses — so nothing is
- *  shown in an in-world iframe any more. Local pages and external sites are treated the
- *  same. @param {string} url */
-function openExternal(url) {
+/** Is this a page of the site itself (a relative link, or this origin)? @param {string} url */
+function sameSite(url) { try { return new URL(url, location.href).origin === location.origin; } catch (e) { return false; } }
+/** Open a page the house opens: About, the CV, the Toolbox, the Music/Games menus, the
+ *  road-houses. A page of this site opens in THIS tab (the address is brought up to the
+ *  slime's spot first, so Back returns to it); another site opens in a new tab. Nothing
+ *  is shown in an in-world iframe. @param {string} url */
+function openPage(url) {
+  if (window.MH_I18N) url = window.MH_I18N.href(url);   // French mode opens the French page
+  if (sameSite(url)) { reflectPlayerInURL(); location.href = url; return; }
   // a plain new TAB: no features string (a features string makes Safari treat it as a blockable
   // popup window). Must be called SYNCHRONOUSLY from a user gesture or iPad/iPhone will block it.
-  if (window.MH_I18N) url = window.MH_I18N.href(url);   // French mode opens the French page
   try { const w = window.open(url, "_blank"); if (w) { try { w.opener = null; } catch (e) { /* _blank is noopener by default on modern browsers */ } } }
   catch (e) { /* headless / blocked: ignore */ }
 }
@@ -1571,15 +1577,15 @@ function openExternal(url) {
 /** @param {number} i exhibit index */
 function openCard(i) {
   const ex = EXHIBITS[i];
-  if (ex.satellite) {                              // a road-house opens its OWN link in a NEW TAB (no iframe)
+  if (ex.satellite) {                              // a road-house opens its OWN link (no iframe)
     ex.visited = true; currentTarget = i; sfx.open(0);
-    openExternal(ex.url);
+    openPage(ex.url);
     return;
   }
   const k = CONTENT.kiosks[i], page = k && k.page;
-  if (page && page.url) {                          // About / CV / Toolbox → open the real page in a NEW TAB, never framed
+  if (page && page.url) {                          // About / CV / Toolbox → open the real page, never framed
     ex.visited = true; currentTarget = i; sfx.open(i);
-    openExternal(page.url);
+    openPage(page.url);
     return;
   }
   openIndex = i;
@@ -1597,7 +1603,7 @@ function browse(dir) {
   if (ni !== openIndex && opensAsCard(ni)) { sfx.nav(); openIndex = ni; EXHIBITS[ni].visited = true; currentTarget = ni; renderCard(ni); }
 }
 /** A kiosk shows an in-world card only when it is NOT a road-house and NOT a page.url
- *  kiosk (those open in a new tab). The Music/Games TOC and any prose kiosk open as a
+ *  kiosk (those open their page). The Music/Games TOC and any prose kiosk open as a
  *  card, so card-browse cycles only through those. @param {number} i */
 function opensAsCard(i) {
   const ex = EXHIBITS[i]; if (!ex || ex.satellite) return false;
@@ -1610,7 +1616,7 @@ function renderCard(i) {
   byId("mh-cardInner").style.setProperty("--mh-card-accent", EXHIBITS[i].accent);  // accent → kiosk colour
   showCardBack(false);
   const page = k.page;
-  if (page && page.toc) {                         // a table-of-contents kiosk → the dropdown menu (every link opens in a new tab)
+  if (page && page.toc) {                         // a table-of-contents kiosk → the dropdown menu (a site page in this tab, another site in a new one)
     setCardWide(false); setCardClean(true);
     renderToc(page);
   } else {                                        // the themed prose card
@@ -1637,11 +1643,11 @@ function showCardBack(on) {
   if (b && b.classList) b.classList.toggle("mh-hidden", !on);
 }
 
-/** Render a Music/Games table of contents as a clean link menu. Every entry — local
- *  page or external site — opens in a NEW TAB (no in-world iframe). @param {{toc:any[]}} page */
+/** Render a Music/Games table of contents as a clean link menu: a page of this site
+ *  opens in this tab, another site in a new one (no in-world iframe). @param {{toc:any[]}} page */
 function renderToc(page) {
   const rows = (page.toc || []).map((it) =>
-    `<a class="mh-toc-link" href="${it.url}" target="_blank" rel="noopener">${it.label}</a>`   // bare link, like the site's menubar dropdown
+    `<a class="mh-toc-link" href="${window.MH_I18N ? window.MH_I18N.href(it.url) : it.url}"${sameSite(it.url) ? "" : ' target="_blank" rel="noopener"'}>${it.label}</a>`   // bare link, like the site's menubar dropdown
   ).join("");
   cardBodyEl.innerHTML = `<div class="mh-toc">${rows}</div>`;
   cardBodyEl.scrollTop = 0;
@@ -2169,16 +2175,33 @@ function reflectPlayerInURL() {
   } catch (_) { /* file URL or restricted history */ }
 }
 
-/** Old links have no slime parameter and retain the ordinary plaza spawn. */
+/** Old links have no slime parameter and retain the ordinary plaza spawn. A
+ *  view handing the walk over (the 3D village) adds the way it faced, ?facing=fx,fy. */
 function restorePlayerFromURL() {
   try {
-    const value = new URL(location.href).searchParams.get("slime");
+    const q = new URL(location.href).searchParams, value = q.get("slime");
     if (!value) return;
     const [x, y] = value.split(",").map(Number);
     if (Number.isFinite(x) && Number.isFinite(y) && Math.abs(x) < 1e6 && Math.abs(y) < 1e6) {
       player.x = x; player.y = y;
     }
+    const [fx, fy] = (q.get("facing") || "").split(",").map(Number), m = Math.hypot(fx, fy);
+    if (m > 1e-6) { player.fx = fx / m; player.fy = fy / m; }
   } catch (_) { /* malformed or unavailable URL */ }
+}
+
+/** The same village in 3D (CONTENT.view3d), in this tab: the slime on the same
+ *  spot, facing the same way, in this skin, as the 3D view's own switch comes back.
+ *  The rest of the address rides along (the signal towers raised here, the
+ *  language), so the way back finds them. */
+function openView3d() {
+  let q;
+  try { q = new URL(location.href).searchParams; } catch (_) { q = new URLSearchParams(); }
+  q.set("theme", SKIN_SHARE[T.id] || T.id); q.set("place", "village");
+  q.set("slime", Number(player.x.toFixed(3)) + "," + Number(player.y.toFixed(3)));
+  q.set("facing", Number(player.fx.toFixed(3)) + "," + Number(player.fy.toFixed(3)));
+  const url = CONTENT.view3d + "?" + q.toString();
+  location.href = window.MH_I18N && window.MH_I18N.href ? window.MH_I18N.href(url) : url;
 }
 
 /* Shareable theme links. Friendly public names (the ones the site uses out loud) map to the

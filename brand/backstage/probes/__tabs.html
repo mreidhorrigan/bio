@@ -1,0 +1,49 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Pages of the site open in the same tab; other sites in a new one</title>
+<meta name="budget" content="20000">
+<iframe id="f" src="/index.html?theme=technocute" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The user's rule (2026-09-23): a page of this site never opens in a new tab;
+// another site may. In the iso world the building menu's Research chip goes to
+// Google Scholar in a new tab (the world stays), and the Toolbox chip opens the
+// Toolbox page in this same tab. On a page, the menubar's Research link (Google
+// Scholar) opens a new tab and its links to the site's own pages do not.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+let stage = 0, tabs = [];
+F.addEventListener("load", () => setTimeout(() => {
+  try { [world, toolbox, page][stage++](); }
+  catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 2500));
+function chip(d, title) { return [...d.querySelectorAll(".mh-navchip")].find((b) => b.textContent.replace(/^\d+\.\s*/, "") === title); }
+function world() {
+  const w = F.contentWindow, d = w.document;
+  w.open = (u) => { tabs.push(u); return null; };
+  const r = chip(d, "Research");
+  if (!r) { say("the Research chip: MISSING"); document.title = "done"; return; }
+  r.click();
+  setTimeout(() => {
+    say("the Research chip: " + (tabs.length === 1 && /scholar\.google/.test(tabs[0]) ? "Google Scholar in a new tab" : "opened " + JSON.stringify(tabs) + " NO") + ", and the world " + (/index\.html$/.test(F.contentWindow.location.pathname) ? "stays" : "left NO"));
+    tabs = []; F.contentWindow.open = (u) => { tabs.push(u); return null; };
+    const t = chip(F.contentWindow.document, "Toolbox");
+    if (!t) { say("the Toolbox chip: MISSING"); document.title = "done"; return; }
+    t.click();                                                 // the frame goes to the Toolbox
+    setTimeout(() => { if (stage === 1) { say("the Toolbox chip: the frame stayed in the world NO"); document.title = "done"; } }, 6000);
+  }, 400);
+}
+function toolbox() {
+  const w = F.contentWindow;
+  say("the Toolbox chip: " + (/toolbox\.html$/.test(w.location.pathname) ? "the Toolbox page, in the same tab" : "went to " + w.location.pathname + " NO") + (tabs.length ? " (and a new tab NO)" : ""));
+  F.src = "/about.html";
+}
+function page() {
+  const d = F.contentWindow.document, links = [...d.querySelectorAll(".mh-nav a")];
+  const research = links.find((a) => /scholar\.google/.test(a.href));
+  const own = links.filter((a) => a.host === F.contentWindow.location.host);
+  const ownNew = own.filter((a) => a.target === "_blank");
+  say("the menubar's Research: " + (research ? (research.target === "_blank" ? "Google Scholar, in a new tab" : "Google Scholar, in the same tab NO") : "MISSING"));
+  say("the menubar's " + own.length + " links to the site's own pages: " + (ownNew.length ? ownNew.length + " open a new tab NO (" + ownNew.map((a) => a.textContent).join(", ") + ")" : "all in the same tab"));
+  say("errors: none");
+  document.title = "done";
+}
+</script>

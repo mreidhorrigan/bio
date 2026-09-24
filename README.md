@@ -31,7 +31,7 @@ a friend fork this, replace the content, and keep a working walkable site.
 
 | File | What it holds |
 |---|---|
-| `content.js` | The kiosks: the site's words. Seven entries (About, Toolbox, Research, Public Writing, Store, Music, Games), each with a title, prose, links, and the "satellites" that grow into houses along a road. A kiosk with `underConstruction: true` wears a hazard tag on the map. `junctions` places a house where two roads meet. This is the main file you edit. |
+| `content.js` | The kiosks: the site's words. Six entries on the site (About, Toolbox, Research, Glossary, Music, Games; a Store waits commented out), each with a title, prose, links, and the "satellites" that grow into houses along a road. A kiosk with `underConstruction: true` wears a hazard tag on the map. `junctions` places a house where two roads meet. This is the main file you edit. |
 | `classic.html` | The plain bio page and portrait. The "About" kiosk opens this. |
 | `Horrigan_CV.html`, `Horrigan_CV.pdf` | The CV, in browser and PDF form. |
 | `menubar.js` (the link arrays only) | The site-wide top bar's links: `GAMES`, `TOOLS`, `MUSIC`, the Home/About/CV row, and `Research`. Edit the arrays near the top. Leave the styling below them. |

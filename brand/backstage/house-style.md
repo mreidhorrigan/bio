@@ -417,7 +417,18 @@ catches is a compound, not a series.
 
 ---
 
-## 11. Keeping this in sync
+## 11. The worlds (their art)
+
+The walkable worlds (the isometric village, the Glossary's sidescroller, the 3D
+slimeverse) have their own drawing rules: a flat fill inside one ink outline,
+which inks, how thick, what gets an outline and what stays a hairline, glows,
+sizes, and the 1:1 mapping between the iso and 3D villages. They live in
+**`world-style.md`**, beside this file. Read it before adding anything drawn in
+a world.
+
+---
+
+## 12. Keeping this in sync
 
 `brand.css` and `tokens.json` are the source of truth for the values; this file
 is the source of truth for the rules. The existing pages predate these files and

@@ -37,7 +37,8 @@
       const S = W.S(), B = BOTS(), I = ISO();
       if (!S || !S.tileOf || !B || !B.updateListener || !I) return;
       const [tx, ty] = S.tileOf(W.me.x, W.me.z);
-      I.placePlayer(tx, ty, Math.sin(W.me.yaw), Math.cos(W.me.yaw));   // the iso slime walks along, unseen: the two never disagree
+      const [fx, fy] = S.tileDir(W.me.yaw);
+      I.placePlayer(tx, ty, fx, fy);                           // the iso slime walks along, unseen: the two never disagree
       B.updateListener(tx, ty, I.hub().period, I.buildings());
       if (note) note.textContent = towers().length + (towers().length === 1 ? " tower" : " towers") + " from the map";
     },
@@ -48,10 +49,10 @@
   function to3d() {
     const I = ISO();
     if (!I) return;
-    const skin = I.skin ? I.skin() : "technurture", p = I.player(), yaw = Math.atan2(p.fx || 0, p.fy || 1);
+    const skin = I.skin ? I.skin() : "technurture", p = I.player();
     W.setSkin(skin); W.load("outdoors");
     const S = W.S(), at = S.fromTile(p.x, p.y);
-    W.me.x = at[0]; W.me.z = at[1]; W.me.yaw = yaw; W.me.speed = 0;
+    W.me.x = at[0]; W.me.z = at[1]; W.me.yaw = S.tileYaw(p.fx || 0, p.fy || 1); W.me.speed = 0;
     W.resume();
     in3d = true; document.body.classList.add("in3d");
     btn.textContent = "Back to the map"; cv.focus({ preventScroll: true });
@@ -61,8 +62,8 @@
   function toMap() {
     const I = ISO(), S = W.S();
     if (I && S && S.tileOf && W.scene().startsWith("outdoors")) {
-      const [tx, ty] = S.tileOf(W.me.x, W.me.z);
-      I.placePlayer(tx, ty, Math.sin(W.me.yaw), Math.cos(W.me.yaw));
+      const [tx, ty] = S.tileOf(W.me.x, W.me.z), [fx, fy] = S.tileDir(W.me.yaw);
+      I.placePlayer(tx, ty, fx, fy);
     }
     isoF.style.display = "block";
     in3d = false; document.body.classList.remove("in3d");

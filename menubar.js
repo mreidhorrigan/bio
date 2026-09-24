@@ -54,7 +54,7 @@
     ["Glossary", "glossary.html"]
   ];
   var LINKS_AFTER_DROPDOWNS = [
-    ["Research", "research.html"]     // the summaries; Google Scholar is linked from that page
+    ["Research", "https://scholar.google.ca/citations?user=g8USNu8AAAAJ&hl=en"]   // Google Scholar (research.html, the summaries, waits off the menu until it has some)
   ];
 
   /* All menubar metrics are pinned in px ON PURPOSE: pages set different root font
@@ -146,6 +146,8 @@
     var a = document.createElement("a");
     a.textContent = label;
     a.href = href;
+    // a page of this site opens in the same tab; another site in a new one
+    if (/^https?:/i.test(href) && a.host !== location.host) { a.target = "_blank"; a.rel = "noopener"; }
     var here = location.pathname.split("/").pop() || "index.html";
     if (href === here) a.setAttribute("aria-current", "page");
     return a;

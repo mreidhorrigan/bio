@@ -19,12 +19,16 @@
 
 (function () {
   const B = (window.MH_SITE && window.MH_SITE.base != null) ? window.MH_SITE.base : "../../";
+  // Another site opens in a new tab; a page of this one opens in the same tab.
   const ext = ` target="_blank" rel="noopener"`;
 
   window.MH_CONTENT = {
     title: "M. Reid Horrigan",
     // The home kiosk. The engine sends the slime here on Space / Enter.
     home: 0,
+    // The same village walkable in 3D: the HUD's 3D button opens it where the
+    // slime stands. Leave it out and there is no button.
+    view3d: `${B}slimeverse3d.html`,
     kiosks: [
       {
         title: "About",
@@ -47,8 +51,8 @@
           motion picture production cultures; and the Musebots, a multi-agent music
           generation system whose origins predate the GPT revolution.</p>
           <p>The full record, with degrees, publications, talks, and teaching, is in
-          the <a href="${B}Horrigan_CV.html"${ext}>CV</a>, which also stands as a house
-          along this road. There is a <a href="${B}Horrigan_CV.pdf"${ext}>PDF</a>.</p>`,
+          the <a href="${B}Horrigan_CV.html">CV</a>, which also stands as a house
+          along this road. There is a <a href="${B}Horrigan_CV.pdf">PDF</a>.</p>`,
       },
       {
         title: "Toolbox",
@@ -56,35 +60,31 @@
         html: `
           <p>Small, free tools I built for teaching:</p>
           <ul>
-            <li><a href="${B}MCQer.html"${ext}>MCQer</a>:write and mark multiple-choice questions.</li>
-            <li><a href="${B}SeatPlanner.html"${ext}>SeatPlanner</a>: seating plans for a class.</li>
-            <li><a href="${B}ExamTimer.html"${ext}>ExamTimer</a>:a clear, calm clock for exams.</li>
-            <li><a href="${B}Nameplates.html"${ext}>Nameplates</a>:printable desk name cards.</li>
+            <li><a href="${B}MCQer.html">MCQer</a>:write and mark multiple-choice questions.</li>
+            <li><a href="${B}SeatPlanner.html">SeatPlanner</a>: seating plans for a class.</li>
+            <li><a href="${B}ExamTimer.html">ExamTimer</a>:a clear, calm clock for exams.</li>
+            <li><a href="${B}Nameplates.html">Nameplates</a>:printable desk name cards.</li>
           </ul>`,
       },
       {
         title: "Research",
-        page: { url: `${B}research.html` },                    // summaries of the publications
+        page: { url: "https://scholar.google.ca/citations?user=g8USNu8AAAAJ&hl=en" },   // Google Scholar: another site, so a new tab
         html: `
           <p>Short summaries of what I have published and what I am writing, in
           plain terms.</p>
-          <p>Read the <a href="${B}research.html"${ext}>summaries</a>, or the full
-          record in the <a href="${B}Horrigan_CV.html"${ext}>CV</a>.</p>`,
+          <p>Read the <a href="${B}research.html">summaries</a>, or the full
+          record in the <a href="${B}Horrigan_CV.html">CV</a>.</p>`,
       },
       {
-        title: "Public Writing",
-        satellites: [   // the two kinds, each its own house along the road
-          // { title: "Criticism", url: `${B}criticism.html` },   // its house is off the village for now (2026-09-22); the page and its links stay
-          // not a dwelling: the glossary is underground, so its house is the
-          // shaft you go down. engine.js draws it with drawWellhead().
-          { title: "Glossary", url: `${B}glossary.html`, structure: "wellhead" },
-        ],
+        // Where Public Writing stood (removed 2026-09-23): the Glossary itself.
+        // Not a dwelling: the glossary is underground, so its house is the shaft
+        // you go down. engine.js draws it with drawWellhead(). (The Criticism
+        // page stays, off the village.)
+        title: "Glossary",
+        structure: "wellhead",
+        page: { url: `${B}glossary.html` },
         html: `
-          <p>Writing for readers outside the academy:</p>
-          <ul>
-            <li><a href="${B}criticism.html"${ext}>Criticism</a>: reviews of art, performance, games, and sound.</li>
-            <li><a href="${B}glossary.html"${ext}>Glossary</a>: the terms I keep using, defined, with an antiglossary of everything they leave out.</li>
-          </ul>`,
+          <p><a href="${B}glossary.html">Glossary</a>: the terms I keep using, defined, with an antiglossary of everything they leave out.</p>`,
       },
       /* The Store is off the village for now (2026-09-22), until there are things
          to sell: the user will say when it goes back. Uncomment to restore.
@@ -100,7 +100,7 @@
       */
       {
         title: "Music",
-        page: { url: `${B}about.html?menu=Music` },            // open the About page with the Music dropdown deployed (new tab)
+        page: { url: `${B}about.html?menu=Music` },            // open the About page with the Music dropdown deployed
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Music" gateway opens the menu)
           { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
           { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },   // the road's end: the Musebots house meets it
@@ -114,7 +114,7 @@
       },
       {
         title: "Games",
-        page: { url: `${B}about.html?menu=Games` },            // open the About page with the Games dropdown deployed (new tab)
+        page: { url: `${B}about.html?menu=Games` },            // open the About page with the Games dropdown deployed
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Games" gateway opens the menu)
           { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
           // { title: "Autofac", url: `${B}autofac.html` },   // off the site for now: still an experiment (2026-09-22)
@@ -126,11 +126,11 @@
         html: `
           <p>Games and interactive pieces:</p>
           <ul>
-            <li><a href="${B}Rock_Walls_and_Damp.html"${ext}>Rock Walls and Damp</a>:a hypertext piece.</li>
+            <li><a href="${B}Rock_Walls_and_Damp.html">Rock Walls and Damp</a>:a hypertext piece.</li>
             <!-- Autofac: Rad Shipping (autofac.html) is off the site for now: still an experiment -->
             <li><a href="https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"${ext}>Clod Bathos, Superior Machine</a>.</li>
             <li><a href="https://cgsa2026-audio-presentation.onrender.com"${ext}>Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>
-            <li><a href="${B}slimeverse3d.html"${ext}>Slimeverse 3D</a>: this village, walkable in three dimensions.</li>
+            <li><a href="${B}slimeverse3d.html">Slimeverse 3D</a>: this village, walkable in three dimensions.</li>
           </ul>`,
       },
     ],
@@ -143,7 +143,7 @@
       {
         title: "Musebots",
         between: ["Music", "Games"],
-        url: "https://vimeo.com/1228633944",   // Musebots Connectivity Demo: LAN, WAN, browser, DAW
+        url: `${B}musebots.html`,   // its page: the Musebots Connectivity Demo (LAN, WAN, browser, DAW) from Vimeo, embedded
       },
     ],
   };

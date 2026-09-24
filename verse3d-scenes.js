@@ -14,8 +14,9 @@
               half, with zoogs in the green and shoggoths in the dark
 
    The ways between them: the dwelling's door (outdoors to indoors and back),
-   the wellhead and the hatch (down to the cave), and the rope under the shaft
-   (back up to the wellhead).
+   the wellhead and the hatch (down to the cave, dropping in), and the rope
+   under the shaft (back up into the house, beside its hatch, from whichever
+   way round the ring the slime comes to it).
 
    Every surface is an analytic function of position, and every prop is placed
    by a hash of its index, so each scene is the same on every visit and
@@ -36,6 +37,8 @@
     g.beginPath(); g.ellipse(bb.x + bb.w * 0.34, bb.y + bb.h * 0.24, bb.w * 0.2, bb.h * 0.12, -0.5, 0, TAU); g.fill();
     g.restore();
   };
+  /** A spore-cap's ink: round its cap, and either side of its stalk. */
+  const CAP_INK = "rgba(50,20,60,0.8)";
   /** A soft halo round a body: a gradient, never a blur. */
   const halo = (colour, reach) => (g, ring, bb) => {
     const cx = bb.x + bb.w / 2, cy = bb.y + bb.h / 2, r = Math.max(bb.w, bb.h) * (reach || 1.6);
@@ -353,8 +356,11 @@
         if (Math.abs(off) > l) b.x = centre(b.z) + Math.sign(off) * l;
       },
       open: (x, y, z) => inTube(x, y, z, 1.5),
-      entries: { well: { x: centre(24), z: 24, yaw: 0 }, start: { x: centre(24), z: 24, yaw: 0 } },
-      portals: [{ x: centre(10) + ROPE, z: 10, r: 3.4, to: "outdoors", entry: "well" }],   // up the rope
+      // down the well or the hatch the slime drops in, under the shaft's opening, and lands (drop: its height)
+      entries: { well: { x: centre(14) - 2, z: 14, yaw: 0, drop: 30 }, start: { x: centre(24), z: 24, yaw: 0 } },
+      // up the rope, into the house beside its hatch: reached by touching the rope's knot, from
+      // either way round the ring (a portal is found at every turn of it)
+      portals: [{ x: centre(10) + ROPE, z: 10, r: 1.1 + V.UNIT * 0.8 + 0.6, to: "indoors", entry: "hatch" }],
       life: {
         zoogs: 10, shoggoths: 3, greet: true,
         spot: (rnd) => { const z = 90 + rnd() * (DARK_FROM - 200); return [centre(z) + (rnd() - 0.5) * 20, z]; },
@@ -389,6 +395,11 @@
     // nothing stands within a slime's width of the middle line
     const BATH = { x: -6.5, z: 1, r: 4.6 * K }, HATCH = { x: 8, z: -2.5, r: Math.max(2.1, 2.4 * K) }, TABLE = { x: 6, z: 6, r: 3 * K };
     const POT = { x: -7.6, z: -5.5 };
+    // the hatch is reached by touching its rim; up the cave's rope the slime comes out beside it,
+    // clear of that reach and facing into the room (so it does not drop straight back down)
+    const HATCH_REACH = HATCH.r + 0.7 + V.UNIT * 0.8 + 0.4;
+    const UP_ROPE = (() => { const d = Math.hypot(HATCH.x, HATCH.z), ux = -HATCH.x / d, uz = -HATCH.z / d, far = HATCH_REACH + 2.5;
+      return { x: HATCH.x + ux * far, z: HATCH.z + uz * far, yaw: Math.atan2(ux, uz) }; })();
     const ROOM = { kind: "room" };
     /** The inside of the shell at height hy: the outline, in by the wall. */
     const wallAt = (hy) => R0 * V.DWELL(hy / TOP);
@@ -604,8 +615,8 @@
         const y = fl(POT.x, POT.z), sway = ctx.reduce ? 0 : Math.sin(E.t * 1.1) * 0.15;
         E.organic(M.shapes.ball(POT.x, y + 1.1, POT.z, 1.6, 1.2, 1.6, 3, 10, false), vgrad("#d08a5a", "#8a4a2a"), P.ink, 1, { layer: 2, inkPx: 4 });
         E.organic(M.shapes.disc(POT.x, POT.z, 1.35, 12, () => y + 2.2), "#3f2a18", null, 0, { layer: 2, bias: 0.3, inkPx: 1e9 });
-        E.line([[POT.x, y + 2.2, POT.z], [POT.x + sway, y + 4.2, POT.z]], "#d8d0be", 0.22, { layer: 2, bias: 0.5, world: true });
-        E.organic(M.shapes.ball(POT.x + sway, y + 4.3, POT.z, 1.3, 0.8, 1.3, 3, 10, true), vgrad("#c88ae6", "#8a4aa8"), "rgba(50,20,60,0.8)", 1, { layer: 2, bias: 0.6, inkPx: 4, after: halo("#e6b0ff", 1.5) });
+        E.line([[POT.x, y + 2.2, POT.z], [POT.x + sway, y + 4.2, POT.z]], "#d8d0be", 0.22, { layer: 2, bias: 0.5, world: true, edge: CAP_INK });   // outlined, as the village's are
+        E.organic(M.shapes.ball(POT.x + sway, y + 4.3, POT.z, 1.3, 0.8, 1.3, 3, 10, true), vgrad("#c88ae6", "#8a4aa8"), CAP_INK, 1, { layer: 2, bias: 0.6, inkPx: 4, after: halo("#e6b0ff", 1.5) });
       }
     }
 
@@ -621,10 +632,10 @@
       walkable: (x, z) => dist(x, z) < R0 - 1,
       bound(b) { const d = dist(b.x, b.z), l = lim(b); if (d > l) { b.x *= l / d; b.z *= l / d; } },
       open: (x, y, z) => y > floorAt(x, z) + 1.2 && y < TOP - 1.5 && dist(x, z) < wallAt(y) - 1.2,
-      entries: { door: { x: 0, z: -R0 + 8.5, yaw: 0 }, start: { x: 0, z: -R0 + 8.5, yaw: 0 } },
+      entries: { door: { x: 0, z: -R0 + 8.5, yaw: 0 }, start: { x: 0, z: -R0 + 8.5, yaw: 0 }, hatch: UP_ROPE },
       // ways out fire on touch: the door where the slime reaches the wall, the
       // hatch where it meets the rim, never from across the room
-      portals: [{ x: 0, z: -R0 + 1.5, r: 3.6, to: "outdoors", entry: "back" }, { x: HATCH.x, z: HATCH.z, r: HATCH.r + 0.7 + V.UNIT * 0.8 + 0.4, to: "cave", entry: "well" }],   // the hatch is reached by touching its rim
+      portals: [{ x: 0, z: -R0 + 1.5, r: 3.6, to: "outdoors", entry: "back" }, { x: HATCH.x, z: HATCH.z, r: HATCH_REACH, to: "cave", entry: "well" }],   // the hatch is reached by touching its rim
       life: {
         zoogs: 2, shoggoths: 0, greet: true, spot: zoogSpot, night: () => false,   // two pets: room to roam without knotting
         motes: { n: 8, glow: "#ffd98a", core: "#fff8e0", spot: (rnd) => { const p = zoogSpot(rnd); return [p[0], p[1], 0.3 + rnd() * 0.5]; } },
@@ -651,9 +662,10 @@
 
   /* ══════════════════════════ THE SKINS OF THE ISO WORLD ══════════════════════
      Each skin of the iso world has its 3D version, built by isoWorld below from
-     that skin's own settings (theme-*.js): its torus, whether its land has
-     biomes, its colours, its buildings, its plants and its creatures. Nothing is
-     added that the skin does not have, and nothing it has is left out.
+     that skin's own settings (theme-*.js): its torus, its walking pace (speed,
+     in tiles a second), whether its land has biomes, its colours, its
+     buildings, its plants and its creatures. Nothing is added that the skin
+     does not have, and nothing it has is left out.
 
        technurture   the slime world by day: biomes, lakes, gel dwellings,
                      flora, zoogs and shoggoths (outdoors)
@@ -671,7 +683,7 @@
   const ISO_PX = V.UNIT / 13;
   const SKINS = {
     technurture: {
-      id: "technurture", period: 58, audio: { root: 261.63 }, biomes: true, flora: true, relief: 1, grain: 0.06, night: false,
+      id: "technurture", speed: 4.9, period: 58, audio: { root: 261.63 }, biomes: true, flora: true, relief: 1, grain: 0.06, night: false,
       ground: { grass: "#3f7d5e", forest: "#214a3e", sand: "#b8ad73", dry: "#94727a", stone: "#5a5170", snow: "#cfd2de", water: "#2f8a98" },
       walls: { grass: "#c2a065", forest: "#9c7a48", sand: "#e2c990", dry: "#cdb285", stone: "#9a948a", snow: "#c9b893", water: "#b89a6a" },
       plaza: "#e7cf94", road: "#d95f93", air: "#c4dccb", sky: ["#bfe3db", "#d8ecd2"], water: "#2f8a98", shallow: "#6fd0d6",
@@ -683,7 +695,7 @@
         stalk: "#d8d0be", cap: ["#c88ae6", "#8a4aa8"], capGlow: "#e6b0ff", tendril: "#4fb07a", drip: "#9fe6c0", reed: ["#6f9a4a", "#557f3a"], head: "#7a5230" },
     },
     technoscure: {
-      id: "technoscure", period: 58, audio: { root: 196.0 }, biomes: true, flora: true, relief: 1, grain: 0.05, night: true,
+      id: "technoscure", speed: 4.9, period: 58, audio: { root: 196.0 }, biomes: true, flora: true, relief: 1, grain: 0.05, night: true,
       ground: { grass: "#1a3a2c", forest: "#10271f", sand: "#3a351f", dry: "#2c2024", stone: "#221f2e", snow: "#353a47", water: "#103a42" },
       walls: { grass: "#2e3a26", forest: "#283324", sand: "#56492f", dry: "#473d2c", stone: "#37372f", snow: "#39414a", water: "#283640" },
       plaza: "#2a2c24", road: "#34281c", air: "#050806", sky: ["#0a120c", "#050806"], water: "#103a42", shallow: "#1f5a58",
@@ -695,7 +707,7 @@
         stalk: "#6a6258", cap: ["#5a3a7a", "#3a2450"], capGlow: "#c890ff", tendril: "#1f5a3a", drip: "#5fe0a0", reed: ["#2f4a2a", "#243a20"], head: "#3a2818" },
     },
     technocute: {
-      id: "technocute", period: 52, audio: { root: 277.18 }, biomes: false, flora: false, relief: 0, grain: 0, night: false,
+      id: "technocute", speed: 5.0, period: 52, audio: { root: 277.18 }, biomes: false, flora: false, relief: 0, grain: 0, night: false,
       ground: null, walls: null, paper: "#f4f0e6",
       plaza: "#dcf3ff", road: "#8a5cc0", air: "#f4f0e6", sky: ["#f4f0e6", "#f4f0e6"],
       house: "block", monument: "cone", sign: "plate",
@@ -740,8 +752,13 @@
       if (m < 0.30) return "dry";
       return "grass";
     }
-    const tileX = (x) => x / TILE + HX, tileZ = (z) => z / TILE + HX;
-    const toWorld = (t) => (t - HX) * TILE;
+    /* Tiles and world units. The iso map draws ty a quarter turn CLOCKWISE
+       from tx on the screen; this engine, seen from above, has z a quarter turn
+       counterclockwise from x. Taking x = tx and z = ty built the village's
+       mirror image (a house to the slime's left in the iso view stood to its
+       right in 3D), so world z runs against ty. */
+    const tileX = (x) => x / TILE + HX, tileZ = (z) => -z / TILE + HX;
+    const toWorld = (t) => (t - HX) * TILE, toWorldZ = (t) => -(t - HX) * TILE;
     const P = { air: SK.air, sky: SK.sky[1], ink: NIGHT ? "rgba(0,0,0,0.6)" : FLAT ? "#111111" : "rgba(20,40,28,0.8)",
       water: NIGHT ? "rgba(16,58,66,0.5)" : "rgba(47,138,152,0.4)", shallow: SK.shallow || "#6fd0d6", deep: SK.water || "#1c5a66",
       glint: NIGHT ? "rgba(160,225,215,0.6)" : "rgba(255,255,250,0.95)", board: "#f3ecd8", boardInk: "#b98a2a", text: "#2a8186", plaza: SK.plaza, road: SK.road };
@@ -749,7 +766,7 @@
     const rgbOf = (c) => M.rgbOf(c);
 
     /* ── the village: content.js laid out as the iso engine lays it ─────── */
-    const C = window.MH_CONTENT || { kiosks: ["About", "Toolbox", "Research", "Public Writing", "Store", "Music", "Games"].map((title) => ({ title })), junctions: [] };
+    const C = window.MH_CONTENT || { kiosks: ["About", "Toolbox", "Research", "Glossary", "Music", "Games"].map((title) => ({ title, structure: title === "Glossary" ? "wellhead" : null })), junctions: [] };
     const kiosks = C.kiosks, n = kiosks.length;
     const HOUSES = [], SPURS = [], gates = [];
     let wellAt = null;
@@ -757,7 +774,9 @@
       const ang = -Math.PI / 2 + (i * TAU) / n, accent = SK.accents[i % SK.accents.length];
       const g = { title: k.title, ang, x: Math.cos(ang) * ISO.ring * TILE, z: Math.sin(ang) * ISO.ring * TILE, sats: (k.satellites || []).length, accent };
       gates.push(g);
-      HOUSES.push({ title: k.title, x: g.x, z: g.z, gate: true, slot: i, accent, item: { kind: "kiosk", title: k.title, kiosk: k } });
+      // a kiosk that is the Glossary's shaft stands on the ring as the wellhead, as the iso village draws it
+      if (k.structure === "wellhead") wellAt = { x: g.x, z: g.z, title: k.title, accent, item: { kind: "kiosk", title: k.title, kiosk: k } };
+      else HOUSES.push({ title: k.title, x: g.x, z: g.z, gate: true, slot: i, accent, item: { kind: "kiosk", title: k.title, kiosk: k } });
       (k.satellites || []).forEach((sat, j) => {
         // beside the road, alternate houses on alternate sides, as the iso village stands them (engine.js SPUR_SIDE)
         const r = (ISO.ring + ISO.spur * (j + 1)) * TILE, side = (j % 2 ? -1 : 1) * (ISO.side || 0) * TILE;
@@ -781,6 +800,10 @@
       for (const e of ends) SPURS.push([e, [jx, jz]]);
     }
     if (!wellAt) wellAt = { x: -3 * TILE, z: 6 * TILE, title: "Glossary", accent: SK.accents[0] };
+    // laid out above in the iso map's axes, as engine.js lays it: into the world's (z against ty)
+    for (const q of HOUSES) q.z = -q.z;
+    for (let i = 0; i < SPURS.length; i++) SPURS[i] = SPURS[i].map(([x, z]) => [x, -z]);
+    wellAt.z = -wellAt.z;
 
     /* ── the land ─────────────────────────────────────────────────────── */
     const segDist = (x, z, a, b) => {
@@ -900,7 +923,7 @@
       if (ctx.towers) for (const tw of ctx.towers()) {           // a lit tower's lamp reaches the ground round it
         const st = ctx.towerState(tw.uid) || {};
         if (st.state !== "playing" && st.state !== "ready" && st.state !== "error") continue;
-        const dx = wD(toWorld(tw.tx) - E.cam.x), dz = wD(toWorld(tw.ty) - E.cam.z);
+        const dx = wD(toWorld(tw.tx) - E.cam.x), dz = wD(toWorldZ(tw.ty) - E.cam.z);
         if (dx * dx + dz * dz < (FOG1 + 30) * (FOG1 + 30)) lamps.push({ x: E.cam.x + dx, z: E.cam.z + dz, r: 3, k: 0.6 });
       }
       // each lamp in the cells of a coarse grid it reaches, so a ground sample
@@ -1017,7 +1040,7 @@
     const FLORA = [];
     const KINDS = ["mould", "gelpod", "sporecap", "tendril"];
     if (SK.flora) for (let ty = 0; ty < NT; ty++) for (let tx = 0; tx < NT; tx++) {
-      const b = BIOME[ty * NT + tx], cx = toWorld(tx), cz = toWorld(ty), hsh = hash01(tx, ty);
+      const b = BIOME[ty * NT + tx], cx = toWorld(tx), cz = toWorldZ(ty), hsh = hash01(tx, ty);
       if (hsh <= 0.22) {                                       // the iso world's own plant on this tile (propAt)
         const x = cx + (hash01(tx * 3 + 1, ty) - 0.5) * TILE * 0.6, z = cz + (hash01(tx, ty * 3 + 1) - 0.5) * TILE * 0.6;
         if (b === "water") { if (heightAt(x, z) < LEVEL - 0.3) FLORA.push({ kind: "lily", x, z, s: 1, r: 0.9 + hash01(ty, tx) * 2.8, bud: hash01(tx + 5, ty) < 0.5 }); }
@@ -1041,7 +1064,7 @@
       if (b !== "water" && b !== "snow") {
         const wet = [[1, 0], [-1, 0], [0, 1], [0, -1]].find(([ox, oz]) => BIOME[wrapT(ty + oz) * NT + wrapT(tx + ox)] === "water");
         if (wet) for (let k = 0; k < 3; k++) {
-          const x = cx + wet[0] * TILE * 0.45 + (hash01(tx + k, ty * 7) - 0.5) * TILE * 0.8, z = cz + wet[1] * TILE * 0.45 + (hash01(tx * 7, ty + k) - 0.5) * TILE * 0.8;
+          const x = cx + wet[0] * TILE * 0.45 + (hash01(tx + k, ty * 7) - 0.5) * TILE * 0.8, z = cz - wet[1] * TILE * 0.45 + (hash01(tx * 7, ty + k) - 0.5) * TILE * 0.8;   // toward the water: ty runs against z
           const h0 = heightAt(x, z);
           if (h0 < LEVEL - 0.5 || h0 > LEVEL + 1.2 || taken(x, z, 1)) continue;
           FLORA.push({ kind: "reed", x, z, s: 0.6 + hash01(tx + k * 3, ty + 1) * hash01(tx, ty + k) * 1.6, ph: hash01(ty, tx + k) * 40, n: 3 + Math.floor(hash01(tx + k, ty + k) * 4) });
@@ -1202,7 +1225,7 @@
       dynSolids.length = 0;
       const list = ctx.towers ? ctx.towers() : [];
       for (const tw of list) {
-        const wx = toWorld(tw.tx), wz = toWorld(tw.ty);
+        const wx = toWorld(tw.tx), wz = toWorldZ(tw.ty);
         dynSolids.push({ x: wx, z: wz, r: TW.foot * 0.6 });
         if (!ctx.ahead(wx, wz, 8)) continue;
         const [x, z] = ctx.at(wx, wz), y = floorAt(x, z), st = ctx.towerState(tw.uid) || {}, t = ctx.reduce ? 0 : E.t;
@@ -1269,9 +1292,10 @@
           }
         } else if (f.kind === "sporecap") {
           const h = 2.6 * s;
-          // the stalk as thick as the iso one is to its cap (3.5 px to a 9 px cap): no screen cap on its width, or a giant's went thread-thin
-          E.line([[f.x, y, f.z], [f.x + sway * 0.4, y + h, f.z]], PL.stalk, 0.5 * s, { layer: 2, world: true, maxPx: 400, fade: s > 1.4 });
-          E.organic(M.shapes.ball(f.x + sway * 0.4, y + h, f.z, 1.3 * s, 0.85 * s, 1.3 * s, 3, [6, 8, 10][lod], true), vgrad(PL.cap[0], PL.cap[1]), "rgba(50,20,60,0.8)", 1, { layer: 2, inkPx: 4, fade: s > 1.4, after: halo(PL.capGlow, 1.5) });
+          // the stalk as thick as the iso one is to its cap (3.5 px to a 9 px cap): no screen cap on its width, or a giant's went thread-thin;
+          // outlined in the cap's ink, as every body standing in the 3D world is, and drawn before the cap, which covers its top
+          E.line([[f.x, y, f.z], [f.x + sway * 0.4, y + h, f.z]], PL.stalk, 0.5 * s, { layer: 2, world: true, maxPx: 400, fade: s > 1.4, edge: CAP_INK });
+          E.organic(M.shapes.ball(f.x + sway * 0.4, y + h, f.z, 1.3 * s, 0.85 * s, 1.3 * s, 3, [6, 8, 10][lod], true), vgrad(PL.cap[0], PL.cap[1]), CAP_INK, 1, { layer: 2, bias: 0.5, inkPx: 4, fade: s > 1.4, after: halo(PL.capGlow, 1.5) });
         } else {
           for (let j = -1; j <= 1; j++) {
             const x = f.x + j * 0.7 * s, h = (2.6 + (j & 1) * 0.6) * s;
@@ -1334,14 +1358,18 @@
       entries.well = { x: wellAt.x + Math.sin(a) * r, z: wellAt.z + Math.cos(a) * r, yaw: a };
       const reach = WELLHEAD.collar + WELLHEAD.lobe + V.UNIT * 0.8 + 1.5;
       // the wellhead: down to the cave (the proposal), or, as in the iso village, the Glossary's page
-      if (menus && wellAt.item && wellAt.item.url) portals.push({ x: wellAt.x, z: wellAt.z, r: reach, open: wellAt.item });
+      if (menus && wellAt.item) portals.push({ x: wellAt.x, z: wellAt.z, r: reach, open: wellAt.item });
       else portals.push({ x: wellAt.x, z: wellAt.z, r: reach, to: "cave", entry: "well" }); }
     const L = SK.life;
     return {
       name: "Outdoors", skin: SK.id, seen: SEEN, period: PER, sea: FLAT ? null : { level: LEVEL }, floorAt, ceilAt: null, pal, solids,
+      walk: SK.speed * TILE,                                   // the iso walk: its tiles a second, in units a second
       pools: [], mirrorAlpha: NIGHT ? 0.25 : 0.4, fogFrom: FOG0, fog, night: NIGHT, slime: SK.slime, signStyle: SK.sign, audio: SK.audio, dynSolids,
       /** iso tiles to world units and back, for a host page syncing the two views */
-      fromTile: (tx, ty) => [toWorld(tx), toWorld(ty)],
+      fromTile: (tx, ty) => [toWorld(tx), toWorldZ(ty)],
+      /** a heading from a direction in iso tiles (the iso slime's facing), and back */
+      tileYaw: (dx, dy) => Math.atan2(dx, -dy),
+      tileDir: (yaw) => [Math.sin(yaw), -Math.cos(yaw)],
       // depth of field: sharp to 70 units, softening to 130, soft beyond
       // cruder and cheaper: no blur filter at all, only the distance drawn small and scaled up
       // at a quarter size far things hopped between 4-pixel blocks as they moved, and the distance swam

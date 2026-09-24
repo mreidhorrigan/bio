@@ -100,7 +100,6 @@
     "kiosk.About.title": "À propos",
     "kiosk.Toolbox.title": "Boîte à outils",
     "kiosk.Research.title": "Recherche",
-    "kiosk.Public Writing.title": "Écrits publics",
     "kiosk.Store.title": "Boutique",
     "kiosk.Music.title": "Musique",
     "kiosk.Games.title": "Jeux",
@@ -110,20 +109,20 @@
     // "CV" is the same word in French, and the road-houses (No Phenomenon,
     // Autofac…) carry the names of works: no entry, so they come back unchanged.
 
-    "kiosk.About.html": "\n          <p><span class=\"mh-big\">Comment travaillez-vous\u00A0?</span></p>\n          <p>Bonjour. Je m'appelle M. Reid Horrigan et je fais de la recherche sur les cultures de production médiatique.</p>\n          <p>J'enseigne l'écriture critique et la théorie, ainsi que des compétences en communication dans des médias comme le podcast, les jeux, la vidéo et la musique. En travaillant avec plus de deux mille personnes étudiantes au postsecondaire depuis 2016, j'ai mis au point de nouvelles méthodes pour favoriser l'intégrité académique, un usage efficace et responsable de l'intelligence artificielle, et l'idéation créative.</p>\n          <p>En plus d'enseigner, je mène actuellement trois grands projets de recherche\u00A0: une monographie sur le <em>Voiceshifting</em>, le procédé technique et esthétique qui consiste à modifier électroniquement des voix pour communiquer des personnages et des personae\u00A0; une monographie adaptée de ma thèse ethnographique sur les cultures de production cinématographique de Vancouver\u00A0; et les Musebots, un système multi-agent de génération musicale dont les origines précèdent la révolution GPT.</p>\n          <p>Le dossier complet, avec les dipl\u00f4mes, les publications, les communications et l'enseignement, se trouve dans le <a href=\"Horrigan_CV.html\" target=\"_blank\" rel=\"noopener\">CV</a>, qui tient aussi une maison le long de cette route. Il existe en <a href=\"Horrigan_CV.pdf\" target=\"_blank\" rel=\"noopener\">PDF</a>.</p>",
+    "kiosk.About.html": "\n          <p><span class=\"mh-big\">Comment travaillez-vous\u00A0?</span></p>\n          <p>Bonjour. Je m'appelle M. Reid Horrigan et je fais de la recherche sur les cultures de production médiatique.</p>\n          <p>J'enseigne l'écriture critique et la théorie, ainsi que des compétences en communication dans des médias comme le podcast, les jeux, la vidéo et la musique. En travaillant avec plus de deux mille personnes étudiantes au postsecondaire depuis 2016, j'ai mis au point de nouvelles méthodes pour favoriser l'intégrité académique, un usage efficace et responsable de l'intelligence artificielle, et l'idéation créative.</p>\n          <p>En plus d'enseigner, je mène actuellement trois grands projets de recherche\u00A0: une monographie sur le <em>Voiceshifting</em>, le procédé technique et esthétique qui consiste à modifier électroniquement des voix pour communiquer des personnages et des personae\u00A0; une monographie adaptée de ma thèse ethnographique sur les cultures de production cinématographique de Vancouver\u00A0; et les Musebots, un système multi-agent de génération musicale dont les origines précèdent la révolution GPT.</p>\n          <p>Le dossier complet, avec les dipl\u00f4mes, les publications, les communications et l'enseignement, se trouve dans le <a href=\"Horrigan_CV.html\">CV</a>, qui tient aussi une maison le long de cette route. Il existe en <a href=\"Horrigan_CV.pdf\">PDF</a>.</p>",
 
-    "kiosk.Toolbox.html": "\n          <p>De petits outils gratuits que j'ai construits pour l'enseignement\u00A0:</p>\n          <ul>\n            <li><a href=\"MCQer.html\" target=\"_blank\" rel=\"noopener\">MCQer</a>\u00A0: rédiger et corriger des questions à choix multiple.</li>\n            <li><a href=\"SeatPlanner.html\" target=\"_blank\" rel=\"noopener\">SeatPlanner</a>\u00A0: des plans de classe.</li>\n            <li><a href=\"ExamTimer.html\" target=\"_blank\" rel=\"noopener\">ExamTimer</a>\u00A0: une horloge claire et calme pour les examens.</li>\n            <li><a href=\"Nameplates.html\" target=\"_blank\" rel=\"noopener\">Nameplates</a>\u00A0: des porte-noms à imprimer.</li>\n          </ul>",
+    "kiosk.Toolbox.html": "\n          <p>De petits outils gratuits que j'ai construits pour l'enseignement\u00A0:</p>\n          <ul>\n            <li><a href=\"MCQer.html\">MCQer</a>\u00A0: rédiger et corriger des questions à choix multiple.</li>\n            <li><a href=\"SeatPlanner.html\">SeatPlanner</a>\u00A0: des plans de classe.</li>\n            <li><a href=\"ExamTimer.html\">ExamTimer</a>\u00A0: une horloge claire et calme pour les examens.</li>\n            <li><a href=\"Nameplates.html\">Nameplates</a>\u00A0: des porte-noms à imprimer.</li>\n          </ul>",
 
 
-    "kiosk.Research.html": "\n          <p>De courts r\u00e9sum\u00e9s de ce que j'ai publi\u00e9 et de ce que j'\u00e9cris, en\n          termes simples.</p>\n          <p>Lisez les <a href=\"research.html\" target=\"_blank\" rel=\"noopener\">r\u00e9sum\u00e9s</a>, ou le dossier\n          complet dans le <a href=\"Horrigan_CV.html\" target=\"_blank\" rel=\"noopener\">CV</a>.</p>",
+    "kiosk.Research.html": "\n          <p>De courts r\u00e9sum\u00e9s de ce que j'ai publi\u00e9 et de ce que j'\u00e9cris, en\n          termes simples.</p>\n          <p>Lisez les <a href=\"research.html\">r\u00e9sum\u00e9s</a>, ou le dossier\n          complet dans le <a href=\"Horrigan_CV.html\">CV</a>.</p>",
 
-    "kiosk.Public Writing.html": "\n          <p>Des textes pour un lectorat hors de l'universit\u00e9\u00A0:</p>\n          <ul>\n            <li><a href=\"criticism.html\" target=\"_blank\" rel=\"noopener\">Critique</a>\u00A0: comptes rendus d'art, de performance, de jeux et de son.</li>\n            <li><a href=\"glossary.html\" target=\"_blank\" rel=\"noopener\">Glossaire</a>\u00A0: les termes que j'emploie sans cesse, d\u00e9finis, avec un antiglossaire de tout ce qu'ils laissent de c\u00f4t\u00e9.</li>\n          </ul>",
+    "kiosk.Glossary.html": "\n          <p><a href=\"glossary.html\">Glossaire</a>\u00A0: les termes que j'emploie sans cesse, d\u00e9finis, avec un antiglossaire de tout ce qu'ils laissent de c\u00f4t\u00e9.</p>",
 
     "kiosk.Store.html": "\n          <p><strong>En construction.</strong> Il n'y a pas encore de boutique.</p>\n          <p>Quand il y en aura une, elle vendra ce que ce site donne d\u00e9j\u00e0\u00A0: les outils,\n          les jeux et la musique. D'ici l\u00e0, tout reste gratuit l\u00e0 o\u00f9 c'est.</p>",
 
     "kiosk.Music.html": "\n          <p>Dans une première carrière artistique, j'ai fait de la conception sonore et\n          de la programmation, en écrivant du code pour des installations et des\n          spectacles musicaux.</p>\n          <p>À écouter\u00A0: <a href=\"https://nophenomenon.bandcamp.com/\" target=\"_blank\" rel=\"noopener\">No Phenomenon</a>\n          sur Bandcamp, et d'autres pièces sur\n          <a href=\"https://soundcloud.com/matt_horrigan\" target=\"_blank\" rel=\"noopener\">SoundCloud</a>.</p>",
 
-    "kiosk.Games.html": "\n          <p>Jeux et pièces interactives\u00A0:</p>\n          <ul>\n            <li><a href=\"Rock_Walls_and_Damp.html\" target=\"_blank\" rel=\"noopener\">Rock Walls and Damp</a>\u00A0: une pièce hypertexte.</li>\n            <!-- Autofac: Rad Shipping (autofac.html) is off the site for now: still an experiment -->\n            <li><a href=\"https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/\" target=\"_blank\" rel=\"noopener\">Clod Bathos, Superior Machine</a>.</li>\n            <li><a href=\"https://cgsa2026-audio-presentation.onrender.com\" target=\"_blank\" rel=\"noopener\">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>\n            <li><a href=\"slimeverse3d.html\" target=\"_blank\" rel=\"noopener\">Slimeverse 3D</a>\u00A0: ce village, praticable en trois dimensions.</li>\n          </ul>",
+    "kiosk.Games.html": "\n          <p>Jeux et pièces interactives\u00A0:</p>\n          <ul>\n            <li><a href=\"Rock_Walls_and_Damp.html\">Rock Walls and Damp</a>\u00A0: une pièce hypertexte.</li>\n            <!-- Autofac: Rad Shipping (autofac.html) is off the site for now: still an experiment -->\n            <li><a href=\"https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/\" target=\"_blank\" rel=\"noopener\">Clod Bathos, Superior Machine</a>.</li>\n            <li><a href=\"https://cgsa2026-audio-presentation.onrender.com\" target=\"_blank\" rel=\"noopener\">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>\n            <li><a href=\"slimeverse3d.html\">Slimeverse 3D</a>\u00A0: ce village, praticable en trois dimensions.</li>\n          </ul>",
 
     /* ── ExamTimer ───────────────────────────────────────────────────────── */
     // "En attente" rather than "Prêt": nothing here should agree with a reader.
@@ -316,7 +315,7 @@
     "*": [
       { sel: '.mh-nav > a[href^="index.html"]', text: "Accueil" },
       { sel: '.mh-nav > a[href^="about.html"]', text: "À propos" },
-      { sel: '.mh-nav > a[href^="research.html"]', text: "Recherche" },
+      { sel: '.mh-nav > a[href^="https://scholar.google"]', text: "Recherche" },
       { sel: '.mh-dd[data-menu="Games"] > summary', text: "Jeux" },
       { sel: '.mh-dd[data-menu="Tools"] > summary', text: "Outils" },
       { sel: '.mh-dd[data-menu="Music"] > summary', text: "Musique" },
@@ -368,6 +367,7 @@
         "<b>Espace</b> borne suivante"
       ] },
       { sel: "#mh-menu", attr: { title: "Menu des bâtiments\u00A0: aller à un bâtiment" } },
+      { sel: "#mh-view3d", attr: { title: "Voir cet endroit en 3D" } },
       { sel: "#mh-buildtoggle", text: "✎ Bâtir", attr: { title: "Réorganiser les bâtiments (B)" } },
       { sel: "#mh-compass", attr: { title: "Revenir à la place (G)" } },
       // The Musebot selector comes from the generated signal-towers.js bundle and
@@ -418,11 +418,18 @@
       { sel: "footer a", text: "Retour au monde" },
     ],
 
+    "musebots.html": [
+      { sel: "title", text: "Musebots\u00A0: M. Reid Horrigan" },
+      { sel: 'meta[name="description"]', attr: { content: "Musebots, par M. Reid Horrigan\u00A0: la Musebots Connectivity Demo (LAN, WAN, navigateur, DAW)." } },
+      { sel: "footer a", text: "Retour au monde" },
+    ],
+
     "slimeverse3d.html": [
       { sel: "title", text: "Slimeverse 3D\u00A0: M. Reid Horrigan" },
       { sel: 'meta[name="description"]', attr: { content: "Le village du site de M. Reid Horrigan, praticable en trois dimensions\u00A0: les mêmes maisons, les mêmes routes et les mêmes lacs que le village isométrique, depuis la maison Slimeverse 3D." } },
       { sel: "#stage", attr: { "aria-label": "Le village en trois dimensions, vu de derrière la créature\u00A0: les mêmes maisons, routes et lacs que le village isométrique." } },
       { sel: "#back", text: "‹ Le village" },
+      { sel: "#view-iso", text: "Isométrique", attr: { title: "Voir cet endroit en vue isométrique" } },
       { sel: "#menu", text: "☰ Menu" },
       { sel: "#zoom-in", attr: { "aria-label": "Plus près" } },
       { sel: "#zoom-out", attr: { "aria-label": "Plus loin" } },

@@ -2,6 +2,9 @@
 
 This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canvas 2D isometric world with optional ecology and a generated Musebots/Signal Towers audio bundle. Preserve appearance, navigation, accessibility, input, simulation, and musical behaviour.
 
+- World art (iso village, sidescroller, 3D): `brand/backstage/world-style.md`.
+  Read it before adding anything drawn in a world: outlines, inks, sizes,
+  the iso-to-3D mapping. Page style is `brand/backstage/house-style.md`.
 - English/French: `docs/i18n.md`. English is the source language and is never
   rewritten; `i18n-fr.js` holds every French word. Check with
   `python3 tools/i18n-check.py`.

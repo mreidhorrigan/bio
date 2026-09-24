@@ -26,7 +26,8 @@
    Every item takes o.layer (0 ground, 1 everything standing on it; lower
    layers always paint first), o.bias (added to its closeness, so a decal or a
    body paints after the surface it lies on), o.alpha, o.world (line widths
-   given in world units rather than pixels) and o.after (a hook drawn inside an
+   given in world units rather than pixels), o.edge (a line outlined in that
+   ink, as a body is: a stalk) and o.after (a hook drawn inside an
    organic body's outline, for a sheen or an eye). o.rough ({ tufts, depth,
    seed, flick, sway, round }) gives an organic body a tufted outline in place of the
    smooth one: fur, a tuft of moss, a torn leaf, or with round, a lumpy mass. A custom item is mirrored
@@ -645,8 +646,17 @@
         }
         if (it.ink) { c.strokeStyle = inkOf(e, it.ink); c.lineWidth = pxWidth(it.w, o, e.depth); c.stroke(); }
       } else if (it.k === 2) {
-        c.strokeStyle = inkOf(e, it.ink); c.lineWidth = pxWidth(it.w, o, e.depth);
-        for (const r of e.runs) { if (o && o.smooth === false) { c.beginPath(); c.moveTo(r[0][0], r[0][1]); for (let k = 1; k < r.length; k++) c.lineTo(r[k][0], r[k][1]); } else tracePath(c, r); c.stroke(); }
+        // o.edge (an ink colour) outlines a line as a body is outlined: a band
+        // of that ink either side of the stroke, as heavy as a body's outline
+        // (0.8 to 2.6 px), for a stalk that stands among bodies. The stroke is
+        // then a fill, so the fog washes its colour as it washes a body's.
+        const lw = pxWidth(it.w, o, e.depth), ew = o && o.edge ? Math.max(0.8, Math.min(2.6, lw * 0.25)) : 0;
+        const body = ew ? (e.fog && e.fog.t > 0.015 ? mix(it.ink, e.fog.colour, Math.min(1, e.fog.t)) : it.ink) : inkOf(e, it.ink);
+        for (const r of e.runs) {
+          if (o && o.smooth === false) { c.beginPath(); c.moveTo(r[0][0], r[0][1]); for (let k = 1; k < r.length; k++) c.lineTo(r[k][0], r[k][1]); } else tracePath(c, r);
+          if (ew) { c.strokeStyle = inkOf(e, o.edge); c.lineWidth = lw + ew * 2; c.stroke(); }
+          c.strokeStyle = body; c.lineWidth = lw; c.stroke();
+        }
       } else if (it.k === 3) {
         const ring = e.ring, bb = e.bb;
         if (o && o.rough) roughRing(c, ring, bb, o.rough); else traceRing(c, ring);

@@ -40,6 +40,7 @@
     .hudbtn{ font:700 12px var(--sans-font); padding:6px 10px; }
     .hudbtn.zoom{ min-width:34px; font-size:15px; padding:5px 10px; }     /* a thumb's width on a phone */
     .hudbtn[aria-expanded="true"], .skin[aria-pressed="true"]{ background:#fff; color:#111; border-color:#fff; }
+    .hudbtn[hidden]{ display:none; }
     .switcher{ position:fixed; left:50%; bottom:52px; transform:translateX(-50%); z-index:5; display:flex; flex-wrap:wrap;
       gap:5px; justify-content:center; max-width:96vw; padding:5px; }
     .skin{ font:600 11px var(--sans-font); padding:5px 9px; background:rgba(18,18,26,.72); border-color:rgba(255,255,255,.15); }
@@ -86,6 +87,7 @@
     <div class="hud">
       <button type="button" class="hudbtn zoom" id="zoom-in" aria-label="Nearer">+</button>
       <button type="button" class="hudbtn zoom" id="zoom-out" aria-label="Farther">−</button>
+      <a class="hudbtn" id="view-iso" href="index.html" title="See this spot in the isometric view" hidden>Isometric</a>
       <a class="hudbtn" id="back" href="index.html">‹ Village</a>
       <button type="button" class="hudbtn" id="menu" aria-expanded="false" aria-controls="navbar">☰ Menu</button>
     </div>

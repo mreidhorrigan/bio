@@ -57,7 +57,9 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     for (let i = 0; i < 5000 && went < ring + 20; i++) {
       if (i % 30 === 0) { jitter = (rnd() - 0.5) * 0.7; K.fast = rnd() < 0.6; }
       const hw = 26, zr = W.me.z - ring * Math.floor(W.me.z / ring), nearShaft = Math.min(Math.abs(zr - 10), Math.abs(zr - 10 - ring)) < 30;
-      let side = Math.sin(i * 0.011 * (1 + seed * 0.3) + drift) * hw * 0.35;
+      // the sway follows the distance walked (0.42 units a frame was the old pace), so a change of
+      // walking speed keeps each walker on its line instead of sending it into a different vine
+      let side = Math.sin(went / 0.42 * 0.011 * (1 + seed * 0.3) + drift) * hw * 0.35;
       if (nearShaft) side = -Math.abs(side) - 4;                // the side away from the rope
       W.me.yaw = Math.atan2(S.centre(W.me.z + 18) + side - W.me.x, 18) + jitter;
       K.fwd = true;
