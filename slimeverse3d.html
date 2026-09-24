@@ -50,10 +50,8 @@
     .navchip{ font:700 12px var(--sans-font); padding:6px 11px; background:rgba(20,20,28,.86); border-color:rgba(255,255,255,.16); }
     .hudbtn:hover, .skin:hover, .navchip:hover{ filter:brightness(1.15); }
     .hudbtn:focus-visible, .skin:focus-visible, .navchip:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
-    .keys{ position:fixed; left:12px; top:12px; max-width:min(420px,70vw); margin:0; padding:7px 11px;
-      font-size:.8rem; line-height:1.45; color:#dce6f0; background:rgba(20,20,28,.6); border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; z-index:2;
-      transition:opacity .6s ease; }
-    .keys.gone{ opacity:0; pointer-events:none; }
+    /* out of sight: the slime says these itself; they stay here for a screen reader */
+    .keys{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
     /* the card a house opens, as the iso village's does: its menu, its words, or its page */
     #card{ position:fixed; inset:0; z-index:5; display:grid; place-items:center; padding:18px; background:rgba(8,10,14,.55); }
     #card[hidden]{ display:none; }
@@ -64,7 +62,6 @@
     .card .go{ display:inline-block; margin-top:6px; padding:9px 16px; background:#5b2a86; color:#fff; border-radius:var(--leaf); text-decoration:none; font-weight:700; }
     .card .toc a{ display:block; padding:7px 0; color:#5b2a86; font-weight:600; }
     @media (max-width:620px){
-      .keys{ display:none; }
       .navbar{ top:40px; gap:4px; padding:4px 6px; max-width:96vw; }
       .switcher{ bottom:44px; gap:4px; padding:3px; }
       .skin{ font-size:10.5px; padding:4px 8px; }
@@ -75,9 +72,11 @@
   <body>
     <canvas id="stage" tabindex="0" role="img"
             aria-label="The village in three dimensions, seen from behind the slime: the same houses, roads and lakes as the isometric village."></canvas>
-    <p class="keys">Arrow keys or W and S to walk, A and D to turn, and shift to hurry. Drag
-      to look around, click to walk somewhere, and scroll or use + and − to come nearer or go farther. Walk into a house, or click it, to open
-      it, as in the village. M turns the sound off and on.</p>
+    <!-- the slime says these in a bubble over it (slimeverse3d-page.js); here they are
+         in words for a screen reader, in the reader's language and for their device -->
+    <p class="keys" id="tips">I can walk: the arrow keys, or WASD. I can hurry: hold shift. I can go where you click.
+      I can look around: drag. I can come nearer: scroll, or + and −. I can open a house: walk me in, or click its
+      door. I can go quiet: press M.</p>
     <nav class="navbar" id="navbar" aria-label="Jump to a building" hidden></nav>
     <div class="switcher" role="group" aria-label="Choose a skin">
       <button type="button" class="skin" data-skin="technurture" aria-pressed="false">technurture / nth nature</button>

@@ -789,6 +789,41 @@
     }
     S.paintBody(S.me.flying ? [gx, 0.2] : [gx, gy2]);        // the slime, where it stands
     vignette(P);                                              // the dark closes in at the edges
+    drawSay(mx, (S.me.flying ? S.me.airY : ground(S.me.x)) - 38);   // its words, over the dark
+  }
+
+  /* ── the slime says what it can do ──────────────────────────────────────
+     Brief tips in the first person, in a bubble over the slime (drawn as the 3D
+     village and the iso world draw it), one at a time from a moment after the
+     start, each skipped once the reader has done it; a phone gets its own. Once a
+     visit. The same words stand in the page (#tips, out of sight) for a screen reader. */
+  let saying = null;
+  const used = {};
+  function sayTip(text, secs) { saying = { text: String(text), t0: performance.now() / 1000, len: secs || 3.4 }; }
+  function drawSay(sx, py) {
+    if (!saying) return;
+    const age = performance.now() / 1000 - saying.t0, left = saying.len - age;
+    if (left <= 0) { saying = null; return; }
+    const a = Math.max(0, Math.min(1, age * 8, left * 4)), px = 14, hop = (1 - Math.min(1, age * 6)) * px * 0.4;
+    g.save(); g.globalAlpha = a;
+    g.font = "700 " + px + "px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif";
+    const maxW = Math.min(S.W * 0.86, 420), lines = [];
+    let line = "";
+    for (const word of saying.text.split(" ")) {
+      const next = line ? line + " " + word : word;
+      if (line && g.measureText(next).width > maxW - px * 1.1) { lines.push(line); line = word; } else line = next;
+    }
+    if (line) lines.push(line);
+    const lh = px * 1.22, w = Math.max(...lines.map((l) => g.measureText(l).width)) + px * 1.1, h = lh * lines.length + px * 0.38;
+    const x0 = Math.max(6, Math.min(S.W - w - 6, sx - w / 2)), y0 = py - h - px * 0.6 - hop;
+    g.fillStyle = "#ffffff"; g.strokeStyle = "#111111"; g.lineWidth = Math.max(1.2, px * 0.1);
+    g.beginPath(); g.roundRect ? g.roundRect(x0, y0, w, h, Math.min(h * 0.45, px * 0.72)) : g.rect(x0, y0, w, h);
+    g.moveTo(sx - px * 0.3, y0 + h); g.lineTo(sx - px * 0.05, y0 + h + px * 0.55); g.lineTo(sx + px * 0.25, y0 + h);   // its tail
+    g.fill(); g.stroke();
+    g.fillStyle = "#ffffff"; g.fillRect(sx - px * 0.25, y0 + h - g.lineWidth, px * 0.46, g.lineWidth * 1.5);
+    g.fillStyle = "#111111"; g.textAlign = "center"; g.textBaseline = "middle";
+    lines.forEach((l, i) => g.fillText(l, x0 + w / 2, y0 + px * 0.19 + lh * (i + 0.5)));
+    g.restore();
   }
 
   function read() {
@@ -807,7 +842,7 @@
 
   function present() { card.hidden = !!(tapOnly && tapOnly.matches) && !(pinned && reached && pinned === active); }
   /** Ask for a word's card (null: none), where cards wait to be asked for. */
-  function pin(m) { pinned = m; reached = !!m && m === active; present(); }
+  function pin(m) { pinned = m; reached = !!m && m === active; if (m) used.read = true; present(); }
   /** The word whose board, or its post, is under a point on the canvas, in the
    *  view's own units: the same geometry marker() draws. */
   function markAt(px, py) {
@@ -1037,12 +1072,42 @@
     card.textContent = "";
     card.className = "entry";
     card.append(el("p", "kind", T("glossary.card.start", "the slime is on its way")));
-    card.append(el("h3", null, T("glossary.card.startTitle", "Walk to a word")));
+    // (its "Walk to a word" is the slime's to say now, in its bubble)
     card.append(el("p", "gloss", T("glossary.card.startBody",
       "Whatever it reaches is written out here. Past the fissure the light goes"
       + " out and the antiglossary begins, which is not mine.")));
   }
   if (!arrive()) { hello(); present(); }
+  {
+    const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    const tips = touch ? [
+      ["walk", "glossary.tip.tap", "I can walk to a word: tap where I should go."],
+      ["read", "glossary.tip.read", "I can show you a word's gloss: tap the word."],
+    ] : [
+      ["walk", "glossary.tip.walk", "I can walk to a word: the arrow keys, or click where I should go."],
+      ["hurry", "glossary.tip.hurry", "I can hurry: hold shift."],
+    ];
+    const tipsEl = document.getElementById("tips");
+    const writeTips = () => { if (tipsEl) tipsEl.textContent = tips.map(([, key, en]) => T(key, en)).join(" "); };
+    writeTips(); document.addEventListener("mh:lang", writeTips);
+    document.addEventListener("keydown", (e) => {
+      const k = e.key.toLowerCase();
+      if (["arrowleft", "arrowright", "a", "d", "q", "home", "end", "pageup", "pagedown"].includes(k)) used.walk = true;
+      if (k === "shift") used.hurry = true;
+    });
+    cv.addEventListener("pointerdown", () => { used.walk = true; });
+    let told = false;
+    try { told = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-glossary")); if (!told) sessionStorage.setItem("mh-tips-glossary", "1"); } catch (e) { /* private: tell them anyway */ }
+    let i = 0;
+    const next = () => {
+      while (i < tips.length && used[tips[i][0]]) i++;
+      if (i >= tips.length) return;
+      const [, key, en] = tips[i++];
+      sayTip(T(key, en), 3.6);
+      setTimeout(next, 4300);
+    };
+    if (!told) setTimeout(next, 1400);
+  }
   document.addEventListener("mh:lang", () => { if (active) show(active, true); else hello(); });
   window.addEventListener("hashchange", () => {              // a link into the word list
     const m = markFor((location.hash || "").replace(/^#/, ""));
@@ -1060,6 +1125,7 @@
   window.MH_GLOSSARY_WORLD = { go: S.go, marks: marks, ground: ground, me: S.me,
     at: () => (active ? label(active) : null), width: () => worldW, dusk: dusk,
     tick: (dt) => S.tick(dt),
+    saying: () => (saying && performance.now() / 1000 - saying.t0 < saying.len ? saying.text : ""),   // the slime's words just now
     // what the harness needs to check the layout it cannot see
     layout: () => ({ W: S.W, H: S.H, BASE: S.base, zoom: S.zoom, cam: S.cam, back: BACK,
       scale: BACK_SCALE, band: backBand(), screenX: screenX }),

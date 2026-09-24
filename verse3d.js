@@ -936,6 +936,29 @@
        lit, so it reads at any distance and in the dark. A pet zoog's "blooloo!"
        and a shoggoth's "teke" are heard as well (voice, with the sounds). */
     function say(who, text, secs, heardAs) { who.say = { text, t: secs, len: secs }; if (heardAs) voice(who, heardAs); }
+    /** One speech bubble with its tail at (sx, py): white, inked, rounded, the text
+     *  in as many lines as keep it within maxW (the slime's tips wrap on a phone).
+     *  A one-line bubble is 1.6 of the letters' size tall, with rounded ends. */
+    function bubble(g, sx, py, text, px, font, maxW, hop) {
+      g.font = font;
+      const lines = [];
+      let line = "";
+      for (const word of String(text).split(" ")) {
+        const next = line ? line + " " + word : word;
+        if (line && g.measureText(next).width > maxW - px * 1.1) { lines.push(line); line = word; } else line = next;
+      }
+      if (line) lines.push(line);
+      const lh = px * 1.22, w = Math.max(...lines.map((l) => g.measureText(l).width)) + px * 1.1, h = lh * lines.length + px * 0.38;
+      const x0 = sx - w / 2, y0 = py - h - px * 0.6 - hop;
+      g.fillStyle = "#ffffff"; g.strokeStyle = "#111111"; g.lineWidth = Math.max(1.2, px * 0.1);
+      g.beginPath(); g.roundRect ? g.roundRect(x0, y0, w, h, Math.min(h * 0.45, px * 0.72)) : g.rect(x0, y0, w, h);
+      g.moveTo(sx - px * 0.3, y0 + h); g.lineTo(sx - px * 0.05, y0 + h + px * 0.55); g.lineTo(sx + px * 0.25, y0 + h);   // its tail
+      g.fill(); g.stroke();
+      g.fillStyle = "#ffffff"; g.fillRect(sx - px * 0.25, y0 + h - g.lineWidth, px * 0.46, g.lineWidth * 1.5);   // open the bubble into its tail
+      g.fillStyle = "#111111"; g.textAlign = "center"; g.textBaseline = "middle";
+      lines.forEach((l, i) => g.fillText(l, sx, y0 + px * 0.19 + lh * (i + 0.5)));
+    }
+    const SERIF = "'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif";
     function buildBubbles() {
       for (const b of zoogs.concat(shogs)) {
         if (!b.say || b.say.t <= 0 || (b.kind === "zoog" && !b.alive)) continue;
@@ -944,18 +967,22 @@
         E.billboard([b.x, top, b.z], (g, sx, py, k, e) => {
           const age = 1 - sy.t / sy.len, a = clamp(Math.min(age * 8, sy.t * 4), 0, 1);   // pops in, fades out
           const px = clamp(k * (lilt ? 0.9 : 1.1), 9, 22), hop = (1 - Math.min(1, age * 6)) * px * 0.4;
-          g.font = (lilt ? "800 " : "700 italic ") + px.toFixed(1) + "px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif";
-          const w = g.measureText(sy.text).width + px * 1.1, h = px * 1.6, x0 = sx - w / 2, y0 = py - h - px * 0.6 - hop;
           g.globalAlpha = a;
-          g.fillStyle = "#ffffff"; g.strokeStyle = "#111111"; g.lineWidth = Math.max(1.2, px * 0.1);
-          g.beginPath(); g.roundRect ? g.roundRect(x0, y0, w, h, h * 0.45) : g.rect(x0, y0, w, h);
-          g.moveTo(sx - px * 0.3, y0 + h); g.lineTo(sx - px * 0.05, y0 + h + px * 0.55); g.lineTo(sx + px * 0.25, y0 + h);   // its tail
-          g.fill(); g.stroke();
-          g.fillStyle = "#ffffff"; g.fillRect(sx - px * 0.25, y0 + h - g.lineWidth, px * 0.46, g.lineWidth * 1.5);   // open the bubble into its tail
-          g.fillStyle = "#111111"; g.textAlign = "center"; g.textBaseline = "middle";
-          g.fillText(sy.text, sx, y0 + h / 2);
+          bubble(g, sx, py, sy.text, px, (lilt ? "800 " : "700 italic ") + px.toFixed(1) + "px " + SERIF, E.W * 0.9, hop);
           g.globalAlpha = 1;
         }, { layer: 2, bias: 3, lit: true, sharp: true });
+      }
+      // the slime's own words (W.say): what it can do, told in the first person. Kept
+      // at a size to read, whatever the zoom, and within the width of a phone.
+      if (me.say && me.say.t > 0) {
+        const sy = me.say;
+        E.billboard([me.x, me.y + me.air + me.R * 1.15 + 1.2, me.z], (g, sx, py, k) => {
+          const age = 1 - sy.t / sy.len, a = clamp(Math.min(age * 8, sy.t * 4), 0, 1);
+          const px = clamp(k * 0.95, 13, 19), hop = (1 - Math.min(1, age * 6)) * px * 0.4;
+          g.globalAlpha = a;
+          bubble(g, sx, py, sy.text, px, "700 " + px.toFixed(1) + "px " + SERIF, Math.min(E.W * 0.86, 440), hop);
+          g.globalAlpha = 1;
+        }, { layer: 2, bias: 4, lit: true, sharp: true });
       }
     }
 
@@ -1374,6 +1401,7 @@
       stepZoogs(dt); stepShoggoths(dt); resolveBodies(); stepWater(dt);
       for (const b of zoogs) if (b.say) b.say.t -= dt;        // what they say runs its time out here, drawn or not
       for (const b of shogs) if (b.say) b.say.t -= dt;
+      if (me.say) me.say.t -= dt;
       stepSound();
       // portals: armed once the body has stepped clear of every one, so it
       // never arrives in a scene only to be sent straight back
@@ -1561,6 +1589,9 @@
       setMuted(m) { sound.muted = !!m; if (sound.master && sound.ctx) sound.master.gain.setTargetAtTime(m ? 0 : 0.8, sound.ctx.currentTime, 0.02); if (!m) soundOn(); },
       muted: () => sound.muted, audioContext: () => sound.ctx, steps: () => sound.steps || 0,   // steps sounded (or due, where audio is held)
       voices: () => sound.voices || 0,                         // the creatures' voices in earshot, sounded or due, likewise
+      /** The slime says something, in a bubble over it, for secs seconds (0: stop). */
+      say(text, secs) { me.say = text && secs > 0 ? { text: String(text), t: secs, len: secs } : null; },
+      saying: () => (me.say && me.say.t > 0 ? me.say.text : ""),
     };
     return W;
   }

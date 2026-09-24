@@ -108,6 +108,8 @@
     .lists:focus-within{ position:static; width:auto; height:auto; margin:0 auto; padding:2.4rem 18px 4rem;
       overflow:visible; clip:auto; white-space:normal; max-width:980px; background:var(--bg); }
     @media (max-width:620px){ .dock{ padding:0 10px 10px; } .entry{ min-height:112px; } }
+    /* out of sight: the slime says these tips itself; they stay here for a screen reader */
+    .tips{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   </style>
   </head>
   <body>
@@ -126,6 +128,9 @@
           does. Walk the slime round the circuit to read them, or read the same
           words as plain text below.</p>
       </div>
+      <!-- the slime says these in a bubble over it (glossary-world.js); here they are in
+           words for a screen reader, in the reader's language and for their device -->
+      <p class="tips" id="tips"></p>
       <div class="dock" id="dock" hidden>
         <div class="entry" id="entry" aria-live="polite"></div>
       </div>

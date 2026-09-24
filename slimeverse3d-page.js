@@ -59,6 +59,7 @@
   try { remembered = window.localStorage && window.localStorage.getItem("mh-skin"); } catch (e) { /* private or file: fine */ }
   const skin = asked(q.get("theme")) || asked(q.get("skin")) || asked(remembered) || timeDefaultSkin();
 
+  const used = {};                                             // what the visitor has done (the slime's tips skip it)
   /* ── the card a house opens ───────────────────────────────────────────── */
   const card = document.getElementById("card"), cardTitle = document.getElementById("card-title"), cardBody = document.getElementById("card-body");
   const close = () => { if (card) card.hidden = true; cv.focus({ preventScroll: true }); };
@@ -91,6 +92,7 @@
   /** What a house opens, as the iso village opens it (engine.js openCard). */
   function onOpen(item, how) {
     if (!item) return;
+    used.open = true;
     const click = !!(how && how.click);
     if (item.url && /slimeverse3d\.html/.test(item.url)) { enterHouse(); return; }   // the house this page lives in: go inside
     if (item.kind === "link") { if (click) openPage(item.url); else linkCard(item.title, item.url); return; }
@@ -232,7 +234,54 @@
   document.addEventListener("keydown", (e) => {
     if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey && !(e.target instanceof HTMLInputElement)) W.setMuted(!W.muted());
   });
-  // the keys hint makes way once the visitor has moved
-  const keys = document.querySelector(".keys");
-  if (keys) { const hide = () => keys.classList.add("gone"); ["keydown", "pointerdown"].forEach((ev) => window.addEventListener(ev, hide, { once: true })); setTimeout(hide, 12000); }
+
+  /* ── the slime says what it can do ──────────────────────────────────────
+     In the first person, briefly, one at a time from a moment after the start,
+     in a bubble over the slime; a tip is skipped once the visitor has done what it
+     says. A phone gets its own. Once a visit (sessionStorage). The same words stand
+     in the page (#tips, out of sight) for a screen reader, in the reader's language. */
+  const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+  const TIPS = touch ? [
+    ["tap", "slimeverse3d.tip.tap", "I can go where you tap."],
+    ["turn", "slimeverse3d.tip.turn", "I can turn: drag sideways."],
+    ["zoom", "slimeverse3d.tip.pinch", "I can come nearer: pinch, or + and −."],
+    ["open", "slimeverse3d.tip.openTap", "I can open a house: walk me in, or tap its door."],
+  ] : [
+    ["walk", "slimeverse3d.tip.walk", "I can walk: the arrow keys, or WASD."],
+    ["hurry", "slimeverse3d.tip.hurry", "I can hurry: hold shift."],
+    ["tap", "slimeverse3d.tip.click", "I can go where you click."],
+    ["turn", "slimeverse3d.tip.look", "I can look around: drag."],
+    ["zoom", "slimeverse3d.tip.zoom", "I can come nearer: scroll, or + and −."],
+    ["open", "slimeverse3d.tip.open", "I can open a house: walk me in, or click its door."],
+    ["mute", "slimeverse3d.tip.mute", "I can go quiet: press M."],
+  ];
+  const tipsEl = document.getElementById("tips");
+  const writeTips = () => { if (tipsEl) tipsEl.textContent = TIPS.map(([, key, en]) => t(key, en)).join(" "); };
+  writeTips(); document.addEventListener("mh:lang", writeTips);
+  // what the visitor has done already, so the slime does not tell them
+  const zoom0 = W.controls.pref;
+  document.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d", "z", "q"].includes(k)) used.walk = true;
+    if (k === "shift") used.hurry = true;
+    if (k === "m") used.mute = true;
+  });
+  const watch = setInterval(() => {
+    const C = W.controls;
+    if (W.me.goal) used.tap = true;
+    if (C.look || C.tilt || C.turn) used.turn = true;
+    if (Math.abs(C.pref - zoom0) > 1e-6) used.zoom = true;
+  }, 200);
+  let tip = 0;
+  function nextTip() {
+    while (tip < TIPS.length && used[TIPS[tip][0]]) tip++;
+    if (tip >= TIPS.length) { clearInterval(watch); return; }
+    const [, key, en] = TIPS[tip++];
+    W.say(t(key, en), 3.4);
+    setTimeout(nextTip, 4100);
+  }
+  // once a visit, as in the iso world, so switching views does not repeat them
+  let told = false;
+  try { told = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-3d")); if (!told) sessionStorage.setItem("mh-tips-3d", "1"); } catch (e) { /* private: tell them anyway */ }
+  if (!told) setTimeout(nextTip, 1600); else clearInterval(watch);
 })();

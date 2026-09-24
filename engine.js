@@ -104,6 +104,9 @@ const keys = { up: false, down: false, left: false, right: false };
 const auto = { active: false, goal: -1, tx: 0, ty: 0, lastDist: Infinity, stuck: 0, warp: false };
 
 let toastText = "", toastUntil = 0;
+/** What the slime is saying (a tip, in the first person), and where it stands on screen. */
+let slimeSay = null, avatarAt = { x: 0, y: 0 };
+const used = {};                        // what the visitor has done: the slime's tips skip it
 let inHub = true;                       // is the player on/over the plaza platform?
 let kiosksOut = false;                  // are ALL kiosks currently off-screen? (→ show nav-bar + edge markers)
 let reduce = false;                     // prefers-reduced-motion: themes gate flicker/glitch on this
@@ -267,6 +270,7 @@ function buildDOM() {
     </div>
 
     <div id="mh-hud" class="mh-hidden">
+      <p id="mh-tips" class="mh-sr"></p>
       <div class="mh-hud-right">
         <button id="mh-view3d" class="mh-hudbtn mh-hidden" type="button" title="See this spot in 3D">3D</button>
         <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu: jump to a building">☰ Menu</button>
@@ -391,6 +395,8 @@ const BASE_CSS = `
   .mh-hudbtn{ pointer-events:auto; appearance:none; cursor:pointer; font:700 12px var(--mh-ui,system-ui,sans-serif);
     padding:6px 10px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); line-height:1; white-space:nowrap; }
   .mh-hudbtn:hover{ filter:brightness(1.15); } .mh-hudbtn.mh-on{ background:#fff; color:#111; }
+  /* out of sight: the slime says these tips itself; they stay here for a screen reader */
+  .mh-sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   .mh-hudbtn:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
   .mh-progress{ font:700 12px var(--mh-ui,system-ui,sans-serif); padding:6px 11px; border-radius:999px; }
   .mh-compass{ pointer-events:auto; appearance:none; cursor:pointer; display:flex; align-items:center; gap:7px;
@@ -851,6 +857,10 @@ function onKeyDown(e) {
   }
   // walking
   if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k)) e.preventDefault();
+  if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) used.walk = true;
+  if (k === " ") used.next = true;
+  if (k === "g" || k === "h") used.plaza = true;
+  if (k === "m") used.mute = true;
   if (k === " ") { navTo((CONTENT && CONTENT.home) || 0); return; }   // Space → the About kiosk
   if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) auto.active = false;
   if (k === "w" || k === "arrowup") keys.up = true;
@@ -892,9 +902,10 @@ function onPointer(e) {
   if (decor >= 0) {
     const building = BUILDINGS[decor], tool = building && toolOf(building.type);
     if (tool && tool.tap && tool.tap(building)) return;
-    toast(tr("world.pressBuild", "Press B (✎ Build) to move or remove buildings")); return;
+    say(tr("world.tip.build", "I can move that: press B, for Build."), 3.4); return;
   }
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
+  used.tap = true;
 }
 /** Canvas pointer-UP: open a tapped kiosk HERE. iOS Safari & Firefox only honour window.open from a
  *  pointerup/click/touchend gesture, not pointerdown, so another site's new tab must open on release. */
@@ -931,6 +942,7 @@ function startGame(gesture) {
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
   introEl.classList.add("mh-hidden"); hudEl.classList.remove("mh-hidden");
   mode = "walking"; last = performance.now();
+  startTips();
 }
 
 /** Toggle the building menu (the nav-bar of buildings) open — reachable any time,
@@ -943,8 +955,8 @@ function toggleBuild() {
   if (buildbarEl) buildbarEl.classList.toggle("mh-faded", !buildMode);
   if (buildToggleEl) buildToggleEl.classList.toggle("mh-on", buildMode);
   refreshBuildTools();
-  toast(buildMode ? tr("world.buildOn", "Build mode: drag to move, or pick a tool to add or remove")
-                  : tr("world.buildOff", "Build mode off"));
+  if (buildMode) say(tr("world.tip.building", "I can build: drag a building to move it, or pick a tool."), 4);
+  else toast(tr("world.buildOff", "Build mode off"));
 }
 function onBuildTool(e) {
   const b = e.target && e.target.closest && e.target.closest(".mh-tool"); if (!b) return;
@@ -1323,6 +1335,7 @@ function render() {
   drawVignette();
   if (mode === "walking" && kiosksOut && T.edgeMarkers) drawEdgeMarkers();
   if (mode === "walking" && inHub && activeIndex < 0 && !auto.active) drawKioskArrow();
+  drawSlimeSay();
   drawToast();
 }
 
@@ -1454,6 +1467,7 @@ function drawAvatar(sx, sy) {
   shadow(ctx, sx, sy, 15);                                // no hover — the slime sits on the ground and pulsates
   const a = { dx, dy, color: T.avatarColors[avatarIndex], ink: T.avatarInk, gel: T.avatarGel, glow: T.avatarGlow, beam: T.avatarBeam, wave: inWater, t: tnow, moving: player.moving };
   (T.paintAvatar || defPaintAvatar)(ctx, sx, sy - 8, a);
+  avatarAt.x = sx; avatarAt.y = sy;
   beamState = (T.avatarBeam && !reduce) ? { sx, baseY: sy - 2, a } : null;   // engine relights it after the darkness pass
 }
 
@@ -1543,6 +1557,73 @@ function drawKioskArrow() {
   ctx.restore();
 }
 
+/** The slime's speech bubble, over its head, as the 3D village draws it (verse3d.js
+ *  bubble): white, inked, rounded, with a tail, the words in as many lines as keep
+ *  it inside the view. Drawn after the night's darkness, so it can be read. */
+function drawSlimeSay() {
+  if (!slimeSay || mode !== "walking") return;
+  const age = tnow - slimeSay.t0, left = slimeSay.len - age;
+  if (left <= 0) { slimeSay = null; return; }
+  const a = Math.max(0, Math.min(1, age * 8, left * 4)), px = 15, hop = (1 - Math.min(1, age * 6)) * px * 0.4;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.font = "700 " + px + "px 'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif";
+  const maxW = Math.min(W * 0.86, 440), lines = [];
+  let line = "";
+  for (const word of slimeSay.text.split(" ")) {
+    const next = line ? line + " " + word : word;
+    if (line && ctx.measureText(next).width > maxW - px * 1.1) { lines.push(line); line = word; } else line = next;
+  }
+  if (line) lines.push(line);
+  const lh = px * 1.22, w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + px * 1.1, h = lh * lines.length + px * 0.38;
+  const sx = avatarAt.x, py = avatarAt.y - 34, x0 = Math.max(6, Math.min(W - w - 6, sx - w / 2)), y0 = py - h - px * 0.6 - hop;
+  ctx.fillStyle = "#ffffff"; ctx.strokeStyle = "#111111"; ctx.lineWidth = Math.max(1.2, px * 0.1);
+  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x0, y0, w, h, Math.min(h * 0.45, px * 0.72)) : ctx.rect(x0, y0, w, h);
+  ctx.moveTo(sx - px * 0.3, y0 + h); ctx.lineTo(sx - px * 0.05, y0 + h + px * 0.55); ctx.lineTo(sx + px * 0.25, y0 + h);   // its tail
+  ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(sx - px * 0.25, y0 + h - ctx.lineWidth, px * 0.46, ctx.lineWidth * 1.5);   // open the bubble into its tail
+  ctx.fillStyle = "#111111"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  lines.forEach((l, i) => ctx.fillText(l, x0 + w / 2, y0 + px * 0.19 + lh * (i + 0.5)));
+  ctx.restore();
+}
+/** The slime says something, in the first person, for secs seconds. */
+function say(text, secs) { slimeSay = { text: String(text), t0: tnow, len: secs || 3.4 }; }
+
+/* The slime says what it can do: brief tips in the first person, one at a time from
+   a moment after the world opens, each skipped once the visitor has done it; a phone
+   gets its own. Once a visit (sessionStorage), so switching views does not repeat
+   them. The same words stand in the HUD (#mh-tips, out of sight) for a screen reader. */
+function tipList() {
+  const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+  if (touch) return [
+    ["tap", "world.tip.tap", "I can go where you tap."],
+    ["open", "world.tip.openTap", "I can open a house: tap it."],
+  ];
+  return [
+    ["walk", "world.tip.walk", "I can walk: the arrow keys, or WASD."],
+    ["tap", "world.tip.click", "I can go where you click."],
+    ["open", "world.tip.open", "I can open a house: press E beside it, or click it."],
+    ["next", "world.tip.next", "I can visit the next house: press Space."],
+  ].concat(T.wayfinding.recall ? [["plaza", "world.tip.plaza", "I can go back to the plaza: press G."]] : [])
+   .concat([["mute", "world.tip.mute", "I can go quiet: press M."]]);
+}
+function writeTips() { const el = document.getElementById("mh-tips"); if (el) el.textContent = tipList().map(([, key, en]) => tr(key, en)).join(" "); }
+let tipsStarted = false;
+function startTips() {
+  if (tipsStarted) return; tipsStarted = true;
+  writeTips(); document.addEventListener("mh:lang", writeTips);
+  try { if (window.sessionStorage && sessionStorage.getItem("mh-tips-iso")) return; sessionStorage.setItem("mh-tips-iso", "1"); } catch (e) { /* private: tell them anyway */ }
+  const tips = tipList();
+  let i = 0;
+  const next = () => {
+    while (i < tips.length && used[tips[i][0]]) i++;
+    if (i >= tips.length) return;
+    const [, key, en] = tips[i++];
+    if (mode === "walking" && !buildMode) say(tr(key, en), 3.4);
+    setTimeout(next, 4100);
+  };
+  setTimeout(next, 1600);
+}
+
 function drawToast() {
   if (tnow > toastUntil) return;
   const a = Math.min(1, (toastUntil - tnow) / 0.4);
@@ -1597,6 +1678,7 @@ function openPage(url) {
 /** @param {number} i exhibit index */
 function openCard(i) {
   const ex = EXHIBITS[i];
+  used.open = true;
   if (ex.satellite) {                              // a road-house opens its OWN link (no iframe)
     ex.visited = true; currentTarget = i; sfx.open(0);
     openPage(ex.url);
@@ -2328,6 +2410,7 @@ window.MH_ISO = {
   })),
   pavedTiles: () => SPUR_TILES.size,
   player: () => ({ x: player.x, y: player.y, fx: player.fx, fy: player.fy }),   // read-only: where the slime is standing, and which way it faces
+  saying: () => (slimeSay && tnow - slimeSay.t0 < slimeSay.len ? slimeSay.text : ""),   // read-only: the slime's words just now (its tips)
   reduced: () => reduce,
   hub: () => ({ x: HX, y: HY, period: P }),   // plaza centre (canonical tile) + torus period
   biome: biomeAt,                              // coarse biome for a canonical tile

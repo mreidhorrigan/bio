@@ -142,8 +142,19 @@ the cap.
   (on a surface seen in depth it aliased into seams). Too many photos look like
   "ai slop", and so does none at all: ask before adding one.
 - **Words in a world:** signs in the skin's format (the leaf plaque, the neon
-  marquee at night, the number plate in bureaucore). Speech bubbles are 3D only
-  ("Yikes!", "Yeep!", "teketeke", "lilililililili!", "blooloo!").
+  marquee at night, the number plate in bureaucore). The creatures' speech
+  bubbles are 3D only ("Yikes!", "Yeep!", "teketeke", "lilililililili!",
+  "blooloo!").
+- **Instructions are the slime's to give,** in the first person, in a speech
+  bubble over it, in every world (since 2026-09-24): "I can walk: the arrow
+  keys, or WASD." Brief, one at a time from a moment after the start, each
+  skipped once the visitor has done it, once a visit (sessionStorage), with a
+  touch set for phones. The bubble is the same everywhere: white, a #111 ink
+  outline, rounded ends, a tail, a 700 serif, wrapped to fit a phone
+  (`bubble()` in verse3d.js, `drawSlimeSay` in engine.js, `drawSay` in
+  glossary-world.js). The same words stand in the page, out of sight, for a
+  screen reader. No instruction panels or legends on screen, and no toasts that
+  tell the visitor what to do (status toasts, "Sound off", stay).
 - **Sounds:** brief soft tones in the skin's key (`audio.root`): sine or
   triangle, a soft attack, through the low-pass. The slime's step, the landing's
   plop, a pet zoog's "blooloo!", and a shoggoth's "teke" are voiced. The other
