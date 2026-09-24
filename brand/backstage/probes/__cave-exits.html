@@ -1,0 +1,68 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Both caves: a click on the light sends the slime up and out</title>
+<meta name="budget" content="30000">
+<iframe id="f" style="width:1100px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// In the 3D cave, a click on the daylight down the shaft sends the slime to it,
+// bouncing up the shaft (flying up, drawn out), and out beside the wellhead in the
+// village, where it lands. In the glossary's cave, a click in a shaft of light
+// sends the slime to it, leaping up and out, back to the address the village kept
+// for this tab (the same spot, in the same view).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const open = (url) => new Promise((r) => { F.onload = () => setTimeout(r, 1500); F.src = url; });
+(async () => {
+  try {
+    // ── 3D ──
+    await open("/slimeverse3d.html?theme=technurture&place=cave");
+    let w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine, me = W.me;
+    W.pause(); W.setMuted(true); W.say("", 0);
+    const S = W.S(), q = S.lights && S.lights[0];
+    if (!q) { say("3D: the cave's light MISSING"); }
+    else {
+      // from 40 units along the cave, facing the shaft: click its pool of light on the floor
+      me.x = S.centre(q.z + 40); me.z = q.z + 40; me.yaw = Math.PI; me.speed = 0;
+      for (let i = 0; i < 90; i++) W.step(1 / 60);
+      const lz = q.z + S.period * Math.round((me.z - q.z) / S.period), p = E.project([q.x, S.floorAt(q.x, lz) + 0.2, lz]);
+      if (!p) say("3D: the light in view MISSING");
+      else {
+        W.controls.onTap(p[0], p[1]);
+        let rose = 0, t = 0, launched = false;
+        while (t < 6 && W.scene() === "cave") { W.step(1 / 60); t += 1 / 60; if (me.launch) { launched = true; rose = Math.max(rose, me.air); } }
+        for (let i = 0; i < 90; i++) W.step(1 / 60);
+        const O = W.S(), well = O.entries && O.entries.well, off = well ? Math.hypot(me.x - well.x, me.z - well.z) : NaN;
+        say("3D: a click on the light: the slime " + (launched ? "bounced up the shaft (" + rose.toFixed(1) + " units)" : "never went up NO") + ", and came out in the " + W.scene()
+          + (W.scene().startsWith("outdoors") ? "" : " NO") + ", " + off.toFixed(1) + " from the wellhead's way out" + (off < 4 ? "" : " NO") + ", " + (me.air === 0 ? "landed" : "still in the air NO"));
+      }
+    }
+    // ── the glossary ── (as if the iso village had opened it, from a spot by the wellhead)
+    const from = location.origin + "/index.html?theme=technurture&slime=31.5,26.5";
+    sessionStorage.setItem("mh-return", from);
+    await open("/glossary.html");
+    w = F.contentWindow; const G = w.MH_GLOSSARY_WORLD, L = G.layout();
+    G.pause();
+    // the shafts down the cracks count too: along the lit half, away from the way in
+    { G.go(2400, 0); for (let i = 0; i < 3; i++) G.tick(1 / 60); const found = new Set();
+      for (let x = 20; x < L.W - 20; x += 8) { const at = G.lightAt(x, L.BASE - 60); if (at != null) found.add(Math.round(at)); }
+      say("glossary: shafts of light in view at 2400: " + ([...found].join(", ") || "none NO"));
+      G.go(0, 0); for (let i = 0; i < 3; i++) G.tick(1 / 60); }
+    // find a shaft of light on screen: scan a row across the view at mid-height between roof and floor
+    let hit = null;
+    for (let x = 20; x < L.W - 20 && !hit; x += 8) { const y = L.BASE - 60; const at = G.lightAt(x, y); if (at != null) hit = [x, y, at]; }
+    if (!hit) { say("glossary: a light in view MISSING"); }
+    else {
+      const cv = w.document.getElementById("crawl"), r = cv.getBoundingClientRect();
+      const o = { clientX: r.left + hit[0] * (r.width / L.W), clientY: r.top + hit[1] * (r.height / L.H), pointerId: 3, pointerType: "mouse", isPrimary: true, bubbles: true, button: 0 };
+      cv.dispatchEvent(new w.PointerEvent("pointerdown", o)); w.dispatchEvent(new w.PointerEvent("pointerup", o));
+      let i = 0; for (; i < 600 && !G.leaving(); i++) G.tick(1 / 60);
+      const flew = G.me.flying;
+      say("glossary: a click on the light at " + Math.round(hit[2]) + ": the slime " + (G.leaving() ? "reached it and leapt" + (flew ? " up" : "") : "never left NO"));
+      await new Promise((res) => { F.onload = () => res(); setTimeout(res, 4000); });
+      say("  and went back to " + F.contentWindow.location.pathname.split("/").pop() + F.contentWindow.location.search + (F.contentWindow.location.href === from ? "" : " NO (wanted " + from + ")"));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+})();
+</script>

@@ -86,6 +86,8 @@
     "slimeverse3d.tip.turn": "Je peux tourner\u00A0: glissez de côté.",
     "slimeverse3d.tip.pinch": "Je peux m'approcher\u00A0: pincez, ou + et −.",
     "slimeverse3d.tip.openTap": "Je peux ouvrir une maison\u00A0: faites-moi entrer, ou touchez sa porte.",
+    "slimeverse3d.tip.light": "Je peux remonter\u00A0: cliquez sur la lumière.",
+    "slimeverse3d.tip.lightTap": "Je peux remonter\u00A0: touchez la lumière.",
     "world.progress": "{v} / {n} vues",
     "world.soundOn": "Son activé",
     "world.soundOff": "Son coupé",
@@ -318,6 +320,8 @@
     "glossary.tip.hurry": "Je peux me presser\u00A0: maintenez Maj.",
     "glossary.tip.tap": "Je peux marcher jusqu'à un mot\u00A0: touchez où je dois aller.",
     "glossary.tip.read": "Je peux vous montrer la glose d'un mot\u00A0: touchez le mot.",
+    "glossary.tip.light": "Je peux remonter\u00A0: cliquez sur une lumière.",
+    "glossary.tip.lightTap": "Je peux remonter\u00A0: touchez une lumière.",
 
     // the lexicon's own headings, as the card and the lists show them
     "glossary.section.Voice / sound / music": "Voix / son / musique",

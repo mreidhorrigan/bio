@@ -10,7 +10,9 @@ test("the site loads and integrates the generated signal-tower bundle", async ()
   ]);
   assert.match(html, /addEventListener\("load"/);
   assert.match(html, /script\.src = "signal-towers\.js\?v=[^"]+"; script\.async = true/);
-  assert.match(engine, /data-tool="signal"/);
+  // the ✎ Build bar draws a button per registered tool: the tower is one of them
+  assert.match(engine, /id: "signal", label:/);
+  assert.match(engine, /data-tool="\$\{t\.id\}"/);
   assert.match(engine, /MH_MUSEBOTS\.restore\(BUILDINGS\)/);
   assert.match(engine, /MH_MUSEBOTS\.reflect\(BUILDINGS\)/);
   assert.match(engine, /restorePlayerFromURL\(\)/);
@@ -18,7 +20,7 @@ test("the site loads and integrates the generated signal-tower bundle", async ()
   assert.match(engine, /MH_MUSEBOTS\.hasSounding/);
   assert.match(engine, /setMusebotAudioActive/);
   assert.match(engine, /siteAudioDiagnostics/);
-  assert.match(engine, /this\.musebotsActive \? 1\.65 : 1/);
+  assert.match(engine, /musebotsActive \? 1\.65 : 1/);
   assert.match(engine, /placementCursor\(buildTool\)/);
   assert.match(engine, /MH_MUSEBOTS\.updateListener\(player\.x, player\.y, P, BUILDINGS\)/);
   assert.match(engine, /mh-musebots-ready/);

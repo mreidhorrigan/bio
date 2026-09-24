@@ -1,0 +1,48 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D: a house's card closes when the slime walks away</title>
+<meta name="budget" content="16000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture" style="width:1100px;height:800px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Walking into a house's door opens its card; the card stays while the slime stands
+// there, and closes once it walks away (the keys, with the card's link focused),
+// as walking closes the iso village's card. A card opened by a click (the menu's
+// chips) closes the same way.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, d = w.document, card = d.getElementById("card");
+    W.pause(); W.setMuted(true); W.say("", 0);
+    w.open = () => null;                                               // no new tabs
+    W.load("outdoors", "start"); for (let i = 0; i < 3; i++) W.tick(0.016);
+    const O = W.S(), q = O.portals.find((p) => p.open && p.open.kind === "link" && !/glossary/.test(p.open.url));
+    if (!q) { say("a road-house's door MISSING"); document.title = "done"; return; }
+    // step clear of every door (so they arm), then into this one
+    W.me.x = q.x + 14; W.me.z = q.z + 14; W.me.speed = 0; for (let i = 0; i < 3; i++) W.tick(0.016);
+    W.me.x = q.x; W.me.z = q.z; W.me.speed = 0; for (let i = 0; i < 3; i++) W.tick(0.016);
+    say("walked into " + q.open.title + "'s door: its card " + (card.hidden ? "stays shut NO" : "opens"));
+    for (let i = 0; i < 90; i++) W.tick(0.016);
+    say("standing there 1.5 s: the card " + (card.hidden ? "closed NO" : "stays open"));
+    const focus = d.activeElement && d.activeElement.tagName.toLowerCase();
+    // walk away, as a visitor would: the back key, the card's link focused
+    const key = (type) => d.dispatchEvent(new w.KeyboardEvent(type, { key: "s", bubbles: true, cancelable: true }));
+    key("keydown");
+    let t = 0; for (; t < 90 && !card.hidden; t++) W.tick(0.016);
+    key("keyup"); for (let i = 0; i < 20; i++) W.tick(0.016);
+    say("walking away (with the " + focus + " focused): the card " + (card.hidden ? "closes after " + (t * 0.016).toFixed(2) + " s" : "stays open NO"));
+    // a card a click opened (the menu's chip for a prose house, or its door clicked) closes the same way
+    const chip = [...d.querySelectorAll("#navbar button, #navbar a")].find((b) => /\d+\./.test(b.textContent));
+    if (chip) {
+      W.me.speed = 0; for (let i = 0; i < 3; i++) W.tick(0.016);
+      chip.click(); for (let i = 0; i < 3; i++) W.tick(0.016);
+      if (card.hidden) say("a chip (" + chip.textContent.trim() + ") opened a page, not a card: skipped");
+      else {
+        key("keydown"); let u = 0; for (; u < 90 && !card.hidden; u++) W.tick(0.016); key("keyup");
+        say("a card from a chip (" + chip.textContent.trim() + "): " + (card.hidden ? "closes on walking away" : "stays open NO"));
+      }
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

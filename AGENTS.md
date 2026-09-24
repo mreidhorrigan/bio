@@ -5,6 +5,9 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
 - World art (iso village, sidescroller, 3D): `brand/backstage/world-style.md`.
   Read it before adding anything drawn in a world: outlines, inks, sizes,
   the iso-to-3D mapping. Page style is `brand/backstage/house-style.md`.
+- Sounds: every sound in the worlds is a recipe in `sounds.js`, played by name
+  from `engine.js` and `verse3d.js`; change sounds only there, and run
+  `node --test sounds.test.mjs`.
 - English/French: `docs/i18n.md`. English is the source language and is never
   rewritten; `i18n-fr.js` holds every French word. Check with
   `python3 tools/i18n-check.py`.

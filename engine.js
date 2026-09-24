@@ -568,39 +568,24 @@ const audio = {
       this.ctx.resume().catch(() => {});
   },
   setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : (this.musebotsActive ? 0.9 : 0.5), this.ctx.currentTime, 0.02); },
-  /** @param {number} f @param {{delay?:number,dur?:number,gain?:number,type?:OscillatorType,soft?:boolean}} [o] */
-  tone(f, o) {
-    if (!this.ctx || !this.master || this.muted) return;
-    const t = this.ctx.currentTime + (o?.delay ?? 0), dur = o?.dur ?? 0.15,
-      // Website cues otherwise disappear perceptually beneath several Musebot
-      // masters. This is a small cue-only compensation, not musical ducking.
-      peak = Math.min(0.32, (o?.gain ?? 0.2) * (this.musebotsActive ? 1.65 : 1));
-    const osc = this.ctx.createOscillator(), g = this.ctx.createGain();
-    osc.type = o?.type || "sine"; osc.frequency.value = f;      // brief, gentle sine cues in every world (the step: a triangle)
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(peak, t + 0.014);        // a soft attack (no click)
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g); g.connect(o?.soft && this.soft ? this.soft : this.master); osc.start(t); osc.stop(t + dur + 0.03);
-  },
+  // (the tones themselves are recipes in sounds.js, the one place the worlds' sounds are defined)
 };
-/** @param {number} degree */
-function noteFreq(degree) {
-  const sc = T.audio.scale, n = sc.length, oct = Math.floor(degree / n);
-  const semi = sc[((degree % n) + n) % n] + 12 * oct;
-  return T.audio.root * Math.pow(2, semi / 12);
+/** Play one of the worlds' sounds, by name (sounds.js is the one place they are
+ *  defined, shared with the 3D village, so the two views cannot drift apart), in
+ *  this skin's key and scale, at the level it is designed for through this master
+ *  (0.5). Under Musebots the master rises and the cues get a small lift. */
+function cue(name, degree) {
+  if (!audio.ctx || !audio.master || audio.muted || !window.MH_SOUNDS) return;
+  window.MH_SOUNDS.play(name, audio.ctx, { out: audio.master, soft: audio.soft, level: 0.5, root: T.audio.root, scale: T.audio.scale,
+    degree: degree || 0, boost: audio.musebotsActive ? 1.65 : 1 });
 }
 const sfx = {
-  open(d) { audio.tone(noteFreq(d), { gain: 0.15, dur: 0.16 }); audio.tone(noteFreq(d + 2), { delay: 0.08, gain: 0.11, dur: 0.14 }); },
-  near(d) { audio.tone(noteFreq(d), { gain: 0.055, dur: 0.08 }); },
-  close() { audio.tone(noteFreq(1), { gain: 0.07, dur: 0.11 }); audio.tone(noteFreq(0), { delay: 0.07, gain: 0.055, dur: 0.12 }); },
-  nav() { audio.tone(noteFreq(2), { gain: 0.045, dur: 0.05 }); },
-  pick() { audio.tone(noteFreq(4), { gain: 0.085, dur: 0.09 }); },
-  // The step, the same sound at the same level as the 3D village's (verse3d.js stepSound;
-  // 0.035 through this 0.5 master is its 0.022 through 0.8), so switching views does not
-  // lose it: a triangle blip four times over, 1/60 s apart, smeared into one wet squelch
-  // and rounded by the low-pass. (It was a pure sine at 262 Hz, which laptop speakers all
-  // but drop: after the 3D step it seemed not to sound at all.) Once per stride (update).
-  step() { for (let i = 0; i < 4; i++) audio.tone(noteFreq(0), { gain: 0.035, dur: 0.06, delay: i / 60, type: "triangle", soft: true }); },
+  open(d) { cue("open", d); },
+  near(d) { cue("near", d); },
+  close() { cue("close"); },
+  nav() { cue("nav"); },
+  pick() { cue("pick"); },
+  step() { cue("step"); },                              // once a stride (update): the same squelch as the 3D village's
 };
 
 /* ----------------------------------------------------------------------------
@@ -1659,6 +1644,8 @@ function updateHUD() {
    -------------------------------------------------------------------------- */
 
 let leaving = false;                    // a page of the site is about to open in this tab
+/** Note this village's address (with the slime's spot) for the tab, so a page opened from it can send the visitor back. */
+function rememberReturn() { try { if (window.sessionStorage) sessionStorage.setItem("mh-return", location.href); } catch (e) { /* private: they go to the plaza */ } }
 /** Is this a page of the site itself (a relative link, or this origin)? @param {string} url */
 function sameSite(url) { try { return new URL(url, location.href).origin === location.origin; } catch (e) { return false; } }
 /** Open a page the house opens: About, the CV, the Toolbox, the Music/Games menus, the
@@ -1668,7 +1655,8 @@ function sameSite(url) { try { return new URL(url, location.href).origin === loc
 function openPage(url) {
   if (window.MH_I18N) url = window.MH_I18N.href(url);   // French mode opens the French page
   // (after a quarter second, so the house's opening chime is heard: going at once cut it off)
-  if (sameSite(url)) { reflectPlayerInURL(); if (!leaving) { leaving = true; setTimeout(() => { location.href = url; leaving = false; }, 260); } return; }
+  // (the page it opens can send the visitor back here, to this spot: the Glossary's light does)
+  if (sameSite(url)) { reflectPlayerInURL(); rememberReturn(); if (!leaving) { leaving = true; setTimeout(() => { location.href = url; leaving = false; }, 260); } return; }
   // a plain new TAB: no features string (a features string makes Safari treat it as a blockable
   // popup window). Must be called SYNCHRONOUSLY from a user gesture or iPad/iPhone will block it.
   try { const w = window.open(url, "_blank"); if (w) { try { w.opener = null; } catch (e) { /* _blank is noopener by default on modern browsers */ } } }

@@ -361,6 +361,10 @@
       // up the rope, into the house beside its hatch: reached by touching the rope's knot, from
       // either way round the ring (a portal is found at every turn of it)
       portals: [{ x: centre(10) + ROPE, z: 10, r: 1.1 + V.UNIT * 0.8 + 0.6, to: "indoors", entry: "hatch" }],
+      // the daylight down the shaft: a click on it (its column or its pool on the floor)
+      // sends the slime there, and up the shaft with a bounce, and out beside the
+      // wellhead in the village, where the shaft comes up
+      lights: [{ x: centre(10), z: 10, r: WELL_R * 1.3, h: 60, to: "outdoors", entry: "well" }],
       life: {
         zoogs: 10, shoggoths: 3, greet: true,
         spot: (rnd) => { const z = 90 + rnd() * (DARK_FROM - 200); return [centre(z) + (rnd() - 0.5) * 20, z]; },
@@ -1355,7 +1359,7 @@
       if (isHome(q)) entries.home = entries["house" + i];
     });
     { const a = Math.atan2(-wellAt.x, -wellAt.z), r = WELLHEAD.collar + 12;
-      entries.well = { x: wellAt.x + Math.sin(a) * r, z: wellAt.z + Math.cos(a) * r, yaw: a };
+      entries.well = { x: wellAt.x + Math.sin(a) * r, z: wellAt.z + Math.cos(a) * r, yaw: a, drop: 12 };   // up the shaft from the cave, it lands beside the wellhead
       const reach = WELLHEAD.collar + WELLHEAD.lobe + V.UNIT * 0.8 + 1.5;
       // the wellhead: down to the cave (the proposal), or, as in the iso village, the Glossary's page
       if (menus && wellAt.item) portals.push({ x: wellAt.x, z: wellAt.z, r: reach, open: wellAt.item });

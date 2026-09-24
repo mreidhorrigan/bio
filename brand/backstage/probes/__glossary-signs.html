@@ -1,0 +1,36 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Glossary: both halves signed at both ends</title>
+<iframe id="f" src="/glossary.html" style="width:1200px;height:760px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The glossary and the antiglossary are each signed at both ends, the arrow
+// pointing into the half: "Glossary ›" where it begins, "‹ Glossary" where it
+// ends, and the same for the antiglossary. The probe walks the whole circuit,
+// gathers every sign drawn, and checks the four are there, each clear of the
+// cave's roof and of the word boards beside it.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = document.getElementById("f").contentWindow, G = w.MH_GLOSSARY_WORLD;
+    G.pause();
+    const seen = new Map(), W = G.width();
+    for (let x = 0; x < W; x += 300) {
+      G.go(x, 0); for (let i = 0; i < 3; i++) G.tick(0.016);
+      for (const s of G.signs()) if (!seen.has(s.label + "@" + Math.round(s.x))) seen.set(s.label + "@" + Math.round(s.x), s);
+    }
+    const signs = [...seen.values()];
+    for (const want of ["Glossary ›", "‹ Glossary", "Antiglossary ›", "‹ Antiglossary"]) {
+      const s = signs.find((q) => q.label === want);
+      if (!s) { say(want + ": MISSING"); continue; }
+      const roof = G.roofAt(s.x), clearRoof = s.top - roof;
+      // the foreground words either side: their boards, in world units (the foreground moves one to one)
+      const near = G.marks.filter((m) => m.side === "glossary" && Math.abs(m.x - s.x) < 400 && m.w);
+      const hit = near.find((m) => Math.abs(m.x - s.x) < (m.w + s.w) / 2 + 6);
+      say(want + " at " + Math.round(s.x) + ": " + Math.round(clearRoof) + " under the roof" + (clearRoof > 4 ? "" : " NO (in the rock)")
+        + (hit ? ", overlapping the board of " + hit.title + " NO" : ", clear of the words beside it"));
+    }
+    say("signs in all: " + signs.length);
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1200));
+</script>

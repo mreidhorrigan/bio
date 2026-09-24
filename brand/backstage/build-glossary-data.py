@@ -453,7 +453,9 @@ def read_entries(path):
         rest = "\n".join(lines[i:])
         en, _, fr = rest.partition("\nfr:\n")
         fields.setdefault("term", key)                # the heading IS the headword
-        fields["gloss"] = unescape(" ".join(en.split()))
+        # the site's word for it, in written entries as in the lexicon's (tidy): without
+        # this a rebuild put "coined" back into glosses the site had as "neologized"
+        fields["gloss"] = re.sub(r"\bcoined\b", "neologized", unescape(" ".join(en.split())))
         fields["fr"] = unescape(" ".join(fr.split()))
         out[key.lower()] = fields
     return out

@@ -142,7 +142,15 @@ the cap.
   (on a surface seen in depth it aliased into seams). Too many photos look like
   "ai slop", and so does none at all: ask before adding one.
 - **Words in a world:** signs in the skin's format (the leaf plaque, the neon
-  marquee at night, the number plate in bureaucore). The creatures' speech
+  marquee at night, the number plate in bureaucore). A stretch with a name of its
+  own (the glossary, the antiglossary) is signed at both ends, the arrow pointing
+  into it ("Glossary ›" where it begins, "‹ Glossary" where it ends), so a
+  visitor coming from either way knows where they are.
+- **A cave's daylight is its way out.** In the 3D cave the shaft of light under
+  the well, and in the glossary's cave every shaft down a crack and the light at
+  the way in: a click on it sends the slime to it, and it bounces up and out (in
+  3D, out of the wellhead in the village; from the glossary, back to the village
+  address kept for the tab, in the view the visitor came from). The creatures' speech
   bubbles are 3D only ("Yikes!", "Yeep!", "teketeke", "lilililililili!",
   "blooloo!").
 - **Instructions are the slime's to give,** in the first person, in a speech
@@ -155,10 +163,19 @@ the cap.
   glossary-world.js). The same words stand in the page, out of sight, for a
   screen reader. No instruction panels or legends on screen, and no toasts that
   tell the visitor what to do (status toasts, "Sound off", stay).
-- **Sounds:** brief soft tones in the skin's key (`audio.root`): sine or
-  triangle, a soft attack, through the low-pass. The slime's step, the landing's
-  plop, a pet zoog's "blooloo!", and a shoggoth's "teke" are voiced. The other
-  cries stay silent until the user asks for them.
+- **Sounds live in one file, `sounds.js` (MH_SOUNDS).** Every sound the worlds
+  make is a named recipe there (the step, the landing, the creatures' voices,
+  the iso cues): blips with a wave, a pitch against the skin's key, a slide, a
+  length, and a loudness at the speaker. The iso engine (`cue(name)`) and the 3D
+  runtime (`playSound(name)`) only play them by name, dividing out their own
+  master, so the two views sound alike and cannot drift apart (the step once
+  did). Change a sound in `sounds.js` and nowhere else. `sounds.test.mjs` fails
+  if an engine plays a name the file lacks, makes its own oscillators, loses a
+  creature's voice's shape (the blooloo two steady notes, high then low; the
+  teke's clucks low, below the key's root), or has a recipe too quiet to hear.
+  Voiced: the slime's step and landing, a pet zoog's "blooloo!", a shoggoth's
+  "teketeke", "teke?!" and "lilililililili!", heard within 140 units of the
+  slime; a zoog's "Yikes!" and "Yeep!" stay silent until the user asks.
 
 ## 7. A new element, checked
 

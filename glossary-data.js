@@ -102,21 +102,6 @@ window.MH_GLOSSARY = {
    "rank": 0.7
   },
   {
-   "term": "petit espace quelconque",
-   "aka": [],
-   "kind": "extended-coinage",
-   "mark": "★↗",
-   "gloss": "A petit espace quelconque is the small liminal atmosphere produced when a game captures semi-opacity cinematically, its possibility space circumscribed in advance. It contrasts with the grand espace quelconque of games like Minecraft, whose hyalosigns were computational failures rather than imitations of cinema. Both torque Deleuze's espace quelconque.",
-   "section": "Game studies / ludology",
-   "zettel": "",
-   "provenance": "",
-   "glossFr": "Un petit espace quelconque, c'est la petite atmosphère liminale que produit un jeu qui capte la semi-opacité de façon cinématographique, son espace de possibles étant circonscrit d'avance. Il s'oppose au grand espace quelconque de jeux comme Minecraft, dont les hyalosignes étaient des échecs de calcul plutôt que des imitations du cinéma. Les deux infléchissent l'espace quelconque de Deleuze.",
-   "termFr": "petit espace quelconque",
-   "mine": true,
-   "slug": "petit-espace-quelconque",
-   "rank": 0.7333
-  },
-  {
    "term": "departmentality",
    "aka": [],
    "kind": "extended-coinage",

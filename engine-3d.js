@@ -362,6 +362,10 @@
       return { x: a, y: c, w: b - a, h: d - c };
     }
     const offscreen = (bb) => bb.x + bb.w < -40 || bb.x > E.W + 40 || bb.y + bb.h < -40 || bb.y > E.H + 40;
+    /** A reflection whose box on screen misses its mirror's box can never show (the
+     *  mirror layer is clipped to the pool): it is not drawn. In the cave that was
+     *  hundreds of walls and lobes a frame, drawn into the layer and clipped away. */
+    const outsideMirror = (o, bb) => { const M = o && o.mirrorOf, b = M && M.box; return !!b && (bb.x + bb.w < b[0] - 2 || bb.x > b[1] + 2 || bb.y + bb.h < b[2] - 2 || bb.y > b[3] + 2); };
 
     /* Where a point shows in a mirror. A reflection is a flip through the
        water's mean LEVEL, never through the height under each point: the body
@@ -390,7 +394,7 @@
     E.mirrorPoint = (M, p, base) => {
       const q = [p[0], 2 * M.level - Math.max(p[1], M.level), p[2]];
       const b = base || 0;
-      q[1] += b + clamp(0.5 * (wave(M, q) - b), -0.22, 0.22);
+      q[1] += b + clamp(0.5 * (wave(M, q) - b), -0.32, 0.32);   // (a little more shiver than it had: the waves show in what the water holds)
       return q;
     };
     /** The reflections: for each mirror, a mirrored copy of every eligible item
@@ -423,6 +427,22 @@
             for (const p of it.pts) x += p[0];
             x /= it.pts.length;
             if (x < M.x0 || x > M.x1) continue;
+          }
+          // First, cheaply, can its reflection land on the pool at all? Its middle and
+          // reach, mirrored through the level and projected: a thing whose reflection
+          // falls wholly off the pool's box on screen is not mirrored (working out each
+          // point's wave for it was most of what the cave's water cost a frame).
+          if (M.box && it.k !== 5) {
+            let cx = 0, cy = 0, cz = 0, r = 0;
+            const n = it.pts.length;
+            for (const p of it.pts) { cx += p[0]; cy += p[1]; cz += p[2]; }
+            cx /= n; cy /= n; cz /= n;
+            for (const p of it.pts) r = Math.max(r, Math.abs(p[0] - cx) + Math.abs(p[1] - cy) + Math.abs(p[2] - cz));
+            const v = E.view([cx, 2 * M.level - Math.max(cy, M.level), cz]);
+            if (v[2] > NEAR() + r) {
+              const sp = E.screen(v), sr = (r * E.fov) / v[2] + 4;
+              if (sp[0] + sr < M.box[0] || sp[0] - sr > M.box[1] || sp[1] + sr < M.box[2] || sp[1] - sr > M.box[3]) continue;
+            }
           }
           const base = E.mirrorBase(M, it.pts);
           const pts = it.pts.map((p) => E.mirrorPoint(M, p, base));
@@ -465,7 +485,8 @@
           const c = clipNear(vs);
           if (c.length < 3) { E.tally.culled++; continue; }
           entry.sp = c.map(E.screen);
-          if (offscreen(bounds(entry.sp))) { E.tally.culled++; continue; }
+          const b1 = bounds(entry.sp);
+          if (offscreen(b1) || outsideMirror(o, b1)) { E.tally.culled++; continue; }
         } else if (it.k === 2) {                             // a path: cut where it passes the eye
           const runs = []; let run = [];
           for (const v of vs) { if (v[2] > n) run.push(E.screen(v)); else if (run.length) { runs.push(run); run = []; } }
@@ -476,7 +497,8 @@
           const c = clipNear(vs);
           if (c.length < 3) { E.tally.culled++; continue; }
           entry.sp = c.map(E.screen);
-          if (offscreen(bounds(entry.sp))) { E.tally.culled++; continue; }
+          const b4 = bounds(entry.sp);
+          if (offscreen(b4) || outsideMirror(o, b4)) { E.tally.culled++; continue; }
         } else {                                             // a body
           if (it.k === 3) {
             // Samples behind the eye are dropped, not the body: a lobe or a blob
@@ -490,7 +512,7 @@
             entry.ring = hull(front);
             if (entry.ring.length < 3) { E.tally.culled++; continue; }
             entry.bb = bounds(entry.ring);
-            if (offscreen(entry.bb) || entry.bb.w < ((o && o.minPx) || 1.2) && entry.bb.h < ((o && o.minPx) || 1.2)) { E.tally.culled++; continue; }
+            if (offscreen(entry.bb) || outsideMirror(o, entry.bb) || entry.bb.w < ((o && o.minPx) || 1.2) && entry.bb.h < ((o && o.minPx) || 1.2)) { E.tally.culled++; continue; }
           } else if (it.k === 5) {
             if (vs[0][2] <= n) { E.tally.culled++; continue; }
             entry.sp = [E.screen(vs[0])];

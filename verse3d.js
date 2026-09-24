@@ -44,7 +44,9 @@
    { zoogs, shoggoths, dormant, spot(rand), night(x, z), motes }, and camera
    { dist, height(x, z) }, fogFrom (where the fog starts; it is whole at
    0.94 of seen), walk (the slime's walking speed there, units a second;
-   WALK where it is left out), and pal().sky for water open to the sky. (The iso lakes'
+   WALK where it is left out), lights [{ x, z, r, h, to, entry }] (daylight a
+   click can send the slime up, bouncing, and out: the cave's shaft), and
+   pal().sky for water open to the sky. (The iso lakes'
    water photo was tried here and taken out: on a surface seen in depth it
    aliased into seams. The iso map keeps it.) ctx carries the engine, the slime, the hashes, and
    helpers for distance, detail and the water.
@@ -147,7 +149,8 @@
     const stats = { eaten: 0 };
     const me = { kind: "slime", x: 0, z: 0, y: 0, yaw: 0, speed: 0, bob: 0, R: UNIT, pool: null, ripple: 0,
       goal: /** @type {null|{x:number,z:number}} */ (null), goalBest: Infinity, stuck: 0,
-      air: 0, vy: 0, landT: /** @type {null|number} */ (null) };   // air: its middle's height over the floor while it drops; landT: time since it landed
+      air: 0, vy: 0, landT: /** @type {null|number} */ (null),
+      launch: /** @type {null|{q:any,t:number}} */ (null), toLight: /** @type {any} */ (null) };   // bouncing up a light and out; walking to one   // air: its middle's height over the floor while it drops; landT: time since it landed
 
     /* ── an endless world: the torus ─────────────────────────────────────
        A scene that sets `period` (world units) repeats every period in x and
@@ -200,12 +203,14 @@
        any ground). Its sheet is bounded by the SHORELINE, marched out from the
        centre along 28 headings to where the floor comes up through the level,
        so a pool is the basin's own shape.                                  */
-    const WAVE_C = 9, WAVE_DAMP = 2.0, WAVE_K = 5.5, AMB = 0.045;
+    // wavier than they were (c 9, damping 2.0, spring 5.5, cells of 4 units): the waves
+    // travel faster, spread farther and last, on a finer grid, and a body entering splashes
+    const WAVE_C = 12, WAVE_DAMP = 1.1, WAVE_K = 3.2, AMB = 0.045;
     function makePool(d) {
       const level = S.floorAt(d.x, d.z) + d.depth;
-      const nx = clamp(Math.round((2 * d.rx) / 4), 6, 18), nz = clamp(Math.round((2 * d.rz) / 4), 6, 18);
+      const nx = clamp(Math.round((2 * d.rx) / 2.5), 8, 28), nz = clamp(Math.round((2 * d.rz) / 2.5), 8, 28);
       const p = { x: d.x, z: d.z, rx: d.rx, rz: d.rz, level, nx, nz, cx: (2 * d.rx) / (nx - 1), cz: (2 * d.rz) / (nz - 1),
-        h: new Float64Array(nx * nz), v: new Float64Array(nx * nz), next: new Float64Array(nx * nz), amp: 0.9, shore: [], awake: 0 };
+        h: new Float64Array(nx * nz), v: new Float64Array(nx * nz), next: new Float64Array(nx * nz), amp: 1.2, shore: [], awake: 0 };
       const wet = (x, z) => S.floorAt(x, z) < level - 0.04;
       const N = 28;
       for (let k = 0; k < N; k++) {
@@ -333,8 +338,14 @@
         E.mirror(ring, { surface: (x, z) => waterY(p, x, z), level: p.level, alpha: S.mirrorAlpha || 0.36, minLayer: S.mirrorMinLayer,
           x0: p.x - p.rx - pad, x1: p.x + p.rx + pad, z0: p.z - p.rz - pad, z1: p.z + p.rz + pad });
         const depth = clamp((p.level - S.floorAt(p.x, p.z)) / 2.4, 0, 1);
+        // Its colours from the place's palette where each part of it lies: the side
+        // away from the camera, the middle, the near side. (All from the middle, a pool
+        // where the cave goes from light to dark was one colour while the rock round it
+        // shaded from one to the other.)
+        const dd = Math.hypot(p.x - c.x, p.z - c.z) || 1, ux = (p.x - c.x) / dd, uz = (p.z - c.z) / dd, reach = Math.max(p.rx, p.rz);
+        const PF = S.pal(p.x + ux * reach, p.z + uz * reach), PN = S.pal(p.x - ux * reach, p.z - uz * reach);
         // grazing water is a mirror: under the sky it shows the sky, in a cave the dark
-        const far = P.sky ? rgba(mix(P.sky, P.shallow, 0.3), 0.9) : rgba(mix(P.deep, P.shallow, 0.18), 0.84), mid = rgba(mix(P.shallow, P.deep, 0.3 + 0.55 * depth), 0.6), near = rgba(P.shallow, 0.3);
+        const far = PF.sky ? rgba(mix(PF.sky, PF.shallow, 0.3), 0.9) : rgba(mix(PF.deep, PF.shallow, 0.18), 0.84), mid = rgba(mix(P.shallow, P.deep, 0.3 + 0.55 * depth), 0.6), near = rgba(PN.shallow, 0.3);
         E.custom(ring, (g, sp, e) => {
           let top = Infinity, bot = -Infinity, lf = Infinity, rt = -Infinity;
           for (const q of sp) { if (q[1] < top) top = q[1]; if (q[1] > bot) bot = q[1]; if (q[0] < lf) lf = q[0]; if (q[0] > rt) rt = q[0]; }
@@ -353,10 +364,10 @@
           const y = waterY(p, x, z), N = waterNormal(p, x, z);
           const V = [c.x - x, c.y - y, c.z - z], vm = Math.hypot(V[0], V[1], V[2]) || 1;
           const H = [V[0] / vm + L[0] / lm, V[1] / vm + L[1] / lm, V[2] / vm + L[2] / lm], hm = Math.hypot(H[0], H[1], H[2]) || 1;
-          const spec = Math.pow(Math.max(0, (N[0] * H[0] + N[1] * H[1] + N[2] * H[2]) / hm), 90);
-          if (spec < 0.08) continue;
+          const spec = Math.pow(Math.max(0, (N[0] * H[0] + N[1] * H[1] + N[2] * H[2]) / hm), 60);   // (a broader highlight than it was: more of the waves catch it)
+          if (spec < 0.06) continue;
           const len = 0.5 + spec * 1.2;
-          E.line([[x - len, y + 0.03, z], [x + len, y + 0.03, z]], rgba(P.glint, Math.min(1, spec)), 0.045 + spec * 0.07, { layer: 1, bias: 2000, world: true });
+          E.line([[x - len, y + 0.03, z], [x + len, y + 0.03, z]], rgba(S.pal(x, z).glint, Math.min(1, spec)), 0.045 + spec * 0.07, { layer: 1, bias: 2000, world: true });
         }
         const rim = ring.slice(); rim.push(ring[0]);           // where water meets ground: a hairline
         E.line(rim, rgba(P.glint, 0.4), 0.06, { layer: 1, bias: 2000, world: true });
@@ -482,7 +493,7 @@
      *  long as it falls, then flattened where it lands and wobbling back to round,
      *  as the glossary's slime lands (slime-2d.js squash). */
     function squashNow() {
-      if (me.air > 0) { const f = clamp(-me.vy / 70, 0, 1); return [1 - 0.14 * f, 1 + 0.3 * f]; }
+      if (me.air > 0) { const f = clamp(Math.abs(me.vy) / 70, 0, 1); return [1 - 0.14 * f, 1 + 0.3 * f]; }   // drawn out, falling or flying up
       if (me.landT == null) return [1, 1];
       const q = Math.exp(-me.landT * 5) * Math.cos(me.landT * 17);
       return [1 + 0.32 * q, 1 - 0.4 * q];
@@ -760,7 +771,7 @@
           s.target = null;
           let best = S.life.sense || 95;                         // a shoggoth senses a zoog a long way off
           for (const z of zoogs) { if (!z.alive) continue; const d = Math.hypot(wrapD(z.x - s.x), wrapD(z.z - s.z)); if (d < best) { best = d; s.target = z; } }
-          if (s.target && !had) say(s, "lilililililili!", 1.6);   // it has found one, and gives chase
+          if (s.target && !had) say(s, "lilililililili!", 1.6, "lilili");   // it has found one, and gives chase
         }
         if (!(s.say && s.say.t > 0) && Math.random() < dt * 0.06) say(s, "teketeke", 1.3, "teke");   // and now and then, to itself
         let fx = 0, fz = 0, top = 2.6, mode = "wander";
@@ -1147,24 +1158,18 @@
       } catch (e) { sound.ctx = null; }
     }
     const heard = () => { const c = sound.ctx; return c && sound.master && !sound.muted && c.state === "running" ? c : null; };
-    /** One blip into `out`, its pitch sliding from f0 to f1. */
-    function chirp(out, f0, f1, gain, dur, delay, type) {
-      const c = sound.ctx, t = c.currentTime + (delay || 0), osc = c.createOscillator(), g = c.createGain();
-      osc.type = type || "sine"; osc.frequency.setValueAtTime(f0, t);
-      if (f1 !== f0) osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + Math.min(0.018, dur * 0.4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);   // a soft attack: no click
-      osc.connect(g); g.connect(out); osc.start(t); osc.stop(t + dur + 0.03);
+    /** Play one of the worlds' sounds by name (sounds.js, the one place they are
+     *  defined, shared with the iso village), in the place's key, at the level it is
+     *  designed for through this master (0.8, and its low-pass, which rounds all of it). */
+    function playSound(name, o) {
+      const c = heard();
+      if (!c || !window.MH_SOUNDS) return;
+      window.MH_SOUNDS.play(name, c, Object.assign({ out: sound.master, level: 0.8, root: rootNow() }, o || {}));
     }
-    function tone(f, gain, dur, delay, type) { if (heard()) chirp(sound.master, f, f, gain, dur, delay, type); }
     /** The key of the place, or of the skin where the place has none (the cave, shared by every skin). */
     const rootNow = () => (S.audio && S.audio.root) || ({ technurture: 261.63, technoscure: 196.0, technocute: 277.18 })[skin] || 261.63;
     /** Landing from a drop: a soft low plop in the key, then the step's squelch. */
-    function landSound() {
-      if (!heard()) return;
-      const f = rootNow();
-      chirp(sound.master, f * 0.5, f * 0.33, 0.06, 0.16, 0, "sine");
-      for (let i = 0; i < 4; i++) tone(f, 0.022, 0.06, 0.03 + i / 60, "triangle");
-    }
+    function landSound() { playSound("land"); }
     /** One step at each crest of the iso world's walking beat (sin(t * 12) past 0.93). */
     function stepSound() {
       // one step at each crest of the walking beat (sin(t * 12)), counted by the beat's phase
@@ -1181,39 +1186,28 @@
       // triangle blip four times over, 1/60 s apart, smeared into one wet squelch and
       // rounded by the low-pass. A place with no key of its own (the cave, shared by
       // every skin) takes the skin's (theme-*.js audio.root).
-      const f = rootNow();
-      for (let i = 0; i < 4; i++) tone(f, 0.022, 0.06, i / 60, "triangle");
+      playSound("step");
     }
     for (const ev of ["pointerdown", "keydown"]) window.addEventListener(ev, soundOn, { passive: true });
     /* ── sound: what the creatures say ─────────────────────────────────────
-       A zoog's "blooloo!" and a shoggoth's "teke" have a voice as brief as the
-       bubble, in the skin's key: the zoog's two rising bubbles high and round,
-       the shoggoth's clucks low, four for its "teketeke" and two for the "teke?!"
-       of one bumped off its hunt, the second rising, asking. Each is quieter
-       the farther the speaker is from the slime, silent past EAR, and panned to
-       the side the camera sees it on. The other cries stay bubbles only. */
-    const EAR = 90;
+       A pet zoog's "blooloo!" and a shoggoth's "teketeke", "teke?!" and
+       "lilililililili!" have a voice as brief as the bubble, in the skin's key
+       (the recipes are in sounds.js). Each is quieter the farther the speaker is
+       from the slime, silent past EAR, and panned to the side the camera sees it
+       on. A zoog's "Yikes!" and "Yeep!" stay bubbles only. */
+    // Heard within EAR of the slime, fading gently (as the power 1.3 of how near): at
+    // 90 units and the square of it, a shoggoth half that far off was a quarter as loud,
+    // and many a "teketeke" bubble in view was silent.
+    const EAR = 140, VOICE = { blooloo: "blooloo", teke: "teke", "teke?": "tekeAsk", lilili: "lilili" };
     function voice(who, kind) {
-      const dx = wrapD(who.x - me.x), dz = wrapD(who.z - me.z), near = 1 - Math.hypot(dx, dz) / EAR;
-      if (near < 0.05) return;                                   // out of earshot (and no ramp to a silent zero)
+      const dx = wrapD(who.x - me.x), dz = wrapD(who.z - me.z), near = Math.pow(Math.max(0, 1 - Math.hypot(dx, dz) / EAR), 1.3);
+      if (near < 0.02) return;                                   // out of earshot
       sound.voices = (sound.voices || 0) + 1;
       const c = heard();
       if (!c) return;
-      const f = rootNow();
-      let out = sound.master;
+      let out = sound.master;                                    // panned to the side the camera sees it on
       if (c.createStereoPanner) { const p = c.createStereoPanner(); p.pan.value = clamp(Math.sin(Math.atan2(dx, dz) - E.cam.yaw) * 0.8, -0.8, 0.8); p.connect(sound.master); out = p; }
-      if (kind === "blooloo") {
-        const a = 0.05 * near * near;
-        chirp(out, f * 2, f * 2.6, a, 0.1, 0, "sine");                  // bloo
-        chirp(out, f * 2.4, f * 3, a * 0.9, 0.13, 0.12, "sine");         // loo
-      } else {
-        const a = 0.045 * near * near, ask = kind === "teke?";
-        for (let i = 0; i < (ask ? 2 : 4); i++) {
-          const hi = f * (i & 1 ? 0.5 : 0.667);                          // te, ke
-          if (ask && i === 1) chirp(out, f * 0.5, f * 0.9, a, 0.11, 0.09, "triangle");
-          else chirp(out, hi, hi * 0.8, a, 0.05, i * 0.09, "triangle");
-        }
-      }
+      playSound(VOICE[kind] || kind, { out, near });
     }
 
     /* ── the walk, the camera, the portals ─────────────────────────────── */
@@ -1280,8 +1274,35 @@
       }
       return null;
     }
+    /** A click on a light (S.lights: the cave's shaft of daylight, its column or
+     *  its pool on the floor): the ray is marched until it enters one. */
+    function lightHit(sx, sy) {
+      if (!S.lights || !S.lights.length) return null;
+      const [o, d] = E.ray(sx, sy);
+      for (let t = 1; t < S.seen; t += 0.8) {
+        const x = o[0] + d[0] * t, y = o[1] + d[1] * t, z = o[2] + d[2] * t, fl = S.floorAt(x, z);
+        for (const q of S.lights) if (Math.hypot(wrapD(x - q.x), wrapD(z - q.z)) < q.r && y > fl - 0.6 && y < fl + q.h) return q;
+        if (y < fl - 0.6) return null;                          // into the ground first
+      }
+      return null;
+    }
+    /** Up a light and out: a bounce, the body flying up (drawn out, the view tilting
+     *  after it), and a moment later the way out it leads to (q.to, q.entry). */
+    function launch(q) {
+      me.launch = { q, t: 0 }; me.goal = null; me.toLight = null; me.speed = 0;
+      me.air = Math.max(me.air, 0.01); me.vy = 40; me.landT = null;
+      playSound("launch");
+    }
     C.onTap = (sx, sy) => {
-      if (fade) return;
+      if (fade || me.launch) return;
+      const light = lightHit(sx, sy);
+      if (light) {
+        const lx = img(light.x, me.x), lz = img(light.z, me.z);
+        if (Math.hypot(me.x - lx, me.z - lz) < light.r) { launch(light); return; }
+        viewYaw = me.yaw + camLook - C.look;                    // walk to it, the camera holding its heading, and then up
+        me.goal = { x: lx, z: lz }; me.goalBest = Infinity; me.stuck = 0; me.side = 0; me.toLight = light;
+        return;
+      }
       const hit = clickHit(sx, sy);
       if (hit) { opts.onOpen(hit.item, { click: true }); return; }
       const h = floorHit(sx, sy);
@@ -1295,7 +1316,7 @@
         h.x = b.x; h.z = b.z;
       }
       viewYaw = me.yaw + camLook - C.look;                    // the heading the camera keeps meanwhile
-      me.goal = h; me.goalBest = Infinity; me.stuck = 0; me.side = 0;
+      me.goal = h; me.goalBest = Infinity; me.stuck = 0; me.side = 0; me.toLight = null;
     };
 
     /** Which way to head for a goal (a unit direction, dist away): straight at
@@ -1361,7 +1382,12 @@
       const k = C.keys;
       let turn = (k.right ? 1 : 0) - (k.left ? 1 : 0), want = (k.fwd ? 1 : 0) - (k.back ? 1 : 0), turnRate = 1.9;
       if (fade) { turn = 0; want = 0; me.goal = null; }
-      if (me.air > 0) {                                        // dropping in (down the hatch or the well): no walking until it lands
+      if (turn || want) me.toLight = null;
+      if (me.launch) {                                         // bouncing up a light and out: faster and faster, no gravity
+        me.launch.t += dt; me.vy += 90 * dt; me.air += me.vy * dt;
+        turn = 0; want = 0; me.goal = null; C.turn = 0;
+        if (me.launch.t > 0.35 && !fade) fade = { t: 0, to: me.launch.q.to, entry: me.launch.q.entry, loaded: false };
+      } else if (me.air > 0) {                                 // dropping in (down the hatch or the well): no walking until it lands
         me.vy -= 120 * dt; me.air = Math.max(0, me.air + me.vy * dt);
         turn = 0; want = 0; me.goal = null; C.turn = 0;
         if (!me.air) { me.vy = 0; me.landT = 0; landSound(); }
@@ -1371,7 +1397,8 @@
       if (me.goal) {
         const dx = me.goal.x - me.x, dz = me.goal.z - me.z, dist = Math.hypot(dx, dz);
         if (dist < me.goalBest - dt * 2) { me.goalBest = dist; me.stuck = 0; } else me.stuck += dt;   // progress, whatever the frame rate
-        if (dist < 2.2 || me.stuck > 1.2) me.goal = null;
+        if (me.toLight && dist < me.toLight.r * 0.8) { launch(me.toLight); }   // under the light: up it goes
+        else if (dist < 2.2 || me.stuck > 1.2) { me.goal = null; me.toLight = null; }
         else {
           const dy = wrap(clearWay(dx / dist, dz / dist, dist) - me.yaw), ahead = Math.max(0, Math.cos(dy));
           turn = clamp(dy * 3, -1, 1); turnRate = 5;
@@ -1381,7 +1408,9 @@
       me.yaw += turn * dt * turnRate;
       if (C.turn) { me.yaw += C.turn; C.turn = 0; me.goal = null; }   // a finger turning the body (engine-3d controls): it stops a walk to a tap
       me.speed += (want * top - me.speed) * Math.min(1, dt * 6);
+      const was = me.pool;
       me.pool = poolAt(me.x, me.z);
+      if (me.pool && me.pool !== was) disturb(me.pool, me.x, me.z, 7);   // in with a splash
       if (Math.abs(me.speed) > 0.01) {
         const wet = me.pool ? 0.55 : 1;
         if (me.pool && Math.abs(me.speed) > 3) disturb(me.pool, me.x, me.z, clamp(me.speed, -22, 22) * 0.05);   // a faster wade stirs no more than a hurried one did
@@ -1501,7 +1530,7 @@
       const at = back || (typeof entry === "object" && entry) || (S.entries && (S.entries[entry] || S.entries.start)) || { x: 0, z: 0, yaw: 0 };
       camLook = 0;
       me.x = at.x; me.z = at.z; me.yaw = at.yaw; me.speed = 0; me.goal = null; me.pool = null; me.ripple = 0;
-      me.air = !reduce && at.drop ? at.drop : 0; me.vy = 0; me.landT = null;   // an entry with a drop: the slime falls in (not with reduced motion)
+      me.air = !reduce && at.drop ? at.drop : 0; me.vy = 0; me.landT = null; me.launch = null; me.toLight = null;   // an entry with a drop: the slime falls in (not with reduced motion)
       if (typeof entry === "object" && entry) { S.bound(me); collide(me); }   // a spot carried from elsewhere: kept inside this place
       me.y = S.floorAt(me.x, me.z);
       C.look = 0; C.tilt = 0;

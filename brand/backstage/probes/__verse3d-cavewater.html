@@ -1,0 +1,44 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D cave: what the water costs, standing and wading</title>
+<meta name="budget" content="20000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=cave" style="width:1000px;height:720px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The cave's pools: the frame's cost away from them, beside one (still), and
+// wading in it (waves), with how many things the water reflects and how big its
+// waves grow. The runner's Chrome is at background priority, so the times are
+// read against one another, in the same run, not as absolutes.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine, me = W.me;
+    W.pause(); W.setMuted(true); W.say("", 0);
+    W.load("cave", "start"); for (let i = 0; i < 30; i++) W.step(1 / 60);
+    const pools = W.pools(), S = W.S();
+    const cost = (n) => { const t0 = performance.now(); for (let i = 0; i < n; i++) W.tick(1 / 60); return (performance.now() - t0) / n; };
+    const wave = (p) => { let m = 0; for (let i = 0; i < p.h.length; i++) m = Math.max(m, Math.abs(p.h[i])); return m; };
+    // away from every pool
+    { const z = pools[0].z - 120; me.x = S.centre(z); me.z = z; me.yaw = 0; W.step(1 / 60); cost(10);
+      say("away from the water: " + cost(40).toFixed(1) + " ms a frame, " + E.tally.mirrored + " things reflected, " + E.tally.drawn + " drawn"); }
+    const p = pools[0];
+    // beside the first pool, looking over it, still
+    me.x = S.centre(p.z - p.rz - 8); me.z = p.z - p.rz - 8; me.yaw = 0; me.speed = 0;
+    for (let i = 0; i < 90; i++) W.step(1 / 60); cost(10);
+    say("beside a pool, still: " + cost(40).toFixed(1) + " ms a frame, " + E.tally.mirrored + " things reflected, " + E.tally.drawn + " drawn");
+    // the same frames without the reflections (the pools' mirrors taken out for a moment)
+    { const mirror = E.mirror; E.mirror = () => {}; cost(10); const t = cost(40); E.mirror = mirror;
+      say("  the same, with no reflections: " + t.toFixed(1) + " ms a frame, " + E.tally.drawn + " drawn"); }
+    // wading through it
+    const K = W.controls.keys; K.fwd = true; let ms = 0, n = 0, most = 0;
+    for (let i = 0; i < 90; i++) { const t0 = performance.now(); W.tick(1 / 60); if (W.poolAt(me.x, me.z)) { ms += performance.now() - t0; n++; most = Math.max(most, wave(p)); } }
+    K.fwd = false;
+    say("wading through it: " + (n ? (ms / n).toFixed(1) : "?") + " ms a frame over " + n + " frames in the water, " + E.tally.mirrored + " things reflected; its waves rose to " + most.toFixed(2) + " units");
+    for (let i = 0; i < 60; i++) W.tick(1 / 60);
+    say("a second after: waves " + wave(p).toFixed(2) + " units, the pool " + (p.awake > 0 ? "still moving" : "settled"));
+    // where the pools lie against the change from light to dark: the palette's darkness (t) at each end
+    say("the pools: " + pools.map((q) => "z " + Math.round(q.z) + " (dark " + S.pal(q.x, q.z - q.rz).t.toFixed(2) + " to " + S.pal(q.x, q.z + q.rz).t.toFixed(2) + ")").join(", "));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1500));
+</script>

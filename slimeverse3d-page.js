@@ -66,23 +66,29 @@
   if (card) {
     card.addEventListener("click", (e) => {
       const el = /** @type {HTMLElement} */ (e.target), a = el.closest("a");
-      if (a && !a.getAttribute("target")) reflect(true);      // leaving for a page of the site: the address keeps the spot, for Back
+      if (a && !a.getAttribute("target")) { reflect(true); rememberReturn(); }   // leaving for a page of the site: the address keeps the spot, for Back
       if (e.target === card || el.closest(".close")) close();
     });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !card.hidden) close(); });
   }
   const href = (url) => (I18N && I18N.href ? I18N.href(url) : url);     // the French page in French mode, as the iso world opens it
+  /** Note this village's address (with the slime's spot) for the tab, so a page opened from it can send the visitor back. */
+  const rememberReturn = () => { try { if (window.sessionStorage) sessionStorage.setItem("mh-return", location.href); } catch (e) { /* private: fine */ } };
   const sameSite = (url) => { try { return new URL(url, location.href).origin === location.origin; } catch (e) { return false; } };
   /** Open a page as the iso village does: one of this site's in this tab (the address
    *  brought up to the slime's spot first, so Back returns to it), another site's in a new tab. */
   function openPage(url) {
-    if (sameSite(url)) { reflect(true); location.href = href(url); return; }
+    if (sameSite(url)) { reflect(true); rememberReturn(); location.href = href(url); return; }
     try { const w = window.open(href(url), "_blank"); if (w) w.opener = null; } catch (e) { /* blocked: the card's link still works */ }
   }
   const away = (url) => (sameSite(url) ? "" : ' target="_blank" rel="noopener"');
+  // Where the slime stood when the card opened (noted on the next frame): walking
+  // AWAY from there, or into another place, closes it, as walking does in the iso village.
+  let cardAt = null;
+  const AWAY = 4;
   function showCard(title, html) {
     if (!card || !cardTitle || !cardBody) return;
-    cardTitle.textContent = title; cardBody.innerHTML = html; card.hidden = false;
+    cardTitle.textContent = title; cardBody.innerHTML = html; card.hidden = false; cardAt = null;
     const first = cardBody.querySelector("a,button"); if (first) /** @type {HTMLElement} */ (first).focus();
   }
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -109,6 +115,12 @@
   const W = V.create(cv, {
     skin, doors: "menus", onOpen,
     onScene() { reflect(true); },
+    onFrame() {
+      if (!card || card.hidden) { cardAt = null; return; }
+      const here = { x: W.me.x, z: W.me.z, scene: W.scene() };
+      if (!cardAt) cardAt = here;
+      else if (here.scene !== cardAt.scene || Math.hypot(here.x - cardAt.x, here.z - cardAt.z) > AWAY) close();
+    },
   });
   // @ts-ignore: for probes and the console
   window.MH_SLIMEVERSE3D = W;
@@ -254,6 +266,7 @@
     ["turn", "slimeverse3d.tip.turn", "I can turn: drag sideways."],
     ["zoom", "slimeverse3d.tip.pinch", "I can come nearer: pinch, or + and −."],
     ["open", "slimeverse3d.tip.openTap", "I can open a house: walk me in, or tap its door."],
+    ["light", "slimeverse3d.tip.lightTap", "I can climb out: tap the light."],
   ] : [
     ["walk", "slimeverse3d.tip.walk", "I can walk: the arrow keys, or WASD."],
     ["hurry", "slimeverse3d.tip.hurry", "I can hurry: hold shift."],
@@ -262,6 +275,7 @@
     ["zoom", "slimeverse3d.tip.zoom", "I can come nearer: scroll, or + and −."],
     ["open", "slimeverse3d.tip.open", "I can open a house: walk me in, or click its door."],
     ["mute", "slimeverse3d.tip.mute", "I can go quiet: press M."],
+    ["light", "slimeverse3d.tip.light", "I can climb out: click the light."],
   ];
   const tipsEl = document.getElementById("tips");
   const writeTips = () => { if (tipsEl) tipsEl.textContent = TIPS.map(([, key, en]) => t(key, en)).join(" "); };
@@ -279,10 +293,12 @@
     if (W.me.goal) used.tap = true;
     if (C.look || C.tilt || C.turn) used.turn = true;
     if (Math.abs(C.pref - zoom0) > 1e-6) used.zoom = true;
+    if (W.me.launch) used.light = true;
   }, 200);
   // A tip waits for a place where it holds: in the house the walls keep the camera as
-  // near as it can come, so "I can come nearer" is told outdoors or in the cave.
-  const holds = { zoom: () => !W.scene().startsWith("indoors") };
+  // near as it can come, so "I can come nearer" is told outdoors or in the cave; the
+  // way out through the light is told in the cave.
+  const holds = { zoom: () => !W.scene().startsWith("indoors"), light: () => W.scene() === "cave" };   // the light is the cave's
   const told = new Set();
   function nextTip() {
     const left = TIPS.filter(([what]) => !used[what] && !told.has(what));

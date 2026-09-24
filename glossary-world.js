@@ -72,7 +72,10 @@
      It closes: walk far enough in either direction and the most invented word
      hands back to the most ordinary one. Every position is modulo worldW, and
      every distance is the shorter way round. */
-  const LEAD = 260, STEP = 178, GAP = 440, RETURN = 820;
+  // GAP was 440: widened so the glossary's end has a sign of its own before the
+  // antiglossary's (every section is signed at both ends)
+  // LEAD was 260, which put the first word's board under the "Glossary ›" sign at 160
+  const LEAD = 380, STEP = 178, GAP = 700, RETURN = 820;
   const NG = DATA.glossary.length, NP = DATA.antiglossary.length;
   const marks = [];
   DATA.glossary.forEach((e, i) => marks.push(
@@ -443,7 +446,7 @@
     fit: { baseFrac: 0.36, baseMin: 128 },
     draw: () => draw(),
     onStep: () => {
-      read();
+      read(); climb();
       if (bar) bar.querySelector(".dot").style.left = (S.me.x / worldW * 100) + "%";
     },
     onSize: () => {
@@ -582,6 +585,7 @@
    *  that half is. Two boards on one pair of posts, in the same format as the
    *  word boards around it: parchment in the living half, and in the dark
    *  technoscure's own, near-black behind a teal rule with gold serif letters. */
+  const signsDrawn = [];
   function sign(x, label, P, pen, note) {
     const sx = S.W / 2 + rd(x - S.cam), gy = ground(x);
     g.font = pen ? CAVE_SIGN_FONT : SIGN_FONT;
@@ -605,6 +609,7 @@
     g.font = pen ? CAVE_SIGN_FONT : SIGN_FONT;
     const w = g.measureText(label).width + 30;
     const h = 30, top = gy - 96 - noteH;
+    signsDrawn.push({ label, x, sx, top, w: Math.max(w, noteW), bottom: gy });   // where it stood this frame (for probes)
     g.strokeStyle = pen ? "#1a140c" : P.stroke; g.lineWidth = 5; g.lineCap = "round";
     g.beginPath(); g.moveTo(sx - w / 4, gy); g.lineTo(sx - w / 4, top + h);
     g.moveTo(sx + w / 4, gy); g.lineTo(sx + w / 4, top + h); g.stroke();
@@ -761,15 +766,18 @@
       const d = screenX(m);
       if (d > -220 && d < S.W + 220) marker(m, P, "board");
     }
-    // Only the two mouths are signed, and both are lit, so they are painted
-    // after the dark falls rather than under it. The daylight half needs no
-    // placard: the page says what it is.
-    sign(160, T("glossary.sign.glossary", "Glossary"), P, false,
-      T("glossary.sign.glossaryNote",
-        "Words I had to coin, because the ones that existed would not do."));
-    sign(entryX - 210, T("glossary.sign.antiglossary", "Antiglossary"), P, true,
-      T("glossary.sign.antiglossaryNote",
-        "Words a machine invented about what my work does not yet say."));
+    // Each half is signed at both ends, the arrow pointing into it, so a reader
+    // coming from either way knows what lies ahead ("Glossary ›") and what they
+    // are leaving ("‹ Glossary"). The signs are lit, so they are painted after the
+    // dark falls rather than under it.
+    signsDrawn.length = 0;
+    const gName = T("glossary.sign.glossary", "Glossary"), aName = T("glossary.sign.antiglossary", "Antiglossary");
+    const gNote = T("glossary.sign.glossaryNote", "Words I had to coin, because the ones that existed would not do.");
+    const aNote = T("glossary.sign.antiglossaryNote", "Words a machine invented about what my work does not yet say.");
+    sign(160, gName + " \u203a", P, false, gNote);
+    sign(lastG + 170, "\u2039 " + gName, P, false, gNote);
+    sign(entryX - 210, aName + " \u203a", P, true, aNote);
+    sign(lastPen + 150, "\u2039 " + aName, P, true, aNote);
     if (P.t > 0.02) {                                         // motes, only in the dark
       g.fillStyle = P.dust;
       for (let i = 0; i < 26; i++) {
@@ -791,6 +799,49 @@
     vignette(P);                                              // the dark closes in at the edges
     drawSay(mx, (S.me.flying ? S.me.airY : ground(S.me.x)) - 38);   // its words, over the dark
   }
+
+  /* ── up a light and out ─────────────────────────────────────────────────
+     The daylight in the cave (the shafts down the cracks in its roof, and the way
+     in at the start) is a way out: a click in one sends the slime to stand in it,
+     and it leaps up through the rock and out, back to where the reader came from
+     (the village's address, kept for this tab when it opened the glossary: the
+     same spot, in the same view), or to the village's plaza. */
+  let climbTo = null, leaving = false;
+  /** The light under a point on the canvas (view units), or null. */
+  function lightAt(px, py) {
+    const cs = every(470);
+    const cand = [0];                                          // the way in, at the seam
+    const k = Math.round((S.cam + (px - S.W / 2)) / cs);
+    for (let j = k - 1; j <= k + 1; j++) cand.push(wrap(j * cs));
+    for (const x of cand) {
+      if (x !== 0 && 1 - caveT(x) < 0.06) continue;            // a crack in the dark lets no light down
+      const sx = S.W / 2 + rd(x - S.cam), floor = ground(x), top = x === 0 ? -20 : roofAt(x);
+      if (py < top || py > floor + 6) continue;
+      const f = (py - top) / Math.max(1, floor - top), half = (x === 0 ? 40 : 8 + 18 * f) + 8;
+      if (Math.abs(px - sx) <= half) return x;
+    }
+    return null;
+  }
+  function returnHref() {
+    let back = "";
+    try { back = (window.sessionStorage && sessionStorage.getItem("mh-return")) || ""; } catch (e) { /* private */ }
+    if (!back) try { const r = new URL(document.referrer); if (r.origin === location.origin && /(^|\/)(index\.html|slimeverse3d\.html)?$/.test(r.pathname)) back = r.href; } catch (e) { /* none */ }
+    const fallback = window.MH_I18N && window.MH_I18N.href ? window.MH_I18N.href("index.html") : "index.html";
+    return back || fallback;
+  }
+  function climb() {
+    if (climbTo == null || leaving) return;
+    if (Math.abs(rd(S.me.x - climbTo)) > 10) return;
+    leaving = true; used.light = true;                        // under the light: up, and out
+    S.target = null; S.me.flying = true; S.me.airY = ground(S.me.x) - 1; S.me.vy = -1150;
+    setTimeout(() => { location.href = returnHref(); }, 650);
+  }
+  cv.addEventListener("pointerdown", (ev) => {                // after the engine's own, which aims the walk at the pointer
+    if (leaving) return;
+    const r = cv.getBoundingClientRect(), x = lightAt((ev.clientX - r.left) * (S.W / r.width), (ev.clientY - r.top) * (S.H / r.height));
+    climbTo = x;
+    if (x != null) S.go(x);                                   // to the light itself, then up
+  });
 
   /* ── the slime says what it can do ──────────────────────────────────────
      Brief tips in the first person, in a bubble over the slime (drawn as the 3D
@@ -1083,9 +1134,11 @@
     const tips = touch ? [
       ["walk", "glossary.tip.tap", "I can walk to a word: tap where I should go."],
       ["read", "glossary.tip.read", "I can show you a word's gloss: tap the word."],
+      ["light", "glossary.tip.lightTap", "I can climb out: tap a light."],
     ] : [
       ["walk", "glossary.tip.walk", "I can walk to a word: the arrow keys, or click where I should go."],
       ["hurry", "glossary.tip.hurry", "I can hurry: hold shift."],
+      ["light", "glossary.tip.light", "I can climb out: click a light."],
     ];
     const tipsEl = document.getElementById("tips");
     const writeTips = () => { if (tipsEl) tipsEl.textContent = tips.map(([, key, en]) => T(key, en)).join(" "); };
@@ -1095,7 +1148,7 @@
       if (["arrowleft", "arrowright", "a", "d", "q", "home", "end", "pageup", "pagedown"].includes(k)) used.walk = true;
       if (k === "shift") used.hurry = true;
     });
-    cv.addEventListener("pointerdown", () => { used.walk = true; });
+    cv.addEventListener("pointerdown", () => { used.walk = true; });   // (a click on a light: climb() marks used.light)
     let told = false;
     try { told = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-glossary")); if (!told) sessionStorage.setItem("mh-tips-glossary", "1"); } catch (e) { /* private: tell them anyway */ }
     let i = 0;
@@ -1126,6 +1179,8 @@
     at: () => (active ? label(active) : null), width: () => worldW, dusk: dusk,
     tick: (dt) => S.tick(dt),
     saying: () => (saying && performance.now() / 1000 - saying.t0 < saying.len ? saying.text : ""),   // the slime's words just now
+    signs: () => signsDrawn.slice(),                           // the signs as last drawn: label, world x, screen x, top, width, foot
+    lightAt: (px, py) => lightAt(px, py), leaving: () => leaving,   // the daylight under a point, and whether the slime is on its way out
     // what the harness needs to check the layout it cannot see
     layout: () => ({ W: S.W, H: S.H, BASE: S.base, zoom: S.zoom, cam: S.cam, back: BACK,
       scale: BACK_SCALE, band: backBand(), screenX: screenX }),
