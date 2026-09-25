@@ -60,6 +60,17 @@ glint.
 - **Posts**: an ink stroke 4.5 px wide under a colour stroke 2.4 px wide. It is
   the same outlined stroke as the 3D engine's `o.edge`.
 - **Tentacles**: round-capped segments drawn in two passes, ink under colour.
+- **The page's chrome over the cave** dresses as the word card at the foot of
+  the picture: the site menubar floats inset as a card (the card's white, grey
+  rule, leaf corner, shadow), and while the card is the gloom's signpost (a word
+  of the antiglossary) so is the bar (`body.in-pen`). The footer under the
+  picture sits on the cave floor's colour (`#403b2f`), as does the ground a
+  phone shows past the page's ends.
+
+**Every world page, on a phone:** `viewport-fit=cover`, so the picture runs under
+the notch and rounded corners (without it the strips beside them show the
+page's pale ground as bars), and whatever is read or pressed keeps clear of them
+with `env(safe-area-inset-*)`.
 
 ## 4. The 3D slimeverse (`engine-3d.js`)
 

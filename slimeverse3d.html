@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Slimeverse 3D: M. Reid Horrigan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="The village of M. Reid Horrigan's site, walkable in three dimensions: the same houses, roads and lakes as the isometric village, entered from the Slimeverse 3D house.">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -35,17 +35,18 @@
     /* the controls, as the iso village lays them out (engine.js HUD): Menu and the
        way back bottom right, the skins bottom centre, the building chips dropping in
        at the top while Menu is on. Same pills: the leaf corner, dark glass. */
-    .hud{ position:fixed; right:16px; bottom:13px; z-index:5; display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; max-width:calc(100vw - 32px); }   /* wraps on a phone, now it has a Mute */
+    /* the picture runs under a phone's notch and corners (viewport-fit=cover); the buttons keep clear of them */
+    .hud{ position:fixed; right:max(16px, env(safe-area-inset-right)); bottom:max(13px, env(safe-area-inset-bottom)); z-index:5; display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; max-width:calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)); }   /* wraps on a phone, now it has a Mute */
     .hudbtn, .skin, .navchip{ appearance:none; cursor:pointer; line-height:1; white-space:nowrap; text-decoration:none;
       border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); }
     .hudbtn{ font:700 12px var(--sans-font); padding:6px 10px; }
     .hudbtn.zoom{ min-width:34px; font-size:15px; padding:5px 10px; }     /* a thumb's width on a phone */
     .hudbtn[aria-expanded="true"], .hudbtn[aria-pressed="true"], .skin[aria-pressed="true"]{ background:#fff; color:#111; border-color:#fff; }
     .hudbtn[hidden]{ display:none; }
-    .switcher{ position:fixed; left:50%; bottom:52px; transform:translateX(-50%); z-index:5; display:flex; flex-wrap:wrap;
+    .switcher{ position:fixed; left:50%; bottom:calc(52px + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:5; display:flex; flex-wrap:wrap;
       gap:5px; justify-content:center; max-width:96vw; padding:5px; }
     .skin{ font:600 11px var(--sans-font); padding:5px 9px; background:rgba(18,18,26,.72); border-color:rgba(255,255,255,.15); }
-    .navbar{ position:fixed; top:50px; left:50%; transform:translateX(-50%); z-index:6; display:flex; flex-wrap:wrap;
+    .navbar{ position:fixed; top:calc(50px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%); z-index:6; display:flex; flex-wrap:wrap;
       gap:7px; justify-content:center; max-width:94vw; padding:7px 9px; }
     .navbar[hidden]{ display:none; }
     .navchip{ font:700 12px var(--sans-font); padding:6px 11px; background:rgba(20,20,28,.86); border-color:rgba(255,255,255,.16); }

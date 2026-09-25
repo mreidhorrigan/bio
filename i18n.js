@@ -269,13 +269,13 @@
        the world's own HUD buttons (dark pill, white text, the leaf corner) so it
        reads as chrome under every skin, light or dark. Above the intro overlay
        (z-index 10) so the switch is there before you enter the world too. */
-    "#mh-lang{ position:fixed; top:12px; right:52px; z-index:12; appearance:none; cursor:pointer;",
+    "#mh-lang{ position:fixed; top:max(12px, env(safe-area-inset-top)); right:calc(52px + env(safe-area-inset-right)); z-index:12; appearance:none; cursor:pointer;",
     "  font:700 12px/1 var(--mh-ui,system-ui,-apple-system,'Segoe UI',sans-serif); text-decoration:none;",
     "  padding:6px 10px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; white-space:nowrap;",
     "  color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); }",
     "#mh-lang:hover{ filter:brightness(1.15); }",
-    "#mh-lang:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }",
-    "@media (max-width:600px){ #mh-lang{ top:8px; right:42px; font-size:11px; padding:5px 8px; } }"
+    "#mh-lang:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }",
+    "@media (max-width:600px){ #mh-lang{ top:max(8px, env(safe-area-inset-top)); right:calc(42px + env(safe-area-inset-right)); font-size:11px; padding:5px 8px; } }"
   ].join("\n");
 
   function pillCss() {

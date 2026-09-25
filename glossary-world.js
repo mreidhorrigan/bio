@@ -1034,6 +1034,7 @@
     const e = m.e, pen = m.side === "penumbra";
     card.textContent = "";
     card.className = "entry" + (pen ? " pen" : "");
+    document.body.classList.toggle("in-pen", pen);           // the menubar dresses as the card does (glossary.html)
     if (!quiet) stamp(m);                                    // the address follows the slime
     if (pen) {
       card.append(el("h3", null, say(e, "term")));
@@ -1137,6 +1138,7 @@
   function hello() {
     card.textContent = "";
     card.className = "entry";
+    document.body.classList.remove("in-pen");
     card.append(el("p", "kind", T("glossary.card.start", "the slime is on its way")));
     // (its "Walk to a word" is the slime's to say now, in its bubble)
     card.append(el("p", "gloss", T("glossary.card.startBody",

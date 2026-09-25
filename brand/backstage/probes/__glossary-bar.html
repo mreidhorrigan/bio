@@ -1,0 +1,37 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Glossary on a phone: the bar is the page's card; the footer sits on the cave floor</title>
+<meta name="budget" content="20000">
+<iframe id="f" src="/glossary.html" style="width:390px;height:844px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// At a phone's width, with the cave running: the site's menubar floats as the word
+// card does (inset from the edges, the leaf corner, the card's white), and turns to
+// the gloom's signpost (near-black, a teal rule) while the card shows a word of the
+// antiglossary; the footer under the picture is styled, on the cave floor's colour;
+// nothing is wider than the screen; and the page asks to run under a notch.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+document.getElementById("f").addEventListener("load", () => setTimeout(async () => {
+  try {
+    const w = document.getElementById("f").contentWindow, d = w.document, G = w.MH_GLOSSARY_WORLD;
+    G.pause();
+    const bar = d.getElementById("mh-menubar"), cs = () => w.getComputedStyle(bar), r = bar.getBoundingClientRect();
+    say("the page runs under a notch: " + (/viewport-fit=cover/.test(d.querySelector('meta[name="viewport"]').content) ? "yes" : "NO"));
+    say("the bar: " + Math.round(r.left) + " to " + Math.round(r.right) + " of " + w.innerWidth + ", top " + Math.round(r.top) + (r.left >= 8 && w.innerWidth - r.right >= 8 && r.top >= 8 ? " (inset, a card)" : " NO (edge to edge)")
+      + "; corner " + cs().borderTopLeftRadius + (parseFloat(cs().borderTopLeftRadius) > 0 ? "" : " NO") + "; " + cs().backgroundColor);
+    const light = cs().backgroundColor;
+    const pen = G.marks.find((m) => m.side === "penumbra");
+    G.go(pen.x, 0); for (let i = 0; i < 4; i++) G.tick(1 / 60);
+    await wait(1500);                                            // the bar eases to its new colour
+    const dark = cs().backgroundColor, link = w.getComputedStyle(bar.querySelector(".mh-nav a")).color;
+    say("at a word of the antiglossary (" + pen.title + "): the body " + (d.body.classList.contains("in-pen") ? "is .in-pen" : "is not .in-pen NO") + ", the bar " + dark + (dark !== light ? "" : " NO (unchanged)") + ", its links " + link);
+    const g0 = G.marks[0]; G.go(g0.x, 0); for (let i = 0; i < 4; i++) G.tick(1 / 60);
+    await wait(1500);
+    say("back at " + g0.title + ": the bar " + (cs().backgroundColor === light ? "light again" : cs().backgroundColor + " NO"));
+    const f = d.querySelector("footer"), fs = w.getComputedStyle(f), fa = w.getComputedStyle(f.querySelector("a"));
+    say("the footer: background " + fs.backgroundColor + (fs.backgroundColor === "rgb(64, 59, 47)" ? "" : " NO") + ", centred " + (fs.textAlign === "center" ? "yes" : "NO") + ", its link " + fa.color + " " + fa.fontWeight);
+    say("the page is " + d.documentElement.scrollWidth + " wide in " + w.innerWidth + (d.documentElement.scrollWidth <= w.innerWidth ? "" : " NO (it scrolls sideways)"));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 1800));
+</script>
