@@ -341,8 +341,10 @@
     "glossary.tip.next": "Je peux aller au mot suivant\u00A0: appuyez sur Espace.",
     "glossary.tip.tap": "Je peux marcher jusqu'à un mot\u00A0: touchez où je dois aller.",
     "glossary.tip.read": "Je peux vous montrer la glose d'un mot\u00A0: touchez le mot.",
-    "glossary.tip.light": "Je peux remonter\u00A0: cliquez sur une lumière.",
-    "glossary.tip.lightTap": "Je peux remonter\u00A0: touchez une lumière.",
+    "glossary.tip.light": "Je peux retourner au village\u00A0: cliquez sur une lumière.",
+    "glossary.tip.lightTap": "Je peux retourner au village\u00A0: touchez une lumière.",
+    "glossary.tip.jump": "Je peux sauter\u00A0: Début jusqu'au premier mot, Fin jusqu'au dernier, Page suivante dans le noir.",
+    "glossary.tip.focus": "Je peux suivre vos touches maintenant\u00A0: les flèches me font marcher, Espace m'amène au mot suivant.",
 
     // the lexicon's own headings, as the card and the lists show them
     "glossary.section.Voice / sound / music": "Voix / son / musique",
@@ -519,7 +521,6 @@
       // The definitions are not here. Both languages of every entry come from
       // brand/backstage/glossary-entries.md through glossary-data.js, so the
       // card and the word list can never say two different things.
-      { sel: "footer a", text: "Retour au monde" },
     ],
 
     "toolbox.html": [

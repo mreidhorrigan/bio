@@ -1,4 +1,4 @@
-<!DOCTYPE html><meta charset="utf-8"><title>Glossary on a phone: the bar is the page's card; the footer sits on the cave floor</title>
+<!DOCTYPE html><meta charset="utf-8"><title>Glossary on a phone: the bar is the page's card; no footer, no outline</title>
 <meta name="budget" content="20000">
 <iframe id="f" src="/glossary.html" style="width:390px;height:844px;border:0"></iframe>
 <pre id="out">running</pre>
@@ -6,7 +6,7 @@
 // At a phone's width, with the cave running: the site's menubar floats as the word
 // card does (inset from the edges, the leaf corner, the card's white), and turns to
 // the gloom's signpost (near-black, a teal rule) while the card shows a word of the
-// antiglossary; the footer under the picture is styled, on the cave floor's colour;
+// antiglossary; no footer and no outline round the picture (the slime says what they did);
 // nothing is wider than the screen; and the page asks to run under a notch.
 const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -27,8 +27,7 @@ document.getElementById("f").addEventListener("load", () => setTimeout(async () 
     const g0 = G.marks[0]; G.go(g0.x, 0); for (let i = 0; i < 4; i++) G.tick(1 / 60);
     await wait(1500);
     say("back at " + g0.title + ": the bar " + (cs().backgroundColor === light ? "light again" : cs().backgroundColor + " NO"));
-    const f = d.querySelector("footer"), fs = w.getComputedStyle(f), fa = w.getComputedStyle(f.querySelector("a"));
-    say("the footer: background " + fs.backgroundColor + (fs.backgroundColor === "rgb(64, 59, 47)" ? "" : " NO") + ", centred " + (fs.textAlign === "center" ? "yes" : "NO") + ", its link " + fa.color + " " + fa.fontWeight);
+    say("the footer: " + (d.querySelector("footer") ? "still there NO (removed 2026-09-24)" : "gone") + "; the outline round the picture: " + (() => { const c = d.getElementById("crawl"); c.focus(); const o = w.getComputedStyle(c).outlineStyle; c.blur(); return o === "none" ? "none" : o + " NO"; })());
     say("the page is " + d.documentElement.scrollWidth + " wide in " + w.innerWidth + (d.documentElement.scrollWidth <= w.innerWidth ? "" : " NO (it scrolls sideways)"));
     say("errors: none");
   } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }

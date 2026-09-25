@@ -9,9 +9,9 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     const A = w.MH_GLOSSARY_WORLD, L = A.layout();
     say("hero", Math.round(d.getElementById("hero").getBoundingClientRect().height) + " of window " + w.innerHeight);
     say("world units", Math.round(L.W) + "x" + Math.round(L.H) + " at zoom " + L.zoom.toFixed(2) + ", ground " + L.BASE);
-    const dock = d.getElementById("dock").getBoundingClientRect(), bar = d.getElementById("trail").getBoundingClientRect();
+    const dock = d.getElementById("dock").getBoundingClientRect();
     say("card", Math.round(dock.width) + "x" + Math.round(dock.height) + ", bottom " + Math.round(dock.bottom));
-    say("bar", Math.round(bar.width) + " wide at y" + Math.round(bar.top) + ", full width? " + (Math.round(bar.width) === 390));
+    say("trail", d.getElementById("trail") ? "still on the page NO (archived 2026-09-24)" : "gone (archived in brand/backstage/glossary-trail-archive.md)");
     const intro = d.querySelector(".intro").getBoundingClientRect();
     say("intro", Math.round(intro.width) + "x" + Math.round(intro.height) + " at y" + Math.round(intro.top));
     say("clear", Math.round(dock.top - intro.bottom) + "px between the title and the card");

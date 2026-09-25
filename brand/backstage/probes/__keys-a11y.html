@@ -126,6 +126,7 @@ const press = (el, key) => { const w = F.contentWindow; return el.dispatchEvent(
     const notTaken = press(d.body, "PageDown");
     say("glossary: Page Down with nothing focused: " + (notTaken ? "left to the page (it scrolls)" : "taken by the world NO"));
     const cvs = d.getElementById("crawl"); cvs.focus();
+    say("glossary: the keyboard reaches the picture, and the slime says " + JSON.stringify(G.saying().slice(0, 40)) + (/keys/.test(G.saying()) ? "" : " NO") + " (no outline: " + w.getComputedStyle(cvs).outlineStyle + ")");
     const xs = G.me.x, taken = !press(cvs, "PageDown");
     for (let i = 0; i < 5; i++) G.tick(1 / 60);
     say("glossary: Page Down with the picture focused: " + (taken && G.me.x > xs + 500 ? "into the dark (the world's)" : "NO (x " + Math.round(xs) + " → " + Math.round(G.me.x) + ")"));

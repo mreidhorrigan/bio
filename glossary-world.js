@@ -45,7 +45,6 @@
   const DATA = window.MH_GLOSSARY, S2 = window.MH_SLIME2D, SIDE = window.MH_SIDE;
   const cv = /** @type {HTMLCanvasElement|null} */ (document.getElementById("crawl"));
   const card = document.getElementById("entry");
-  const bar = document.getElementById("trail");
   if (!DATA || !S2 || !SIDE || !cv || !card) return;        // the lists still read fine
 
   const reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -445,24 +444,11 @@
     // the strip reads clear below the slime rather than beside it.
     fit: { baseFrac: 0.36, baseMin: 128 },
     draw: () => draw(),
-    onStep: () => {
-      read(); climb();
-      if (bar) bar.querySelector(".dot").style.left = (S.me.x / worldW * 100) + "%";
-    },
+    onStep: () => { read(); climb(); },
     onSize: () => {
       const barEl = document.getElementById("mh-menubar");   // it can wrap to two rows
       document.documentElement.style.setProperty("--mh-bar", (barEl ? barEl.offsetHeight : 46) + "px");
       marks.forEach((m) => { m.lines = null; });
-      if (bar) {
-        // The light changes over the mouths, not at a line, so the bar does too.
-        const pc = (x) => (wrap(x) / worldW * 100).toFixed(2) + "%";
-        const DAYC = "#bcdcc7", DARKC = "#242a20";
-        bar.style.background = "linear-gradient(90deg,"
-          + DAYC + " 0%," + DAYC + " " + pc(entryX - MOUTH / 2) + ","
-          + DARKC + " " + pc(entryX + MOUTH / 2) + "," + DARKC + " " + pc(exitX - MOUTH / 2) + ","
-          + DAYC + " " + pc(exitX + MOUTH / 2) + "," + DAYC + " 100%)";
-        bar.hidden = false;
-      }
     },
     // Home and PageUp to the first word, End to the strangest, PageDown into the dark,
     // Space to the next word (round to the first again after the last).
@@ -1062,12 +1048,6 @@
     card.append(cite);
   }
 
-  if (bar) bar.addEventListener("pointerdown", (ev) => {
-    const r = bar.getBoundingClientRect();
-    S.go(clamp((ev.clientX - r.left) / r.width, 0, 1) * worldW);
-    pin(null);
-  });
-
   // The plain-text lists are the same words: clicking one sends the slime to it.
   document.addEventListener("click", (ev) => {
     const b = ev.target && ev.target.closest ? ev.target.closest("dl.words dt button") : null;
@@ -1151,19 +1131,21 @@
     const tips = touch ? [
       ["walk", "glossary.tip.tap", "I can walk to a word: tap where I should go."],
       ["read", "glossary.tip.read", "I can show you a word's gloss: tap the word."],
-      ["light", "glossary.tip.lightTap", "I can climb out: tap a light."],
+      ["light", "glossary.tip.lightTap", "I can go back to the village: tap a light."],
     ] : [
       ["walk", "glossary.tip.walk", "I can walk to a word: the arrow keys, or click where I should go."],
       ["hurry", "glossary.tip.hurry", "I can hurry: hold shift."],
       ["next", "glossary.tip.next", "I can go to the next word: press Space."],
-      ["light", "glossary.tip.light", "I can climb out: click a light."],
+      ["jump", "glossary.tip.jump", "I can jump: Home to the first word, End to the last, Page Down into the dark."],
+      ["light", "glossary.tip.light", "I can go back to the village: click a light."],
     ];
     const tipsEl = document.getElementById("tips");
     const writeTips = () => { if (tipsEl) tipsEl.textContent = tips.map(([, key, en]) => T(key, en)).join(" "); };
     writeTips(); document.addEventListener("mh:lang", writeTips);
     document.addEventListener("keydown", (e) => {
       const k = e.key.toLowerCase();
-      if (["arrowleft", "arrowright", "a", "d", "q", "home", "end", "pageup", "pagedown"].includes(k)) used.walk = true;
+      if (["arrowleft", "arrowright", "a", "d", "q"].includes(k)) used.walk = true;
+      if (["home", "end", "pageup", "pagedown"].includes(k) && e.target === cv) used.jump = true;
       if (k === "shift") used.hurry = true;
     });
     cv.addEventListener("pointerdown", () => { used.walk = true; });   // (a click on a light: climb() marks used.light)
@@ -1178,6 +1160,13 @@
       setTimeout(next, 4300);
     };
     if (!told) setTimeout(next, 1400);
+    // When the keyboard reaches the picture, the slime says so (there is no outline round it)
+    let heard = false;
+    cv.addEventListener("focus", () => {
+      if (heard || !cv.matches(":focus-visible")) return;
+      heard = true;
+      sayTip(T("glossary.tip.focus", "I can take your keys now: the arrows walk me, Space goes to the next word."), 3.8);
+    });
   }
   document.addEventListener("mh:lang", () => { if (active) show(active, true); else hello(); });
   window.addEventListener("hashchange", () => {              // a link into the word list

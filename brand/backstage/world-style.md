@@ -63,9 +63,12 @@ glint.
 - **The page's chrome over the cave** dresses as the word card at the foot of
   the picture: the site menubar floats inset as a card (the card's white, grey
   rule, leaf corner, shadow), and while the card is the gloom's signpost (a word
-  of the antiglossary) so is the bar (`body.in-pen`). The footer under the
-  picture sits on the cave floor's colour (`#403b2f`), as does the ground a
-  phone shows past the page's ends.
+  of the antiglossary) so is the bar (`body.in-pen`). Nothing else: no footer,
+  no progress strip (archived in glossary-trail-archive.md), no outline round the
+  picture; the slime says what they did, in its first-person bubbles (a light
+  leads back to the village; Home, End and Page Down jump; when the keyboard
+  reaches the picture, it says so). The ground a phone shows past the page's
+  ends is the cave floor's colour (`#403b2f`).
 
 **Every world page, on a phone:** `viewport-fit=cover`, so the picture runs under
 the notch and rounded corners (without it the strips beside them show the
