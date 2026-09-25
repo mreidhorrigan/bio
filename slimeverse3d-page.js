@@ -62,8 +62,23 @@
   const used = {};                                             // what the visitor has done (the slime's tips skip it)
   /* ── the card a house opens ───────────────────────────────────────────── */
   const card = document.getElementById("card"), cardTitle = document.getElementById("card-title"), cardBody = document.getElementById("card-body");
-  const close = () => { if (card) card.hidden = true; cv.focus({ preventScroll: true }); };
+  let cardReturn = null;                                       // where focus was when the card opened: it goes back there
+  const close = () => {
+    if (card) card.hidden = true;
+    const back = cardReturn; cardReturn = null;
+    if (back && back !== document.body && back.isConnected && back.getClientRects().length) back.focus({ preventScroll: true });
+    else cv.focus({ preventScroll: true });
+  };
   if (card) {
+    // a modal: Tab and Shift-Tab go round the card's own controls, not out behind it
+    card.addEventListener("keydown", (e) => {
+      if (e.key !== "Tab" || card.hidden) return;
+      const all = Array.from(card.querySelectorAll("a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])")).filter((el) => el.getClientRects().length);
+      if (!all.length) return;
+      const first = all[0], last = all[all.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
     card.addEventListener("click", (e) => {
       const el = /** @type {HTMLElement} */ (e.target), a = el.closest("a");
       if (a && !a.getAttribute("target")) { reflect(true); rememberReturn(); }   // leaving for a page of the site: the address keeps the spot, for Back
@@ -81,13 +96,14 @@
     if (sameSite(url)) { reflect(true); rememberReturn(); location.href = href(url); return; }
     try { const w = window.open(href(url), "_blank"); if (w) w.opener = null; } catch (e) { /* blocked: the card's link still works */ }
   }
-  const away = (url) => (sameSite(url) ? "" : ' target="_blank" rel="noopener"');
+  const away = (url) => (sameSite(url) ? "" : ' target="_blank" rel="noopener" aria-describedby="mh-newtab"');
   // Where the slime stood when the card opened (noted on the next frame): walking
   // AWAY from there, or into another place, closes it, as walking does in the iso village.
   let cardAt = null;
   const AWAY = 4;
   function showCard(title, html) {
     if (!card || !cardTitle || !cardBody) return;
+    if (card.hidden) cardReturn = /** @type {HTMLElement} */ (document.activeElement);
     cardTitle.textContent = title; cardBody.innerHTML = html; card.hidden = false; cardAt = null;
     const first = cardBody.querySelector("a,button"); if (first) /** @type {HTMLElement} */ (first).focus();
   }
@@ -229,6 +245,54 @@
     menuBtn.addEventListener("click", () => showMenu(navbar.hidden));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !navbar.hidden) showMenu(false); });
   }
+  /* ── Space: the next house ─────────────────────────────────────────────
+     As in the iso village: the slime goes to the front of the next house on the
+     menu (after the one it stands at, or went to last; from anywhere else, the
+     first), and the house opens its page, as its chip in the menu does. Coming back,
+     the address puts the slime there, so Space goes on to the one after. A focused
+     button keeps Space for itself (it presses it), and a field for typing. */
+  let lastStop = -1;
+  function stopAt() {                                          // the house the slime stands at, if any
+    if (!C || !W.scene().startsWith("outdoors")) return -1;
+    let best = -1, bd = 16;
+    C.kiosks.forEach((k, i) => { const q = doorOf(k); if (q) { const d = Math.hypot(W.me.x - q.x, W.me.z - q.z); if (d < bd) { bd = d; best = i; } } });
+    return best;
+  }
+  function doorOf(k) { const S = W.S(); return (S.portals || []).find((p) => p.open && p.open.kind === "kiosk" && p.open.title === k.title) || null; }
+  function nextStop() {
+    if (!C || !C.kiosks.length) return;
+    const at = stopAt() >= 0 ? stopAt() : lastStop;
+    const i = at < 0 ? (C.home || 0) : (at + 1) % C.kiosks.length, k = C.kiosks[i];
+    lastStop = i; used.next = true;
+    if (card && !card.hidden) { card.hidden = true; cardReturn = null; }
+    if (!W.scene().startsWith("outdoors")) W.load("outdoors", "start");
+    const q = doorOf(k), S = W.S();
+    if (q) {
+      // eight units out from its door, facing it: a house's own way out if it has one, else away from the plaza's middle
+      const outs = Object.keys(S.entries || {}).filter((n) => /^house\d+$/.test(n)).map((n) => S.entries[n]);
+      let spot = outs.reduce((b, e) => (!b || Math.hypot(e.x - q.x, e.z - q.z) < Math.hypot(b.x - q.x, b.z - q.z) ? e : b), null);
+      if (!spot || Math.hypot(spot.x - q.x, spot.z - q.z) > 12) {
+        const st = S.entries.start, dx = st.x - q.x, dz = st.z - q.z, d = Math.hypot(dx, dz) || 1;
+        spot = { x: q.x + (dx / d) * (q.r + 4), z: q.z + (dz / d) * (q.r + 4) };
+      }
+      W.load("outdoors", { x: spot.x, z: spot.z, yaw: Math.atan2(q.x - spot.x, q.z - spot.z) });
+    }
+    onOpen({ kind: "kiosk", title: k.title, kiosk: k }, { click: true });
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== " " || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+    const el = /** @type {HTMLElement} */ (e.target), tag = ((el && el.tagName) || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select" || (el && el.isContentEditable)) return;
+    if (el && el.closest && el.closest("button, summary, [role=button]")) return;
+    e.preventDefault(); nextStop();
+  });
+  // A button pressed with a mouse or a finger gives focus back to the world, so Space goes on
+  // to the next house instead of pressing that button again (from the keyboard, e.detail is 0).
+  document.addEventListener("click", (e) => {
+    const b = e.target && /** @type {HTMLElement} */ (e.target).closest && /** @type {HTMLElement} */ (e.target).closest(".hudbtn, .navchip, .skin");
+    if (b && e.detail > 0 && document.activeElement === b) cv.focus({ preventScroll: true });
+  });
+
   /* ── the zoom: + and − (buttons and keys), as well as the wheel and a pinch ── */
   // A phone starts a little farther back: its screen is narrow, and the slime filled it.
   const ZOOM = "mh-3d-zoom";                                   // the visitor's zoom, as a factor on each place's own distance
@@ -250,9 +314,17 @@
   });
   cv.addEventListener("wheel", () => setTimeout(keep, 0), { passive: true });
   cv.addEventListener("pointerup", () => setTimeout(keep, 0));
-  // M mutes and unmutes, as in the iso village
+  // Sound off and on: the button, or M, as in the iso village; kept for the visit, in both views
+  const muteBtn = document.getElementById("mute");
+  const setMute = (m) => {
+    W.setMuted(!!m);
+    try { if (window.sessionStorage) sessionStorage.setItem("mh-muted", m ? "1" : "0"); } catch (e) { /* private: this page only */ }
+    if (muteBtn) muteBtn.setAttribute("aria-pressed", String(!!m));
+  };
+  try { if (window.sessionStorage && sessionStorage.getItem("mh-muted") === "1") setMute(true); } catch (e) { /* private: sound on */ }
+  if (muteBtn) muteBtn.addEventListener("click", () => setMute(!W.muted()));
   document.addEventListener("keydown", (e) => {
-    if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey && !(e.target instanceof HTMLInputElement)) W.setMuted(!W.muted());
+    if ((e.key === "m" || e.key === "M") && !e.ctrlKey && !e.metaKey && !e.altKey && !(e.target instanceof HTMLInputElement)) setMute(!W.muted());
   });
 
   /* ── the slime says what it can do ──────────────────────────────────────
@@ -275,6 +347,7 @@
     ["zoom", "slimeverse3d.tip.zoom", "I can come nearer: scroll, or + and −."],
     ["open", "slimeverse3d.tip.open", "I can open a house: walk me in, or click its door."],
     ["mute", "slimeverse3d.tip.mute", "I can go quiet: press M."],
+    ["next", "slimeverse3d.tip.next", "I can visit the next house: press Space."],
     ["light", "slimeverse3d.tip.light", "I can climb out: click the light."],
   ];
   const tipsEl = document.getElementById("tips");

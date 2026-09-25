@@ -82,6 +82,7 @@
     "slimeverse3d.tip.zoom": "Je peux m'approcher\u00A0: la molette, ou + et −.",
     "slimeverse3d.tip.open": "Je peux ouvrir une maison\u00A0: faites-moi entrer, ou cliquez sur sa porte.",
     "slimeverse3d.tip.mute": "Je peux me taire\u00A0: appuyez sur M.",
+    "slimeverse3d.tip.next": "Je peux aller à la maison suivante\u00A0: appuyez sur Espace.",
     "slimeverse3d.tip.tap": "Je peux aller où vous touchez.",
     "slimeverse3d.tip.turn": "Je peux tourner\u00A0: glissez de côté.",
     "slimeverse3d.tip.pinch": "Je peux m'approcher\u00A0: pincez, ou + et −.",
@@ -90,6 +91,9 @@
     "slimeverse3d.tip.lightTap": "Je peux remonter\u00A0: touchez la lumière.",
     "world.progress": "{v} / {n} vues",
     "world.soundOn": "Son activé",
+    // said to a screen reader when the slime sets off for a house (engine.js announce)
+    "world.going": "En route vers {title}.",
+    "world.opening": "Ouverture de {title}.",
     "world.soundOff": "Son coupé",
     "world.heading": "Retour à la place",
     "world.buildOff": "Mode construction désactivé",
@@ -105,6 +109,22 @@
     "world.tip.build": "Je peux déplacer ça\u00A0: appuyez sur B, pour Bâtir.",
     "world.tip.building": "Je peux bâtir\u00A0: faites glisser un bâtiment pour le déplacer, ou choisissez un outil.",
     "world.occupied": "Il y a déjà quelque chose ici",
+    // build mode by keyboard (engine.js): what the keys' tile has on it, and what Enter did
+    "world.tip.buildKeys": "Avec les touches\u00A0: les flèches déplacent mon pointeur, et Entrée bâtit, prend ou pose.",
+    "world.build.house": "une maison",
+    "world.build.tree": "un arbre",
+    "world.build.signal": "une tour de signal",
+    "world.build.carrying": "En déplacement\u00A0: {what}.",
+    "world.build.empty": "Rien ici.",
+    "world.build.edge": "Le bord de la vue\u00A0: faites-moi avancer avec WASD ou ZQSD.",
+    "world.build.putDown": "Posé\u00A0: {what}.",
+    "world.build.nothingToMove": "Rien à déplacer ici.",
+    "world.build.pickedUp": "Pris\u00A0: {what}. Les flèches déplacent le bâtiment, Entrée le pose, Échap le remet en place.",
+    "world.build.housesStay": "Les maisons de la place restent\u00A0: seul ce que vous avez bâti peut partir.",
+    "world.build.nothingToRemove": "Rien à retirer ici.",
+    "world.build.removed": "Retiré\u00A0: {what}.",
+    "world.build.built": "Bâti\u00A0: {what}.",
+    "world.build.putBack": "Remis en place\u00A0: {what}.",
     // Drawn onto the canvas over the kiosk you are standing at.
     "world.pressE": "Appuyez sur E",
     "world.enterArrow": "ENTRER →",
@@ -318,6 +338,7 @@
     // what the slime says it can do, in its bubble (first person)
     "glossary.tip.walk": "Je peux marcher jusqu'à un mot\u00A0: les flèches, ou cliquez où je dois aller.",
     "glossary.tip.hurry": "Je peux me presser\u00A0: maintenez Maj.",
+    "glossary.tip.next": "Je peux aller au mot suivant\u00A0: appuyez sur Espace.",
     "glossary.tip.tap": "Je peux marcher jusqu'à un mot\u00A0: touchez où je dois aller.",
     "glossary.tip.read": "Je peux vous montrer la glose d'un mot\u00A0: touchez le mot.",
     "glossary.tip.light": "Je peux remonter\u00A0: cliquez sur une lumière.",
@@ -363,7 +384,10 @@
       // rebuild cannot drop the French.
       { sel: "#cv-menubar", attr: { "aria-label": "Vues du document" } },
       { sel: "#cv-tab-pdf", text: "Impression / PDF" },
-      { sel: "#cv-mb-download", text: "Télécharger le PDF ↓" }
+      { sel: "#cv-mb-download", text: "Télécharger le PDF ↓" },
+      // for a screen reader: the first stop on every page, and what a new-tab link is described by
+      { sel: ".mh-skiplink", text: "Aller au contenu" },
+      { sel: "#mh-newtab", text: "s'ouvre dans un nouvel onglet" }
     ],
 
     /* ── the walkable homepage: the world's chrome (engine.js) ───────────── */
@@ -397,6 +421,12 @@
       ] },
       { sel: "#mh-menu", attr: { title: "Menu des bâtiments\u00A0: aller à un bâtiment" } },
       { sel: "#mh-view3d", attr: { title: "Voir cet endroit en 3D" } },
+      { sel: ".mh-mute-label", text: "Silence" },
+      { sel: "#mh-mute", attr: { title: "Couper et rétablir le son (M)" } },
+      // for a screen reader: the way to the plain pages, what the page is, and the picture
+      { sel: "#mh-skip", text: "Lire le site en pages ordinaires" },
+      { sel: "#mh-srintro", text: "Un village à parcourir\u00A0: chaque maison ouvre une partie du site. Le menu des bâtiments mène à n'importe quelle maison, et Espace à la suivante." },
+      { sel: "#mh-game", attr: { "aria-label": "Le village, vu d'en haut\u00A0: une créature parmi des maisons autour d'une place, et des routes vers d'autres maisons." } },
       { sel: "#mh-buildtoggle", text: "✎ Bâtir", attr: { title: "Réorganiser les bâtiments (B)" } },
       { sel: "#mh-compass", attr: { title: "Revenir à la place (G)" } },
       // The Musebot selector comes from the generated signal-towers.js bundle and
@@ -460,6 +490,8 @@
       { sel: "#back", text: "‹ Le village" },
       { sel: "#view-iso", text: "Isométrique", attr: { title: "Voir cet endroit en vue isométrique" } },
       { sel: "#menu", text: "☰ Menu" },
+      { sel: ".mute-label", text: "Silence" },
+      { sel: "#mute", attr: { title: "Couper et rétablir le son (M)" } },
       { sel: "#zoom-in", attr: { "aria-label": "Plus près" } },
       { sel: "#zoom-out", attr: { "aria-label": "Plus loin" } },
       { sel: ".switcher", attr: { "aria-label": "Choisir un habillage" } },
@@ -516,6 +548,7 @@
       { sel: 'meta[name="description"]', attr: { content: "ExamTimer\u00A0: une horloge plein écran, claire et calme, avec le tableau des consignes, pour les examens. Gratuit, dans le navigateur." } },
       { sel: ".setup-label", each: ["Régler la durée", "Sonneries aux moments clés"] },
       { sel: ".time-inputs .field span", each: ["Heures", "Minutes", "Secondes"] },
+      { sel: "#exam-name", attr: { "aria-label": "Nom de l'examen à afficher (facultatif)" } },
       { sel: "#exam-name", attr: { placeholder: "Nom de l'examen à afficher (facultatif), p.\u00A0ex. IAT 206W Midterm" } },
       { sel: "#progress", attr: { "aria-label": "Temps restant" } },
       { sel: "#btn-reset", text: "Réinitialiser" },
@@ -635,6 +668,8 @@
       { sel: "#max-mcq", attr: { placeholder: "toutes", title: "Utiliser au plus ce nombre de questions à choix multiple. Vide ou 0 les utilise toutes." } },
       { sel: "#max-written", attr: { placeholder: "toutes", title: "Utiliser au plus ce nombre de questions à développement par version. Vide ou 0 garde le compte du document." } },
       { sel: "#btn-generate", text: "⬇ Télécharger toutes les versions" },
+      { sel: "#btn-minus", attr: { "aria-label": "Moins de versions" } },
+      { sel: "#btn-plus", attr: { "aria-label": "Plus de versions" } },
       { sel: "#progress-label", text: "Préparation…" }
     ],
 

@@ -145,11 +145,11 @@ function registerStructure(name, painter) { STRUCTURES.set(name, painter); }
 /** @typedef {{id:string, label:string, glyph:string, hitTop?:number, place?:(b:any)=>void, placed?:(b:any)=>void, tap?:(b:any)=>boolean, remove?:(b:any)=>void}} BuildTool */
 /** @type {BuildTool[]} */
 const BUILD_TOOLS = [
-  { id: "house", label: "Plant a house.", hitTop: 44,
+  { id: "house", label: "Plant a house.", noun: "a house", hitTop: 44,
     glyph: '<path d="M8 13l7-6 7 6v9H8z" fill="#ffd37a"/><path d="M6 14l9-8 9 8" fill="none" stroke="#17202a" stroke-width="2"/>' },
-  { id: "tree", label: "Build a tree.", hitTop: 44,
+  { id: "tree", label: "Build a tree.", noun: "a tree", hitTop: 44,
     glyph: '<path d="M15 11v12" stroke="#17202a" stroke-width="3"/><circle cx="15" cy="9" r="6" fill="#73d98b" stroke="#17202a" stroke-width="1.5"/>' },
-  { id: "signal", label: "Raise a signal tower.", hitTop: 96,
+  { id: "signal", label: "Raise a signal tower.", noun: "a signal tower", hitTop: 96,
     glyph: '<path d="M15 7v17M10 24h10M11 13h8M12 18h6" stroke="#17202a" stroke-width="2"/><circle cx="15" cy="6" r="3" fill="#7afcff" stroke="#17202a"/>',
     // a tower is a Musebot: it needs an id, opens its selector when placed or tapped, and tells the bundle when it goes
     place(b) { if (window.MH_MUSEBOTS) b.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS); },
@@ -221,7 +221,10 @@ function buildDOM() {
   const root = document.createElement("div");
   root.id = "mh-root";
   root.innerHTML = `
-    <canvas id="mh-game"></canvas>
+    <a id="mh-skip" class="mh-skip" href="about.html">Read the site as plain pages</a>
+    <h1 id="mh-srtitle" class="mh-sr">M. Reid Horrigan</h1>
+    <p id="mh-srintro" class="mh-sr">A village to walk round: each house opens a part of the site. The building menu goes to any house, and Space to the next one.</p>
+    <canvas id="mh-game" role="img" aria-label="The village, seen from above: a slime among houses round a plaza, with roads out to more houses."></canvas>
     <a id="mh-back" href="index.html" title="Back to the design gallery">‹ designs</a>
     <nav id="mh-navbar" class="mh-navbar mh-faded" aria-label="Jump to a section"></nav>
     <div id="mh-switcher" class="mh-switcher mh-faded" role="group" aria-label="Choose a skin"></div>
@@ -254,7 +257,7 @@ function buildDOM() {
     </div>
 
     <div id="mh-card" class="mh-overlay mh-hidden">
-      <div class="mh-card" id="mh-cardInner" tabindex="-1">
+      <div class="mh-card" id="mh-cardInner" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="mh-cardTitle">
         <div class="mh-card-head">
           <button id="mh-cardBack" class="mh-back-btn mh-hidden" type="button" title="Back to the menu">‹ Menu</button>
           <h2 id="mh-cardTitle">Title</h2>
@@ -271,9 +274,12 @@ function buildDOM() {
 
     <div id="mh-hud" class="mh-hidden">
       <p id="mh-tips" class="mh-sr"></p>
+      <p id="mh-said" class="mh-sr" aria-live="polite"></p>
+      <span id="mh-newtab" hidden>opens in a new tab</span>
       <div class="mh-hud-right">
+        <button id="mh-mute" class="mh-hudbtn" type="button" aria-pressed="false" title="Sound off and on (M)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l4 6M21 9l-4 6"/></svg><span class="mh-mute-label">Mute</span></button>
         <button id="mh-view3d" class="mh-hudbtn mh-hidden" type="button" title="See this spot in 3D">3D</button>
-        <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu: jump to a building">☰ Menu</button>
+        <button id="mh-menu" class="mh-hudbtn" type="button" title="Building menu: jump to a building" aria-expanded="false" aria-controls="mh-navbar">☰ Menu</button>
         <button id="mh-buildtoggle" class="mh-hudbtn" type="button" title="Rearrange the buildings (B)">✎ Build</button>
         <button id="mh-compass" class="mh-compass mh-hidden" title="Walk back to the plaza (G)">
           <span class="mh-needle" id="mh-needle">›</span>
@@ -315,6 +321,10 @@ function buildDOM() {
   const backEl = byId("mh-back");
   if (backHref) backEl.setAttribute("href", backHref); else backEl.remove();
   byId("mh-plain").setAttribute("href", plainHref);
+  if (plainHref) byId("mh-skip").setAttribute("href", plainHref); else byId("mh-skip").remove();
+  byId("mh-srtitle").textContent = (CONTENT && CONTENT.title) || "M. Reid Horrigan";
+  // outside build mode, the build tools are out of reach (not just faded): no stop in the Tab order you cannot see
+  buildbarEl.inert = true;
 }
 
 const BASE_CSS = `
@@ -372,7 +382,7 @@ const BASE_CSS = `
     padding:6px 11px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff;
     background:var(--mh-card-accent,rgba(20,20,28,.72)); border:1px solid rgba(255,255,255,.25); }
   .mh-back-btn:hover{ filter:brightness(1.12); }
-  .mh-back-btn:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
+  .mh-back-btn:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }
   /* table-of-contents (Toolbox / Music / Games): the site menubar's DROPDOWN, verbatim — a
      white leaf-cornered panel, soft-grey embossed sans items, brand-cyan fill + glow on hover. */
   .mh-prose .mh-toc{ display:flex; flex-direction:column; gap:2px; margin:10px auto 14px; padding:6px; max-width:min(340px,86vw);
@@ -396,8 +406,12 @@ const BASE_CSS = `
     padding:6px 10px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); line-height:1; white-space:nowrap; }
   .mh-hudbtn:hover{ filter:brightness(1.15); } .mh-hudbtn.mh-on{ background:#fff; color:#111; }
   /* out of sight: the slime says these tips itself; they stay here for a screen reader */
+  /* the way to the plain pages: out of sight until the keyboard reaches it */
+  .mh-skip{ position:fixed; top:10px; left:12px; z-index:30; transform:translateY(-300%); font:700 13px/1 var(--mh-ui,system-ui,sans-serif);
+    padding:9px 13px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.92); text-decoration:none; }
+  .mh-skip:focus{ transform:none; outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }
   .mh-sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
-  .mh-hudbtn:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
+  .mh-hudbtn:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }
   .mh-progress{ font:700 12px var(--mh-ui,system-ui,sans-serif); padding:6px 11px; border-radius:999px; }
   .mh-compass{ pointer-events:auto; appearance:none; cursor:pointer; display:flex; align-items:center; gap:7px;
     padding:6px 11px 6px 9px; border-radius:999px; font:700 12px var(--mh-ui,system-ui,sans-serif); }
@@ -411,7 +425,7 @@ const BASE_CSS = `
     padding:6px 11px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; white-space:nowrap; line-height:1; color:#fff;
     background:rgba(20,20,28,.86); border:1px solid rgba(255,255,255,.16); }
   .mh-navchip:hover{ filter:brightness(1.12); }
-  .mh-navchip:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
+  .mh-navchip:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }
   /* live skin-switcher (the cohesion centerpiece: one place, many lenses) */
   .mh-switcher{ position:fixed; left:50%; bottom:52px; transform:translateX(-50%); z-index:6;
     display:flex; flex-wrap:wrap; gap:5px; justify-content:center; max-width:96vw; padding:5px; }
@@ -420,7 +434,7 @@ const BASE_CSS = `
     padding:5px 9px; border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(18,18,26,.72); border:1px solid rgba(255,255,255,.15); line-height:1; }
   .mh-skin:hover{ filter:brightness(1.16); }
   .mh-skin.mh-cur{ background:#fff; color:#111; border-color:#fff; }
-  .mh-skin:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
+  .mh-skin:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }
   /* the CONSTANT mark — identical under every skin (the cohesion anchor): the house
      leaf corner + the cyan→violet pentad. Theme CSS never restyles it. */
   #mh-mark{ position:fixed; top:12px; right:14px; z-index:8; width:30px; height:30px;
@@ -437,7 +451,7 @@ const BASE_CSS = `
   .mh-buildbar.mh-faded{ opacity:0; pointer-events:none; }
   .mh-tool{ appearance:none; cursor:pointer; font:700 12px var(--mh-ui,system-ui,sans-serif); padding:6px 10px;
     border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.86); border:1px solid rgba(255,255,255,.16); line-height:1; }
-  .mh-tool.mh-cur{ background:#fff; color:#111; } .mh-tool:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
+  .mh-tool.mh-cur{ background:#fff; color:#111; } .mh-tool:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }
   ::view-transition-old(root),::view-transition-new(root){ animation-duration:.34s; }
   /* phones: keep every menu compact and tucked to the edges so nothing blocks the
      play area. top: back + mark + nav-bar; bottom: switcher + hint/progress. */
@@ -514,9 +528,41 @@ function buildNavbar() {
 function navTo(i) {
   if (mode !== "walking") return;
   audio.ensure(); audio.resume();
-  menuOpen = false; const m = document.getElementById("mh-menu"); if (m) m.classList.remove("mh-on");
-  if (!opensAsCard(i)) { warpAndOpen(i); return; }   // a kiosk with a page → warp the slime there AND open the page in THIS gesture (another site's new tab is popup-safe only here)
+  menuOpen = false; const m = document.getElementById("mh-menu"); if (m) { m.classList.remove("mh-on"); m.setAttribute("aria-expanded", "false"); }
+  const k = CONTENT && CONTENT.kiosks[i], name = k ? kioskTitle(k.title) : (EXHIBITS[i] && EXHIBITS[i].title) || "";
+  // a kiosk with a page → warp the slime there AND open the page in THIS gesture (another site's new tab is popup-safe only here)
+  if (!opensAsCard(i)) { announce(tr("world.opening", "Opening {title}.", { title: name })); warpAndOpen(i); return; }
+  announce(tr("world.going", "Going to {title}.", { title: name }));
   auto.active = true; auto.goal = i; auto.warp = true; auto.lastDist = Infinity; auto.stuck = 0;
+}
+/** Space: on to the next house, in the building menu's order, after the one the slime is
+ *  at (or went to last); from nowhere in particular, the first. Road-houses are walk-up
+ *  only, as in the menu. */
+function nextStop() {
+  const list = []; EXHIBITS.forEach((ex, i) => { if (!ex.satellite) list.push(i); });
+  if (!list.length) return;
+  // the house the slime is at: the one last gone to, or the one in reach, or (back from
+  // a house's page, where the slime was left at the edge of its reach) the nearest within
+  // a little more. Still on the spot where it lands, it is at none (the spawn happens to
+  // be in the Glossary's reach), so the first Space goes to the first house.
+  const atSpawn = Math.hypot(nearImg(HX, player.x) - player.x, nearImg(HY + 1.8, player.y) - player.y) < 0.3;
+  let here = currentTarget >= 0 ? currentTarget : atSpawn ? -1 : activeIndex;
+  if (here < 0 && !atSpawn) {
+    let bd = (T.interact || 1.95) * 1.15;                   // warpAndOpen leaves it at T.interact; the plaza's middle is well outside
+    for (const i of list) {
+      const ex = EXHIBITS[i], d = Math.hypot(nearImg(ex.tx, player.x) - player.x, nearImg(ex.ty, player.y) - player.y);
+      if (d < bd) { bd = d; here = i; }
+    }
+  }
+  const at = list.indexOf(here);
+  used.next = true;
+  navTo(at < 0 ? ((CONTENT && CONTENT.home) || list[0]) : list[(at + 1) % list.length]);
+}
+/** Say something to a screen reader (the polite live region), in the reader's language. */
+function announce(text) {
+  const el = document.getElementById("mh-said"); if (!el) return;
+  el.textContent = "";                                   // cleared first, so the same words twice are said twice
+  setTimeout(() => { el.textContent = text; }, 60);
 }
 /** Send the slime WARPING toward kiosk i — as a POSITION target (auto.goal = -1), so its arrival
  *  won't try to re-open it (a deferred new tab would be popup-blocked) — and open the kiosk's page
@@ -551,12 +597,12 @@ const audio = {
   ensure(sharedContext) {
     if (sharedContext && this.ctx !== sharedContext) {
       if (this.ctx && this.ctx.state === "running") this.ctx.suspend().catch(() => {});
-      this.ctx = sharedContext; this.master = null;
+      this.ctx = sharedContext; this.master = null; installSpeaker(sharedContext);
     }
     if (this.ctx && this.master) return;
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!this.ctx && !AC) return;
-    this.ctx ||= new AC(); this.master = this.ctx.createGain();
+    this.ctx ||= new AC(); installSpeaker(this.ctx); this.master = this.ctx.createGain();
     this.master.gain.value = this.muted ? 0 : (this.musebotsActive ? 0.9 : 0.5); this.master.connect(this.ctx.destination);
     this.soft = null;
     if (this.ctx.createBiquadFilter) {                        // (a context without filters: the step goes to the master)
@@ -567,9 +613,37 @@ const audio = {
     if (this.ctx && this.ctx.state !== "running" && this.ctx.state !== "closed")
       this.ctx.resume().catch(() => {});
   },
-  setMuted(m) { this.muted = m; if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : (this.musebotsActive ? 0.9 : 0.5), this.ctx.currentTime, 0.02); },
+  setMuted(m) {
+    this.muted = m;
+    if (this.ctx && this.master) this.master.gain.setTargetAtTime(m ? 0 : (this.musebotsActive ? 0.9 : 0.5), this.ctx.currentTime, 0.02);
+    const sp = this.ctx && /** @type {any} */ (this.ctx).mhSpeaker;
+    if (sp) sp.gain.setTargetAtTime(m ? 0 : 1, this.ctx.currentTime, 0.02);   // and everything else on the page: the Musebots' music too
+  },
   // (the tones themselves are recipes in sounds.js, the one place the worlds' sounds are defined)
 };
+/** The page's one speaker. The Musebots bundle (generated elsewhere) sends its music
+ *  straight to its context's destination, past the site's master, so M never silenced
+ *  it. The context is this page's own (the bundle asks MH_ISO for it), so its
+ *  destination is stood in for by a gain every sound on the page goes out through:
+ *  the mute turns that down, and everything goes quiet. @param {AudioContext} ctx */
+function installSpeaker(ctx) {
+  const c = /** @type {any} */ (ctx);
+  if (!c || c.mhSpeaker || !c.createGain) return;
+  try {
+    const real = c.destination, speaker = c.createGain();
+    speaker.gain.value = audio.muted ? 0 : 1;
+    speaker.connect(real);
+    Object.defineProperty(c, "destination", { configurable: true, get: () => speaker });
+    c.mhSpeaker = speaker;
+  } catch (e) { /* a context that will not take it: the mute still covers the site's own sounds */ }
+}
+/** Sound on or off, from the button or M: kept for this visit (the 3D village reads it too). */
+function setMute(m) {
+  audio.setMuted(!!m);
+  try { if (window.sessionStorage) sessionStorage.setItem("mh-muted", m ? "1" : "0"); } catch (_) { /* private: this page only */ }
+  const b = document.getElementById("mh-mute");
+  if (b) { b.setAttribute("aria-pressed", String(!!m)); b.classList.toggle("mh-on", !!m); }
+}
 /** Play one of the worlds' sounds, by name (sounds.js is the one place they are
  *  defined, shared with the 3D village, so the two views cannot drift apart), in
  *  this skin's key and scale, at the level it is designed for through this master
@@ -797,6 +871,18 @@ function wireInput() {
   cardEl.addEventListener("click", (e) => { if (e.target === cardEl) closeCard(); });
   compassEl.addEventListener("click", recallHome);
   byId("mh-menu").addEventListener("click", toggleMenu);
+  byId("mh-mute").addEventListener("click", () => { setMute(!audio.muted); toast(audio.muted ? tr("world.soundOff", "Sound off") : tr("world.soundOn", "Sound on")); });
+  // the visit's sound setting, from this view or the 3D one
+  try { if (window.sessionStorage && sessionStorage.getItem("mh-muted") === "1") setMute(true); } catch (_) { /* private: sound on */ }
+  // the building menu shows itself the moment the keyboard reaches one of its buttons
+  if (navbarEl && navbarEl.addEventListener) navbarEl.addEventListener("focusin", () => { if (mode === "walking") navbarEl.classList.remove("mh-faded"); });
+  // A button pressed with a mouse or a finger gives focus back to the world, so Space goes on
+  // to the next house instead of pressing that button again. (From the keyboard, e.detail is
+  // 0, and focus stays where the reader put it.)
+  byId("mh-root").addEventListener("click", (e) => {
+    const b = e.target && e.target.closest && e.target.closest(".mh-hudbtn, .mh-navchip, .mh-skin, .mh-tool, .mh-compass");
+    if (b && e.detail > 0 && document.activeElement === b) b.blur();
+  });
   if (CONTENT && CONTENT.view3d) { const v = byId("mh-view3d"); v.classList.remove("mh-hidden"); v.addEventListener("click", openView3d); }
   buildToggleEl.addEventListener("click", toggleBuild);
   buildbarEl.addEventListener("click", onBuildTool);
@@ -821,6 +907,15 @@ function onKeyDown(e) {
   const k = e.key.toLowerCase();
   audio.ensure(); audio.resume();                   // a key is a gesture: sound may start now
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.unlock) window.MH_MUSEBOTS.unlock();
+  // Typing in a field (the Musebot picker's): every key is the reader's. A focused button
+  // or menu keeps Enter and Space, a link Enter, to press them as everywhere on the web
+  // (they used to walk the slime off to About instead). Walking keys and letters, and
+  // Space from a link, still reach the world.
+  const el = /** @type {HTMLElement} */ (e.target), tag = ((el && el.tagName) || "").toLowerCase();
+  if (tag === "input" || tag === "textarea" || tag === "select" || (el && el.isContentEditable)) return;
+  if (k === "enter" && el && el.closest && el.closest("a[href], button, summary, [role=button], [role=link]")) return;
+  if (k === " " && el && el.closest && el.closest("button, summary, [role=button], [role=checkbox], [role=switch]")) return;   // a link has no use for Space
+  if (k === "tab" && mode === "card") { trapTab(e); return; }
   if (mode === "intro") {
     if (!startBtn.disabled && ["enter", " ", "w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) { e.preventDefault(); startGame(true); }
     return;
@@ -828,35 +923,43 @@ function onKeyDown(e) {
   if (mode === "card") {
     if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) {
       e.preventDefault(); closeCard(); auto.active = false;
-      if (k === "w" || k === "arrowup") keys.up = true;
+      if (k === "w" || k === "z" || k === "arrowup") keys.up = true;
       else if (k === "s" || k === "arrowdown") keys.down = true;
-      else if (k === "a" || k === "arrowleft") keys.left = true;
+      else if (k === "a" || k === "q" || k === "arrowleft") keys.left = true;
       else if (k === "d" || k === "arrowright") keys.right = true;
       return;
     }
     if (k === "e" || k === "escape") { e.preventDefault(); closeCard(); }
-    else if (k === " " || k === "enter") { e.preventDefault(); closeCard(); navTo((CONTENT && CONTENT.home) || 0); }
+    else if (k === " ") { e.preventDefault(); closeCard(); nextStop(); }
+    else if (k === "enter") { e.preventDefault(); closeCard(); navTo((CONTENT && CONTENT.home) || 0); }
     else if (k === "," || k === "<") { e.preventDefault(); browse(-1); }
     else if (k === "." || k === ">") { e.preventDefault(); browse(1); }
     return;
   }
+  // build mode: the arrows move the build tile (WASD still walk), Enter acts on it, Escape puts back or leaves
+  if (buildMode) {
+    if (BUILD_STEP[k]) { e.preventDefault(); if (!e.repeat || bcur.shown) moveBuildCursor(k); return; }
+    if (k === "enter") { e.preventDefault(); buildEnter(); return; }
+    if (k === "escape") { e.preventDefault(); buildEscape(); return; }
+  }
   // walking
   if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k)) e.preventDefault();
-  if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) used.walk = true;
+  if (["w", "a", "s", "d", "z", "q", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) used.walk = true;
   if (k === " ") used.next = true;
   if (k === "g" || k === "h") used.plaza = true;
   if (k === "m") used.mute = true;
-  if (k === " ") { navTo((CONTENT && CONTENT.home) || 0); return; }   // Space → the About kiosk
-  if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) auto.active = false;
-  if (k === "w" || k === "arrowup") keys.up = true;
+  if (k === " ") { nextStop(); return; }                               // Space → the next house
+  if (["w", "a", "s", "d", "z", "q", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k)) auto.active = false;
+  // WASD, and ZQSD where those keys sit on a French (AZERTY) keyboard
+  if (k === "w" || k === "z" || k === "arrowup") keys.up = true;
   else if (k === "s" || k === "arrowdown") keys.down = true;
-  else if (k === "a" || k === "arrowleft") keys.left = true;
+  else if (k === "a" || k === "q" || k === "arrowleft") keys.left = true;
   else if (k === "d" || k === "arrowright") keys.right = true;
   else if (k === "e") { if (activeIndex >= 0) openCard(activeIndex); }
   else if (k === "enter") { navTo((CONTENT && CONTENT.home) || 0); }   // Enter → the About kiosk
   else if (k === "g" || k === "h") { if (T.wayfinding.recall) recallHome(); }
   else if (k === "c") { avatarIndex = (avatarIndex + 1) % T.avatarColors.length; sfx.pick(); toast(tr("world.colour", "Colour {n}", { n: avatarIndex + 1 })); }
-  else if (k === "m") { audio.setMuted(!audio.muted); toast(audio.muted ? tr("world.soundOff", "Sound off") : tr("world.soundOn", "Sound on")); }
+  else if (k === "m") { setMute(!audio.muted); toast(audio.muted ? tr("world.soundOff", "Sound off") : tr("world.soundOn", "Sound on")); }
   else if (k === "t") { cycleSkin(); }   // cycle to the next skin (live)
   else if (k === "b") { toggleBuild(); } // build mode (rearrange / add buildings)
 }
@@ -864,9 +967,9 @@ function onKeyDown(e) {
 /** @param {KeyboardEvent} e */
 function onKeyUp(e) {
   const k = e.key.toLowerCase();
-  if (k === "w" || k === "arrowup") keys.up = false;
+  if (k === "w" || k === "z" || k === "arrowup") keys.up = false;
   else if (k === "s" || k === "arrowdown") keys.down = false;
-  else if (k === "a" || k === "arrowleft") keys.left = false;
+  else if (k === "a" || k === "q" || k === "arrowleft") keys.left = false;
   else if (k === "d" || k === "arrowright") keys.right = false;
 }
 
@@ -932,15 +1035,22 @@ function startGame(gesture) {
 
 /** Toggle the building menu (the nav-bar of buildings) open — reachable any time,
  *  which is how you navigate on a phone without having to wander off-screen. */
-function toggleMenu() { menuOpen = !menuOpen; const el = document.getElementById("mh-menu"); if (el) el.classList.toggle("mh-on", menuOpen); sfx.nav(); }
+function toggleMenu() { menuOpen = !menuOpen; const el = document.getElementById("mh-menu"); if (el) { el.classList.toggle("mh-on", menuOpen); el.setAttribute("aria-expanded", String(menuOpen)); } sfx.nav(); }
 
 /* --- build mode: rearrange the buildings + add decorative ones (persisted) --- */
 function toggleBuild() {
-  buildMode = !buildMode; buildTool = "move"; drag = null; tapDown = null;
-  if (buildbarEl) buildbarEl.classList.toggle("mh-faded", !buildMode);
+  if (drag && drag.key) { const o = drag.kind === "kiosk" ? EXHIBITS[drag.i] : BUILDINGS[drag.i]; if (o) { o.tx = drag.from.tx; o.ty = drag.from.ty; } }
+  buildMode = !buildMode; buildTool = "move"; drag = null; tapDown = null; bcur.shown = false;
+  if (buildbarEl) { buildbarEl.classList.toggle("mh-faded", !buildMode); buildbarEl.inert = !buildMode; }
   if (buildToggleEl) buildToggleEl.classList.toggle("mh-on", buildMode);
   refreshBuildTools();
-  if (buildMode) say(tr("world.tip.building", "I can build: drag a building to move it, or pick a tool."), 4);
+  if (buildMode) {
+    say(tr("world.tip.building", "I can build: drag a building to move it, or pick a tool."), 4);
+    const keysTip = tr("world.tip.buildKeys", "With the keys: the arrows move my pointer, and Enter builds, picks up, or puts down.");
+    announce(keysTip);
+    const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    if (!touch) setTimeout(() => { if (buildMode && !bcur.shown) say(keysTip, 4.4); }, 4300);   // and, after the first, the slime says it
+  }
   else toast(tr("world.buildOff", "Build mode off"));
 }
 function onBuildTool(e) {
@@ -991,29 +1101,153 @@ function buildPointerDown(sx, sy) {
     const k = kioskAtScreen(sx, sy); if (k >= 0) { drag = { kind: "kiosk", i: k }; updateBuildCursor(); return; }
     const d = decorAtScreen(sx, sy); if (d >= 0) { drag = { kind: "decor", i: d }; updateBuildCursor(); }
   } else if (toolOf(buildTool)) {
-    const tool = toolOf(buildTool);
-    const w = screenToWorld(sx, sy), tx = wrap(Math.round(w.x)), ty = wrap(Math.round(w.y));
-    if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast(tr("world.occupied", "Something is already built here")); return; }   // one structure per tile
-    const building = { tx, ty, type: buildTool };
-    if (tool.place) tool.place(building);
-    BUILDINGS.push(building); saveLayout(); sfx.pick(); window.MH_ISO.refreshObstacles();
-    if (tool.placed) tool.placed(building);
+    const w = screenToWorld(sx, sy);
+    placeAt(wrap(Math.round(w.x)), wrap(Math.round(w.y)));
   } else if (buildTool === "delete") {
-    const d = decorAtScreen(sx, sy); if (d >= 0) {
-      const building = BUILDINGS[d], tool = building && toolOf(building.type);
-      if (tool && tool.remove) tool.remove(building);
-      BUILDINGS.splice(d, 1); saveLayout(); sfx.close(); window.MH_ISO.refreshObstacles();
+    removeAt(decorAtScreen(sx, sy));
+  }
+  bcur.shown = false;                                        // the pointer's turn: the keys' tile steps aside
+}
+/** Build the current tool's building on tile (tx, ty), one structure per tile. */
+function placeAt(tx, ty) {
+  const tool = toolOf(buildTool); if (!tool) return false;
+  if (buildingAt(tx, ty) || EXHIBITS.some((e) => wrap(e.tx) === tx && wrap(e.ty) === ty)) { toast(tr("world.occupied", "Something is already built here")); announce(tr("world.occupied", "Something is already built here")); return false; }
+  const building = { tx, ty, type: buildTool };
+  if (tool.place) tool.place(building);
+  BUILDINGS.push(building); saveLayout(); sfx.pick(); window.MH_ISO.refreshObstacles();
+  if (tool.placed) tool.placed(building);
+  return true;
+}
+/** Take away the visitor's building at index d (the plaza's own houses cannot be removed). */
+function removeAt(d) {
+  if (d < 0) return false;
+  const building = BUILDINGS[d], tool = building && toolOf(building.type);
+  if (tool && tool.remove) tool.remove(building);
+  BUILDINGS.splice(d, 1); saveLayout(); sfx.close(); window.MH_ISO.refreshObstacles();
+  return true;
+}
+
+/* --- build mode by keyboard: a tile the arrow keys move, and Enter to act on it ---
+   The arrows step the tile one tile across the screen (up is up, as they walk the
+   slime); WASD still walk. Enter does what a press would do there with the chosen
+   tool: Move picks up the building on the tile and, a second time, puts it down;
+   a building tool builds there; Remove takes the visitor's building away. Escape
+   puts a carried building back, or else leaves build mode. Each step is said to a
+   screen reader: what stands on the tile. */
+const bcur = { tx: 0, ty: 0, shown: false };
+const BUILD_STEP = { arrowup: [-1, -1], arrowdown: [1, 1], arrowleft: [-1, 1], arrowright: [1, -1] };
+/** The plaza house (or road-house) on tile (tx, ty), or -1. */
+function kioskAtTile(tx, ty) {
+  for (let i = 0; i < EXHIBITS.length; i++) {
+    const ex = EXHIBITS[i];
+    if (Math.hypot(nearImg(ex.tx, tx) - tx, nearImg(ex.ty, ty) - ty) < 0.75) return i;
+  }
+  return -1;
+}
+/** The visitor's building on tile (tx, ty), or -1. */
+function decorAtTile(tx, ty) {
+  for (let i = 0; i < BUILDINGS.length; i++) if (wrap(Math.round(BUILDINGS[i].tx)) === wrap(tx) && wrap(Math.round(BUILDINGS[i].ty)) === wrap(ty)) return i;
+  return -1;
+}
+/** A building's name, for a screen reader: "a tree", "a signal tower", "About". */
+function buildingName(kind, i) {
+  if (kind === "kiosk") { const ex = EXHIBITS[i]; return ex ? ex.title : ""; }
+  const b = BUILDINGS[i], t = b && toolOf(b.type);
+  return b ? tr("world.build." + b.type, (t && t.noun) || b.type) : "";
+}
+/** What stands on the tile under the keys, in a few words. */
+function describeTile() {
+  if (drag && drag.key) return tr("world.build.carrying", "Carrying {what}.", { what: buildingName(drag.kind, drag.i) });
+  const k = kioskAtTile(bcur.tx, bcur.ty); if (k >= 0) return buildingName("kiosk", k) + ".";
+  const d = decorAtTile(bcur.tx, bcur.ty); if (d >= 0) return buildingName("decor", d) + ".";
+  return tr("world.build.empty", "Nothing here.");
+}
+/** Is tile (tx, ty) on screen, clear of the edges? */
+function tileOnScreen(tx, ty) {
+  const c = toScreen(nearImg(tx, player.x), nearImg(ty, player.y));
+  return c.x > 40 && c.x < W - 40 && c.y > 70 && c.y < H - 40;
+}
+function moveBuildCursor(k) {
+  // working on the map now: a tool button chosen from the keyboard gives focus back to the
+  // world, so the next Enter builds on the tile instead of pressing that button again
+  const f = document.activeElement;
+  if (f && f !== document.body && f !== canvas && f.closest && f.closest("#mh-root button") && canvas.focus) canvas.focus({ preventScroll: true });
+  if (!bcur.shown || !tileOnScreen(bcur.tx, bcur.ty)) {
+    // first press, or the slime has walked on: the tile just in front of the slime
+    bcur.tx = wrap(Math.round(player.x + player.fx * 1.5)); bcur.ty = wrap(Math.round(player.y + player.fy * 1.5));
+    bcur.shown = true;
+  } else {
+    const [dx, dy] = BUILD_STEP[k], nx = wrap(bcur.tx + dx), ny = wrap(bcur.ty + dy);
+    if (!tileOnScreen(nx, ny)) { announce(tr("world.build.edge", "The edge of the view: walk me on with WASD.")); return; }
+    bcur.tx = nx; bcur.ty = ny;
+  }
+  if (drag && drag.key) {                                    // a carried building goes with the tile
+    const o = drag.kind === "kiosk" ? EXHIBITS[drag.i] : BUILDINGS[drag.i];
+    if (o) { o.tx = bcur.tx; o.ty = bcur.ty; }
+  }
+  sfx.nav();
+  announce(describeTile());
+}
+function buildEnter() {
+  if (!bcur.shown) { moveBuildCursor("arrowup"); return; }  // Enter before any arrow: show the tile first
+  if (buildTool === "move") {
+    if (drag && drag.key) {                                  // put it down, if the tile is free
+      const k = kioskAtTile(bcur.tx, bcur.ty), d = decorAtTile(bcur.tx, bcur.ty);
+      const other = (k >= 0 && !(drag.kind === "kiosk" && k === drag.i)) || (d >= 0 && !(drag.kind === "decor" && d === drag.i));
+      if (other) { announce(tr("world.occupied", "Something is already built here")); toast(tr("world.occupied", "Something is already built here")); return; }
+      const name = buildingName(drag.kind, drag.i);
+      drag = null; saveLayout(); window.MH_ISO.refreshObstacles(); sfx.pick(); updateBuildCursor();
+      announce(tr("world.build.putDown", "Put {what} down.", { what: name }));
+      return;
     }
+    const k = kioskAtTile(bcur.tx, bcur.ty), d = k >= 0 ? -1 : decorAtTile(bcur.tx, bcur.ty);
+    if (k < 0 && d < 0) { announce(tr("world.build.nothingToMove", "Nothing here to move.")); return; }
+    const o = k >= 0 ? EXHIBITS[k] : BUILDINGS[d];
+    drag = { kind: k >= 0 ? "kiosk" : "decor", i: k >= 0 ? k : d, key: true, from: { tx: o.tx, ty: o.ty } };
+    o.tx = bcur.tx; o.ty = bcur.ty;
+    sfx.nav(); updateBuildCursor();
+    announce(tr("world.build.pickedUp", "Picked up {what}: the arrows carry it, Enter puts it down, Escape puts it back.", { what: buildingName(drag.kind, drag.i) }));
+  } else if (buildTool === "delete") {
+    const d = decorAtTile(bcur.tx, bcur.ty);
+    if (d < 0) { announce(kioskAtTile(bcur.tx, bcur.ty) >= 0 ? tr("world.build.housesStay", "The plaza's houses stay: only what you built can go.") : tr("world.build.nothingToRemove", "Nothing here to remove.")); return; }
+    const name = buildingName("decor", d);
+    removeAt(d); announce(tr("world.build.removed", "Removed {what}.", { what: name }));
+  } else if (toolOf(buildTool)) {
+    if (placeAt(bcur.tx, bcur.ty)) announce(tr("world.build.built", "Built {what}.", { what: tr("world.build." + buildTool, toolOf(buildTool).noun || buildTool) }));
   }
 }
+/** Escape in build mode: a carried building goes back where it was; otherwise build mode ends. */
+function buildEscape() {
+  if (drag && drag.key) {
+    const o = drag.kind === "kiosk" ? EXHIBITS[drag.i] : BUILDINGS[drag.i];
+    if (o) { o.tx = drag.from.tx; o.ty = drag.from.ty; }
+    announce(tr("world.build.putBack", "Put {what} back.", { what: buildingName(drag.kind, drag.i) }));
+    drag = null; updateBuildCursor();
+    return;
+  }
+  toggleBuild();
+}
+/** The tile under the keys, drawn over the world (after the night's darkness, so it shows). */
+function drawBuildCursor() {
+  if (!buildMode || !bcur.shown) return;
+  const c = toScreen(nearImg(bcur.tx, player.x), nearImg(bcur.ty, player.y));
+  const a = reduce ? 1 : 0.75 + 0.25 * Math.sin(tnow * 5);
+  ctx.save(); ctx.globalAlpha = a; ctx.lineJoin = "round";
+  for (const [w, col] of [[5, "#111"], [2.5, "#fff"]]) {
+    ctx.beginPath();
+    ctx.moveTo(c.x, c.y - TILE_H / 2); ctx.lineTo(c.x + TILE_W / 2, c.y); ctx.lineTo(c.x, c.y + TILE_H / 2); ctx.lineTo(c.x - TILE_W / 2, c.y); ctx.closePath();
+    ctx.lineWidth = w; ctx.strokeStyle = col; ctx.stroke();
+  }
+  ctx.restore();
+}
 function onPointerMove(e) {
-  if (!buildMode || !drag) return;
+  if (!buildMode || !drag || drag.key) return;
   const r = canvas.getBoundingClientRect(), w = screenToWorld(e.clientX - r.left, e.clientY - r.top);
   if (drag.kind === "kiosk") { const ex = EXHIBITS[drag.i]; if (ex) { ex.tx = w.x; ex.ty = w.y; } }
   else { const b = BUILDINGS[drag.i]; if (b) { b.tx = w.x; b.ty = w.y; } }
 }
 function onPointerUp() {
-  if (!buildMode || !drag) return;
+  if (!buildMode || !drag || drag.key) return;
   if (drag.kind === "kiosk") { const ex = EXHIBITS[drag.i]; if (ex) { ex.tx = wrap(Math.round(ex.tx)); ex.ty = wrap(Math.round(ex.ty)); } }
   else { const b = BUILDINGS[drag.i]; if (b) { b.tx = wrap(Math.round(b.tx)); b.ty = wrap(Math.round(b.ty)); } }
   drag = null; saveLayout(); updateBuildCursor();
@@ -1316,6 +1550,7 @@ function render() {
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = "multiply"; ctx.drawImage(darkCv, 0, 0); ctx.restore();
   }
 
+  drawBuildCursor();
   kiosksOut = !anyKioskOnScreen();
   drawVignette();
   if (mode === "walking" && kiosksOut && T.edgeMarkers) drawEdgeMarkers();
@@ -1625,7 +1860,7 @@ function updateHUD() {
   progressEl.textContent = tr("world.progress", "{v} / {n} seen", { v: v, n: EXHIBITS.length });
 
   // nav-bar shows when you wander out of sight OR when you open the ☰ menu (mobile-friendly)
-  if (navbarEl) navbarEl.classList.toggle("mh-faded", !(mode === "walking" && (kiosksOut || menuOpen)));
+  if (navbarEl) navbarEl.classList.toggle("mh-faded", !(mode === "walking" && (kiosksOut || menuOpen || (navbarEl.contains && navbarEl.contains(document.activeElement)))));
 
   // compass (optional): show only off the plaza
   const showCompass = T.wayfinding.compass && mode === "walking" && !inHub;
@@ -1684,8 +1919,21 @@ function openCard(i) {
   keys.up = keys.down = keys.left = keys.right = false;
   mode = "card";
   renderCard(i);
+  cardReturn = /** @type {HTMLElement} */ (document.activeElement);
   cardEl.classList.remove("mh-hidden");
   byId("mh-cardInner").focus();
+}
+/** Where focus was when the card opened: it goes back there when the card closes. */
+let cardReturn = null;
+/** Tab and Shift-Tab go round the open card's controls, not out behind it (it is a modal). */
+function trapTab(e) {
+  const inner = byId("mh-cardInner");
+  const all = Array.from(inner.querySelectorAll("a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])"))
+    .filter((el) => el.getClientRects().length && !el.closest(".mh-hidden"));
+  if (!all.length) { e.preventDefault(); inner.focus(); return; }
+  const first = all[0], lastEl = all[all.length - 1], at = document.activeElement;
+  if (e.shiftKey && (at === first || at === inner)) { e.preventDefault(); lastEl.focus(); }
+  else if (!e.shiftKey && (at === lastEl || !inner.contains(at))) { e.preventDefault(); first.focus(); }
 }
 function browse(dir) {
   let ni = openIndex;
@@ -1737,7 +1985,7 @@ function showCardBack(on) {
  *  opens in this tab, another site in a new one (no in-world iframe). @param {{toc:any[]}} page */
 function renderToc(page) {
   const rows = (page.toc || []).map((it) =>
-    `<a class="mh-toc-link" href="${window.MH_I18N ? window.MH_I18N.href(it.url) : it.url}"${sameSite(it.url) ? "" : ' target="_blank" rel="noopener"'}>${it.label}</a>`   // bare link, like the site's menubar dropdown
+    `<a class="mh-toc-link" href="${window.MH_I18N ? window.MH_I18N.href(it.url) : it.url}"${sameSite(it.url) ? "" : ' target="_blank" rel="noopener" aria-describedby="mh-newtab"'}>${it.label}</a>`   // bare link, like the site's menubar dropdown
   ).join("");
   cardBodyEl.innerHTML = `<div class="mh-toc">${rows}</div>`;
   cardBodyEl.scrollTop = 0;
@@ -1748,7 +1996,8 @@ function closeCard() {
   auto.active = false; auto.warp = false;              // never let a queued move fire on close
   if (cardBodyEl) cardBodyEl.innerHTML = "";        // unload any embedded page/iframe
   setCardWide(false); setCardClean(false); showCardBack(false);
-  try { canvas.focus(); } catch (_) { /* ignore */ }
+  const back = cardReturn; cardReturn = null;
+  try { if (back && back !== document.body && back.isConnected && back.getClientRects().length) back.focus(); else canvas.focus(); } catch (_) { /* ignore */ }
 }
 
 /* ----------------------------------------------------------------------------

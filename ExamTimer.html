@@ -149,7 +149,7 @@
   .exam-name-input:focus-visible {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--focus);
+    box-shadow: var(--focus-ring);
   }
 
   .presets {
@@ -172,7 +172,7 @@
     transition: background 0.15s, color 0.15s, border-color 0.15s;
   }
   .preset:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-  .preset:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+  .preset:focus-visible { outline: none; box-shadow: var(--focus-ring); }
   .preset.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 
   .exam-name-row { margin-top: 1rem; }
@@ -323,7 +323,7 @@
   .btn:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
   .btn:active { transform: translateY(1px); }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+  .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
   .btn-secondary { background: transparent; color: var(--accent); }
   .btn-secondary:hover { background: var(--accent); color: var(--on-accent); }
@@ -397,7 +397,7 @@
   }
   .ms-row input[type="number"]::-webkit-outer-spin-button,
   .ms-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  .ms-row input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus); }
+  .ms-row input:focus-visible { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
 
   /* ── Rules ────────────────────────────────────────────────────────────────── */
   .rules {
@@ -524,7 +524,7 @@
   .edit-field input[type="text"]:focus-visible {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--focus);
+    box-shadow: var(--focus-ring);
   }
   .edit-field .hint { font-size: 0.82rem; color: var(--faint); margin-top: 0.3rem; font-family: var(--body-font); }
   .edit-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
@@ -596,7 +596,7 @@
 
 <div class="flare"></div>
 
-<div class="card">
+<div class="card" role="main" id="content">
 
   <!-- ── Masthead ── -->
   <div class="masthead">
@@ -635,7 +635,7 @@
       <button class="preset" data-min="1">1 min</button>
     </div>
     <div class="exam-name-row">
-      <input type="text" class="exam-name-input" id="exam-name" maxlength="80"
+      <input type="text" class="exam-name-input" id="exam-name" maxlength="80" aria-label="Exam name to display (optional)"
              placeholder="Exam name to display (optional), e.g. IAT 206W Midterm">
     </div>
   </div>

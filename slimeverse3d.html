@@ -35,12 +35,12 @@
     /* the controls, as the iso village lays them out (engine.js HUD): Menu and the
        way back bottom right, the skins bottom centre, the building chips dropping in
        at the top while Menu is on. Same pills: the leaf corner, dark glass. */
-    .hud{ position:fixed; right:16px; bottom:13px; z-index:5; display:flex; gap:8px; }
+    .hud{ position:fixed; right:16px; bottom:13px; z-index:5; display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; max-width:calc(100vw - 32px); }   /* wraps on a phone, now it has a Mute */
     .hudbtn, .skin, .navchip{ appearance:none; cursor:pointer; line-height:1; white-space:nowrap; text-decoration:none;
       border-radius:16px 4px 16px 4px / 7px 2px 7px 2px; color:#fff; background:rgba(20,20,28,.7); border:1px solid rgba(255,255,255,.18); }
     .hudbtn{ font:700 12px var(--sans-font); padding:6px 10px; }
     .hudbtn.zoom{ min-width:34px; font-size:15px; padding:5px 10px; }     /* a thumb's width on a phone */
-    .hudbtn[aria-expanded="true"], .skin[aria-pressed="true"]{ background:#fff; color:#111; border-color:#fff; }
+    .hudbtn[aria-expanded="true"], .hudbtn[aria-pressed="true"], .skin[aria-pressed="true"]{ background:#fff; color:#111; border-color:#fff; }
     .hudbtn[hidden]{ display:none; }
     .switcher{ position:fixed; left:50%; bottom:52px; transform:translateX(-50%); z-index:5; display:flex; flex-wrap:wrap;
       gap:5px; justify-content:center; max-width:96vw; padding:5px; }
@@ -50,7 +50,7 @@
     .navbar[hidden]{ display:none; }
     .navchip{ font:700 12px var(--sans-font); padding:6px 11px; background:rgba(20,20,28,.86); border-color:rgba(255,255,255,.16); }
     .hudbtn:hover, .skin:hover, .navchip:hover{ filter:brightness(1.15); }
-    .hudbtn:focus-visible, .skin:focus-visible, .navchip:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff; }
+    .hudbtn:focus-visible, .skin:focus-visible, .navchip:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #111; }   /* white against the button, dark against a light sky */
     /* out of sight: the slime says these itself; they stay here for a screen reader */
     .keys{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
     /* the card a house opens, as the iso village's does: its menu, its words, or its page */
@@ -60,6 +60,7 @@
       border-radius:var(--leaf-lg); padding:18px 20px 16px; box-shadow:0 18px 50px rgba(0,0,0,.45); position:relative; }
     .card h2{ margin:0 0 10px; font-family:var(--body-font); font-variant-caps:small-caps; }
     .card .close{ position:absolute; right:10px; top:8px; border:0; background:transparent; font-size:26px; line-height:1; cursor:pointer; color:var(--ink); }
+    .card .go:focus-visible, .card .close:focus-visible, .card a:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff, 0 0 0 4px #5b2a86; }
     .card .go{ display:inline-block; margin-top:6px; padding:9px 16px; background:#5b2a86; color:#fff; border-radius:var(--leaf); text-decoration:none; font-weight:700; }
     .card .toc a{ display:block; padding:7px 0; color:#5b2a86; font-weight:600; }
     @media (max-width:620px){
@@ -71,13 +72,15 @@
   </style>
   </head>
   <body>
+    <h1 class="keys">Slimeverse 3D</h1>
     <canvas id="stage" tabindex="0" role="img"
             aria-label="The village in three dimensions, seen from behind the slime: the same houses, roads and lakes as the isometric village."></canvas>
     <!-- the slime says these in a bubble over it (slimeverse3d-page.js); here they are
          in words for a screen reader, in the reader's language and for their device -->
     <p class="keys" id="tips">I can walk: the arrow keys, or WASD. I can hurry: hold shift. I can go where you click.
       I can look around: drag. I can come nearer: scroll, or + and −. I can open a house: walk me in, or click its
-      door. I can go quiet: press M.</p>
+      door. I can go quiet: press M. I can visit the next house: press Space.</p>
+    <span id="mh-newtab" hidden>opens in a new tab</span>
     <nav class="navbar" id="navbar" aria-label="Jump to a building" hidden></nav>
     <div class="switcher" role="group" aria-label="Choose a skin">
       <button type="button" class="skin" data-skin="technurture" aria-pressed="false">technurture / nth nature</button>
@@ -85,6 +88,7 @@
       <button type="button" class="skin" data-skin="technocute" aria-pressed="false">technocute/bureaucore</button>
     </div>
     <div class="hud">
+      <button type="button" class="hudbtn" id="mute" aria-pressed="false" title="Sound off and on (M)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l4 6M21 9l-4 6"/></svg><span class="mute-label">Mute</span></button>
       <button type="button" class="hudbtn zoom" id="zoom-in" aria-label="Nearer">+</button>
       <button type="button" class="hudbtn zoom" id="zoom-out" aria-label="Farther">−</button>
       <a class="hudbtn" id="view-iso" href="index.html" title="See this spot in the isometric view" hidden>Isometric</a>

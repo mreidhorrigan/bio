@@ -125,6 +125,8 @@
     background: var(--surface);
   }
 
+  /* the file field is transparent over its card, so the card shows the keyboard's focus */
+  .upload-card:has(input:focus-visible) { box-shadow: var(--focus-ring); }
   .upload-card:hover, .upload-card.dragover {
     border-color: var(--accent);
     background: var(--accent-wash);
@@ -257,7 +259,7 @@
     resize: vertical;
     line-height: 1.5;
   }
-  #flag-terms:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus); }
+  #flag-terms:focus-visible { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
 
   .flag-terms-upload { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.45rem; flex-wrap: wrap; }
   .link-btn {
@@ -333,7 +335,7 @@
   .btn:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
   .btn:active { transform: translateY(1px); }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+  .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
   .btn-secondary {
     background: transparent;
@@ -739,7 +741,7 @@
   <body>
     <div class="flare"></div>
     <div id="drag-ghost"></div>
-    <div class="card">
+    <div class="card" role="main" id="content">
       <!-- ── Masthead ── -->
       <div class="masthead">
         <h1>Seating Planner</h1>
@@ -752,22 +754,22 @@
       <!-- ── File uploads ── -->
       <div class="uploads">
         <div class="upload-card" id="card-students"> <input
-            accept=".csv" id="input-students" type="file">
-          <div class="card-title">Student Roster</div>
-          <div class="card-hint"> <strong>Simple CSV:</strong> name,
+            accept=".csv" id="input-students" type="file" aria-labelledby="title-students" aria-describedby="hint-students status-students">
+          <div class="card-title" id="title-students">Student Roster</div>
+          <div class="card-hint" id="hint-students"> <strong>Simple CSV:</strong> name,
             optional score, optional note.<br>
             <strong>Canvas export:</strong> drop it in as-is. Ranking
             and integrity flags are off by default. Enable them below. </div>
-          <div class="card-status" id="status-students"></div>
+          <div class="card-status" id="status-students" aria-live="polite"></div>
         </div>
         <div class="upload-card" id="card-layout"> <input accept=".csv"
-            id="input-layout" type="file">
-          <div class="card-label"><span class="optional">optional</span></div>
-          <div class="card-title">Classroom Layout</div>
-          <div class="card-hint">Cells with "X" mark valid seat
+            id="input-layout" type="file" aria-labelledby="title-layout opt-layout" aria-describedby="hint-layout status-layout">
+          <div class="card-label"><span class="optional" id="opt-layout">optional</span></div>
+          <div class="card-title" id="title-layout">Classroom Layout</div>
+          <div class="card-hint" id="hint-layout">Cells with "X" mark valid seat
             positions.<br>
             Leave blank to use the default layout.</div>
-          <div class="card-status" id="status-layout"></div>
+          <div class="card-status" id="status-layout" aria-live="polite"></div>
         </div>
       </div>
       <!-- ── Options: ranking + flagging (both off by default) ── -->

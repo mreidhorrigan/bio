@@ -194,7 +194,7 @@ Retune any of this by editing `ANCHOR_HUE` / `MEMBERS` / `TONE` / `SUPPORT` in
 |---|---|
 | `--ink` | `#1a1a1a` |
 | `--muted` | `#595959` |
-| `--faint` | `#8a8a8a` |
+| `--faint` | `#6b6b6b` |
 | `--rule` | `#d9d9d9` |
 | `--bg` | `#f9f7fb` |
 | `--surface` | `#ffffff` |
@@ -367,8 +367,10 @@ its own fixed bar like the CV) expose a `#cv-menubar` container.
 
 **States & elevation**
 
-- **Focus ring** — cyan, on `:focus-visible`: `box-shadow: 0 0 0 3px var(--focus)`,
-  typically paired with `border-color: var(--accent)` on inputs/controls. Tint
+- **Focus ring** — on `:focus-visible`: `box-shadow: var(--focus-ring)`, the cyan halo
+  with a 2px violet line inside it (`0 0 0 2px var(--accent), 0 0 0 5px var(--focus)`):
+  cyan alone is 1.2:1 against white and does not show a keyboard user where they are.
+  It is typically paired with `border-color: var(--accent)` on inputs/controls. Tint
   native controls with `accent-color: var(--accent)`.
 - **Elevation** — `--shadow-card` `0 4px 28px rgba(0,0,0,.10)` for main cards;
   `--shadow-bar` `0 1px 4px rgba(0,0,0,.05)` for the menubar; `--shadow-dropdown`

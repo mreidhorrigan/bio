@@ -240,7 +240,7 @@
     }
     .num-input:focus-visible {
       outline: none; border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--focus);
+      box-shadow: var(--focus-ring);
     }
     .version-badges { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-left: auto; align-self: center; }
     .badge {
@@ -279,7 +279,7 @@
     #btn-generate:focus-visible,
     .drop-zone:focus-visible,
     a:focus-visible {
-      outline: none; box-shadow: 0 0 0 3px var(--focus);
+      outline: none; box-shadow: var(--focus-ring);
     }
 
     /* Respect reduced-motion: neutralise transitions (the progress bar, hovers,
@@ -291,16 +291,16 @@
 </head>
 <body>
 <div class="flare"></div>
-<div class="card">
+<div class="card" role="main" id="content">
   <div class="masthead">
     <h1>Exam Version Generator</h1>
     <p class="subtitle">Upload questions and an optional PDF coversheet. Downloads versioned answer keys and test forms as DOCX + PDF.</p>
   </div>
 
   <div class="upload-section">
-    <div class="upload-label">Questions document</div>
-    <div class="drop-zone" id="drop-zone-q">
-      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+    <div class="upload-label" id="lbl-q">Questions document</div>
+    <div class="drop-zone" id="drop-zone-q" tabindex="0" role="button" aria-labelledby="lbl-q drop-zone-q">
+      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
       </svg>
       <p><span class="cta">Choose a .docx, .md, or .txt file</span> or drag it here</p>
@@ -310,11 +310,11 @@
   </div>
 
   <div class="upload-section">
-    <div class="upload-label">
+    <div class="upload-label" id="lbl-c">
       PDF Coversheet
       <span class="optional">optional</span>
     </div>
-    <div class="drop-zone compact" id="drop-zone-c">
+    <div class="drop-zone compact" id="drop-zone-c" tabindex="0" role="button" aria-labelledby="lbl-c drop-zone-c">
       <p><span class="cta">Choose a PDF coversheet</span> or drag it here</p>
       <p class="hint">Prepended to all PDF outputs as-is. Docx outputs have no coversheet.</p>
     </div>
@@ -322,18 +322,18 @@
   </div>
 
   <div class="upload-section">
-    <div class="upload-label">
+    <div class="upload-label" id="lbl-img">
       Images for [Image: …] tags
       <span class="optional">optional</span>
     </div>
-    <div class="drop-zone compact" id="drop-zone-img">
+    <div class="drop-zone compact" id="drop-zone-img" tabindex="0" role="button" aria-labelledby="lbl-img drop-zone-img">
       <p><span class="cta">Choose image files</span> or drag them here</p>
       <p class="hint">Only needed for the [Image: filename] fallback. Images embedded directly in the Word document are detected automatically.</p>
     </div>
     <input type="file" id="file-input-img" accept="image/*" multiple />
   </div>
 
-  <div id="status"></div>
+  <div id="status" role="status" aria-live="polite"></div>
 
   <!-- Tag reference (always visible) -->
   <div id="format-ref">
@@ -386,11 +386,11 @@
 
   <div class="controls" id="version-row">
     <div class="control-field">
-      <label>Exam versions</label>
-      <div class="version-stepper">
-        <button id="btn-minus" type="button">−</button>
-        <span id="version-display">3</span>
-        <button id="btn-plus" type="button">+</button>
+      <label id="lbl-versions">Exam versions</label>
+      <div class="version-stepper" role="group" aria-labelledby="lbl-versions">
+        <button id="btn-minus" type="button" aria-label="Fewer versions">−</button>
+        <span id="version-display" aria-live="polite">3</span>
+        <button id="btn-plus" type="button" aria-label="More versions">+</button>
       </div>
     </div>
     <div class="control-field">
@@ -633,6 +633,7 @@
   // ── Drag-and-drop wiring ─────────────────────────────────────────────────
   function wireDrop(zone, input, onFile) {
     zone.addEventListener('click', () => input.click());
+    zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
     zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
     zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
     zone.addEventListener('drop', e => {
@@ -794,6 +795,7 @@
 
   // ── Images for [Image: …] fallback tags ───────────────────────────────────
   dropImg.addEventListener('click', () => inputImg.click());
+  dropImg.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputImg.click(); } });
   dropImg.addEventListener('dragover', e => { e.preventDefault(); dropImg.classList.add('dragover'); });
   dropImg.addEventListener('dragleave', () => dropImg.classList.remove('dragover'));
   dropImg.addEventListener('drop', e => {

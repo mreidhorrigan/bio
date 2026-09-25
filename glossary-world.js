@@ -464,9 +464,24 @@
         bar.hidden = false;
       }
     },
-    // Home and PageUp to the first word, End to the strangest, PageDown into the dark.
-    keys: { Home: () => S.go(LEAD), PageUp: () => S.go(LEAD), End: () => S.go(lastG), PageDown: () => S.go(gateX + 150) },
+    // Home and PageUp to the first word, End to the strangest, PageDown into the dark,
+    // Space to the next word (round to the first again after the last).
+    keys: { Home: () => S.go(LEAD), PageUp: () => S.go(LEAD), End: () => S.go(lastG), PageDown: () => S.go(gateX + 150), " ": nextWord },
+    // Space is the world's while the picture is on screen and nothing else has focus;
+    // scrolled down to the lists, it scrolls the page, as it always did
+    keysWhen: (ev) => {
+      if (ev.key !== " " || ev.repeat || !(ev.target === document.body || ev.target === document.documentElement)) return false;
+      const r = cv.getBoundingClientRect();
+      return Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0) > r.height * 0.5;
+    },
   });
+  /** The next word along from where the slime is going (or is), round to the first after the last. */
+  function nextWord() {
+    const from = wrap(S.target != null ? S.target : S.me.x);
+    const m = marks.find((q) => q.x > from + 30) || marks[0];
+    used.next = true;
+    S.go(m.x);
+  }
   S.me.x = S.cam = wrap(LEAD - 170);
 
 
@@ -1138,6 +1153,7 @@
     ] : [
       ["walk", "glossary.tip.walk", "I can walk to a word: the arrow keys, or click where I should go."],
       ["hurry", "glossary.tip.hurry", "I can hurry: hold shift."],
+      ["next", "glossary.tip.next", "I can go to the next word: press Space."],
       ["light", "glossary.tip.light", "I can climb out: click a light."],
     ];
     const tipsEl = document.getElementById("tips");

@@ -367,10 +367,14 @@
       return !(tag === "input" || tag === "textarea" || tag === "select" || el.isContentEditable);
     }
     const onKeyDown = (ev) => {
+      if (ev.mhSide) return; ev.mhSide = true;                  // heard once, from the canvas or the document
       if (ev.key === "Shift") { keys.shift = true; return; }
       if (KEY[ev.key]) { keys[KEY[ev.key]] = true; ev.preventDefault(); return; }
+      // A world's own keys (o.keys: Home, End, Page Up and Down, Space) move the body
+      // while the picture has focus, or where the world says (o.keysWhen); anywhere
+      // else on the page they scroll it, and press what has focus, as they always do.
       const extra = o.keys && o.keys[ev.key];
-      if (extra) { extra(ev); ev.preventDefault(); }
+      if (extra && (ev.target === canvas || (o.keysWhen && o.keysWhen(ev)))) { extra(ev); ev.preventDefault(); }
     };
     const onKeyUp = (ev) => {
       if (ev.key === "Shift") keys.shift = false;

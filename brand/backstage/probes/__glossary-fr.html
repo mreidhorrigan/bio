@@ -17,7 +17,7 @@ f.addEventListener("load", async () => {
     say("aka", d.querySelector("dl.words .aka").textContent.trim());
     say("departmentality", d.querySelector('dd[data-term="departmentality"] .g').textContent.slice(0, 55));
     say("hauntological", d.querySelector('dd[data-term="hauntological security"] .g').textContent.slice(0, 55));
-    say("start card", d.querySelector("#entry h3").textContent);
+    say("start card", (d.querySelector("#entry .kind") || { textContent: "MISSING" }).textContent);   // its first line (the card lost its h3 when the slime took over the words)
     A.me.flying = false; A.me.x = A.marks[6].x; A.tick(0.016); A.tick(0.016);
     say("card fr", d.querySelector("#entry .kind").textContent + " / " + d.querySelector("#entry .meta").textContent);
     const pen = A.marks.findIndex(m => m.side === "penumbra");

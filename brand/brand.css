@@ -71,7 +71,7 @@
 
   --ink:               #1a1a1a;  /* primary text                             */
   --muted:             #595959;  /* secondary text, subtitles                */
-  --faint:             #8a8a8a;  /* hints, captions                          */
+  --faint:             #6b6b6b;  /* hints, captions (AA on white and the lavenders) */
   --rule:              #d9d9d9;  /* hairlines, borders, dashed drop-zones    */
   --bg:                #f9f7fb;  /* page background (lavender-tinted white)   */
   --surface:           #ffffff;  /* cards, drop-zones                        */
@@ -82,6 +82,9 @@
   --danger-wash:       #fbecea;  /* error/warning background                 */
   --ok:                #1f7a3d;  /* affirmation (used by ExamTimer)          */
   --focus:             #c3f0ff;  /* focus ring (= --brand-cyan)              */
+  /* the ring itself: the cyan halo, with a violet line inside it so it shows on white
+     (cyan alone is 1.2:1 against white; the violet line is 9:1) */
+  --focus-ring:        0 0 0 2px var(--accent), 0 0 0 5px var(--focus);
 
   /* ---- The leaf corner (fixed elliptical radii — never %, except fluid) --
      Shape: big sweep at TOP-LEFT + BOTTOM-RIGHT, near-square TOP-RIGHT + BOTTOM-LEFT.
@@ -145,13 +148,13 @@
    by ::selection, so only background + colour take effect) */
 ::selection { background: var(--brand-cyan); color: #000; }
 
-/* Focus ring — cyan, 3px. Apply on your control's :focus-visible (and tint
+/* Focus ring — the cyan halo with a violet line inside (--focus-ring). Apply on your control's :focus-visible (and tint
    native form controls with the accent). Recipe used across the tools:
      .btn:focus-visible, input:focus-visible {
-       outline: none; box-shadow: 0 0 0 3px var(--focus); border-color: var(--accent);
+       outline: none; box-shadow: var(--focus-ring); border-color: var(--accent);
      }
      input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); } */
-.focus-ring:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+.focus-ring:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
 /* Left-accent callout / notice strip — an intentional NON-leaf exception:
    a coloured left border with simple right-rounded corners. Use --accent for

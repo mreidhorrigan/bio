@@ -8,6 +8,9 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
 - Sounds: every sound in the worlds is a recipe in `sounds.js`, played by name
   from `engine.js` and `verse3d.js`; change sounds only there, and run
   `node --test sounds.test.mjs`.
+- Accessibility: `docs/accessibility.md` (what a keyboard and a screen reader
+  meet, and the rules the pages keep). Audit with `node tools/a11y-audit.mjs`;
+  `brand/backstage/probes/__keys-a11y.html` guards the keys (Space: the next stop).
 - English/French: `docs/i18n.md`. English is the source language and is never
   rewritten; `i18n-fr.js` holds every French word. Check with
   `python3 tools/i18n-check.py`.

@@ -121,7 +121,15 @@
     ".mh-dd{ position:relative; }",
     ".mh-dd summary{ list-style:none; display:inline-block; }",
     ".mh-dd summary::-webkit-details-marker{ display:none; }",
-    ".mh-dd summary::after{ content:' \\25BE'; font-size:.75em; }",
+    /* the ▾ is drawn, not read out: the second content (alt text after the slash) is
+       silent where a browser knows the syntax, and the first stands where it does not */
+    ".mh-dd summary::after{ content:' \\25BE'; content:' \\25BE' / ''; font-size:.75em; }",
+    /* Skip to the content: the first stop on every page, out of sight until the keyboard reaches it */
+    ".mh-skiplink{ position:fixed; top:8px; left:8px; z-index:1003; transform:translateY(-300%);",
+    "  font:600 13px/1.1 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;",
+    "  color:#000; background:var(--mh-blue); padding:8px 13px; border-radius:var(--mh-leaf); text-decoration:none; }",
+    ".mh-skiplink:focus{ transform:none; outline:2px solid #000; outline-offset:2px; }",
+    "[data-mh-skip-target]:focus{ outline:none; }",
     ".mh-dd-menu{",
     "  position:absolute; left:0; top:calc(100% + 8px); min-width:min(260px,calc(100vw - 16px)); max-width:min(340px,calc(100vw - 16px));",
     "  display:flex; flex-direction:column; gap:2px; padding:6px; z-index:1001;",
@@ -147,7 +155,10 @@
     a.textContent = label;
     a.href = href;
     // a page of this site opens in the same tab; another site in a new one
-    if (/^https?:/i.test(href) && a.host !== location.host) { a.target = "_blank"; a.rel = "noopener"; }
+    if (/^https?:/i.test(href) && a.host !== location.host) {
+      a.target = "_blank"; a.rel = "noopener";
+      a.setAttribute("aria-describedby", "mh-newtab");   // a screen reader hears "opens in a new tab" (see newTabNote)
+    }
     var here = location.pathname.split("/").pop() || "index.html";
     if (href === here) a.setAttribute("aria-current", "page");
     return a;
@@ -211,6 +222,34 @@
     add("icon", "favicon-16x16.png", { type: "image/png", sizes: "16x16" });
     add("apple-touch-icon", "apple-touch-icon.png", { sizes: "180x180" });
     if (!document.querySelector('link[rel="manifest"]')) add("manifest", "site.webmanifest");
+  }
+
+  /* The words a new-tab link is described by, once per page (hidden; a description
+     is read from a hidden element). i18n-fr.js puts them in French. */
+  function newTabNote() {
+    if (document.getElementById("mh-newtab")) return;
+    var s = document.createElement("span");
+    s.id = "mh-newtab"; s.hidden = true; s.textContent = "opens in a new tab";
+    document.body.appendChild(s);
+  }
+
+  /* "Skip to the content": the first stop on the page, to its <main> (or its first
+     heading), so the keyboard and a screen reader need not go through the menu first. */
+  function skipLink(bar) {
+    var target = document.querySelector("main, [role=main]") || document.querySelector("h1");
+    if (!target || document.querySelector(".mh-skiplink")) return;
+    if (!target.id) target.id = "mh-content";
+    var a = document.createElement("a");
+    a.className = "mh-skiplink"; a.href = "#" + target.id; a.textContent = "Skip to the content";
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (!target.hasAttribute("tabindex")) { target.setAttribute("tabindex", "-1"); target.setAttribute("data-mh-skip-target", ""); }
+      target.focus({ preventScroll: true });
+      // clear of the fixed bar, which would otherwise cover the top of what it skips to
+      var y = target.getBoundingClientRect().top + window.pageYOffset - (bar ? bar.offsetHeight : 0) - 10;
+      window.scrollTo(0, Math.max(0, y));
+    });
+    document.body.insertBefore(a, document.body.firstChild);
   }
 
   function mount() {
@@ -278,9 +317,14 @@
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape")
         Array.prototype.forEach.call(document.querySelectorAll(".mh-dd[open]"), function (d) {
+          var inside = d.contains(document.activeElement);
           d.removeAttribute("open");
+          if (inside) { var sum = d.querySelector("summary"); if (sum) sum.focus(); }   // focus stays on something visible
         });
     });
+
+    newTabNote();
+    skipLink(bar);
 
     // The bar exists: i18n.js can now hang the language switch in it and translate
     // these links. (It listens for this whether it loaded before or after us.)

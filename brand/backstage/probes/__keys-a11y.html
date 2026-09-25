@@ -1,0 +1,146 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Keys: a focused control keeps Enter and Space; Space goes to the next stop</title>
+<meta name="budget" content="40000">
+<iframe id="f" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The keyboard, as the accessibility work of 2026-09-24 left it:
+//  - in the iso village, Enter or Space on a focused button is the button's (they
+//    used to walk the slime off to About); Space with nothing focused, or on a
+//    link, goes to the next house on the menu: About first, then, back from About,
+//    the Toolbox;
+//  - in the 3D village the same: Space to the next house (its page opens), a
+//    focused button keeps Space;
+//  - in the glossary, Space goes to the next word while the picture is on screen
+//    and nothing has focus; Page Down scrolls the page unless the picture has focus.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const open = (url, settle = 2500) => new Promise((r) => { F.onload = () => setTimeout(r, settle); F.src = url; });
+const loaded = (ms = 8000) => new Promise((r) => { const t = setTimeout(() => r(false), ms); F.onload = () => { clearTimeout(t); setTimeout(() => r(true), 2500); }; });
+// the page, with its menu if it asks for one (Music and Games open About with their menu down)
+const page = () => { const l = F.contentWindow.location, m = new URLSearchParams(l.search).get("menu"); return l.pathname.split("/").pop() + (m ? "?menu=" + m : ""); };
+const press = (el, key) => { const w = F.contentWindow; return el.dispatchEvent(new w.KeyboardEvent("keydown", { key, bubbles: true, cancelable: true })); };
+(async () => {
+  try {
+    sessionStorage.removeItem("mh-return");
+    // ── the iso village ──
+    await open("/index.html?theme=technocute");
+    let w = F.contentWindow, d = w.document;
+    w.open = () => null;
+    const menu = d.getElementById("mh-menu");
+    menu.focus();
+    press(menu, "Enter"); press(menu, " ");
+    await wait(1500);
+    say("iso: Enter and Space on the focused ☰ Menu button: " + (page() === "index.html" ? "left to the button (still in the village)" : "went to " + page() + " NO"));
+    // the building menu shows itself when the keyboard reaches it (no stop you cannot see)
+    menu.blur(); await wait(400);
+    const plaza = d.querySelector("#mh-navbar .mh-navchip"); plaza.focus(); await wait(500);
+    say("iso: the building menu, its first button focused: " + (d.getElementById("mh-navbar").classList.contains("mh-faded") ? "still faded NO" : "shown") + ", opacity " + w.getComputedStyle(d.getElementById("mh-navbar")).opacity);
+    plaza.blur(); await wait(300);
+    // build mode by keyboard: B, the arrows move the tile, Enter builds / picks up / puts down / removes
+    {
+      const I = w.MH_ISO, said = () => (d.getElementById("mh-said") || {}).textContent || "", tick = () => wait(120);
+      const n0 = I.buildings().length;
+      press(d.body, "b"); await tick();
+      press(d.body, "ArrowRight"); await tick();
+      const first = said();
+      press(d.body, "ArrowRight"); await tick();
+      d.querySelector('.mh-tool[data-tool="tree"]').click(); await tick();
+      press(d.body, "Enter"); await tick();
+      const built = I.buildings(), tree = built[built.length - 1];
+      say("iso build by keys: the tile said " + JSON.stringify(first) + "; Enter with the tree tool " + (built.length === n0 + 1 && tree.type === "tree" ? "built a tree at " + tree.tx + "," + tree.ty + " (" + JSON.stringify(said()) + ")" : "built nothing NO"));
+      d.querySelector('.mh-tool[data-tool="move"]').click(); await tick();
+      press(d.body, "Enter"); await tick();
+      const pick = said();
+      press(d.body, "ArrowDown"); await tick(); press(d.body, "Enter"); await tick();
+      const moved = I.buildings().find((b) => b.type === "tree" && b.tx === tree.tx + 1 && b.ty === tree.ty + 1);
+      say("  Move: Enter picked it up (" + JSON.stringify(pick.slice(0, 30)) + "), Down and Enter put it down " + (moved ? "one tile down" : "NO, " + JSON.stringify(I.buildings().slice(-1))));
+      d.querySelector('.mh-tool[data-tool="delete"]').click(); await tick();
+      press(d.body, "Enter"); await tick();
+      say("  Remove: Enter " + (I.buildings().length === n0 ? "took it away (" + JSON.stringify(said()) + ")" : "left it NO"));
+      press(d.body, "Escape"); await tick();
+      say("  Escape: build mode " + (d.getElementById("mh-buildbar").inert ? "off" : "still on NO"));
+    }
+    // the mute button: pressed, it silences the page (the Musebots too, through the page's one speaker)
+    {
+      const mb = d.getElementById("mh-mute");
+      mb.click(); await wait(200);
+      const ctx = w.MH_ISO.sharedAudioContext();
+      say("iso mute button: pressed " + mb.getAttribute("aria-pressed") + ", muted " + w.MH_ISO.siteAudioDiagnostics().muted + ", kept for the visit " + w.sessionStorage.getItem("mh-muted")
+        + ", the page's speaker " + (ctx.mhSpeaker && ctx.destination === ctx.mhSpeaker ? "stands in for the destination" : "MISSING"));
+      if (mb.getAttribute("aria-pressed") !== "true" || w.sessionStorage.getItem("mh-muted") !== "1") say("  NO");
+    }
+    const lang = d.getElementById("mh-lang");
+    say("iso: the canvas is named: " + JSON.stringify((d.getElementById("mh-game").getAttribute("aria-label") || "").slice(0, 40)) + (d.getElementById("mh-game").getAttribute("role") === "img" ? "" : " NO"));
+    say("iso: a heading for a screen reader: " + ((d.querySelector("h1.mh-sr") || {}).textContent || "MISSING"));
+    say("iso: the build tools out of reach outside build mode: " + (d.getElementById("mh-buildbar").inert ? "yes" : "NO"));
+    let next = loaded();
+    press(lang || d.body, " ");                                  // Space on a link (the language switch): the world's
+    say("iso: Space " + (lang ? "on the language link" : "with nothing focused") + " ...");
+    await next;
+    say("  ... opened " + page() + (page() === "about.html" ? " (the first house)" : " NO (wanted about.html)"));
+    const back = sessionStorage.getItem("mh-return");
+    say("  the village kept its address for Back: " + (back && /slime=/.test(back) ? "yes" : "NO"));
+    await open(back || "/index.html?theme=technocute");
+    w = F.contentWindow; d = w.document; w.open = () => null;
+    { const pl = w.MH_ISO.player(), ab = w.MH_ISO.exhibits().find((e) => e.title === "About");
+      say("  back in the village: the slime at " + pl.x.toFixed(2) + "," + pl.y.toFixed(2) + (ab ? ", " + Math.hypot(pl.x - ab.tx, pl.y - ab.ty).toFixed(2) + " tiles from About" : "") + " (address " + (back || "").split("?")[1] + ")");
+      say("  houses by distance: " + w.MH_ISO.exhibits().map((e) => [e.title, Math.hypot(pl.x - e.tx, pl.y - e.ty)]).sort((a, b) => a[1] - b[1]).slice(0, 4).map(([t, dd]) => t + " " + dd.toFixed(2)).join(", ")); }
+    next = loaded();
+    press(d.body, " ");
+    await next;
+    say("iso: back from About, Space opened " + page() + (page() === "toolbox.html" ? " (the next house)" : " NO (wanted toolbox.html)"));
+
+    // ── the 3D village ──
+    sessionStorage.removeItem("mh-return");
+    await open("/slimeverse3d.html?theme=technocute&place=village", 3000);
+    w = F.contentWindow; d = w.document; w.open = () => null;
+    say("3D: muted from the village: " + (w.MH_SLIMEVERSE3D.muted() && d.getElementById("mute").getAttribute("aria-pressed") === "true" ? "yes, and its Mute button shows it" : "NO"));
+    d.getElementById("mute").click(); await wait(100);
+    say("3D: its Mute button unmutes: " + (!w.MH_SLIMEVERSE3D.muted() && w.sessionStorage.getItem("mh-muted") === "0" ? "yes" : "NO"));
+    const mb = d.getElementById("menu"); mb.focus(); press(mb, " ");
+    await wait(1200);
+    say("3D: Space on the focused ☰ Menu button: " + (page() === "slimeverse3d.html" ? "left to the button" : "went to " + page() + " NO"));
+    const cv = d.getElementById("stage"); cv.focus();
+    next = loaded();
+    press(cv, " ");
+    await next;
+    say("3D: Space in the world opened " + page() + (page() === "about.html" ? " (the first house)" : " NO (wanted about.html)"));
+    const back3 = sessionStorage.getItem("mh-return");
+    await open(back3 || "/slimeverse3d.html?theme=technocute&place=village", 3000);
+    w = F.contentWindow; d = w.document; w.open = () => null;
+    say("  back: " + page() + ", " + (w.MH_SLIMEVERSE3D ? w.MH_SLIMEVERSE3D.scene() : "?"));
+    next = loaded();
+    press(d.getElementById("stage"), " ");
+    await next;
+    say("3D: back from About, Space opened " + page() + (page() === "toolbox.html" ? " (the next house)" : " NO (wanted toolbox.html)"));
+
+    // ── the glossary ──
+    await open("/glossary.html");
+    w = F.contentWindow; d = w.document;
+    const G = w.MH_GLOSSARY_WORLD; G.pause();
+    const x0 = G.me.x, first = G.marks[0].x;
+    d.body.focus(); press(d.body, " ");
+    for (let i = 0; i < 180; i++) G.tick(1 / 60);
+    say("glossary: Space with the picture on screen: the slime went from " + Math.round(x0) + " to " + Math.round(G.me.x) + (Math.abs(G.me.x - first) < 40 ? " (the first word, " + G.marks[0].title + ")" : " NO (the first word is at " + Math.round(first) + ")"));
+    const notTaken = press(d.body, "PageDown");
+    say("glossary: Page Down with nothing focused: " + (notTaken ? "left to the page (it scrolls)" : "taken by the world NO"));
+    const cvs = d.getElementById("crawl"); cvs.focus();
+    const xs = G.me.x, taken = !press(cvs, "PageDown");
+    for (let i = 0; i < 5; i++) G.tick(1 / 60);
+    say("glossary: Page Down with the picture focused: " + (taken && G.me.x > xs + 500 ? "into the dark (the world's)" : "NO (x " + Math.round(xs) + " → " + Math.round(G.me.x) + ")"));
+    const cite = d.querySelector(".words .cite");
+    const nameIds = (cite && cite.getAttribute("aria-labelledby") || "").split(" ").map((i) => (d.getElementById(i) || {}).textContent || "?");
+    say("glossary: a cite button is called " + JSON.stringify(nameIds.join(" ")) + (nameIds.length === 2 && nameIds[1] !== "?" ? "" : " NO"));
+    // ── a teaching tool: an upload area opens the file picker from the keyboard ──
+    await open("/MCQer.html", 1500);
+    w = F.contentWindow; d = w.document;
+    const zone = d.getElementById("drop-zone-q"), input = d.getElementById("file-input-q");
+    let picked = 0; input.addEventListener("click", (e) => { picked++; e.preventDefault(); });
+    zone.focus(); press(zone, "Enter"); press(zone, " ");
+    say("MCQer: the questions upload " + (d.activeElement === zone ? "takes focus" : "cannot take focus NO") + ", and Enter and Space open the file picker: " + (picked === 2 ? "yes" : picked + " of 2 NO"));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+})();
+</script>

@@ -485,9 +485,10 @@ def write_lists(data, page):
     for i in order:
         e = data["glossary"][i]
         tfr = (' data-fr="%s"' % esc(e["termFr"])) if e.get("termFr") else ""
-        dt = ('        <dt id="t-%s"><button type="button" data-side="glossary" data-i="%d"%s>%s</button>'
-              '<button type="button" class="cite" data-cite="%s">cite</button></dt>'
-              % (esc(e["slug"]), i, tfr, esc(e["term"]), esc(e["slug"])))
+        # each "cite" is named with its word ("cite abstractivism"), so a screen reader can tell them apart
+        dt = ('        <dt id="t-%s"><button type="button" id="w-%s" data-side="glossary" data-i="%d"%s>%s</button>'
+              '<button type="button" class="cite" id="c-%s" aria-labelledby="c-%s w-%s" data-cite="%s">cite</button></dt>'
+              % (esc(e["slug"]), esc(e["slug"]), i, tfr, esc(e["term"]), esc(e["slug"]), esc(e["slug"]), esc(e["slug"]), esc(e["slug"])))
         where = " \u00b7 ".join([x for x in [e["section"], e["zettel"]] if x])
         # The English is written out, so the list reads with no script at all.
         # glossary-world.js rewrites the section and the "also" in French.
@@ -503,9 +504,9 @@ def write_lists(data, page):
 
     rows = []
     for i, a in enumerate(data["antiglossary"]):
-        dt = ('        <dt id="t-%s"><button type="button" data-side="penumbra" data-i="%d">%s</button>'
-              '<button type="button" class="cite" data-cite="%s">cite</button></dt>'
-              % (esc(a["slug"]), i, esc(a["term"]), esc(a["slug"])))
+        dt = ('        <dt id="t-%s"><button type="button" id="w-%s" data-side="penumbra" data-i="%d">%s</button>'
+              '<button type="button" class="cite" id="c-%s" aria-labelledby="c-%s w-%s" data-cite="%s">cite</button></dt>'
+              % (esc(a["slug"]), esc(a["slug"]), i, esc(a["term"]), esc(a["slug"]), esc(a["slug"]), esc(a["slug"]), esc(a["slug"])))
         fr = (' data-fr="%s"' % esc(a["glossFr"])) if a.get("glossFr") else ""
         dd = ('        <dd><span class="g"%s>%s</span> <span class="where">%s \u00b7 zone:penumbra</span></dd>'
               % (fr, esc(a["gloss"]), esc(a.get("id") or "the penumbra")))
