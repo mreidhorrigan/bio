@@ -39,6 +39,13 @@ const profile = mkdtempSync(join(tmpdir(), "switch-sound-"));
 const port = 9950 + Math.floor(Math.random() * 40);
 const chrome = spawn("taskpolicy", ["-b", CHROME, "--headless=new", "--mute-audio", "--no-first-run", "--window-size=1100,800",
   "--remote-debugging-port=" + port, "--user-data-dir=" + profile, "about:blank"], { stdio: "ignore" });
+// however this ends (done, an error, Ctrl-C), the browser goes with it: a Chrome left
+// behind by a run that threw kept a page spinning for most of a day (2026-09-24)
+const stopChrome = () => { try { chrome.kill("SIGKILL"); } catch (e) { /* gone */ } };
+process.on("exit", stopChrome);
+for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(sig, () => { stopChrome(); process.exit(130); });
+process.on("uncaughtException", (e) => { console.log("ERROR " + (e && e.stack || e)); stopChrome(); process.exit(1); });
+process.on("unhandledRejection", (e) => { console.log("ERROR " + (e && e.stack || e)); stopChrome(); process.exit(1); });
 let wsUrl = null;
 for (let i = 0; i < 100 && !wsUrl; i++) { await sleep(200); try { wsUrl = (await (await fetch(`http://127.0.0.1:${port}/json/version`)).json()).webSocketDebuggerUrl; } catch (e) { /* not up */ } }
 const sock = new WebSocket(wsUrl);
