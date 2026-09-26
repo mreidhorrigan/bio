@@ -43,8 +43,18 @@ document.getElementById("f").addEventListener("load", () => setTimeout(() => {
     U(2, 310, 400); U(1, 90, 400); W.tick(0.016);
     const d1 = W.controls.dist;
     say("two fingers pinched apart bring the camera from " + d0.toFixed(0) + " to " + d1.toFixed(0) + (d1 < d0 * 0.8 ? "" : " NO") + ", and the slime " + (Math.abs(W.me.yaw - y0 - turned) < 0.01 ? "did not turn" : "turned NO"));
+    // a pinch as a hand makes one: the first finger drifts before the second lands, and
+    // one lifts before the other, the one left moving on a little. The slime turns only by
+    // that last little move (5 px, about 3 degrees), and the view does not tilt with a jump.
+    const y1 = W.me.yaw, t1 = W.controls.tilt;
+    P("pointerdown", 1, 150, 400); P("pointermove", 1, 158, 404); W.tick(0.016); P("pointerdown", 2, 250, 400);
+    for (let k = 0; k <= 5; k++) { P("pointermove", 1, 158 - k * 10, 404 + k * 8); P("pointermove", 2, 250 + k * 12, 400 - k * 8); W.tick(0.016); }
+    U(1, 108, 444); P("pointermove", 2, 315, 360); W.tick(0.016); U(2, 315, 360); W.tick(0.016);
+    const dy1 = (W.me.yaw - y1) * 180 / Math.PI, dt1 = W.controls.tilt - t1;
+    say("a pinch lifted one finger at a time: the slime turned " + dy1.toFixed(1) + " degrees" + (Math.abs(dy1) < 4 ? "" : " NO") + ", the view tilted " + dt1.toFixed(2) + (Math.abs(dt1) < 0.05 ? "" : " NO"));
+    const d2 = W.controls.dist;
     d.getElementById("zoom-out").click(); d.getElementById("zoom-out").click();
-    say("the − button twice: " + d1.toFixed(0) + " to " + W.controls.dist.toFixed(0) + (W.controls.dist > d1 * 1.4 ? "" : " NO"));
+    say("the − button twice: " + d2.toFixed(0) + " to " + W.controls.dist.toFixed(0) + (W.controls.dist > d2 * 1.4 ? "" : " NO"));
     const zd = W.controls.dist; W.load("indoors", "door"); const zi = W.controls.dist; W.load("outdoors", "home");
     say("the zoom kept through a door: " + zd.toFixed(0) + " out, " + zi.toFixed(0) + " in, " + W.controls.dist.toFixed(0) + " out again" + (Math.abs(W.controls.dist - zd) < 1 ? "" : " NO"));
     let tapped = 0; const tap0 = W.controls.onTap; W.controls.onTap = (x, y) => { tapped++; tap0(x, y); };

@@ -127,9 +127,46 @@
     showCard(item.title, t("kiosk." + k.title + ".html", k.html || ""));   // a prose kiosk: its words, in the reader's language
   }
 
+  /* ── the signal towers raised in the iso world ─────────────────────────
+     They ride in the address (?signals=, written by the Musebots bundle), so the
+     switch carries them both ways. Here they stand in the village, each lit by its
+     Musebot and playing, as in the iso world: the bundle (signal-towers.js, loaded
+     only when there are towers) restores them into TOWERS. It asks its host page
+     for an audio context (MH_ISO.sharedAudioContext, as engine.js gives it): this
+     page's has a speaker gain for a destination, so the Mute silences them too. */
+  const TOWERS = [];
+  let towerCtx = null, towerSpeaker = null, towersMuted = false;
+  if (q.get("signals")) {
+    // @ts-ignore: the bundle's host hooks, the two it uses of the iso world's
+    window.MH_ISO = window.MH_ISO || {
+      sharedAudioContext() {
+        if (towerCtx) return towerCtx;
+        const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
+        towerCtx = new AC({ latencyHint: "interactive" });
+        try {
+          const real = towerCtx.destination;
+          towerSpeaker = towerCtx.createGain(); towerSpeaker.gain.value = towersMuted ? 0 : 1; towerSpeaker.connect(real);
+          Object.defineProperty(towerCtx, "destination", { configurable: true, get: () => towerSpeaker });
+        } catch (e) { towerSpeaker = null; }
+        return towerCtx;
+      },
+      setMusebotAudioActive() { /* the iso world's cue levels: nothing to lift here */ },
+    };
+    const ready = () => { const M = window.MH_MUSEBOTS; if (M && M.restore) M.restore(TOWERS); };
+    window.addEventListener("mh-musebots-ready", ready, { once: true });
+    const unlock = () => { const M = window.MH_MUSEBOTS; if (M && M.unlock && !towersMuted) M.unlock(); };
+    for (const ev of ["pointerdown", "keydown"]) window.addEventListener(ev, unlock, { passive: true });
+    window.addEventListener("load", () => {
+      const s = document.createElement("script");
+      s.src = "signal-towers.js?v=20260826-wasm-dsp-2"; s.async = true;   // the iso world's version, so a file:// Chrome shares its cache
+      document.body.appendChild(s);
+    }, { once: true });
+  }
+  const towerState = (uid) => (window.MH_MUSEBOTS ? window.MH_MUSEBOTS.stateFor(uid) : { state: "unassigned", beat: 0 });
+
   /* ── the view ─────────────────────────────────────────────────────────── */
   const W = V.create(cv, {
-    skin, doors: "menus", onOpen,
+    skin, doors: "menus", onOpen, towers: () => TOWERS, towerState,
     onScene() { reflect(true); },
     onFrame() {
       if (!card || card.hidden) { cardAt = null; return; }
@@ -215,6 +252,18 @@
   }
   W.run();
   setInterval(() => reflect(false), 500);
+  // The towers are heard from where the slime stands in the village, in iso tiles as
+  // the iso world tells the bundle; in the house or the cave, from the house's door.
+  // The ring's size, in tiles, is the village's (a skin's own), noted when there.
+  let towerPeriod = 0;
+  setInterval(() => {
+    const M = window.MH_MUSEBOTS, S = W.S();
+    if (!M || !M.updateListener || !TOWERS.length || !S) return;
+    const out = W.scene().startsWith("outdoors") && S.tileOf;
+    if (out && S.period) towerPeriod = S.period / V.ISO.tile;
+    const at = out ? S.tileOf(W.me.x, W.me.z) : homeTile;
+    if (at && towerPeriod) M.updateListener(at[0], at[1], towerPeriod, TOWERS);
+  }, 250);
 
   /* ── skins ────────────────────────────────────────────────────────────── */
   const chips = Array.from(document.querySelectorAll("[data-skin]"));
@@ -318,6 +367,8 @@
   const muteBtn = document.getElementById("mute");
   const setMute = (m) => {
     W.setMuted(!!m);
+    towersMuted = !!m;
+    if (towerCtx && towerSpeaker) towerSpeaker.gain.setTargetAtTime(m ? 0 : 1, towerCtx.currentTime, 0.02);
     try { if (window.sessionStorage) sessionStorage.setItem("mh-muted", m ? "1" : "0"); } catch (e) { /* private: this page only */ }
     if (muteBtn) muteBtn.setAttribute("aria-pressed", String(!!m));
   };

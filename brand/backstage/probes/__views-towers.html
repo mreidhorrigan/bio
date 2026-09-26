@@ -1,0 +1,53 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Signal towers across the switch between the iso and 3D villages</title>
+<meta name="budget" content="40000">
+<iframe id="f" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Two signal towers raised in the iso world (in the address, ?signals=, as the
+// Musebots bundle writes it) must stand in the 3D village at their tiles, be
+// restored by the bundle there, and still be in the iso world after the way back.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const enc = (o) => btoa(JSON.stringify(o)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const SIG = enc({ v: 1, t: [["s1", 31, 30, ""], ["s2", 12, 40, ""]] });
+const F = document.getElementById("f");
+F.src = "/index.html?theme=technurture&slime=30.0,30.1&signals=" + SIG;
+let stage = 0;
+const wait = (ok, then, n = 0) => { if (ok() || n > 60) then(); else setTimeout(() => wait(ok, then, n + 1), 250); };
+F.addEventListener("load", () => setTimeout(() => {
+  try { [iso1, in3d, iso2][stage++](); }
+  catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 1500));
+const towersIn = (I) => I.buildings().filter((b) => b.type === "signal").map((b) => b.uid + "@" + b.tx + "," + b.ty).sort().join(" ");
+function iso1() {
+  const w = F.contentWindow;
+  wait(() => w.MH_MUSEBOTS, () => {
+    const got = towersIn(w.MH_ISO);
+    say("iso: towers " + (got === "s1@31,30 s2@12,40" ? got : (got || "none") + " NO"));
+    w.document.getElementById("mh-view3d").click();
+  });
+}
+function in3d() {
+  const w = F.contentWindow, W = w.MH_SLIMEVERSE3D;
+  say("3D: the address " + (new URL(w.location.href).searchParams.get("signals") === SIG ? "carries the towers" : "dropped the towers NO"));
+  wait(() => w.MH_MUSEBOTS, () => {
+    W.pause(); W.setMuted(true);
+    for (let i = 0; i < 3; i++) W.step(1 / 60);
+    const S = W.S(), solids = (S.dynSolids || []).length;
+    say("3D: the bundle " + (w.MH_MUSEBOTS ? "loaded" : "did not load NO") + "; towers standing as solids: " + solids + (solids === 2 ? "" : " NO"));
+    const [tx, ty] = S.tileOf(S.dynSolids[0].x, S.dynSolids[0].z);
+    say("3D: the first stands at tile " + tx.toFixed(1) + "," + ty.toFixed(1) + (Math.hypot(tx - 31, ty - 30) < 0.6 ? "" : " NO"));
+    const st = w.MH_MUSEBOTS.stateFor("s1");
+    say("3D: its Musebot state is read (" + st.state + ")");
+    w.document.getElementById("view-iso").click();
+  });
+}
+function iso2() {
+  const w = F.contentWindow;
+  wait(() => w.MH_MUSEBOTS, () => {
+    const got = towersIn(w.MH_ISO);
+    say("iso again: towers " + (got === "s1@31,30 s2@12,40" ? got : (got || "none") + " NO"));
+    say("errors: none");
+    document.title = "done";
+  });
+}
+</script>

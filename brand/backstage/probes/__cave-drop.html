@@ -1,0 +1,30 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The camera while the slime drops into the cave</title>
+<meta name="budget" content="30000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=house" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Down the hatch the slime drops into the cave under the shaft. Every frame of
+// the fall and the landing, the camera must be inside the cave's open tube:
+// outside the rock, the painter sees the backs of the walls and the roof, and
+// far things show through near ones.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine;
+    W.pause(); W.setMuted(true);
+    for (const entry of ["well", "start"]) {
+      W.load("cave", entry);
+      let out = 0, worst = 0, first = -1;
+      for (let i = 0; i < 180; i++) {
+        W.step(1 / 60);
+        const S = W.S(), c = E.cam;
+        if (!S.open(c.x, c.y, c.z)) { out++; if (first < 0) first = i; worst = Math.max(worst, c.y - S.ceilAt(c.x, c.z)); }
+      }
+      say("cave, entry " + entry + ": camera outside the tube in " + out + " of 180 frames" + (out ? " NO (first at frame " + first + ", up to " + worst.toFixed(1) + " above the roof)" : ""));
+    }
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 2500));
+</script>

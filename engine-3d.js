@@ -900,18 +900,26 @@
       const pd = (ev) => {
         if (ev.pointerType === "touch") {
           touches.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
-          if (touches.size === 2) { pinch = { span: span(), dist: C.dist }; if (drag) drag.moved = 99; }   // a pinch is never a tap
+          if (touches.size === 2) {
+            pinch = { span: span(), dist: C.dist };
+            if (drag) {
+              drag.moved = 99;                                   // a pinch is never a tap
+              // The first finger lands a moment before the second, and what it turned
+              // and tilted in that moment was the start of the pinch, not a turn: undone.
+              if (performance.now() - drag.t < 300) { C.turn -= drag.turned; drag.turned = 0; C.tilt = drag.tilt; }
+            }
+          }
         }
-        if (!drag) drag = { x: ev.clientX, y: ev.clientY, lx: ev.clientX, look: C.look, tilt: C.tilt, moved: 0, t: performance.now(), touch: ev.pointerType === "touch" };
+        if (!drag) drag = { id: ev.pointerId, x: ev.clientX, y: ev.clientY, lx: ev.clientX, look: C.look, tilt: C.tilt, moved: 0, turned: 0, t: performance.now(), touch: ev.pointerType === "touch" };
         try { el.setPointerCapture(ev.pointerId); } catch (e) { /* older Safari */ }
         ev.preventDefault();
       };
       const pm = (ev) => {
         if (touches.has(ev.pointerId)) touches.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
         if (pinch && touches.size >= 2) { C.zoom(clamp(pinch.dist * pinch.span / span(), C.min, C.max) / C.dist); return; }
-        if (!drag) return;
+        if (!drag || ev.pointerId !== drag.id) return;         // the finger the drag follows, not whichever moved
         drag.moved = Math.max(drag.moved, Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y));
-        if (drag.touch) { C.turn += (ev.clientX - drag.lx) * 0.009; drag.lx = ev.clientX; }
+        if (drag.touch) { const d = (ev.clientX - drag.lx) * 0.009; C.turn += d; drag.turned += d; drag.lx = ev.clientX; }
         else C.look = clamp(drag.look + (ev.clientX - drag.x) * 0.006, -1.1, 1.1);
         C.tilt = clamp(drag.tilt - (ev.clientY - drag.y) * 0.004, -0.5, 0.6);
       };
@@ -919,7 +927,14 @@
       // canvas, in CSS pixels, and can send the body there.
       const pu = (ev) => {
         touches.delete(ev.pointerId);
-        if (touches.size < 2) pinch = null;
+        if (touches.size < 2 && pinch) {
+          pinch = null;
+          // One finger of a pinch lifted before the other: the one left carries the drag
+          // on from where it is now. From where the drag began, or from the other finger,
+          // the view jumped as the pinch ended.
+          const [id, at] = [...touches.entries()][0] || [];
+          if (drag && at) Object.assign(drag, { id, x: at.x, y: at.y, lx: at.x, look: C.look, tilt: C.tilt });
+        }
         if (touches.size) return;                              // a finger still down: the gesture goes on
         if (drag && drag.moved < 6 && C.onTap) {               // however long it was held
           const r = el.getBoundingClientRect();

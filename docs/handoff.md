@@ -63,7 +63,8 @@ node tools/switch-sound.mjs [--file]                # real-input audio across th
 Probes by area: the keys and accessibility `__keys-a11y`; the homepage
 `__tabs`, `__tips`, `__iso-sound`; the 3D village `__slimeverse3d`,
 `__verse3d`, `__verse3d-keys`, `__card-away`, `__cave-exits`,
-`__verse3d-cavewater`, `__verse3d-voices`, `__views-switch`; the glossary
+`__verse3d-cavewater`, `__verse3d-voices`, `__views-switch`, `__views-towers`,
+`__cave-drop`; the glossary
 `__glossary`, `__glossary-bar`, `__glossary-signs`, `__glossary-phone`,
 `__glossary-small`, `__glossary-live`, `__glossary-keys`, `__glossary-fr*`.
 A probe's line with NO, MISSING, EXCEPTION or FAIL fails it.
@@ -153,8 +154,7 @@ What a design would need, at least:
 
 - A pass with VoiceOver on a Mac and an iPhone; the checks so far read the
   accessibility tree, not a screen reader.
-- Offered to M., not requested: the iso kiosks' chimes in 3D; the visitor's
-  Musebots signal towers standing and playing in 3D; an opt-in model download
+- Offered to M., not requested: the iso kiosks' chimes in 3D; an opt-in model download
   for Clod Bathos on phones.
 - Clod Bathos (its own repository,
   `~/Documents/GamesDevelopment/StateMachineDrivenLLMTemplate`): the fix that
