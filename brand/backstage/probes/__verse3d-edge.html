@@ -4,7 +4,8 @@
 <pre id="out">running</pre>
 <script>
 // As in the iso village: outdoors, while no house of the menu is in sight, each gets
-// a numbered arrow in its colour at the edge of the frame, and the menu of houses
+// a numbered arrow in its colour at the left or right edge of the frame (the side it
+// lies on: wayfinding.js sides), and the menu of houses
 // shows by itself; with a house in sight, neither; in the house and the cave, neither.
 const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
 const F = document.getElementById("f");
@@ -22,8 +23,7 @@ F.addEventListener("load", () => setTimeout(() => {
       const white = (x, y) => { for (let dx = -7; dx <= 7; dx++) for (let dy = -7; dy <= 7; dy++) { const i = at(x + dx, y + dy); if (img[i] > 235 && img[i + 1] > 235 && img[i + 2] > 235) return true; } return false; };
       const look = (x, y) => { const i = at(x, y);
         cols.forEach((c, j) => { if (!hit.has(j) && Math.abs(img[i] - c[0]) + Math.abs(img[i + 1] - c[1]) + Math.abs(img[i + 2] - c[2]) < 30 && white(x, y)) hit.add(j); }); };
-      for (let x = 10; x < E.W - 10; x += 2) { look(x, 30); look(x, E.H - 30); }
-      for (let y = 10; y < E.H - 10; y += 2) { look(30, y); look(E.W - 30, y); }
+      for (let y = 10; y < E.H - 10; y += 2) { look(30, y); look(E.W - 30, y); }   // the left and right edges only
       return hit.size;
     };
     const tick = (n) => { for (let i = 0; i < n; i++) W.tick(1 / 60); };
@@ -31,7 +31,7 @@ F.addEventListener("load", () => setTimeout(() => {
     const p = S.fromTile(30 + 14, 30 + 14);
     W.load("outdoors", { x: p[0], z: p[1], yaw: S.tileYaw(1, 1) }); tick(20);
     const a = marks();
-    say("out in the fields, facing away: markers for " + a + " houses" + (a >= 4 ? "" : " NO") + "; the menu " + (nav.hidden ? "hidden NO" : "shows"));
+    say("out in the fields, facing away: markers at the left and right edges for " + a + " houses" + (a === S.kiosks.length ? "" : " NO") + "; the menu " + (nav.hidden ? "hidden NO" : "shows"));
     // at the plaza, facing a house
     W.load("outdoors", "start"); tick(20);
     const b = marks();

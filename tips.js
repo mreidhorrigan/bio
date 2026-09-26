@@ -15,12 +15,16 @@
                               ended, whoever said it (quiet)
      the rest                 only in a lull: the visitor still, and the slime
                               quiet, for a long while (idle); one tip a lull
-     once                     each tip is said once. What the slime has said,
-                              or seen the visitor do, is remembered in this
-                              browser by its English words (localStorage, else
-                              sessionStorage, else this page's own memory), so
-                              it is not said again on the next visit, nor in
-                              another view that has the same words
+     once a day               each tip is said once, then not again for a while
+                              (forget: 12 hours). What the slime has said, or
+                              seen the visitor do, is remembered in this browser
+                              by its English words and the time (localStorage,
+                              else sessionStorage, else this page's own memory),
+                              so it is not said again that day, nor in another
+                              view that has the same words; a visitor back the
+                              next day hears the essentials again. (Remembered
+                              for good, the tips were soon never heard at all:
+                              26 Sept 2026.)
      never over anything      not while the view is busy (a card open, build
                               mode, a way between places) or the tab hidden: a
                               tip waits for its moment, it is not lost
@@ -43,12 +47,12 @@
    MH_TIPS.tell(en, speak)  a tip said in answer to the visitor (build mode):
                             speak() once, and never again
    MH_TIPS.settle(en)       remember a tip as said without saying it (needless)
-   MH_TIPS.memory           has(en), add(en), forget(): what has been said
-   MH_TIPS.timing           { first, quiet, idle } in seconds, read on every tick
+   MH_TIPS.memory           has(en), add(en), forget(): what has been said lately
+   MH_TIPS.timing           { first, quiet, idle, forget } in seconds, read on every tick
    ========================================================================== */
 (function () {
   const KEY = "mh-told";
-  const timing = { first: 2, quiet: 6, idle: 25 };
+  const timing = { first: 2, quiet: 6, idle: 25, forget: 12 * 3600 };
   const TICK_MS = 250;
 
   /** The browser's stores that can be reached. A private window, blocked site data
@@ -62,27 +66,31 @@
     return out;
   }
 
-  /** What has been said, kept in each of these stores that works. @param {Storage[]} stores */
-  function memoryIn(stores) {
-    /** @type {Record<string, 1>} */ const seen = Object.create(null);
+  /** What has been said lately, kept in each of these stores that works: each tip's
+   *  English words and when (ms). Older than timing.forget, it may be said again (a
+   *  word kept before times were, as 1, is long past). @param {Storage[]} stores
+   *  @param {() => number} [clock] milliseconds (a test brings its own) */
+  function memoryIn(stores, clock = () => Date.now()) {
+    /** @type {Record<string, number>} */ const seen = Object.create(null);
     const load = () => {
       for (const s of stores) {
         try {
           const v = JSON.parse(s.getItem(KEY) || "{}");
-          if (v && typeof v === "object") for (const k of Object.keys(v)) seen[k] = 1;
+          if (v && typeof v === "object") for (const k of Object.keys(v)) seen[k] = Math.max(seen[k] || 0, Number(v[k]) || 0);
         } catch (e) { /* unreadable or refused: the others, or the page's own */ }
       }
     };
+    const lately = (en) => !!seen[en] && clock() - seen[en] < timing.forget * 1000;
     load();
     return {
       load,
       /** @param {string} en */
-      has: (en) => !!seen[en],
+      has: lately,
       /** @param {string} en */
       add(en) {
-        if (!en || seen[en]) return;
+        if (!en || lately(en)) return;
         load();                                        // another view or tab may have said some since
-        seen[en] = 1;
+        seen[en] = clock();
         const text = JSON.stringify(seen);
         for (const s of stores) { try { s.setItem(KEY, text); } catch (e) { /* full or refused: the page remembers */ } }
       },

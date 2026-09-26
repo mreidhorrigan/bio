@@ -1,0 +1,38 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Which way the houses are, in the iso village</title>
+<meta name="budget" content="30000">
+<iframe id="f" src="/index.html?theme=technurture&slime=30.0,30.1" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// Walked out of sight of the village, each house gets a marker at the edge of the
+// frame (wayfinding.js: a chip in its colour with its number, and an arrow); on the
+// plaza, none.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+const ACCENTS = ["#f0b62a", "#f28b46", "#d24f86", "#8a52d0", "#36b9d6", "#e0613a"];   // technurture's (theme-technurture.js)
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, I = w.MH_ISO, cv = w.document.querySelector("canvas"), g = cv.getContext("2d");
+    const marks = () => {
+      const s = cv.width / cv.clientWidth, Wc = cv.clientWidth, Hc = cv.clientHeight, img = g.getImageData(0, 0, cv.width, cv.height).data, hit = new Set();
+      const at = (x, y) => (Math.round(y * s) * cv.width + Math.round(x * s)) * 4;
+      const rgb = ACCENTS.map((h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16)));
+      const white = (x, y) => { for (let dx = -7; dx <= 7; dx++) for (let dy = -7; dy <= 7; dy++) { const i = at(x + dx, y + dy); if (img[i] > 235 && img[i + 1] > 235 && img[i + 2] > 235) return true; } return false; };
+      const look = (x, y) => { const i = at(x, y); rgb.forEach((c, j) => { if (!hit.has(j) && Math.abs(img[i] - c[0]) + Math.abs(img[i + 1] - c[1]) + Math.abs(img[i + 2] - c[2]) < 40 && white(x, y)) hit.add(j); }); };
+      for (let x = 10; x < Wc - 10; x += 2) { look(x, 30); look(x, Hc - 30); }
+      for (let y = 10; y < Hc - 10; y += 2) { look(30, y); look(Wc - 30, y); }
+      return hit.size;
+    };
+    I.placePlayer(30 + 24, 30 + 24, 1, 1);
+    setTimeout(() => {
+      const a = marks();
+      say("far from the village: markers in " + a + " of the houses' colours" + (a >= 4 ? "" : " NO"));
+      I.placePlayer(30.0, 30.1, 1, -1);
+      setTimeout(() => {
+        const b = marks();
+        say("on the plaza: markers " + b + (b === 0 ? "" : " NO"));
+        say("errors: none"); document.title = "done";
+      }, 1200);
+    }, 1500);
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 2500));
+</script>

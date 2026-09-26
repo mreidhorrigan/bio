@@ -5,7 +5,7 @@
 // tips.js (MH_TIPS) decides when the slime tells the visitor what it can do, in the
 // iso village (engine.js), the 3D village (slimeverse3d-page.js) and the glossary
 // (glossary-world.js): an area's introduction a moment after the slime arrives and
-// a quiet spell apart, the rest only in a long lull, and each tip once, remembered
+// a quiet spell apart, the rest only in a long lull, and each tip once a day, remembered
 // in the browser, or in the page where the browser refuses (a private window, a
 // file:// page, blocked site data). These checks keep it so: the pacing on a clock
 // the test drives, the memory over stores that work and stores that refuse, and
@@ -150,6 +150,26 @@ test("a bubble the view says itself keeps the quiet too", () => {
   assert.equal(v.said.length, 1, "no tip until a quiet spell after it");
   v.run(8 + 3.8 + quiet + 0.5);
   assert.equal(v.said.length, 2);
+});
+
+test("said once a day: the next day the essentials come again; a word kept for good before is past", () => {
+  const ls = store(), M = load({ localStorage: ls }), { forget } = M.timing;
+  assert.ok(forget >= 3600 * 6 && forget <= 3600 * 24, "a tip rests for hours, not for good (" + forget / 3600 + " h)");
+  let t = 1e12;
+  const mem = M.memoryIn([ls], () => t);
+  mem.add(WALK);
+  assert.equal(mem.has(WALK), true, "said: quiet now");
+  t += (forget - 60) * 1000;
+  assert.equal(M.memoryIn([ls], () => t).has(WALK), true, "later the same day, in another page: still quiet");
+  t += 120 * 1000;
+  const next = M.memoryIn([ls], () => t);
+  assert.equal(next.has(WALK), false, "the next day: it may be said again");
+  next.add(WALK);
+  assert.equal(M.memoryIn([ls], () => t).has(WALK), true, "and is quiet again once said");
+  const old = store(); old.setItem("mh-told", JSON.stringify({ [WALK]: 1 }));   // as kept before, when a tip was said for good
+  const v = view(load({ localStorage: old }), [WALK]);
+  v.run(10);
+  assert.deepEqual(v.said.map((x) => x.text), [WALK], "a tip remembered for good before is heard again");
 });
 
 test("the browser's stores refused, or missing: the page's own memory, and no error", () => {

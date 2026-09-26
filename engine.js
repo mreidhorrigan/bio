@@ -748,6 +748,7 @@ function buildHub() {
   });
   player.x = HX; player.y = HY + 1.8; player.fx = 0; player.fy = 1;   // spawn on the plaza, clear of the central beacon
   restorePlayerFromURL();
+  if (window.MH_TOWER_ADDRESS) window.MH_TOWER_ADDRESS.recall();   // towers kept in this tab, where the address came without them
   activeIndex = prevActive = currentTarget = -1;
   // build-mode is a per-session sandbox: placed buildings do NOT persist across a refresh,
   // and the kiosks always return to their even ring. Older builds saved a layout; drop it.
@@ -893,6 +894,11 @@ function wireInput() {
   window.addEventListener("mh-musebots-ready", () => {
     if (!window.MH_MUSEBOTS) return;
     window.MH_MUSEBOTS.restore(BUILDINGS);
+    // a tower raised before the bundle arrived has no Musebot id, and never reached
+    // the address: it gets one now, and the address (and this tab's copy) takes it
+    const early = BUILDINGS.filter((b) => b.type === "signal" && !b.uid);
+    for (const b of early) b.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS);
+    if (early.length) saveLayout(); else if (window.MH_TOWER_ADDRESS) window.MH_TOWER_ADDRESS.keep();
     window.MH_MUSEBOTS.updateListener?.(player.x, player.y, P, BUILDINGS);
   });
   // The Musebot picker covers the build toolbar while it is open. Its explicit
@@ -1266,6 +1272,7 @@ function decorAtScreen(sx, sy) {
  *  written to storage; only the tower bundle, which encodes towers in the URL, is told. */
 function saveLayout() {
   if (window.MH_MUSEBOTS && window.MH_MUSEBOTS.reflect) window.MH_MUSEBOTS.reflect(BUILDINGS);
+  if (window.MH_TOWER_ADDRESS) window.MH_TOWER_ADDRESS.keep();   // and this tab keeps a copy (tower-address.js)
 }
 
 /* ----------------------------------------------------------------------------
@@ -1570,22 +1577,18 @@ function anyKioskOnScreen() {
 
 /** Off-screen kiosk markers: clamp each kiosk's direction to a screen-edge inset and
  *  draw an accent chip with its number + an outward arrow (a "quest marker"). */
+/** Which way the houses are, while none is on screen: a marker for each at the edge
+ *  of the frame, pointing its way (wayfinding.js, shared with the 3D village). */
 function drawEdgeMarkers() {
-  const cx = W / 2, cy = H / 2, m = 30, ix = cx - m, iy = cy - m;
+  const WF = window.MH_WAYFINDING; if (!WF) return;
+  const off = [];
   for (let i = 0; i < EXHIBITS.length; i++) {
     const ex = EXHIBITS[i], c = toScreen(nearImg(ex.tx, player.x), nearImg(ex.ty, player.y));
     if (c.x >= 0 && c.x <= W && c.y >= 0 && c.y <= H) continue;       // on screen → no marker
-    const a = Math.atan2(c.y - cy, c.x - cx), dx = Math.cos(a), dy = Math.sin(a);
-    const t = Math.min(Math.abs(dx) > 1e-4 ? ix / Math.abs(dx) : Infinity, Math.abs(dy) > 1e-4 ? iy / Math.abs(dy) : Infinity);
-    const x = cx + dx * t, y = cy + dy * t;
-    ctx.save();
-    ctx.translate(x, y); ctx.rotate(a);                              // arrow points outward, toward the kiosk
-    ctx.fillStyle = hexA(ex.accent, 0.96);
-    ctx.beginPath(); ctx.moveTo(17, 0); ctx.lineTo(8, -6); ctx.lineTo(8, 6); ctx.closePath(); ctx.fill();
-    ctx.restore();
-    roundRect(x - 12, y - 11, 24, 22, 8, hexA(ex.accent, 0.96), "rgba(0,0,0,0.35)");
-    label(ctx, String(i + 1), x, y + 4, 12, "#ffffff");
+    off.push({ x: c.x, y: c.y, colour: ex.accent, label: i + 1 });
   }
+  const at = WF.edge(W, H, off), font = "700 12px " + uiFont();
+  off.forEach((m, k) => WF.mark(ctx, at[k].x, at[k].y, at[k].a, m.colour, m.label, font));
 }
 
 /** Distance "fog": a vignette whose clear centre shrinks the farther you roam from

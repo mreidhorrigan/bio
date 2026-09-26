@@ -10,7 +10,17 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
   `node --test sounds.test.mjs`.
 - The slime's instructions: when it speaks is `tips.js`, the same in every
   world (its words stay with each view, `brand/backstage/world-style.md`
-  section 6). Change the pacing only there, and run `node --test tips.test.mjs`.
+  section 6): each area's essentials once, the rest in a long lull, and a tip
+  once said rests for 12 hours (`timing.forget`). Change the pacing only there,
+  and run `node --test tips.test.mjs`.
+- Which way the houses are: `wayfinding.js` draws and places the edge markers
+  for the iso village (on the frame's edge, toward each house) and the 3D
+  village outdoors (left or right edge by side, ahead high, behind low); each
+  view only says when (no house in sight). Run `node --test wayfinding.test.mjs`.
+- The visitor's signal towers: `tower-address.js` keeps them in the address
+  (`?signals=`, written by the Musebots bundle) with a copy for this tab, so
+  every way between the iso and 3D villages finds them
+  (`brand/backstage/probes/__views-built-towers.html`).
 - Starting a new session: `docs/handoff.md` (where things are, how M. wants the
   work done, how to check a change, what is left).
 - Accessibility: `docs/accessibility.md` (what a keyboard and a screen reader

@@ -128,15 +128,18 @@
   }
 
   /* ── the signal towers raised in the iso world ─────────────────────────
-     They ride in the address (?signals=, written by the Musebots bundle), so the
-     switch carries them both ways. Here they stand in the village, each lit by its
+     They ride in the address (?signals=, written by the Musebots bundle), and this
+     tab keeps a copy (tower-address.js), so every way between the views finds them. Here they stand in the village, each lit by its
      Musebot and playing, as in the iso world: the bundle (signal-towers.js, loaded
      only when there are towers) restores them into TOWERS. It asks its host page
      for an audio context (MH_ISO.sharedAudioContext, as engine.js gives it): this
      page's has a speaker gain for a destination, so the Mute silences them too. */
   const TOWERS = [];
   let towerCtx = null, towerSpeaker = null, towersMuted = false;
-  if (q.get("signals")) {
+  // the address, or this tab's copy where the address came without them (tower-address.js:
+  // the Slimeverse 3D house's own link, say)
+  const signals = window.MH_TOWER_ADDRESS ? window.MH_TOWER_ADDRESS.recall() : q.get("signals");
+  if (signals) {
     // @ts-ignore: the bundle's host hooks, the two it uses of the iso world's
     window.MH_ISO = window.MH_ISO || {
       sharedAudioContext() {
@@ -179,47 +182,32 @@
   // @ts-ignore: for probes and the console
   window.MH_SLIMEVERSE3D = W;
 
-  /* ── which way the houses are: the iso village's edge markers ──────────
-     Outdoors, while no house of the menu is in sight, each one gets a numbered
-     arrow in its colour at the edge of the frame, pointing its way, as the iso
-     village draws them (engine.js drawEdgeMarkers), and the menu of houses fades
-     in (as the iso nav-bar does). A house behind the eye points down, to its side.
-     Not in the house or the cave, where there is no village to lose. */
+  /* ── which way the houses are ─────────────────────────────────────────
+     Outdoors, while no house of the menu is in sight, each gets a marker at the
+     left or right edge of the frame, the side it lies on, and the menu of houses
+     fades in, as the iso village does it (wayfinding.js: the markers, their
+     placing, and SIGHT). Not in the house or the cave, where there is no village
+     to lose, nor while a card or a way between places is up. */
   let housesOut = false, markFont = "";
   function edgeMarkers() {
-    const S = W.S(), E = W.engine, g = E.g;
-    const out = !!(S && S.kiosks && W.scene().startsWith("outdoors") && !W.fading() && (!card || card.hidden));
-    const P = (S && S.period) || 0, img = (v, ref) => (P ? v + P * Math.round((ref - v) / P) : v);
+    const WF = window.MH_WAYFINDING, S = W.S(), E = W.engine;
+    const out = !!(WF && S && S.kiosks && W.scene().startsWith("outdoors") && !W.fading() && (!card || card.hidden));
+    const P = (S && S.period) || 0, img = (v, ref) => (P ? v + P * Math.round((ref - v) / P) : v);   // each house's copy nearest the camera, round the world
     let seen = false;
-    const spots = out ? S.kiosks.map((k, i) => {
-      const x = img(k.x, E.cam.x), z = img(k.z, E.cam.z), p = [x, S.floorAt(x, z) + 6, z], v = E.view(p);
-      const sp = E.project(p), d = Math.hypot(x - E.cam.x, z - E.cam.z);
-      if (sp && d < (S.seen || 240) && sp[0] >= 0 && sp[0] <= E.W && sp[1] >= 0 && sp[1] <= E.H) seen = true;
-      return { k, i, sp, v };
+    const marks = out ? S.kiosks.map((k, i) => {
+      const x = img(k.x, E.cam.x), z = img(k.z, E.cam.z), sp = E.project([x, S.floorAt(x, z) + 6, z]);
+      if (sp && Math.hypot(x - E.cam.x, z - E.cam.z) < WF.SIGHT && sp[0] >= 0 && sp[0] <= E.W && sp[1] >= 0 && sp[1] <= E.H) seen = true;
+      // its bearing on the ground from the way the camera faces (its tilt aside): + to the right
+      const dx = x - E.cam.x, dz = z - E.cam.z, cy = Math.cos(E.cam.yaw), sy = Math.sin(E.cam.yaw);
+      return { bearing: Math.atan2(dx * cy - dz * sy, dx * sy + dz * cy), colour: k.accent || "#5b2a86", label: i + 1 };
     }) : [];
     const was = housesOut;
     housesOut = out && !seen;
     if (was !== housesOut && menuShown) menuShown();
     if (!housesOut) return;
-    const cx = E.W / 2, cy = E.H / 2, m = 30, ix = cx - m, iy = cy - m;
-    g.save();
     markFont = markFont || "700 12px " + (getComputedStyle(document.body).getPropertyValue("--sans-font").trim() || "system-ui, sans-serif");
-    g.font = markFont;
-    g.textAlign = "center"; g.textBaseline = "middle";
-    for (const { k, i, sp, v } of spots) {
-      const dx0 = sp ? sp[0] - cx : v[0], dy0 = sp ? sp[1] - cy : Math.abs(v[2]) * 0.8 + 1;   // behind: down, to its side
-      const a = Math.atan2(dy0, dx0), dx = Math.cos(a), dy = Math.sin(a);
-      const t = Math.min(Math.abs(dx) > 1e-4 ? ix / Math.abs(dx) : Infinity, Math.abs(dy) > 1e-4 ? iy / Math.abs(dy) : Infinity);
-      const x = cx + dx * t, y = cy + dy * t, col = k.accent || "#5b2a86";
-      g.save(); g.translate(x, y); g.rotate(a);                // the arrow points outward, toward the house
-      g.globalAlpha = 0.96; g.fillStyle = col;
-      g.beginPath(); g.moveTo(17, 0); g.lineTo(8, -6); g.lineTo(8, 6); g.closePath(); g.fill();
-      g.restore();
-      g.globalAlpha = 0.96; g.fillStyle = col; g.strokeStyle = "rgba(0,0,0,0.35)"; g.lineWidth = 1;
-      g.beginPath(); if (g.roundRect) g.roundRect(x - 12, y - 11, 24, 22, 8); else g.rect(x - 12, y - 11, 24, 22); g.fill(); g.stroke();
-      g.globalAlpha = 1; g.fillStyle = "#ffffff"; g.fillText(String(i + 1), x, y + 1);
-    }
-    g.restore();
+    const at = WF.sides(E.W, E.H, marks.map((m) => m.bearing));
+    marks.forEach((m, k) => WF.mark(E.g, at[k].x, at[k].y, at[k].a, m.colour, m.label, markFont));
   }
   let menuShown = null;                                        // set with the menu, below: shows it while the houses are out of sight
 

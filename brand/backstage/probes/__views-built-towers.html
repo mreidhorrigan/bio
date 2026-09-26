@@ -1,0 +1,69 @@
+<!DOCTYPE html><meta charset="utf-8"><title>A signal tower built in the iso village stands in the 3D village, however it is reached</title>
+<meta name="budget" content="60000">
+<iframe id="f" src="/index.html?theme=technurture&slime=30.0,30.1" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// As a visitor does it: Build, the signal-tower tool, a click on the ground beside
+// the slime, the Musebot picker closed, Done; then the 3D button. The tower must be
+// in the address, and stand in the 3D village at its tile; and back in the iso world.
+// Then the 3D village by a link that drops the address (the Slimeverse 3D house's):
+// the tab's copy (tower-address.js) brings the tower along.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+let stage = 0, built = null;
+const wait = (ok, then, n = 0) => { if (ok() || n > 80) then(); else setTimeout(() => wait(ok, then, n + 1), 250); };
+F.addEventListener("load", () => setTimeout(() => {
+  try { [iso1, in3d, iso2, bare3d][stage++](); }
+  catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}, 1500));
+const towers = (I) => I.buildings().filter((b) => b.type === "signal");
+function iso1() {
+  const w = F.contentWindow, d = w.document, I = w.MH_ISO, cv = d.querySelector("canvas");
+  wait(() => w.MH_MUSEBOTS, () => {
+    const btn = (sel) => { const b = d.querySelector(sel); if (!b) throw new Error(sel + " MISSING"); b.click(); };
+    btn("#mh-buildtoggle"); btn('[data-tool="signal"]');
+    const r = cv.getBoundingClientRect(), x = r.left + r.width / 2 + 96, y = r.top + r.height / 2 + 30;
+    for (const type of ["pointerdown", "pointerup"]) cv.dispatchEvent(new w.PointerEvent(type, { clientX: x, clientY: y, bubbles: true, pointerId: 1, pointerType: "mouse", button: 0, buttons: type === "pointerdown" ? 1 : 0, isPrimary: true }));
+    setTimeout(() => {
+      const t = towers(I);
+      say("iso: towers built: " + t.length + (t.length === 1 ? "" : " NO") + (t[0] ? " at " + t[0].tx + "," + t[0].ty + ", id " + t[0].uid : ""));
+      built = t[0];
+      const close = d.querySelector(".mh-signal-close"); if (close) close.click();
+      btn('[data-tool="done"]');
+      say("iso: the address " + (new URL(w.location.href).searchParams.get("signals") ? "carries it" : "does not carry it NO"));
+      btn("#mh-view3d");
+    }, 600);
+  });
+}
+function in3d() {
+  const w = F.contentWindow, W = w.MH_SLIMEVERSE3D;
+  wait(() => w.MH_MUSEBOTS, () => {
+    W.pause(); W.setMuted(true);
+    for (let i = 0; i < 3; i++) W.tick(1 / 60);
+    const S = W.S(), st = S.dynSolids || [];
+    const at = st[0] ? S.tileOf(st[0].x, st[0].z) : null;
+    const ok = at && built && Math.hypot(at[0] - built.tx, at[1] - built.ty) < 0.6;
+    say("3D: towers standing: " + st.length + (st.length === 1 ? "" : " NO") + (at ? " at tile " + at[0].toFixed(1) + "," + at[1].toFixed(1) + (ok ? "" : " NO") : ""));
+    w.document.getElementById("view-iso").click();
+  });
+}
+function iso2() {
+  const w = F.contentWindow;
+  wait(() => w.MH_MUSEBOTS, () => {
+    const t = towers(w.MH_ISO);
+    say("iso again: towers " + t.length + (t.length === 1 && built && t[0].tx === built.tx && t[0].ty === built.ty ? "" : " NO"));
+    w.location.href = "/slimeverse3d.html?place=village";         // the Slimeverse 3D house's own link: an address without the towers
+  });
+}
+function bare3d() {
+  const w = F.contentWindow, W = w.MH_SLIMEVERSE3D;
+  wait(() => w.MH_MUSEBOTS, () => {
+    W.pause(); W.setMuted(true);
+    W.load("outdoors", "start"); for (let i = 0; i < 3; i++) W.tick(1 / 60);
+    const n = (W.S().dynSolids || []).length;
+    say("3D by a link without them: towers standing: " + n + (n === 1 ? "" : " NO") + "; the address " + (new URL(w.location.href).searchParams.get("signals") ? "has them back" : "still without NO"));
+    say("errors: none");
+    document.title = "done";
+  });
+}
+</script>
