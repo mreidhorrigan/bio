@@ -1,0 +1,74 @@
+<!DOCTYPE html><meta charset="utf-8"><title>3D views: forward on the keys goes the way the view looks</title>
+<iframe id="f" src="/brand/backstage/slimes/verse3d.html?skin=technurture" style="width:1100px;height:900px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The keys move the slime along its own heading, and the camera is not always behind
+// it: a drag turns the view, and on a walk to a click the camera holds its heading while
+// the body turns. Forward on the keys then went sideways across the screen (the owner's
+// report, 26 Sept 2026). Each case turns the view from the body, holds forward, and
+// measures the way the slime went against the way the view looked when the key went down.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const wrap = (a) => { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; };
+const deg = (a) => (a * 180 / Math.PI).toFixed(0) + "°";
+document.getElementById("f").addEventListener("load", () => setTimeout(() => {
+  const w = document.getElementById("f").contentWindow, d = w.document, W = w.MH_V3D, C = W.controls, cam = W.engine.cam;
+  W.pause();
+  const cv = d.querySelector("canvas");
+  const key = (type, k) => d.dispatchEvent(new w.KeyboardEvent(type, { key: k, bubbles: true, cancelable: true }));
+  const ticks = (n) => { for (let i = 0; i < n; i++) W.tick(0.016); };
+  const fresh = () => { W.load("outdoors"); ticks(20); C.look = 0; C.tilt = 0; ticks(20); };
+  /** Forward held for `frames`: the angle between the way the slime went and the way the view looked. */
+  const forward = (frames) => {
+    const view = cam.yaw, x0 = W.me.x, z0 = W.me.z;
+    key("keydown", "ArrowUp"); ticks(frames); key("keyup", "ArrowUp");
+    const went = Math.atan2(W.me.x - x0, W.me.z - z0), dist = Math.hypot(W.me.x - x0, W.me.z - z0);
+    return { off: Math.abs(wrap(went - view)), dist, viewMoved: Math.abs(wrap(cam.yaw - view)) };
+  };
+
+  // 1. a drag to look about, and then forward
+  fresh();
+  C.look = 0.9; ticks(300);                                   // as a mouse drag leaves it: the view turned 0.9 radians from the body
+  const turned = Math.abs(wrap(cam.yaw - W.me.yaw));
+  let r = forward(60);
+  say("after a drag to look (the view " + deg(turned) + " from the body): forward went " + deg(r.off) + " from the view's direction over " + r.dist.toFixed(0) +
+      " units, the view moving " + deg(r.viewMoved) + (turned > 0.7 && r.off < 0.1 && r.dist > 5 && r.viewMoved < 0.1 ? "" : " NO"));
+
+  // 2. a walk to a click at the side, cut short by forward
+  fresh();
+  const bw = cv.clientWidth, bh = cv.clientHeight;
+  C.onTap(bw * 0.86, bh * 0.82);                              // the ground to the right, near the slime
+  for (let i = 0; i < 40; i++) W.step(0.016);                 // the body turns to the goal; the camera holds its heading
+  const apart = Math.abs(wrap(cam.yaw - W.me.yaw));
+  r = forward(60);
+  say("a walk to a click at the side (body and view " + deg(apart) + " apart), then forward: it went " + deg(r.off) + " from the view's direction, the view moving " +
+      deg(r.viewMoved) + (apart > 0.3 && r.off < 0.12 && r.dist > 5 && r.viewMoved < 0.12 ? "" : apart > 0.3 ? " NO" : " (the walk did not turn the body: MISSING)"));
+
+  // 3. forward held while the mouse drags: the body follows the look, once, not again every frame
+  fresh();
+  const y0 = W.me.yaw, o = (x) => ({ clientX: x, clientY: 420, pointerId: 7, pointerType: "mouse", button: 0, bubbles: true });
+  cv.dispatchEvent(new w.PointerEvent("pointerdown", o(500)));
+  key("keydown", "ArrowUp");
+  for (let i = 1; i <= 30; i++) { cv.dispatchEvent(new w.PointerEvent("pointermove", o(500 + i * 3))); W.tick(0.016); }   // 90 px: 0.54 radians of look
+  const mid = wrap(W.me.yaw - y0), midTrail = Math.abs(wrap(cam.yaw - W.me.yaw));   // the view comes round as it always did, and the body with it
+  w.dispatchEvent(new w.PointerEvent("pointerup", o(590)));
+  ticks(300); key("keyup", "ArrowUp");                        // the rest of the look comes round, taken up as it shows
+  const swung = wrap(W.me.yaw - y0), trail = Math.abs(wrap(cam.yaw - W.me.yaw));
+  say("forward held while dragging 90 px (0.54 radians of look): the body turned " + mid.toFixed(2) + " radians during the drag (the view " + deg(midTrail) +
+      " from it), " + swung.toFixed(2) + " in all, the view " + deg(trail) + " from it" +
+      (mid > 0.02 && midTrail < 0.1 && Math.abs(swung - 0.54) < 0.06 && trail < 0.05 ? "" : " NO"));
+
+  // 4. the arrows still turn the body when the view is behind it, and the view follows
+  fresh();
+  const t0 = W.me.yaw;
+  key("keydown", "ArrowLeft"); ticks(60); key("keyup", "ArrowLeft"); ticks(60);
+  const tw = wrap(W.me.yaw - t0);
+  say("left arrow held a second: the body turned " + tw.toFixed(2) + " radians, the view " + deg(Math.abs(wrap(cam.yaw - W.me.yaw))) + " behind it" +
+      (tw < -1.5 && Math.abs(wrap(cam.yaw - W.me.yaw)) < 0.1 ? "" : " NO"));
+  // and forward, from the start with the view behind the body, is as it was (within a few
+  // degrees: a slide along a solid bends a straight walk a little)
+  fresh();
+  r = forward(60);
+  say("forward from the start, the view behind the body: " + deg(r.off) + " off, " + r.dist.toFixed(0) + " units" + (r.off < 0.1 && r.dist > 5 ? "" : " NO"));
+  document.title = "done";
+}, 1200));
+</script>

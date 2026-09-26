@@ -888,7 +888,8 @@
       document.addEventListener("keydown", down);
       document.addEventListener("keyup", up);
       window.addEventListener("blur", drop);
-      // A mouse drags to look about, the view swinging back behind the body after.
+      // A mouse drags to look about, and the view stays where it was left: the
+      // next press of a key turns the body to face that way (C.settle, below).
       // A finger, as touch games with a camera behind do, drags sideways to TURN
       // the body (C.turn, which the world takes each frame: there are no keys on
       // a phone, and a look that swung back left no way to face anywhere) and up
@@ -926,6 +927,10 @@
         }
         drag = null;
       };
+      /** `a` of the look handed to the body: the world has turned the body that far to
+       *  face the way the view looks, so the look is that much less, and a drag going on
+       *  carries on from there (from its old start it would turn the body again every frame). */
+      C.settle = (a) => { C.look -= a; if (drag && !drag.touch) drag.look -= a; };
       const wh = (ev) => { C.zoom(1 + Math.sign(ev.deltaY) * 0.12); ev.preventDefault(); };
       el.addEventListener("pointerdown", pd); el.addEventListener("pointermove", pm);
       window.addEventListener("pointerup", pu); window.addEventListener("pointercancel", pu); el.addEventListener("wheel", wh, { passive: false });

@@ -1245,7 +1245,10 @@
        (a click low in the frame, on the ground between camera and slime) is
        moved to just ahead of it, keeping its sideways offset.               */
     const wrap = (a) => { while (a > Math.PI) a -= TAU; while (a < -Math.PI) a += TAU; return a; };
-    let camLook = 0, viewYaw = 0;
+    // camLook, the camera's turn from the body's heading, is two turns: `hold`, the heading a
+    // walk to a click keeps (and eases back from after), and `shown`, as much of the visitor's
+    // look (C.look, a drag) as the view has come round to.
+    let camLook = 0, viewYaw = 0, hold = 0, shown = 0;
     /** A click on a house (anything a place lists as clickable) opens it, as a
      *  click on an iso kiosk does: the ray is marched out until it enters one. */
     function clickHit(sx, sy) {
@@ -1393,6 +1396,18 @@
         if (!me.air) { me.vy = 0; me.landT = 0; landSound(); }
       } else if (me.landT != null && (me.landT += dt) > 1.2) me.landT = null;
       if (turn || want) me.goal = null;
+      // The keys go the way the view looks. The view can be turned from the body's
+      // heading (a drag to look about, or the heading the camera held on a walk to a
+      // click and is easing back from), and the keys move the body along ITS heading,
+      // so forward could go sideways across the screen (26 Sept 2026). A key pressed
+      // then turns the body to face the way the view looks, at once, and the view stays
+      // put. The part of a drag the view has not come round to yet stays the visitor's
+      // look, and is taken up as it shows, so a drag with a key held steers the walk.
+      if ((turn || want) && Math.abs(hold + shown) > 1e-3) {
+        me.yaw = wrap(me.yaw + hold + shown);
+        if (C.settle) C.settle(shown); else C.look -= shown;
+        hold = 0; shown = 0; camLook = 0;
+      }
       const top = (S.walk || WALK) * (k.fast ? 1.6 : 1);
       if (me.goal) {
         const dx = me.goal.x - me.x, dz = me.goal.z - me.z, dist = Math.hypot(dx, dz);
@@ -1462,8 +1477,9 @@
         }
       }
       const cam = S.camera || {};
-      if (me.goal) camLook = wrap(viewYaw - me.yaw) + C.look;
-      else camLook += (C.look - camLook) * Math.min(1, dt * (reduce ? 60 : 1.2));
+      if (me.goal) { hold = wrap(viewYaw - me.yaw); shown = C.look; }
+      else { const ease = Math.min(1, dt * (reduce ? 60 : 1.2)); hold -= hold * ease; shown += (C.look - shown) * ease; }
+      camLook = hold + shown;
       // The visitor's zoom (C.pref). Farther asks for a longer boom, which walls may cut
       // short; nearer is a share of the boom the camera can have, so it comes nearer
       // even in the house, where the walls hold the camera close already (asking there
@@ -1528,7 +1544,7 @@
       SEA = S.sea ? { sea: true, level: S.sea.level, x: 0, z: 0 } : null;
       const back = entry === "back" && backs[sceneId] ? backs[sceneId].at : null;
       const at = back || (typeof entry === "object" && entry) || (S.entries && (S.entries[entry] || S.entries.start)) || { x: 0, z: 0, yaw: 0 };
-      camLook = 0;
+      camLook = 0; hold = 0; shown = 0;
       me.x = at.x; me.z = at.z; me.yaw = at.yaw; me.speed = 0; me.goal = null; me.pool = null; me.ripple = 0;
       me.air = !reduce && at.drop ? at.drop : 0; me.vy = 0; me.landT = null; me.launch = null; me.toLight = null;   // an entry with a drop: the slime falls in (not with reduced motion)
       if (typeof entry === "object" && entry) { S.bound(me); collide(me); }   // a spot carried from elsewhere: kept inside this place
