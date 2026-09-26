@@ -169,14 +169,27 @@ the cap.
   "blooloo!").
 - **Instructions are the slime's to give,** in the first person, in a speech
   bubble over it, in every world (since 2026-09-24): "I can walk: the arrow
-  keys, or WASD." Brief, one at a time from a moment after the start, each
-  skipped once the visitor has done it, once a visit (sessionStorage), with a
-  touch set for phones. The bubble is the same everywhere: white, a #111 ink
-  outline, rounded ends, a tail, a 700 serif, wrapped to fit a phone
-  (`bubble()` in verse3d.js, `drawSlimeSay` in engine.js, `drawSay` in
-  glossary-world.js). The same words stand in the page, out of sight, for a
-  screen reader. No instruction panels or legends on screen, and no toasts that
-  tell the visitor what to do (status toasts, "Sound off", stay).
+  keys, or WASD." Brief, with a touch set for phones, and seldom (since
+  2026-09-26). When the slime speaks is `tips.js` (MH_TIPS), the same in every
+  world: each area's introduction first (the tips marked `"intro"`: the walk,
+  opening a house and Space in the villages, the light on arriving in the
+  cave), a moment after arriving and a quiet spell of 6 s after each bubble.
+  The rest only when the visitor has been still, and the slime quiet, for 25 s:
+  one tip a lull. Each tip is said once, remembered in the browser by its
+  English words (localStorage, else sessionStorage, else the page's own
+  memory), so neither the next visit nor the other view says it again, and a
+  tip is skipped once the visitor has done it. Build mode is introduced once. A
+  click on something built says "I can move that" once, and after that the
+  slime walks there, as on the ground. The glossary's "I can take your keys
+  now" is said each time the page opens and the keyboard reaches the picture:
+  it stands in for the picture's outline. `tips.test.mjs` checks the pacing
+  and the memory, `probes/__tips.html` the worlds. The bubble is the same
+  everywhere: white, a #111 ink outline, rounded ends, a tail, a 700 serif,
+  wrapped to fit a phone (`bubble()` in verse3d.js, `drawSlimeSay` in
+  engine.js, `drawSay` in glossary-world.js). The same words stand in the page,
+  out of sight, for a screen reader, all of them all the time. No instruction
+  panels or legends on screen, and no toasts that tell the visitor what to do
+  (status toasts, "Sound off", stay).
 - **Sounds live in one file, `sounds.js` (MH_SOUNDS).** Every sound the worlds
   make is a named recipe there (the step, the landing, the creatures' voices,
   the iso cues): blips with a wave, a pitch against the skin's key, a slide, a

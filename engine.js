@@ -990,7 +990,7 @@ function onPointer(e) {
   if (decor >= 0) {
     const building = BUILDINGS[decor], tool = building && toolOf(building.type);
     if (tool && tool.tap && tool.tap(building)) return;
-    say(tr("world.tip.build", "I can move that: press B, for Build."), 3.4); return;
+    if (tellTip(BUILD_TIPS.move, 3.4)) return;                   // said once; after that a click here walks, as on the ground
   }
   const w = screenToWorld(sx, sy); auto.active = true; auto.goal = -1; auto.warp = false; auto.tx = w.x; auto.ty = w.y; auto.lastDist = Infinity; auto.stuck = 0;
   used.tap = true;
@@ -1045,11 +1045,11 @@ function toggleBuild() {
   if (buildToggleEl) buildToggleEl.classList.toggle("mh-on", buildMode);
   refreshBuildTools();
   if (buildMode) {
-    say(tr("world.tip.building", "I can build: drag a building to move it, or pick a tool."), 4);
-    const keysTip = tr("world.tip.buildKeys", "With the keys: the arrows move my pointer, and Enter builds, picks up, or puts down.");
-    announce(keysTip);
+    settleTip(BUILD_TIPS.move);                                  // build mode found: "press B" is needless now
+    tellTip(BUILD_TIPS.build, 4);                                // the slime introduces build mode once (tips.js)
+    announce(tr(BUILD_TIPS.keys[0], BUILD_TIPS.keys[1]));        // a screen reader hears the keys every time: it cannot see the build bar come up
     const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
-    if (!touch) setTimeout(() => { if (buildMode && !bcur.shown) say(keysTip, 4.4); }, 4300);   // and, after the first, the slime says it
+    if (!touch) setTimeout(() => { if (buildMode && !bcur.shown) tellTip(BUILD_TIPS.keys, 4.4); }, 4300);   // and, after the first, the slime says it, once
   }
   else toast(tr("world.buildOff", "Build mode off"));
 }
@@ -1175,7 +1175,7 @@ function moveBuildCursor(k) {
   if (!bcur.shown || !tileOnScreen(bcur.tx, bcur.ty)) {
     // first press, or the slime has walked on: the tile just in front of the slime
     bcur.tx = wrap(Math.round(player.x + player.fx * 1.5)); bcur.ty = wrap(Math.round(player.y + player.fy * 1.5));
-    bcur.shown = true;
+    bcur.shown = true; settleTip(BUILD_TIPS.keys);           // the keys found: the slime need not say them
   } else {
     const [dx, dy] = BUILD_STEP[k], nx = wrap(bcur.tx + dx), ny = wrap(bcur.ty + dy);
     if (!tileOnScreen(nx, ny)) { announce(tr("world.build.edge", "The edge of the view: walk me on with WASD.")); return; }
@@ -1808,21 +1808,24 @@ function drawSlimeSay() {
 /** The slime says something, in the first person, for secs seconds. */
 function say(text, secs) { slimeSay = { text: String(text), t0: tnow, len: secs || 3.4 }; }
 
-/* The slime says what it can do: brief tips in the first person, one at a time from
-   a moment after the world opens, each skipped once the visitor has done it; a phone
-   gets its own. Once a visit (sessionStorage), so switching views does not repeat
-   them. The same words stand in the HUD (#mh-tips, out of sight) for a screen reader. */
+/* The slime says what it can do: brief tips in the first person; a phone gets its
+   own. When, is tips.js (MH_TIPS), as in the other views: the village's
+   introduction ("intro") first, a moment after the world opens and a quiet spell
+   apart; the rest only in a long lull; each skipped once the visitor has done it,
+   and said once, remembered in this browser (so neither the next visit nor the 3D
+   view says the same words again). Never in build mode or over a card. The same
+   words stand in the HUD (#mh-tips, out of sight) for a screen reader. */
 function tipList() {
   const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
   if (touch) return [
-    ["tap", "world.tip.tap", "I can go where you tap."],
-    ["open", "world.tip.openTap", "I can open a house: tap it."],
+    ["tap", "world.tip.tap", "I can go where you tap.", "intro"],
+    ["open", "world.tip.openTap", "I can open a house: tap it.", "intro"],
   ];
   return [
-    ["walk", "world.tip.walk", "I can walk: the arrow keys, or WASD."],
+    ["walk", "world.tip.walk", "I can walk: the arrow keys, or WASD.", "intro"],
     ["tap", "world.tip.click", "I can go where you click."],
-    ["open", "world.tip.open", "I can open a house: press E beside it, or click it."],
-    ["next", "world.tip.next", "I can visit the next house: press Space."],
+    ["open", "world.tip.open", "I can open a house: press E beside it, or click it.", "intro"],
+    ["next", "world.tip.next", "I can visit the next house: press Space.", "intro"],
   ].concat(T.wayfinding.recall ? [["plaza", "world.tip.plaza", "I can go back to the plaza: press G."]] : [])
    .concat([["mute", "world.tip.mute", "I can go quiet: press M."]]);
 }
@@ -1831,18 +1834,25 @@ let tipsStarted = false;
 function startTips() {
   if (tipsStarted) return; tipsStarted = true;
   writeTips(); document.addEventListener("mh:lang", writeTips);
-  try { if (window.sessionStorage && sessionStorage.getItem("mh-tips-iso")) return; sessionStorage.setItem("mh-tips-iso", "1"); } catch (e) { /* private: tell them anyway */ }
-  const tips = tipList();
-  let i = 0;
-  const next = () => {
-    while (i < tips.length && used[tips[i][0]]) i++;
-    if (i >= tips.length) return;
-    const [, key, en] = tips[i++];
-    if (mode === "walking" && !buildMode) say(tr(key, en), 3.4);
-    setTimeout(next, 4100);
-  };
-  setTimeout(next, 1600);
+  const M = window.MH_TIPS; if (!M) return;                     // tips.js not loaded (a harness): the slime keeps quiet
+  M.start({
+    tips: tipList().map(([what, key, en, intro]) => ({ en, intro: intro === "intro", text: () => tr(key, en), done: () => !!used[what] })),
+    say: (text) => say(text, 3.4),
+    saying: () => !!slimeSay && tnow - slimeSay.t0 < slimeSay.len,
+    busy: () => mode !== "walking" || buildMode,
+  });
 }
+/* Build mode's own tips, said in answer to the visitor, once each (tips.js tell):
+   [its key, its English words]. */
+const BUILD_TIPS = {
+  move: ["world.tip.build", "I can move that: press B, for Build."],
+  build: ["world.tip.building", "I can build: drag a building to move it, or pick a tool."],
+  keys: ["world.tip.buildKeys", "With the keys: the arrows move my pointer, and Enter builds, picks up, or puts down."],
+};
+/** The slime says a build tip unless it has said it before. @returns {boolean} whether it spoke */
+function tellTip([key, en], secs) { const M = window.MH_TIPS; return !!M && M.tell(en, () => say(tr(key, en), secs)); }
+/** A build tip the visitor no longer needs: never said. */
+function settleTip([, en]) { const M = window.MH_TIPS; if (M) M.settle(en); }
 
 function drawToast() {
   if (tnow > toastUntil) return;

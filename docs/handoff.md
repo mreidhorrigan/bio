@@ -52,7 +52,7 @@ learned and what is left.
 All of these run at low priority; run them one at a time.
 
 ```
-node --test *.test.mjs                              # sounds, world maths, signal-tower wiring
+node --test *.test.mjs                              # sounds, the slime's tips, world maths, signal-tower wiring
 node storage/selftest.js                            # the iso engine in every skin
 node tools/probe-runner.mjs __keys-a11y.html ...    # probes, by name (brand/backstage/probes)
 taskpolicy -b nice -n 15 python3 tools/i18n-check.py glossary.html   # the French, a page at a time

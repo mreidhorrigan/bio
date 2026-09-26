@@ -328,31 +328,46 @@
   });
 
   /* ── the slime says what it can do ──────────────────────────────────────
-     In the first person, briefly, one at a time from a moment after the start,
-     in a bubble over the slime; a tip is skipped once the visitor has done what it
-     says. A phone gets its own. Once a visit (sessionStorage). The same words stand
-     in the page (#tips, out of sight) for a screen reader, in the reader's language. */
+     In the first person, briefly, in a bubble over the slime; a phone gets its
+     own. When, is tips.js (MH_TIPS), as in the other views: each place's
+     introduction ("intro") first, a moment after the slime arrives there and a
+     quiet spell apart; the rest only in a long lull; each skipped once the visitor
+     has done it, and said once, remembered in this browser (so neither the next
+     visit nor the iso view says the same words again). The same words stand in the
+     page (#tips, out of sight) for a screen reader, in the reader's language. */
   const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
   const TIPS = touch ? [
-    ["tap", "slimeverse3d.tip.tap", "I can go where you tap."],
+    ["tap", "slimeverse3d.tip.tap", "I can go where you tap.", "intro"],
     ["turn", "slimeverse3d.tip.turn", "I can turn: drag sideways."],
     ["zoom", "slimeverse3d.tip.pinch", "I can come nearer: pinch, or + and −."],
-    ["open", "slimeverse3d.tip.openTap", "I can open a house: walk me in, or tap its door."],
-    ["light", "slimeverse3d.tip.lightTap", "I can climb out: tap the light."],
+    ["open", "slimeverse3d.tip.openTap", "I can open a house: walk me in, or tap its door.", "intro"],
+    ["light", "slimeverse3d.tip.lightTap", "I can climb out: tap the light.", "intro"],
   ] : [
-    ["walk", "slimeverse3d.tip.walk", "I can walk: the arrow keys, or WASD."],
+    ["walk", "slimeverse3d.tip.walk", "I can walk: the arrow keys, or WASD.", "intro"],
     ["hurry", "slimeverse3d.tip.hurry", "I can hurry: hold shift."],
     ["tap", "slimeverse3d.tip.click", "I can go where you click."],
     ["turn", "slimeverse3d.tip.look", "I can look around: drag."],
     ["zoom", "slimeverse3d.tip.zoom", "I can come nearer: scroll, or + and −."],
-    ["open", "slimeverse3d.tip.open", "I can open a house: walk me in, or click its door."],
+    ["open", "slimeverse3d.tip.open", "I can open a house: walk me in, or click its door.", "intro"],
     ["mute", "slimeverse3d.tip.mute", "I can go quiet: press M."],
-    ["next", "slimeverse3d.tip.next", "I can visit the next house: press Space."],
-    ["light", "slimeverse3d.tip.light", "I can climb out: click the light."],
+    ["next", "slimeverse3d.tip.next", "I can visit the next house: press Space.", "intro"],
+    ["light", "slimeverse3d.tip.light", "I can climb out: click the light.", "intro"],
   ];
   const tipsEl = document.getElementById("tips");
   const writeTips = () => { if (tipsEl) tipsEl.textContent = TIPS.map(([, key, en]) => t(key, en)).join(" "); };
   writeTips(); document.addEventListener("mh:lang", writeTips);
+  // A tip waits for a place where it holds: the houses are opened from the village;
+  // in the house the walls keep the camera as near as it can come, so "I can come
+  // nearer" is told outdoors or in the cave; the way out through the light is the cave's.
+  const where = () => W.scene().split("@")[0];
+  const holds = { open: () => where() === "outdoors", zoom: () => where() !== "indoors", light: () => where() === "cave" };
+  const tips = window.MH_TIPS && window.MH_TIPS.start({
+    tips: TIPS.map(([what, key, en, intro]) => ({ en, intro: intro === "intro", text: () => t(key, en), holds: holds[what], done: () => !!used[what] })),
+    say: (text) => W.say(text, 3.4),
+    saying: () => W.saying(),
+    busy: () => !!(card && !card.hidden) || !!W.me.launch || W.fading(),
+    area: where,
+  });
   // what the visitor has done already, so the slime does not tell them
   const zoom0 = W.controls.pref;
   document.addEventListener("keydown", (e) => {
@@ -362,28 +377,11 @@
     if (k === "m") used.mute = true;
   });
   const watch = setInterval(() => {
+    if (!tips || !tips.left()) { clearInterval(watch); return; }  // nothing left to tell
     const C = W.controls;
     if (W.me.goal) used.tap = true;
     if (C.look || C.tilt || C.turn) used.turn = true;
     if (Math.abs(C.pref - zoom0) > 1e-6) used.zoom = true;
     if (W.me.launch) used.light = true;
   }, 200);
-  // A tip waits for a place where it holds: in the house the walls keep the camera as
-  // near as it can come, so "I can come nearer" is told outdoors or in the cave; the
-  // way out through the light is told in the cave.
-  const holds = { zoom: () => !W.scene().startsWith("indoors"), light: () => W.scene() === "cave" };   // the light is the cave's
-  const told = new Set();
-  function nextTip() {
-    const left = TIPS.filter(([what]) => !used[what] && !told.has(what));
-    if (!left.length) { clearInterval(watch); return; }
-    const ready = left.find(([what]) => !holds[what] || holds[what]());
-    if (!ready) { setTimeout(nextTip, 2000); return; }           // only a tip that waits for elsewhere is left
-    told.add(ready[0]);
-    W.say(t(ready[1], ready[2]), 3.4);
-    setTimeout(nextTip, 4100);
-  }
-  // once a visit, as in the iso world, so switching views does not repeat them
-  let before = false;
-  try { before = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-3d")); if (!before) sessionStorage.setItem("mh-tips-3d", "1"); } catch (e) { /* private: tell them anyway */ }
-  if (!before) setTimeout(nextTip, 1600); else clearInterval(watch);
 })();

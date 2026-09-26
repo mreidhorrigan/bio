@@ -8,6 +8,9 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
 - Sounds: every sound in the worlds is a recipe in `sounds.js`, played by name
   from `engine.js` and `verse3d.js`; change sounds only there, and run
   `node --test sounds.test.mjs`.
+- The slime's instructions: when it speaks is `tips.js`, the same in every
+  world (its words stay with each view, `brand/backstage/world-style.md`
+  section 6). Change the pacing only there, and run `node --test tips.test.mjs`.
 - Starting a new session: `docs/handoff.md` (where things are, how M. wants the
   work done, how to check a change, what is left).
 - Accessibility: `docs/accessibility.md` (what a keyboard and a screen reader

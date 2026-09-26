@@ -846,9 +846,11 @@
 
   /* ── the slime says what it can do ──────────────────────────────────────
      Brief tips in the first person, in a bubble over the slime (drawn as the 3D
-     village and the iso world draw it), one at a time from a moment after the
-     start, each skipped once the reader has done it; a phone gets its own. Once a
-     visit. The same words stand in the page (#tips, out of sight) for a screen reader. */
+     village and the iso world draw it); a phone gets its own. When, is tips.js
+     (MH_TIPS), as in the villages: the glossary's introduction ("intro") first, a
+     moment after the start and a quiet spell apart; the rest only in a long lull;
+     each skipped once the reader has done it, and said once, remembered in this
+     browser. The same words stand in the page (#tips, out of sight) for a screen reader. */
   let saying = null;
   const used = {};
   function sayTip(text, secs) { saying = { text: String(text), t0: performance.now() / 1000, len: secs || 3.4 }; }
@@ -1129,13 +1131,13 @@
   {
     const touch = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
     const tips = touch ? [
-      ["walk", "glossary.tip.tap", "I can walk to a word: tap where I should go."],
-      ["read", "glossary.tip.read", "I can show you a word's gloss: tap the word."],
+      ["walk", "glossary.tip.tap", "I can walk to a word: tap where I should go.", "intro"],
+      ["read", "glossary.tip.read", "I can show you a word's gloss: tap the word.", "intro"],
       ["light", "glossary.tip.lightTap", "I can go back to the village: tap a light."],
     ] : [
-      ["walk", "glossary.tip.walk", "I can walk to a word: the arrow keys, or click where I should go."],
+      ["walk", "glossary.tip.walk", "I can walk to a word: the arrow keys, or click where I should go.", "intro"],
       ["hurry", "glossary.tip.hurry", "I can hurry: hold shift."],
-      ["next", "glossary.tip.next", "I can go to the next word: press Space."],
+      ["next", "glossary.tip.next", "I can go to the next word: press Space.", "intro"],
       ["jump", "glossary.tip.jump", "I can jump: Home to the first word, End to the last, Page Down into the dark."],
       ["light", "glossary.tip.light", "I can go back to the village: click a light."],
     ];
@@ -1149,23 +1151,23 @@
       if (k === "shift") used.hurry = true;
     });
     cv.addEventListener("pointerdown", () => { used.walk = true; });   // (a click on a light: climb() marks used.light)
-    let told = false;
-    try { told = !!(window.sessionStorage && sessionStorage.getItem("mh-tips-glossary")); if (!told) sessionStorage.setItem("mh-tips-glossary", "1"); } catch (e) { /* private: tell them anyway */ }
-    let i = 0;
-    const next = () => {
-      while (i < tips.length && used[tips[i][0]]) i++;
-      if (i >= tips.length) return;
-      const [, key, en] = tips[i++];
-      sayTip(T(key, en), 3.6);
-      setTimeout(next, 4300);
-    };
-    if (!told) setTimeout(next, 1400);
-    // When the keyboard reaches the picture, the slime says so (there is no outline round it)
+    // a light is told of where there is daylight to click: not deep in the dark
+    const holds = { light: () => caveT(S.me.x) < 0.5 };
+    if (window.MH_TIPS) window.MH_TIPS.start({
+      tips: tips.map(([what, key, en, intro]) => ({ en, intro: intro === "intro", text: () => T(key, en), holds: holds[what], done: () => !!used[what] })),
+      say: (text) => sayTip(text, 3.6),
+      saying: () => !!saying && performance.now() / 1000 - saying.t0 < saying.len,
+      busy: () => leaving,
+    });
+    // When the keyboard reaches the picture, the slime says so (there is no outline round
+    // it): each time the page opens, not once for good, for it stands in for the outline
     let heard = false;
     cv.addEventListener("focus", () => {
       if (heard || !cv.matches(":focus-visible")) return;
       heard = true;
       sayTip(T("glossary.tip.focus", "I can take your keys now: the arrows walk me, Space goes to the next word."), 3.8);
+      // that tells the walk and Space already: the slime need not say them again
+      if (window.MH_TIPS) for (const [what, , en] of tips) if (what === "walk" || what === "next") window.MH_TIPS.settle(en);
     });
   }
   document.addEventListener("mh:lang", () => { if (active) show(active, true); else hello(); });
