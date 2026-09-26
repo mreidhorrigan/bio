@@ -411,9 +411,11 @@ the essentials:
 4. **The serial comma, always.** Three or more items take a comma before the
    conjunction: `the tools, the games, and the music`. Chicago made explicit.
 5. **Plain, active, concrete.** Short sentences. Say what the control does.
+6. **A run-in title takes a colon.** `*Grading:* As I understand it …`, never
+   `*Grading.*` (Chicago's period is overruled).
 
-A linter for rules 1–3 lives in the local-only `house-style-private/` workshop
-(`scan-style.py`), kept out of the repo. It also warns on a series that looks
+A linter for rules 1–3 and 6 lives in the local-only workshop
+(`storage/house-style/house-style-private-workshop/scan-style.py`), kept out of the repo. It also warns on a series that looks
 like it is missing rule 4's comma, which needs a human eye: some of what it
 catches is a compound, not a series.
 

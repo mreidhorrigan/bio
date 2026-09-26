@@ -13,7 +13,7 @@ description: >-
 
 The site has one writing voice, the way it has one visual language. This skill is
 the source of truth for that voice. The visual rules live beside it in
-`brand/house-style.md` (section 11 summarizes these same rules).
+`brand/backstage/house-style.md` (section 10 summarizes these same rules).
 
 ## When this applies
 
@@ -102,7 +102,20 @@ It earns its keep on the sentences where the last two items would otherwise
 read as one thing: `the tools, the games, and the music` is three offerings,
 `the tools, the games and the music` can be read as two.
 
-### 8. Default to Chicago.
+### 8. A run-in title takes a colon.
+
+A title that opens a paragraph and runs straight into its text (a run-in title,
+set in italics or bold) always ends in a **colon**, never a period. Chicago sets
+a period here; the house style wins. Rule 5 still decides the next word's case.
+
+- ✓ `*Contingency, management, leadership:* I design courses for scalability …`
+- ✗ `*Contingency, management, leadership.* I design courses for scalability …`
+- ✓ `**Media samples:** matthorrigan.com (a walkable isometric site …)`
+
+A caption label (`Table 1.`) is not a run-in title. A bold lead that is itself a
+complete sentence keeps its period.
+
+### 9. Default to Chicago.
 
 For anything these house rules don't cover (hyphenation, number style, quotation
 and punctuation placement, capitalization edge cases), follow the **Chicago Manual
@@ -113,12 +126,14 @@ rather than an exception to it.
 ## Workflow when editing site copy
 
 1. Write or revise the prose following the rules above.
-2. Run the linter from the repo root:
-   `house-style-private/scan-style.py` (or name a file to check just it).
+2. Run the linter:
+   `python3 storage/house-style/house-style-private-workshop/scan-style.py`
+   (it finds the site's pages itself; or name a file, HTML or Markdown, to check just it).
    It strips comments and code, so it judges what ships. It exits non-zero on a
    spaced em dash.
-3. Skim the warnings (em-dash over-use, suspect semicolons) and fix real ones.
+3. Skim the warnings (em-dash over-use, suspect semicolons, run-in titles that
+   end in a period) and fix real ones.
 
-The linter and any private drafts live in the gitignored `house-style-private/`
-workshop. The committed brand docs are `brand/house-style.md`, `brand/tokens.json`,
-and `brand/brand.css`.
+The linter and any private drafts live in the gitignored `storage/house-style/`
+workshop. The committed brand docs are `brand/backstage/house-style.md`,
+`brand/backstage/tokens.json`, and `brand/brand.css`.
