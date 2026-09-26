@@ -1,0 +1,79 @@
+<!DOCTYPE html><meta charset="utf-8"><title>Nothing in the cave shows through the floor in front of it</title>
+<meta name="budget" content="120000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=cave" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The painter draws the cave's floor first (layers -1 and 0) and everything else
+// after it, whatever its depth. So a thing standing, lying or reflected BEHIND a rise
+// of the floor would paint over the rise. This walks the cave ring and, every few
+// frames, casts rays through points of each thing drawn after the floor: where the
+// floor meets the ray well before the thing, the thing shows through the floor.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine;
+    W.pause(); W.setMuted(true);
+    // every item a frame submits, in order; and a way to leave some out of a repaint
+    const got = []; let drop = null, n = 0;
+    for (const k of ["face", "organic", "custom", "line"]) {
+      const f = E[k].bind(E);
+      E[k] = (pts, a, b, c, o) => {
+        const opts = k === "custom" ? b : k === "line" ? c : o, i = n++;
+        got.push({ k, pts, o: opts || {} });
+        if (drop && drop.has(i)) return;
+        return f(pts, a, b, c, o);
+      };
+    }
+    // the first thing a ray from the camera meets, if it is the floor, and how far
+    function floorHit(dir, maxT) {
+      const S = W.S(), c = E.cam;
+      for (let t = 0.5; t < maxT; t += 0.5) {
+        const x = c.x + dir[0] * t, y = c.y + dir[1] * t, z = c.z + dir[2] * t;
+        if (y < S.floorAt(x, z) - 0.7) return t;   // under the floor as it is drawn: its strips lie 0.3 down, straight between five points across (up to 0.4 more at a crest)
+        if (!S.open(x, y, z) && !S.walkable(x, z)) return 0;   // rock first: not the floor's to hide
+      }
+      return 0;
+    }
+    const cv = E.g.canvas, k = cv.width / E.W;
+    const px = (x, y) => Array.from(E.g.getImageData(Math.round(x * k), Math.round(y * k), 1, 1).data);
+    const kinds = {}, cases = [];
+    let frames = 0, behind = 0, shown = 0;
+    const S = W.S(); var END = S.period;
+    for (let z = 20; z < END; z += 9) {
+      W.load("cave", { x: S.centre(z), z, yaw: 0 });
+      for (let i = 0; i < 4; i++) W.step(1 / 60);
+      got.length = 0; n = 0; drop = null; W.tick(1e-6); frames++;
+      if (!got.length) { say("nothing collected NO"); break; }
+      // things drawn after the floor whose middle is behind nearer floor
+      const hidden = [];
+      got.forEach((it, i) => {
+        if ((it.o.layer | 0) < 1 || !it.pts || !it.pts.length) return;
+        let cx = 0, cy = 0, cz = 0; for (const p of it.pts) { cx += p[0]; cy += p[1]; cz += p[2]; }
+        const m = [cx / it.pts.length, cy / it.pts.length, cz / it.pts.length], sp = E.project(m);
+        if (!sp || sp[2] < 4 || sp[0] < 2 || sp[0] > E.W - 2 || sp[1] < 2 || sp[1] > E.H - 2) return;
+        const [o, dir] = E.ray(sp[0], sp[1]), dist = Math.hypot(m[0] - o[0], m[1] - o[1], m[2] - o[2]), t = floorHit(dir, dist);
+        if (t && t < dist - 4) hidden.push({ i, sp, key: it.k + " layer " + (it.o.layer | 0), dist, t,
+          what: "camera z " + E.cam.z.toFixed(0) + ", at world z " + m[2].toFixed(0) + ", " + (m[1] - W.S().floorAt(m[0], m[2])).toFixed(1) + " over the floor, bias " + (it.o.bias || 0) + ", floor met at z " + (o[2] + dir[2] * t).toFixed(0) + " x off the middle " + (o[0] + dir[0] * t - W.S().centre(o[2] + dir[2] * t)).toFixed(1) + (() => { const hx = o[0] + dir[0] * t, hz = o[2] + dir[2] * t, P = W.pools().find((q) => Math.abs(((hz - q.z) % END + END * 1.5) % END - END / 2) < q.rz); return P ? ", in the pool at z " + P.z.toFixed(0) + " (level " + P.level.toFixed(1) + ", floor there " + W.S().floorAt(hx, hz).toFixed(1) + ", ray " + (o[1] + dir[1] * t).toFixed(1) + ")" : ""; })() });
+      });
+      if (!hidden.length) continue;
+      behind += hidden.length;
+      const before = hidden.map((h) => px(h.sp[0], h.sp[1]));
+      got.length = 0; n = 0; drop = new Set(hidden.map((h) => h.i)); W.tick(1e-6); drop = null;
+      hidden.forEach((h, j) => {
+        const after = px(h.sp[0], h.sp[1]), d = Math.max(...after.map((v, c) => Math.abs(v - before[j][c])));
+        if (d > 6) {                                           // it changed the pixel: it shows through the floor
+          shown++; kinds[h.key] = (kinds[h.key] || 0) + 1;
+          if (cases.length < 6) cases.push("at z " + z + ": a " + h.key + " " + h.dist.toFixed(0) + " away shows through floor " + h.t.toFixed(0) + " away (" + h.what + ")");
+        }
+      });
+    }
+    say("pools: " + W.pools().map((q) => "z " + q.z.toFixed(0) + " rz " + q.rz.toFixed(0) + " level " + q.level.toFixed(1)).join("; "));
+    say(frames + " places round the ring; " + behind + " things behind nearer floor; shown through it: " + shown + (shown ? " NO" : ""));
+    for (const [kk, v] of Object.entries(kinds).sort((a, b) => b[1] - a[1])) say("  " + v + "  " + kk);
+    for (const c of cases) say("  " + c);
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 2500));
+</script>

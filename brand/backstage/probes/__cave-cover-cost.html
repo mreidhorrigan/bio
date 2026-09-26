@@ -1,0 +1,37 @@
+<!DOCTYPE html><meta charset="utf-8"><title>What the floor's cover costs a cave frame</title>
+<meta name="budget" content="60000">
+<iframe id="f" src="/slimeverse3d.html?theme=technurture&place=cave" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// The cave walked round its ring, frame by frame, with the floor covering what is
+// behind it (engine-3d o.occlude) and without: the time a painted frame takes each
+// way, and how many covers were laid. Run it with PROBE_GPU=1 to time it as a
+// visitor's browser does: on the probes' usual software canvas the cover's copies
+// of the ground cost far more (26 Sept 2026: 18.1 ms a frame without, 17.4 with, on
+// the GPU; 38 and 103 on the software canvas).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const F = document.getElementById("f");
+F.addEventListener("load", () => setTimeout(() => {
+  try {
+    const w = F.contentWindow, W = w.MH_SLIMEVERSE3D, E = W.engine;
+    W.pause(); W.setMuted(true);
+    let off = false; const face = E.face.bind(E), custom = E.custom.bind(E);
+    E.face = (p, f, i, wd, o) => face(p, f, i, wd, off && o && o.occlude != null ? Object.assign({}, o, { occlude: undefined }) : o);
+    E.custom = (p, d, o) => custom(p, d, off && o && o.occlude != null ? Object.assign({}, o, { occlude: undefined }) : o);
+    const S = W.S(), run = () => {
+      let t = 0, n = 0, covers = 0;
+      for (let z = 20; z < S.period; z += 12) {
+        W.load("cave", { x: S.centre(z), z, yaw: 0 });
+        W.tick(1 / 60);
+        const t0 = performance.now(); W.tick(1 / 60); t += performance.now() - t0; n++; covers += E.tally.covered || 0;
+      }
+      return [t / n, covers / n];
+    };
+    run();                                                    // warm
+    off = true; const [a] = run(); off = false; const [b, c] = run();
+    say("a cave frame: " + a.toFixed(2) + " ms without the cover, " + b.toFixed(2) + " ms with it (" + ((b / a - 1) * 100).toFixed(0) + "% more), " + c.toFixed(1) + " covers laid a frame");
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}, 2500));
+</script>

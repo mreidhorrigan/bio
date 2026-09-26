@@ -175,6 +175,14 @@
       pools.push({ x: centre(z), z, rx: halfWidth(z) - 2, rz: Math.max(z - lo, hi - z) + 4, depth: 1.6 });
     }
     const wetZ = (z) => pools.some((p) => Math.abs(z - p.z) < p.rz);
+    /** Whether any of these floor points lies under a pool's water (its level as
+     *  verse3d.js sets it: the floor at the middle, plus the depth). */
+    const underWater = (pts) => pools.some((p) => {
+      const zz = pts[0][2] - END * Math.round((pts[0][2] - p.z) / END);   // the pool's copy nearest, round the ring
+      if (Math.abs(zz - p.z) > p.rz + STEP) return false;
+      const level = floorAt(p.x, p.z) + p.depth;
+      return pts.some((q) => q[1] < level + 0.35);
+    });
 
     // what stands in the cave: slime3d.js's five kinds
     const PROPS = [], solids = [];
@@ -208,14 +216,40 @@
     const detailAt = (z) => { const far = Math.abs(z - E.cam.z); return far > 130 ? 0 : far > 70 ? 1 : 2; };
     const inkFade = (z) => clamp((110 - Math.abs(z - E.cam.z)) / 60, 0, 1);
 
+    /* The floor in front hides what is behind it: a strip marked o.occlude lays its
+       pixels back over whatever farther was painted across it (engine-3d). Only a
+       crest can hide anything: a strip whose far edge shows above the near edge of
+       some strip farther on, at the same place across the cave (the floor dropping
+       away behind it). Found each frame from the camera, far to near; these strips'
+       z are kept in `crest` for the floor's rounded edges (buildWalls). Not a strip
+       under a pool's water, which shows over it. */
+    const crest = new Set();
     function buildFloor() {
-      const [z0, z1] = span(STEP);
+      const [z0, z1] = span(STEP), strips = [];
       for (let z = z0; z < z1; z += STEP) {
         const P = palZ(z + STEP / 2), pts = [];
         const cA = centre(z), cB = centre(z + STEP), wA = halfWidth(z) - RC(z) + 0.6, wB = halfWidth(z + STEP) - RC(z + STEP) + 0.6;
         for (let k = 0; k <= 4; k++) { const x = cA - wA + (2 * wA * k) / 4; pts.push([x, floorAt(x, z) - 0.3, z]); }
         for (let k = 4; k >= 0; k--) { const x = cB - wB + (2 * wB * k) / 4; pts.push([x, floorAt(x, z + STEP) - 0.3, z + STEP]); }
-        E.face(pts, P.rockLo, null, 0, { layer: -1 });
+        strips.push({ z, P, pts });
+      }
+      crest.clear();
+      const low = [-Infinity, -Infinity, -Infinity, -Infinity, -Infinity];   // lowest on screen any farther strip's near edge reaches, at each place across
+      const ahead = Math.cos(E.cam.yaw) >= 0;                  // which way along the cave is away from the eye
+      // the pools count as farther ground too, at their near rim (one can lie past the floor's end)
+      const rims = pools.map((p) => { const zz = p.z + END * Math.round((E.cam.z - p.z) / END), zn = zz - (ahead ? p.rz : -p.rz) * 0.8;
+        return { z: zn, at: E.project([p.x, floorAt(p.x, p.z) + p.depth, zn]) }; }).filter((r) => r.at);
+      for (let j = 0; j < strips.length; j++) {
+        const st = strips[ahead ? strips.length - 1 - j : j], pts = st.pts, zFar = ahead ? st.z + STEP : st.z;
+        for (const r of rims) if (r.at && (ahead ? r.z >= zFar : r.z <= zFar)) { for (let k = 0; k <= 4; k++) low[k] = Math.max(low[k], r.at[1]); r.at = null; }
+        let hides = false;
+        for (let k = 0; k <= 4; k++) {
+          const far = E.project(pts[ahead ? 9 - k : k]), near = E.project(pts[ahead ? k : 9 - k]);
+          if (far && far[1] < low[k] - 1) hides = true;
+          if (near && near[1] > low[k]) low[k] = near[1];
+        }
+        if (hides && !underWater(pts)) crest.add(st.z);
+        E.face(pts, st.P.rockLo, null, 0, crest.has(st.z) ? { layer: -1, occlude: STEP } : { layer: -1 });
       }
       const [b0, b1] = span(4);
       for (let z = b0; z < b1; z += 4) {
@@ -243,7 +277,7 @@
             // the colour turns smoothly from floor to wall to roof, band by band,
             // and each band is sealed in its own colour so no seam shows between
             const up = (qa[3] + pa[3]) / 2, col = up >= 0 ? mix(P.wall, P.rockLo, up) : mix(P.wall, P.roof, -up);
-            E.face([[pa[0], pa[1], z], [qa[0], qa[1], z], [qb[0], qb[1], z2], [pb[0], pb[1], z2]], col, null, 0, { layer: up > 0.55 ? -1 : 2, bias: -STEP });
+            E.face([[pa[0], pa[1], z], [qa[0], qa[1], z], [qb[0], qb[1], z2], [pb[0], pb[1], z2]], col, null, 0, up > 0.55 ? (crest.has(z) ? { layer: -1, occlude: STEP } : { layer: -1 }) : { layer: 2, bias: -STEP });   // the floor's rounded edge, at a crest, hides what is behind it as the floor does
             pa = profile(side, z, k / segs); pb = profile(side, z2, k / segs);
           }
         }
@@ -1367,6 +1401,7 @@
     const L = SK.life;
     return {
       name: "Outdoors", skin: SK.id, seen: SEEN, period: PER, sea: FLAT ? null : { level: LEVEL }, floorAt, ceilAt: null, pal, solids,
+      kiosks: gates.map((q) => ({ title: q.title, x: q.x, z: q.z, accent: q.accent })),   // the menu's houses, in order, with their colours: for a page's wayfinding
       walk: SK.speed * TILE,                                   // the iso walk: its tiles a second, in units a second
       pools: [], mirrorAlpha: NIGHT ? 0.25 : 0.4, fogFrom: FOG0, fog, night: NIGHT, slime: SK.slime, signStyle: SK.sign, audio: SK.audio, dynSolids,
       /** iso tiles to world units and back, for a host page syncing the two views */

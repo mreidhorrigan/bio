@@ -31,7 +31,10 @@
    organic body's outline, for a sheen or an eye). o.rough ({ tufts, depth,
    seed, flick, sway, round }) gives an organic body a tufted outline in place of the
    smooth one: fur, a tuft of moss, a torn leaf, or with round, a lumpy mass. A custom item is mirrored
-   in a pool only when it asks, with o.mirror.
+   in a pool only when it asks, with o.mirror. A ground face (layer 0 or below)
+   with o.occlude (a bias, as o.bias) hides what is behind it: at its turn in each
+   upper layer it paints the ground back over what farther was drawn across it (a
+   world marks only its crests, where the floor drops away; see "the floor in front").
 
    MIRRORS: mirror(ring, o) declares a reflecting surface (a pool) by the ring
    of world points that bounds it, o.level (its still height) and o.surface(x,
@@ -457,7 +460,7 @@
     /** Project, cull, sort and draw everything collected since begin(). */
     E.paint = () => {
       if (mirrors.length) reflect(); else E.tally.mirrored = 0;
-      const n = NEAR(), ready = [];
+      const n = NEAR(), ready = [], occluders = [];
       E.tally.items = items.length; E.tally.culled = 0;
       for (let i = 0; i < items.length; i++) {
         const it = items[i], o = it.o, vs = [];
@@ -487,6 +490,7 @@
           entry.sp = c.map(E.screen);
           const b1 = bounds(entry.sp);
           if (offscreen(b1) || outsideMirror(o, b1)) { E.tally.culled++; continue; }
+          if (o && o.occlude != null && entry.layer <= 0) occluders.push({ sp: entry.sp, bb: b1, key: depth + o.occlude });
         } else if (it.k === 2) {                             // a path: cut where it passes the eye
           const runs = []; let run = [];
           for (const v of vs) { if (v[2] > n) run.push(E.screen(v)); else if (run.length) { runs.push(run); run = []; } }
@@ -533,11 +537,24 @@
           e.faded = b && sp[0] > b.x && sp[0] < b.x + b.w && sp[1] > b.y && sp[1] < b.y + b.h ? 1 : 0;
         }
       }
+      // The floor in front: a ground face marked o.occlude (a number, its bias: a cave
+      // floor's crests, which the world marks, as laying every strip cost a frame two
+      // thirds more) paints the ground back in each upper layer at its place in the
+      // depth order, over whatever farther was drawn across it (paintCovered).
+      const focus = E.focus && !E.focus.off;
+      let covering = false;
+      if (occluders.length && !focus) {
+        const layers = new Set();
+        for (const e of ready) if (e.layer >= 1) layers.add(e.layer);
+        for (const L of layers) for (const q of occluders) { ready.push({ cover: true, layer: L, key: q.key, sp: q.sp, bb: q.bb, i: 1e9 }); covering = true; }
+      }
       // Lower layers first; within a layer, far to near; equal depths keep their
       // order, or coplanar neighbours would swap from frame to frame and crawl.
       ready.sort((a, b) => (a.layer - b.layer) || (b.key - a.key) || (a.i - b.i));
       g.lineJoin = "round"; g.lineCap = "round";
-      if (E.focus && !E.focus.off) paintInFocus(ready);
+      E.tally.covered = 0;
+      if (focus) paintInFocus(ready);
+      else if (covering) paintCovered(ready);
       else { for (const e of ready) draw(e); flushMirrors(); }   // (flush: if the frame ended inside a run of reflections)
       E.tally.drawn = ready.length;
       return ready.length;
@@ -611,6 +628,58 @@
       g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "low";
       g.drawImage(src, 0, 0, src.width, src.height, 0, 0, canvas.width, canvas.height);
       g.restore();
+    }
+    /* ── the floor in front ────────────────────────────────────────────────
+       The ground is painted first (layers 0 and below) and everything else after
+       it, so a thing behind a rise of the floor showed through the rise: a far
+       wall, a lobe, a pool, dark with haze, laid over the nearer floor of a cave
+       (26 Sept 2026). So the ground is painted into a canvas of its own, laid onto
+       the frame, and each floor strip that asked (o.occlude: the world marks its
+       crests), when its turn comes in each upper layer's far-to-near order, fills its
+       shape with that ground again, over whatever farther was drawn across it since.
+       Only where something was: a strip nothing crossed costs nothing. (Copying the
+       frame itself partway through made the browser finish and copy it twice a
+       frame, and a clip made a mask of the whole frame for every strip.) */
+    let fcv = null, fctx = null;
+    function paintCovered(ready) {
+      if (!fcv) { fcv = document.createElement("canvas"); fctx = /** @type {CanvasRenderingContext2D} */ (fcv.getContext("2d")); }
+      if (fcv.width !== canvas.width || fcv.height !== canvas.height) { fcv.width = canvas.width; fcv.height = canvas.height; }
+      fctx.setTransform(1, 0, 0, 1, 0, 0); fctx.clearRect(0, 0, fcv.width, fcv.height);
+      fctx.setTransform(E.dpr, 0, 0, E.dpr, 0, 0); fctx.lineJoin = "round"; fctx.lineCap = "round";
+      let layer = -Infinity, dirty = null, pat = null;
+      const lay = () => {                                      // the ground onto the frame, once
+        cur = g; g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(fcv, 0, 0); g.restore();
+        pat = g.createPattern(fcv, "no-repeat");
+        if (pat && pat.setTransform) pat.setTransform(new DOMMatrix([1 / E.dpr, 0, 0, 1 / E.dpr, 0, 0]));
+      };
+      cur = fctx;
+      for (const e of ready) {
+        if (e.layer !== layer) { if (layer <= 0 && e.layer >= 1) lay(); layer = e.layer; dirty = null; }
+        if (e.cover) {
+          const b = e.bb;
+          if (!pat || !dirty || b.x > dirty[1] || b.x + b.w < dirty[0] || b.y > dirty[3] || b.y + b.h < dirty[2]) continue;
+          flushMirrors();
+          const sp = e.sp;
+          // a pixel wider all round: two neighbouring strips' antialiased edges each let a
+          // little through along the line they share, and a hairline of what is behind showed
+          const cx = b.x + b.w / 2, cy = b.y + b.h / 2, grow = (q) => { const dx = q[0] - cx, dy = q[1] - cy, m = Math.hypot(dx, dy) || 1; return [q[0] + dx / m, q[1] + dy / m]; };
+          g.beginPath(); let q0 = grow(sp[0]); g.moveTo(q0[0], q0[1]);
+          for (let j = 1; j < sp.length; j++) { q0 = grow(sp[j]); g.lineTo(q0[0], q0[1]); }
+          g.closePath(); g.globalAlpha = 1; g.fillStyle = pat; g.fill();
+          E.tally.covered++;
+          continue;
+        }
+        draw(e);
+        if (layer >= 1) {                                      // what this layer has drawn so far, as a box
+          const b = e.bb || (e.sp && e.sp.length > 1 ? bounds(e.sp) : null) || (e.runs ? bounds(e.runs.flat()) : null);
+          if (b) dirty = dirty ? [Math.min(dirty[0], b.x), Math.max(dirty[1], b.x + b.w), Math.min(dirty[2], b.y), Math.max(dirty[3], b.y + b.h)]
+            : [b.x, b.x + b.w, b.y, b.y + b.h];
+          else dirty = [-1e9, 1e9, -1e9, 1e9];                 // a billboard: its reach is its own, so assume anywhere
+        }
+      }
+      if (layer <= 0) lay();
+      flushMirrors();
+      cur = g;
     }
     function paintInFocus(ready) {
       const F = E.focus, scale = F.scale || [1 / 3, 1 / 1.7], blur = F.blur || [1.2, 0.6];

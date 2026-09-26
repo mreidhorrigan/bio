@@ -54,7 +54,9 @@ const base = `http://127.0.0.1:${server.address().port}/brand/backstage/probes/`
 /* ── one Chrome, at background priority ────────────────────────────────── */
 const profile = mkdtempSync(join(tmpdir(), "probes-"));
 const port = 9400 + Math.floor(Math.random() * 400);
-const args = ["--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars", "--mute-audio", "--window-size=1280,900",
+// PROBE_GPU=1 leaves the GPU on, as a visitor's browser has it: for timing canvas work,
+// which a software canvas (the default here) makes look far dearer than it is
+const args = ["--headless=new", ...(process.env.PROBE_GPU ? [] : ["--disable-gpu"]), "--no-sandbox", "--hide-scrollbars", "--mute-audio", "--window-size=1280,900",
   "--remote-debugging-port=" + port, "--user-data-dir=" + profile, "about:blank"];
 const chrome = spawn("taskpolicy", ["-b", CHROME, ...args], { stdio: "ignore" });
 // however this ends (done, an error, Ctrl-C), the browser goes with it: a Chrome left

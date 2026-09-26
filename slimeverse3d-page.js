@@ -169,6 +169,7 @@
     skin, doors: "menus", onOpen, towers: () => TOWERS, towerState,
     onScene() { reflect(true); },
     onFrame() {
+      edgeMarkers();
       if (!card || card.hidden) { cardAt = null; return; }
       const here = { x: W.me.x, z: W.me.z, scene: W.scene() };
       if (!cardAt) cardAt = here;
@@ -177,6 +178,50 @@
   });
   // @ts-ignore: for probes and the console
   window.MH_SLIMEVERSE3D = W;
+
+  /* ── which way the houses are: the iso village's edge markers ──────────
+     Outdoors, while no house of the menu is in sight, each one gets a numbered
+     arrow in its colour at the edge of the frame, pointing its way, as the iso
+     village draws them (engine.js drawEdgeMarkers), and the menu of houses fades
+     in (as the iso nav-bar does). A house behind the eye points down, to its side.
+     Not in the house or the cave, where there is no village to lose. */
+  let housesOut = false, markFont = "";
+  function edgeMarkers() {
+    const S = W.S(), E = W.engine, g = E.g;
+    const out = !!(S && S.kiosks && W.scene().startsWith("outdoors") && !W.fading() && (!card || card.hidden));
+    const P = (S && S.period) || 0, img = (v, ref) => (P ? v + P * Math.round((ref - v) / P) : v);
+    let seen = false;
+    const spots = out ? S.kiosks.map((k, i) => {
+      const x = img(k.x, E.cam.x), z = img(k.z, E.cam.z), p = [x, S.floorAt(x, z) + 6, z], v = E.view(p);
+      const sp = E.project(p), d = Math.hypot(x - E.cam.x, z - E.cam.z);
+      if (sp && d < (S.seen || 240) && sp[0] >= 0 && sp[0] <= E.W && sp[1] >= 0 && sp[1] <= E.H) seen = true;
+      return { k, i, sp, v };
+    }) : [];
+    const was = housesOut;
+    housesOut = out && !seen;
+    if (was !== housesOut && menuShown) menuShown();
+    if (!housesOut) return;
+    const cx = E.W / 2, cy = E.H / 2, m = 30, ix = cx - m, iy = cy - m;
+    g.save();
+    markFont = markFont || "700 12px " + (getComputedStyle(document.body).getPropertyValue("--sans-font").trim() || "system-ui, sans-serif");
+    g.font = markFont;
+    g.textAlign = "center"; g.textBaseline = "middle";
+    for (const { k, i, sp, v } of spots) {
+      const dx0 = sp ? sp[0] - cx : v[0], dy0 = sp ? sp[1] - cy : Math.abs(v[2]) * 0.8 + 1;   // behind: down, to its side
+      const a = Math.atan2(dy0, dx0), dx = Math.cos(a), dy = Math.sin(a);
+      const t = Math.min(Math.abs(dx) > 1e-4 ? ix / Math.abs(dx) : Infinity, Math.abs(dy) > 1e-4 ? iy / Math.abs(dy) : Infinity);
+      const x = cx + dx * t, y = cy + dy * t, col = k.accent || "#5b2a86";
+      g.save(); g.translate(x, y); g.rotate(a);                // the arrow points outward, toward the house
+      g.globalAlpha = 0.96; g.fillStyle = col;
+      g.beginPath(); g.moveTo(17, 0); g.lineTo(8, -6); g.lineTo(8, 6); g.closePath(); g.fill();
+      g.restore();
+      g.globalAlpha = 0.96; g.fillStyle = col; g.strokeStyle = "rgba(0,0,0,0.35)"; g.lineWidth = 1;
+      g.beginPath(); if (g.roundRect) g.roundRect(x - 12, y - 11, 24, 22, 8); else g.rect(x - 12, y - 11, 24, 22); g.fill(); g.stroke();
+      g.globalAlpha = 1; g.fillStyle = "#ffffff"; g.fillText(String(i + 1), x, y + 1);
+    }
+    g.restore();
+  }
+  let menuShown = null;                                        // set with the menu, below: shows it while the houses are out of sight
 
   /** Into the Slimeverse 3D house, its way out leading back to its own door. */
   function enterHouse() { W.setBack("outdoors", "home"); W.load("indoors", "door"); }
@@ -290,9 +335,12 @@
       const title = t("kiosk." + k.title + ".title", k.title);
       chip("slimeverse3d.navchip", "{n}. {title}", { n: i + 1, title }, () => onOpen({ kind: "kiosk", title: k.title, kiosk: k }, { click: true }));
     });
-    const showMenu = (on) => { navbar.hidden = !on; menuBtn.setAttribute("aria-expanded", String(on)); };
-    menuBtn.addEventListener("click", () => showMenu(navbar.hidden));
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !navbar.hidden) showMenu(false); });
+    // open with the button, or of itself while no house is in sight (as the iso nav-bar)
+    let menuOpen = false;
+    const showMenu = (on) => { menuOpen = on; menuBtn.setAttribute("aria-expanded", String(on)); menuShown(); };
+    menuShown = () => { navbar.hidden = !(menuOpen || housesOut || navbar.contains(document.activeElement)); };
+    menuBtn.addEventListener("click", () => showMenu(!menuOpen));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && menuOpen) showMenu(false); });
   }
   /* ── Space: the next house ─────────────────────────────────────────────
      As in the iso village: the slime goes to the front of the next house on the
