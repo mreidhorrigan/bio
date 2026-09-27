@@ -253,6 +253,7 @@ CARD = """\t<!-- The title card in front of the machine translation (title-card.
 \t<script>
 \tif (window.MH_TITLE_CARD) window.MH_TITLE_CARD.show({
 \t\tid: "rockwallsmt",
+\t\tcolour: "#5b2a86",                                          // violet (the house --accent): its own, as each card has
 \t\tkicker: "This machine translation is presented",
 \t\tmark: "FR",
 \t\ttitle: "Rock walls and damp\\u2014these match our dream; but, Rector, the cold is new",

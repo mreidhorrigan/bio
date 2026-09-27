@@ -1,0 +1,46 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The title cards on phones: nothing collides, the top can be reached, each its own colour</title>
+<meta name="budget" content="40000">
+<pre id="out">running</pre>
+<script>
+// Each title card at two phone sizes. What it says: whether any two of the card's parts
+// overlap (the switch, the kicker, the box, the author's words, the by-line and name,
+// the buttons, the status line, the corner lines), and whether the card's top can be
+// scrolled to (a card taller than the screen, centred, once hid its top above it).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const PAGES = [["Rock Walls", "/Rock_Walls_and_Damp.html"], ["Rock Walls, French", "/Rock_Walls_and_Damp.html?lang=fr"],
+  ["machine translation", "/Rock_Walls_and_Damp_fr.html?lang=fr"], ["Autofac", "/autofac.html"], ["CGSA", "/cgsa2026.html?relay=brand/backstage/probes/fake-relay/"]];
+const SIZES = [[390, 844], [360, 640]];
+const PARTS = [".mhtc-lang", ".mhtc-kicker", ".mhtc-box", ".mhtc-text", ".mhtc-by", ".mhtc-author", ".mhtc-ways", ".mhtc-status", ".mhtc-left", ".mhtc-right"];
+let bad = 0, left = PAGES.length * SIZES.length;
+const colours = {};                                          // each card's own colour, by page: all must differ
+for (const [name, url] of PAGES) for (const [w, h] of SIZES) {
+  const f = document.createElement("iframe"); f.src = url; f.style.cssText = "width:" + w + "px;height:" + h + "px;border:0";
+  f.addEventListener("load", () => setTimeout(() => {
+    try {
+      const d = f.contentWindow.document, card = d.querySelector(".mhtc");
+      if (!card) { say(name + " " + w + "×" + h + ": the card MISSING"); bad++; return; }
+      card.scrollTop = 0;
+      colours[url.split("?")[0]] = card.style.getPropertyValue("--mhtc-c");   // by page: a page's card is one colour in both languages
+      const boxes = PARTS.map((sel) => { const el = d.querySelector(sel); if (!el || el.hidden || !el.textContent.trim()) return null; const r = el.getBoundingClientRect(); return r.width && r.height ? { sel, r } : null; }).filter(Boolean);
+      const hits = [];
+      for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i].r, b = boxes[j].r;
+        if (a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1) hits.push(boxes[i].sel + " × " + boxes[j].sel);
+      }
+      const top = Math.min(...boxes.map((b) => b.r.top)), edge = (sel) => boxes.find((b) => b.sel === sel);
+      const reach = top >= 0;
+      const inside = boxes.every((b) => b.r.left >= -1 && b.r.right <= w + 1);
+      say(name + " " + w + "×" + h + ": " + (hits.length ? "collisions NO: " + hits.join(", ") : "nothing collides")
+        + "; its top " + (reach ? "in reach (" + Math.round(top) + " px)" : "cut off above the screen NO (" + Math.round(top) + " px)")
+        + (inside ? "" : "; something runs off the side NO"));
+      if (hits.length || !reach || !inside) bad++;
+    } catch (e) { say(name + ": EXCEPTION " + e.message); bad++; }
+    finally { if (--left === 0) {
+      const vals = Object.values(colours), distinct = new Set(vals).size === vals.length && vals.every(Boolean);
+      say("each card its own colour: " + (distinct ? "yes" : "NO") + " (" + Object.entries(colours).map(([k, v]) => k + " " + v).join(", ") + ")");
+      if (!distinct) bad++;
+      say(bad ? bad + " NO" : "every card lays out cleanly on a phone"); say("errors: none"); document.title = "done"; } }
+  }, 2500));
+  document.body.appendChild(f);
+}
+</script>

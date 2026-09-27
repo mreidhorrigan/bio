@@ -25,7 +25,9 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
   page gives it the author's own words, the box only specs, and the French in
   `i18n-fr.js` (`docs/i18n.md`). The machine translation of Rock Walls and Damp
   is built by `tools/rock-walls-fr.py`, never edited by hand. Probes:
-  `__title-card.html`, `__title-card-fr.html`, `__cgsa-door.html`.
+  `__title-card.html`, `__title-card-fr.html`, `__cgsa-door.html`,
+  `__title-card-phone.html` (no collisions at two phone sizes, the top in reach,
+  each card its own colour: `colour` in each page's card).
 - The visitor's signal towers: `tower-address.js` keeps them in the address
   (`?signals=`, written by the Musebots bundle) with a copy for this tab, so
   every way between the iso and 3D villages finds them

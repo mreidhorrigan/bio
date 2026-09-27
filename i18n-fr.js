@@ -369,7 +369,7 @@
     "titlecard.by": "Par",
     "titlecard.go": "Commencer",
     "titlecard.rockwalls.kicker": "Ce récit numérique interactif est présenté",
-    "titlecard.rockwalls.particulars": "Réalisation\u00A0: Twine 2.3.16, SugarCube 2.36.1, 44 passages, un seul fichier HTML (590\u00A0Ko).\nExécution\u00A0: tout navigateur web récent, sur ordinateur ou téléphone, avec JavaScript.",
+    "titlecard.rockwalls.particulars": "Réalisation\u00A0: Twine 2.3.16, SugarCube 2.36.1.\nExécution\u00A0: tout navigateur web récent, sur ordinateur ou téléphone, avec JavaScript.",
     "titlecard.rockwalls.note": "Le récit lui-même est en anglais.",
     "titlecard.rockwalls.also": "Lire la traduction automatique",
     "titlecard.rockwalls.text0": "J'ai créé Rock Walls and Damp comme une expérience sur la boucle narrative en tant que mode d'absorption ou d'immersion, mon idée ayant été de construire un récit chronologiquement non linéaire, vécu du point de vue d'un avatar qui interagit avec son monde au moyen d'une sorte de système de courriel futuriste, une situation assez proche de la mienne aujourd'hui (automne 2026), alors que j'administre un cours en ligne asynchrone et que je manipule diverses IA à des fins de programmation. Rock Walls and Damp est ce qu'on pourrait appeler un récit numérique interactif «\u00A0à support fixe\u00A0», au sens où il ne contient lui-même aucun LLM et se tourne plutôt, pour le simulacre de validité écologique qu'exige l'immersion, vers les traditions conjuguées du récit épistolaire et des livres-jeux où l'on choisit son aventure, dans la lignée de The Cave of Time. Rock Walls a été présenté en première au Small File Media Festival 2022.",
