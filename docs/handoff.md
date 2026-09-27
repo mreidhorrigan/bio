@@ -44,8 +44,8 @@ learned and what is left.
 - Keep the CPU down: one headless browser at a time, at background priority,
   muted. No subagents unless M. asks.
 - Hidden for now, restore only on M.'s word: the Criticism house and the Store
-  kiosk (commented out in `content.js`), and the Autofac links (`menubar.js`,
-  `content.js`, `i18n-fr.js`).
+  kiosk (commented out in `content.js`). Autofac came back on 26 Sept 2026, with
+  a title card.
 
 ## Checking a change
 

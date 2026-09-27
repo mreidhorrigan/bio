@@ -1,0 +1,47 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The title card in front of Rock Walls and Damp and Autofac</title>
+<meta name="budget" content="30000">
+<iframe id="f" src="/Rock_Walls_and_Damp.html" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="p" src="/Rock_Walls_and_Damp.html" style="width:390px;height:800px;border:0"></iframe>
+<iframe id="a" src="/autofac.html" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// title-card.js before the story: the card up at once, in the author's words, the
+// grain running; the keys its own while it is up; Enter closes it and the story is
+// there; on a phone it fits the width and the story's first link can be reached.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+let loaded = 0;
+for (const id of ["f", "p", "a"]) document.getElementById(id).addEventListener("load", () => { if (++loaded === 3) setTimeout(run, 2000); });
+function run() {
+  try {
+    const w = document.getElementById("f").contentWindow, d = w.document, card = d.querySelector(".mhtc");
+    say("the card: " + (card ? "up" : "MISSING") + "; its title: " + ((d.getElementById("mhtc-title") || {}).textContent || "MISSING").slice(0, 40) + "…");
+    say("the author's words: " + (/narrative looping/.test((d.querySelector(".mhtc-text") || {}).textContent || "") ? "there" : "MISSING"));
+    w.focus();                                                // (of three frames, only the focused one reports its focus: asked below, a moment on)
+    const g1 = d.querySelector(".mhtc-grain").style.backgroundPosition;
+    setTimeout(() => {
+      const g2 = d.querySelector(".mhtc-grain").style.backgroundPosition;
+      say("the grain moves: " + (g1 !== g2 ? "yes" : "NO"));
+      // focus on Begin; an iframe that did not have the focus when the card took it may report
+      // the page's body instead, and then Tab must bring it to Begin (the card keeps Tab to itself)
+      w.focus();
+      const onGo = () => d.activeElement && d.activeElement.classList.contains("mhtc-go");
+      let how = onGo() ? "yes" : "";
+      if (!how) { d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true })); how = onGo() ? "yes, with Tab" : ""; }
+      say("focus on Begin: " + (how || "NO (" + (d.activeElement ? d.activeElement.tagName : "none") + ")"));
+      d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }));
+      setTimeout(() => {
+        const story = d.getElementById("passages");
+        say("Enter: the card " + (d.querySelector(".mhtc") ? "stays NO" : "goes") + "; the story " + (story && /Rock walls and damp/.test(story.textContent) ? "shows its first passage" : "is not there NO"));
+        const pw = document.getElementById("p").contentWindow, pd = pw.document, box = pd.querySelector(".mhtc-box"), go = pd.querySelector(".mhtc-go");
+        const r = box && box.getBoundingClientRect();
+        say("on a phone: the card " + (r && r.left >= 0 && r.right <= pw.innerWidth + 1 ? "fits the width" : "overflows NO") + "; Begin " + (go ? "there" : "MISSING"));
+        const aw = document.getElementById("a").contentWindow, ad = aw.document;
+        say("Autofac: the card " + (ad.querySelector(".mhtc") ? "up" : "MISSING") + ", " + (/audiogaming/.test((ad.querySelector(".mhtc-text") || {}).textContent || "") && /MetaSound/.test(ad.querySelector(".mhtc-text").textContent) ? "with both paragraphs" : "without its words NO"));
+        ad.querySelector(".mhtc-go").click();
+        say("Autofac: Begin " + (ad.querySelector(".mhtc") ? "leaves the card up NO" : "shows the page"));
+        say("errors: none"); document.title = "done";
+      }, 500);
+    }, 400);
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}
+</script>

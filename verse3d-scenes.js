@@ -770,7 +770,7 @@
     /* the iso world's own noise (engine.js hash01, noise01, biomeAt), on this skin's torus */
     function hash01(a, b) {
       let h = (wrapT(a) * 374761393 + wrapT(b) * 668265263) | 0;
-      h = Math.imul(h ^ (h >>> 13), 1274126177) | 0;
+      h = (h ^ (h >>> 13)) * 1274126177 | 0;                    // as engine.js multiplies, not Math.imul: past 2^53 the product loses its low bits, and 34 tiles came out another biome
       h = h ^ (h >>> 16);
       return ((h >>> 0) % 100000) / 100000;
     }

@@ -825,16 +825,8 @@ function buildJunctions(step) {
       jx += HX + re * Math.cos(a); jy += HY + re * Math.sin(a);
     }
     jx /= gates.length; jy /= gates.length;
-    if (T.biomes) {                                              // keep the house out of the water: nudge to the nearest dry tile
-      outer:
-      for (const rad of [0, 0.9, 1.8, 2.7]) {
-        for (let k = 0; k < 8; k++) {
-          const a = (k / 8) * Math.PI * 2;
-          const x = jx + rad * Math.cos(a), y = jy + rad * Math.sin(a);
-          if (biomeAt(Math.round(x), Math.round(y)) !== "water") { jx = x; jy = y; break outer; }
-        }
-      }
-    }
+    // It stands there, on water or not, as every house does: the world is made anew
+    // and a house works wherever it falls (the 3D village places it the same way).
 
     EXHIBITS.push({
       tx: jx, ty: jy,
