@@ -19,9 +19,13 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
   village outdoors (left or right edge by side, ahead high, behind low); each
   view only says when (no house in sight). Run `node --test wayfinding.test.mjs`.
 - Title cards: `title-card.js` puts a card in front of a work (Rock Walls and
-  Damp, Autofac, and a copy in Clod Bathos's repository as
+  Damp, its machine translation, Autofac, the CGSA poster's door
+  `cgsa2026.html`, and a copy in Clod Bathos's repository as
   `engine/title-card.js`): modelled on a film's rating card, with grain; each
-  page gives it the author's own words. Probe: `__title-card.html`.
+  page gives it the author's own words, the box only specs, and the French in
+  `i18n-fr.js` (`docs/i18n.md`). The machine translation of Rock Walls and Damp
+  is built by `tools/rock-walls-fr.py`, never edited by hand. Probes:
+  `__title-card.html`, `__title-card-fr.html`, `__cgsa-door.html`.
 - The visitor's signal towers: `tower-address.js` keeps them in the address
   (`?signals=`, written by the Musebots bundle) with a copy for this tab, so
   every way between the iso and 3D villages finds them

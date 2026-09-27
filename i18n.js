@@ -28,8 +28,18 @@
      MH_I18N.t(key, english, vars)         one string, now
      MH_I18N.live(el, key, english, vars)  a string that re-translates on a switch
      MH_I18N.href(url)                     a same-site link carrying the language
+                                           (and a link to another site of the
+                                           author's that reads ?lang= too: a
+                                           dictionary's `elsewhere` lists them)
+     MH_I18N.offer()                       what a switch offers: { code, text, aria }
      MH_I18N.apply()                       re-run the overlay over new DOM
      document.addEventListener("mh:lang", fn)   re-render anything else
+
+   A PAGE THAT STAYS IN ITS OWN LANGUAGE
+     <html data-untranslated>: a work in English (Rock Walls and Damp). Its lang
+     stays its own, so a screen reader reads it as English, and it gets no switch;
+     what is translated on it (its title card, title-card.js) marks its own lang
+     and offers its own switch.
 
    See docs/i18n.md for the dictionary format and how to add a string.
    ========================================================================== */
@@ -46,6 +56,7 @@
   var button = null;                  // the one switch, wherever it is mounted
   var ready = false;                  // has the first apply() run
   var pageLang = document.documentElement.getAttribute("lang") || "en";
+  var untranslated = document.documentElement.hasAttribute("data-untranslated");   // see the head of this file
 
   /* ── which language ──────────────────────────────────────────────────── */
 
@@ -145,6 +156,9 @@
   function localizedHref(href) {
     var code = current();
     if (code === SOURCE || !href) return href;
+    if (elsewhere(href)) {                             // another site of the author's that reads ?lang= too
+      try { var u = new URL(href); u.searchParams.set("lang", code); return u.href; } catch (e) { return href; }
+    }
     if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.charAt(0) === "#" || href.charAt(0) === "/") return href;
     var hashAt = href.indexOf("#"), hash = hashAt >= 0 ? href.slice(hashAt) : "";
     var rest = hashAt >= 0 ? href.slice(0, hashAt) : href;
@@ -155,6 +169,14 @@
       params.set("lang", code);
       return path + "?" + params.toString() + hash;
     } catch (e) { return href; }
+  }
+
+  /** A page on another site of the author's that reads ?lang= as this one does (the
+   *  dictionary lists their addresses under `elsewhere`: Clod Bathos, on its own). */
+  function elsewhere(href) {
+    var dict = dicts[current()], list = (dict && dict.elsewhere) || [];
+    for (var i = 0; i < list.length; i++) if (String(href).indexOf(list[i]) === 0) return true;
+    return false;
   }
 
   /** Rewrite every internal page link under root; restore() undoes it. */
@@ -289,20 +311,27 @@
   /** Where the switch lives on this page: the shared menubar if there is one. */
   function host() { return document.querySelector(".mh-nav"); }
 
-  function label(el) {
+  /** What a switch offers: the other language, in its own words. The switch is
+   *  written in the language it leads to: a French speaker looks for "Français",
+   *  not for "French". `known`: its dictionary has loaded (English always has). */
+  function offer() {
     var next = other(), dict = dicts[next];
-    // The switch is written in the language it leads to: a French speaker looks
-    // for "Français", not for "French". lang= tells a screen reader to say it so.
-    el.textContent = (dict && dict.label) || (next === SOURCE ? "English" : next.toUpperCase());
-    el.setAttribute("lang", next);
-    el.setAttribute("hreflang", next);
-    el.setAttribute("aria-label", (dict && dict.switchLabel) || ("Switch to " + el.textContent));
-    el.setAttribute("title", el.getAttribute("aria-label"));
+    var text = (dict && dict.label) || (next === SOURCE ? "English" : next.toUpperCase());
+    return { code: next, text: text, aria: (dict && dict.switchLabel) || ("Switch to " + text), known: next === SOURCE || !!dict };
+  }
+
+  function label(el) {
+    var next = offer();
+    el.textContent = next.text;
+    el.setAttribute("lang", next.code);                 // so a screen reader says it in that language
+    el.setAttribute("hreflang", next.code);
+    el.setAttribute("aria-label", next.aria);
+    el.setAttribute("title", next.aria);
     try {
       var url = new URL(location.href);
-      url.searchParams.set("lang", next);
+      url.searchParams.set("lang", next.code);
       el.setAttribute("href", url.pathname.split("/").pop() + url.search + url.hash);
-    } catch (e) { el.setAttribute("href", "?lang=" + next); }
+    } catch (e) { el.setAttribute("href", "?lang=" + next.code); }
   }
 
   function mount() {
@@ -350,9 +379,11 @@
     restore();                                        // always back to the English page
     var code = current();
     var root = document.documentElement;
-    root.setAttribute("lang", code === SOURCE ? pageLang : code);
-    if (root.hasAttribute("xml:lang"))                 // the CV builder emits one
-      root.setAttribute("xml:lang", code === SOURCE ? pageLang : code);
+    if (!untranslated) {                               // a page in its own language keeps its lang
+      root.setAttribute("lang", code === SOURCE ? pageLang : code);
+      if (root.hasAttribute("xml:lang"))               // the CV builder emits one
+        root.setAttribute("xml:lang", code === SOURCE ? pageLang : code);
+    }
     if (code !== SOURCE) {
       rulesFor(code).forEach(function (rule) { applyRule(rule, root); });
       localizeLinks(root);
@@ -418,6 +449,7 @@
     source: SOURCE,
     t: t,
     href: localizedHref,
+    offer: offer,
     live: liveSet,
     apply: apply,
     set: set,
@@ -439,9 +471,10 @@
     apply();
     // If this page loads the shared menubar, the switch belongs in it: wait for
     // the bar rather than flashing a floating pill that then moves.
-    if (host() || !document.querySelector('script[src*="menubar.js"]')) mount();
+    // (A page that stays in its own language gets none: see the head of this file.)
+    if (!untranslated && (host() || !document.querySelector('script[src*="menubar.js"]'))) mount();
     // The menubar builds its links after us, so translate them when it says so.
-    document.addEventListener("mh:menubar", function () { apply(); mount(); });
+    document.addEventListener("mh:menubar", function () { apply(); if (!untranslated) mount(); });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+  The door to "Appraising the Pedagogical Utility of Audiogames", the interactive
+  poster for CGSA 2026, which runs on its own server at Render
+  (https://cgsa2026-audio-presentation.onrender.com, source in the
+  CGSA2026_Pedagogical-Utility-Audio repository). Render's free tier puts the server
+  to sleep after about 15 minutes without a visitor, and the next visitor waits while
+  it wakes: about a minute, Render's documentation says (render.com/docs/free; one
+  measurement here took 21 seconds, and it varies). So the site's links come here first: a title card (title-card.js) says
+  what the poster is, that waking takes a while, and that it is multiplayer, and this
+  page starts the server the moment it opens, so the wait passes while the card is
+  read. The card's line under Begin says when the server is up (its relay answers
+  /net/info with {"multiplayer": true}; anything else, a timeout or Render's own
+  holding page, is still waking). Begin opens the poster in this tab.
+  The card's French: titlecard.cgsa.* and cgsa.* in i18n-fr.js.
+-->
+<html lang="en" data-untranslated>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Appraising the Pedagogical Utility of Audiogames</title>
+<meta name="description" content="The interactive poster for CGSA 2026: a walkable, multiplayer presentation with eight kiosks of slides.">
+<style>html,body{margin:0;min-height:100%;background:#050814;color:#fff;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+  noscript a{color:#c3f0ff}</style>
+<script src="i18n.js"></script>
+<script src="i18n-fr.js"></script>
+</head>
+<body>
+<noscript><p style="padding:24px">The presentation: <a href="https://cgsa2026-audio-presentation.onrender.com/">cgsa2026-audio-presentation.onrender.com</a>. Its server may take about a minute to wake.</p></noscript>
+<script src="title-card.js"></script>
+<script>
+(function () {
+  var APP = "https://cgsa2026-audio-presentation.onrender.com/";
+  // A probe may stand a fake relay on this site in for Render (?relay=brand/backstage/probes/…/),
+  // never another address: Begin goes wherever APP is, and a link must not send it elsewhere.
+  try { var fake = new URLSearchParams(location.search).get("relay"); if (fake && /^brand\/backstage\/probes\/[\w-]+\/$/.test(fake)) APP = fake; } catch (e) { /* Render */ }
+  document.documentElement.setAttribute("data-relay", APP);   // which server Begin opens, for a probe to read
+  var I = window.MH_I18N, t = function (key, en, vars) { return I ? I.t(key, en, vars) : en.replace(/\{(\w+)\}/g, function (m, k) { return vars && k in vars ? vars[k] : m; }); };
+  var go = function () { location.href = APP; };
+  var card = window.MH_TITLE_CARD ? window.MH_TITLE_CARD.show({
+    id: "cgsa",
+    kicker: "This interactive poster is presented",
+    mark: "CGSA",
+    title: "Appraising the Pedagogical Utility of Audiogames",
+    particulars: "Implementation: a walkable presentation in HTML5 canvas and JavaScript, no libraries, with eight kiosks of slides. Multiplayer: a relay in Python (standard library) that shares each visitor's position, on Render's free tier.\nRuntime: any current web browser, desktop or phone.",
+    note: "The server sleeps after 15 minutes without visitors: waking it takes about a minute.",
+    text: [
+      "This presentation runs on a small server of its own at Render, which puts it to sleep after 15 minutes without visitors. Render says waking it takes about a minute, so this card starts it now, while you read: the line under Begin says when it is ready.",
+      "It is multiplayer. Everyone who has it open at the same moment walks the same room, each as a ghost with a name, and can leave the others a short speech bubble. At the conference those were the attendees. Here, they are whoever else is visiting."
+    ],
+    by: "By",
+    author: "M. Reid Horrigan",
+    left: "matthorrigan.com",
+    right: "CGSA 2026",
+    go: "Begin",
+    onClose: go
+  }) : null;
+  if (!card) { go(); return; }
+
+  // Wake the server now, and say how it is going: a second at a time while it wakes,
+  // then how long it took. Ready means its own relay answered.
+  var t0 = Date.now(), ready = 0, gone = false, secs = function () { return Math.round((Date.now() - t0) / 1000); };
+  function say() {
+    if (ready) card.status(t("cgsa.ready", "The server is awake (it took {s} s): Begin opens the presentation.", { s: ready }));
+    else if (secs() >= 120) card.status(t("cgsa.slow", "Still waking after {s} s. Begin opens it anyway, and it finishes waking there.", { s: secs() }));
+    else card.status(t("cgsa.waking", "Waking the server: {s} s", { s: secs() }));
+  }
+  function poll() {
+    if (ready || gone) return;
+    fetch(APP + "net/info", { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.multiplayer) { ready = Math.max(1, secs()); say(); } else setTimeout(poll, 2000); })
+      .catch(function () { setTimeout(poll, 2000); });    // asleep, waking, or Render's holding page: again
+  }
+  var clock = setInterval(function () { if (ready || !card.up()) { clearInterval(clock); return; } say(); }, 1000);
+  say(); poll();
+  document.addEventListener("mh:lang", say);                   // the card's switch: the line in the new language too
+  window.addEventListener("pagehide", function () { gone = true; });
+})();
+</script>
+</body>
+</html>

@@ -63,6 +63,10 @@
 
   label: "Français",                     // the switch is written in the language it leads to
   switchLabel: "Passer en français",
+  // Sites of the author's own that read ?lang=fr as this one does: a link to one
+  // carries the language, as a link to a page of this site does (Clod Bathos, on
+  // its own site, whose title card speaks French when asked).
+  elsewhere: ["https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"],
 
   /* ══ Keyed strings: text that scripts build at run time ═══════════════════ */
   strings: {
@@ -165,7 +169,7 @@
 
     "kiosk.Music.html": "\n          <p>Dans une première carrière artistique, j'ai fait de la conception sonore et\n          de la programmation, en écrivant du code pour des installations et des\n          spectacles musicaux.</p>\n          <p>À écouter\u00A0: <a href=\"https://nophenomenon.bandcamp.com/\" target=\"_blank\" rel=\"noopener\">No Phenomenon</a>\n          sur Bandcamp, et d'autres pièces sur\n          <a href=\"https://soundcloud.com/matt_horrigan\" target=\"_blank\" rel=\"noopener\">SoundCloud</a>.</p>",
 
-    "kiosk.Games.html": "\n          <p>Jeux et pièces interactives\u00A0:</p>\n          <ul>\n            <li><a href=\"Rock_Walls_and_Damp.html\">Rock Walls and Damp</a>\u00A0: une pièce hypertexte.</li>\n            <li><a href=\"autofac.html\">Autofac: Rad Shipping</a>.</li>\n            <li><a href=\"https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/\" target=\"_blank\" rel=\"noopener\">Clod Bathos, Superior Machine</a>.</li>\n            <li><a href=\"https://cgsa2026-audio-presentation.onrender.com\" target=\"_blank\" rel=\"noopener\">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>\n            <li><a href=\"slimeverse3d.html\">Slimeverse 3D</a>\u00A0: ce village, praticable en trois dimensions.</li>\n          </ul>",
+    "kiosk.Games.html": "\n          <p>Jeux et pièces interactives\u00A0:</p>\n          <ul>\n            <li><a href=\"Rock_Walls_and_Damp.html\">Rock Walls and Damp</a>\u00A0: une pièce hypertexte.</li>\n            <li><a href=\"autofac.html\">Autofac: Rad Shipping</a>.</li>\n            <li><a href=\"https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/\" target=\"_blank\" rel=\"noopener\">Clod Bathos, Superior Machine</a>.</li>\n            <li><a href=\"cgsa2026.html\">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>\n            <li><a href=\"slimeverse3d.html\">Slimeverse 3D</a>\u00A0: ce village, praticable en trois dimensions.</li>\n          </ul>",
 
     /* ── ExamTimer ───────────────────────────────────────────────────────── */
     // "En attente" rather than "Prêt": nothing here should agree with a reader.
@@ -356,6 +360,42 @@
 
     // The definitions themselves are not keyed strings. They are generated in
     // both languages into glossary-data.js, and the page picks by MH_I18N.lang.
+
+    /* ── the title cards in front of the works (title-card.js) ───────────── */
+    // The works themselves stay in English, so each French card says so in the
+    // strip along the foot of its box, where a film's card puts its small print
+    // (the English cards have no such strip). The works' titles, the festival and
+    // the author are names: left as they are.
+    "titlecard.by": "Par",
+    "titlecard.go": "Commencer",
+    "titlecard.rockwalls.kicker": "Ce récit numérique interactif est présenté",
+    "titlecard.rockwalls.particulars": "Réalisation\u00A0: Twine 2.3.16, SugarCube 2.36.1, 44 passages, un seul fichier HTML (590\u00A0Ko).\nExécution\u00A0: tout navigateur web récent, sur ordinateur ou téléphone, avec JavaScript.",
+    "titlecard.rockwalls.note": "Le récit lui-même est en anglais.",
+    "titlecard.rockwalls.also": "Lire la traduction automatique",
+    "titlecard.rockwalls.text0": "J'ai créé Rock Walls and Damp comme une expérience sur la boucle narrative en tant que mode d'absorption ou d'immersion, mon idée ayant été de construire un récit chronologiquement non linéaire, vécu du point de vue d'un avatar qui interagit avec son monde au moyen d'une sorte de système de courriel futuriste, une situation assez proche de la mienne aujourd'hui (automne 2026), alors que j'administre un cours en ligne asynchrone et que je manipule diverses IA à des fins de programmation. Rock Walls and Damp est ce qu'on pourrait appeler un récit numérique interactif «\u00A0à support fixe\u00A0», au sens où il ne contient lui-même aucun LLM et se tourne plutôt, pour le simulacre de validité écologique qu'exige l'immersion, vers les traditions conjuguées du récit épistolaire et des livres-jeux où l'on choisit son aventure, dans la lignée de The Cave of Time. Rock Walls a été présenté en première au Small File Media Festival 2022.",
+    // The machine translation of Rock Walls and Damp (Rock_Walls_and_Damp_fr.html, built by
+    // tools/rock-walls-fr.py) has a card of its own, saying what it is, in both languages.
+    "titlecard.rockwallsmt.kicker": "Cette traduction automatique est présentée",
+    "titlecard.rockwallsmt.particulars": "Réalisation\u00A0: traduction automatique en français de l'original Twine 2.3.16, SugarCube 2.36.1, faite avec Claude (Anthropic) en septembre 2026, sans relecture de M. Reid Horrigan. Les noms des passages, la destination de chaque lien et la logique du récit sont inchangés.\nExécution\u00A0: tout navigateur web récent, sur ordinateur ou téléphone, avec JavaScript.",
+    "titlecard.rockwallsmt.note": "Traduction automatique\u00A0: à lire à vos risques et périls.",
+    "titlecard.rockwallsmt.text0": "Voici une traduction automatique de Rock Walls and Damp en français. Un modèle de langage l'a produite, sans relecture de M. Reid Horrigan\u00A0: elle peut être fautive, guindée ou étrange par endroits. L'œuvre, c'est l'original, en anglais.",
+    "titlecard.rockwallsmt.also": "Lire l'original, en anglais",
+    // The door to the CGSA 2026 poster (cgsa2026.html): its server sleeps and takes a
+    // while to wake, and the poster is multiplayer. The line under Begin (cgsa.*) says
+    // how the waking is going.
+    "titlecard.cgsa.kicker": "Cette affiche interactive est présentée",
+    "titlecard.cgsa.particulars": "Réalisation\u00A0: une présentation à parcourir, en canevas HTML5 et JavaScript, sans bibliothèque, avec huit kiosques de diapositives. Multijoueur\u00A0: un relais en Python (bibliothèque standard) qui partage la position de chaque visite, sur l'offre gratuite de Render.\nExécution\u00A0: tout navigateur web récent, sur ordinateur ou téléphone.",
+    "titlecard.cgsa.note": "Le serveur s'endort après 15\u00A0minutes sans visite\u00A0: le réveiller prend environ une minute.",
+    "titlecard.cgsa.text0": "Cette présentation tourne sur un petit serveur à elle, chez Render, qui l'endort après 15\u00A0minutes sans visite. Selon Render, le réveil prend environ une minute\u00A0: cette carte le lance donc dès maintenant, pendant que vous lisez, et la ligne sous Commencer indique quand il est prêt.",
+    "titlecard.cgsa.text1": "Elle est multijoueur. Toutes les personnes qui l'ont ouverte au même moment parcourent la même salle, chacune sous la forme d'un fantôme qui porte un nom, et peuvent laisser aux autres une courte bulle de texte. Au colloque, c'étaient les personnes participantes. Ici, c'est quiconque la visite en même temps que vous.",
+    "cgsa.waking": "Réveil du serveur\u00A0: {s}\u00A0s",
+    "cgsa.ready": "Le serveur est réveillé (il a fallu {s}\u00A0s)\u00A0: Commencer ouvre la présentation.",
+    "cgsa.slow": "Toujours en réveil après {s}\u00A0s. Commencer l'ouvre quand même, et le réveil s'achève là-bas.",
+    "titlecard.autofac.kicker": "Cette expérience est présentée",
+    "titlecard.autofac.particulars": "Réalisation\u00A0: Unreal Engine 5.7, C++. Audio\u00A0: MetaSounds procéduraux, en binaural par Steam Audio 4.8.1. Version 0.3.0.\nExécution\u00A0: macOS 14 ou ultérieur sur puce Apple, un .dmg d'environ 440\u00A0Mo. Casque obligatoire.",
+    "titlecard.autofac.note": "Le jeu lui-même est en anglais.",
+    "titlecard.autofac.text0": "Autofac est une expérience absurde de jeu audio. Votre avatar, un robot, parcourt une «\u00A0darkfactory\u00A0» (une usine qui tourne dans le noir) calquée sur un entrepôt, où quelque chose émet un rayonnement qui tient les êtres humains à distance, mais nuit aussi aux robots. Vous devez ramasser et évacuer des colis. L'expérience a en partie échoué, car le jeu est assez difficile à jouer sans voir. (Il y a de l'écholocalisation, mais elle est difficile à utiliser.) J'ai néanmoins conservé le jeu ici, pour que vous puissiez l'expérimenter par vous-même.",
+    "titlecard.autofac.text1": "Techniquement, le développement du jeu s'est appuyé sur Unreal Engine 5.7, et le jeu est écrit en C++. Chaque son est un MetaSound procédural, dont beaucoup ont été construits en direct dans l'éditeur en marche par Claude Code, par l'intermédiaire de VibeUE, un serveur MCP intégré à Unreal. Les échos sont de vrais lancers de rayons, retardés selon leur temps de parcours, une réverbération se réaccorde à l'espace que mesure chaque ping, et chaque hauteur appartient à un réseau d'intonation juste bâti sur une fondamentale de 110\u00A0Hz. Steam Audio rend les indices sonores en binaural pour une écoute au casque. Les murs sont des piles de caisses soumises à une simulation physique, et les répliques sont produites par la synthèse vocale de macOS à partir d'un seul script.",
   },
 
   /* ══ Markup already on the page ═══════════════════════════════════════════ */

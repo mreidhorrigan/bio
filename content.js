@@ -119,7 +119,7 @@
           { title: "Rock Walls & Damp", url: `${B}Rock_Walls_and_Damp.html` },
           { title: "Autofac", url: `${B}autofac.html` },
           { title: "Clod Bathos", url: "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/" },
-          { title: "Audiogames (CGSA)", url: "https://cgsa2026-audio-presentation.onrender.com" },
+          { title: "Audiogames (CGSA)", url: `${B}cgsa2026.html` },   // its door: a card that wakes the poster's server (Render) while it is read
           { title: "Slimeverse 3D", url: `${B}slimeverse3d.html` },   // this village, walkable in three dimensions: the house leads into it
         ],
 
@@ -129,7 +129,7 @@
             <li><a href="${B}Rock_Walls_and_Damp.html">Rock Walls and Damp</a>:a hypertext piece.</li>
             <li><a href="${B}autofac.html">Autofac: Rad Shipping</a>.</li>
             <li><a href="https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"${ext}>Clod Bathos, Superior Machine</a>.</li>
-            <li><a href="https://cgsa2026-audio-presentation.onrender.com"${ext}>Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>
+            <li><a href="${B}cgsa2026.html">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>
             <li><a href="${B}slimeverse3d.html">Slimeverse 3D</a>: this village, walkable in three dimensions.</li>
           </ul>`,
       },

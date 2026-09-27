@@ -1,0 +1,38 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The door to the CGSA poster: its card, and its server waking</title>
+<meta name="budget" content="30000">
+<iframe id="en" src="/cgsa2026.html?relay=brand/backstage/probes/fake-relay/" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="fr" src="/cgsa2026.html?lang=fr&relay=brand/backstage/probes/fake-relay/" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="evil" src="/cgsa2026.html?relay=https://example.com/" style="width:600px;height:400px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// cgsa2026.html, with a fake relay of this site standing in for Render (fake-relay/net/info
+// answers {"multiplayer": true}, as the poster's relay does once awake), so nothing here wakes
+// the real server. The card says what the poster is, that its server sleeps after 15 minutes
+// without visitors and takes about a minute to wake (Render's own figure), and that it is
+// multiplayer; the line under Begin counts the waking, then says it is
+// awake; in French too, the page staying English. A relay that is not this site's is refused
+// (that frame waits on Render instead, so a run of this probe does wake the real server).
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+let loaded = 0;
+for (const id of ["en", "fr", "evil"]) document.getElementById(id).addEventListener("load", () => { if (++loaded === 3) setTimeout(run, 3500); });
+const words = (d, sel) => ((d.querySelector(sel) || {}).textContent || "").trim();
+function run() {
+  try {
+    const en = document.getElementById("en").contentWindow.document, fr = document.getElementById("fr").contentWindow.document;
+    say("English: the card " + (en.querySelector(".mhtc") ? "up" : "MISSING") + ", titled \"" + words(en, "#mhtc-title") + "\"");
+    say("English: the strip says \"" + words(en, ".mhtc-strip") + "\"" + (/15 minutes/.test(words(en, ".mhtc-strip")) && /about a minute/.test(words(en, ".mhtc-strip")) ? "" : " NO"));
+    say("English: the author's side says it is multiplayer: " + (/multiplayer/.test(words(en, ".mhtc-text")) && /attendees/.test(words(en, ".mhtc-text")) ? "yes" : "NO"));
+    say("English: the line under Begin: \"" + words(en, ".mhtc-status") + "\"" + (/The server is awake \(it took \d+ s\)/.test(words(en, ".mhtc-status")) ? "" : " NO"));
+    say("French: card lang " + fr.querySelector(".mhtc").getAttribute("lang") + (fr.querySelector(".mhtc").getAttribute("lang") === "fr" ? "" : " NO")
+      + ", page lang " + fr.documentElement.getAttribute("lang") + (fr.documentElement.getAttribute("lang") === "en" ? "" : " NO")
+      + "; the line: \"" + words(fr, ".mhtc-status") + "\"" + (/Le serveur est réveillé/.test(words(fr, ".mhtc-status")) ? "" : " NO"));
+    say("French: the strip says \"" + words(fr, ".mhtc-strip") + "\"" + (/environ une minute/.test(words(fr, ".mhtc-strip")) ? "" : " NO"));
+    // a relay from another site is refused: the page waits on Render, never on the address given
+    const evil = document.getElementById("evil").contentWindow.document, relay = (d) => d.documentElement.getAttribute("data-relay");
+    say("the fake relay stands in: " + (relay(en) === "brand/backstage/probes/fake-relay/" ? "yes" : "NO (" + relay(en) + ")"));
+    say("a relay from another site: " + (relay(evil) === "https://cgsa2026-audio-presentation.onrender.com/" ? "refused: Begin still opens the poster at Render" : "taken NO (" + relay(evil) + ")"));
+    say("errors: none");
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); }
+  document.title = "done";
+}
+</script>

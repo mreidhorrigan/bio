@@ -1,0 +1,91 @@
+<!DOCTYPE html><meta charset="utf-8"><title>The title cards in French, and the works in English</title>
+<meta name="budget" content="40000">
+<iframe id="rwf" src="/Rock_Walls_and_Damp.html?lang=fr" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="af" src="/autofac.html?lang=fr" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="rw" src="/Rock_Walls_and_Damp.html" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="ab" src="/about.html?lang=fr" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="mt" src="/Rock_Walls_and_Damp_fr.html?lang=fr" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="mte" src="/Rock_Walls_and_Damp_fr.html" style="width:1000px;height:700px;border:0"></iframe>
+<pre id="out">running</pre>
+<script>
+// title-card.js with i18n.js: a French visitor's card is in French and says, in the
+// strip along its box, that the work itself is in English; the English card has no
+// strip. Rock Walls and Damp stays English under its card (<html lang="en">, no page
+// switch: data-untranslated), the card itself marked lang="fr". The card's own switch
+// turns it over and back. And the site's link to Clod Bathos, on its own site,
+// carries ?lang=fr in French mode, so that card speaks French too. The machine
+// translation of Rock Walls and Damp is reached only from the French card's second
+// button; its own card says, in either language, that it is a machine translation to
+// read at one's own risk, and leads into the French story, whose links still go where
+// the English ones do.
+const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
+const ids = ["rwf", "af", "rw", "ab", "mt", "mte"];
+let loaded = 0;
+for (const id of ids) document.getElementById(id).addEventListener("load", () => { if (++loaded === ids.length) setTimeout(run, 2200); });
+const q = (d, sel) => d.querySelector(sel);
+const words = (d, sel) => ((q(d, sel) || {}).textContent || "").trim();
+function card(name, d, want, stripSays = /anglais/) {
+  const c = q(d, ".mhtc"), strip = q(d, ".mhtc-strip"), sw = q(d, ".mhtc-lang");
+  if (!c) { say(name + ": the card MISSING"); return; }
+  const french = want === "fr";
+  say(name + ": card lang " + c.getAttribute("lang") + (c.getAttribute("lang") === want ? "" : " NO")
+    + "; kicker \"" + words(d, ".mhtc-kicker").slice(0, 44) + "\"" + ((/^(Ce|Cette) /.test(words(d, ".mhtc-kicker"))) === french ? "" : " NO")
+    + "; Begin reads \"" + words(d, ".mhtc-go") + "\"" + ((words(d, ".mhtc-go") === "Commencer") === french ? "" : " NO"));
+  say(name + ": the strip " + (strip && !strip.hidden ? "says \"" + strip.textContent + "\"" + (french && stripSays.test(strip.textContent) ? "" : " NO") : "is not there" + (french ? " NO" : ""))
+    + "; the title stays \"" + words(d, "#mhtc-title").slice(0, 28) + "…\" (lang " + q(d, "#mhtc-title").getAttribute("lang") + ")"
+    + "; the switch offers \"" + (sw && !sw.hidden ? sw.textContent : "nothing NO") + "\"");
+}
+function run() {
+  try {
+    const rwf = document.getElementById("rwf").contentWindow.document, af = document.getElementById("af").contentWindow.document;
+    card("Rock Walls, French", rwf, "fr");
+    const also = q(rwf, ".mhtc-also");
+    say("Rock Walls, French: the second way " + (also && !also.hidden ? "reads \"" + also.textContent + "\", to " + also.getAttribute("href") + (/Rock_Walls_and_Damp_fr\.html\?lang=fr/.test(also.getAttribute("href")) ? "" : " NO") : "is not there NO"));
+    say("Rock Walls, French: the page stays " + rwf.documentElement.getAttribute("lang") + (rwf.documentElement.getAttribute("lang") === "en" ? "" : " NO")
+      + " for the story; its own language switch " + (rwf.getElementById("mh-lang") ? "is there NO" : "is absent, as it should be")
+      + "; the author's words in French: " + (/J'ai créé Rock Walls/.test(words(rwf, ".mhtc-text")) ? "yes" : "NO"));
+    card("Autofac, French", af, "fr");
+    say("Autofac, French: the page " + af.documentElement.getAttribute("lang") + (af.documentElement.getAttribute("lang") === "fr" ? "" : " NO")
+      + "; both paragraphs in French: " + (/Autofac est une expérience/.test(words(af, ".mhtc-text")) && /Unreal Engine 5\.7/.test(words(af, ".mhtc-text")) ? "yes" : "NO"));
+    // the card's own switch, on the English Rock Walls: over to French and back
+    const rww = document.getElementById("rw").contentWindow, rw = rww.document;
+    card("Rock Walls, English", rw, "en");
+    say("Rock Walls, English: the machine translation " + (q(rw, ".mhtc-also").hidden ? "is not offered (French only)" : "is offered NO"));
+    q(rw, ".mhtc-lang").click();
+    card("Rock Walls, switched", rw, "fr");
+    say("Rock Walls, switched: the page stays " + rw.documentElement.getAttribute("lang") + (rw.documentElement.getAttribute("lang") === "en" ? "" : " NO")
+      + "; the address " + (/lang=fr/.test(rww.location.href) ? "says lang=fr" : "does not NO"));
+    q(rw, ".mhtc-lang").click();
+    card("Rock Walls, back", rw, "en");
+    // the link to Clod Bathos, in French mode
+    const abw = document.getElementById("ab").contentWindow, ab = abw.document;
+    const clod = "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/";
+    const links = [...ab.querySelectorAll('a[href^="' + clod + '"]')];
+    say("About, French: links to Clod Bathos " + links.length + (links.length ? "" : " NO") + ", " + (links.length && links.every((a) => /lang=fr/.test(a.href)) ? "each carrying lang=fr" : "not carrying lang=fr NO")
+      + "; MH_I18N.href gives " + abw.MH_I18N.href(clod) + (/lang=fr/.test(abw.MH_I18N.href(clod)) ? "" : " NO"));
+    // the machine translation: its card, in French and in English, then into the story
+    const mtw = document.getElementById("mt").contentWindow, mt = mtw.document, mte = document.getElementById("mte").contentWindow.document;
+    card("Machine translation, French", mt, "fr", /Traduction automatique.*risques/);
+    say("Machine translation, French: the page " + mt.documentElement.getAttribute("lang") + (mt.documentElement.getAttribute("lang") === "fr" ? "" : " NO")
+      + "; the strip warns: " + (/Traduction automatique/.test(words(mt, ".mhtc-strip")) && /risques/.test(words(mt, ".mhtc-strip")) ? "yes" : "NO")
+      + "; back to the original: " + (/Rock_Walls_and_Damp\.html/.test((q(mt, ".mhtc-also") || {}).getAttribute ? q(mt, ".mhtc-also").getAttribute("href") : "") && !q(mt, ".mhtc-also").hidden ? "yes" : "NO"));
+    say("Machine translation, English card: the strip says \"" + words(mte, ".mhtc-strip") + "\"" + (/Machine translation/.test(words(mte, ".mhtc-strip")) && /own risk/.test(words(mte, ".mhtc-strip")) ? "" : " NO")
+      + "; the page stays " + mte.documentElement.getAttribute("lang") + (mte.documentElement.getAttribute("lang") === "fr" ? "" : " NO"));
+    q(mt, ".mhtc-go").click();
+    setTimeout(() => {
+      const story = mt.getElementById("passages"), text = story ? story.textContent : "";
+      say("Machine translation, the story: " + (/Parois de roche et humidité/.test(text) ? "opens in French" : "does not open in French NO") + (/Jour \d+ depuis le réveil/.test(text) ? ", its header in French (\"" + text.match(/Jour \d+ depuis le réveil/)[0] + "\")" : ", no header NO"));
+      const link = [...mt.querySelectorAll("#passages a")].find((a) => /le froid est nouveau/.test(a.textContent));
+      if (!link) { say("Machine translation: the first link MISSING"); say("errors: none"); document.title = "done"; return; }
+      link.click();
+      setTimeout(() => {
+        const t2 = (mt.getElementById("passages") || {}).textContent || "";
+        say("Machine translation, the first link: " + (/Calculez notre balistique|Menez des essais thermiques/.test(t2) && /\bOU\b/.test(t2) ? "goes to one of its two passages (chosen at random), in French" : "goes somewhere else NO (" + t2.slice(0, 80) + ")"));
+        say("errors: none");
+        document.title = "done";
+      }, 900);
+    }, 900);
+    return;
+  } catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
+}
+</script>

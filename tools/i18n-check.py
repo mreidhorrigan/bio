@@ -35,7 +35,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGES = ["index.html?theme=technocute", "about.html", "toolbox.html", "research.html", "criticism.html",
          "glossary.html", "slime3d.html", "slimeverse3d.html", "musebots.html", "MCQer.html", "SeatPlanner.html",
          "ExamTimer.html", "Nameplates.html", "autofac.html", "pitch-shift.html",
-         "Horrigan_CV.html"]
+         "Horrigan_CV.html", "Rock_Walls_and_Damp.html", "Rock_Walls_and_Damp_fr.html", "cgsa2026.html"]
+# Pages that stay in their own language (<html data-untranslated>: a work, and the doors to
+# works) keep their lang and have no switch of their own: what turns French there is the
+# title card (title-card.js), which carries its own switch and its own lang.
 # Identical in both languages on purpose: names, keys, units, symbols.
 KEEP = re.compile(r"""^(?:
       [\W\d\s]+                                   # punctuation, numbers, arrows
@@ -175,7 +178,10 @@ def main():
             notes.append("no language switch in English")
         if "mh-langbtn" not in fr:
             notes.append("no language switch in French")
-        if not re.search(r'<html[^>]*\blang="fr"', fr):
+        if re.search(r'<html[^>]*\bdata-untranslated', fr):
+            if not re.search(r'class="mhtc"[^>]*\blang="fr"', fr):
+                notes.append("its title card did not turn French")
+        elif not re.search(r'<html[^>]*\blang="fr"', fr):
             notes.append("<html lang> did not become fr")
         stale = stale_rules(base, page + sep + "lang=fr", ROOT)
         if isinstance(stale, list) and stale and isinstance(stale[0], dict):
