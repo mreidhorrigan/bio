@@ -83,29 +83,42 @@ test("the rest wait for a long lull, one tip a lull", () => {
   assert.equal(v.said.length, 3, "and then nothing: each is said once");
 });
 
-test("each tip once: not again on the next visit, nor in another view with the same words", () => {
-  const local = store(), M = load({ localStorage: local, sessionStorage: store() });
-  const iso = view(M, [WALK, OPEN]);
+test("an area's essentials: the first time the slime comes to each view in a visit, never twice in one", () => {
+  const local = store(), session = store(), M = load({ localStorage: local, sessionStorage: session });
+  const OPEN3D = "I can open a house: walk me in, or click its door.";
+  const iso = view(M, [WALK, OPEN], { view: "/index.html" });
   iso.run(30);
   assert.deepEqual(iso.said.map((s) => s.text), [WALK, OPEN]);
-  const again = view(M, [WALK, OPEN]);                          // the same page, opened again
+  const again = view(M, [WALK, OPEN], { view: "/index.html" });   // the same page, opened again in the visit
   again.run(600);
-  assert.equal(again.said.length, 0, "nothing said twice");
-  const M2 = load({ localStorage: local, sessionStorage: store() });   // the next visit: a new page, the same browser
-  const v3d = view(M2, [WALK, "I can open a house: walk me in, or click its door."]);
+  assert.equal(again.said.length, 0, "nothing said twice in one view");
+  const v3d = view(load({ localStorage: local, sessionStorage: session }), [WALK, OPEN3D], { view: "/slimeverse3d.html" });
   v3d.run(60);
-  assert.deepEqual(v3d.said.map((s) => s.text), ["I can open a house: walk me in, or click its door."], "the 3D view says only its own words");
+  assert.deepEqual(v3d.said.map((s) => s.text), [WALK, OPEN3D], "entering the 3D village the first time: its essentials, the walk too");
+  const next = view(load({ localStorage: local, sessionStorage: store() }), [WALK, OPEN], { view: "/index.html" });   // the next visit
+  next.run(30);
+  assert.deepEqual(next.said.map((s) => s.text), [WALK, OPEN], "the next visit: the essentials again");
 });
 
-test("what the visitor has done is never said, and stays done", () => {
-  const local = store(), M = load({ localStorage: local });
+test("the rest are said once a day, whichever view said them", () => {
+  const local = store(), M = load({ localStorage: local, sessionStorage: store() });
+  const iso = view(M, [{ en: MUTE }], { view: "/index.html" });
+  iso.run(60);
+  assert.deepEqual(iso.said.map((s) => s.text), [MUTE], "in a lull");
+  const v3d = view(load({ localStorage: local, sessionStorage: store() }), [{ en: MUTE }], { view: "/slimeverse3d.html" });
+  v3d.run(120);
+  assert.equal(v3d.said.length, 0, "not again that day, in another view or visit");
+});
+
+test("what the visitor has done is not said, in that view that visit", () => {
+  const session = store(), M = load({ localStorage: store(), sessionStorage: session });
   const used = { walk: true };
   const v = view(M, [{ en: WALK, intro: true, done: () => !!used.walk }, { en: OPEN, intro: true, done: () => !!used.open }]);
   v.run(4);
   assert.deepEqual(v.said.map((s) => s.text), [OPEN], "the walk tip skipped: the visitor walked");
-  const later = view(load({ localStorage: local }), [WALK]);
+  const later = view(M, [WALK]);
   later.run(60);
-  assert.equal(later.said.length, 0, "and remembered: the next visit does not say it either");
+  assert.equal(later.said.length, 0, "and remembered: opened again in the visit, not said either");
 });
 
 test("busy, or a hidden tab: a tip waits for its moment, it is not lost", () => {

@@ -840,15 +840,19 @@
       g.setTransform(E.dpr, 0, 0, E.dpr, 0, 0);
       E.fov = opts.fov ? opts.fov(E.W, E.H) : Math.max(360, E.H * 1.05);
     };
-    let last = 0, running = false, frameFn = null;
-    function frame(now) {
-      if (!running) return;
+    // Each run is a loop of its own (loop): a pause ends it, and a run after it starts
+    // a new one. A pause and a run within one frame left the old loop's frame still
+    // waiting, and it went on beside the new one: two loops, the world at twice the
+    // speed and every timer (a bubble, a fade) run down twice as fast (26 Sept 2026).
+    let last = 0, running = false, frameFn = null, loop = 0;
+    function frame(now, mine) {
+      if (!running || mine !== loop) return;
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now; E.dt = dt; E.t += dt;
       frameFn(dt);
-      requestAnimationFrame(frame);
+      requestAnimationFrame((t) => frame(t, mine));
     }
-    E.run = (fn) => { frameFn = fn; if (running) return; running = true; last = 0; requestAnimationFrame(frame); };
+    E.run = (fn) => { frameFn = fn; if (running) return; running = true; last = 0; const mine = ++loop; requestAnimationFrame((t) => frame(t, mine)); };
     E.pause = () => { running = false; };
     E.resume = () => { if (frameFn) E.run(frameFn); };
     /** One synchronous frame, for probes: no rAF, a fixed dt. */

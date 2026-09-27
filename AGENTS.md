@@ -10,8 +10,9 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
   `node --test sounds.test.mjs`.
 - The slime's instructions: when it speaks is `tips.js`, the same in every
   world (its words stay with each view, `brand/backstage/world-style.md`
-  section 6): each area's essentials once, the rest in a long lull, and a tip
-  once said rests for 12 hours (`timing.forget`). Change the pacing only there,
+  section 6): each view's essentials the first time the slime comes to it in a
+  visit (remembered per view, for the visit), the rest in a long lull, once
+  said resting for 12 hours (`timing.forget`). Change the pacing only there,
   and run `node --test tips.test.mjs`.
 - Which way the houses are: `wayfinding.js` draws and places the edge markers
   for the iso village (on the frame's edge, toward each house) and the 3D

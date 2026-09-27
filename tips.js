@@ -12,10 +12,16 @@
      an area's introduction   its essential tips (intro), one at a time: the
                               first a moment after the slime arrives (first),
                               each after a quiet spell since the last bubble
-                              ended, whoever said it (quiet)
+                              ended, whoever said it (quiet). Said the first time
+                              the slime comes to each view in a visit, whatever
+                              another view has said: each view's essentials are
+                              remembered for the visit only, and by that view
+                              (sessionStorage, by the page's path), so entering
+                              the 3D village for the first time says how to walk
+                              there even after the iso village did
      the rest                 only in a lull: the visitor still, and the slime
                               quiet, for a long while (idle); one tip a lull
-     once a day               each tip is said once, then not again for a while
+     the rest, once a day     each other tip is said once, then not again for a while
                               (forget: 12 hours). What the slime has said, or
                               seen the visitor do, is remembered in this browser
                               by its English words and the time (localStorage,
@@ -48,10 +54,11 @@
                             speak() once, and never again
    MH_TIPS.settle(en)       remember a tip as said without saying it (needless)
    MH_TIPS.memory           has(en), add(en), forget(): what has been said lately
+   MH_TIPS.visit            the same for each view's essentials this visit (view|en)
    MH_TIPS.timing           { first, quiet, idle, forget } in seconds, read on every tick
    ========================================================================== */
 (function () {
-  const KEY = "mh-told";
+  const KEY = "mh-told", VISIT_KEY = "mh-told-visit";
   const timing = { first: 2, quiet: 6, idle: 25, forget: 12 * 3600 };
   const TICK_MS = 250;
 
@@ -70,17 +77,17 @@
    *  English words and when (ms). Older than timing.forget, it may be said again (a
    *  word kept before times were, as 1, is long past). @param {Storage[]} stores
    *  @param {() => number} [clock] milliseconds (a test brings its own) */
-  function memoryIn(stores, clock = () => Date.now()) {
+  function memoryIn(stores, clock = () => Date.now(), key = KEY, forget = () => timing.forget) {
     /** @type {Record<string, number>} */ const seen = Object.create(null);
     const load = () => {
       for (const s of stores) {
         try {
-          const v = JSON.parse(s.getItem(KEY) || "{}");
+          const v = JSON.parse(s.getItem(key) || "{}");
           if (v && typeof v === "object") for (const k of Object.keys(v)) seen[k] = Math.max(seen[k] || 0, Number(v[k]) || 0);
         } catch (e) { /* unreadable or refused: the others, or the page's own */ }
       }
     };
-    const lately = (en) => !!seen[en] && clock() - seen[en] < timing.forget * 1000;
+    const lately = (en) => !!seen[en] && clock() - seen[en] < forget() * 1000;
     load();
     return {
       load,
@@ -92,15 +99,20 @@
         load();                                        // another view or tab may have said some since
         seen[en] = clock();
         const text = JSON.stringify(seen);
-        for (const s of stores) { try { s.setItem(KEY, text); } catch (e) { /* full or refused: the page remembers */ } }
+        for (const s of stores) { try { s.setItem(key, text); } catch (e) { /* full or refused: the page remembers */ } }
       },
       forget() {
         for (const k of Object.keys(seen)) delete seen[k];
-        for (const s of stores) { try { s.removeItem(KEY); } catch (e) { /* fine */ } }
+        for (const s of stores) { try { s.removeItem(key); } catch (e) { /* fine */ } }
       },
     };
   }
   const memory = memoryIn(reachable());
+  /** Each view's essentials said this visit: sessionStorage only (else the page), for good within it. */
+  const visitMemory = (stores) => memoryIn(stores.filter((s) => { try { return s === window.sessionStorage; } catch (e) { return false; } }), undefined, VISIT_KEY, () => Infinity);
+  const visit = visitMemory(reachable());
+  /** The view a page is: its path (the iso village at / and at /index.html is one view). */
+  const viewPath = () => { try { return String(location.pathname || "page").replace(/\/$/, "/index.html"); } catch (e) { return "page"; } };
   try {
     // back to a page kept in the back-forward cache, or another tab: catch up with what was said there
     window.addEventListener("pageshow", () => memory.load());
@@ -111,33 +123,36 @@
 
   /** A view's tips, paced. Pure: the caller brings the clock (seconds). */
   function pace(o) {
-    const M = o.memory || memory;
+    const M = o.memory || memory, V = o.visit || visit, view = o.view || viewPath();
     const tips = (o.tips || []).filter((t) => t && t.en);
+    // an essential is remembered by this view for the visit; the rest by its words for a while
+    const said = (t) => (t.intro ? V.has(view + "|" + t.en) : M.has(t.en));
+    const mark = (t) => { if (t.intro) V.add(view + "|" + t.en); M.add(t.en); };
     let here = "", since = /** @type {number|null} */ (null), quiet = -Infinity, still = /** @type {number|null} */ (null), lulled = false;
     const api = {
       /** @param {number} now */
       tick(now) {
-        for (const t of tips) if (t.done && !M.has(t.en) && t.done()) M.add(t.en);   // the visitor has done it: no need to say it
+        for (const t of tips) if (t.done && !said(t) && t.done()) mark(t);           // the visitor has done it: no need to say it
         if (o.saying && o.saying()) { quiet = now; return; }                        // a bubble up: the quiet starts when it ends
         if ((o.busy && o.busy()) || hidden()) { since = null; return; }            // busy: wait, and arrive again after
         const at = o.area ? String(o.area()) : "";
         if (since == null || at !== here) { here = at; since = now; }
         if (still == null) still = now;
         if (now - since < timing.first || now - quiet < timing.quiet) return;
-        const left = tips.filter((t) => !M.has(t.en) && (!t.holds || t.holds()));
+        const left = tips.filter((t) => !said(t) && (!t.holds || t.holds()));
         if (!left.length) return;
         let tip = left.find((t) => t.intro);
         if (!tip) {                                                                   // the rest: one in a long lull
           if (lulled || now - still < timing.idle || now - quiet < timing.idle) return;
           tip = left[0]; lulled = true;
         }
-        M.add(tip.en); quiet = now;
+        mark(tip); quiet = now;
         o.say(tip.text ? tip.text() : tip.en);
       },
       /** The visitor did something: a lull starts again from now. @param {number} now */
       input(now) { still = now; lulled = false; },
       /** How many of the view's tips are still to say. */
-      left: () => tips.filter((t) => !M.has(t.en)).length,
+      left: () => tips.filter((t) => !said(t)).length,
       stop() { /* start() gives it a clock to stop */ },
     };
     return api;
@@ -161,5 +176,8 @@
     return true;
   }
 
-  window.MH_TIPS = { timing, memory, memoryIn, pace, start, tell, settle: (en) => memory.add(en), KEY };
+  /** Remember a tip as said without saying it, here and in this view's visit (needless). @param {string} en */
+  function settle(en) { memory.add(en); visit.add(viewPath() + "|" + en); }
+
+  window.MH_TIPS = { timing, memory, visit, memoryIn, visitMemory, pace, start, tell, settle, KEY, VISIT_KEY };
 })();
