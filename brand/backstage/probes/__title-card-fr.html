@@ -29,7 +29,7 @@ function card(name, d, want, stripSays = /anglais/) {
   if (!c) { say(name + ": the card MISSING"); return; }
   const french = want === "fr";
   say(name + ": card lang " + c.getAttribute("lang") + (c.getAttribute("lang") === want ? "" : " NO")
-    + "; kicker \"" + words(d, ".mhtc-kicker").slice(0, 44) + "\"" + ((/^(Ce|Cette) /.test(words(d, ".mhtc-kicker"))) === french ? "" : " NO")
+    + "; kicker \"" + words(d, ".mhtc-kicker").slice(0, 44) + "\"" + ((/^(Récit|Traduction|Expérience|Affiche)\b/.test(words(d, ".mhtc-kicker"))) === french ? "" : " NO")
     + "; Begin reads \"" + words(d, ".mhtc-go") + "\"" + ((words(d, ".mhtc-go") === "Commencer") === french ? "" : " NO"));
   say(name + ": the strip " + (strip && !strip.hidden ? "says \"" + strip.textContent + "\"" + (french && stripSays.test(strip.textContent) ? "" : " NO") : "is not there" + (french ? " NO" : ""))
     + "; the title stays \"" + words(d, "#mhtc-title").slice(0, 28) + "…\" (lang " + q(d, "#mhtc-title").getAttribute("lang") + ")"

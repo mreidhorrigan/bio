@@ -254,12 +254,12 @@ CARD = """\t<!-- The title card in front of the machine translation (title-card.
 \tif (window.MH_TITLE_CARD) window.MH_TITLE_CARD.show({
 \t\tid: "rockwallsmt",
 \t\tcolour: "#5b2a86",                                          // violet (the house --accent): its own, as each card has
-\t\tkicker: "This machine translation is presented",
+\t\tkicker: "Machine translation",
 \t\tmark: "FR",
 \t\ttitle: "Rock walls and damp\\u2014these match our dream; but, Rector, the cold is new",
 \t\tparticulars: "Implementation: a machine translation into French of the Twine 2.3.16, SugarCube 2.36.1 original, made with Claude (Anthropic) in September 2026 and not reviewed by the author. Passage names, where each link goes, and the story's logic are unchanged.\\nRuntime: any current web browser, desktop or phone, with JavaScript.",
 \t\tnote: "Machine translation: read it at your own risk.",
-\t\ttext: ["This is a machine translation of Rock Walls and Damp into French. A language model made it, and M. Reid Horrigan has not reviewed it, so it may be wrong, stilted or strange in places. The work is the original, in English."],
+\t\ttext: ["This is a machine translation of Rock Walls and Damp into French. A language model made it, and M. Reid Horrigan has not reviewed it, so it may be wrong, stilted, or strange in places. The work is the original, in English."],
 \t\talso: "Read the original, in English",
 \t\talsoUrl: "Rock_Walls_and_Damp.html",
 \t\tby: "By",
