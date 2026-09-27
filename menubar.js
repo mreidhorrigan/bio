@@ -27,7 +27,7 @@
     ["Autofac: Rad Shipping", "autofac.html"],
     ["Clod Bathos, Superior Machine",
      "https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"],
-    ["Appraising the Pedagogical Value of Audiogames (CGSA 2026)",
+    ["Appraising the Pedagogical Utility of Audiogames (CGSA 2026)",
      "cgsa2026.html"]   // its door: a card that wakes the poster's server while it is read
     // next: ["<itch.io game>", "https://…itch.io/…"],
   ];

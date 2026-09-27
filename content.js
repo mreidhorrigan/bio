@@ -129,7 +129,7 @@
             <li><a href="${B}Rock_Walls_and_Damp.html">Rock Walls and Damp</a>:a hypertext piece.</li>
             <li><a href="${B}autofac.html">Autofac: Rad Shipping</a>.</li>
             <li><a href="https://mreidhorrigan.github.io/Clod-Bathos-Superior-Machine-An-LM-IDN/"${ext}>Clod Bathos, Superior Machine</a>.</li>
-            <li><a href="${B}cgsa2026.html">Appraising the Pedagogical Value of Audiogames</a> (CGSA 2026).</li>
+            <li><a href="${B}cgsa2026.html">Appraising the Pedagogical Utility of Audiogames</a> (CGSA 2026).</li>
             <li><a href="${B}slimeverse3d.html">Slimeverse 3D</a>: this village, walkable in three dimensions.</li>
           </ul>`,
       },
