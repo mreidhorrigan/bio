@@ -47,7 +47,7 @@
   ];
   var MUSIC = [
     ["No Phenomenon", "https://nophenomenon.bandcamp.com/"],
-    ["SoundCloud", "https://soundcloud.com/matt_horrigan"]
+    ["SoundCloud", "https://soundcloud.com/mhorriga"]
   ];
   var WRITING = [
     ["Criticism", "criticism.html"],

@@ -102,7 +102,7 @@
         title: "Music",
         page: { url: `${B}about.html?menu=Music` },            // open the About page with the Music dropdown deployed
         satellites: [   // slimeverse: each specific-project house opens that project's OWN page/splash (the "Music" gateway opens the menu)
-          { title: "SoundCloud", url: "https://soundcloud.com/matt_horrigan" },
+          { title: "SoundCloud", url: "https://soundcloud.com/mhorriga" },
           { title: "No Phenomenon", url: "https://nophenomenon.bandcamp.com/" },   // the road's end: the Musebots house meets it
         ],
         html: `
@@ -110,7 +110,7 @@
           code for art installations and musical performances.</p>
           <p>Hear it: <a href="https://nophenomenon.bandcamp.com/"${ext}>No Phenomenon</a>
           on Bandcamp, and more on
-          <a href="https://soundcloud.com/matt_horrigan"${ext}>SoundCloud</a>.</p>`,
+          <a href="https://soundcloud.com/mhorriga"${ext}>SoundCloud</a>.</p>`,
       },
       {
         title: "Games",
