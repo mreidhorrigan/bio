@@ -522,6 +522,8 @@
     "musebots.html": [
       { sel: "title", text: "Musebots\u00A0: M. Reid Horrigan" },
       { sel: 'meta[name="description"]', attr: { content: "Musebots, par M. Reid Horrigan\u00A0: la Musebots Connectivity Demo (LAN, WAN, navigateur, DAW)." } },
+      { sel: "h2", text: "MBOTTV" },
+      { sel: "figure:nth-of-type(2) figcaption", html: "MusebotTV Prime Series, 5/4, Season 1 Episode 1: The Lamb. Plus sur la <a href=\"https://www.youtube.com/@MBOTTV\">cha\u00eene YouTube MBOTTV</a>." },
       { sel: "footer a", text: "Retour au monde" },
     ],
 
