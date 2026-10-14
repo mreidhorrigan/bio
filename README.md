@@ -127,11 +127,14 @@ shares the same client-side clock and Musebot Protocol room, so several towers
 can play together. The first pointer or keyboard interaction unlocks Web Audio.
 
 A link can open the world on the Musebot selector:
-`https://matthorrigan.com/?build=signal` lands in build mode with the tower tool
-chosen, raises one tower beside the slime, and opens its selector as soon as the
-tower bundle arrives. Any build tool's id works (`house` and `tree` only choose the
-tool), and `?build` alone opens build mode on Move. The parameter leaves the address
-once used, so a reload or a copied link opens the world without raising another tower.
+`https://matthorrigan.com/?build=signal`, or `?signals` with no towers in it
+(`https://matthorrigan.com/?theme=bureaucore&signals`), lands in build mode with the
+tower tool chosen; as soon as the tower bundle arrives it raises one tower beside the
+slime, on a tile clear of any towers already in the address or kept in the tab, and
+opens its selector. A `signals` value with towers in it is a shared ensemble and opens
+as before. Any build tool's id works for `build` (`house` and `tree` only choose the
+tool), and `?build` alone opens build mode on Move. These leave the address once read,
+so a reload or a copied link opens the world without raising another tower.
 
 Tower positions and assignments are stored in the `signals` URL query parameter,
 and the slime's current world position is stored in `slime`. Copying the URL

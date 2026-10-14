@@ -892,8 +892,10 @@ function wireInput() {
     for (const b of early) b.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS);
     if (early.length) saveLayout(); else if (window.MH_TOWER_ADDRESS) window.MH_TOWER_ADDRESS.keep();
     // and its picker, which it would have opened had the bundle been here (a ?build=signal
-    // link puts the tool in hand at once: a quick click comes before the bundle)
-    if (early.length && buildMode) window.MH_MUSEBOTS.openSelector(early[early.length - 1], BUILDINGS);
+    // link puts the tool in hand at once: a quick click comes before the bundle); with
+    // none, the link's own tower, now that the towers in the address stand (buildFromURL)
+    if (early.length) { linkRaise = null; if (buildMode) window.MH_MUSEBOTS.openSelector(early[early.length - 1], BUILDINGS); }
+    else raiseFromLink();
     window.MH_MUSEBOTS.updateListener?.(player.x, player.y, P, BUILDINGS);
   });
   // The Musebot picker covers the build toolbar while it is open. Its explicit
@@ -2428,7 +2430,7 @@ function start(themeOrId, content) {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
   function boot() {
-    buildDOM(); buildHub(); buildNavbar(); buildPicker(); refreshSwitcher(); wireInput(); resize();
+    buildDOM(); readBuildLink(); buildHub(); buildNavbar(); buildPicker(); refreshSwitcher(); wireInput(); resize();
     applyEcology();
     // The world's chrome exists now: let i18n.js translate it, and redraw the
     // engine's own words whenever the visitor uses the switch.
@@ -2540,24 +2542,42 @@ function restorePlayerFromURL() {
 
 /** A link can land in build mode with a tool in hand: ?build=signal opens on
  *  "Raise a signal tower." with a tower raised beside the slime and its Musebot
- *  picker open (the way to the towers from a cover letter). Any build tool's id
- *  works (house, tree, signal); ?build alone opens build mode on Move. The word
- *  leaves the address once used, so a link copied later, a reload, or the way back
- *  from the 3D village does not open build mode, or raise a tower, again. */
-function buildFromURL() {
+ *  picker open (the way to the towers from a cover letter), and so does ?signals
+ *  with no towers in it (?signals=… with towers is a shared ensemble, and opens as
+ *  ever). Any build tool's id works (house, tree, signal); ?build alone opens
+ *  build mode on Move. The words leave the address once read, so a link copied
+ *  later, a reload, or the way back from the 3D village does not open build mode,
+ *  or raise a tower, again. Read before buildHub: an empty ?signals is where this
+ *  tab's kept towers go (tower-address.js recall), and it must be seen first. */
+let linkBuild = null;                               // the tool a link asked for ("" for Move), or null
+function readBuildLink() {
   let u;
   try { u = new URL(location.href); } catch (_) { return; }
-  if (!u.searchParams.has("build")) return;
-  const want = String(u.searchParams.get("build") || "").trim().toLowerCase();
-  u.searchParams.delete("build");
+  const q = u.searchParams, bare = q.has("signals") && !q.get("signals");
+  if (!q.has("build") && !bare) return;
+  linkBuild = bare ? "signal" : String(q.get("build") || "").trim().toLowerCase();
+  q.delete("build"); if (bare) q.delete("signals");
   try { history.replaceState(history.state, "", u.href); } catch (_) { /* file URL or restricted history */ }
+}
+function buildFromURL() {
+  if (linkBuild == null) return;
+  const want = linkBuild; linkBuild = null;
   if (!buildMode) toggleBuild();
   const tool = toolOf(want);
   if (!tool) return;
   buildTool = want; refreshBuildTools();
   // a tool with a menu of its own (the signal tower's Musebot picker) raises one, so
-  // the link lands on that menu: it opens when the tower bundle arrives (mh-musebots-ready)
-  if (tool.placed) { const t = freeTileNearSlime(); if (t) placeAt(t.tx, t.ty); }
+  // the link lands on that menu. A tower waits for the tower bundle (mh-musebots-ready):
+  // the towers already in the address stand only then, and its tile must be free of them
+  if (tool.placed) { linkRaise = want; if (window.MH_MUSEBOTS) raiseFromLink(); }
+}
+let linkRaise = null;                               // the tool a link's building waits to be raised with
+/** Raise the link's building beside the slime (its menu opens as it is placed), if
+ *  the visitor is still in build mode with that tool and has not raised one already. */
+function raiseFromLink() {
+  const want = linkRaise; linkRaise = null;
+  if (!want || !buildMode || buildTool !== want) return;
+  const t = freeTileNearSlime(); if (t) placeAt(t.tx, t.ty);
 }
 /** A free tile beside the slime for a building a link raises: the nearest to it on
  *  the screen, and never so far to the side that a phone's width leaves it out; not
