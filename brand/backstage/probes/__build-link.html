@@ -13,13 +13,15 @@
 // (/?theme=bureaucore&signals): in a fresh tab, and in one keeping towers (they
 // come back, and a new one is raised); and a shared ensemble, ?signals=… with
 // towers in it, which opens as ever: no build mode, no picker, no new tower.
-// Last, a click before the bundle comes: that tower's picker, and no second.
+// Then a click before the bundle comes: that tower's picker, and no second.
+// Last, the short links: /?signals?theme=b as written ("?" for "&"), the picker
+// open in bureaucore; ?theme=t and ?theme=g on the homepage, and g in the 3D village.
 const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
 const F = document.getElementById("f");
 let stage = 0, kept = [], shared = "";
 const wait = (ok, then, n = 0) => { if (ok() || n > 80) then(); else setTimeout(() => wait(ok, then, n + 1), 250); };
 F.addEventListener("load", () => {
-  const run = [signal, reloaded, bare, house, elsewhere, signalsFresh, signalsKept, ensemble, early][stage++];
+  const run = [signal, reloaded, bare, house, elsewhere, signalsFresh, signalsKept, ensemble, early, short, shortT, shortG, short3d][stage++];
   setTimeout(() => {
     try { run(); }
     catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
@@ -138,9 +140,39 @@ function early() {
     wait(() => w.MH_MUSEBOTS && picker(d), () => {
       const t = towers(w);
       say("a click " + (before ? "before" : "after (the bundle was quicker)") + " the bundle: towers " + t.length + (t.length === 1 ? "" : " NO") + "; picker " + (picker(d) ? "open" : "closed NO"));
-      say("errors: none");
-      document.title = "done";
+      w.sessionStorage.removeItem(w.MH_TOWER_ADDRESS.KEY); kept = [];
+      F.src = "/?signals?theme=b";
     });
   }, 1);
+}
+function short() {
+  const w = F.contentWindow, d = w.document;
+  wait(() => w.MH_MUSEBOTS && picker(d), () => {
+    const keys = [...new URL(w.location.href).searchParams.keys()];
+    say("/?signals?theme=b: skin " + w.MH_ISO.skin() + (w.MH_ISO.skin() === "technocute" ? "" : " NO") + "; build mode " + (on(d) ? "on" : "off NO")
+      + "; towers " + towers(w).length + (towers(w).length === 1 ? "" : " NO") + "; picker " + (picker(d) ? "open" : "closed NO")
+      + "; the address " + w.location.search + (keys.some((k) => k.includes("?")) ? " NO" : ""));
+    F.src = "/?theme=t";
+  });
+}
+function shortT() {
+  const w = F.contentWindow;
+  say("/?theme=t: skin " + w.MH_ISO.skin() + (w.MH_ISO.skin() === "technurture" ? "" : " NO"));
+  // (by day technurture is the default too: the letters themselves, then)
+  say("  the letters: " + ["b", "t", "g", "B"].map((k) => k + " → " + w.MH_ISO.resolveSkin(k)).join(", ")
+    + (["b", "t", "g", "B"].map(w.MH_ISO.resolveSkin).join() === "technocute,technurture,technoscure,technocute" ? "" : " NO"));
+  F.src = "/?theme=g";
+}
+function shortG() {
+  const w = F.contentWindow;
+  say("/?theme=g: skin " + w.MH_ISO.skin() + (w.MH_ISO.skin() === "technoscure" ? "" : " NO"));
+  F.src = "/slimeverse3d.html?theme=g";
+}
+function short3d() {
+  const w = F.contentWindow, W = w.MH_SLIMEVERSE3D;
+  if (W) { W.pause(); W.setMuted(true); }
+  say("/slimeverse3d.html?theme=g: skin " + (W ? W.skin() : "MISSING") + (W && W.skin() === "technoscure" ? "" : " NO"));
+  say("errors: none");
+  document.title = "done";
 }
 </script>

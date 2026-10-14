@@ -4,7 +4,8 @@ This is the source for [matthorrigan.com](https://matthorrigan.com): a personal
 website you walk around. Instead of a menu, you steer a little avatar across an
 isometric world and walk up to kiosks. Each kiosk opens a page of the site (About,
 Toolbox, CV, Music, Games). One world renders in three "skins," and the landing
-skin follows your local time of day.
+skin follows your local time of day. A link can name one: `?theme=bureaucore`,
+`technurture` or `gloomthmaxx`, or just its first letter (`?theme=b`, `t`, `g`).
 
 It is built to be **forked as a template.** Keep the design and the engine, swap in
 your own words, and you have your own walkable site. This README explains the one
@@ -135,6 +136,8 @@ opens its selector. A `signals` value with towers in it is a shared ensemble and
 as before. Any build tool's id works for `build` (`house` and `tree` only choose the
 tool), and `?build` alone opens build mode on Move. These leave the address once read,
 so a reload or a copied link opens the world without raising another tower.
+The short form, `https://matthorrigan.com/?signals?theme=b`, works too: the homepage
+reads a `?` where an `&` belongs as an `&`.
 
 Tower positions and assignments are stored in the `signals` URL query parameter,
 and the slime's current world position is stored in `slime`. Copying the URL

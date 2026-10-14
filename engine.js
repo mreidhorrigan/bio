@@ -2613,8 +2613,10 @@ function openView3d() {
 }
 
 /* Shareable theme links. Friendly public names (the ones the site uses out loud) map to the
-   engine ids, so ?skin=gloomthmaxx / ?skin=bureaucore / ?skin=technurture all work. */
-const SKIN_ALIAS = { bureaucore: "technocute", gloomthmaxx: "technoscure" };   // ?skin input → registry id
+   engine ids, so ?skin=gloomthmaxx / ?skin=bureaucore / ?skin=technurture all work, and so
+   do their first letters for a short link: ?theme=b / ?theme=t / ?theme=g (slimeverse3d-page.js the same). */
+const SKIN_ALIAS = { bureaucore: "technocute", gloomthmaxx: "technoscure",     // ?skin input → registry id
+  b: "technocute", t: "technurture", g: "technoscure" };
 const SKIN_SHARE = { technocute: "bureaucore", technoscure: "gloomthmaxx" };   // registry id → friendly name shown in the URL
 /** Resolve a skin id OR a friendly alias to a real registry id. @param {string} s */
 function resolveSkin(s) { s = String(s == null ? "" : s).toLowerCase(); return SKIN_ALIAS[s] || s; }

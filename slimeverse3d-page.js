@@ -18,7 +18,7 @@
                       climbs back up into the house, beside the hatch
 
    THE ADDRESS speaks the iso world's language, so the two views agree:
-     ?theme=technurture|gloomthmaxx|bureaucore   (or a registry id; ?skin= too)
+     ?theme=technurture|gloomthmaxx|bureaucore   (or t|g|b, or a registry id; ?skin= too)
      ?slime=x,y       where the slime stands: in the village, iso tiles (the
                       iso world's own ?slime=); in the house or the cave, that
                       place's own units
@@ -42,7 +42,8 @@
   const t = (key, en, vars) => (I18N ? I18N.t(key, en, vars) : en);
   /** Words the page writes, kept in the reader's language: a switch re-renders them. */
   const say = (el, key, en, vars) => { if (!el) return; if (I18N && I18N.live) I18N.live(el, key, en, vars); else el.textContent = en; };
-  const ALIAS = { bureaucore: "technocute", gloomthmaxx: "technoscure" }, SHARE = { technocute: "bureaucore", technoscure: "gloomthmaxx" };
+  const ALIAS = { bureaucore: "technocute", gloomthmaxx: "technoscure", b: "technocute", t: "technurture", g: "technoscure" },   // and a short link's first letters (engine.js SKIN_ALIAS)
+    SHARE = { technocute: "bureaucore", technoscure: "gloomthmaxx" };
   const SKINS = ["technurture", "technoscure", "technocute"];
   const PLACE = { village: "outdoors", house: "indoors", cave: "cave" }, PLACE_NAME = { outdoors: "village", indoors: "house", cave: "cave" };
 
