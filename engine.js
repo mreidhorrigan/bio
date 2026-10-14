@@ -891,6 +891,9 @@ function wireInput() {
     const early = BUILDINGS.filter((b) => b.type === "signal" && !b.uid);
     for (const b of early) b.uid = window.MH_MUSEBOTS.nextUid(BUILDINGS);
     if (early.length) saveLayout(); else if (window.MH_TOWER_ADDRESS) window.MH_TOWER_ADDRESS.keep();
+    // and its picker, which it would have opened had the bundle been here (a ?build=signal
+    // link puts the tool in hand at once: a quick click comes before the bundle)
+    if (early.length && buildMode) window.MH_MUSEBOTS.openSelector(early[early.length - 1], BUILDINGS);
     window.MH_MUSEBOTS.updateListener?.(player.x, player.y, P, BUILDINGS);
   });
   // The Musebot picker covers the build toolbar while it is open. Its explicit
@@ -2434,6 +2437,7 @@ function start(themeOrId, content) {
       document.addEventListener("mh:lang", relabel);
     }
     startGame();          // no "enter" page — land straight in the world (audio wakes on first input)
+    buildFromURL();
     last = performance.now(); requestAnimationFrame(loop);
   }
 }
@@ -2532,6 +2536,22 @@ function restorePlayerFromURL() {
     const [fx, fy] = (q.get("facing") || "").split(",").map(Number), m = Math.hypot(fx, fy);
     if (m > 1e-6) { player.fx = fx / m; player.fy = fy / m; }
   } catch (_) { /* malformed or unavailable URL */ }
+}
+
+/** A link can land in build mode with a tool in hand: ?build=signal opens on
+ *  "Raise a signal tower." (the way to the towers from a cover letter). Any build
+ *  tool's id works (house, tree, signal); ?build alone opens build mode on Move.
+ *  The word leaves the address once used, so a link copied later, a reload, or the
+ *  way back from the 3D village does not open build mode again. */
+function buildFromURL() {
+  let u;
+  try { u = new URL(location.href); } catch (_) { return; }
+  if (!u.searchParams.has("build")) return;
+  const want = String(u.searchParams.get("build") || "").trim().toLowerCase();
+  u.searchParams.delete("build");
+  try { history.replaceState(history.state, "", u.href); } catch (_) { /* file URL or restricted history */ }
+  if (!buildMode) toggleBuild();
+  if (toolOf(want)) { buildTool = want; refreshBuildTools(); }
 }
 
 /** The same village in 3D (CONTENT.view3d), in this tab: the slime on the same
