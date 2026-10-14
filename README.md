@@ -126,10 +126,12 @@ independent instance of the selected browser Musebot; every tower on the page
 shares the same client-side clock and Musebot Protocol room, so several towers
 can play together. The first pointer or keyboard interaction unlocks Web Audio.
 
-A link can open the world in build mode with the tower tool already chosen:
-`https://matthorrigan.com/?build=signal`. Any build tool's id works (`house`,
-`tree`, `signal`), and `?build` alone opens build mode on Move. The parameter
-leaves the address once used, so a reload or a copied link opens the plain world.
+A link can open the world on the Musebot selector:
+`https://matthorrigan.com/?build=signal` lands in build mode with the tower tool
+chosen, raises one tower beside the slime, and opens its selector as soon as the
+tower bundle arrives. Any build tool's id works (`house` and `tree` only choose the
+tool), and `?build` alone opens build mode on Move. The parameter leaves the address
+once used, so a reload or a copied link opens the world without raising another tower.
 
 Tower positions and assignments are stored in the `signals` URL query parameter,
 and the slime's current world position is stored in `slime`. Copying the URL

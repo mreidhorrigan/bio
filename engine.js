@@ -2539,10 +2539,11 @@ function restorePlayerFromURL() {
 }
 
 /** A link can land in build mode with a tool in hand: ?build=signal opens on
- *  "Raise a signal tower." (the way to the towers from a cover letter). Any build
- *  tool's id works (house, tree, signal); ?build alone opens build mode on Move.
- *  The word leaves the address once used, so a link copied later, a reload, or the
- *  way back from the 3D village does not open build mode again. */
+ *  "Raise a signal tower." with a tower raised beside the slime and its Musebot
+ *  picker open (the way to the towers from a cover letter). Any build tool's id
+ *  works (house, tree, signal); ?build alone opens build mode on Move. The word
+ *  leaves the address once used, so a link copied later, a reload, or the way back
+ *  from the 3D village does not open build mode, or raise a tower, again. */
 function buildFromURL() {
   let u;
   try { u = new URL(location.href); } catch (_) { return; }
@@ -2551,7 +2552,30 @@ function buildFromURL() {
   u.searchParams.delete("build");
   try { history.replaceState(history.state, "", u.href); } catch (_) { /* file URL or restricted history */ }
   if (!buildMode) toggleBuild();
-  if (toolOf(want)) { buildTool = want; refreshBuildTools(); }
+  const tool = toolOf(want);
+  if (!tool) return;
+  buildTool = want; refreshBuildTools();
+  // a tool with a menu of its own (the signal tower's Musebot picker) raises one, so
+  // the link lands on that menu: it opens when the tower bundle arrives (mh-musebots-ready)
+  if (tool.placed) { const t = freeTileNearSlime(); if (t) placeAt(t.tx, t.ty); }
+}
+/** A free tile beside the slime for a building a link raises: the nearest to it on
+ *  the screen, and never so far to the side that a phone's width leaves it out; not
+ *  under the slime, on a building or the water, or by a house or the beacon. */
+function freeTileNearSlime() {
+  const cx = Math.round(player.x), cy = Math.round(player.y);
+  let best = null, bestD = Infinity;
+  for (let dx = -3; dx <= 3; dx++) for (let dy = -3; dy <= 3; dy++) {
+    const ix = cx + dx, iy = cy + dy, rx = ix - player.x, ry = iy - player.y;
+    const ox = (rx - ry) * (TILE_W / 2), oy = (rx + ry) * (TILE_H / 2), d = Math.hypot(ox, oy);   // as toScreen
+    if (Math.abs(ox) > 120 || Math.hypot(rx, ry) < 1 || d >= bestD) continue;
+    const tx = wrap(ix), ty = wrap(iy);
+    if (buildingAt(tx, ty) || onWater(tx, ty)) continue;
+    if (EXHIBITS.some((e) => Math.hypot(nearImg(e.tx, tx) - tx, nearImg(e.ty, ty) - ty) < 1.5)) continue;
+    if (T.monument !== false && Math.hypot(nearImg(HX, tx) - tx, nearImg(HY, ty) - ty) < 1.5) continue;   // nor by the plaza's beacon
+    best = { tx, ty }; bestD = d;
+  }
+  return best;
 }
 
 /** The same village in 3D (CONTENT.view3d), in this tab: the slime on the same

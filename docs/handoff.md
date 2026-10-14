@@ -67,7 +67,7 @@ Probes by area: the keys and accessibility `__keys-a11y`; the homepage
 `__cave-drop`, `__cave-seethrough` (nothing shows through the cave floor),
 `__cave-cover-cost` (time it with `PROBE_GPU=1`), `__verse3d-edge` and `__iso-edge` (the edge
 markers), `__views-built-towers` (a tower built by hand, into 3D every way), `__build-link`
-(`?build=signal` lands in build mode on the tower tool); the glossary
+(`?build=signal` lands on the Musebot selector); the glossary
 `__glossary`, `__glossary-bar`, `__glossary-signs`, `__glossary-phone`,
 `__glossary-small`, `__glossary-live`, `__glossary-keys`, `__glossary-fr*`.
 A probe's line with NO, MISSING, EXCEPTION or FAIL fails it.

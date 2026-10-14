@@ -1,75 +1,86 @@
-<!DOCTYPE html><meta charset="utf-8"><title>A link with ?build=signal lands in build mode on the signal-tower tool</title>
+<!DOCTYPE html><meta charset="utf-8"><title>A link with ?build=signal lands on the Musebot picker, a tower raised beside the slime</title>
 <meta name="budget" content="60000">
-<iframe id="f" src="/index.html?build=signal&theme=technurture&slime=30.0,30.1" style="width:1000px;height:700px;border:0"></iframe>
+<iframe id="f" src="/?build=signal" style="width:1000px;height:700px;border:0"></iframe>
 <pre id="out">running</pre>
 <script>
-// The cover letter's link (/?build=signal): the world opens in build mode with
-// "Raise a signal tower." chosen, and the word leaves the address (the theme
-// stays). A click on the ground raises a tower and opens the Musebot picker;
-// a reload is the plain world again. Then ?build alone (Move) and ?build=house.
-// Then a click before the tower bundle has arrived: the picker still opens.
+// The cover letter's link, as it is (/?build=signal): the world opens in build
+// mode on "Raise a signal tower.", one tower raised beside the slime, and its
+// Musebot picker open once the tower bundle arrives; the word leaves the address.
+// A bot chosen goes into the address; a reload is the plain world with that one
+// tower (no second). The tab keeps it from then on (tower-address.js), so the
+// later stages count only what they raise. Then ?build alone (Move) and ?build=House raise nothing,
+// and the same link from a spot by the water.
 const say = (t) => { document.getElementById("out").textContent += "\n" + t; };
 const F = document.getElementById("f");
-let stage = 0;
+let stage = 0, kept = [];
 const wait = (ok, then, n = 0) => { if (ok() || n > 80) then(); else setTimeout(() => wait(ok, then, n + 1), 250); };
 F.addEventListener("load", () => {
-  const run = [signal, reloaded, bare, house, early][stage++];
-  const delay = run === early ? 0 : 1500;
+  const run = [signal, reloaded, bare, house, elsewhere][stage++];
   setTimeout(() => {
     try { run(); }
     catch (e) { say("EXCEPTION " + e.message + "\n" + e.stack); document.title = "done"; }
-  }, delay);
+  }, run === signal ? 0 : 1500);
 });
 const bar = (d) => d.getElementById("mh-buildbar");
 const on = (d) => { const b = bar(d); return !!b && !b.classList.contains("mh-faded") && !b.inert; };
 const current = (d) => { const c = bar(d) && bar(d).querySelector(".mh-tool.mh-cur"); return c ? c.dataset.tool : "none"; };
 const param = (w, k) => new URL(w.location.href).searchParams.get(k);
-const click = (w, cv, dx, dy) => {
-  const r = cv.getBoundingClientRect(), x = r.left + r.width / 2 + dx, y = r.top + r.height / 2 + dy;
-  for (const type of ["pointerdown", "pointerup"]) cv.dispatchEvent(new w.PointerEvent(type, { clientX: x, clientY: y, bubbles: true, pointerId: 1, pointerType: "mouse", button: 0, buttons: type === "pointerdown" ? 1 : 0, isPrimary: true }));
-};
 const picker = (d) => { const s = d.getElementById("mh-signal-selector"); return !!s && !s.hidden; };
+const towers = (w) => w.MH_ISO.buildings().filter((b) => b.type === "signal");
+const raised = (w) => w.MH_ISO.buildings().filter((b) => !kept.includes(b.uid));   // the tab keeps earlier towers (tower-address.js): only new ones count
+// where the tower stands on the screen from the slime, in CSS pixels (as toScreen): a phone 390 wide sees ±150
+const offset = (w, t) => { const p = w.MH_ISO.player(), T = w.MH_ISO.TILE, rx = t.tx - p.x, ry = t.ty - p.y; return [(rx - ry) * T.W / 2, (rx + ry) * T.H / 2]; };
+const where = (w, t) => { const [x, y] = offset(w, t); return Math.round(x) + "," + Math.round(y) + " px from the slime" + (Math.abs(x) <= 120 && Math.hypot(x, y) <= 200 ? "" : " NO"); };
 function signal() {
   const w = F.contentWindow, d = w.document;
-  say("?build=signal: build mode " + (on(d) ? "on" : "off NO") + "; tool " + current(d) + (current(d) === "signal" ? "" : " NO"));
-  say("the address: build " + (param(w, "build") === null ? "gone" : "still there NO") + ", theme " + (param(w, "theme") || "gone NO"));
-  wait(() => w.MH_MUSEBOTS, () => {
-    click(w, d.querySelector("canvas"), 96, 30);
-    setTimeout(() => {
-      const t = w.MH_ISO.buildings().filter((b) => b.type === "signal");
-      say("a click: towers " + t.length + (t.length === 1 ? "" : " NO") + "; the Musebot picker " + (picker(d) ? "open" : "closed NO"));
-      w.location.reload();
-    }, 600);
+  wait(() => w.MH_ISO && d.querySelector("canvas") && on(d), () => {
+    const early = !w.MH_MUSEBOTS, t = towers(w);
+    say("/?build=signal: build mode " + (on(d) ? "on" : "off NO") + "; tool " + current(d) + (current(d) === "signal" ? "" : " NO"));
+    say("the address: build " + (param(w, "build") === null ? "gone" : "still there NO"));
+    say("towers raised " + (early ? "before the bundle" : "(the bundle was quicker)") + ": " + t.length + (t.length === 1 ? "" : " NO")
+      + (t[0] ? ", " + where(w, t[0]) : ""));
+    wait(() => w.MH_MUSEBOTS && picker(d), () => {
+      const h = d.getElementById("mh-signal-title"), f = d.activeElement;
+      say("the bundle came: the Musebot picker " + (picker(d) ? "open" : "closed NO") + ", \"" + (h ? h.textContent : "MISSING") + "\""
+        + "; focus in " + (f && f.classList.contains("mh-signal-search") ? "its search" : (f ? f.tagName : "nothing") + " NO"));
+      say("the tower has an id: " + (towers(w)[0] && towers(w)[0].uid ? "yes" : "NO"));
+      const opt = d.querySelector(".mh-signal-option");
+      if (!opt) { say("a Musebot to choose MISSING"); document.title = "done"; return; }
+      opt.click();
+      setTimeout(() => {
+        const tok = towers(w)[0] && towers(w)[0].botToken;
+        say("a Musebot chosen: picker " + (picker(d) ? "open NO" : "closed") + "; the tower's bot " + (tok ? "set" : "unset NO") + "; the address " + (param(w, "signals") ? "carries it" : "does not NO"));
+        w.location.reload();
+      }, 400);
+    });
   });
 }
 function reloaded() {
-  const d = F.contentWindow.document;
-  say("reloaded: build mode " + (on(d) ? "on NO" : "off"));
-  F.src = "/index.html?build&theme=technocute";
+  const w = F.contentWindow, d = w.document;
+  wait(() => w.MH_MUSEBOTS, () => {
+    const t = towers(w); kept = t.map((b) => b.uid);
+    say("reloaded: build mode " + (on(d) ? "on NO" : "off") + "; picker " + (picker(d) ? "open NO" : "closed") + "; towers " + t.length + (t.length === 1 && t[0].botToken ? ", its bot kept" : " NO"));
+    F.src = "/index.html?build&theme=technocute";
+  });
 }
 function bare() {
-  const d = F.contentWindow.document;
-  say("?build: build mode " + (on(d) ? "on" : "off NO") + "; tool " + current(d) + (current(d) === "move" ? "" : " NO"));
+  const w = F.contentWindow, d = w.document;
+  say("?build: build mode " + (on(d) ? "on" : "off NO") + "; tool " + current(d) + (current(d) === "move" ? "" : " NO") + "; raised " + raised(w).length + (raised(w).length ? " NO" : ""));
   F.src = "/index.html?build=House&theme=technocute";
 }
 function house() {
-  const d = F.contentWindow.document;
-  say("?build=House: tool " + current(d) + (current(d) === "house" ? "" : " NO"));
-  F.src = "/index.html?build=signal&theme=technocute&slime=30.0,30.1";
-}
-function early() {
-  // the frame's load event comes after the page's own, which starts the bundle's
-  // fetch; a click now, as soon as the world is up, may still come before it runs
   const w = F.contentWindow, d = w.document;
-  wait(() => d.querySelector("canvas") && on(d), () => {
-    const before = !w.MH_MUSEBOTS;
-    click(w, d.querySelector("canvas"), 96, 30);
-    say("a click " + (before ? "before" : "after (the bundle was quicker)") + " the bundle: towers " + w.MH_ISO.buildings().filter((b) => b.type === "signal").length);
-    wait(() => w.MH_MUSEBOTS && picker(d), () => {
-      say("the bundle came: the Musebot picker " + (picker(d) ? "open" : "closed NO"));
-      say("errors: none");
-      document.title = "done";
-    });
-  }, 1);
+  say("?build=House: tool " + current(d) + (current(d) === "house" ? "" : " NO") + "; raised " + raised(w).length + (raised(w).length ? " NO" : ""));
+  F.src = "/index.html?build=signal&theme=technurture&slime=30.0,30.1";
+}
+function elsewhere() {
+  const w = F.contentWindow, d = w.document;
+  wait(() => w.MH_MUSEBOTS && picker(d), () => {
+    const t = raised(w);
+    say("from another spot: raised " + t.length + (t.length === 1 ? "" : " NO") + (t[0] ? ", " + where(w, t[0]) + (w.MH_ISO.onWater(t[0].tx, t[0].ty) ? ", in the water NO" : "") : "")
+      + "; picker " + (picker(d) ? "open" : "closed NO"));
+    say("errors: none");
+    document.title = "done";
+  });
 }
 </script>
