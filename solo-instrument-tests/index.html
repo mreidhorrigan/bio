@@ -41,6 +41,7 @@ table.reading td{white-space:normal}table.reading td:first-child{width:220px}
 .readouts td{font-variant-numeric:tabular-nums}
 #status{min-height:2.9em;font-size:14px;margin:4px 0}#status.failed{color:var(--warn)}
 .said{color:var(--warn);font-size:13px;min-height:2.9em}
+.solo{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px}.solo label{font-size:14px}#w-soloSaid{font-size:13px;min-height:1.4em}
 #w-pitchSaid{min-height:2.9em}
 #s-way{font-size:20px;margin-left:10px;vertical-align:middle;display:inline-block;width:6.2em;white-space:nowrap}
 .radios label,.strings label{margin-right:14px;font-size:14px;white-space:nowrap}
@@ -88,6 +89,10 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <button id="w-tongueNow" title="t">Tongue now (t)</button>
     <button id="w-neutral" title="its neutral note, at its dynamic, every dial back to the rules' value there">↺ Neutral note</button>
     <button id="w-reset" title="every dial back to the rules' value at this pitch and dynamic, the holes the pitch's">↺ Back to the rules</button>
+    <div class="solo"><button id="w-solo" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player -- played on it; everything in it drawn from its seed">▶ A musebot plays</button>
+      <label>seed <input type="number" id="w-soloSeed" min="0" step="1"></label>
+      <label>at most <input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"> s</label></div>
+    <div class="muted" id="w-soloSaid"></div>
     <div class="meter"><div id="w-meter"></div></div>
     <table class="readouts"><tbody>
       <tr><td>Heard</td><td id="w-heard">--</td></tr>

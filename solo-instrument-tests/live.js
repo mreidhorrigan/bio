@@ -577,26 +577,26 @@ function playersBand(input) {
     input.replaceWith(track);
     track.append(input);
   }
-  const band = document.createElement("span"), fill2 = document.createElement("i"), said2 = document.createElement("small");
-  band.className = "players";
-  band.append(fill2, said2);
-  track.append(band);
+  const band2 = document.createElement("span"), fill2 = document.createElement("i"), said2 = document.createElement("small");
+  band2.className = "players";
+  band2.append(fill2, said2);
+  track.append(band2);
   return (entry, place, written) => {
-    const value2 = entry?.value != null, [low, high] = value2 ? [entry.value, entry.value] : entry?.range ?? [null, null];
+    const value3 = entry?.value != null, [low, high] = value3 ? [entry.value, entry.value] : entry?.range ?? [null, null];
     if (!entry || low == null && high == null) {
       fill2.hidden = true;
       said2.textContent = "unmeasured";
-      band.title = "Nobody measured yet for this control.";
+      band2.title = "Nobody measured yet for this control.";
       return;
     }
     const clip = (x2) => Math.min(1, Math.max(0, x2)), a = low == null ? 0 : place(low), b = high == null ? 1 : place(high);
     const placed2 = Number.isFinite(a) && Number.isFinite(b), from = clip(Math.min(a, b)), to = clip(Math.max(a, b)), beyond = placed2 && (Math.max(a, b) < 0 || Math.min(a, b) > 1);
     fill2.hidden = !placed2 || beyond;
-    fill2.classList.toggle("tick", value2);
+    fill2.classList.toggle("tick", value3);
     fill2.style.left = `calc(8px + (100% - 16px) * ${from})`;
-    fill2.style.width = value2 ? "" : `calc((100% - 16px) * ${to - from})`;
-    said2.textContent = `measured ${value2 ? written(low) : low == null ? `≤ ${written(high)}` : high == null ? `≥ ${written(low)}` : `${written(low)}–${written(high)}`}` + (beyond ? ", beyond its reach" : "") + (entry.by ? " (borrowed)" : "");
-    band.title = `${entry.what[0].toUpperCase()}${entry.what.slice(1)}: ${entry.source}${entry.by ? `; borrowed from ${entry.by}` : ""}.`;
+    fill2.style.width = value3 ? "" : `calc((100% - 16px) * ${to - from})`;
+    said2.textContent = `measured ${value3 ? written(low) : low == null ? `≤ ${written(high)}` : high == null ? `≥ ${written(low)}` : `${written(low)}–${written(high)}`}` + (beyond ? ", beyond its reach" : "") + (entry.by ? " (borrowed)" : "");
+    band2.title = `${entry.what[0].toUpperCase()}${entry.what.slice(1)}: ${entry.source}${entry.by ? `; borrowed from ${entry.by}` : ""}.`;
   };
 }
 function atPitch(entry, midi) {
@@ -1068,10 +1068,10 @@ async function init(status2) {
   };
   $("variant").onchange = () => instrument(state.type, +$("variant").value);
   $("reseed").onclick = async () => {
-    const seed = Math.round(+$("seed").value);
-    if (seed >= 0) {
-      await ask([{ do: "seed", seed }]);
-      state.seed = seed;
+    const seed2 = Math.round(+$("seed").value);
+    if (seed2 >= 0) {
+      await ask([{ do: "seed", seed: seed2 }]);
+      state.seed = seed2;
       describe();
     }
   };
@@ -3828,7 +3828,7 @@ var EQUATION = Object.freeze({
   "cylinder-diameter": ({ mu, rho }) => Math.sqrt(4 * mu / (Math.PI * rho)),
   "young-from-stiffness": ({ EI, d }) => 64 * EI / (Math.PI * d ** 4),
   "mean": ({ values }) => values.reduce((a, b) => a + b, 0) / values.length,
-  "same": ({ value: value2 }) => value2,
+  "same": ({ value: value3 }) => value3,
   "periods-in": ({ seconds, hz }) => seconds * hz,
   "seconds-for": ({ periods, hz, least }) => Math.max(least, periods / hz),
   "scale-ratio": ({ a, a0 }) => a / a0,
@@ -3981,11 +3981,11 @@ function resolve(of, id, path, stack) {
     ...Object.fromEntries(Object.entries(spec.inputs ?? {}).map(([name2, p]) => [name2, read2(node, p, caps)])),
     ...Object.fromEntries(Object.entries(spec.here ?? {}).map(([name2, p]) => [name2, read2(id, p, captures)]))
   });
-  let value2 = leaf.value ?? leaf.range ?? leaf.file ?? null, kind = leaf.kind, borrowedFrom = null;
+  let value3 = leaf.value ?? leaf.range ?? leaf.file ?? null, kind = leaf.kind, borrowedFrom = null;
   if ((leaf.derive || leaf.like) && OBJECTS[id]?.abstract) return Object.freeze({ ...leaf, id, path, at, inherited, kind, value: null, template: true });
   if (leaf.derive) {
     const inputs = Object.fromEntries(Object.entries(leaf.derive.inputs).map(([name2, p]) => [name2, read2(id, p, captures)]));
-    value2 = ranged ? null : equation(leaf.derive.equation, inputs);
+    value3 = ranged ? null : equation(leaf.derive.equation, inputs);
   }
   if (leaf.like) {
     const L = leaf.like, target = compute(id, L.here ?? L.match, captures);
@@ -3998,16 +3998,16 @@ function resolve(of, id, path, stack) {
         score = d;
       }
     }
-    value2 = L.take === "@id" ? best.node : compute(best.node, L.take, best.caps);
+    value3 = L.take === "@id" ? best.node : compute(best.node, L.take, best.caps);
     borrowedFrom = [best.node, ...best.caps].join(" ");
   }
   if (inherited && leaf.passes?.by && !(leaf.measuredOn ?? []).includes(id) && !ranged) {
     const at2 = (node, suffix) => Object.fromEntries(Object.entries(leaf.passes.inputs).map(([name2, p]) => [name2 + suffix, read2(node, p, [])]));
-    value2 = value2 * equation(leaf.passes.by, { ...at2(id, ""), ...at2(leaf.passes.reference, "0") });
+    value3 = value3 * equation(leaf.passes.by, { ...at2(id, ""), ...at2(leaf.passes.reference, "0") });
     kind = "borrowed";
     borrowedFrom = leaf.passes.reference;
   }
-  return Object.freeze({ ...leaf, id, path, at, inherited, kind, value: value2, ...ranged ? { ranged } : {}, ...borrowedFrom ? { borrowedFrom } : {} });
+  return Object.freeze({ ...leaf, id, path, at, inherited, kind, value: value3, ...ranged ? { ranged } : {}, ...borrowedFrom ? { borrowedFrom } : {} });
 }
 var playerEntry = (id, path) => resolve("players", id, path, []);
 var player = (id, path) => playerEntry(id, path).value;
@@ -4048,8 +4048,8 @@ function settingEntry(method, name2, stack = []) {
     if (kind === "player") return resolve("players", rest3[0], rest3.slice(1).join(":"), [...stack, key]).value;
     throw new Error(`registry: setting ${method} ${name2}: no input ${p}`);
   };
-  const value2 = leaf.derive ? equation(leaf.derive.equation, Object.fromEntries(Object.entries(leaf.derive.inputs).map(([k, p]) => [k, input(p)]))) : leaf.value ?? leaf.range ?? null;
-  return Object.freeze({ ...leaf, method, name: name2, value: value2 });
+  const value3 = leaf.derive ? equation(leaf.derive.equation, Object.fromEntries(Object.entries(leaf.derive.inputs).map(([k, p]) => [k, input(p)]))) : leaf.value ?? leaf.range ?? null;
+  return Object.freeze({ ...leaf, method, name: name2, value: value3 });
 }
 
 // public/shared/performers/vocal-tract.js
@@ -4160,17 +4160,17 @@ function yinFixedDifferences(samples, width, maxLag, { maxTransform = 131072 } =
   let directFallbacks = 0;
   for (let lag = 1; lag <= maxLag; lag++) {
     const scale = prefix[width] + prefix[width + lag] - prefix[lag];
-    let value2 = scale - 2 * a[width - 1 + lag];
-    if (value2 <= 1e-10 * scale) {
-      value2 = 0;
+    let value3 = scale - 2 * a[width - 1 + lag];
+    if (value3 <= 1e-10 * scale) {
+      value3 = 0;
       for (let j = 0; j < width; j++) {
         const d = samples[j] - samples[j + lag];
-        value2 += d * d;
+        value3 += d * d;
       }
       directFallbacks++;
     }
-    if (!Number.isFinite(value2)) throw new RangeError("Nonfinite YIN transform result");
-    differences[lag] = value2;
+    if (!Number.isFinite(value3)) throw new RangeError("Nonfinite YIN transform result");
+    differences[lag] = value3;
   }
   return { differences, transformSize: size, directFallbacks, kind: "floating-point-approximation" };
 }
@@ -4466,6 +4466,291 @@ function slideSvg(position, most = 7, label3 = "Slide") {
   return svgOf([0, 0, 21, 5.6], `<rect x="${x2(1) - 0.4}" y=".6" width="${x2(at) - x2(1) + 0.8}" height="1.2" rx=".3" fill="currentColor" opacity=".35"/><line x1="${x2(1)}" y1="2.6" x2="${x2(end)}" y2="2.6" stroke="currentColor" stroke-width=".1"/>${marks.join("")}<line x1="${x2(at)}" y1=".2" x2="${x2(at)}" y2="3.8" stroke="currentColor" stroke-width=".25"/>`, label3);
 }
 
+// public/random-source.js
+var MULBERRY_STEP = 1831565813;
+function hashSeed(value3) {
+  const text = String(value3), numeric = Number(text);
+  if (text.trim() !== "" && Number.isFinite(numeric)) return numeric >>> 0;
+  let hash = 2166136261;
+  for (const character of text) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+function freshSeed() {
+  return hashSeed(Date.now());
+}
+function mulberry(state2) {
+  let value3 = state2;
+  value3 = Math.imul(value3 ^ value3 >>> 15, value3 | 1);
+  value3 ^= value3 + Math.imul(value3 ^ value3 >>> 7, value3 | 61);
+  return ((value3 ^ value3 >>> 14) >>> 0) / 4294967296;
+}
+function createRandomStream(value3) {
+  const seed2 = hashSeed(value3);
+  let state2 = seed2;
+  return {
+    seed: seed2,
+    next() {
+      state2 = state2 + MULBERRY_STEP >>> 0;
+      return mulberry(state2);
+    },
+    snapshot() {
+      return { algorithm: "mulberry32", seed: seed2, state: state2 };
+    },
+    restore(saved) {
+      if (saved?.algorithm !== "mulberry32" || saved.seed !== seed2 || !Number.isInteger(saved.state) || saved.state < 0 || saved.state > 4294967295) throw new Error("Invalid random stream state");
+      state2 = saved.state;
+    }
+  };
+}
+var seed = freshSeed();
+var stream = createRandomStream(seed);
+
+// public/shared/rhythm-vocabulary.js
+var KRISHNASWAMY_WELLS = Object.freeze({
+  citation: 'Jagdish A. Krishnaswamy and Robert Wells, "A Novel Generative Paradigm for Carnatic Rhythmic Composition", Analytical Approaches to Music of South Asia 1 (2023)',
+  uri: "https://southasia.iftawm.org/wp-content/uploads/KrishnaswamyWells_Article.pdf",
+  accessed: "2026-09-28"
+});
+var TOUSSAINT = Object.freeze({
+  citation: 'Godfried T. Toussaint, The Geometry of Musical Rhythm: What Makes a "Good" Rhythm Good? (CRC Press, 2013), and "The Euclidean algorithm generates traditional musical rhythms", Bridges (2005)',
+  uri: "https://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf",
+  accessed: "2026-09-28"
+});
+var VURKAC = Object.freeze({
+  citation: 'Mehmet Vurkaç, "A Cross-Cultural Grammar for Temporal Harmony in Afro-Latin Musics: Clave, Partido-Alto and Other Timelines", Current Musicology 94 (2012)',
+  uri: "https://doi.org/10.7916/cm.v0i94.5234",
+  accessed: "2026-07-24"
+});
+var CLAYTON = Object.freeze({ citation: "Martin Clayton, Time in Indian Music: Rhythm, Metre, and Form in North Indian Rāg Performance (Oxford University Press, 2000)", uri: null, accessed: null });
+var wikipedia = (title, accessed = "2026-09-28") => Object.freeze({ citation: `"${title}", Wikipedia`, uri: `https://en.wikipedia.org/wiki/${title}`, accessed });
+var NADAI = Object.freeze({ caturasra: 1, tisra: 3, khanda: 5, misra: 7, sankirna: 9, "sampurna-khanda": 10 });
+var THEKA_BAYAN = Object.freeze({ dha: true, dhin: true, dhi: true, ta: false, tin: false, ti: false, na: false });
+var tala = (record) => {
+  const beats = record.components.reduce((sum, component) => sum + component.beats, 0);
+  if (record.theka && (record.theka.length !== beats || record.theka.some((bol) => !(bol in THEKA_BAYAN)))) throw new RangeError(`${record.id}: a theka is a known bol for each beat`);
+  return Object.freeze({
+    kind: "tala",
+    license: "metadata-only",
+    ...record,
+    ...record.theka ? { theka: Object.freeze([...record.theka]) } : {},
+    components: Object.freeze(record.components.map((component) => Object.freeze({ ...component, gestures: component.gestures ? Object.freeze([...component.gestures]) : null })))
+  });
+};
+var clave = (record) => Object.freeze({ kind: "clave", license: "metadata-only", ...record, onsets: Object.freeze([...record.onsets]) });
+var RHYTHM_VOCABULARY = Object.freeze(Object.fromEntries([
+  // Ādi tāḷa: "8 beats of equal duration ... grouped into three angas of 4, 2, and 2 beats" (¶15). A laghu's beats are a
+  // clap and finger counts from the little finger, a drutam's a clap and a wave (Figure 1, shown there for tisra
+  // triputa's laghu of three: clap, pinky, ring).
+  tala({
+    id: "carnatic.adi",
+    tradition: "Carnatic",
+    name: "Ādi tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "laghu", beats: 4, gestures: ["clap", "pinky", "ring", "middle"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }]
+  }),
+  // Tiśra tripuṭa tāḷa: "seven-beat cycles divided into angas of lengths 3, 2, and 2", each beat marked by its kriyā:
+  // clap, pinky, ring; clap, wave; clap, wave (Figure 1).
+  tala({
+    id: "carnatic.tisra-triputa",
+    tradition: "Carnatic",
+    name: "Tiśra tripuṭa tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "laghu", beats: 3, gestures: ["clap", "pinky", "ring"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }]
+  }),
+  // Rūpaka tāḷa as the source takes it: "3 beats of equal duration" (¶15), "a 3-beat rhythmic cycle with 4 subdivisions
+  // per beat" (¶3). The source gives no kriyās for it, so none are claimed.
+  tala({
+    id: "carnatic.rupaka",
+    tradition: "Carnatic",
+    name: "Rūpaka tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "beats", beats: 3, gestures: null }]
+  }),
+  // Miśra cāpu tāḷa, a cāpu tāḷa, "whose beats vary in duration" (¶12), as the source takes it: "one long beat (three
+  // subdivisions) followed by two shorter beats (two subdivisions)", seven subdivisions a cycle (note 3; "miṣra cāpu
+  // tāḷa in tiṣra naḍai, totalling 21 subdivisions per cycle"). Other artists count it as seven equal beats (note 3).
+  // No kriyās are claimed.
+  tala({
+    id: "carnatic.misra-capu",
+    tradition: "Carnatic",
+    name: "Miśra cāpu tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "long", beats: 1, units: 3, gestures: null }, { kind: "short", beats: 2, units: 2, gestures: null }]
+  }),
+  // Hindustani taals: vibhags, each begun with a clap (tali; the cycle's first, sam, marked X) or a wave (khali, "empty",
+  // marked 0), the other matras ungestured; and the theka, the taal's stroke names (bols) a matra each. Where a bol
+  // sounds the bayan, the left-hand bass drum (dha, dhin, dhi), and where it does not (ta, tin, ti, na) is the theka's
+  // own (THEKA_BAYAN), so a part's bass can follow it: the khali vibhag is where it thins.
+  // Teentaal: 16 matras, 4+4+4+4, marked X 2 0 3.
+  tala({
+    id: "hindustani.teentaal",
+    tradition: "Hindustani",
+    name: "Tīntāl",
+    source: [CLAYTON, wikipedia("Teental")],
+    components: [
+      { kind: "vibhag", role: "tali", marker: "X", beats: 4, gestures: ["sam", null, null, null] },
+      { kind: "vibhag", role: "tali", marker: "2", beats: 4, gestures: ["tali", null, null, null] },
+      { kind: "vibhag", role: "khali", marker: "0", beats: 4, gestures: ["khali", null, null, null] },
+      { kind: "vibhag", role: "tali", marker: "3", beats: 4, gestures: ["tali", null, null, null] }
+    ],
+    theka: ["dha", "dhin", "dhin", "dha", "dha", "dhin", "dhin", "dha", "dha", "tin", "tin", "ta", "ta", "dhin", "dhin", "dha"]
+  }),
+  // Jhaptaal: 10 matras, 2+3+2+3, marked X 2 0 3.
+  tala({
+    id: "hindustani.jhaptaal",
+    tradition: "Hindustani",
+    name: "Jhaptāl",
+    source: [CLAYTON, wikipedia("Jhaptal")],
+    components: [
+      { kind: "vibhag", role: "tali", marker: "X", beats: 2, gestures: ["sam", null] },
+      { kind: "vibhag", role: "tali", marker: "2", beats: 3, gestures: ["tali", null, null] },
+      { kind: "vibhag", role: "khali", marker: "0", beats: 2, gestures: ["khali", null] },
+      { kind: "vibhag", role: "tali", marker: "3", beats: 3, gestures: ["tali", null, null] }
+    ],
+    theka: ["dhi", "na", "dhi", "dhi", "na", "ti", "na", "dhi", "dhi", "na"]
+  }),
+  // Clave: an orienting timeline with a direction, not five marked slots (Vurkaç 2012). Onsets on sixteen pulses, as
+  // Toussaint writes them: son x..x..x...x.x..., rumba x..x...x..x.x..., bossa nova x..x..x...x..x... The 2-3 side is
+  // the same timeline begun at its other half.
+  clave({ id: "afro-cuban.son-clave-3-2", tradition: "Afro-Cuban", name: "Son clave, 3-2", pulses: 16, onsets: [0, 3, 6, 10, 12], direction: "3-2", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "afro-cuban.son-clave-2-3", tradition: "Afro-Cuban", name: "Son clave, 2-3", pulses: 16, onsets: [2, 4, 8, 11, 14], direction: "2-3", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "afro-cuban.rumba-clave-3-2", tradition: "Afro-Cuban", name: "Rumba clave, 3-2", pulses: 16, onsets: [0, 3, 7, 10, 12], direction: "3-2", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "afro-cuban.rumba-clave-2-3", tradition: "Afro-Cuban", name: "Rumba clave, 2-3", pulses: 16, onsets: [2, 4, 8, 11, 15], direction: "2-3", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "brazilian.bossa-nova-clave", tradition: "Brazilian", name: "Bossa nova clave", pulses: 16, onsets: [0, 3, 6, 10, 13], direction: null, source: [TOUSSAINT] })
+].map((record) => [record.id, record])));
+
+// public/shared/meter-space.js
+var METER_SPACE = Object.freeze({
+  numerators: Object.freeze([1, 40]),
+  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
+  // with a tempo).
+  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
+  // A bar's groups: 2s and 3s mostly, now and then a 1 or a 4.
+  groupSizes: Object.freeze([[2, 4], [3, 4], [1, 0.3], [4, 1]].map(Object.freeze)),
+  // The share of draws grouped as they draw, rather than as the meter's most-threes.
+  ownGrouping: 0.7,
+  // Pulses a unit.
+  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
+  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
+  talas: 0.12,
+  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
+  barSeconds: Object.freeze([0.5, 10])
+});
+var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
+
+// public/shared/felt-meter-catalog.js
+var freeze = (value3) => {
+  if (value3 && typeof value3 === "object") {
+    Object.values(value3).forEach(freeze);
+    Object.freeze(value3);
+  }
+  return value3;
+};
+var FELT_METER_POLICY = freeze({
+  "id": "score-selection-v2",
+  "evidence": "authored-policy-not-human-calibration",
+  "favoredBeatSeconds": [
+    "2/5",
+    "4/5"
+  ],
+  "candidateBeatSeconds": [
+    "3/10",
+    "1"
+  ],
+  "cyclePreferenceMaxSeconds": "4",
+  "cycleMinimumSeconds": null,
+  "catalog": [
+    { "id": "2/4-in-2", "numerator": 2, "denominator": 4, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "3/4-in-3", "numerator": 3, "denominator": 4, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "4/4-in-4", "numerator": 4, "denominator": 4, "beatWeights": [1, 1, 1, 1], "groups": [2, 2], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "2/2-in-2", "numerator": 2, "denominator": 2, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
+    { "id": "3/2-in-3", "numerator": 3, "denominator": 2, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
+    { "id": "6/8-in-2", "numerator": 6, "denominator": 8, "beatWeights": [3, 3], "groups": [3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "9/8-in-3", "numerator": 9, "denominator": 8, "beatWeights": [3, 3, 3], "groups": [3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "12/8-in-4", "numerator": 12, "denominator": 8, "beatWeights": [3, 3, 3, 3], "groups": [3, 3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "5/4-in-5", "numerator": 5, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["75", "200"] },
+    { "id": "7/4-in-7", "numerator": 7, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1, 1, 1], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["105", "150"], "candidateQuarterBPM": ["105", "200"] },
+    { "id": "5/4-in-2", "numerator": 5, "denominator": 4, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
+    { "id": "7/4-in-3", "numerator": 7, "denominator": 4, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
+    { "id": "5/8-in-2", "numerator": 5, "denominator": 8, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "7/8-in-3", "numerator": 7, "denominator": 8, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "8/8-in-3", "numerator": 8, "denominator": 8, "beatWeights": [3, 3, 2], "groups": [3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "9/8-in-4", "numerator": 9, "denominator": 8, "beatWeights": [2, 2, 2, 3], "groups": [2, 2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "11/8-in-5", "numerator": 11, "denominator": 8, "beatWeights": [2, 2, 3, 2, 2], "groups": [2, 2, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "13/8-in-5", "numerator": 13, "denominator": 8, "beatWeights": [3, 3, 3, 2, 2], "groups": [3, 3, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["195/2", "200"] },
+    { "id": "17/8-in-6", "numerator": 17, "denominator": 8, "beatWeights": [3, 3, 3, 3, 3, 2], "groups": [3, 3, 3, 3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/2", "150"], "candidateQuarterBPM": ["255/2", "200"] },
+    { "id": "5/16-in-2", "numerator": 5, "denominator": 16, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
+    { "id": "7/16-in-3", "numerator": 7, "denominator": 16, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
+    { "id": "17/16-in-7", "numerator": 17, "denominator": 16, "beatWeights": [2, 2, 3, 2, 2, 3, 3], "groups": [2, 2, 3, 2, 2, 3, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/4", "75"], "candidateQuarterBPM": ["255/4", "100"] },
+    { "id": "17/16-in-4", "numerator": 17, "denominator": 16, "beatWeights": [4, 4, 4, 5], "groups": [4, 4, 4, 5], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["375/4", "150"], "candidateQuarterBPM": ["75", "200"] },
+    { "id": "107/32-in-5", "numerator": 107, "denominator": 32, "beatWeights": [19, 19, 19, 25, 25], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["1875/8", "1425/4"], "candidateQuarterBPM": ["1605/8", "475"] },
+    { "id": "107/32-in-2", "numerator": 107, "denominator": 32, "beatWeights": [57, 50], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 1, "dots": 0 }, "favoredQuarterBPM": ["4275/8", "1875/2"], "candidateQuarterBPM": ["855/2", "1250"] }
+  ]
+});
+var FELT_METER_CATALOG = FELT_METER_POLICY.catalog;
+
+// public/shared/tempo-range.js
+var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
+
+// public/shared/meter-reading.js
+var EDITORIAL_ACTIONS = Object.freeze([
+  "PUBLISH_STANDARD",
+  "PUBLISH_GROUPED",
+  "PUBLISH_SPECIALIST_WITH_LEGEND",
+  "KEEP_WITH_SUPPORT",
+  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
+  "HOLD_FOR_REVIEW",
+  "FREE_TIME_BY_INTENT"
+]);
+
+// public/shared/metric-home/grouping.js
+var REMAINDER_UNITS = Object.freeze([3, 2]);
+
+// public/shared/metric-home/nested.js
+var NESTING = Object.freeze({
+  // The longest group a listener hears as one (seconds; meterform_clodbot's and grouping-choice.js's longestGroupSeconds,
+  // ours, within the few seconds a measure can last: London 2012, Hearing in Time, 2nd ed.,
+  // doi:10.1093/acprof:oso/9780199744374.001.0001).
+  longestSeconds: 5,
+  // A split into sections is told apart by their lengths: the shorter section at least this share of the span and the
+  // two sections' shares differing by at least `contrast` (37/107 against 70/107 differ by 0.31). Ours.
+  shortestShare: 0.25,
+  contrast: 0.12,
+  // Candidate splits offered at most for one span, the best first. Ours.
+  offered: 12,
+  // Groups under one at most (grouping.js MAX_GROUPS_UNDER_ONE, Scansion Maker's: four or more are grouped again).
+  maxParts: 3
+});
+
+// public/shared/felt-tempo.js
+var value2 = (text) => {
+  const [n, d = "1"] = String(text).split("/");
+  return Number(n) / Number(d);
+};
+var band = (list) => [value2(list[0]), value2(list[1])];
+var FELT_TEMPO = Object.freeze({
+  beat: Object.freeze(band(FELT_METER_POLICY.candidateBeatSeconds)),
+  favoredBeat: Object.freeze(band(FELT_METER_POLICY.favoredBeatSeconds)),
+  longestBarSeconds: NESTING.longestSeconds
+});
+
+// public/shared/opening-time.js
+var DEFAULT_SEED = 20260916;
+var OPENING_TIME = Object.freeze({
+  // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
+  phraseSeconds: Object.freeze([5, 13]),
+  // A phrase's bars at most (ours: meterspace_clodbot's).
+  phraseBarsAtMost: 8,
+  // The band's density before any is heard, drawn between these (ours).
+  density: Object.freeze([0.35, 0.85]),
+  // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
+  // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
+  reference: 4
+});
+
 // native/live/winds.js
 var $2 = (id) => document.getElementById(`w-${id}`);
 var NAMES2 = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
@@ -4491,8 +4776,8 @@ var status = null;
 var say = (text) => {
   $2("said").textContent = text ?? "";
 };
-async function post(path, value2 = {}) {
-  const r = await fetch(`/winds${path}`, { method: "POST", body: JSON.stringify({ ...value2, version: V }) });
+async function post(path, value3 = {}) {
+  const r = await fetch(`/winds${path}`, { method: "POST", body: JSON.stringify({ ...value3, version: V }) });
   const got = await r.json();
   if (r.status === 409) {
     poll();
@@ -4502,8 +4787,8 @@ async function post(path, value2 = {}) {
 }
 function sender(path) {
   let flying = false, next = null;
-  return async (value2) => {
-    next = value2;
+  return async (value3) => {
+    next = value3;
     if (flying) return;
     flying = true;
     try {
@@ -4545,6 +4830,11 @@ async function poll() {
   S = s2;
   if (s2.model && s2.version !== V) build(s2);
   shown2(s2);
+  soloShown(s2);
+  if (s2.soloist?.playing && s2.version === V && s2.played?.pitch != null) {
+    P = s2.played;
+    refresh();
+  }
   if (s2.model && s2.impedance && !impedance && !fetchingImpedance) {
     fetchingImpedance = true;
     const asked2 = V;
@@ -4558,7 +4848,7 @@ async function poll() {
       fetchingImpedance = false;
     });
   }
-  polling = setTimeout(poll, s2.loading ? 500 : !s2.model || !s2.impedance ? 2e3 : 5e3);
+  polling = setTimeout(poll, s2.loading || s2.soloist?.playing ? 500 : !s2.model || !s2.impedance ? 2e3 : 5e3);
 }
 function shown2(s2) {
   status.classList.toggle("failed", Boolean(s2.failed && !s2.loading));
@@ -4856,14 +5146,14 @@ function build(s2) {
     const box = document.createElement("div");
     box.innerHTML = `<label><span></span><b></b></label><input type="range" min="0" max="1" step="0.01">`;
     box.querySelector("span").textContent = brass ? `Valve ${c[1] + 1}` : s2.holes?.[c[1]] ?? c[2] ?? c[1];
-    const slider = box.querySelector("input"), value2 = box.querySelector("b");
+    const slider = box.querySelector("input"), value3 = box.querySelector("b");
     slider.oninput = () => {
-      value2.textContent = (+slider.value).toFixed(2);
+      value3.textContent = (+slider.value).toFixed(2);
       sendHole({ column: k, value: +slider.value });
     };
     controls[`hole${k}`] = { set: (v) => {
       if (held !== slider) slider.value = v;
-      value2.textContent = v.toFixed(2);
+      value3.textContent = v.toFixed(2);
     }, hole: k };
     $2("holes").append(box);
   });
@@ -5108,6 +5398,35 @@ var tongueNow = async () => {
 };
 $2("blow").onclick = blow;
 $2("tongueNow").onclick = tongueNow;
+$2("soloSeed").value = DEFAULT_SEED;
+$2("solo").onclick = async () => {
+  if (!S?.model || busy) return;
+  const on = !S.soloist?.playing;
+  if (on) {
+    sound2();
+    $2("soloSaid").textContent = "Its band composes the piece ...";
+  }
+  const r = await post("/soloist", on ? { on, seed: Number($2("soloSeed").value), seconds: Number($2("soloSeconds").value) } : { on });
+  if (r.error) {
+    $2("soloSaid").textContent = r.error;
+    return;
+  }
+  if (r.pitch !== void 0) took(r);
+  if (r.soloist !== void 0) {
+    S = { ...S, soloist: r.soloist };
+    soloShown(S);
+  }
+  poll();
+};
+var clock = (x2) => `${Math.floor(x2 / 60)}:${String(Math.floor(x2 % 60)).padStart(2, "0")}`;
+function soloShown(s2) {
+  const playing = Boolean(s2.soloist?.playing), said2 = s2.soloist?.said;
+  $2("solo").textContent = playing ? "■ Stop the musebot" : "▶ A musebot plays";
+  $2("solo").classList.toggle("on", playing);
+  $2("solo").disabled = busy;
+  if (!said2) return;
+  $2("soloSaid").textContent = `${said2.player} on the ${label(s2.model ?? said2.instrument)}, seed ${said2.seed}: ${playing ? "" : "played "}${clock(Math.min(said2.at, said2.seconds))} of ${clock(said2.seconds)}, ${said2.notes} notes` + (said2.unplayed.length ? `; ${said2.unplayed.length} not played here (${said2.unplayed[0].why})` : "") + (said2.late ? `; ${said2.late} came late` : "") + (said2.refused.length ? `; ${said2.refused.length} refused (${said2.refused.at(-1).error})` : "") + ".";
+}
 $2("keep").onclick = async () => {
   const r = await post("/keep", { words: $2("words").value });
   $2("kept").textContent = r.kept ? "kept" : r.error ?? "";

@@ -6547,6 +6547,30 @@ function windsDial(env) {
     queue = queue.filter((e) => e.tag !== tag);
   };
   const tonguing = () => queue.some((e) => e.tag === "tongue");
+  const PULL_MOST = 16384;
+  let soloist = null;
+  async function solo(given2) {
+    const now = current.frames / WINDS_RATE;
+    if (soloist?.line) {
+      soloist = { said: soloist.line.shown(now), playing: false };
+      withdrawn({ by: "soloist", from: now });
+      if (state.blowing) await change("/blow", { on: false });
+    }
+    if (!given2.on) return { status: 200, json: { ...playing(), soloist } };
+    const { composeSolo, SoloLine } = await import("./soloist/soloist.js");
+    const composed2 = await composeSolo({ model: current.model, kind: current.kind, seed: Number(given2.seed), seconds: Number(given2.seconds) });
+    const dial = shown(), lead = Math.max(dial.strokeLeast.tongued, dial.strokeLeast.legato) + PULL_MOST / WINDS_RATE, start = current.frames / WINDS_RATE + lead;
+    const send2 = async (path, asked) => {
+      try {
+        return path === "/withdraw" ? withdrawn(asked) : await later(path, asked);
+      } catch (error) {
+        return { status: 400, json: { error: error.message } };
+      }
+    };
+    soloist = { line: new SoloLine(composed2, { dial, send: send2, start, lead }), playing: true };
+    return { status: 200, json: { ...playing(), soloist: { said: soloist.line.shown(start), playing: true } } };
+  }
+  const soloShown = () => soloist && { said: soloist.line ? soloist.line.shown(current.frames / WINDS_RATE) : soloist.said, playing: soloist.playing };
   const strokeLength = (how, asked = how === "legato" ? state.softSeconds : state.stroke) => how === "legato" ? Math.max(asked, 2 * TONGUE.fall, current.kind === "reed" ? least("breathRise") : 0) : Math.max(asked, TONGUE.touch + least(fingered()));
   function stroke(before, how, moving = 0) {
     cancel("tongue");
@@ -6999,6 +7023,7 @@ function windsDial(env) {
         queue = [];
         refused = [];
         pace = null;
+        soloist = null;
         before?.glides?.stop();
         before?.stream.close();
         Object.assign(state, { x: {}, fingers: {}, blowing: false, lip: null, lipDialled: false, valves: null, slide: null, slideDialled: false, vibrato: { on: false, ...vibratoOf(model) }, row: null, pitch: null });
@@ -7034,6 +7059,11 @@ function windsDial(env) {
   let pace = null;
   async function pulled(frames) {
     if (!current) return new Float32Array(frames);
+    if (soloist?.line) {
+      const now = current.frames / WINDS_RATE;
+      await soloist.line.take(now);
+      if (soloist.line.done(now)) soloist = { said: soloist.line.shown(now), playing: false };
+    }
     const t = performance.now(), out = new Float32Array(frames), made = current;
     for (let got2 = 0; got2 < frames; ) {
       while (queue.length && queue[0].at <= made.frames) await queue.shift().run();
@@ -7100,7 +7130,8 @@ function windsDial(env) {
         breathTimes: current.neutral.breathTimes ?? 1
       } : null,
       played: playing(),
-      refused
+      refused,
+      soloist: soloShown()
     };
   }
   const LIMITS = () => ({
@@ -7359,7 +7390,7 @@ function windsDial(env) {
       if (path === "/state") return { status: 200, json: shown() };
       if (path === "/impedance") return { status: 200, json: current?.impedance ?? null };
       if (path === "/audio") {
-        const frames = Math.min(Math.max(1, Number(query?.get("frames")) || 1024), 16384);
+        const frames = Math.min(Math.max(1, Number(query?.get("frames")) || 1024), PULL_MOST);
         const samples = await serial(() => pulled(frames));
         return { status: 200, samples, headers: {
           "x-pace": pace == null ? "" : pace.toFixed(3),
@@ -7406,6 +7437,7 @@ function windsDial(env) {
       if (!current) throw new Error("no instrument yet");
       if (given2.version !== void 0 && given2.version !== version) return { status: 409, json: { error: "another instrument was taken up", version } };
       if (path === "/withdraw") return await serial(() => withdrawn(given2));
+      if (path === "/soloist") return await serial(() => solo(given2));
       if (given2.at != null) return await serial(() => later(path, given2));
       const answer = await serial(() => change(path, given2));
       if (answer === null) return { status: 404 };
