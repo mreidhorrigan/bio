@@ -5,67 +5,214 @@ var __export = (target, all) => {
 };
 
 // native/live/site/page.js
-var worker = new Worker(new URL("dial-worker.js", document.baseURI), { type: "module" });
-var waiting = /* @__PURE__ */ new Map();
-var next = 0;
 var KEPT = "musebots-live-dial-kept";
-worker.onmessage = ({ data }) => {
-  if (data.said !== void 0) {
-    console.log(data.said);
-    return;
-  }
-  if (data.kept) {
-    try {
-      localStorage.setItem(KEPT, JSON.stringify([...kept(), data.kept]));
-    } catch {
-    }
-    return;
-  }
-  const { resolve: resolve2 } = waiting.get(data.id) ?? {};
-  waiting.delete(data.id);
-  if (!resolve2) return;
-  const headers = Object.fromEntries(Object.entries(data.headers ?? {}).map(([k, v]) => [k, String(v)]));
-  resolve2(data.samples ? new Response(data.samples.buffer, { status: data.status, headers: { "content-type": "application/octet-stream", ...headers } }) : data.json === void 0 ? new Response(null, { status: data.status }) : new Response(JSON.stringify(data.json), { status: data.status, headers: { "content-type": "application/json" } }));
-};
-worker.onerror = (error) => {
-  for (const { reject } of waiting.values()) reject(new Error(`the dial stopped: ${error.message ?? error}`));
-  waiting.clear();
-};
-function kept() {
+var STRINGS_KEPT = "musebots-live-dial-strings-kept";
+var kept = (key = KEPT) => {
   try {
-    return JSON.parse(localStorage.getItem(KEPT) ?? "[]");
+    return JSON.parse(localStorage.getItem(key) ?? "[]");
   } catch {
     return [];
   }
+};
+var keep = (key, record) => {
+  try {
+    localStorage.setItem(key, JSON.stringify([...kept(key), record]));
+  } catch {
+  }
+};
+function served(worker, { key, line: line2 } = {}) {
+  const waiting = /* @__PURE__ */ new Map();
+  let next = 0;
+  worker.onmessage = ({ data }) => {
+    if (data.said !== void 0) {
+      console.log(data.said);
+      return;
+    }
+    if (data.line !== void 0) {
+      line2?.(data.line);
+      return;
+    }
+    if (data.kept) {
+      keep(key, data.kept);
+      return;
+    }
+    const { resolve: resolve2 } = waiting.get(data.id) ?? {};
+    waiting.delete(data.id);
+    if (!resolve2) return;
+    const headers = Object.fromEntries(Object.entries(data.headers ?? {}).map(([k, v]) => [k, String(v)]));
+    resolve2(data.samples ? new Response(data.samples.buffer, { status: data.status, headers: { "content-type": "application/octet-stream", ...headers } }) : data.json !== void 0 ? new Response(JSON.stringify(data.json), { status: data.status, headers: { "content-type": "application/json" } }) : new Response(data.text ?? null, { status: data.status }));
+  };
+  worker.onerror = (error) => {
+    for (const { reject } of waiting.values()) reject(new Error(`the dial stopped: ${error.message ?? error}`));
+    waiting.clear();
+  };
+  return (method, path, query, given) => {
+    const id = next++;
+    return new Promise((resolve2, reject) => {
+      waiting.set(id, { resolve: resolve2, reject });
+      worker.postMessage({ id, method, path, query, given });
+    });
+  };
+}
+var winds = served(new Worker(new URL("dial-worker.js", document.baseURI), { type: "module" }), { key: KEPT });
+var listening = /* @__PURE__ */ new Set();
+var strings = null;
+function stringsWorker() {
+  if (strings) return strings;
+  const worker = new Worker(new URL("strings-worker.js", document.baseURI), { type: "module" });
+  const ask2 = served(worker, { key: STRINGS_KEPT, line: (line2) => {
+    for (const listener of listening) listener(line2);
+  } });
+  strings = { worker, ask: ask2, ended: null, running: false };
+  strings.ready = ask2("GET", "/state").then(
+    async (r) => {
+      if (!r.ok) throw new Error(await r.text());
+      strings.rate = (await r.json()).rate;
+      strings.running = true;
+      sound();
+    },
+    (error) => {
+      strings.ended = `the strings' dial stopped: ${error.message}`;
+      throw error;
+    }
+  );
+  strings.ready.catch(() => {
+  });
+  worker.postMessage({ listen: true });
+  return strings;
+}
+var family = () => ({ instruments: [], ...strings ? { running: strings.running, starting: !strings.running && !strings.ended, ended: strings.ended } : { running: false, starting: false, ended: null } });
+async function families() {
+  const f = await (await winds("GET", "/families")).json();
+  f.strings = { ...f.strings, ...family(), instruments: f.strings.instruments };
+  return new Response(JSON.stringify(f), { headers: { "content-type": "application/json" } });
+}
+function stringsKept(path, given) {
+  if (path === "/kept") return new Response(JSON.stringify(kept(STRINGS_KEPT)), { headers: { "content-type": "application/json" } });
+  const all = kept(STRINGS_KEPT), left = all.filter((k) => k.at !== given?.at);
+  if (left.length === all.length) return new Response(`nothing kept at ${given?.at}`, { status: 404 });
+  try {
+    localStorage.setItem(STRINGS_KEPT, JSON.stringify(left));
+  } catch {
+  }
+  return new Response(JSON.stringify({ left: left.length }), { headers: { "content-type": "application/json" } });
 }
 var own = globalThis.fetch.bind(globalThis);
-var ROUTE = /^\/(families|start|winds\/.*)$/;
+var ROUTE = /^\/(families|start|winds\/.*|strings\/.*)$/;
 globalThis.fetch = async (input, init2 = {}) => {
   const url = new URL(typeof input === "string" ? input : input.url, location.origin);
   if (url.origin !== location.origin || !url.pathname.startsWith("/") || !ROUTE.test(url.pathname)) return own(input, init2);
   const method = (init2.method ?? "GET").toUpperCase(), given = typeof init2.body === "string" && init2.body ? JSON.parse(init2.body) : void 0;
-  const id = next++;
-  return new Promise((resolve2, reject) => {
-    waiting.set(id, { resolve: resolve2, reject });
-    worker.postMessage({ id, method, path: url.pathname, query: url.search, given });
-  });
+  if (url.pathname === "/families") return families();
+  if (url.pathname === "/start") {
+    if (url.searchParams.get("family") !== "strings") {
+      const r = await winds(method, url.pathname, url.search, given);
+      if (!r.ok) return r;
+    } else try {
+      await stringsWorker().ready;
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), { status: 503, headers: { "content-type": "application/json" } });
+    }
+    return families();
+  }
+  const m = /^\/strings(\/.*)$/.exec(url.pathname);
+  if (m) {
+    if (m[1] === "/kept" || m[1] === "/forget") return stringsKept(m[1], given);
+    const { ask: ask2, ready } = stringsWorker();
+    try {
+      await ready;
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), { status: 503, headers: { "content-type": "application/json" } });
+    }
+    return ask2(method, m[1], url.search, given);
+  }
+  return winds(method, url.pathname, url.search, given);
 };
+var OwnEventSource = globalThis.EventSource;
+globalThis.EventSource = class extends EventTarget {
+  constructor(address, options) {
+    const url = new URL(address, location.origin);
+    if (url.origin !== location.origin || url.pathname !== "/strings/events") return new OwnEventSource(address, options);
+    super();
+    this.url = url.href;
+    this.readyState = 0;
+    this.onmessage = this.onopen = this.onerror = null;
+    const heard2 = (line2) => {
+      const e = new MessageEvent("message", { data: line2 });
+      this.onmessage?.(e);
+      this.dispatchEvent(e);
+    };
+    listening.add(heard2);
+    stringsWorker();
+    this.close = () => {
+      listening.delete(heard2);
+      this.readyState = 2;
+    };
+    queueMicrotask(() => {
+      if (this.readyState === 0) {
+        this.readyState = 1;
+        const e = new Event("open");
+        this.onopen?.(e);
+        this.dispatchEvent(e);
+      }
+    });
+  }
+};
+var RING = `class Ring extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(sampleRate*2);this.r=0;this.w=0;this.n=0;this.got=0;this.t=0;
+this.port.onmessage=({data})=>{this.out=data.port;this.out.onmessage=({data})=>{this.got+=data.length;for(let i=0;i<data.length&&this.n<this.b.length;i++){this.b[this.w]=data[i];this.w=(this.w+1)%this.b.length;this.n++}};this.ask()}}
+ask(){this.out?.postMessage({n:this.n,got:this.got})}
+process(_,outs){const o=outs[0];for(let i=0;i<o[0].length;i++){let v=0;if(this.n>0){v=this.b[this.r];this.r=(this.r+1)%this.b.length;this.n--}for(const c of o)c[i]=v}
+if(++this.t%2===0)this.ask();return true}}registerProcessor('strings-ring',Ring);`;
+var LET_GO = 3;
+var context = null;
+var letting = null;
+var shown = () => document.querySelector('[data-family="strings"]')?.hidden === false;
+async function sound() {
+  if (!strings?.running || !shown() || !navigator.userActivation?.hasBeenActive) return;
+  clearTimeout(letting);
+  if (context) {
+    if (context.state === "suspended") context.resume();
+    return;
+  }
+  context = new AudioContext({ sampleRate: strings.rate });
+  await context.audioWorklet.addModule(URL.createObjectURL(new Blob([RING], { type: "text/javascript" })));
+  const node = new AudioWorkletNode(context, "strings-ring", { numberOfInputs: 0, outputChannelCount: [2] });
+  node.connect(context.destination);
+  const channel = new MessageChannel();
+  strings.worker.postMessage({ sound: channel.port2 }, [channel.port2]);
+  node.port.postMessage({ port: channel.port1 }, [channel.port1]);
+}
+for (const event of ["pointerdown", "keydown"]) addEventListener(event, () => {
+  sound();
+}, true);
+function watch() {
+  new MutationObserver(() => {
+    if (shown()) sound();
+    else if (context?.state === "running") {
+      clearTimeout(letting);
+      letting = setTimeout(() => {
+        if (!shown()) context.suspend();
+      }, LET_GO * 1e3);
+    }
+  }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] });
+}
 function line() {
   const note = document.createElement("div");
   note.className = "muted";
   note.style.margin = "0 0 10px";
-  note.innerHTML = `Wind instruments modelled by OpenWInD's scheme, played in this browser by the Musebots engine in WebAssembly (<a href="SOURCES.html">its source, GPL-3.0</a>); the bowed strings come later. Press <b>space</b> or <b>blow</b> to sound it.`;
+  note.innerHTML = `Wind instruments modelled by OpenWInD's scheme and bowed strings by Artifastring, played in this browser by the Musebots engines in WebAssembly (<a href="SOURCES.html">their source, GPL-3.0</a>). Press <b>space</b> or <b>blow</b> to sound a wind, <b>play</b> to bow a string.`;
   const say2 = document.createElement("span");
   fetch("/families").then((r) => r.json()).then((f) => {
     say2.textContent = f.engine?.error ? ` The engine did not load: ${f.engine.error}` : f.engine?.threaded ? "" : " This browser gives the page one core (it is not cross-origin isolated): the larger instruments may play slower than real time.";
   });
   note.append(say2);
   document.body.prepend(note);
+  watch();
 }
 if (document.readyState === "loading") addEventListener("DOMContentLoaded", line);
 else line();
 window.addEventListener("load", () => {
-  if (window.live) window.live.kept = kept;
+  if (window.live) window.live.kept = () => kept();
 });
 
 // native/live/strings.js
@@ -260,9 +407,9 @@ function curveEditor(box, { kind, label: label3, color = "var(--accent)", change
     });
     const [pt, py2] = peakOf(points);
     tip.textContent = `peak ${py2.toFixed(2)}${unit2}${meaning ? ` (${meaning(py2)})` : ""} at ${ms(pt)} · settled at ${ms(points.at(-1)[0])}`;
-    shown3();
+    shown4();
   }
-  function shown3() {
+  function shown4() {
     const k = selected, on = k >= 0 && k < points.length;
     which.textContent = on ? `Point ${k + 1} of ${points.length}:` : `${points.length} points: press on the plot to add one, or select one to set it.`;
     for (const el of [tBox, tUnit, yBox, yUnit, remove]) el.style.display = on ? "" : "none";
@@ -377,7 +524,7 @@ function curveEditor(box, { kind, label: label3, color = "var(--accent)", change
       place(selected, v / 1e3, points[selected][1]);
       fit();
       changed();
-    } else shown3();
+    } else shown4();
   };
   yBox.onchange = () => {
     const v = +yBox.value;
@@ -385,7 +532,7 @@ function curveEditor(box, { kind, label: label3, color = "var(--accent)", change
       place(selected, points[selected][0], v);
       fit();
       changed();
-    } else shown3();
+    } else shown4();
   };
   shapeBox.onchange = () => {
     if (selected < 1) return;
@@ -557,15 +704,15 @@ function read() {
   $("reading").innerHTML = rows.map(([a, b2]) => `<tr><td>${a}</td><td>${b2}</td></tr>`).join("");
   attackSaid();
 }
-function strings() {
+function strings2() {
   $("strings").innerHTML = builds.map((k, i) => `<label><input type="radio" name="s-string" value="${i}"${i === s ? " checked" : ""}> ${name(midiOf(openHz(k)))} string</label>`).join("");
   for (const r of document.querySelectorAll("input[name=s-string]")) r.onchange = () => cross(+r.value);
 }
-function cross(next2) {
+function cross(next) {
   const was = s;
-  if (next2 === was) return;
+  if (next === was) return;
   const asks = [{ do: "vibrato", string: was, width: 0, rate: value.rate }, ...bowing ? [{ do: "lift", string: was, pos: pos(), vel: direction * value.speed }] : []];
-  s = next2;
+  s = next;
   limits();
   showBuild();
   asks.push(fingerAsk(), dampingAsk(), vibratoAsk(), hairAsk());
@@ -629,7 +776,7 @@ async function instrument(type, variant) {
   s = Math.min(s, builds.length - 1);
   inUse = state.inUse;
   variants();
-  strings();
+  strings2();
   limits();
   showBuild();
   $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
@@ -645,7 +792,7 @@ function variants() {
   $("variants").textContent = `of ${n}`;
 }
 function describe() {
-  document.getElementById("what").textContent = `The ${state.name} on Artifastring, heard through the Mac's audio: ${state.bodyScaled ? `the ${state.bodyScaled.from}'s body` : "Artifastring's"} no. ${state.variant}, seed ${state.seed} · ` + (state.neutral ? `taken up on its neutral note, from ${state.neutral.map.split("/").pop()}` : `its good note made from ${state.from.split("/").pop()}`);
+  document.getElementById("what").textContent = `The ${state.name} on Artifastring, heard through ${state.heardThrough}: ${state.bodyScaled ? `the ${state.bodyScaled.from}'s body` : "Artifastring's"} no. ${state.variant}, seed ${state.seed} · ` + (state.neutral ? `taken up on its neutral note, from ${state.neutral.map.split("/").pop()}` : `its good note made from ${state.from.split("/").pop()}`);
 }
 async function init(status2) {
   for (const until = performance.now() + 6e4; ; ) {
@@ -662,7 +809,7 @@ async function init(status2) {
   builds = state.strings.map(startBuild);
   inUse = state.inUse;
   variants();
-  strings();
+  strings2();
   $("seed").value = state.seed;
   const semis = -12 * Math.log2(1 - st.finger), beta = st.pos / (1 - st.finger);
   const times = [st.startSeconds, state.bow.endSeconds];
@@ -767,7 +914,7 @@ async function init(status2) {
     builds[s][key] = value[key];
     later("build", () => [buildAsk()]);
     read();
-    strings();
+    strings2();
   };
   for (const [key, label3, box] of BUILD) {
     const own2 = state.strings[s][key];
@@ -866,7 +1013,7 @@ async function init(status2) {
     showBuild();
     ask([buildAsk()]);
     read();
-    strings();
+    strings2();
   };
   $("variant").onchange = () => instrument(state.type, +$("variant").value);
   $("reseed").onclick = async () => {
@@ -1058,7 +1205,7 @@ async function recall(k) {
   if (k.build) {
     builds[s] = { ...builds[s], ...k.build };
     showBuild();
-    strings();
+    strings2();
   }
   const constants = Object.entries(k.constants ?? {}).filter(([key, v]) => setters[key] && Number.isFinite(v));
   for (const [key, v] of constants) setters[key](v, true);
@@ -1100,7 +1247,7 @@ async function good() {
   if (st.string !== s && builds[st.string]) cross(st.string);
   builds = state.strings.map((k2, i) => ({ ...ownBuild(k2), modes: builds[i]?.modes ?? state.mostModes }));
   showBuild();
-  strings();
+  strings2();
   const k = state.strings[s], q = p.string, own2 = state.type === p.type || !q;
   const force = own2 ? st.force : st.force * Math.sqrt(k.T * k.pl) / Math.sqrt(q.T * q.pl) * (k.mus - k.mud) / (q.mus - q.mud);
   const set = {
@@ -1164,7 +1311,7 @@ async function neutral() {
   if (n.string !== s && builds[n.string]) cross(n.string);
   builds = state.strings.map((k, i) => ({ ...ownBuild(k), modes: builds[i]?.modes ?? state.mostModes }));
   showBuild();
-  strings();
+  strings2();
   const set = {
     pitch: n.stop,
     firmness: 1,
@@ -1231,7 +1378,7 @@ function take(model2, { status: status2, choose: choose2 }) {
       await (state.neutral ? neutral() : good());
       placed.add(type);
     }
-    status2.textContent = `The ${state.name}, ready: heard through the Mac's audio, on ` + (state.neutral ? neutralSaid(state.neutral) : `its good note${type === state.pick.type ? " (the note it started from)" : " (the violin's note, bowed at the same place on Schelleng's diagram)"}`) + ".";
+    status2.textContent = `The ${state.name}, ready: heard through ${state.heardThrough}, on ` + (state.neutral ? neutralSaid(state.neutral) : `its good note${type === state.pick.type ? " (the note it started from)" : " (the violin's note, bowed at the same place on Schelleng's diagram)"}`) + ".";
     describe();
   }).catch((error) => {
     status2.classList.add("failed");
@@ -4077,15 +4224,15 @@ function outlineOf(entry) {
 var svgOf = (box, inner, label3) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box.join(" ")}" role="img" aria-label="${label3.replace(/[<>&"]/g, "")}"><title>${label3.replace(/[<>&]/g, "")}</title>${inner}</svg>`;
 var marksSvg = (marks) => marks.map(([x2, y2, m]) => `<g transform="translate(${x2} ${y2})">${m}</g>`).join("");
 var drawings = 0;
-function diagramSvg(family2, keys3, label3 = "Fingering", { whole = false, parts = {}, faint = {} } = {}) {
-  const entry = fingering_diagrams_default.families[family2];
+function diagramSvg(family3, keys3, label3 = "Fingering", { whole = false, parts = {}, faint = {} } = {}) {
+  const entry = fingering_diagrams_default.families[family3];
   if (!entry) return null;
   const rings = Object.keys(parts).filter((id2) => entry.keys[`${id2}R`]).map((id2) => id2.split(":"));
   const all = rings.length ? Object.fromEntries(["cc", "lh", "rh"].map((g) => [g, [...keys3[g] ?? [], ...rings.filter(([r]) => r === g).map(([, n]) => `${n}R`)]])) : keys3;
   const drawn = composeDiagram(entry, all), box = drawn.box, marks = whole ? twinFilled([...drawn.marks, ...outlineOf(entry)]) : drawn.marks;
-  const id = `fingered${++drawings}`, shown3 = [...Object.entries(parts).filter(([, a]) => a < 1).map(([key, a]) => [key, a, 1]), ...Object.entries(faint).map(([key, a]) => [key, a, 0.35])].filter(([key, a]) => entry.keys[key] && a > 0);
-  const clips = shown3.map(([, a], n) => `<clipPath id="${id}-${n}" clipPathUnits="objectBoundingBox"><rect x="-0.1" y="${+(1 - Math.min(1, a)).toFixed(4)}" width="1.2" height="${+(Math.min(1, a) + 0.1).toFixed(4)}"/></clipPath>`);
-  const filled = shown3.map(([key, , opacity], n) => `<g clip-path="url(#${id}-${n})"${opacity < 1 ? ` opacity="${opacity}"` : ""}>${marksSvg(entry.keys[key].add.filter((m) => m[2].includes('fill="currentColor"')))}</g>`);
+  const id = `fingered${++drawings}`, shown4 = [...Object.entries(parts).filter(([, a]) => a < 1).map(([key, a]) => [key, a, 1]), ...Object.entries(faint).map(([key, a]) => [key, a, 0.35])].filter(([key, a]) => entry.keys[key] && a > 0);
+  const clips = shown4.map(([, a], n) => `<clipPath id="${id}-${n}" clipPathUnits="objectBoundingBox"><rect x="-0.1" y="${+(1 - Math.min(1, a)).toFixed(4)}" width="1.2" height="${+(Math.min(1, a) + 0.1).toFixed(4)}"/></clipPath>`);
+  const filled = shown4.map(([key, , opacity], n) => `<g clip-path="url(#${id}-${n})"${opacity < 1 ? ` opacity="${opacity}"` : ""}>${marksSvg(entry.keys[key].add.filter((m) => m[2].includes('fill="currentColor"')))}</g>`);
   return svgOf(box, `${clips.length ? `<defs>${clips.join("")}</defs>` : ""}<g stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">${marksSvg(marks)}${filled.join("")}</g>`, label3);
 }
 var keywork = (model2) => fingering_diagrams_default.instruments[model2] ?? null;
@@ -4241,14 +4388,14 @@ function heldFingering(model2, open) {
 function woodwindDiagram(model2, keys3, label3, { whole = false, parts = {}, faint = {} } = {}) {
   const w = keywork(model2);
   if (!w) return null;
-  const family2 = fingering_diagrams_default.families[w.diagram], undrawn = [];
+  const family3 = fingering_diagrams_default.families[w.diagram], undrawn = [];
   const drawn = Object.fromEntries(["cc", "lh", "rh"].map((g) => [g, (keys3[g] ?? []).filter((name2) => {
-    const ok = Boolean(family2.keys[`${g}:${name2}`]);
+    const ok = Boolean(family3.keys[`${g}:${name2}`]);
     if (!ok) undrawn.push(`${g}:${name2}`);
     return ok;
   })]));
   const placed2 = (shares) => Object.fromEntries(Object.entries(shares).filter(([key]) => {
-    const ok = Boolean(family2.keys[key]);
+    const ok = Boolean(family3.keys[key]);
     if (!ok) undrawn.push(key);
     return ok;
   }));
@@ -4303,15 +4450,15 @@ async function post(path, value2 = {}) {
   return got;
 }
 function sender(path) {
-  let flying = false, next2 = null;
+  let flying = false, next = null;
   return async (value2) => {
-    next2 = value2;
+    next = value2;
     if (flying) return;
     flying = true;
     try {
-      while (next2) {
-        const asked2 = next2;
-        next2 = null;
+      while (next) {
+        const asked2 = next;
+        next = null;
         const r = await post(path, asked2);
         if (r.error) {
           say(r.error);
@@ -4346,7 +4493,7 @@ async function poll() {
   if (!active) return;
   S = s2;
   if (s2.model && s2.version !== V) build(s2);
-  shown(s2);
+  shown2(s2);
   if (s2.model && s2.impedance && !impedance && !fetchingImpedance) {
     fetchingImpedance = true;
     const asked2 = V;
@@ -4362,7 +4509,7 @@ async function poll() {
   }
   polling = setTimeout(poll, s2.loading ? 500 : !s2.model || !s2.impedance ? 2e3 : 5e3);
 }
-function shown(s2) {
+function shown2(s2) {
   status.classList.toggle("failed", Boolean(s2.failed && !s2.loading));
   const breathSaid = (n) => n.breathTimes && n.breathTimes !== 1 ? `, its breath ${n.breathTimes} times its players' law's, where it sounds` : "";
   const neutral2 = s2.neutral ? `, on its neutral note (${etName(s2.notes[s2.neutral.note])} at ${s2.neutral.dynamic}${breathSaid(s2.neutral)})` : s2.model ? `, on the middle of its charted notes: no neutral note found on its body yet (Commands/Make Dial Bodies.command finds it)` : "";
@@ -4800,7 +4947,7 @@ function fingered() {
     const f = heldFingering(S.model, open), w = keywork(S.model), faint = Object.entries(f.faint), parts = Object.entries(f.parts);
     const d = woodwindDiagram(S.model, f.keys, `Fingering${f.documented ? ` ${f.documented}` : ""}`, { whole: true, parts: f.parts, faint: Object.fromEntries(faint.map(([key2, v]) => [key2, v.share])) });
     const unkeyed = holes.filter(([c, k]) => !w.holes.includes(S.holes[c[1]]) && Math.abs(P.row[k] - P.rules[k]) > 5e-3).map(([c, k]) => `${S.holes[c[1]]} at ${P.row[k].toFixed(2)}`);
-    const pct = (a) => `${Math.round(100 * a)} %`, shown3 = new Set(faint.map(([, v]) => v.hole)), off = f.off.filter((h) => !shown3.has(h));
+    const pct = (a) => `${Math.round(100 * a)} %`, shown4 = new Set(faint.map(([, v]) => v.hole)), off = f.off.filter((h) => !shown4.has(h));
     svg = d.svg;
     note = (f.documented ? `${f.documented}, as its players' guide writes it.` : f.off.length ? "No fingering of its keys leaves its holes so: the keys nearest them." : "Its keys for the holes as they stand: no charted fingering.") + (parts.length ? ` Pressed part way: ${parts.map(([key2, a]) => `${key2} ${pct(a)}`).join(", ")}.` : "") + (faint.length ? ` Drawn faint: ${faint.map(([key2, v]) => `${key2} ${pct(v.share)} for ${v.hole} (${open[v.hole].toFixed(2)} open), which it moves only with ${v.moves.join(", ")}`).join("; ")}.` : "") + (off.length ? ` Left otherwise than they stand: ${off.map((h) => `${h} (${open[h].toFixed(2)} open)`).join(", ")}.` : "") + (d.undrawn.length ? ` Also pressed, with no place in LilyPond's ${w.diagram} diagram: ${d.undrawn.join(", ")}.` : "") + (unkeyed.length ? ` Dialled, with no key on its diagram: ${unkeyed.join(", ")}.` : "");
   }
@@ -4850,7 +4997,7 @@ $2("neutral").onclick = async () => {
   const r = await post("/neutral");
   if (r.error) return say(r.error);
   S = await (await fetch("/winds/state", { cache: "no-store" })).json();
-  shown(S);
+  shown2(S);
   if (r.pitch !== void 0) took(r);
   const k = S.neutral ? S.neutral.note : Math.floor(S.notes.length / 2);
   if (S.kind !== "air" && S.tractMeasured) setTract(VocalTract.normal(S.model, hzOf(S.notes[k])).resonances);
@@ -4865,7 +5012,7 @@ $2("fluttering").onchange = () => sendFlutter({ on: $2("fluttering").checked });
 $2("humming").onchange = () => sendHum({ on: $2("humming").checked });
 var blow = async () => {
   if (!S?.model || busy) return;
-  sound();
+  sound2();
   const r = await post("/blow", { on: !P.blowing });
   r.error ? say(r.error) : r.pitch !== void 0 && took(r);
 };
@@ -5046,7 +5193,7 @@ canvas.ondblclick = (e) => {
   setTract(r);
 };
 var RATE = 48e3;
-var RING = `class Ring extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(${RATE * 2});this.r=0;this.w=0;this.n=0;this.under=0;this.t=0;
+var RING2 = `class Ring extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(${RATE * 2});this.r=0;this.w=0;this.n=0;this.under=0;this.t=0;
 this.port.onmessage=({data})=>{this.s=1;for(let i=0;i<data.length&&this.n<this.b.length;i++){this.b[this.w]=data[i];this.w=(this.w+1)%this.b.length;this.n++}}}
 process(_,outs){const o=outs[0];for(let i=0;i<o[0].length;i++){let v=0;if(this.n>0){v=this.b[this.r];this.r=(this.r+1)%this.b.length;this.n--}else if(this.s)this.under++;for(const c of o)c[i]=v}
 if(++this.t%4===0)this.port.postMessage({n:this.n,under:this.under});return true}}registerProcessor('ring',Ring);`;
@@ -5055,22 +5202,22 @@ var BLOCK = 2048;
 var recent = new Float32Array(4096);
 var SHORT_SECONDS = 5;
 var started2 = null;
-var context = null;
+var context2 = null;
 var pulling = false;
 var buffered = 0;
 var under = 0;
 var pace = null;
 var shorts = [];
-function sound() {
+function sound2() {
   if (started2) {
-    if (context?.state === "suspended") context.resume();
+    if (context2?.state === "suspended") context2.resume();
     return;
   }
   started2 = (async () => {
-    context = new AudioContext({ sampleRate: RATE });
-    await context.audioWorklet.addModule(URL.createObjectURL(new Blob([RING], { type: "text/javascript" })));
-    const node = new AudioWorkletNode(context, "ring", { numberOfInputs: 0, outputChannelCount: [2] });
-    node.connect(context.destination);
+    context2 = new AudioContext({ sampleRate: RATE });
+    await context2.audioWorklet.addModule(URL.createObjectURL(new Blob([RING2], { type: "text/javascript" })));
+    const node = new AudioWorkletNode(context2, "ring", { numberOfInputs: 0, outputChannelCount: [2] });
+    node.connect(context2.destination);
     const pull = async () => {
       if (pulling || buffered >= AHEAD || !active) return;
       pulling = true;
@@ -5120,7 +5267,7 @@ setInterval(() => {
 async function take2(model2, { status: el }) {
   status = el;
   active = true;
-  if (started2 && context?.state === "suspended") context.resume();
+  if (started2 && context2?.state === "suspended") context2.resume();
   if (S?.model === model2 && what) document.getElementById("what").textContent = what;
   let s2;
   try {
@@ -5143,7 +5290,7 @@ function rest2() {
   });
   active = false;
   clearTimeout(polling);
-  if (context?.state === "running") context.suspend();
+  if (context2?.state === "running") context2.suspend();
 }
 function keys2(e) {
   if (["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName) && !["range", "radio", "checkbox"].includes(e.target.type)) return;
@@ -5157,57 +5304,57 @@ function keys2(e) {
 var $3 = (id) => document.getElementById(id);
 var label2 = (m) => m.replace(/-/g, " ");
 var DIALS = { strings: strings_exports, winds: winds_exports };
-var families = null;
-var family = null;
+var families2 = null;
+var family2 = null;
 var model = null;
-function shown2(next2) {
-  for (const el of document.querySelectorAll("[data-family]")) el.hidden = el.dataset.family !== next2;
+function shown3(next) {
+  for (const el of document.querySelectorAll("[data-family]")) el.hidden = el.dataset.family !== next;
 }
-var shownAs = (next2) => {
-  model = next2;
-  $3("instrument").value = next2;
-  history.replaceState(null, "", `?instrument=${encodeURIComponent(next2)}`);
+var shownAs = (next) => {
+  model = next;
+  $3("instrument").value = next;
+  history.replaceState(null, "", `?instrument=${encodeURIComponent(next)}`);
 };
-async function choose(next2) {
-  const to = families.strings.instruments.includes(next2) ? "strings" : "winds";
-  shownAs(next2);
-  if (family && family !== to) DIALS[family].rest();
-  family = to;
-  shown2(to);
-  if (!families[to].running) {
+async function choose(next) {
+  const to = families2.strings.instruments.includes(next) ? "strings" : "winds";
+  shownAs(next);
+  if (family2 && family2 !== to) DIALS[family2].rest();
+  family2 = to;
+  shown3(to);
+  if (!families2[to].running) {
     $3("status").classList.remove("failed");
-    $3("status").textContent = `Starting the ${to}' dial for the ${label2(next2)} ...`;
-    const r = await fetch(`/start?family=${to}&model=${encodeURIComponent(next2)}`, { method: "POST" });
+    $3("status").textContent = `Starting the ${to}' dial for the ${label2(next)} ...`;
+    const r = await fetch(`/start?family=${to}&model=${encodeURIComponent(next)}`, { method: "POST" });
     const got = await r.json();
     if (!r.ok) {
       $3("status").classList.add("failed");
       $3("status").textContent = `The ${to}' dial did not start: ${got.error}`;
       return;
     }
-    families = got;
+    families2 = got;
   }
-  if (model !== next2) return;
-  await DIALS[to].take(next2, { status: $3("status"), choose: shownAs });
+  if (model !== next) return;
+  await DIALS[to].take(next, { status: $3("status"), choose: shownAs });
 }
 async function main() {
-  families = await (await fetch("/families", { cache: "no-store" })).json();
+  families2 = await (await fetch("/families", { cache: "no-store" })).json();
   const select = $3("instrument"), group = (name2, models) => {
     const g = document.createElement("optgroup");
     g.label = name2;
     g.append(...models.map((m) => new Option(label2(m), m)));
     select.append(g);
   };
-  group("Strings", families.strings.instruments);
-  group("Woodwinds", families.winds.instruments.filter((i) => i.kind !== "lips").map((i) => i.model));
-  group("Brass", families.winds.instruments.filter((i) => i.kind === "lips").map((i) => i.model));
+  group("Strings", families2.strings.instruments);
+  group("Woodwinds", families2.winds.instruments.filter((i) => i.kind !== "lips").map((i) => i.model));
+  group("Brass", families2.winds.instruments.filter((i) => i.kind === "lips").map((i) => i.model));
   select.onchange = () => {
     choose(select.value);
     select.blur();
   };
-  addEventListener("keydown", (e) => family && DIALS[family].keys(e));
+  addEventListener("keydown", (e) => family2 && DIALS[family2].keys(e));
   const asked2 = new URLSearchParams(location.search).get("instrument");
-  const all = [...families.strings.instruments, ...families.winds.instruments.map((i) => i.model)];
-  choose(all.includes(asked2) ? asked2 : families.first);
+  const all = [...families2.strings.instruments, ...families2.winds.instruments.map((i) => i.model)];
+  choose(all.includes(asked2) ? asked2 : families2.first);
 }
 window.live = { strings: strings_exports, winds: winds_exports, choose };
 main();

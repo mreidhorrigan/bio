@@ -10,15 +10,17 @@ th,td{border:1px solid #8884;padding:6px 8px;text-align:left;vertical-align:top}
 </head>
 <body>
 <h1>Sources of the solo instrument tests</h1>
-<p>Built 2026-11-03T04:45:53.404Z from the Musebots repository at 86f9210967643cbf8328cbbfa879063a075d5571 by
-<code>scripts/build-live-site.mjs</code>. The page is the Mac's own live dial (<code>native/live/live.html</code>, <code>winds.js</code>), its dial run
-in the browser (<code>native/live/site/</code>, <code>native/openwind/dial.mjs</code>).</p>
+<p>Built 2026-11-03T05:39:58.629Z from the Musebots repository at 9ee3d156bb7cde309d0a56ea1ee5b31f0e6df95c by
+<code>scripts/build-live-site.mjs</code>. The page is the Mac's own live dial (<code>native/live/live.html</code>, <code>winds.js</code>, <code>strings.js</code>), its
+dials run in the browser (<code>native/live/site/</code>, <code>native/openwind/dial.mjs</code>, <code>native/strings-model/dial.mjs</code>).</p>
 <table>
 <tr><th>File</th><th>What it is</th><th>Licence</th><th>Source</th></tr>
 <tr><td><code>openwind-threads.wasm.gz</code>, <code>openwind.wasm.gz</code></td><td>OpenWInD's scheme as the Musebots streaming player for winds, built for WebAssembly with and without threads (Rust's wasm32-wasip1-threads and wasm32-unknown-unknown, SIMD128)</td><td>GPL-3.0-or-later (its crate's)</td><td><a href="sources/openwind-engine.tar.gz"><code>sources/openwind-engine.tar.gz</code></a></td></tr>
-<tr><td><code>live.js</code>, <code>dial-worker.js</code>, <code>openwind-thread.js</code></td><td>the page's code, bundled by esbuild 0.28.1 from the files packed in <code>sources/live-dial-code.tar.gz</code></td><td>the Musebots project's</td><td><a href="sources/live-dial-code.tar.gz"><code>sources/live-dial-code.tar.gz</code></a></td></tr>
+<tr><td><code>strings-live.js</code>, <code>strings-live.wasm.gz</code></td><td>Artifastring (G. Percival) as Musebots patch it, played by the Musebots live host (<code>native/strings-model/musebots-strings-live.cpp</code>), with FFTW 3.3.10 single precision and Eigen 5.0.1's headers, built for WebAssembly by Emscripten 6.0.12</td><td>GPL-3.0-or-later (Artifastring's; FFTW's GPL-2.0-or-later taken under it; Eigen's MPL-2.0)</td><td><a href="sources/strings-engine.tar.gz"><code>sources/strings-engine.tar.gz</code></a>, <a href="sources/live-dial-code.tar.gz"><code>sources/live-dial-code.tar.gz</code></a>; FFTW 3.3.10: <a href="sources/fftw-3.3.10.tar.gz"><code>sources/fftw-3.3.10.tar.gz</code></a> (sha256 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467), built <code>--enable-float --disable-shared</code> by Emscripten; Eigen 5.0.1: <a href="https://gitlab.com/libeigen/eigen/-/releases/5.0.1">gitlab.com/libeigen/eigen</a>, unchanged</td></tr>
+<tr><td><code>live.js</code>, <code>dial-worker.js</code>, <code>strings-worker.js</code>, <code>openwind-thread.js</code></td><td>the page's code, bundled by esbuild 0.28.1 from the files packed in <code>sources/live-dial-code.tar.gz</code></td><td>the Musebots project's</td><td><a href="sources/live-dial-code.tar.gz"><code>sources/live-dial-code.tar.gz</code></a></td></tr>
 <tr><td><code>coi-serviceworker.js</code></td><td>coi-serviceworker 0.1.7 (G. Zuidhof and contributors): the page's cross-origin isolation, a static host sending no headers</td><td>MIT (<a href="coi-serviceworker-LICENSE.txt"><code>coi-serviceworker-LICENSE.txt</code></a>)</td><td><a href="https://github.com/gzuidhof/coi-serviceworker">github.com/gzuidhof/coi-serviceworker</a></td></tr>
 <tr><td><code>winds/&lt;instrument&gt;/</code></td><td>each instrument's body, laid out for the engine from OpenWInD's (GPL-3.0-or-later) scheme of its bore, gzipped</td><td>the Musebots project's</td><td>made by <code>native/openwind/make-bodies.mjs</code></td></tr>
+<tr><td><code>strings/manifest.json.gz</code></td><td>what the Mac's strings dial measures as it goes, measured beforehand: the monitor's gains (notes rendered by the engine's driver), Artifastring's variants, the started note's bowing</td><td>the Musebots project's</td><td>made by <code>scripts/build-live-site.mjs</code> (<code>native/strings-model/monitor.mjs</code>)</td></tr>
 </table>
 <p>Not published here: the bassoon (its bore's source may be used here but not republished); the contrabassoon (its bore, the bassoon's scaled, may be used here but not republished).</p>
 </body>

@@ -6945,7 +6945,7 @@ var ready = (async () => {
   });
   const built = engine.then((e) => ({ threaded: e.threaded, cores: CORES }), (error) => ({ error: error.message }));
   const families = async () => ({
-    strings: { instruments: [], running: false, starting: false, ended: null, later: strings },
+    strings: { instruments: strings, running: false, starting: false, ended: null },
     winds: { instruments: instruments.map(({ model, kind }) => ({ model, kind })), running: true, starting: false, ended: null },
     first,
     engine: await built
