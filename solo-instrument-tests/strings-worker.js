@@ -25175,6 +25175,73 @@ var neutral_notes_default = {
   }
 };
 
+// public/shared/performers/lungs.js
+var LUNGS = Object.freeze({
+  capacity: Object.freeze({ litres: 4.21, sd: 1.11, evidence: "measured" }),
+  spent: Object.freeze({ share: (0.72 + 0.83) / 2, evidence: "measured" }),
+  inhale: Object.freeze({ seconds: VOICE.breaths.full.seconds, evidence: "borrowed: a singer's full breath" })
+});
+var BREATH_LITRES = +(LUNGS.capacity.litres * LUNGS.spent.share).toFixed(2);
+var PLAYERS_AIRFLOW = Object.freeze({
+  oboe: [{ midi: 58, pp: [0.061, 23], ff: [0.102, 33] }, { midi: 81, pp: [0.047, 55], ff: [0.058, 80] }],
+  "english-horn": [{ midi: 57, pp: [0.09, 15.4], ff: [0.097, 22.7] }, { midi: 81, pp: [0.08, 18.5], ff: [0.074, 45.7] }],
+  bassoon: [{ midi: 34, pp: [0.15, 44], ff: [0.81, 38.5] }],
+  flute: [{ midi: 60, pp: [0.13, 5], ff: [0.56, 10.7] }, { midi: 93, pp: [0.1, 21], ff: [0.62, 29] }],
+  trumpet: [{ midi: 81, pp: [0.15, 33], ff: [0.49, 110] }],
+  tuba: [{ midi: 33, pp: [0.23, 2.4], ff: [1.57, 11.6] }, { midi: 57, pp: [0.14, 12.4], ff: [1.72, 74] }]
+});
+var BORROWED_AIRFLOW = Object.freeze({
+  piccolo: ["flute"],
+  "alto-flute": ["flute"],
+  contrabassoon: ["bassoon"],
+  clarinet: ["oboe", "english-horn", "bassoon"],
+  "e-flat-clarinet": ["oboe", "english-horn", "bassoon"],
+  "bass-clarinet": ["oboe", "english-horn", "bassoon"],
+  "soprano-saxophone": ["oboe", "english-horn", "bassoon"],
+  "alto-saxophone": ["oboe", "english-horn", "bassoon"],
+  "tenor-saxophone": ["oboe", "english-horn", "bassoon"],
+  "baritone-saxophone": ["oboe", "english-horn", "bassoon"],
+  horn: ["trumpet", "tuba"],
+  trombone: ["trumpet", "tuba"]
+});
+var MARKS3 = ["ppp", "pp", "p", "mp", "mf", "f", "ff", "fff"];
+var PP = MARKS3.indexOf("pp");
+var FF = MARKS3.indexOf("ff");
+
+// native/live/players-ranges.mjs
+function compassOf(model) {
+  const r = instrumentRange(DEFAULT_INSTRUMENT_RANGES[model] ?? model);
+  if (!r?.range) return null;
+  const host = String(r.sources?.[0] ?? "").match(/^https?:\/\/(?:www\.)?([^/]+)/)?.[1];
+  return {
+    range: [...r.range],
+    what: `its players' compass (${r.name})`,
+    source: host === "vsl.co.at" ? "Vienna Symphonic Library" : host === "phys.unsw.edu.au" ? "Chen, Smith & Wolfe" : host ?? "instrument-ranges.js",
+    ...model === "trumpet" ? { by: "the C trumpet's" } : {}
+  };
+}
+function stringsRanges(name) {
+  const measured3 = (path) => {
+    try {
+      const e = playerEntry(name, path);
+      return e.kind === "literature" ? e : null;
+    } catch {
+      return null;
+    }
+  };
+  const rate = measured3("vibrato.rate"), width = measured3("vibrato.width"), contacts = playerEntry("violin-family", "contacts"), force = playerEntry("violin-family", "mostForce");
+  const by = name === "violin" || name === "viola" ? {} : { by: "violinists' and violists'" };
+  return {
+    pitch: compassOf(name),
+    beta: { range: [...contacts.range], what: "the contact point players bow at, a share of the string from the bridge", source: "Schoonderwaldt 2009", ...by },
+    force: { range: [null, force.value], what: "the most bow force players were seen to use", source: "Schoonderwaldt 2009", ...by },
+    speed: null,
+    damping: { value: 1, what: "a fingertip's measured damping", source: "Wiertlewski & Hayward 2012" },
+    width: width ? { value: width.value, what: `its players' vibrato, peak to peak`, source: width.source } : null,
+    rate: rate ? { value: rate.value, what: "its players' vibrato", source: rate.source } : null
+  };
+}
+
 // native/strings-model/dial.mjs
 var INSTRUMENTS = Object.entries(MODEL2.types).sort((a, b) => a[1] - b[1]).map(([name]) => name);
 var NEUTRAL_NOTES = neutral_notes_default.notes;
@@ -25245,7 +25312,9 @@ function stringsDial({ type, variant, seed: seed2, from, start, variants, fitted
       neutral: NEUTRAL_NOTES[name] ?? null,
       neutralDb: neutralDb(name, type2),
       rendersDb: 20 * Math.log10(gainOf(name)),
-      attacks: attacksOf(name)
+      attacks: attacksOf(name),
+      // (What players were measured doing with its dials, drawn on them: players-ranges.mjs.)
+      players: stringsRanges(name)
     };
   };
   const state = {

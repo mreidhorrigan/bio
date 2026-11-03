@@ -4420,8 +4420,8 @@ var voicePart = (name, hz, register) => record(
   { basis: "measured", measuredExtremesHz: hz, register, note: "Measured extremes are choristers' phonetogram means; the register is authored." }
 );
 var BOWED_COMPASS = Object.freeze({ violin: "violin-standard", viola: "viola-standard", cello: "cello-standard", contrabass: "contrabass-four-string" });
-var bowedRecord = (name, label, page) => record(
-  label,
+var bowedRecord = (name, label2, page) => record(
+  label2,
   value(name, "compass"),
   pathsOf(name).includes("writtenToSounding") ? value(name, "writtenToSounding") : 0,
   academy("strings", page),
@@ -5517,6 +5517,925 @@ var dial_reach_default = {
   factor: 4
 };
 
+// render/synthesis/breath-literature.json
+var breath_literature_default = {
+  schema: "musebots.breath-literature/1",
+  about: "Wind players' mouth pressures as measured, each instrument's tables as their sources publish them (a list, one table a source's): read by workers/woodwind_reeds.py (breath_means) for its players' laws",
+  sources: {
+    "fuks-sundberg-1996": `L. Fuks & J. Sundberg 1996, "Blowing pressures in reed woodwind instruments", KTH TMH-QPSR 37(3), 41-57 (https://www.speech.kth.se/music/publications/leofuks/thesis/paper1/ifuks4.html; research-downloads/winds/fuks-sundberg-1996-blowing-pressures-tables.html), revised as "Blowing pressures in bassoon, clarinet, oboe and saxophone", Acta Acustica united with Acustica 85 (1999), 267-277: two professional players of each instrument, a pressure transducer in the mouth's corner; Appendix Tables A1-A2 (clarinet players Cl1, Cl2), A3-A4 (alto saxophone, Sx1, Sx2), A5-A6 (oboe, Ob1, Ob2), A7-A8 (bassoon, Bn1, Bn2), each pitch's mean over its repetitions in an arpeggio, ascending then descending, at pp, mp, mf and ff (sounding pitches as the tables name them)`,
+    "pamies-vila-2018": 'M. Pamies-Vila, A. Hofmann & V. Chatziioannou 2018, "Analysis of tonguing and blowing actions during clarinet performance", Frontiers in Psychology 9, 617, doi:10.3389/fpsyg.2018.00617 (research-downloads/winds/pamies-vila-2018-tonguing-blowing.pdf): ten clarinettists, the mean mouth pressure over a melody at piano and forte, slow tempo, Table 1 (mean and standard deviation across players)'
+  },
+  clarinet: [
+    {
+      source: "fuks-sundberg-1996",
+      tables: "A1-A2",
+      unit: "cm H2O",
+      pitches: [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "Eb4",
+        "G4",
+        "Bb4",
+        "Eb5",
+        "G5",
+        "Bb5",
+        "Eb6",
+        "Bb5",
+        "G5",
+        "Eb5",
+        "Bb4",
+        "G4",
+        "Eb4",
+        "Bb3",
+        "G3",
+        "Eb3"
+      ],
+      players: {
+        Cl1: {
+          ff: [
+            65,
+            55,
+            46,
+            47,
+            46,
+            50,
+            46,
+            45,
+            43,
+            37,
+            37,
+            38,
+            48,
+            51,
+            46,
+            44,
+            43,
+            46,
+            47
+          ],
+          mf: [
+            43,
+            41,
+            39,
+            39,
+            40,
+            43,
+            39,
+            33,
+            34,
+            31,
+            32,
+            34,
+            39,
+            44,
+            37,
+            37,
+            36,
+            40,
+            42
+          ],
+          mp: [
+            33,
+            32,
+            30,
+            32,
+            32,
+            34,
+            31,
+            29,
+            28,
+            26,
+            27,
+            28,
+            31,
+            34,
+            30,
+            30,
+            30,
+            33,
+            33
+          ],
+          pp: [
+            26,
+            26,
+            24,
+            25,
+            26,
+            29,
+            26,
+            24,
+            23,
+            23,
+            23,
+            24,
+            25,
+            27,
+            24,
+            24,
+            24,
+            25,
+            26
+          ]
+        },
+        Cl2: {
+          ff: [
+            59,
+            60,
+            59,
+            56,
+            53,
+            55,
+            52,
+            50,
+            44,
+            40,
+            40,
+            45,
+            48,
+            49,
+            46,
+            46,
+            48,
+            50,
+            51
+          ],
+          mf: [
+            42,
+            42,
+            39,
+            38,
+            37,
+            43,
+            41,
+            37,
+            34,
+            31,
+            33,
+            36,
+            39,
+            40,
+            35,
+            36,
+            36,
+            38,
+            38
+          ],
+          mp: [
+            32,
+            32,
+            31,
+            31,
+            30,
+            35,
+            33,
+            31,
+            29,
+            29,
+            29,
+            31,
+            33,
+            34,
+            28,
+            29,
+            28,
+            29,
+            30
+          ],
+          pp: [
+            28,
+            27,
+            27,
+            27,
+            25,
+            31,
+            30,
+            29,
+            27,
+            31,
+            29,
+            30,
+            31,
+            33,
+            27,
+            27,
+            27,
+            27,
+            27
+          ]
+        }
+      }
+    },
+    {
+      source: "pamies-vila-2018",
+      unit: "kPa",
+      players: 10,
+      means: {
+        p: 2.7,
+        f: 3.8
+      },
+      spreads: {
+        p: 0.3,
+        f: 0.6
+      },
+      note: "Table 1, slow tempo (forte at the fast tempo 4.1 to 4.2 kPa); legato, portato and staccato the same. W. Li et al. 2016's pp 1.9-2.4 and ff 2.6-3.6 kPa (JASA 139, 825, doi:10.1121/1.4941660) are averaged over each attack's rise, not a held note: not here"
+    }
+  ],
+  "alto-saxophone": [
+    {
+      source: "fuks-sundberg-1996",
+      tables: "A3-A4",
+      unit: "cm H2O",
+      pitches: [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "Eb4",
+        "G4",
+        "Bb4",
+        "Eb5",
+        "G5",
+        "Eb5",
+        "Bb4",
+        "G4",
+        "Eb4",
+        "Bb3",
+        "G3",
+        "Eb3"
+      ],
+      players: {
+        Sx1: {
+          ff: [
+            25,
+            37,
+            43,
+            45,
+            61,
+            60,
+            49,
+            43,
+            45,
+            48,
+            55,
+            35,
+            34,
+            37,
+            26
+          ],
+          mf: [
+            21,
+            24,
+            28,
+            29,
+            40,
+            39,
+            32,
+            29,
+            32,
+            32,
+            35,
+            26,
+            24,
+            25,
+            21
+          ],
+          mp: [
+            20,
+            23,
+            22,
+            24,
+            30,
+            28,
+            26,
+            24,
+            26,
+            27,
+            30,
+            24,
+            23,
+            25,
+            21
+          ],
+          pp: [
+            20,
+            21,
+            20,
+            21,
+            24,
+            23,
+            22,
+            21,
+            22,
+            23,
+            26,
+            21,
+            20,
+            22,
+            21
+          ]
+        },
+        Sx2: {
+          ff: [
+            28,
+            36,
+            31,
+            34,
+            48,
+            54,
+            51,
+            45,
+            44,
+            43,
+            43,
+            32,
+            28,
+            28,
+            25
+          ],
+          mf: [
+            16,
+            19,
+            18,
+            19,
+            28,
+            27,
+            25,
+            24,
+            24,
+            26,
+            27,
+            19,
+            18,
+            20,
+            16
+          ],
+          mp: [
+            19,
+            20,
+            18,
+            19,
+            25,
+            24,
+            22,
+            22,
+            22,
+            23,
+            25,
+            20,
+            18,
+            20,
+            18
+          ],
+          pp: [
+            21,
+            21,
+            18,
+            18,
+            23,
+            22,
+            20,
+            20,
+            20,
+            21,
+            23,
+            19,
+            18,
+            21,
+            20
+          ]
+        }
+      }
+    }
+  ],
+  oboe: [
+    {
+      source: "fuks-sundberg-1996",
+      tables: "A5-A6",
+      unit: "cm H2O",
+      pitches: [
+        "Bb3",
+        "D4",
+        "F4",
+        "Bb4",
+        "D5",
+        "F5",
+        "Bb5",
+        "D6",
+        "Bb5",
+        "F5",
+        "D5",
+        "Bb4",
+        "F4",
+        "D4",
+        "Bb3"
+      ],
+      players: {
+        Ob1: {
+          ff: [
+            41,
+            46,
+            52,
+            56,
+            62,
+            68,
+            69,
+            80,
+            70,
+            62,
+            56,
+            46,
+            45,
+            41,
+            42
+          ],
+          mf: [
+            40,
+            43,
+            47,
+            48,
+            52,
+            57,
+            57,
+            62,
+            59,
+            54,
+            48,
+            43,
+            39,
+            38,
+            38
+          ],
+          mp: [
+            37,
+            39,
+            41,
+            42,
+            45,
+            50,
+            51,
+            53,
+            52,
+            49,
+            44,
+            40,
+            38,
+            37,
+            35
+          ],
+          pp: [
+            39,
+            40,
+            41,
+            41,
+            45,
+            48,
+            46,
+            50,
+            46,
+            45,
+            43,
+            41,
+            41,
+            39,
+            39
+          ]
+        },
+        Ob2: {
+          ff: [
+            52,
+            63,
+            70,
+            77,
+            82,
+            103,
+            118,
+            113,
+            120,
+            94,
+            78,
+            69,
+            59,
+            56,
+            50
+          ],
+          mf: [
+            40,
+            45,
+            48,
+            55,
+            57,
+            70,
+            78,
+            74,
+            76,
+            64,
+            56,
+            52,
+            44,
+            42,
+            38
+          ],
+          mp: [
+            40,
+            39,
+            40,
+            43,
+            47,
+            50,
+            57,
+            56,
+            54,
+            51,
+            46,
+            41,
+            39,
+            38,
+            38
+          ],
+          pp: [
+            42,
+            42,
+            41,
+            43,
+            45,
+            48,
+            50,
+            51,
+            49,
+            47,
+            44,
+            41,
+            40,
+            39,
+            39
+          ]
+        }
+      }
+    }
+  ],
+  bassoon: [
+    {
+      source: "fuks-sundberg-1996",
+      tables: "A7-A8",
+      unit: "cm H2O",
+      pitches: [
+        "Bb1",
+        "D2",
+        "F2",
+        "Bb2",
+        "D3",
+        "F3",
+        "Bb3",
+        "D4",
+        "F4",
+        "Bb4",
+        "F4",
+        "D4",
+        "Bb3",
+        "F3",
+        "D3",
+        "Bb2",
+        "F2",
+        "D2",
+        "Bb1"
+      ],
+      players: {
+        Bn1: {
+          ff: [
+            26,
+            27,
+            31,
+            35,
+            35,
+            37,
+            53,
+            61,
+            65,
+            56,
+            58,
+            60,
+            52,
+            37,
+            35,
+            32,
+            25,
+            25,
+            23
+          ],
+          mf: [
+            18,
+            21,
+            23,
+            28,
+            28,
+            30,
+            39,
+            45,
+            48,
+            43,
+            43,
+            44,
+            38,
+            28,
+            25,
+            26,
+            20,
+            19,
+            15
+          ],
+          mp: [
+            15,
+            17,
+            17,
+            21,
+            21,
+            24,
+            31,
+            37,
+            38,
+            33,
+            36,
+            35,
+            31,
+            25,
+            22,
+            23,
+            19,
+            17,
+            16
+          ],
+          pp: [
+            13,
+            16,
+            16,
+            19,
+            19,
+            22,
+            28,
+            32,
+            33,
+            29,
+            32,
+            32,
+            28,
+            23,
+            21,
+            21,
+            17,
+            16,
+            16
+          ]
+        },
+        Bn2: {
+          ff: [
+            19,
+            21,
+            22,
+            25,
+            24,
+            26,
+            34,
+            38,
+            42,
+            40,
+            44,
+            40,
+            32,
+            25,
+            23,
+            23,
+            19,
+            19,
+            17
+          ],
+          mf: [
+            12,
+            13,
+            14,
+            16,
+            16,
+            18,
+            23,
+            27,
+            29,
+            27,
+            29,
+            28,
+            24,
+            20,
+            19,
+            19,
+            17,
+            17,
+            16
+          ],
+          pp: [
+            13,
+            14,
+            14,
+            16,
+            16,
+            18,
+            22,
+            24,
+            27,
+            27,
+            28,
+            25,
+            22,
+            18,
+            17,
+            16,
+            15,
+            15,
+            13
+          ]
+        }
+      },
+      note: "Bn2's mp row, as the page gives it, is Bn1's mp row repeated value for value -- over Bn2's own mf at every pitch -- a transcription's slip: left out, Bn2's mp read from Bn1's at Bn2's own level against Bn1's (workers/woodwind_reeds.py breath_means)"
+    }
+  ]
+};
+
+// render/synthesis/reed-literature.json
+var reed_literature_default = {
+  schema: "musebots.reed-literature/1",
+  source: `J. Chabassier & R. Auvray 2022, "Control parameters for reed wind instruments or organ pipes with reed induced flow", Proceedings of the 25th International Conference on Digital Audio Effects (DAFx20in22), Vienna, Table 1: the clarinet-like reeds' dimensioned values found in the literature; the values they set in italic (guessed, not found in the reference) left out (null)`,
+  use: "tools/fit_reed.py: each single reed's parameter's prior spread, the standard deviation of its logarithm over these reeds -- how far published reeds stand from one another (tools/measured_registry.py exciter_spreads); workers/openwind_worker.py: the saxophones' reed, the middle of its kind's measured stiffness, resistance and mass per area (saxophone_reed). Rows after Chabassier & Auvray's: [6]'s and [8]'s, added from their papers, each with its size and, where measured, its stiffness and resistance per area",
+  references: {
+    "[1]": 'S. Bilbao 2008, "Direct simulation for wind instrument synthesis", DAFx-08, 145-152',
+    "[2]": 'V. Chatziioannou & M. van Walstijn 2012, "Estimation of clarinet reed parameters by inverse modelling", Acta Acustica united with Acustica 98(4), 629-639',
+    "[3]": 'F. Avanzini & D. Rocchesso 2002, "Efficiency, accuracy, and stability issues in discrete-time simulations of single reed wind instruments", JASA 111(5), 2293-2301',
+    "[4]": 'M. van Walstijn 2002, "Discrete-time modelling of brass and reed woodwind instruments with application to musical sound synthesis", PhD thesis, University of Edinburgh',
+    "[6]": 'A. Munoz Arancon, B. Gazengel, J.-P. Dalmont & E. Conan 2016, "Estimation of saxophone reed parameters during playing", JASA 139(5), 2754-2765, doi:10.1121/1.4948774',
+    "[7]": 'V. Chatziioannou, S. Schmutzhard, M. Pamies-Vila & A. Hofmann 2019, "Investigating clarinet articulation using a physical model and an artificial blowing machine", Acta Acustica united with Acustica 105(4), 682-694',
+    "[8]": `D. Tonetti & E. A. Piana 2025, "Imaging based saxophone reed modelling", Forum Acusticum / EuroNoise 2025, Malaga, 2871-2876, doi:10.61782/fa.2025.0442 (checked on Crossref; CC BY 3.0; research-downloads/winds/saxophone-reed/tonetti-piana-2025-sax-reed-imaging.pdf): a synthetic tenor reed (Legere 3) on its mouthpiece, its tip filmed at 10 kHz under a sine sweep, a foam lip loaded 0 to 1000 g; their Table 1, a one-degree oscillator fitted to each load's transfer function`,
+    "[9]": `A. Gaillard, V. Koehl & B. Gazengel 2024, "Theoretical and experimental studies about single cane reeds: a review", Acta Acustica 8, 63, doi:10.1051/aacus/2024050 (checked on Crossref; research-downloads/winds/saxophone-reed/aacus240040.pdf): Table A7, the reed + lip's equivalent parameters published (clarinet: damping rates 453 to 2900 /s, damping factors 0.03 to 0.24; the tenor saxophone, [6]'s); Table A4, Nederveen's measured stiffness by saxophone size (soprano 1e7, alto 8.33e6, tenor 3.33e6 N/m3)`,
+    "[10]": `D. Tonetti & E. A. Piana 2026, "Saxophone acoustical modeling and vibrato 'a la machoire' sound synthesis", JASA 159, 141-156, doi:10.1121/10.0041870 (checked on Crossref; research-downloads/winds/from-owner-2026-10-25/141_1_10.0041870.pdf): [8]'s reed against [6]'s, whose in-vivo damping is some eight times its foam lip's and its resonance half -- the lip's material, they say, sets the damping; a saxophonist's vibrato matched at a blowing pressure of 2.3 kPa`
+  },
+  reeds: [
+    { ref: "[4] Fig 10.17 A", instrument: "clarinet", massPerArea: 0.052, section: 8e-5, opening: 85e-5, width: null, dissip: 3e3, hz: 1900 },
+    { ref: "[4] Fig 10.17 B", instrument: "clarinet", massPerArea: 0.035, section: 55e-6, opening: 106e-5, width: null, dissip: 3e3, hz: 2400 },
+    { ref: "[4] Fig 10.17 C", instrument: "clarinet", massPerArea: 0.035, section: 38e-6, opening: 123e-5, width: null, dissip: 3e4, hz: 3e3 },
+    { ref: "[3] Tab. I", instrument: "clarinet", massPerArea: 0.0231, section: 146e-6, opening: 4e-4, width: 0.0634, dissip: 3e3, hz: 3700 },
+    { ref: "[1] Fig. 7", instrument: "clarinet", massPerArea: 0.0231, section: 146e-6, opening: 4e-4, width: 0.01, dissip: 3e3, hz: 3700 },
+    { ref: "[2] Tab. I", instrument: "clarinet", massPerArea: 0.05, section: 7e-5, opening: 4e-4, width: 0.013, dissip: 3e3, hz: 2747 },
+    { ref: "[2] Tab. II", instrument: "clarinet", massPerArea: 0.056, section: 177e-6, opening: 255e-6, width: 0.012, dissip: 453, hz: 2368 },
+    {
+      ref: "[6] Tab VI",
+      instrument: "saxophone",
+      massPerArea: null,
+      section: null,
+      opening: 36e-5,
+      width: null,
+      dissip: null,
+      hz: null,
+      size: "tenor",
+      stiffness: 48e5,
+      resistance: 1e3,
+      notMeasured: `its massPerArea (0.269), and the hz (672) and dissip (3717) Chabassier & Auvray derive from it: its authors' Table VI "provides some improvement ... though the mass is not accurately estimated because a linear modeling of the inertial effects is employed. This result is presented as an insight" (p. 2763), their reed at mf an oscillator of stiffness and damping, "the effect of mass (inertia) being very small" (abstract); its stiffness K 4.8e6 Pa/m and damping R 1.0e3 Pa s/m its measurements`
+    },
+    { ref: "[6] Tab V p", instrument: "saxophone", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 64e5, resistance: 1900, note: "their reed at p as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
+    { ref: "[6] Tab V mf", instrument: "saxophone", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 45e5, resistance: 1200, note: "their reed at mf as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
+    { ref: "[8] Tab. 1 250 g", instrument: "saxophone", massPerArea: 0.1674, section: null, opening: null, width: null, dissip: 1036, hz: 1526, size: "tenor", stiffness: 154e5, resistance: 173.4, derived: "their kr 1.54e+07 Pa/m, wr 9.59e+03 rad/s, xi 0.054 at a foam lip loaded 250 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
+    { ref: "[8] Tab. 1 500 g", instrument: "saxophone", massPerArea: 0.1524, section: null, opening: null, width: null, dissip: 1238, hz: 1579, size: "tenor", stiffness: 15e6, resistance: 188.7, derived: "their kr 1.5e+07 Pa/m, wr 9.92e+03 rad/s, xi 0.0624 at a foam lip loaded 500 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
+    { ref: "[8] Tab. 1 750 g", instrument: "saxophone", massPerArea: 0.1646, section: null, opening: null, width: null, dissip: 1304, hz: 1655, size: "tenor", stiffness: 178e5, resistance: 214.6, derived: "their kr 1.78e+07 Pa/m, wr 1.04e+04 rad/s, xi 0.0627 at a foam lip loaded 750 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
+    { ref: "[8] Tab. 1 1000 g", instrument: "saxophone", massPerArea: 0.1555, section: null, opening: null, width: null, dissip: 1727, hz: 1783, size: "tenor", stiffness: 195e5, resistance: 268.5, derived: "their kr 1.95e+07 Pa/m, wr 1.12e+04 rad/s, xi 0.0771 at a foam lip loaded 1000 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
+    { ref: "[7] initial", instrument: "clarinet", massPerArea: 0.033, section: 986e-7, opening: 246e-6, width: 0.012, dissip: 3e3, hz: 3709 }
+  ]
+};
+
+// native/live/players-ranges.mjs
+var label = (m) => m.replace(/-/g, " ");
+var STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+var midiNamed = (name) => {
+  const m = /^([A-G])(b|#)?(-?\d)$/.exec(name);
+  if (!m) throw new Error(`a pitch named ${name}`);
+  return 12 * (+m[3] + 1) + STEP[m[1]] + (m[2] === "b" ? -1 : m[2] === "#" ? 1 : 0);
+};
+var CM_H2O = 98.0665;
+function compassOf(model) {
+  const r = instrumentRange(DEFAULT_INSTRUMENT_RANGES[model] ?? model);
+  if (!r?.range) return null;
+  const host = String(r.sources?.[0] ?? "").match(/^https?:\/\/(?:www\.)?([^/]+)/)?.[1];
+  return {
+    range: [...r.range],
+    what: `its players' compass (${r.name})`,
+    source: host === "vsl.co.at" ? "Vienna Symphonic Library" : host === "phys.unsw.edu.au" ? "Chen, Smith & Wolfe" : host ?? "instrument-ranges.js",
+    ...model === "trumpet" ? { by: "the C trumpet's" } : {}
+  };
+}
+var MEASURED_BREATH = {
+  clarinet: "clarinet",
+  "e-flat-clarinet": "clarinet",
+  "bass-clarinet": "clarinet",
+  oboe: "oboe",
+  "english-horn": "oboe",
+  bassoon: "bassoon",
+  contrabassoon: "bassoon",
+  "soprano-saxophone": "alto-saxophone",
+  "alto-saxophone": "alto-saxophone",
+  "tenor-saxophone": "alto-saxophone",
+  "baritone-saxophone": "alto-saxophone"
+};
+var transposition = (model) => instrumentRange(DEFAULT_INSTRUMENT_RANGES[model] ?? model)?.writtenToSounding ?? 0;
+function reedBreath(model) {
+  const from = MEASURED_BREATH[model];
+  if (!from) return null;
+  const table = breath_literature_default[from].find((t) => t.source === "fuks-sundberg-1996"), shift = transposition(model) - transposition(from), at2 = /* @__PURE__ */ new Map();
+  table.pitches.forEach((name, k) => {
+    const midi = midiNamed(name) + shift, rows = Object.values(table.players);
+    const low = Math.min(...rows.map((p) => p.pp?.[k]).filter(Number.isFinite)), high = Math.max(...rows.map((p) => p.ff?.[k]).filter(Number.isFinite));
+    const was = at2.get(midi);
+    at2.set(midi, was ? [Math.min(was[0], low), Math.max(was[1], high)] : [low, high]);
+  });
+  return {
+    points: [...at2].sort((a, b) => a[0] - b[0]).map(([midi, [low, high]]) => [midi, Math.round(low * CM_H2O), Math.round(high * CM_H2O)]),
+    what: "the mouth's pressure two professional players blew, pp to ff",
+    source: "Fuks & Sundberg 1996",
+    ...from !== model ? { by: `the ${label(from)}'s players, at the same written note` } : {}
+  };
+}
+function lipsBreath(model, compass) {
+  const [lo, hi] = compass?.range ?? [24, 96], line2 = ({ at: at2, slope }, hz) => Math.exp(at2 + slope * Math.log(hz)), points = [];
+  for (let midi = lo; midi <= hi; midi++) {
+    const hz = 440 * 2 ** ((midi - 69) / 12);
+    points.push([midi, Math.round(line2(PLAYERS_BREATH.pp, hz) / PLAYERS_BREATH.pp.scatter), Math.round(Math.min(MOST, line2(PLAYERS_BREATH.ff, hz) * PLAYERS_BREATH.ff.scatter))]);
+  }
+  return {
+    points,
+    what: "the mouth's pressure brass players blew, pp to ff",
+    source: "Fletcher & Tarnopolsky 1999; Bouhuys 1965",
+    ...["trumpet", "tuba"].includes(model) ? {} : { by: "the trumpet and tuba players measured, at its pitch" }
+  };
+}
+var REED_KIND = {
+  clarinet: "clarinet",
+  "e-flat-clarinet": "clarinet",
+  "bass-clarinet": "clarinet",
+  "soprano-saxophone": "saxophone",
+  "alto-saxophone": "saxophone",
+  "tenor-saxophone": "saxophone",
+  "baritone-saxophone": "saxophone"
+};
+var spanOf = (values) => values.length ? values.length > 1 ? { range: [Math.min(...values), Math.max(...values)] } : { value: values[0] } : null;
+function reedOwn(model) {
+  const kind = REED_KIND[model];
+  if (!kind) return {};
+  const reeds = reed_literature_default.reeds.filter((r) => r.instrument === kind), omega = (r) => 2 * Math.PI * r.hz;
+  const about = (what, values) => {
+    const s = spanOf(values);
+    return s && {
+      ...s,
+      what: `${what}, ${values.length} published ${kind} reed${values.length > 1 ? "s" : ""}`,
+      source: "Chabassier & Auvray 2022; Muñoz Arancón et al. 2016; Tonetti & Piana 2025",
+      ...kind === "saxophone" && model !== "tenor-saxophone" ? { by: "a tenor saxophone's reeds" } : {}
+    };
+  };
+  return {
+    pulsation: about("its resonance", reeds.filter((r) => r.hz > 0).map(omega)),
+    qfactor: about("its quality factor", reeds.filter((r) => r.hz > 0 && r.dissip > 0).map((r) => omega(r) / r.dissip)),
+    closing_pressure: about("its closing pressure", reeds.map((r) => r.hz > 0 && r.massPerArea > 0 && r.opening > 0 ? omega(r) ** 2 * r.massPerArea * r.opening : r.stiffness > 0 && r.opening > 0 ? r.stiffness * r.opening : null).filter(Number.isFinite))
+  };
+}
+function tongueOf(model) {
+  const portato = playerEntry("reed-woodwind", "tongue.portato.contact"), staccato = player("reed-woodwind", "tongue.staccato.contact");
+  const clarinets = ["clarinet", "e-flat-clarinet", "bass-clarinet"].includes(model);
+  return {
+    range: [+(portato.value - portato.sd).toFixed(3), Math.max(...staccato.map(([, s]) => s))],
+    what: "the tongue's contact, portato to staccato at two notes a second",
+    source: "Pàmies-Vilà, Hofmann & Chatziioannou 2018",
+    ...clarinets ? {} : { by: "clarinettists'" }
+  };
+}
+function breathTaken() {
+  const { capacity, spent } = LUNGS, low = Math.max(0, capacity.litres - 2 * capacity.sd) * spent.share, high = (capacity.litres + 2 * capacity.sd) * spent.share;
+  return {
+    litres: { range: [+low.toFixed(2), +high.toFixed(2)], what: `a breath: ${Math.round(100 * spent.share)} % of wind players' vital capacity, two deviations either side`, source: "Bouros et al. 2018; Cossette, Sliwinski & Macklem 2000" },
+    inhale: { range: [0.3, LUNGS.inhale.seconds], what: "a breath taken in: reed players' fastest to a singer's full breath", source: "Fuks & Sundberg 1998; Salomoni, van den Hoorn & Hodges 2016" }
+  };
+}
+function windsRanges(model, kind) {
+  const compass = compassOf(model), { litres, inhale } = breathTaken();
+  return {
+    pitch: compass,
+    breath: kind === "reed" ? reedBreath(model) : kind === "lips" ? lipsBreath(model, compass) : null,
+    columns: kind === "reed" ? reedOwn(model) : {},
+    stroke: tongueOf(model),
+    softSeconds: null,
+    rise: null,
+    repeatRate: { range: [null, 8], what: "single tonguing, some 8 notes a second (double some 11.5)", source: "Bertsch & Hoole 2014", ...kind === "lips" ? {} : { by: "brass players'" } },
+    litres,
+    inhale,
+    vibratoWidth: null,
+    vibratoRate: null,
+    flutterHz: null,
+    flutterDepth: null,
+    humInterval: null,
+    humLevel: null
+  };
+}
+
 // native/openwind/dial.mjs
 var REACH = dial_reach_default.factor;
 var least = (kind) => transition(kind).least;
@@ -5599,7 +6518,7 @@ function windsDial(env) {
   const composed = () => state.rules.map((v, k) => current.columns[k][0] === "opening" ? state.fingers[k] ?? v : ofDial(k, v, state.x[k] ?? 0));
   function played(row, { breath = held.breath, tongue = held.tongue } = {}) {
     const out = [...row], { breath: b, zeta } = current;
-    out[b] = row[b] * breath * state.swell;
+    out[b] = row[b] * breath * state.swell * (current.kind === "lips" ? tongue : 1);
     if (zeta != null) out[zeta] = row[zeta] * tongue;
     return out;
   }
@@ -5638,7 +6557,6 @@ function windsDial(env) {
     if (kind === "reed" || kind === "lips" && !legato) {
       const touch = TONGUE.touch, left = legato ? TONGUE.soft : TONGUE.shut;
       held.tongue = left;
-      if (kind === "lips") held.breath = left;
       holdAs(before, touch);
       after(touch, () => hold(state.row, Math.max(length - touch, least(fingered()))));
       after(length, () => {
@@ -5664,30 +6582,30 @@ function windsDial(env) {
   }
   function attackNow(seconds, { shut = null } = {}) {
     cancel("attack");
-    const attack = attackHeld(), lips = current.lips && attack && attack.share !== 1 ? attack : null;
-    if (state.breathAttack.length === 2) {
-      held.breath = 1;
-      held.tongue = shut != null ? TONGUE.shut : 1;
-      if (lips) {
-        const own2 = lipsRow(current.lips, state.lip, 1, state.valves), from = lipsRow(current.lips, state.lip * lips.share, 1, state.valves);
-        send(played(state.row).map((v, k) => own2[k] ? v * from[k] / own2[k] : v), seconds);
-        after(lips.settleAfter, () => hold(state.row, least("lips")), "attack");
-      } else hold(state.row, seconds);
-      if (shut != null) after(shut, () => {
-        held.tongue = 1;
-        hold(state.row, TONGUE.release);
-      }, "attack");
-      return;
-    }
-    const curve = firstEndingAt(state.breathAttack, seconds);
-    const times = [.../* @__PURE__ */ new Set([...curve.slice(1).map((p) => p[0]), ...lips ? [lips.settleAfter, lips.settleAfter + least("lips")] : [], ...shut != null ? [shut, shut + TONGUE.release] : []])].filter((t) => t > 0).sort((a, b) => a - b);
-    const move = (t, span2) => {
-      held.breath = curveAt(curve, t);
-      held.tongue = shut != null && t <= shut ? TONGUE.shut : 1;
-      if (lips && t <= lips.settleAfter) {
+    const attack = attackHeld(), lips = current.lips && attack && attack.share !== 1 ? attack : null, settle = lips ? (shut ?? 0) + lips.settleAfter : null;
+    const holdAt = (t, span2) => {
+      if (lips && t <= settle) {
         const own2 = lipsRow(current.lips, state.lip, 1, state.valves), from = lipsRow(current.lips, state.lip * lips.share, 1, state.valves);
         send(played(state.row).map((v, k) => own2[k] ? v * from[k] / own2[k] : v), span2);
       } else hold(state.row, span2);
+    };
+    if (state.breathAttack.length === 2) {
+      held.breath = 1;
+      held.tongue = shut != null ? TONGUE.shut : 1;
+      holdAt(0, seconds);
+      if (shut != null) after(shut, () => {
+        held.tongue = 1;
+        holdAt(shut, TONGUE.release);
+      }, "attack");
+      if (lips) after(settle, () => hold(state.row, least("lips")), "attack");
+      return;
+    }
+    const curve = firstEndingAt(state.breathAttack, seconds);
+    const times = [.../* @__PURE__ */ new Set([...curve.slice(1).map((p) => p[0]), ...lips ? [settle, settle + least("lips")] : [], ...shut != null ? [shut, shut + TONGUE.release] : []])].filter((t) => t > 0).sort((a, b) => a - b);
+    const move = (t, span2) => {
+      held.breath = curveAt(curve, t);
+      held.tongue = shut != null && t <= shut ? TONGUE.shut : 1;
+      holdAt(t, span2);
     };
     times.forEach((t, k) => {
       const from = k ? times[k - 1] : 0;
@@ -5727,7 +6645,7 @@ function windsDial(env) {
     sway();
   }
   function fromRest() {
-    if (current.kind === "reed") attackNow(state.rise, { shut: state.rise });
+    if (current.kind === "reed" || current.kind === "lips") attackNow(state.rise, { shut: state.rise });
     else {
       held.tongue = 1;
       attackNow(state.rise);
@@ -6058,7 +6976,9 @@ function windsDial(env) {
         zeta: kind === "air" ? null : at2("reed", "zeta"),
         rows: /* @__PURE__ */ new Map(),
         glided: /* @__PURE__ */ new Set(),
-        impedance: null
+        impedance: null,
+        // (What players were measured doing with its dials, drawn on them: players-ranges.mjs.)
+        players: windsRanges(model, kind)
       };
       made.glides = brass ? null : env.glides({ model, folder, columns });
       made.neutral = env.neutral(folder);
@@ -6168,6 +7088,7 @@ function windsDial(env) {
       unattacked: attacks ? attacks.notes.map((a) => Object.entries(a.dynamics).filter(([, g]) => g.share == null).map(([d]) => d)) : null,
       vibratoOwn: vibratoOf(current.model),
       layout: current.layout,
+      players: current.players,
       lungs: { ...LUNGS, breath: BREATH_LITRES, airflow: airflowOf(current.model).source },
       neutral: current.neutral ? {
         note: current.neutral.note,

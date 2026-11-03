@@ -568,6 +568,44 @@ function curveEditor(box, { kind, label: label3, color = "var(--accent)", change
   };
 }
 
+// native/live/players.js
+function playersBand(input) {
+  let track = input.parentElement;
+  if (!track.classList.contains("track")) {
+    track = document.createElement("span");
+    track.className = "track";
+    input.replaceWith(track);
+    track.append(input);
+  }
+  const band = document.createElement("span"), fill2 = document.createElement("i"), said2 = document.createElement("small");
+  band.className = "players";
+  band.append(fill2, said2);
+  track.append(band);
+  return (entry, place, written) => {
+    const value2 = entry?.value != null, [low, high] = value2 ? [entry.value, entry.value] : entry?.range ?? [null, null];
+    if (!entry || low == null && high == null) {
+      fill2.hidden = true;
+      said2.textContent = "unmeasured";
+      band.title = "Nobody measured yet for this control.";
+      return;
+    }
+    const clip = (x2) => Math.min(1, Math.max(0, x2)), a = low == null ? 0 : place(low), b = high == null ? 1 : place(high);
+    const placed2 = Number.isFinite(a) && Number.isFinite(b), from = clip(Math.min(a, b)), to = clip(Math.max(a, b)), beyond = placed2 && (Math.max(a, b) < 0 || Math.min(a, b) > 1);
+    fill2.hidden = !placed2 || beyond;
+    fill2.classList.toggle("tick", value2);
+    fill2.style.left = `calc(8px + (100% - 16px) * ${from})`;
+    fill2.style.width = value2 ? "" : `calc((100% - 16px) * ${to - from})`;
+    said2.textContent = `measured ${value2 ? written(low) : low == null ? `≤ ${written(high)}` : high == null ? `≥ ${written(low)}` : `${written(low)}–${written(high)}`}` + (beyond ? ", beyond its reach" : "") + (entry.by ? " (borrowed)" : "");
+    band.title = `${entry.what[0].toUpperCase()}${entry.what.slice(1)}: ${entry.source}${entry.by ? `; borrowed from ${entry.by}` : ""}.`;
+  };
+}
+function atPitch(entry, midi) {
+  const p = entry?.points;
+  if (!p?.length || midi < p[0][0] || midi > p.at(-1)[0]) return null;
+  const k = Math.max(0, p.findLastIndex((q) => q[0] <= midi)), [m0, l0, h0] = p[k], [m1, l1, h1] = p[Math.min(k + 1, p.length - 1)], t = m1 > m0 ? (midi - m0) / (m1 - m0) : 0;
+  return { ...entry, range: [l0 + t * (l1 - l0), h0 + t * (h1 - h0)] };
+}
+
 // native/live/strings.js
 var $ = (id) => document.getElementById(`s-${id}`);
 var NAMES = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
@@ -624,7 +662,7 @@ function dial(box, id, label3, { min, max, log, value: start, step = "any", onch
     else number.value = value[id];
   };
   set(start, true);
-  setters[id] = Object.assign(set, { bounds });
+  setters[id] = Object.assign(set, { bounds, place: (v) => (to(v) - range.min) / (range.max - range.min) });
 }
 async function ask(asks) {
   if (!asks.length) return;
@@ -731,8 +769,21 @@ function limits() {
   setters.beta.bounds(nearest, 0.5);
   if (value.beta < nearest) setters.beta(nearest, true);
   hairNote();
+  drawPlayers();
   $("fingerboardLimit").textContent = `at most ${state.fingerboard.toFixed(1)} semitones over the open string, where it meets the end of the ${state.name}'s fingerboard (Goldblatt's measurements)`;
   $("hairLimit").textContent = `its middle at least half the hair on the string from the bridge (${(value.hair / 2).toFixed(1)} mm): a violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; the ${state.name}'s not found measured`}`;
+}
+var bands = {};
+function drawPlayers() {
+  const R = state.players;
+  if (!R) return;
+  const open = midiOf(openHz(builds[s])), shortly2 = (v) => String(+(+v).toPrecision(2));
+  const WRITTEN2 = { pitch: (v) => name(Math.round(open + v)), force: (v) => `${shortly2(v)} N`, width: (v) => `${Math.round(v)} ¢`, rate: (v) => `${shortly2(v)} Hz`, damping: (v) => `${shortly2(v)}×` };
+  for (const [id, set] of Object.entries(setters)) {
+    if (id === "volume") continue;
+    const entry = id === "pitch" && R.pitch ? { ...R.pitch, range: R.pitch.range.map((m) => m - open) } : R[id] ?? null;
+    (bands[id] ??= playersBand($(id)))(entry, set.place, WRITTEN2[id] ?? shortly2);
+  }
 }
 function hairNote() {
   const modes = inUse.modes[s] ?? state.strings[s].N, cells = inUse.points[s] ?? 0, cell = inUse.cellMm[s];
@@ -4601,7 +4652,7 @@ function row(box, id, text, { min, max, to = (v) => v, from = (x2) => x2, step =
     if (Number.isFinite(v) && v >= min && v <= max) change(v);
     else refresh();
   };
-  return controls[id] = { set, range, number, note: n };
+  return controls[id] = { set, range, number, note: n, band: playersBand(range), place: (v) => (to(v) - to(min)) / (to(max) - to(min)) };
 }
 var held = null;
 addEventListener("pointerdown", (e) => {
@@ -4923,7 +4974,41 @@ function refresh() {
       if (at >= 0) c.note.textContent = `${meaningOf("gamma")[1]}: ${(P.row[c.k] * P.row[at] / 1e3).toFixed(2)} kPa`;
     }
   }
+  drawPlayers2();
   said();
+}
+var kPa = (v) => `${(v / 1e3).toFixed(1)} kPa`;
+var msOf = (v) => `${Math.round(v)} ms`;
+var shortly = (v) => String(+(+v).toPrecision(2));
+var WRITTEN = { pulsation: (v) => `${Math.round(v / 2 / Math.PI)} Hz`, closing_pressure: kPa, qfactor: shortly };
+var OWN = {
+  stroke: [1e3, msOf],
+  softSeconds: [1e3, msOf],
+  rise: [1e3, msOf],
+  inhale: [1e3, msOf],
+  repeatRate: [1, (v) => `${v} a second`],
+  litres: [1, (v) => `${v.toFixed(1)} L`],
+  vibratoWidth: [1, (v) => `${Math.round(v)} ¢`],
+  vibratoRate: [1, (v) => `${shortly(v)} Hz`]
+};
+var pitchBand = null;
+function drawPlayers2() {
+  const R = S.players;
+  if (!R) return;
+  pitchBand ??= playersBand($2("pitch"));
+  const low = +$2("pitch").min, high = +$2("pitch").max;
+  pitchBand(R.pitch, (m) => (m - low) / (high - low), (m) => noteName(Math.round(m)));
+  const shut = S.columns.findIndex((q) => q[0] === "reed" && q[2] === "closing_pressure"), blown = atPitch(R.breath, P.pitch);
+  for (const [id, c] of Object.entries(controls)) {
+    if (!c.band) continue;
+    const x2 = (v) => (placeOf(c.k, v) + 1) / 2;
+    if (c.name === "gamma") c.band(shut >= 0 ? blown : null, (p) => x2(p / P.row[shut]), kPa);
+    else if (c.k !== void 0) c.band(R.columns[c.name] ?? null, x2, WRITTEN[c.name] ?? shortly);
+    else {
+      const [scale, written] = OWN[id] ?? [1, shortly];
+      c.band(R[id] ?? null, (v) => c.place(scale * v), (v) => written(scale * v));
+    }
+  }
 }
 var drawnFor = null;
 function fingered() {

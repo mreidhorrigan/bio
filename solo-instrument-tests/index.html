@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Solo Instrument Tests</title>
 <style>
-:root{--bg:#f7f6f2;--fg:#1d1d1b;--muted:#6b6a64;--line:#d9d6cc;--accent:#b4462c;--strings:#2f5d8a;--warn:#a2452c;--on:#2e7d4f;--bore:#8a8a86;--sum:#1d1d1b;--band:rgba(180,70,44,.10);--bend:rgba(44,110,180,.10);--harm:rgba(44,110,180,.55)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6)}}
-:root[data-theme="dark"]{--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6)}
+:root{--bg:#f7f6f2;--fg:#1d1d1b;--muted:#6b6a64;--line:#d9d6cc;--accent:#b4462c;--strings:#2f5d8a;--warn:#a2452c;--on:#2e7d4f;--bore:#8a8a86;--sum:#1d1d1b;--band:rgba(180,70,44,.10);--bend:rgba(44,110,180,.10);--harm:rgba(44,110,180,.55);--players:rgba(46,125,79,.6)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6);--players:rgba(124,199,154,.65)}}
+:root[data-theme="dark"]{--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6);--players:rgba(124,199,154,.65)}
 body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,sans-serif;margin:0;padding:16px;max-width:860px}
 h1{font-size:18px;margin:0 0 2px}.muted{color:var(--muted);font-size:13px}
 /* (The three kinds of setting, each under its own heading: what the player does, what the instrument is, and what the
@@ -20,6 +20,11 @@ fieldset{border:1px solid var(--line);border-radius:8px;margin:14px 0;padding:10
 fieldset.bare{border:0;padding:0;margin:0}fieldset.bare:disabled{opacity:.45}
 .row{display:grid;grid-template-columns:170px 1fr 104px;gap:10px;align-items:center;margin:8px 0}
 .row label{font-size:14px}.row input[type=range]{width:100%}
+/* (What players were measured doing, under each slider (players.js): a band over its range, a tick for one value, and a
+   short line saying it.) */
+.track{display:block;position:relative;padding-bottom:14px}.track input[type=range]{display:block;margin:0}
+.players{position:absolute;left:0;right:0;bottom:0;height:14px}.players i{position:absolute;top:0;height:4px;border-radius:2px;background:var(--players)}
+.players i.tick{width:3px;margin-left:-1.5px}.players small{position:absolute;top:4px;left:0;font-size:10.5px;line-height:1.2;color:var(--muted);white-space:nowrap}
 input[type=number],select{width:104px;box-sizing:border-box;font:inherit;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:2px 4px;font-variant-numeric:tabular-nums}
 #instrument,#w-note{width:100%;max-width:260px}
 .note{color:var(--muted);font-size:12px;margin:-4px 0 6px 180px}
@@ -59,7 +64,7 @@ svg.curve:focus{outline:none}svg.curve:focus-visible{outline:2px solid var(--lin
 .curveTools{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;font-size:13px}.curveTools input{width:5.5em}
 .curveLabel{font-size:14px;margin-top:8px}
 input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px}
-@media (max-width:560px){.row{grid-template-columns:1fr 96px}.row input[type=range]{grid-column:1/3;grid-row:2}.note{margin-left:0}td:first-child{width:72px}table.reading td:first-child{width:40%}}
+@media (max-width:560px){.row{grid-template-columns:1fr 96px}.row>input[type=range],.row>.track{grid-column:1/3;grid-row:2}.note{margin-left:0}td:first-child{width:72px}table.reading td:first-child{width:40%}}
 </style>
 </head>
 <body>
