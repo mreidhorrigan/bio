@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="coi-settings.js"></script>
+<script src="coi-serviceworker.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solo Instrument Tests</title>
+<style>
+:root{--bg:#f7f6f2;--fg:#1d1d1b;--muted:#6b6a64;--line:#d9d6cc;--accent:#b4462c;--strings:#2f5d8a;--warn:#a2452c;--on:#2e7d4f;--bore:#8a8a86;--sum:#1d1d1b;--band:rgba(180,70,44,.10);--bend:rgba(44,110,180,.10);--harm:rgba(44,110,180,.55)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6)}}
+:root[data-theme="dark"]{--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6)}
+body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,sans-serif;margin:0;padding:16px;max-width:860px}
+h1{font-size:18px;margin:0 0 2px}.muted{color:var(--muted);font-size:13px}
+/* (The three kinds of setting, each under its own heading: what the player does, what the instrument is, and what the
+   model's physics holds.) */
+h2{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:26px 0 0;padding-top:8px;border-top:2px solid var(--line)}
+h2 + .muted{margin:2px 0 0}
+fieldset{border:1px solid var(--line);border-radius:8px;margin:14px 0;padding:10px 14px;min-width:0}legend{color:var(--muted);font-size:13px;padding:0 4px}
+fieldset.bare{border:0;padding:0;margin:0}fieldset.bare:disabled{opacity:.45}
+.row{display:grid;grid-template-columns:170px 1fr 104px;gap:10px;align-items:center;margin:8px 0}
+.row label{font-size:14px}.row input[type=range]{width:100%}
+input[type=number],select{width:104px;box-sizing:border-box;font:inherit;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:2px 4px;font-variant-numeric:tabular-nums}
+#instrument,#w-note{width:100%;max-width:260px}
+.note{color:var(--muted);font-size:12px;margin:-4px 0 6px 180px}
+button{font:inherit;padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;margin:4px 6px 4px 0}
+button.on{background:var(--on);color:var(--bg);border-color:var(--on)}button:disabled{opacity:.5;cursor:default}
+button.big{font-size:18px;padding:12px 26px;font-weight:600;min-width:8.5em}
+.meter{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:8px 0 2px}.meter div{height:100%;width:0;background:var(--accent);transition:width 60ms linear}
+[data-family="strings"] .meter div{background:var(--strings)}
+/* (What changes as it plays -- the pitch heard, the level, the engine's pace, the bow's way, what is being made, a
+   message -- in space kept for it, so that nothing on the page moves as it changes.) */
+table{border-collapse:collapse;font-size:14px;width:100%;table-layout:fixed}td{padding:2px 12px 2px 0;vertical-align:top;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td:first-child{color:var(--muted);width:110px}
+table.reading td{white-space:normal}table.reading td:first-child{width:220px}
+.readouts td{font-variant-numeric:tabular-nums}
+#status{min-height:2.9em;font-size:14px;margin:4px 0}#status.failed{color:var(--warn)}
+.said{color:var(--warn);font-size:13px;min-height:2.9em}
+#w-pitchSaid{min-height:2.9em}
+#s-way{font-size:20px;margin-left:10px;vertical-align:middle;display:inline-block;width:6.2em;white-space:nowrap}
+.radios label,.strings label{margin-right:14px;font-size:14px;white-space:nowrap}
+/* (The fingering drawn as its players read it, beside the note it plays: a woodwind's LilyPond diagram, every key outlined,
+   its size its family's whatever is pressed, so nothing moves as the fingers do.) */
+.fingering{display:flex;gap:16px;align-items:flex-start}.fingered{flex:1;min-width:0}
+#w-diagram{margin:0;flex:none;width:150px;height:300px;display:flex;justify-content:center;align-items:flex-start}#w-diagram svg{height:300px;width:auto;max-width:150px}
+#w-diagram.brass{width:220px;height:auto}#w-diagram.brass svg{height:auto;width:220px;max-width:220px}#w-diagram:empty{display:none}
+#w-diagramNote{min-height:2.9em;margin-top:6px}
+.holes{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px 10px;margin-top:6px}
+.holes label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:4px;font-variant-numeric:tabular-nums}.holes label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.holes input{width:100%}
+canvas{width:100%;height:320px;display:block;touch-action:none;cursor:crosshair;margin-top:6px}
+#w-legend{min-height:5.8em}
+#s-keptList td{white-space:normal}#s-keptList td:first-child{color:inherit}#s-keptList button{padding:2px 8px;margin:0 4px 0 0;font-size:13px}
+/* (A drawn curve (curves.js): a quantity the player holds over time -- an attack's, a multiple of the one it settles at.) */
+svg.curve{width:100%;height:auto;display:block;touch-action:none;user-select:none;margin:2px 0 4px;cursor:crosshair;border-radius:6px}
+svg.curve:focus{outline:none}svg.curve:focus-visible{outline:2px solid var(--line)}
+.curve .grid{stroke:var(--line);stroke-width:1}.curve text{fill:var(--muted);font:11px system-ui,sans-serif}
+.curve .settled{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4}.curve .line{stroke-width:2.5}
+.curve .dot{cursor:grab;stroke:var(--bg);stroke-width:2}.curve .dot.selected{stroke:var(--fg);stroke-width:2.5}.curve .tip{fill:var(--fg)}
+.curveTools{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;font-size:13px}.curveTools input{width:5.5em}
+.curveLabel{font-size:14px;margin-top:8px}
+input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px}
+@media (max-width:560px){.row{grid-template-columns:1fr 96px}.row input[type=range]{grid-column:1/3;grid-row:2}.note{margin-left:0}td:first-child{width:72px}table.reading td:first-child{width:40%}}
+</style>
+</head>
+<body>
+<h1>Solo instrument tests</h1>
+<div class="muted" id="what">Every instrument we model, played live: its player, its instrument and its physics dialled by ear.</div>
+
+<fieldset><legend>Play</legend>
+  <div class="row"><label for="instrument">Instrument</label><select id="instrument"></select><span></span></div>
+  <div id="status"></div>
+  <div data-family="strings" hidden>
+    <button id="s-play" class="big" title="space">▶ Play</button><span id="s-way"></span>
+    <button id="s-reverse" title="r">Change bow now (r)</button>
+    <button id="s-pluck" title="p">Pluck (p)</button>
+    <button id="s-good" title="every dial back to its neutral note on this instrument (a good note made from the violin's where it has none)">↺ Neutral note</button>
+    <div class="meter"><div id="s-meter"></div></div>
+    <table class="readouts"><tbody><tr><td>Level</td><td id="s-level">silent</td></tr></tbody></table>
+    <div class="said" id="s-said"></div>
+  </div>
+  <div data-family="winds" hidden>
+    <button id="w-blow" class="big" title="space">Blow</button>
+    <button id="w-tongueNow" title="t">Tongue now (t)</button>
+    <button id="w-neutral" title="its neutral note, at its dynamic, every dial back to the rules' value there">↺ Neutral note</button>
+    <button id="w-reset" title="every dial back to the rules' value at this pitch and dynamic, the holes the pitch's">↺ Back to the rules</button>
+    <div class="meter"><div id="w-meter"></div></div>
+    <table class="readouts"><tbody>
+      <tr><td>Heard</td><td id="w-heard">--</td></tr>
+      <tr><td>Level</td><td id="w-level">silent</td></tr>
+      <tr><td>Engine</td><td id="w-engine">--</td></tr>
+    </tbody></table>
+    <div class="said" id="w-said"></div>
+  </div>
+</fieldset>
+
+<h2>Player</h2>
+<div class="muted">What the player does: the note, the hands, the breath and the mouth.</div>
+<div data-family="strings" hidden>
+  <fieldset><legend>Left hand</legend>
+    <div class="strings" id="s-strings"></div>
+    <div id="s-left"></div>
+  </fieldset>
+  <fieldset><legend>Right hand: the bow on the string</legend>
+    <div id="s-right"></div>
+  </fieldset>
+  <fieldset><legend>Strokes</legend>
+    <div class="row"><label><input type="checkbox" id="s-alternate" checked> Turn the bow by itself</label><span class="muted">down-bow, up-bow, … while it plays</span><span></span></div>
+    <div id="s-strokes"></div>
+  </fieldset>
+  <fieldset><legend>Attack: how each stroke starts</legend>
+    <div class="row"><label for="s-attackFrom">Shape it from</label><select id="s-attackFrom"></select><span></span></div>
+    <div class="note" id="s-attackNote"></div>
+    <div class="curveLabel">Bow force, × the force dialled</div><div id="s-forceCurve"></div>
+    <div class="curveLabel">Bow speed, × the speed dialled</div><div id="s-speedCurve"></div>
+    <div class="muted">Played at Play and at every turn. Press anywhere on a plot to put a point there and drag it -- above the dashed line, a peak over what the stroke settles at; drag a point; select one to set it as numbers or make the segment into it straight; double-click it, or press Delete, to take it away. The speed's first rise is the stroke's start (s) above.</div>
+    <div class="note" id="s-attackSaid"></div>
+  </fieldset>
+  <fieldset><legend>Vibrato</legend>
+    <div class="row"><label><input type="checkbox" id="s-vibrating"> Vibrato</label><span class="muted" id="s-vibratoNote"></span><span></span></div>
+    <div id="s-vibrato"></div>
+  </fieldset>
+  <fieldset><legend>Pluck</legend>
+    <div id="s-plucking"></div>
+  </fieldset>
+  <fieldset><legend>The hands' noise</legend>
+    <div class="note">What a player's hands never hold exactly, drawn afresh from the seed: 0 the exact machine, 1 a player's (each kind's size ours, slight, until measured).</div>
+    <div id="s-noise"></div>
+  </fieldset>
+  <fieldset><legend>The hands' reach on this instrument</legend>
+    <div class="row"><label><input type="checkbox" id="s-limitFingerboard" checked> The fingerboard's end</label><span class="muted" id="s-fingerboardLimit"></span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-limitHair" checked> The bow hair's width</label><span class="muted" id="s-hairLimit"></span><span></span></div>
+    <div class="note">Each caps its dials while it is on; off, a dial reaches whatever the model can play.</div>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+<fieldset class="bare w-controls" hidden>
+  <fieldset><legend>Note</legend>
+    <div class="fingering"><div class="fingered">
+    <div class="row"><label for="w-note">Charted note</label><select id="w-note"></select><span></span></div>
+    <div class="row"><label for="w-dynamic">Dynamic</label><select id="w-dynamic"></select><span></span></div>
+    <div class="row"><label for="w-pitch">Pitch</label><input type="range" id="w-pitch" step="0.01"><input type="number" id="w-pitchN" step="0.01" title="fractional MIDI: 72.5 is a quarter tone above C5"></div>
+    <div class="muted" id="w-pitchSaid"></div>
+    <div class="muted" id="w-diagramNote"></div></div><figure id="w-diagram"></figure></div>
+  </fieldset>
+  <fieldset><legend id="w-playerLegend">Breath and embouchure</legend>
+    <div class="muted" id="w-excitorNote"></div>
+    <div id="w-excitorPlayer"></div>
+  </fieldset>
+  <fieldset id="w-fingerSet"><legend id="w-fingerLegend">Fingers</legend>
+    <div class="muted" id="w-fingerNote">Each hole's opening, 0 closed to 1 open: the pitch's, until the pitch moves.</div>
+    <div class="holes" id="w-holes"></div><div id="w-slideBox"></div>
+  </fieldset>
+  <fieldset><legend>Tongue</legend>
+    <div class="row"><label>Articulation</label><span class="radios">
+      <label><input type="radio" name="w-articulation" value="slurred"> slurred</label>
+      <label><input type="radio" name="w-articulation" value="legato"> legato-tongued</label>
+      <label><input type="radio" name="w-articulation" value="tongued"> tongued</label></span><span></span></div>
+    <div class="note" id="w-articulationNote"></div>
+    <div id="w-tongue"></div>
+    <div class="curveLabel">Breath at a note's start, × the breath dialled</div><div id="w-attack"></div>
+    <div class="muted" id="w-attackNote"></div>
+    <button id="w-plainRise" title="the breath risen to what is dialled, no more">↺ A plain rise</button>
+    <div class="row"><label><input type="checkbox" id="w-repeating"> Repeat the note</label><span class="muted">tongued again by itself while it is blown</span><span></span></div>
+    <div id="w-repeat"></div>
+  </fieldset>
+  <fieldset><legend>Breathing</legend>
+    <div class="row"><label><input type="checkbox" id="w-breathing" checked> Breathe by itself</label><span class="muted">the note let go as its breath runs out, a breath taken, the note attacked again</span><span></span></div>
+    <div id="w-lungs"></div>
+    <div class="note" id="w-lungsNote"></div>
+    <div class="row"><label>Air left</label><div class="meter"><div id="w-air"></div></div><span id="w-airN">--</span></div>
+  </fieldset>
+  <fieldset><legend>Vibrato</legend>
+    <div class="row"><label><input type="checkbox" id="w-vibrating"> Vibrato</label><span class="muted" id="w-vibratoNote"></span><span></span></div>
+    <div id="w-vibrato"></div>
+  </fieldset>
+  <fieldset><legend>Flutter and hum</legend>
+    <div class="row"><label><input type="checkbox" id="w-fluttering"> Flutter</label><span class="muted">the tongue's roll closing the breath off while it is blown</span><span></span></div>
+    <div id="w-flutter"></div>
+    <div class="row"><label><input type="checkbox" id="w-humming"> Hum</label><span class="muted">the player's voice through the instrument</span><span></span></div>
+    <div id="w-hum"></div>
+    <div class="note" id="w-humNote"></div>
+    <div class="note" id="w-techniqueNote"></div>
+  </fieldset>
+  <fieldset><legend id="w-tractLegend">Vocal tract</legend>
+    <button id="w-normal">Players' normal tract for this note</button><button id="w-none">No tract</button>
+    <div class="muted" id="w-tractHow">Drag a handle: its frequency and peak. Wheel on it: its width (Q). Double-click: add one, or remove one.</div>
+    <canvas id="w-plot"></canvas>
+    <div class="muted" id="w-legend"></div>
+  </fieldset>
+</fieldset>
+</div>
+
+<h2>Instrument</h2>
+<div class="muted">What the instrument is: its body, its strings or bore, its reed.</div>
+<div data-family="strings" hidden>
+  <fieldset><legend>Which one</legend>
+    <div class="row"><label for="s-variant">Artifastring's</label><select id="s-variant"></select><span class="muted" id="s-variants"></span></div>
+    <div class="row"><label for="s-seed">Seed</label><input type="number" id="s-seed" min="0" step="1"><button id="s-reseed">Seed again</button></div>
+    <div class="note">An instrument changed comes in at rest, the sound brought down and up again around it, on its good note.</div>
+  </fieldset>
+  <fieldset><legend>This string, as Artifastring builds it</legend>
+    <div class="muted">Each a decade either side of Artifastring's own. Its length, diameter, density or stiffness (or a tension that changes how many modes it has) remakes its modes: the sound dips for a moment each time. Its friction and losses are under Physics.</div>
+    <div id="s-build"></div>
+    <button id="s-ownBuild">Back to Artifastring's own</button>
+  </fieldset>
+  <fieldset><legend>Body</legend>
+    <div class="row"><label><input type="checkbox" id="s-correcting" checked> Body as the renders correct it</label><span class="muted">its bridge hill and highs restored</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-radiating" checked> Body radiates as a body does</label><span class="muted">nothing at 0 Hz; less and less under its corner</span><span></span></div>
+    <div id="s-body"></div>
+    <div class="row"><label for="s-falling">Falling under it</label><select id="s-falling"><option value="2">12 dB an octave</option><option value="4">24 dB an octave</option></select><span></span></div>
+    <div class="note" id="s-bodyNote"></div>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+<fieldset class="bare w-controls" hidden>
+  <fieldset><legend>Body</legend>
+    <table><tbody id="w-body"></tbody></table>
+  </fieldset>
+  <fieldset id="w-instrumentSet"><legend id="w-instrumentLegend">Reed</legend>
+    <div class="muted" id="w-instrumentNote"></div>
+    <div id="w-excitorInstrument"></div>
+  </fieldset>
+</fieldset>
+</div>
+
+<h2>Physics</h2>
+<div class="muted">What the model holds: its laws' constants, its losses and resolution, and what they say of the playing.</div>
+<div data-family="strings" hidden>
+  <fieldset><legend>This string's friction and losses</legend>
+    <div class="muted">Artifastring's friction curve and modal losses for this string, each a decade either side of its own; how many modes it is resolved with.</div>
+    <div id="s-buildPhysics"></div>
+  </fieldset>
+  <fieldset><legend>Artifastring's own constants</legend>
+    <div class="muted">Fixed in Artifastring's source; several marked there "estimated from listening". The friction noise lowers the friction curve's slope v0 at random by up to this share on every sample the string slips.</div>
+    <div id="s-constants"></div>
+    <button id="s-ownConstants">Back to Artifastring's</button>
+  </fieldset>
+  <fieldset><legend>What the physics says about this bowing</legend>
+    <table class="reading"><tbody id="s-reading"></tbody></table>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+<fieldset class="bare w-controls" hidden>
+  <fieldset id="w-physicsSet"><legend id="w-physicsLegend">The model's own</legend>
+    <div class="muted" id="w-physicsNote"></div>
+    <div id="w-excitorPhysics"></div>
+  </fieldset>
+  <fieldset><legend>The engine</legend>
+    <table><tbody id="w-engineTable"></tbody></table>
+  </fieldset>
+</fieldset>
+</div>
+
+<h2>Listening and keeping</h2>
+<div data-family="strings" hidden>
+  <fieldset><legend>Listening</legend>
+    <button id="s-output">Hearing: the instrument</button>
+    <div id="s-listening"></div>
+  </fieldset>
+  <fieldset><legend>Keep this setting</legend>
+    <input class="words" id="s-words" placeholder="what you hear: smooth, scratchy, whistling, airy, choked…">
+    <button id="s-keep">Keep</button><span class="muted" id="s-kept"></span>
+  </fieldset>
+  <fieldset><legend>Kept</legend>
+    <div class="muted" id="s-keptNone">Nothing kept yet.</div>
+    <table><tbody id="s-keptList"></tbody></table>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+  <fieldset><legend>Keep this setting</legend>
+    <input class="words" id="w-words" placeholder="what you hear: clean, airy, choked, buzzy, unstable…">
+    <button id="w-keep">Keep</button><span class="muted" id="w-kept"></span>
+  </fieldset>
+</div>
+
+<script type="module" src="live.js"></script>
+</body>
+</html>

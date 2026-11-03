@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Solo Instrument Tests: Sources</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;max-width:60rem;margin:0 auto;padding:16px}table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #8884;padding:6px 8px;text-align:left;vertical-align:top}code{font-size:.92em;overflow-wrap:anywhere}</style>
+</head>
+<body>
+<h1>Sources of the solo instrument tests</h1>
+<p>Built 2026-11-03T04:45:53.404Z from the Musebots repository at 86f9210967643cbf8328cbbfa879063a075d5571 by
+<code>scripts/build-live-site.mjs</code>. The page is the Mac's own live dial (<code>native/live/live.html</code>, <code>winds.js</code>), its dial run
+in the browser (<code>native/live/site/</code>, <code>native/openwind/dial.mjs</code>).</p>
+<table>
+<tr><th>File</th><th>What it is</th><th>Licence</th><th>Source</th></tr>
+<tr><td><code>openwind-threads.wasm.gz</code>, <code>openwind.wasm.gz</code></td><td>OpenWInD's scheme as the Musebots streaming player for winds, built for WebAssembly with and without threads (Rust's wasm32-wasip1-threads and wasm32-unknown-unknown, SIMD128)</td><td>GPL-3.0-or-later (its crate's)</td><td><a href="sources/openwind-engine.tar.gz"><code>sources/openwind-engine.tar.gz</code></a></td></tr>
+<tr><td><code>live.js</code>, <code>dial-worker.js</code>, <code>openwind-thread.js</code></td><td>the page's code, bundled by esbuild 0.28.1 from the files packed in <code>sources/live-dial-code.tar.gz</code></td><td>the Musebots project's</td><td><a href="sources/live-dial-code.tar.gz"><code>sources/live-dial-code.tar.gz</code></a></td></tr>
+<tr><td><code>coi-serviceworker.js</code></td><td>coi-serviceworker 0.1.7 (G. Zuidhof and contributors): the page's cross-origin isolation, a static host sending no headers</td><td>MIT (<a href="coi-serviceworker-LICENSE.txt"><code>coi-serviceworker-LICENSE.txt</code></a>)</td><td><a href="https://github.com/gzuidhof/coi-serviceworker">github.com/gzuidhof/coi-serviceworker</a></td></tr>
+<tr><td><code>winds/&lt;instrument&gt;/</code></td><td>each instrument's body, laid out for the engine from OpenWInD's (GPL-3.0-or-later) scheme of its bore, gzipped</td><td>the Musebots project's</td><td>made by <code>native/openwind/make-bodies.mjs</code></td></tr>
+</table>
+<p>Not published here: the bassoon (its bore's source may be used here but not republished); the contrabassoon (its bore, the bassoon's scaled, may be used here but not republished).</p>
+</body>
+</html>

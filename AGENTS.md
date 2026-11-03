@@ -47,4 +47,4 @@ This is M. Reid Horrigan's static, GitHub Pages website. Its homepage is a Canva
 - Tests: `node --test *.test.mjs` and `cargo test --manifest-path rust/Cargo.toml`
 - Benchmarks: open `/?perf=1`; use `window.MH_PERF.report()` in the console.
 
-Do not edit `signal-towers.js` or files under `wasm/` as canonical source: they are generated. Signal Towers source is in the sibling `web-musebots` repository. Minimize JS/WASM crossings and prefer packed/reused buffers. Keep DOM, Canvas painting, input, and browser Web APIs in JavaScript unless measurements justify moving them.
+Do not edit `signal-towers.js` or files under `wasm/` as canonical source: they are generated. Signal Towers source is in the sibling `web-musebots` repository. `solo-instrument-tests/` (the Musebots winds' live dial, played in the browser; linked from nothing yet) is generated too, by `web-musebots/scripts/build-live-site.mjs` and checked by its `scripts/test-live-site.mjs`: rebuild it there, never edit it here. Minimize JS/WASM crossings and prefer packed/reused buffers. Keep DOM, Canvas painting, input, and browser Web APIs in JavaScript unless measurements justify moving them.
