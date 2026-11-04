@@ -220,7 +220,9 @@ var strings_exports = {};
 __export(strings_exports, {
   kept: () => kept2,
   keys: () => keys,
+  load: () => load,
   rest: () => rest,
+  settings: () => settings,
   take: () => take
 });
 
@@ -606,6 +608,438 @@ function atPitch(entry, midi) {
   return { ...entry, range: [l0 + t * (l1 - l0), h0 + t * (h1 - h0)] };
 }
 
+// public/random-source.js
+var MULBERRY_STEP = 1831565813;
+function hashSeed(value3) {
+  const text = String(value3), numeric = Number(text);
+  if (text.trim() !== "" && Number.isFinite(numeric)) return numeric >>> 0;
+  let hash = 2166136261;
+  for (const character of text) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+function freshSeed() {
+  return hashSeed(Date.now());
+}
+function mulberry(state2) {
+  let value3 = state2;
+  value3 = Math.imul(value3 ^ value3 >>> 15, value3 | 1);
+  value3 ^= value3 + Math.imul(value3 ^ value3 >>> 7, value3 | 61);
+  return ((value3 ^ value3 >>> 14) >>> 0) / 4294967296;
+}
+function createRandomStream(value3) {
+  const seed2 = hashSeed(value3);
+  let state2 = seed2;
+  return {
+    seed: seed2,
+    next() {
+      state2 = state2 + MULBERRY_STEP >>> 0;
+      return mulberry(state2);
+    },
+    snapshot() {
+      return { algorithm: "mulberry32", seed: seed2, state: state2 };
+    },
+    restore(saved) {
+      if (saved?.algorithm !== "mulberry32" || saved.seed !== seed2 || !Number.isInteger(saved.state) || saved.state < 0 || saved.state > 4294967295) throw new Error("Invalid random stream state");
+      state2 = saved.state;
+    }
+  };
+}
+var seed = freshSeed();
+var stream = createRandomStream(seed);
+
+// public/shared/rhythm-vocabulary.js
+var KRISHNASWAMY_WELLS = Object.freeze({
+  citation: 'Jagdish A. Krishnaswamy and Robert Wells, "A Novel Generative Paradigm for Carnatic Rhythmic Composition", Analytical Approaches to Music of South Asia 1 (2023)',
+  uri: "https://southasia.iftawm.org/wp-content/uploads/KrishnaswamyWells_Article.pdf",
+  accessed: "2026-09-28"
+});
+var TOUSSAINT = Object.freeze({
+  citation: 'Godfried T. Toussaint, The Geometry of Musical Rhythm: What Makes a "Good" Rhythm Good? (CRC Press, 2013), and "The Euclidean algorithm generates traditional musical rhythms", Bridges (2005)',
+  uri: "https://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf",
+  accessed: "2026-09-28"
+});
+var VURKAC = Object.freeze({
+  citation: 'Mehmet Vurkaç, "A Cross-Cultural Grammar for Temporal Harmony in Afro-Latin Musics: Clave, Partido-Alto and Other Timelines", Current Musicology 94 (2012)',
+  uri: "https://doi.org/10.7916/cm.v0i94.5234",
+  accessed: "2026-07-24"
+});
+var CLAYTON = Object.freeze({ citation: "Martin Clayton, Time in Indian Music: Rhythm, Metre, and Form in North Indian Rāg Performance (Oxford University Press, 2000)", uri: null, accessed: null });
+var wikipedia = (title, accessed = "2026-09-28") => Object.freeze({ citation: `"${title}", Wikipedia`, uri: `https://en.wikipedia.org/wiki/${title}`, accessed });
+var NADAI = Object.freeze({ caturasra: 1, tisra: 3, khanda: 5, misra: 7, sankirna: 9, "sampurna-khanda": 10 });
+var THEKA_BAYAN = Object.freeze({ dha: true, dhin: true, dhi: true, ta: false, tin: false, ti: false, na: false });
+var tala = (record) => {
+  const beats = record.components.reduce((sum, component) => sum + component.beats, 0);
+  if (record.theka && (record.theka.length !== beats || record.theka.some((bol) => !(bol in THEKA_BAYAN)))) throw new RangeError(`${record.id}: a theka is a known bol for each beat`);
+  return Object.freeze({
+    kind: "tala",
+    license: "metadata-only",
+    ...record,
+    ...record.theka ? { theka: Object.freeze([...record.theka]) } : {},
+    components: Object.freeze(record.components.map((component) => Object.freeze({ ...component, gestures: component.gestures ? Object.freeze([...component.gestures]) : null })))
+  });
+};
+var clave = (record) => Object.freeze({ kind: "clave", license: "metadata-only", ...record, onsets: Object.freeze([...record.onsets]) });
+var RHYTHM_VOCABULARY = Object.freeze(Object.fromEntries([
+  // Ādi tāḷa: "8 beats of equal duration ... grouped into three angas of 4, 2, and 2 beats" (¶15). A laghu's beats are a
+  // clap and finger counts from the little finger, a drutam's a clap and a wave (Figure 1, shown there for tisra
+  // triputa's laghu of three: clap, pinky, ring).
+  tala({
+    id: "carnatic.adi",
+    tradition: "Carnatic",
+    name: "Ādi tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "laghu", beats: 4, gestures: ["clap", "pinky", "ring", "middle"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }]
+  }),
+  // Tiśra tripuṭa tāḷa: "seven-beat cycles divided into angas of lengths 3, 2, and 2", each beat marked by its kriyā:
+  // clap, pinky, ring; clap, wave; clap, wave (Figure 1).
+  tala({
+    id: "carnatic.tisra-triputa",
+    tradition: "Carnatic",
+    name: "Tiśra tripuṭa tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "laghu", beats: 3, gestures: ["clap", "pinky", "ring"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }]
+  }),
+  // Rūpaka tāḷa as the source takes it: "3 beats of equal duration" (¶15), "a 3-beat rhythmic cycle with 4 subdivisions
+  // per beat" (¶3). The source gives no kriyās for it, so none are claimed.
+  tala({
+    id: "carnatic.rupaka",
+    tradition: "Carnatic",
+    name: "Rūpaka tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "beats", beats: 3, gestures: null }]
+  }),
+  // Miśra cāpu tāḷa, a cāpu tāḷa, "whose beats vary in duration" (¶12), as the source takes it: "one long beat (three
+  // subdivisions) followed by two shorter beats (two subdivisions)", seven subdivisions a cycle (note 3; "miṣra cāpu
+  // tāḷa in tiṣra naḍai, totalling 21 subdivisions per cycle"). Other artists count it as seven equal beats (note 3).
+  // No kriyās are claimed.
+  tala({
+    id: "carnatic.misra-capu",
+    tradition: "Carnatic",
+    name: "Miśra cāpu tāḷa",
+    source: KRISHNASWAMY_WELLS,
+    components: [{ kind: "long", beats: 1, units: 3, gestures: null }, { kind: "short", beats: 2, units: 2, gestures: null }]
+  }),
+  // Hindustani taals: vibhags, each begun with a clap (tali; the cycle's first, sam, marked X) or a wave (khali, "empty",
+  // marked 0), the other matras ungestured; and the theka, the taal's stroke names (bols) a matra each. Where a bol
+  // sounds the bayan, the left-hand bass drum (dha, dhin, dhi), and where it does not (ta, tin, ti, na) is the theka's
+  // own (THEKA_BAYAN), so a part's bass can follow it: the khali vibhag is where it thins.
+  // Teentaal: 16 matras, 4+4+4+4, marked X 2 0 3.
+  tala({
+    id: "hindustani.teentaal",
+    tradition: "Hindustani",
+    name: "Tīntāl",
+    source: [CLAYTON, wikipedia("Teental")],
+    components: [
+      { kind: "vibhag", role: "tali", marker: "X", beats: 4, gestures: ["sam", null, null, null] },
+      { kind: "vibhag", role: "tali", marker: "2", beats: 4, gestures: ["tali", null, null, null] },
+      { kind: "vibhag", role: "khali", marker: "0", beats: 4, gestures: ["khali", null, null, null] },
+      { kind: "vibhag", role: "tali", marker: "3", beats: 4, gestures: ["tali", null, null, null] }
+    ],
+    theka: ["dha", "dhin", "dhin", "dha", "dha", "dhin", "dhin", "dha", "dha", "tin", "tin", "ta", "ta", "dhin", "dhin", "dha"]
+  }),
+  // Jhaptaal: 10 matras, 2+3+2+3, marked X 2 0 3.
+  tala({
+    id: "hindustani.jhaptaal",
+    tradition: "Hindustani",
+    name: "Jhaptāl",
+    source: [CLAYTON, wikipedia("Jhaptal")],
+    components: [
+      { kind: "vibhag", role: "tali", marker: "X", beats: 2, gestures: ["sam", null] },
+      { kind: "vibhag", role: "tali", marker: "2", beats: 3, gestures: ["tali", null, null] },
+      { kind: "vibhag", role: "khali", marker: "0", beats: 2, gestures: ["khali", null] },
+      { kind: "vibhag", role: "tali", marker: "3", beats: 3, gestures: ["tali", null, null] }
+    ],
+    theka: ["dhi", "na", "dhi", "dhi", "na", "ti", "na", "dhi", "dhi", "na"]
+  }),
+  // Clave: an orienting timeline with a direction, not five marked slots (Vurkaç 2012). Onsets on sixteen pulses, as
+  // Toussaint writes them: son x..x..x...x.x..., rumba x..x...x..x.x..., bossa nova x..x..x...x..x... The 2-3 side is
+  // the same timeline begun at its other half.
+  clave({ id: "afro-cuban.son-clave-3-2", tradition: "Afro-Cuban", name: "Son clave, 3-2", pulses: 16, onsets: [0, 3, 6, 10, 12], direction: "3-2", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "afro-cuban.son-clave-2-3", tradition: "Afro-Cuban", name: "Son clave, 2-3", pulses: 16, onsets: [2, 4, 8, 11, 14], direction: "2-3", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "afro-cuban.rumba-clave-3-2", tradition: "Afro-Cuban", name: "Rumba clave, 3-2", pulses: 16, onsets: [0, 3, 7, 10, 12], direction: "3-2", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "afro-cuban.rumba-clave-2-3", tradition: "Afro-Cuban", name: "Rumba clave, 2-3", pulses: 16, onsets: [2, 4, 8, 11, 15], direction: "2-3", source: [TOUSSAINT, VURKAC] }),
+  clave({ id: "brazilian.bossa-nova-clave", tradition: "Brazilian", name: "Bossa nova clave", pulses: 16, onsets: [0, 3, 6, 10, 13], direction: null, source: [TOUSSAINT] })
+].map((record) => [record.id, record])));
+
+// public/shared/meter-space.js
+var METER_SPACE = Object.freeze({
+  numerators: Object.freeze([1, 40]),
+  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
+  // with a tempo).
+  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
+  // A bar's groups: 2s and 3s mostly, now and then a 1 or a 4.
+  groupSizes: Object.freeze([[2, 4], [3, 4], [1, 0.3], [4, 1]].map(Object.freeze)),
+  // The share of draws grouped as they draw, rather than as the meter's most-threes.
+  ownGrouping: 0.7,
+  // Pulses a unit.
+  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
+  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
+  talas: 0.12,
+  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
+  barSeconds: Object.freeze([0.5, 10])
+});
+var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
+
+// public/shared/felt-meter-catalog.js
+var freeze = (value3) => {
+  if (value3 && typeof value3 === "object") {
+    Object.values(value3).forEach(freeze);
+    Object.freeze(value3);
+  }
+  return value3;
+};
+var FELT_METER_POLICY = freeze({
+  "id": "score-selection-v2",
+  "evidence": "authored-policy-not-human-calibration",
+  "favoredBeatSeconds": [
+    "2/5",
+    "4/5"
+  ],
+  "candidateBeatSeconds": [
+    "3/10",
+    "1"
+  ],
+  "cyclePreferenceMaxSeconds": "4",
+  "cycleMinimumSeconds": null,
+  "catalog": [
+    { "id": "2/4-in-2", "numerator": 2, "denominator": 4, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "3/4-in-3", "numerator": 3, "denominator": 4, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "4/4-in-4", "numerator": 4, "denominator": 4, "beatWeights": [1, 1, 1, 1], "groups": [2, 2], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "2/2-in-2", "numerator": 2, "denominator": 2, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
+    { "id": "3/2-in-3", "numerator": 3, "denominator": 2, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
+    { "id": "6/8-in-2", "numerator": 6, "denominator": 8, "beatWeights": [3, 3], "groups": [3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "9/8-in-3", "numerator": 9, "denominator": 8, "beatWeights": [3, 3, 3], "groups": [3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "12/8-in-4", "numerator": 12, "denominator": 8, "beatWeights": [3, 3, 3, 3], "groups": [3, 3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "5/4-in-5", "numerator": 5, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["75", "200"] },
+    { "id": "7/4-in-7", "numerator": 7, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1, 1, 1], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["105", "150"], "candidateQuarterBPM": ["105", "200"] },
+    { "id": "5/4-in-2", "numerator": 5, "denominator": 4, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
+    { "id": "7/4-in-3", "numerator": 7, "denominator": 4, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
+    { "id": "5/8-in-2", "numerator": 5, "denominator": 8, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "7/8-in-3", "numerator": 7, "denominator": 8, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "8/8-in-3", "numerator": 8, "denominator": 8, "beatWeights": [3, 3, 2], "groups": [3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "9/8-in-4", "numerator": 9, "denominator": 8, "beatWeights": [2, 2, 2, 3], "groups": [2, 2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "11/8-in-5", "numerator": 11, "denominator": 8, "beatWeights": [2, 2, 3, 2, 2], "groups": [2, 2, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "13/8-in-5", "numerator": 13, "denominator": 8, "beatWeights": [3, 3, 3, 2, 2], "groups": [3, 3, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["195/2", "200"] },
+    { "id": "17/8-in-6", "numerator": 17, "denominator": 8, "beatWeights": [3, 3, 3, 3, 3, 2], "groups": [3, 3, 3, 3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/2", "150"], "candidateQuarterBPM": ["255/2", "200"] },
+    { "id": "5/16-in-2", "numerator": 5, "denominator": 16, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
+    { "id": "7/16-in-3", "numerator": 7, "denominator": 16, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
+    { "id": "17/16-in-7", "numerator": 17, "denominator": 16, "beatWeights": [2, 2, 3, 2, 2, 3, 3], "groups": [2, 2, 3, 2, 2, 3, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/4", "75"], "candidateQuarterBPM": ["255/4", "100"] },
+    { "id": "17/16-in-4", "numerator": 17, "denominator": 16, "beatWeights": [4, 4, 4, 5], "groups": [4, 4, 4, 5], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["375/4", "150"], "candidateQuarterBPM": ["75", "200"] },
+    { "id": "107/32-in-5", "numerator": 107, "denominator": 32, "beatWeights": [19, 19, 19, 25, 25], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["1875/8", "1425/4"], "candidateQuarterBPM": ["1605/8", "475"] },
+    { "id": "107/32-in-2", "numerator": 107, "denominator": 32, "beatWeights": [57, 50], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 1, "dots": 0 }, "favoredQuarterBPM": ["4275/8", "1875/2"], "candidateQuarterBPM": ["855/2", "1250"] }
+  ]
+});
+var FELT_METER_CATALOG = FELT_METER_POLICY.catalog;
+
+// public/shared/tempo-range.js
+var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
+
+// public/shared/meter-reading.js
+var EDITORIAL_ACTIONS = Object.freeze([
+  "PUBLISH_STANDARD",
+  "PUBLISH_GROUPED",
+  "PUBLISH_SPECIALIST_WITH_LEGEND",
+  "KEEP_WITH_SUPPORT",
+  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
+  "HOLD_FOR_REVIEW",
+  "FREE_TIME_BY_INTENT"
+]);
+
+// public/shared/metric-home/grouping.js
+var REMAINDER_UNITS = Object.freeze([3, 2]);
+
+// public/shared/metric-home/nested.js
+var NESTING = Object.freeze({
+  // The longest group a listener hears as one (seconds; meterform_clodbot's and grouping-choice.js's longestGroupSeconds,
+  // ours, within the few seconds a measure can last: London 2012, Hearing in Time, 2nd ed.,
+  // doi:10.1093/acprof:oso/9780199744374.001.0001).
+  longestSeconds: 5,
+  // A split into sections is told apart by their lengths: the shorter section at least this share of the span and the
+  // two sections' shares differing by at least `contrast` (37/107 against 70/107 differ by 0.31). Ours.
+  shortestShare: 0.25,
+  contrast: 0.12,
+  // Candidate splits offered at most for one span, the best first. Ours.
+  offered: 12,
+  // Groups under one at most (grouping.js MAX_GROUPS_UNDER_ONE, Scansion Maker's: four or more are grouped again).
+  maxParts: 3
+});
+
+// public/shared/felt-tempo.js
+var value = (text) => {
+  const [n, d = "1"] = String(text).split("/");
+  return Number(n) / Number(d);
+};
+var band = (list) => [value(list[0]), value(list[1])];
+var FELT_TEMPO = Object.freeze({
+  beat: Object.freeze(band(FELT_METER_POLICY.candidateBeatSeconds)),
+  favoredBeat: Object.freeze(band(FELT_METER_POLICY.favoredBeatSeconds)),
+  longestBarSeconds: NESTING.longestSeconds
+});
+
+// public/shared/opening-time.js
+var DEFAULT_SEED = 20260916;
+var OPENING_TIME = Object.freeze({
+  // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
+  phraseSeconds: Object.freeze([5, 13]),
+  // A phrase's bars at most (ours: meterspace_clodbot's).
+  phraseBarsAtMost: 8,
+  // The band's density before any is heard, drawn between these (ours).
+  density: Object.freeze([0.35, 0.85]),
+  // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
+  // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
+  reference: 4
+});
+
+// native/live/musebot.js
+var words = (name2) => name2.replace(/[A-Z]/g, (c) => ` ${c.toLowerCase()}`);
+function musebotControls({ box, seed: seed2, seconds }) {
+  let built = null, shown4 = null;
+  function share(into, id, name2, { grammar = false } = {}) {
+    const r = document.createElement("div");
+    r.className = "row";
+    r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="range" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
+    r.querySelector("span").textContent = words(name2);
+    r.title = `${grammar ? `its motifs' ${name2} grammar's share` : `its ${words(name2)}`}: drawn from its seed unless ticked, 0 to 1 across its range (registry/method/personality.json)`;
+    const [tick, range, number] = r.querySelectorAll("input");
+    range.id = `${id}-${name2}`;
+    r.querySelector("label").htmlFor = range.id;
+    const drawnShown = () => r.classList.toggle("drawn", !tick.checked);
+    const set = (v) => {
+      range.value = v;
+      number.value = (+v).toFixed(2);
+    };
+    range.oninput = () => {
+      tick.checked = true;
+      number.value = (+range.value).toFixed(2);
+      drawnShown();
+    };
+    number.onchange = () => {
+      const v = +number.value;
+      if (Number.isFinite(v) && v >= 0 && v <= 1) {
+        tick.checked = true;
+        range.value = v;
+        drawnShown();
+      } else number.value = (+range.value).toFixed(2);
+    };
+    tick.onchange = drawnShown;
+    into.append(r);
+    set(0.5);
+    drawnShown();
+    return {
+      name: name2,
+      grammar,
+      get given() {
+        return tick.checked;
+      },
+      value: () => +range.value,
+      take(v, given) {
+        tick.checked = given;
+        if (v != null) set(v);
+        drawnShown();
+      }
+    };
+  }
+  function span(into, id, name2) {
+    const r = document.createElement("div");
+    r.className = "row";
+    r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="number" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
+    r.querySelector("span").textContent = words(name2);
+    r.title = `its range of ${words(name2)}, its low and high shares of its span on its instrument: drawn from its seed unless ticked (personality.js TONE_RANGES; docs/PLAYER_PERSONALITY.md)`;
+    const [tick, low, high] = r.querySelectorAll("input");
+    low.id = `${id}-range-${name2}`;
+    r.querySelector("label").htmlFor = low.id;
+    let last = [0, 1];
+    const drawnShown = () => r.classList.toggle("drawn", !tick.checked);
+    const set = ([a, b]) => {
+      low.value = (+a).toFixed(2);
+      high.value = (+b).toFixed(2);
+      last = [+a, +b];
+    };
+    low.onchange = high.onchange = () => {
+      const a = +low.value, b = +high.value;
+      if (!(a >= 0 && a <= 1 && b >= 0 && b <= 1)) {
+        set(last);
+        return;
+      }
+      set([Math.min(a, b), Math.max(a, b)]);
+      tick.checked = true;
+      drawnShown();
+    };
+    tick.onchange = drawnShown;
+    into.append(r);
+    set(last);
+    drawnShown();
+    return {
+      name: name2,
+      range: true,
+      get given() {
+        return tick.checked;
+      },
+      value: () => [...last],
+      take(v, given) {
+        tick.checked = given;
+        if (v != null) set(v);
+        drawnShown();
+      }
+    };
+  }
+  function build2(player2) {
+    box.replaceChildren();
+    const id = box.id || "musebot", head = document.createElement("div");
+    head.className = "note musebotNote";
+    head.textContent = "Each drawn from its seed unless ticked; a piece's draw shown on those not ticked.";
+    const all = document.createElement("button");
+    all.type = "button";
+    all.textContent = "All from its seed";
+    all.onclick = () => {
+      for (const s2 of built) s2.take(null, false);
+    };
+    box.append(head, all);
+    const levers = player2.levers.map((name2) => share(box, id, name2));
+    const g = document.createElement("div");
+    g.className = "curveLabel";
+    g.textContent = "Its motifs' grammars";
+    box.append(g);
+    built = [...levers, ...(player2.grammars ?? []).map((name2) => share(box, id, name2, { grammar: true }))];
+    if (player2.ranges?.length) {
+      const r = document.createElement("div");
+      r.className = "curveLabel";
+      r.textContent = "Its tone's ranges, low and high";
+      box.append(r);
+      built.push(...player2.ranges.map((name2) => span(box, id, name2)));
+    }
+  }
+  return {
+    // (What a piece is asked with: the levers, grammars and ranges ticked, each by its name.)
+    given() {
+      const personality = {}, grammars = {}, ranges = {};
+      for (const s2 of built ?? []) if (s2.given) (s2.range ? ranges : s2.grammar ? grammars : personality)[s2.name] = s2.value();
+      if (Object.keys(grammars).length) personality.grammars = grammars;
+      if (Object.keys(ranges).length) personality.ranges = ranges;
+      return { seed: Number(seed2.value), seconds: Number(seconds.value), personality };
+    },
+    // (The dial's player: its controls built the first time, and set again only when it changes -- a file loaded, a
+    // piece asked -- so that what is being set here is not undone by a poll; `drawn`, a piece's own levers.)
+    show(player2, drawn = null) {
+      if (!player2?.levers) return;
+      if (!built) build2(player2);
+      const now = JSON.stringify([player2.seed, player2.seconds, player2.personality, drawn?.levers ?? null, drawn?.ranges ?? null]);
+      if (now === shown4) return;
+      shown4 = now;
+      if (document.activeElement !== seed2) seed2.value = player2.seed;
+      if (document.activeElement !== seconds) seconds.value = player2.seconds;
+      const given = player2.personality ?? {};
+      for (const s2 of built) {
+        const set = s2.range ? given.ranges?.[s2.name] : s2.grammar ? given.grammars?.[s2.name] : given[s2.name];
+        s2.take(set ?? (s2.range ? drawn?.ranges?.[s2.name] : s2.grammar ? drawn?.grammars?.[s2.name] : drawn?.levers?.[s2.name]) ?? null, set != null);
+      }
+    }
+  };
+}
+
 // native/live/strings.js
 var $ = (id) => document.getElementById(`s-${id}`);
 var NAMES = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
@@ -621,7 +1055,7 @@ var bridge = false;
 var direction = 1;
 var builds = [];
 var INSTRUMENT_OF = [];
-var value = {};
+var value2 = {};
 var setters = {};
 var notes = {};
 function dial(box, id, label3, { min, max, log, value: start, step = "any", onchange, note }) {
@@ -645,10 +1079,10 @@ function dial(box, id, label3, { min, max, log, value: start, step = "any", onch
     range.max = to(hi);
     min = lo;
     max = hi;
-    range.value = to(Math.min(max, Math.max(min, value[id])));
+    range.value = to(Math.min(max, Math.max(min, value2[id])));
   };
   const set = (v, quiet) => {
-    value[id] = v;
+    value2[id] = v;
     range.value = to(Math.min(max, Math.max(min, v)));
     number.value = +(+v).toPrecision(4);
     if (!quiet) onchange?.();
@@ -659,7 +1093,7 @@ function dial(box, id, label3, { min, max, log, value: start, step = "any", onch
   number.onchange = () => {
     const v = +number.value;
     if (Number.isFinite(v) && (!log || v > 0)) set(v);
-    else number.value = value[id];
+    else number.value = value2[id];
   };
   set(start, true);
   setters[id] = Object.assign(set, { bounds, place: (v) => (to(v) - range.min) / (range.max - range.min) });
@@ -678,21 +1112,21 @@ function later(key, build2) {
   });
   pending.set(key, build2);
 }
-var finger = () => 1 - 2 ** (-value.pitch / 12);
-var pos = () => value.beta * (1 - finger());
+var finger = () => 1 - 2 ** (-value2.pitch / 12);
+var pos = () => value2.beta * (1 - finger());
 var alternating = () => $("alternate").checked;
-var fingerAsk = () => ({ do: "finger", string: s, finger: finger(), firmness: value.firmness });
-var dampingAsk = () => ({ do: "damping", string: s, ratio: value.damping });
-var bowAsk = () => ({ do: "bow", string: s, pos: pos(), force: value.force, vel: direction * value.speed });
-var strokeAsk = () => ({ do: "stroke", string: s, pos: pos(), force: value.force, vel: direction * value.speed, acc: value.speed / value.start });
-var alternateAsk = () => ({ do: "alternate", string: s, stroke: alternating() ? value.stroke / 100 : 0, end: value.end, start: value.start });
-var vibratoAsk = (string = s) => ({ do: "vibrato", string, width: $("vibrating").checked ? value.width : 0, rate: value.rate });
+var fingerAsk = () => ({ do: "finger", string: s, finger: finger(), firmness: value2.firmness });
+var dampingAsk = () => ({ do: "damping", string: s, ratio: value2.damping });
+var bowAsk = () => ({ do: "bow", string: s, pos: pos(), force: value2.force, vel: direction * value2.speed });
+var strokeAsk = () => ({ do: "stroke", string: s, pos: pos(), force: value2.force, vel: direction * value2.speed, acc: value2.speed / value2.start });
+var alternateAsk = () => ({ do: "alternate", string: s, stroke: alternating() ? value2.stroke / 100 : 0, end: value2.end, start: value2.start });
+var vibratoAsk = (string = s) => ({ do: "vibrato", string, width: $("vibrating").checked ? value2.width : 0, rate: value2.rate });
 var buildAsk = (string = s) => ({ do: "build", string, ...builds[string] });
-var radiateAsk = () => ({ do: "radiate", corner: $("radiating").checked ? value.corner : 0, order: +$("falling").value });
+var radiateAsk = () => ({ do: "radiate", corner: $("radiating").checked ? value2.corner : 0, order: +$("falling").value });
 var correctAsk = () => ({ do: "correct", on: $("correcting").checked });
 var heardDb = () => state.neutralDb ?? state.gainDb + state.rendersDb - state.startedRendersDb;
 var cornerFor = (corrected) => corrected && state.correctedRadiation ? state.correctedRadiation.hz : state.airMode.hz;
-var hairAsk = (string = s) => ({ do: "hair", string, width: value.hair / 1e3 });
+var hairAsk = (string = s) => ({ do: "hair", string, width: value2.hair / 1e3 });
 var NOISE_KINDS = [
   ["force", "Bow force", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the force asked.`],
   ["speed", "Bow speed", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the speed asked.`],
@@ -700,7 +1134,7 @@ var NOISE_KINDS = [
   ["finger", "The finger's pitch", (sd) => `At 1, ${sd} cents.`]
 ];
 var noiseId = (kind) => `noise${kind[0].toUpperCase()}${kind.slice(1)}`;
-var noiseAsks = () => NOISE_KINDS.map(([kind]) => ({ do: "noise", what: kind, temperature: value.noisePlayer * value[noiseId(kind)] }));
+var noiseAsks = () => NOISE_KINDS.map(([kind]) => ({ do: "noise", what: kind, temperature: value2.noisePlayer * value2[noiseId(kind)] }));
 var noiseAt = (player2, kinds = {}) => {
   setters.noisePlayer(player2, true);
   for (const [kind] of NOISE_KINDS) setters[noiseId(kind)](kinds[kind] ?? 1, true);
@@ -728,11 +1162,11 @@ function way() {
 function read() {
   const k = builds[s];
   if (!k) return;
-  const f0 = openHz(k), length = k.L * (1 - finger()), Z2 = Math.sqrt(k.T * k.pl), v = value.speed, b = value.beta, F2 = value.force;
+  const f0 = openHz(k), length = k.L * (1 - finger()), Z2 = Math.sqrt(k.T * k.pl), v = value2.speed, b = value2.beta, F2 = value2.force;
   const most = 2 * Z2 * v / (b * (k.mus - k.mud)), corner = 2 * Z2 * v / b;
-  notes.pitch.textContent = `${name(midiOf(f0) + value.pitch)} · finger ${(100 * finger()).toFixed(1)} % of the string from the nut`;
+  notes.pitch.textContent = `${name(midiOf(f0) + value2.pitch)} · finger ${(100 * finger()).toFixed(1)} % of the string from the nut`;
   notes.beta.textContent = `${(1e3 * b * length).toFixed(1)} mm from the bridge, of ${(1e3 * length).toFixed(0)} mm sounding · smaller is nearer the bridge (sul ponticello), larger toward the fingerboard (sul tasto)`;
-  notes.stroke.textContent = `${(value.stroke / state.bow.length).toFixed(0)} % of a ${(100 * state.bow.length).toFixed(0)} cm bow · a stroke lasts about ${(value.stroke / 100 / value.speed).toFixed(2)} s at this speed`;
+  notes.stroke.textContent = `${(value2.stroke / state.bow.length).toFixed(0)} % of a ${(100 * state.bow.length).toFixed(0)} cm bow · a stroke lasts about ${(value2.stroke / 100 / value2.speed).toFixed(2)} s at this speed`;
   const rows = [
     ["The force most for a clean (Helmholtz) tone", k.mus > k.mud ? `${most.toFixed(2)} N — you are at ${(100 * F2 / most).toFixed(0)} % of it` : "none: μs is not over μd"],
     ["Helmholtz force on the bridge, 2Zv/β", `${corner.toFixed(2)} N (${(20 * Math.log10(corner)).toFixed(1)} dB re 1 N): what loudness the stroke asks`],
@@ -749,7 +1183,7 @@ function strings2() {
 function cross(next) {
   const was = s;
   if (next === was) return;
-  const asks = [{ do: "vibrato", string: was, width: 0, rate: value.rate }, ...bowing ? [{ do: "lift", string: was, pos: pos(), vel: direction * value.speed }] : []];
+  const asks = [{ do: "vibrato", string: was, width: 0, rate: value2.rate }, ...bowing ? [{ do: "lift", string: was, pos: pos(), vel: direction * value2.speed }] : []];
   s = next;
   limits();
   showBuild();
@@ -764,14 +1198,14 @@ var hairLimited = () => $("limitHair").checked;
 function limits() {
   const top = fingerboard() ? state.fingerboard : Math.max(state.fingerboard, state.range.range[1] - midiOf(openHz(builds[s])));
   setters.pitch.bounds(0, top);
-  if (value.pitch > top) setters.pitch(top, true);
-  const length = builds[s].L * (1 - finger()), nearest = Math.min(0.5, hairLimited() ? Math.max(0.02, value.hair / 2e3 / length) : 0.02);
+  if (value2.pitch > top) setters.pitch(top, true);
+  const length = builds[s].L * (1 - finger()), nearest = Math.min(0.5, hairLimited() ? Math.max(0.02, value2.hair / 2e3 / length) : 0.02);
   setters.beta.bounds(nearest, 0.5);
-  if (value.beta < nearest) setters.beta(nearest, true);
+  if (value2.beta < nearest) setters.beta(nearest, true);
   hairNote();
   drawPlayers();
   $("fingerboardLimit").textContent = `at most ${state.fingerboard.toFixed(1)} semitones over the open string, where it meets the end of the ${state.name}'s fingerboard (Goldblatt's measurements)`;
-  $("hairLimit").textContent = `its middle at least half the hair on the string from the bridge (${(value.hair / 2).toFixed(1)} mm): a violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; the ${state.name}'s not found measured`}`;
+  $("hairLimit").textContent = `its middle at least half the hair on the string from the bridge (${(value2.hair / 2).toFixed(1)} mm): a violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; the ${state.name}'s not found measured`}`;
 }
 var bands = {};
 function drawPlayers() {
@@ -787,7 +1221,7 @@ function drawPlayers() {
 }
 function hairNote() {
   const modes = inUse.modes[s] ?? state.strings[s].N, cells = inUse.points[s] ?? 0, cell = inUse.cellMm[s];
-  notes.hair.textContent = value.hair > 0 && cells > 0 ? `${cells > 1 ? `${cells} cells of ${(value.hair / cells).toFixed(1)} mm` : `one cell, ${value.hair.toFixed(1)} mm`}, each sticking and slipping on its own: its ${modes} modes hold cells no finer than ${Number.isFinite(cell) ? cell.toFixed(1) : "?"} mm apart (more modes, finer cells); under the ribbon's ${(1e3 * state.bow.hairWidth).toFixed(0)} mm, the bow tilted` : "Artifastring's point bow";
+  notes.hair.textContent = value2.hair > 0 && cells > 0 ? `${cells > 1 ? `${cells} cells of ${(value2.hair / cells).toFixed(1)} mm` : `one cell, ${value2.hair.toFixed(1)} mm`}, each sticking and slipping on its own: its ${modes} modes hold cells no finer than ${Number.isFinite(cell) ? cell.toFixed(1) : "?"} mm apart (more modes, finer cells); under the ribbon's ${(1e3 * state.bow.hairWidth).toFixed(0)} mm, the bow tilted` : "Artifastring's point bow";
   notes.modes.textContent = `${modes} in use, as many as asked and as its rate holds (Artifastring's own ${state.strings[s].N}): more resolve the bow's hair more finely, and take more processing`;
 }
 function bodyNote() {
@@ -854,6 +1288,7 @@ async function init(status2) {
     await new Promise((done) => setTimeout(done, 250));
   }
   INSTRUMENT_OF = Object.keys(state.variants);
+  soloShown();
   const st = state.start;
   s = st.string;
   direction = st.direction;
@@ -962,7 +1397,7 @@ async function init(status2) {
   dial("plucking", "pluckPos", "Where (β)", { min: 0.02, max: 0.5, log: true, value: state.pluck.position });
   dial("plucking", "pluckForce", "Pull (N)", { min: Math.min(...pulls), max: Math.max(...pulls), log: true, value: state.pluck.pull.mf });
   const built = (key) => () => {
-    builds[s][key] = value[key];
+    builds[s][key] = value2[key];
     later("build", () => [buildAsk()]);
     read();
     strings2();
@@ -970,7 +1405,7 @@ async function init(status2) {
   for (const [key, label3, box] of BUILD) {
     const own2 = state.strings[s][key];
     dial(box, key, label3, key === "slope" ? { min: -2, max: 2, value: 0, step: 0.01, onchange: built(key) } : key === "loss" ? { min: 0.1, max: 10, log: true, value: 1, onchange: built(key) } : key === "modes" ? { min: 4, max: state.mostModes, log: true, value: state.mostModes, step: 1, onchange: () => {
-      setters.modes(Math.round(value.modes), true);
+      setters.modes(Math.round(value2.modes), true);
       built("modes")();
     }, note: "" } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: built(key) });
   }
@@ -986,7 +1421,7 @@ async function init(status2) {
   ];
   for (const [key, label3, said2] of CONSTANTS) {
     const own2 = state.constants[key];
-    dial("constants", key, label3, key === "A_noise" ? { min: 0, max: own2 * 10, value: own2, step: 1e-3, onchange: () => later(key, () => [{ do: "constant", name: key, value: value[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: () => later(key, () => [{ do: "constant", name: key, value: value[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 });
+    dial("constants", key, label3, key === "A_noise" ? { min: 0, max: own2 * 10, value: own2, step: 1e-3, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 });
   }
   $("ownConstants").onclick = () => {
     for (const [key] of CONSTANTS) setters[key](state.constants[key], true);
@@ -997,7 +1432,7 @@ async function init(status2) {
     max: 40,
     value: 0,
     step: 0.5,
-    onchange: () => later("gain", () => [{ do: "gain", gain: 10 ** ((heardDb() + value.volume) / 20) }]),
+    onchange: () => later("gain", () => [{ do: "gain", gain: 10 ** ((heardDb() + value2.volume) / 20) }]),
     note: "0 dB: the instrument's neutral note at broadcast loudness (EBU R128). Louder or softer playing is heard louder or softer against it."
   });
   $("correcting").checked = state.corrected;
@@ -1058,7 +1493,7 @@ async function init(status2) {
     $("output").textContent = bridge ? "Hearing: the bridge force (no body)" : "Hearing: the instrument";
     ask([{ do: "output", bridge }]);
   };
-  $("pluck").onclick = () => ask([{ do: "pluck", string: s, pos: value.pluckPos * (1 - finger()), force: value.pluckForce }]);
+  $("pluck").onclick = () => ask([{ do: "pluck", string: s, pos: value2.pluckPos * (1 - finger()), force: value2.pluckForce }]);
   $("ownBuild").onclick = () => {
     builds[s] = ownBuild(state.strings[s]);
     showBuild();
@@ -1076,35 +1511,7 @@ async function init(status2) {
     }
   };
   $("keep").onclick = async () => {
-    const r = await fetch("/strings/keep", { method: "POST", body: JSON.stringify({
-      words: $("words").value,
-      string: s,
-      openHz: openHz(builds[s]),
-      pitchSemitones: value.pitch,
-      finger: finger(),
-      firmness: value.firmness,
-      damping: value.damping,
-      dampingNsPerM: value.damping * state.finger.damping,
-      beta: value.beta,
-      pos: pos(),
-      force: value.force,
-      speed: value.speed,
-      direction,
-      bowing,
-      alternating: alternating(),
-      strokeCm: value.stroke,
-      startSeconds: value.start,
-      endSeconds: value.end,
-      attack: { shape: $("attackFrom").value, force: forceCurve.get(), speed: speedCurve.get() },
-      vibrato: $("vibrating").checked ? { widthCents: value.width, rateHz: value.rate } : null,
-      build: builds[s],
-      constants: Object.fromEntries(Object.keys(state.constants).map((key) => [key, value[key]])),
-      heard: bridge ? "bridge force" : "instrument",
-      body: { corrected: $("correcting").checked, radiated: $("radiating").checked, cornerHz: value.corner, order: +$("falling").value },
-      limits: { fingerboard: fingerboard(), hair: hairLimited() },
-      hairMm: value.hair,
-      noise: { player: value.noisePlayer, ...Object.fromEntries(NOISE_KINDS.map(([kind]) => [kind, value[noiseId(kind)]])) }
-    }) });
+    const r = await fetch("/strings/keep", { method: "POST", body: JSON.stringify({ words: $("words").value, ...settingsNow() }) });
     $("kept").textContent = r.ok ? ` kept (${(/* @__PURE__ */ new Date()).toLocaleTimeString()})` : ` not kept: ${await r.text()}`;
     if (r.ok) {
       $("words").value = "";
@@ -1112,6 +1519,36 @@ async function init(status2) {
     }
   };
   kept2();
+}
+function settingsNow() {
+  return {
+    string: s,
+    openHz: openHz(builds[s]),
+    pitchSemitones: value2.pitch,
+    finger: finger(),
+    firmness: value2.firmness,
+    damping: value2.damping,
+    dampingNsPerM: value2.damping * state.finger.damping,
+    beta: value2.beta,
+    pos: pos(),
+    force: value2.force,
+    speed: value2.speed,
+    direction,
+    bowing,
+    alternating: alternating(),
+    strokeCm: value2.stroke,
+    startSeconds: value2.start,
+    endSeconds: value2.end,
+    attack: { shape: $("attackFrom").value, force: forceCurve.get(), speed: speedCurve.get() },
+    vibrato: $("vibrating").checked ? { widthCents: value2.width, rateHz: value2.rate } : null,
+    build: builds[s],
+    constants: Object.fromEntries(Object.keys(state.constants).map((key) => [key, value2[key]])),
+    heard: bridge ? "bridge force" : "instrument",
+    body: { corrected: $("correcting").checked, radiated: $("radiating").checked, cornerHz: value2.corner, order: +$("falling").value },
+    limits: { fingerboard: fingerboard(), hair: hairLimited() },
+    hairMm: value2.hair,
+    noise: { player: value2.noisePlayer, ...Object.fromEntries(NOISE_KINDS.map(([kind]) => [kind, value2[noiseId(kind)]])) }
+  };
 }
 async function kept2() {
   const all = (await (await fetch("/strings/kept", { cache: "no-store" })).json()).reverse();
@@ -1132,8 +1569,8 @@ async function kept2() {
     row2.innerHTML = `<td>${new Date(k.at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td><td><b></b><br><span class="muted"></span></td><td><button>Load</button><button>Delete</button></td>`;
     row2.querySelector("b").textContent = k.words || "(no words)";
     row2.querySelector(".muted").textContent = what2;
-    const [load, forget] = row2.querySelectorAll("button");
-    load.onclick = () => recall(k);
+    const [load3, forget] = row2.querySelectorAll("button");
+    load3.onclick = () => recall(k);
     forget.onclick = async () => {
       if (!confirm(`Delete "${k.words || "(no words)"}"?`)) return;
       const r = await fetch("/strings/forget", { method: "POST", body: JSON.stringify({ at: k.at }) });
@@ -1161,7 +1598,7 @@ function attackAsks() {
   return asks;
 }
 function shaped(name2) {
-  const start = value.start, a = state.attacks;
+  const start = value2.start, a = state.attacks;
   if (name2 === "neutral" || !a) return { force: [[0, 1], [start, 1]], speed: [[0, 0], [start, 1, "straight"]] };
   if (name2 === "silence") return bowedAttack(a, { attack: start });
   const onset = a.articulations[name2];
@@ -1176,14 +1613,14 @@ function shape(name2) {
 }
 function started() {
   const name2 = $("attackFrom").value;
-  if (name2 === "drawn") speedCurve.set(startingAt(speedCurve.get(), value.start));
+  if (name2 === "drawn") speedCurve.set(startingAt(speedCurve.get(), value2.start));
   else shape(name2);
   later("attack", attackAsks);
 }
 function attackSaid() {
   if (!forceCurve || !builds[s]) return;
   const [ft, fy] = peakOf(forceCurve.get()), [vt, vy] = peakOf(speedCurve.get());
-  $("attackSaid").textContent = `Its force at most ${(fy * value.force).toFixed(2)} N (${fy.toFixed(2)}×, ${Math.round(1e3 * ft)} ms in), its speed at most ${(vy * value.speed).toFixed(3)} m/s (${vy.toFixed(2)}×, ${Math.round(1e3 * vt)} ms in); settled ${Math.round(1e3 * Math.max(forceCurve.get().at(-1)[0], speedCurve.get().at(-1)[0]))} ms in.`;
+  $("attackSaid").textContent = `Its force at most ${(fy * value2.force).toFixed(2)} N (${fy.toFixed(2)}×, ${Math.round(1e3 * ft)} ms in), its speed at most ${(vy * value2.speed).toFixed(3)} m/s (${vy.toFixed(2)}×, ${Math.round(1e3 * vt)} ms in); settled ${Math.round(1e3 * Math.max(forceCurve.get().at(-1)[0], speedCurve.get().at(-1)[0]))} ms in.`;
 }
 function attackCurves() {
   const a = state.attacks;
@@ -1199,16 +1636,16 @@ function attackCurves() {
     label: "Bow force at a stroke's start",
     color: "var(--strings)",
     change: drawn,
-    meaning: (y2) => `${(y2 * value.force).toFixed(2)} N`
+    meaning: (y2) => `${(y2 * value2.force).toFixed(2)} N`
   });
   speedCurve = curveEditor($("speedCurve"), {
     kind: attackKind({ from: 0, straight: true }),
     label: "Bow speed at a stroke's start",
     color: "var(--strings)",
-    meaning: (y2) => `${(y2 * value.speed).toFixed(3)} m/s`,
+    meaning: (y2) => `${(y2 * value2.speed).toFixed(3)} m/s`,
     change: (points) => {
       const start = startOf(points);
-      if (Math.abs(start - value.start) > 1e-6) {
+      if (Math.abs(start - value2.start) > 1e-6) {
         setters.start(start, true);
         if (bowing) later("alternate", () => [alternateAsk()]);
       }
@@ -1275,7 +1712,7 @@ async function recall(k) {
     $("limitFingerboard").checked = false;
     past.push("past the fingerboard's end");
   }
-  if (hairLimited() && value.beta * builds[s].L * (1 - finger()) < state.bow.hairWidth / 2) {
+  if (hairLimited() && value2.beta * builds[s].L * (1 - finger()) < state.bow.hairWidth / 2) {
     $("limitHair").checked = false;
     past.push("with the bow nearer the bridge than half its hair's width");
   }
@@ -1436,8 +1873,77 @@ function take(model2, { status: status2, choose: choose2 }) {
     status2.textContent = `The strings could not take up the ${model2}: ${error.message}`;
   });
 }
+$("soloSeed").value = DEFAULT_SEED;
+var musebot = musebotControls({ box: $("personality"), seed: $("soloSeed"), seconds: $("soloSeconds") });
+var following = null;
+$("solo").onclick = async () => {
+  if (!state) return;
+  const on = !state.soloist?.playing;
+  if (on) {
+    if (bowing) play();
+    $("soloSaid").textContent = "Its band composes the piece ...";
+  }
+  const r = await fetch("/strings/soloist", { method: "POST", body: JSON.stringify(on ? { on, ...musebot.given() } : { on }) });
+  if (!r.ok) {
+    $("soloSaid").textContent = await r.text();
+    return;
+  }
+  state = { ...state, ...await r.json() };
+  soloShown();
+  follow();
+};
+async function follow() {
+  clearTimeout(following);
+  state = await (await fetch("/strings/state", { cache: "no-store" })).json();
+  soloShown();
+  if (state.soloist?.playing) following = setTimeout(follow, 500);
+}
+var minutes = (x2) => `${Math.floor(x2 / 60)}:${String(Math.floor(x2 % 60)).padStart(2, "0")}`;
+function soloShown() {
+  const playing = Boolean(state.soloist?.playing), said2 = state.soloist?.said, tone = said2?.personality?.tone;
+  $("solo").textContent = playing ? "■ Stop the musebot" : "▶ A musebot plays";
+  $("solo").classList.toggle("on", playing);
+  musebot.show(state.player, said2?.personality);
+  if (!said2) return;
+  $("soloSaid").textContent = `${said2.player} on the ${state.name}, seed ${said2.seed}: ${playing ? "" : "played "}${minutes(Math.min(said2.at, said2.seconds))} of ${minutes(said2.seconds)}, ${said2.notes} notes` + (said2.late ? `; ${said2.late} lines came late` : "") + (said2.personality ? `; its register ${name(said2.personality.register[0])} to ${name(said2.personality.register[1])}` : "") + (tone ? `; its tone ${said2.personality.levers.tone.toFixed(2)}: ${tone.kinds.length ? `${tone.kinds.join(", ")} in ${Math.round(100 * tone.share)}% of phrases` : "no techniques"}, vibrato ${tone.vibrato[0].toFixed(1)} to ${tone.vibrato[1].toFixed(1)} × its players'` : "") + ".";
+}
+async function settings() {
+  await taking.catch(() => {
+  });
+  if (!state) throw new Error("no instrument yet");
+  const model2 = INSTRUMENT_OF[state.type];
+  return {
+    model: model2,
+    settings: { family: "strings", model: model2, type: state.type, variant: state.variant, seed: state.seed, ...settingsNow(), player: musebot.given() },
+    words: $("words").value,
+    heard: { through: bridge ? "bridge force" : "instrument", bowing, said: $("listening").textContent }
+  };
+}
+async function load(file) {
+  await taking.catch(() => {
+  });
+  if (!state) throw new Error("no instrument yet");
+  const k = file.settings;
+  if (Number.isInteger(k.seed) && k.seed !== state.seed) {
+    await ask([{ do: "seed", seed: k.seed }]);
+    state.seed = k.seed;
+    describe();
+  }
+  await recall(k);
+  if (file.words) $("words").value = file.words;
+  const refused = [];
+  if (k.player) {
+    const r = await fetch("/strings/player", { method: "POST", body: JSON.stringify(k.player) });
+    if (r.ok) {
+      state = { ...state, ...await r.json() };
+      soloShown();
+    } else refused.push({ path: "/player", error: await r.text() });
+  }
+  return { made: "every one", refused };
+}
 function rest() {
   if (bowing) play();
+  if (state?.soloist?.playing) fetch("/strings/soloist", { method: "POST", body: JSON.stringify({ on: false }) }).then(follow);
 }
 function keys(e) {
   if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
@@ -1452,7 +1958,9 @@ function keys(e) {
 var winds_exports = {};
 __export(winds_exports, {
   keys: () => keys2,
+  load: () => load2,
   rest: () => rest2,
+  settings: () => settings2,
   take: () => take2
 });
 
@@ -1462,6 +1970,8 @@ var sources_default = {
   about: "Every source a registry value cites, once (registry/README.md). literature: a published measurement or standard, its DOI checked with Crossref where it has one; vernacular: a maker's chart, a retailer's page, players' common knowledge, looked up, with the page and a saved copy; other: Printables, a dataset, an engine's own data, a CT, with where it is and its licence. Saved copies are in the trunk's research-downloads/.",
   sources: {
     "fletcher-rossing-1998": { kind: "literature", authors: "N. H. Fletcher, T. D. Rossing", title: "The Physics of Musical Instruments", year: 1998, doi: "10.1007/978-0-387-21603-4", edition: "2nd", publisher: "Springer" },
+    "weinzierl-2017": { kind: "literature", authors: "S. Weinzierl, M. Vorländer, G. Behler, F. Brinkmann, H. von Coler, E. Detzner, J. Krämer, A. Lindau, M. Pollow, F. Schulz, N. R. Shabtai", title: "A Database of Anechoic Microphone Array Measurements of Musical Instruments", year: 2017, doi: "10.14279/depositonce-5861.2", url: "https://depositonce.tu-berlin.de/handle/11303/6305.2", note: "a published dataset, its DOI checked on DataCite (not on Crossref); its recordings in the trunk's research-downloads/tu-berlin-anechoic/, read by native/openwind/turbulence-fit.mjs and tools/sound_power_table.py" },
+    "fletcher-1975": { kind: "literature", authors: "N. H. Fletcher", title: "Acoustical correlates of flute performance technique", year: 1975, doi: "10.1121/1.380430", in: "The Journal of the Acoustical Society of America 57(1), 233-237", note: "its laws as render/synthesis/workers/openwind_worker.py quotes them; the paper not yet fetched (research/SOURCES_TO_FETCH.md)" },
     "fletcher-1964": { kind: "literature", authors: "H. Fletcher", title: "Normal Vibration Frequencies of a Stiff Piano String", year: 1964, doi: "10.1121/1.1918933", in: "JASA 36(1), 203-209" },
     "schelleng-1973": { kind: "literature", authors: "J. C. Schelleng", title: "The bowed string and the player", year: 1973, doi: "10.1121/1.1913322", in: "JASA 53(1), 26-41" },
     "schoonderwaldt-2009": { kind: "literature", authors: "E. Schoonderwaldt", title: "The player and the bowed string: Coordination of bowing parameters in violin and viola performance", year: 2009, doi: "10.1121/1.3203209", in: "JASA 126(5), 2709-2720" },
@@ -1586,7 +2096,7 @@ var equations_default = {
 var modules_default = {
   schema: "musebots.registry-modules/1",
   about: "The modules whose values are the registry's (registry/README.md): an owned module holds no number about an instrument, a player, the physics or a method -- the registry's test reads it -- and a pending one is still to move, listed in REGISTRY.md.",
-  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js"],
+  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js"],
   pending: ["public/shared/performers/vibrato.js", "public/shared/performers/instrument-ranges.js"]
 };
 
@@ -3281,7 +3791,7 @@ var bowed_default2 = {
 // registry/objects/winds.json
 var winds_default = {
   schema: "musebots.registry-objects/1",
-  about: "The woodwinds as a tree of types (registry/README.md), begun with what their players share: a vocal tract upstream of the reed (players/winds.json), one model whose values are its players' -- measured of clarinettists, every reed player's until their own are measured. Their bodies are still render/synthesis/geometry's (research/REGISTRY_PLAN.md, the woodwinds' step).",
+  about: "The winds, woodwinds and brass, as a tree of types (registry/README.md), begun with what their players share: a vocal tract upstream of the reed (players/winds.json), one model whose values are its players' -- measured of clarinettists, every reed player's until their own are measured. Their bodies are still render/synthesis/geometry's (research/REGISTRY_PLAN.md, the woodwinds' step).",
   nodes: {
     "reed-woodwind": {
       is: "instrument",
@@ -3331,6 +3841,44 @@ var winds_default = {
     "baritone-saxophone": {
       is: "reed-woodwind",
       about: "The baritone saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+    },
+    "jet-woodwind": {
+      is: "instrument",
+      abstract: true,
+      about: "A woodwind sounded by its player's jet across an edge: its blowing pressure follows the note's frequency as flutists were measured blowing it (players/winds.json; Fletcher 1975)."
+    },
+    flute: {
+      is: "jet-woodwind",
+      about: "The concert flute in C."
+    },
+    "alto-flute": {
+      is: "jet-woodwind",
+      about: "The alto flute in G, the flute scaled to its bore (tools/design_openwind_woodwind.py flute_like): its players' law the flutists' until its own is measured."
+    },
+    piccolo: {
+      is: "jet-woodwind",
+      about: "The piccolo in C, the flute scaled to its bore: its players' law the flutists' until its own is measured."
+    },
+    "lip-reed": {
+      is: "instrument",
+      abstract: true,
+      about: "A brass instrument, sounded by its player's lips buzzing into its mouthpiece: the flow between them the reed's, its lips opening outward (native/openwind src/kernel.rs T_REED, T_LIPS). Its bodies are render/synthesis/geometry's (tools/save_brass_body.py)."
+    },
+    trumpet: {
+      is: "lip-reed",
+      about: "The B-flat trumpet."
+    },
+    trombone: {
+      is: "lip-reed",
+      about: "The tenor trombone, its slide moving."
+    },
+    horn: {
+      is: "lip-reed",
+      about: "The French horn, its bore a horn in F (Kemp 2002)."
+    },
+    tuba: {
+      is: "lip-reed",
+      about: "The tuba in C (an Alexander CC, Campbell et al. 2021)."
     }
   }
 };
@@ -3338,7 +3886,7 @@ var winds_default = {
 // registry/players/winds.json
 var winds_default2 = {
   schema: "musebots.registry-players/1",
-  about: "What the players of the woodwinds do, on the objects' tree (registry/README.md): a node's values are its players'; one a node does not give, its parent's.",
+  about: "What the players of the winds do, the woodwinds' and the brass's, on the objects' tree (registry/README.md): a node's values are its players'; one a node does not give, its parent's.",
   nodes: {
     "reed-woodwind": {
       values: {
@@ -3367,6 +3915,24 @@ var winds_default2 = {
             contact: { value: [[0.25, 0.115], [0.5, 0.347]], unit: "s", kind: "literature", source: "pamies-vila-hofmann-chatziioannou-2018", at: "3.1.2; Table 1", note: "[the notes' inter-onset interval, the tongue's contact with the reed]: clarinettists' staccato eighths at 120 and 60 bpm, the note stopped by the tongue (their technique I); sd 31 and 27 ms" },
             silence: { value: [[0.25, 0.084], [0.5, 0.302]], unit: "s", kind: "literature", source: "pamies-vila-hofmann-chatziioannou-2018", at: "3.1.2; Table 1", note: "[the notes' inter-onset interval, the silence between notes]: the same staccato eighths at 120 and 60 bpm, stopped by the tongue (technique I); sd 37 and 43 ms" }
           }
+        },
+        flow: {
+          turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow through the reed's channel turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a clarinet's reed channel's flow, its level measured", date: "2026-11-03", found: "none measured: J. O. Smith, Physical Audio Signal Processing, 'Single-Reed Theory' -- synthesis models' noise modulated by the reed 'despite a lack of firm basis in acoustic measurements to date', turbulence near the reed's closing the basic model's chief omission; a reed channel's flow laminar-like below a Reynolds number of about 4000, seldom reached in saxophones and clarinets (TU Delft repository); a synthesis patent's noise following the breath, its level unmeasured" }] }
+        }
+      }
+    },
+    "lip-reed": {
+      values: {
+        flow: {
+          turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow between the lips turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the lips' slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017's trumpet; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a brass player's lips' flow, its level measured or modelled", date: "2026-11-03", found: "none measured: C. Vergez & X. Rodet's trumpet model (ICMC 2001), the jet out of the lips losing its energy to turbulence in the mouthpiece's cup, no noise level; Adachi & Sato's lips, and Giordano's (ISMA 2017) Navier-Stokes flow over them, no level given" }] }
+        }
+      }
+    },
+    "jet-woodwind": {
+      values: {
+        breath: {
+          perHz: { value: 0.8, unit: "Pa/Hz", kind: "literature", source: "fletcher-1975", at: '"p = 0.008 v" mbar at a note of v Hz', note: "four flutists' blowing pressure rising with the note's frequency, its jet's speed sqrt(2p/rho): 20 m/s at D4, 40 at D6 (the same number as render/synthesis/workers/openwind_worker.py WOODWINDS jet pressure, the worker's own until it reads the registry)" },
+          ffOverPp: { range: [1, 2], unit: "", kind: "literature", source: "fletcher-1975", note: "two of his four flutists raising their pressure about twice from pp to ff, two holding it" }
         }
       }
     }
@@ -3807,6 +4373,41 @@ var levels_default = {
   }
 };
 
+// registry/method/personality.json
+var personality_default = {
+  schema: "musebots.registry-methods/1",
+  about: "A player's personality (public/shared/performers/personality.js; docs/PLAYER_PERSONALITY.md): how far it pushes its instrument's idiom and what lines it prefers, each lever a draw from its seed within the range here, or given (a spec's, an LLM's later). Every range holds the line planner's own value (line.js LINE, wind-line.js WIND_LINE, flute_clodbot.js FLUTE), so that a personality is a place among the planner's settings, never outside them.",
+  methods: {
+    personality: {
+      about: "The levers, each a share 0 to 1 drawn from the player's seed (its ensemble's seed, its identity and its instrument), read across its range here; daring is the one that reaches toward the instrument's limits (its facts, instrument-facts.js), tone the one from a clean tone to its extremes -- its techniques, its rhythmic grammars and its ranges in its tone's parameters -- the rest its style.",
+      source: "ours",
+      settings: {
+        dynamicSteps: { value: 2, unit: "marks", kind: "setting", reason: "how many dynamic marks the most daring player goes past the dynamics comfortable in a register (wind-line.js WIND_LINE lowMost f and highLeast p): to fff low and ppp high, the scale's ends (dynamics.js)" },
+        shortest: { range: [0.08, 0.12], unit: "s", kind: "setting", reason: "its quickest note, the most daring's the planner's own (line.js LINE.shortest: a wind's double tonguing near it), the least daring's a single-tongued note's at some 8 notes a second (Bertsch & Hoole 2014, players-ranges.mjs repeatRate)" },
+        phraseRange: { range: [12, 18], unit: "semitones", kind: "setting", reason: "a phrase's widest range, about the planner's 14 (line.js LINE.phraseRange)" },
+        density: { range: [0.25, 0.5], unit: "share", kind: "setting", reason: "its density among equals, about the flute's 0.35 (flute_clodbot.js FLUTE)" },
+        loudness: { range: [0.4, 0.6], unit: "share", kind: "setting", reason: "its loudness among equals, about the flute's 0.5" },
+        fioriture: { range: [0.2, 0.55], unit: "share", kind: "setting", reason: "its fioriture as a soloist, about the flute's 0.35" },
+        leap: { range: [0.08, 0.32], unit: "share", kind: "setting", reason: "a leap's chance in its motif, about the planner's 0.18 (line.js LINE.leap)" },
+        slurs: { range: [2, 6], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, about the planner's 4 (LINE.slurMost)" },
+        motifFewest: { range: [3, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
+        motifMost: { range: [5, 7], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest" },
+        runs: { range: [3, 6], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, about the planner's 4 (LINE.runMost)" },
+        rests: { range: [0.3, 0.7], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
+        commas: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, about the planner's 0.2 (LINE.commaShare)" },
+        landing: { range: [0.4, 1], unit: "share", kind: "setting", reason: "how high above its floor a cadence may land, a share of its span, about the planner's 0.75 (LINE.landing's upper end)" },
+        grammarLeast: { value: 0.15, unit: "share", kind: "setting", reason: "the least weight a motif's grammar is given, against the most preferred's 1, so that every grammar stays open to it (line.js chooseMotif)" },
+        quoting: { range: [0.5, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: given them, it prefers them more often than not" },
+        techniques: { range: [0, 0.6], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's three phrases in five, each still the instrument's own" },
+        toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
+        vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
+        harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
+        rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
+      }
+    }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x2 = 1, y2 = b / a;
@@ -3893,7 +4494,8 @@ var FILES = Object.freeze({
   "players/winds.json": winds_default2,
   "stimuli/stimuli.json": stimuli_default,
   "method/strings.json": strings_default,
-  "method/levels.json": levels_default
+  "method/levels.json": levels_default,
+  "method/personality.json": personality_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
@@ -4466,291 +5068,6 @@ function slideSvg(position, most = 7, label3 = "Slide") {
   return svgOf([0, 0, 21, 5.6], `<rect x="${x2(1) - 0.4}" y=".6" width="${x2(at) - x2(1) + 0.8}" height="1.2" rx=".3" fill="currentColor" opacity=".35"/><line x1="${x2(1)}" y1="2.6" x2="${x2(end)}" y2="2.6" stroke="currentColor" stroke-width=".1"/>${marks.join("")}<line x1="${x2(at)}" y1=".2" x2="${x2(at)}" y2="3.8" stroke="currentColor" stroke-width=".25"/>`, label3);
 }
 
-// public/random-source.js
-var MULBERRY_STEP = 1831565813;
-function hashSeed(value3) {
-  const text = String(value3), numeric = Number(text);
-  if (text.trim() !== "" && Number.isFinite(numeric)) return numeric >>> 0;
-  let hash = 2166136261;
-  for (const character of text) {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
-  }
-  return hash >>> 0;
-}
-function freshSeed() {
-  return hashSeed(Date.now());
-}
-function mulberry(state2) {
-  let value3 = state2;
-  value3 = Math.imul(value3 ^ value3 >>> 15, value3 | 1);
-  value3 ^= value3 + Math.imul(value3 ^ value3 >>> 7, value3 | 61);
-  return ((value3 ^ value3 >>> 14) >>> 0) / 4294967296;
-}
-function createRandomStream(value3) {
-  const seed2 = hashSeed(value3);
-  let state2 = seed2;
-  return {
-    seed: seed2,
-    next() {
-      state2 = state2 + MULBERRY_STEP >>> 0;
-      return mulberry(state2);
-    },
-    snapshot() {
-      return { algorithm: "mulberry32", seed: seed2, state: state2 };
-    },
-    restore(saved) {
-      if (saved?.algorithm !== "mulberry32" || saved.seed !== seed2 || !Number.isInteger(saved.state) || saved.state < 0 || saved.state > 4294967295) throw new Error("Invalid random stream state");
-      state2 = saved.state;
-    }
-  };
-}
-var seed = freshSeed();
-var stream = createRandomStream(seed);
-
-// public/shared/rhythm-vocabulary.js
-var KRISHNASWAMY_WELLS = Object.freeze({
-  citation: 'Jagdish A. Krishnaswamy and Robert Wells, "A Novel Generative Paradigm for Carnatic Rhythmic Composition", Analytical Approaches to Music of South Asia 1 (2023)',
-  uri: "https://southasia.iftawm.org/wp-content/uploads/KrishnaswamyWells_Article.pdf",
-  accessed: "2026-09-28"
-});
-var TOUSSAINT = Object.freeze({
-  citation: 'Godfried T. Toussaint, The Geometry of Musical Rhythm: What Makes a "Good" Rhythm Good? (CRC Press, 2013), and "The Euclidean algorithm generates traditional musical rhythms", Bridges (2005)',
-  uri: "https://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf",
-  accessed: "2026-09-28"
-});
-var VURKAC = Object.freeze({
-  citation: 'Mehmet Vurkaç, "A Cross-Cultural Grammar for Temporal Harmony in Afro-Latin Musics: Clave, Partido-Alto and Other Timelines", Current Musicology 94 (2012)',
-  uri: "https://doi.org/10.7916/cm.v0i94.5234",
-  accessed: "2026-07-24"
-});
-var CLAYTON = Object.freeze({ citation: "Martin Clayton, Time in Indian Music: Rhythm, Metre, and Form in North Indian Rāg Performance (Oxford University Press, 2000)", uri: null, accessed: null });
-var wikipedia = (title, accessed = "2026-09-28") => Object.freeze({ citation: `"${title}", Wikipedia`, uri: `https://en.wikipedia.org/wiki/${title}`, accessed });
-var NADAI = Object.freeze({ caturasra: 1, tisra: 3, khanda: 5, misra: 7, sankirna: 9, "sampurna-khanda": 10 });
-var THEKA_BAYAN = Object.freeze({ dha: true, dhin: true, dhi: true, ta: false, tin: false, ti: false, na: false });
-var tala = (record) => {
-  const beats = record.components.reduce((sum, component) => sum + component.beats, 0);
-  if (record.theka && (record.theka.length !== beats || record.theka.some((bol) => !(bol in THEKA_BAYAN)))) throw new RangeError(`${record.id}: a theka is a known bol for each beat`);
-  return Object.freeze({
-    kind: "tala",
-    license: "metadata-only",
-    ...record,
-    ...record.theka ? { theka: Object.freeze([...record.theka]) } : {},
-    components: Object.freeze(record.components.map((component) => Object.freeze({ ...component, gestures: component.gestures ? Object.freeze([...component.gestures]) : null })))
-  });
-};
-var clave = (record) => Object.freeze({ kind: "clave", license: "metadata-only", ...record, onsets: Object.freeze([...record.onsets]) });
-var RHYTHM_VOCABULARY = Object.freeze(Object.fromEntries([
-  // Ādi tāḷa: "8 beats of equal duration ... grouped into three angas of 4, 2, and 2 beats" (¶15). A laghu's beats are a
-  // clap and finger counts from the little finger, a drutam's a clap and a wave (Figure 1, shown there for tisra
-  // triputa's laghu of three: clap, pinky, ring).
-  tala({
-    id: "carnatic.adi",
-    tradition: "Carnatic",
-    name: "Ādi tāḷa",
-    source: KRISHNASWAMY_WELLS,
-    components: [{ kind: "laghu", beats: 4, gestures: ["clap", "pinky", "ring", "middle"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }]
-  }),
-  // Tiśra tripuṭa tāḷa: "seven-beat cycles divided into angas of lengths 3, 2, and 2", each beat marked by its kriyā:
-  // clap, pinky, ring; clap, wave; clap, wave (Figure 1).
-  tala({
-    id: "carnatic.tisra-triputa",
-    tradition: "Carnatic",
-    name: "Tiśra tripuṭa tāḷa",
-    source: KRISHNASWAMY_WELLS,
-    components: [{ kind: "laghu", beats: 3, gestures: ["clap", "pinky", "ring"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }, { kind: "drutam", beats: 2, gestures: ["clap", "wave"] }]
-  }),
-  // Rūpaka tāḷa as the source takes it: "3 beats of equal duration" (¶15), "a 3-beat rhythmic cycle with 4 subdivisions
-  // per beat" (¶3). The source gives no kriyās for it, so none are claimed.
-  tala({
-    id: "carnatic.rupaka",
-    tradition: "Carnatic",
-    name: "Rūpaka tāḷa",
-    source: KRISHNASWAMY_WELLS,
-    components: [{ kind: "beats", beats: 3, gestures: null }]
-  }),
-  // Miśra cāpu tāḷa, a cāpu tāḷa, "whose beats vary in duration" (¶12), as the source takes it: "one long beat (three
-  // subdivisions) followed by two shorter beats (two subdivisions)", seven subdivisions a cycle (note 3; "miṣra cāpu
-  // tāḷa in tiṣra naḍai, totalling 21 subdivisions per cycle"). Other artists count it as seven equal beats (note 3).
-  // No kriyās are claimed.
-  tala({
-    id: "carnatic.misra-capu",
-    tradition: "Carnatic",
-    name: "Miśra cāpu tāḷa",
-    source: KRISHNASWAMY_WELLS,
-    components: [{ kind: "long", beats: 1, units: 3, gestures: null }, { kind: "short", beats: 2, units: 2, gestures: null }]
-  }),
-  // Hindustani taals: vibhags, each begun with a clap (tali; the cycle's first, sam, marked X) or a wave (khali, "empty",
-  // marked 0), the other matras ungestured; and the theka, the taal's stroke names (bols) a matra each. Where a bol
-  // sounds the bayan, the left-hand bass drum (dha, dhin, dhi), and where it does not (ta, tin, ti, na) is the theka's
-  // own (THEKA_BAYAN), so a part's bass can follow it: the khali vibhag is where it thins.
-  // Teentaal: 16 matras, 4+4+4+4, marked X 2 0 3.
-  tala({
-    id: "hindustani.teentaal",
-    tradition: "Hindustani",
-    name: "Tīntāl",
-    source: [CLAYTON, wikipedia("Teental")],
-    components: [
-      { kind: "vibhag", role: "tali", marker: "X", beats: 4, gestures: ["sam", null, null, null] },
-      { kind: "vibhag", role: "tali", marker: "2", beats: 4, gestures: ["tali", null, null, null] },
-      { kind: "vibhag", role: "khali", marker: "0", beats: 4, gestures: ["khali", null, null, null] },
-      { kind: "vibhag", role: "tali", marker: "3", beats: 4, gestures: ["tali", null, null, null] }
-    ],
-    theka: ["dha", "dhin", "dhin", "dha", "dha", "dhin", "dhin", "dha", "dha", "tin", "tin", "ta", "ta", "dhin", "dhin", "dha"]
-  }),
-  // Jhaptaal: 10 matras, 2+3+2+3, marked X 2 0 3.
-  tala({
-    id: "hindustani.jhaptaal",
-    tradition: "Hindustani",
-    name: "Jhaptāl",
-    source: [CLAYTON, wikipedia("Jhaptal")],
-    components: [
-      { kind: "vibhag", role: "tali", marker: "X", beats: 2, gestures: ["sam", null] },
-      { kind: "vibhag", role: "tali", marker: "2", beats: 3, gestures: ["tali", null, null] },
-      { kind: "vibhag", role: "khali", marker: "0", beats: 2, gestures: ["khali", null] },
-      { kind: "vibhag", role: "tali", marker: "3", beats: 3, gestures: ["tali", null, null] }
-    ],
-    theka: ["dhi", "na", "dhi", "dhi", "na", "ti", "na", "dhi", "dhi", "na"]
-  }),
-  // Clave: an orienting timeline with a direction, not five marked slots (Vurkaç 2012). Onsets on sixteen pulses, as
-  // Toussaint writes them: son x..x..x...x.x..., rumba x..x...x..x.x..., bossa nova x..x..x...x..x... The 2-3 side is
-  // the same timeline begun at its other half.
-  clave({ id: "afro-cuban.son-clave-3-2", tradition: "Afro-Cuban", name: "Son clave, 3-2", pulses: 16, onsets: [0, 3, 6, 10, 12], direction: "3-2", source: [TOUSSAINT, VURKAC] }),
-  clave({ id: "afro-cuban.son-clave-2-3", tradition: "Afro-Cuban", name: "Son clave, 2-3", pulses: 16, onsets: [2, 4, 8, 11, 14], direction: "2-3", source: [TOUSSAINT, VURKAC] }),
-  clave({ id: "afro-cuban.rumba-clave-3-2", tradition: "Afro-Cuban", name: "Rumba clave, 3-2", pulses: 16, onsets: [0, 3, 7, 10, 12], direction: "3-2", source: [TOUSSAINT, VURKAC] }),
-  clave({ id: "afro-cuban.rumba-clave-2-3", tradition: "Afro-Cuban", name: "Rumba clave, 2-3", pulses: 16, onsets: [2, 4, 8, 11, 15], direction: "2-3", source: [TOUSSAINT, VURKAC] }),
-  clave({ id: "brazilian.bossa-nova-clave", tradition: "Brazilian", name: "Bossa nova clave", pulses: 16, onsets: [0, 3, 6, 10, 13], direction: null, source: [TOUSSAINT] })
-].map((record) => [record.id, record])));
-
-// public/shared/meter-space.js
-var METER_SPACE = Object.freeze({
-  numerators: Object.freeze([1, 40]),
-  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
-  // with a tempo).
-  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
-  // A bar's groups: 2s and 3s mostly, now and then a 1 or a 4.
-  groupSizes: Object.freeze([[2, 4], [3, 4], [1, 0.3], [4, 1]].map(Object.freeze)),
-  // The share of draws grouped as they draw, rather than as the meter's most-threes.
-  ownGrouping: 0.7,
-  // Pulses a unit.
-  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
-  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
-  talas: 0.12,
-  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
-  barSeconds: Object.freeze([0.5, 10])
-});
-var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
-
-// public/shared/felt-meter-catalog.js
-var freeze = (value3) => {
-  if (value3 && typeof value3 === "object") {
-    Object.values(value3).forEach(freeze);
-    Object.freeze(value3);
-  }
-  return value3;
-};
-var FELT_METER_POLICY = freeze({
-  "id": "score-selection-v2",
-  "evidence": "authored-policy-not-human-calibration",
-  "favoredBeatSeconds": [
-    "2/5",
-    "4/5"
-  ],
-  "candidateBeatSeconds": [
-    "3/10",
-    "1"
-  ],
-  "cyclePreferenceMaxSeconds": "4",
-  "cycleMinimumSeconds": null,
-  "catalog": [
-    { "id": "2/4-in-2", "numerator": 2, "denominator": 4, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
-    { "id": "3/4-in-3", "numerator": 3, "denominator": 4, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
-    { "id": "4/4-in-4", "numerator": 4, "denominator": 4, "beatWeights": [1, 1, 1, 1], "groups": [2, 2], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
-    { "id": "2/2-in-2", "numerator": 2, "denominator": 2, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
-    { "id": "3/2-in-3", "numerator": 3, "denominator": 2, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
-    { "id": "6/8-in-2", "numerator": 6, "denominator": 8, "beatWeights": [3, 3], "groups": [3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
-    { "id": "9/8-in-3", "numerator": 9, "denominator": 8, "beatWeights": [3, 3, 3], "groups": [3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
-    { "id": "12/8-in-4", "numerator": 12, "denominator": 8, "beatWeights": [3, 3, 3, 3], "groups": [3, 3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
-    { "id": "5/4-in-5", "numerator": 5, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["75", "200"] },
-    { "id": "7/4-in-7", "numerator": 7, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1, 1, 1], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["105", "150"], "candidateQuarterBPM": ["105", "200"] },
-    { "id": "5/4-in-2", "numerator": 5, "denominator": 4, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
-    { "id": "7/4-in-3", "numerator": 7, "denominator": 4, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
-    { "id": "5/8-in-2", "numerator": 5, "denominator": 8, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "7/8-in-3", "numerator": 7, "denominator": 8, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "8/8-in-3", "numerator": 8, "denominator": 8, "beatWeights": [3, 3, 2], "groups": [3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "9/8-in-4", "numerator": 9, "denominator": 8, "beatWeights": [2, 2, 2, 3], "groups": [2, 2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "11/8-in-5", "numerator": 11, "denominator": 8, "beatWeights": [2, 2, 3, 2, 2], "groups": [2, 2, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "13/8-in-5", "numerator": 13, "denominator": 8, "beatWeights": [3, 3, 3, 2, 2], "groups": [3, 3, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["195/2", "200"] },
-    { "id": "17/8-in-6", "numerator": 17, "denominator": 8, "beatWeights": [3, 3, 3, 3, 3, 2], "groups": [3, 3, 3, 3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/2", "150"], "candidateQuarterBPM": ["255/2", "200"] },
-    { "id": "5/16-in-2", "numerator": 5, "denominator": 16, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
-    { "id": "7/16-in-3", "numerator": 7, "denominator": 16, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
-    { "id": "17/16-in-7", "numerator": 17, "denominator": 16, "beatWeights": [2, 2, 3, 2, 2, 3, 3], "groups": [2, 2, 3, 2, 2, 3, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/4", "75"], "candidateQuarterBPM": ["255/4", "100"] },
-    { "id": "17/16-in-4", "numerator": 17, "denominator": 16, "beatWeights": [4, 4, 4, 5], "groups": [4, 4, 4, 5], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["375/4", "150"], "candidateQuarterBPM": ["75", "200"] },
-    { "id": "107/32-in-5", "numerator": 107, "denominator": 32, "beatWeights": [19, 19, 19, 25, 25], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["1875/8", "1425/4"], "candidateQuarterBPM": ["1605/8", "475"] },
-    { "id": "107/32-in-2", "numerator": 107, "denominator": 32, "beatWeights": [57, 50], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 1, "dots": 0 }, "favoredQuarterBPM": ["4275/8", "1875/2"], "candidateQuarterBPM": ["855/2", "1250"] }
-  ]
-});
-var FELT_METER_CATALOG = FELT_METER_POLICY.catalog;
-
-// public/shared/tempo-range.js
-var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
-
-// public/shared/meter-reading.js
-var EDITORIAL_ACTIONS = Object.freeze([
-  "PUBLISH_STANDARD",
-  "PUBLISH_GROUPED",
-  "PUBLISH_SPECIALIST_WITH_LEGEND",
-  "KEEP_WITH_SUPPORT",
-  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
-  "HOLD_FOR_REVIEW",
-  "FREE_TIME_BY_INTENT"
-]);
-
-// public/shared/metric-home/grouping.js
-var REMAINDER_UNITS = Object.freeze([3, 2]);
-
-// public/shared/metric-home/nested.js
-var NESTING = Object.freeze({
-  // The longest group a listener hears as one (seconds; meterform_clodbot's and grouping-choice.js's longestGroupSeconds,
-  // ours, within the few seconds a measure can last: London 2012, Hearing in Time, 2nd ed.,
-  // doi:10.1093/acprof:oso/9780199744374.001.0001).
-  longestSeconds: 5,
-  // A split into sections is told apart by their lengths: the shorter section at least this share of the span and the
-  // two sections' shares differing by at least `contrast` (37/107 against 70/107 differ by 0.31). Ours.
-  shortestShare: 0.25,
-  contrast: 0.12,
-  // Candidate splits offered at most for one span, the best first. Ours.
-  offered: 12,
-  // Groups under one at most (grouping.js MAX_GROUPS_UNDER_ONE, Scansion Maker's: four or more are grouped again).
-  maxParts: 3
-});
-
-// public/shared/felt-tempo.js
-var value2 = (text) => {
-  const [n, d = "1"] = String(text).split("/");
-  return Number(n) / Number(d);
-};
-var band = (list) => [value2(list[0]), value2(list[1])];
-var FELT_TEMPO = Object.freeze({
-  beat: Object.freeze(band(FELT_METER_POLICY.candidateBeatSeconds)),
-  favoredBeat: Object.freeze(band(FELT_METER_POLICY.favoredBeatSeconds)),
-  longestBarSeconds: NESTING.longestSeconds
-});
-
-// public/shared/opening-time.js
-var DEFAULT_SEED = 20260916;
-var OPENING_TIME = Object.freeze({
-  // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
-  phraseSeconds: Object.freeze([5, 13]),
-  // A phrase's bars at most (ours: meterspace_clodbot's).
-  phraseBarsAtMost: 8,
-  // The band's density before any is heard, drawn between these (ours).
-  density: Object.freeze([0.35, 0.85]),
-  // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
-  // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
-  reference: 4
-});
-
 // native/live/winds.js
 var $2 = (id) => document.getElementById(`w-${id}`);
 var NAMES2 = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
@@ -4830,10 +5147,13 @@ async function poll() {
   S = s2;
   if (s2.model && s2.version !== V) build(s2);
   shown2(s2);
-  soloShown(s2);
+  soloShown2(s2);
   if (s2.soloist?.playing && s2.version === V && s2.played?.pitch != null) {
     P = s2.played;
     refresh();
+  } else if (P?.blowing && s2.version === V && s2.played?.lungs && P.breathing && S.lungs) {
+    P.lungs = s2.played.lungs;
+    lungsSaid();
   }
   if (s2.model && s2.impedance && !impedance && !fetchingImpedance) {
     fetchingImpedance = true;
@@ -4848,7 +5168,7 @@ async function poll() {
       fetchingImpedance = false;
     });
   }
-  polling = setTimeout(poll, s2.loading || s2.soloist?.playing ? 500 : !s2.model || !s2.impedance ? 2e3 : 5e3);
+  polling = setTimeout(poll, s2.loading || s2.muting || s2.soloist?.playing ? 500 : P?.blowing ? 1e3 : !s2.model || !s2.impedance ? 2e3 : 5e3);
 }
 function shown2(s2) {
   status.classList.toggle("failed", Boolean(s2.failed && !s2.loading));
@@ -4964,6 +5284,11 @@ var sendAttack = sender("/attack");
 var sendBreathing = sender("/breathing");
 var sendFlutter = sender("/flutter");
 var sendHum = sender("/hum");
+var sendGrowl = sender("/growl");
+var sendNoise = sender("/noise");
+var sendMute = sender("/mute");
+var NOISE_LABEL = { breath: "The breath's pressure", lips: "The lips' tension" };
+var noiseId2 = (what2) => `noise${what2[0].toUpperCase()}${what2.slice(1)}`;
 var RISEN = [[0, 0], [0.05, 1]];
 var attack = curveEditor($2("attack"), { kind: attackKind({ from: 0, straight: false }), label: "Breath at a note's start", change: (points) => {
   if (!S?.model || busy) {
@@ -4980,7 +5305,7 @@ function build(s2) {
   V = s2.version;
   P = s2.played;
   impedance = null;
-  for (const box of ["tongue", "repeat", "lungs", "vibrato", "flutter", "hum", "excitorPlayer", "excitorInstrument", "excitorPhysics", "holes", "slideBox", "diagram"]) $2(box).replaceChildren();
+  for (const box of ["tongue", "repeat", "lungs", "vibrato", "noise", "flutter", "hum", "growl", "excitorPlayer", "excitorInstrument", "excitorPhysics", "holes", "slideBox", "diagram"]) $2(box).replaceChildren();
   drawnFor = null;
   $2("diagramNote").textContent = "";
   for (const k in controls) delete controls[k];
@@ -5052,9 +5377,22 @@ function build(s2) {
     if (P.breathing && $2("breathing").checked !== P.breathing.on) sendBreathing({ on: $2("breathing").checked });
   }
   const own2 = s2.vibratoOwn;
-  $2("vibratoNote").textContent = `${own2.width > 0 ? `the ${label(s2.model)} players' own: ${own2.width} ¢ at ${own2.rate} Hz` : `the ${label(s2.model)} is played without one${own2.reach ? `; ${own2.reach} ¢ where a style asks` : ""}`}; ${brass ? "in the lips' frequency" : "in the breath"}`;
+  $2("vibratoNote").textContent = `${own2.width > 0 ? `the ${label(s2.model)} players' own: ${own2.width} ¢ at ${own2.rate} Hz` : `the ${label(s2.model)} is played without one${own2.reach ? `; ${own2.reach} ¢ where a style asks` : ""}`}; ${brass ? "the whole embouchure swayed, as the mouthpiece is pressed into the lips and eased, as deep as the note is heard so wide" : "in the breath"}`;
   row($2("vibrato"), "vibratoWidth", "Width, cents", { min: L.width[0], max: L.width[1], step: 1, format: Math.round, change: (v) => sendVibrato({ width: v }) });
   row($2("vibrato"), "vibratoRate", "Rate, Hz", { min: L.rate[0], max: L.rate[1], step: 0.1, format: (v) => v.toFixed(1), change: (v) => sendVibrato({ rate: v }) });
+  if (s2.noise) {
+    const { profile: f, most } = s2.noise, dial2 = { min: 0, max: most, step: 0.05, format: (v) => v.toFixed(2) };
+    row($2("noise"), "noisePlayer", "The player's temperature", {
+      ...dial2,
+      change: (v) => sendNoise({ player: v }),
+      note: `Each kind's under it. Its power falling as 1/f^${f.beta} from ${f.low} to ${f.high} Hz, a ${f.tremor.hz} Hz tremor ${Math.round(100 * f.tremor.share)} % of it.`
+    });
+    for (const { what: what2, sd } of s2.noise.kinds) row($2("noise"), noiseId2(what2), NOISE_LABEL[what2], {
+      ...dial2,
+      change: (v) => sendNoise({ [what2]: v }),
+      note: `At 1, ${+(100 * sd).toPrecision(2)} % of the ${what2 === "breath" ? "pressure" : "tension"} asked.`
+    });
+  }
   if (L.flutterHz) {
     row($2("flutter"), "flutterHz", "Turns a second", {
       min: L.flutterHz[0],
@@ -5062,7 +5400,7 @@ function build(s2) {
       step: 0.5,
       format: (v) => v.toFixed(1),
       change: (v) => sendFlutter({ hz: v }),
-      note: `The renders' flutter, 25 by default: ours, "some 20 to 30 times a second", not yet measured of players.`
+      note: "The middle of the renders' flutters by default: 28 to 33 a second, as speakers' voiceless tongue-tip trills were measured (Elie & Laprie 2017); no wind player's measured."
     });
     row($2("flutter"), "flutterDepth", "Breath closed off", {
       min: L.flutterDepth[0],
@@ -5070,7 +5408,7 @@ function build(s2) {
       step: 0.01,
       format: (v) => v.toFixed(2),
       change: (v) => sendFlutter({ depth: v }),
-      note: "At each half turn this share of the breath closed off, let go at each whole one along the raised cosine, on whatever moves under it: an attack, a stroke, a breath."
+      note: "At each turn this share of the breath closed off and let go, its curve squared as the renders' is, on whatever moves under it: an attack, a stroke, a breath."
     });
     row($2("hum"), "humInterval", "Hummed, semitones from the note", {
       min: L.humInterval[0],
@@ -5086,9 +5424,35 @@ function build(s2) {
       step: 0.01,
       format: (v) => v.toFixed(2),
       change: (v) => sendHum({ level: v }),
-      note: "Its breath swung this much of itself at the hummed pitch: the renders' 0.2 by default."
+      note: "Its breath swung this much of itself by the voice, its partials falling as the square of their number: the renders' 0.2 by default."
     });
-    $2("techniqueNote").textContent = "A growl -- the hum's period doubled, with breath noise -- the hum's upper partials and the renders' sharper flutter wait on the engine's own source of them, an edit made once the flute's fit, running on the engine now, ends.";
+    if (L.growlInterval) {
+      row($2("growl"), "growlInterval", "Growled, semitones from the note", {
+        min: L.growlInterval[0],
+        max: L.growlInterval[1],
+        step: 0.01,
+        format: (v) => v.toFixed(2),
+        change: (v) => sendGrowl({ interval: v }),
+        note: "Folded into the player's voice as the hum is; an octave under by default, the middle of what the renders' growlers draw."
+      });
+      row($2("growl"), "growlLevel", "Level, × the breath", {
+        min: L.growlLevel[0],
+        max: L.growlLevel[1],
+        step: 0.01,
+        format: (v) => v.toFixed(2),
+        change: (v) => sendGrowl({ level: v }),
+        note: "Its breath swung this much of itself by the rough voice."
+      });
+      row($2("growl"), "growlRough", "Roughness", {
+        min: L.growlRough[0],
+        max: L.growlRough[1],
+        step: 0.01,
+        format: (v) => v.toFixed(2),
+        change: (v) => sendGrowl({ rough: v }),
+        note: "Its voice's period doubled, every other pulse this much weaker, with breath noise this rough: 0.3 to 0.9 in the renders."
+      });
+      $2("techniqueNote").textContent = "Played by the engine as the renders play them. A growl and a hum both on: the growl.";
+    } else $2("techniqueNote").textContent = "This dial was started before its growl: Commands/Start Live Dial.command again brings it.";
   } else $2("techniqueNote").textContent = "This dial was started before its flutter and hum: Commands/Start Live Dial.command again brings them.";
   const reach = s2.reach === 4 ? "a quarter to four" : `1/${s2.reach} to ${s2.reach}`, between = `each ${reach} times the rules' value at the pitch and dynamic; the box, its value.`;
   $2("playerLegend").textContent = brass ? "Lips and breath" : kind === "air" ? "Breath and jet" : "Breath and embouchure";
@@ -5122,6 +5486,8 @@ function build(s2) {
   $2("physicsSet").hidden = !$2("excitorPhysics").children.length;
   $2("fingerSet").hidden = brass && !s2.valves && !s2.slide;
   $2("fingerLegend").textContent = brass ? s2.slide ? "Slide" : "Valves" : "Fingers";
+  $2("muteSet").hidden = !s2.mutes?.length;
+  $2("mute").replaceChildren(new Option("none", ""), ...(s2.mutes ?? []).map((m2) => new Option(MUTE_NAME[m2] ?? m2, m2)));
   $2("fingerNote").textContent = s2.slide ? "The slide, at a position from 1 (in) to 7 and past: the note's, its players' chart's, placed where its partial plays it in tune; a pitch between them on the partial played there, glided to. Drawn here by itself, its lips held: the bore gives the pitch." : brass ? "Each valve, 0 pressed to 1 raised -- a half-valve between: the note's fingering, its players' chart's, until the pitch moves." : "Each hole's opening, 0 closed to 1 open: the pitch's, until the pitch moves.";
   if (s2.slide) {
     const c = row($2("slideBox"), "slide", "Slide position", {
@@ -5230,12 +5596,15 @@ function refresh() {
     $2("breathing").checked = P.breathing.on;
     controls.litres.set(P.breathing.litres);
     controls.inhale.set(1e3 * P.breathing.inhale);
-    const f = P.lungs.flow, src = S.lungs.airflow, b = S.breath, dialled = P.rules[b] > 0 && Math.abs(P.row[b] / P.rules[b] - 1) > 5e-3;
-    $2("lungsNote").textContent = `At ${P.dynamic} on ${etName(P.pitch)}${dialled ? ", at the breath dialled," : ""} its players spend ${f.toFixed(2)} L a second (` + (src.evidence === "measured" ? `measured of ${label(S.model)} players: Bouhuys 1965` : `borrowed from ${src.from.map(label).join(", ")} players' measured flows, Bouhuys 1965: none measured on the ${label(S.model)}`) + `): ${P.breathing.on ? `a breath of ${P.breathing.litres.toFixed(2)} L lasts ${(P.breathing.litres / f).toFixed(1)} s, then the note is let go, a breath taken in over ${Math.round(1e3 * P.breathing.inhale)} ms and the note attacked again as from rest -- as the strings' bow turns.` : "unbreathing, it blows one breath without end."}`;
+    lungsSaid();
   }
   $2("vibrating").checked = P.vibrato.on;
   controls.vibratoWidth.set(P.vibrato.width);
   controls.vibratoRate.set(P.vibrato.rate);
+  if (P.noise && controls.noisePlayer) {
+    controls.noisePlayer.set(P.noise.player);
+    for (const { what: what2 } of S.noise.kinds) controls[noiseId2(what2)].set(P.noise[what2]);
+  }
   if (P.flutter && controls.flutterHz) {
     $2("fluttering").checked = P.flutter.on;
     controls.flutterHz.set(P.flutter.hz);
@@ -5243,13 +5612,20 @@ function refresh() {
     $2("humming").checked = P.hum.on;
     controls.humInterval.set(P.hum.interval);
     controls.humLevel.set(P.hum.level);
-    const h = P.hummed, f = hzOf(P.pitch);
-    $2("humNote").textContent = h == null ? "" : `Hummed at ${h.toFixed(1)} Hz (${etName(12 * Math.log2(h / 440) + 69)}), the voice's fundamental alone; with the note's ${f.toFixed(1)} Hz, its difference tone ${Math.abs(f - h).toFixed(1)} Hz and its sum ${(f + h).toFixed(1)} Hz.` + (P.hum.on ? " The vibrato waits while it hums: the engine has one oscillator for both." : "");
+    if (P.growl && controls.growlInterval) {
+      $2("growling").checked = P.growl.on;
+      controls.growlInterval.set(P.growl.interval);
+      controls.growlLevel.set(P.growl.level);
+      controls.growlRough.set(P.growl.rough);
+    }
+    const growling = P.growl?.on && P.growled != null, h = growling ? P.growled : P.hummed, f = hzOf(P.pitch);
+    $2("humNote").textContent = h == null ? "" : `${growling ? "Growled" : "Hummed"} at ${h.toFixed(1)} Hz (${etName(12 * Math.log2(h / 440) + 69)}); with the note's ${f.toFixed(1)} Hz, its difference tone ${Math.abs(f - h).toFixed(1)} Hz and its sum ${(f + h).toFixed(1)} Hz.`;
   }
   if (controls.slide && P.slide != null) {
     controls.slide.set(positionOf(P.slide));
     controls.slide.note.textContent = `${Math.round(1e3 * P.slide)} mm of tube past first position, the hand ${Math.round(500 * P.slide)} mm out; moved as its players move it, over ${Math.round(1e3 * S.slide.least)} ms or at some ${S.slide.speed} m/s.`;
   }
+  muteSaid();
   fingered();
   for (const c of Object.values(controls)) {
     if (c.hole !== void 0) c.set(P.row[c.hole]);
@@ -5266,6 +5642,10 @@ function refresh() {
   }
   drawPlayers2();
   said();
+}
+function lungsSaid() {
+  const f = P.lungs.flow, players = P.lungs.players, src = S.lungs.airflow, b = S.breath, dialled = P.rules[b] > 0 && Math.abs(P.row[b] / P.rules[b] - 1) > 5e-3;
+  $2("lungsNote").textContent = `${f > 0 ? `As it was last blown its model let ${f.toFixed(3)} L a second into its bore (its engine's own flow)` : "Its model's flow is measured as it is blown"}; at ${P.dynamic} on ${etName(P.pitch)}${dialled ? ", at the breath dialled," : ""} its players spend ${players.toFixed(2)} L a second (` + (src.evidence === "measured" ? `measured of ${label(S.model)} players: Bouhuys 1965` : `borrowed from ${src.from.map(label).join(", ")} players' measured flows, Bouhuys 1965: none measured on the ${label(S.model)}`) + `). ${P.breathing.on ? `${f > 0 ? `A breath of ${P.breathing.litres.toFixed(2)} L lasts it ${(P.breathing.litres / f).toFixed(1)} s` : `A breath of ${P.breathing.litres.toFixed(2)} L spent`}, then the note is let go, a breath taken in over ${Math.round(1e3 * P.breathing.inhale)} ms and the note attacked again as from rest -- as the strings' bow turns.` : "Unbreathing, it blows one breath without end."}`;
 }
 var kPa = (v) => `${(v / 1e3).toFixed(1)} kPa`;
 var msOf = (v) => `${Math.round(v)} ms`;
@@ -5331,6 +5711,13 @@ function fingered() {
   $2("diagram").innerHTML = svg ?? "";
   $2("diagramNote").textContent = note;
 }
+var MUTE_NAME = { straight: "straight mute", cup: "cup mute", "harmon-stem-out": "harmon, stem out", "harmon-stem-in": "harmon, stem in", stopped: "stopped, the hand in the bell" };
+function muteSaid() {
+  if (!S.mutes?.length) return;
+  const m = S.muting, name2 = (k) => k ? MUTE_NAME[k] ?? k : "no mute";
+  if (document.activeElement !== $2("mute")) $2("mute").value = (m ? m.mute : S.mute) ?? "";
+  $2("muteNote").textContent = m?.error ? `The ${name2(m.mute)}'s body could not be made: ${m.error}. Still played with ${name2(S.mute)}.` : m ? `${name2(m.mute)[0].toUpperCase() + name2(m.mute).slice(1)} asked: ${m.ready ? "put in as soon as the breath is let go and the bell has rung down" : `its body being made: ${m.step} (${Math.round(m.seconds)} s)`}. Played with ${name2(S.mute)} until then.` : S.mute ? `Played with its ${name2(S.mute)} in: its body's bore the mute's ring, its hollow a closed branch at its tip.` : "Played open.";
+}
 function said() {
   const b = P.between, partialOf = (m) => {
     const k = S.notes.indexOf(m);
@@ -5338,7 +5725,7 @@ function said() {
   };
   if (S.kind === "lips") {
     const k = P.note ?? S.notes.indexOf(P.midi), none = S.unattacked?.[k] ?? [], a = P.attack;
-    $2("pitchSaid").textContent = P.lip == null ? "" : (P.slideDialled ? "The slide drawn by itself: the bore gives the pitch. " : "") + `Lips at ${P.lip.toFixed(1)} Hz: ` + (P.lipDialled ? "dialled by themselves; the bore picks the partial" : !b || b.share === 0 && b.low === b.high ? `partial ${partialOf(P.midi)}, as its lips sound it` : `between partial ${partialOf(b.low)}'s lips and ${partialOf(b.high)}'s, ${Math.round(100 * b.share)} % of the way; the bore picks the partial`) + (!a ? `. Blown from rest at ${P.dynamic}, no attack found it.` : a.share === 1 ? "." : `. Blown from rest: attacked from lips ${Math.abs(100 * (1 - a.share)).toFixed(0)} % ${a.share < 1 ? "lower" : "higher"}, settled after ${Math.round(1e3 * a.settleAfter)} ms.`) + (none.length ? ` Partial ${partialOf(P.midi)}'s attack finds it at no lips at ${none.join(", ")}.` : "");
+    $2("pitchSaid").textContent = P.lip == null ? "" : (P.slideDialled ? "The slide drawn by itself: the bore gives the pitch. " : "") + `Lips at ${P.lip.toFixed(1)} Hz: ` + (P.lipDialled ? "dialled by themselves; the bore picks the partial" : !b || b.share === 0 && b.low === b.high ? `partial ${partialOf(P.midi)}, as its lips sound it` : `between partial ${partialOf(b.low)}'s lips and ${partialOf(b.high)}'s, ${Math.round(100 * b.share)} % of the way; the bore picks the partial`) + (!a ? `. Blown from rest at ${P.dynamic}, no attack found it.` : a.share === 1 ? "." : `. Blown from rest: attacked from lips ${Math.abs(100 * (1 - a.share)).toFixed(0)} % ${a.share < 1 ? "lower" : "higher"}, settled after ${Math.round(1e3 * a.settleAfter)} ms.`) + (none.length ? ` Partial ${partialOf(P.midi)}'s attack finds it at no lips at ${none.join(", ")}.` : "") + (P.vibrato.on && P.vibrato.width > 0 ? P.vibratoHeard == null ? " Its vibrato's swing is not measured on this body." : P.vibratoHeard < P.vibrato.width - 0.05 ? ` Its vibrato heard ${P.vibratoHeard.toFixed(1)} ¢ wide, the widest its partial holds.` : "" : "");
     return;
   }
   $2("pitchSaid").textContent = !b ? "" : b.sounds == null ? `${etName(P.pitch)}: the charted note, as the rules play it.` : `${b.share > 0 && b.share < 1 ? `Between the charted ${noteName(b.low)} and ${noteName(b.high)}, ${Math.round(100 * b.share)} % of the way` : `The charted ${noteName(b.share < 1 ? b.low : b.high)}`}${Math.abs(b.sounds - P.pitch) > 5e-3 ? `; the nearest it reaches, ${etName(b.sounds)}.` : "."}`;
@@ -5385,11 +5772,19 @@ $2("breathing").onchange = () => {
 $2("vibrating").onchange = () => sendVibrato({ on: $2("vibrating").checked });
 $2("fluttering").onchange = () => sendFlutter({ on: $2("fluttering").checked });
 $2("humming").onchange = () => sendHum({ on: $2("humming").checked });
+$2("growling").onchange = () => sendGrowl({ on: $2("growling").checked });
+$2("mute").onchange = () => {
+  if (S?.model && !busy) sendMute({ mute: $2("mute").value || null }).finally(poll);
+};
 var blow = async () => {
   if (!S?.model || busy) return;
   sound2();
   const r = await post("/blow", { on: !P.blowing });
   r.error ? say(r.error) : r.pitch !== void 0 && took(r);
+  if (P?.blowing) {
+    clearTimeout(polling);
+    polling = setTimeout(poll, 1e3);
+  }
 };
 var tongueNow = async () => {
   if (!P?.blowing || busy) return;
@@ -5399,6 +5794,7 @@ var tongueNow = async () => {
 $2("blow").onclick = blow;
 $2("tongueNow").onclick = tongueNow;
 $2("soloSeed").value = DEFAULT_SEED;
+var musebot2 = musebotControls({ box: $2("personality"), seed: $2("soloSeed"), seconds: $2("soloSeconds") });
 $2("solo").onclick = async () => {
   if (!S?.model || busy) return;
   const on = !S.soloist?.playing;
@@ -5406,7 +5802,7 @@ $2("solo").onclick = async () => {
     sound2();
     $2("soloSaid").textContent = "Its band composes the piece ...";
   }
-  const r = await post("/soloist", on ? { on, seed: Number($2("soloSeed").value), seconds: Number($2("soloSeconds").value) } : { on });
+  const r = await post("/soloist", on ? { on, ...musebot2.given() } : { on });
   if (r.error) {
     $2("soloSaid").textContent = r.error;
     return;
@@ -5414,18 +5810,19 @@ $2("solo").onclick = async () => {
   if (r.pitch !== void 0) took(r);
   if (r.soloist !== void 0) {
     S = { ...S, soloist: r.soloist };
-    soloShown(S);
+    soloShown2(S);
   }
   poll();
 };
 var clock = (x2) => `${Math.floor(x2 / 60)}:${String(Math.floor(x2 % 60)).padStart(2, "0")}`;
-function soloShown(s2) {
+function soloShown2(s2) {
   const playing = Boolean(s2.soloist?.playing), said2 = s2.soloist?.said;
   $2("solo").textContent = playing ? "■ Stop the musebot" : "▶ A musebot plays";
   $2("solo").classList.toggle("on", playing);
   $2("solo").disabled = busy;
+  musebot2.show(s2.player, said2?.personality);
   if (!said2) return;
-  $2("soloSaid").textContent = `${said2.player} on the ${label(s2.model ?? said2.instrument)}, seed ${said2.seed}: ${playing ? "" : "played "}${clock(Math.min(said2.at, said2.seconds))} of ${clock(said2.seconds)}, ${said2.notes} notes` + (said2.unplayed.length ? `; ${said2.unplayed.length} not played here (${said2.unplayed[0].why})` : "") + (said2.late ? `; ${said2.late} came late` : "") + (said2.refused.length ? `; ${said2.refused.length} refused (${said2.refused.at(-1).error})` : "") + ".";
+  $2("soloSaid").textContent = `${said2.player} on the ${label(s2.model ?? said2.instrument)}, seed ${said2.seed}: ${playing ? "" : "played "}${clock(Math.min(said2.at, said2.seconds))} of ${clock(said2.seconds)}, ${said2.notes} notes` + (said2.unplayed.length ? `; ${said2.unplayed.length} not played here (${said2.unplayed[0].why})` : "") + (said2.late ? `; ${said2.late} came late` : "") + (said2.refused.length ? `; ${said2.refused.length} refused (${said2.refused.at(-1).error})` : "") + (said2.personality ? `; its register ${etName(said2.personality.register[0])} to ${etName(said2.personality.register[1])}, its motif ${said2.personality.motif}` : "") + ".";
 }
 $2("keep").onclick = async () => {
   const r = await post("/keep", { words: $2("words").value });
@@ -5668,6 +6065,27 @@ setInterval(() => {
   $2("engine").textContent = `${pace ? `${Math.round(100 * pace)} % of real time` : "--"}${S.threads > 1 ? ` on ${S.threads} cores` : ""}; ${(buffered / RATE * 1e3).toFixed(0)} ms ahead${short > 0 ? `, ${short.toFixed(0)} ms short in the last ${SHORT_SECONDS} s` : ""}`;
   draw();
 }, 150);
+async function settings2() {
+  const r = await fetch("/winds/settings", { cache: "no-store" }), got = await r.json();
+  if (!r.ok) throw new Error(got.error);
+  return {
+    model: got.model,
+    settings: got,
+    words: $2("words").value,
+    heard: { hz: heard, level: $2("level").textContent, heardAs: $2("heard").textContent, blowing: Boolean(P?.blowing), pace, threads: S?.threads ?? null }
+  };
+}
+async function load2(file, { wait = 120 } = {}) {
+  for (let k = 0; k < wait * 4 && !(S?.model === file.model && !busy && !S.loading && !S.muting && V === S.version); k++) await new Promise((go) => setTimeout(go, 250));
+  if (S?.model !== file.model || busy) throw new Error(`the ${label(file.model)} was not taken up`);
+  const r = await post("/settings", { settings: file.settings });
+  if (r.error) throw new Error(r.error);
+  if (r.pitch !== void 0) took(r);
+  if (file.words) $2("words").value = file.words;
+  if (r.player) S = { ...S, player: r.player };
+  poll();
+  return r.loaded;
+}
 async function take2(model2, { status: el }) {
   status = el;
   active = true;
@@ -5702,6 +6120,29 @@ function keys2(e) {
     e.preventDefault();
     blow();
   } else if (e.key === "t") tongueNow();
+}
+
+// public/shared/dial-settings.js
+var SETTINGS_FORMAT = "musebots-live-dial-settings";
+var SETTINGS_VERSION = 1;
+var FAMILIES = ["strings", "winds"];
+function settingsFile({ family: family3, model: model2, settings: settings3, words: words2 = "", heard: heard2 = null, page = null, at = /* @__PURE__ */ new Date() }) {
+  if (!FAMILIES.includes(family3) || typeof model2 !== "string" || !settings3 || typeof settings3 !== "object") throw new Error("a family, its instrument and its settings");
+  return `${JSON.stringify({ format: SETTINGS_FORMAT, version: SETTINGS_VERSION, saved: at.toISOString(), family: family3, model: model2, words: words2, heard: heard2, page, settings: settings3 }, null, 1)}
+`;
+}
+var settingsFileName = (model2, at = /* @__PURE__ */ new Date()) => `${model2} ${at.toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "")} settings.json`;
+function readSettingsFile(text) {
+  let got;
+  try {
+    got = JSON.parse(text);
+  } catch {
+    throw new Error("not a settings file: not JSON");
+  }
+  if (got?.format !== SETTINGS_FORMAT) throw new Error(`not a settings file (its format not "${SETTINGS_FORMAT}")`);
+  if (!(got.version >= 1 && got.version <= SETTINGS_VERSION)) throw new Error(`a settings file of version ${got.version}: this page reads to ${SETTINGS_VERSION}`);
+  if (!FAMILIES.includes(got.family) || typeof got.model !== "string" || !got.settings || typeof got.settings !== "object") throw new Error("a settings file with no family, instrument or settings");
+  return got;
 }
 
 // native/live/live.html
@@ -5760,5 +6201,44 @@ async function main() {
   const all = [...families2.strings.instruments, ...families2.winds.instruments.map((i) => i.model)];
   choose(all.includes(asked2) ? asked2 : families2.first);
 }
-window.live = { strings: strings_exports, winds: winds_exports, choose };
+var settingsSaid = (text) => {
+  $3("settingsSaid").textContent = text;
+};
+async function saveSettings() {
+  if (!family2) throw new Error("no instrument yet");
+  const at = /* @__PURE__ */ new Date(), { model: m, settings: settings3, words: words2, heard: heard2 } = await DIALS[family2].settings();
+  const text = settingsFile({ family: family2, model: m, settings: settings3, words: words2, heard: heard2, page: location.href, at });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+  a.download = settingsFileName(m, at);
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1e3);
+  return { text, name: a.download };
+}
+async function loadSettings(text) {
+  const file = readSettingsFile(text);
+  if (file.model !== model) {
+    settingsSaid(`Taking up the ${label2(file.model)} ...`);
+    await choose(file.model);
+  }
+  settingsSaid(`Making its settings, saved ${new Date(file.saved).toLocaleString()} ...`);
+  const { made, refused } = await DIALS[file.family].load(file);
+  return { file, made, refused };
+}
+$3("saveSettings").onclick = () => saveSettings().then(({ name: name2 }) => settingsSaid(`Saved as ${name2}.`), (error) => settingsSaid(`Not saved: ${error.message}`));
+$3("loadSettings").onclick = () => $3("settingsFile").click();
+$3("settingsFile").onchange = async () => {
+  const chosen2 = $3("settingsFile").files[0];
+  $3("settingsFile").value = "";
+  if (!chosen2) return;
+  try {
+    const { file, made, refused } = await loadSettings(await chosen2.text());
+    settingsSaid(`${chosen2.name}: the ${label2(file.model)}'s settings made (${made})${refused.length ? `; ${refused.length} refused: ${refused.map((r) => `${r.path} (${r.error})`).join("; ")}` : ""}${file.words ? ` -- "${file.words}"` : ""}.`);
+  } catch (error) {
+    settingsSaid(`${chosen2.name} not loaded: ${error.message}`);
+  }
+};
+window.live = { strings: strings_exports, winds: winds_exports, choose, saveSettings, loadSettings };
 main();

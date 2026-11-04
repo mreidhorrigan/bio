@@ -36,6 +36,8 @@ var sources_default = {
   about: "Every source a registry value cites, once (registry/README.md). literature: a published measurement or standard, its DOI checked with Crossref where it has one; vernacular: a maker's chart, a retailer's page, players' common knowledge, looked up, with the page and a saved copy; other: Printables, a dataset, an engine's own data, a CT, with where it is and its licence. Saved copies are in the trunk's research-downloads/.",
   sources: {
     "fletcher-rossing-1998": { kind: "literature", authors: "N. H. Fletcher, T. D. Rossing", title: "The Physics of Musical Instruments", year: 1998, doi: "10.1007/978-0-387-21603-4", edition: "2nd", publisher: "Springer" },
+    "weinzierl-2017": { kind: "literature", authors: "S. Weinzierl, M. Vorländer, G. Behler, F. Brinkmann, H. von Coler, E. Detzner, J. Krämer, A. Lindau, M. Pollow, F. Schulz, N. R. Shabtai", title: "A Database of Anechoic Microphone Array Measurements of Musical Instruments", year: 2017, doi: "10.14279/depositonce-5861.2", url: "https://depositonce.tu-berlin.de/handle/11303/6305.2", note: "a published dataset, its DOI checked on DataCite (not on Crossref); its recordings in the trunk's research-downloads/tu-berlin-anechoic/, read by native/openwind/turbulence-fit.mjs and tools/sound_power_table.py" },
+    "fletcher-1975": { kind: "literature", authors: "N. H. Fletcher", title: "Acoustical correlates of flute performance technique", year: 1975, doi: "10.1121/1.380430", in: "The Journal of the Acoustical Society of America 57(1), 233-237", note: "its laws as render/synthesis/workers/openwind_worker.py quotes them; the paper not yet fetched (research/SOURCES_TO_FETCH.md)" },
     "fletcher-1964": { kind: "literature", authors: "H. Fletcher", title: "Normal Vibration Frequencies of a Stiff Piano String", year: 1964, doi: "10.1121/1.1918933", in: "JASA 36(1), 203-209" },
     "schelleng-1973": { kind: "literature", authors: "J. C. Schelleng", title: "The bowed string and the player", year: 1973, doi: "10.1121/1.1913322", in: "JASA 53(1), 26-41" },
     "schoonderwaldt-2009": { kind: "literature", authors: "E. Schoonderwaldt", title: "The player and the bowed string: Coordination of bowing parameters in violin and viola performance", year: 2009, doi: "10.1121/1.3203209", in: "JASA 126(5), 2709-2720" },
@@ -160,7 +162,7 @@ var equations_default = {
 var modules_default = {
   schema: "musebots.registry-modules/1",
   about: "The modules whose values are the registry's (registry/README.md): an owned module holds no number about an instrument, a player, the physics or a method -- the registry's test reads it -- and a pending one is still to move, listed in REGISTRY.md.",
-  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js"],
+  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js"],
   pending: ["public/shared/performers/vibrato.js", "public/shared/performers/instrument-ranges.js"]
 };
 
@@ -1855,7 +1857,7 @@ var bowed_default2 = {
 // registry/objects/winds.json
 var winds_default = {
   schema: "musebots.registry-objects/1",
-  about: "The woodwinds as a tree of types (registry/README.md), begun with what their players share: a vocal tract upstream of the reed (players/winds.json), one model whose values are its players' -- measured of clarinettists, every reed player's until their own are measured. Their bodies are still render/synthesis/geometry's (research/REGISTRY_PLAN.md, the woodwinds' step).",
+  about: "The winds, woodwinds and brass, as a tree of types (registry/README.md), begun with what their players share: a vocal tract upstream of the reed (players/winds.json), one model whose values are its players' -- measured of clarinettists, every reed player's until their own are measured. Their bodies are still render/synthesis/geometry's (research/REGISTRY_PLAN.md, the woodwinds' step).",
   nodes: {
     "reed-woodwind": {
       is: "instrument",
@@ -1905,6 +1907,44 @@ var winds_default = {
     "baritone-saxophone": {
       is: "reed-woodwind",
       about: "The baritone saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+    },
+    "jet-woodwind": {
+      is: "instrument",
+      abstract: true,
+      about: "A woodwind sounded by its player's jet across an edge: its blowing pressure follows the note's frequency as flutists were measured blowing it (players/winds.json; Fletcher 1975)."
+    },
+    flute: {
+      is: "jet-woodwind",
+      about: "The concert flute in C."
+    },
+    "alto-flute": {
+      is: "jet-woodwind",
+      about: "The alto flute in G, the flute scaled to its bore (tools/design_openwind_woodwind.py flute_like): its players' law the flutists' until its own is measured."
+    },
+    piccolo: {
+      is: "jet-woodwind",
+      about: "The piccolo in C, the flute scaled to its bore: its players' law the flutists' until its own is measured."
+    },
+    "lip-reed": {
+      is: "instrument",
+      abstract: true,
+      about: "A brass instrument, sounded by its player's lips buzzing into its mouthpiece: the flow between them the reed's, its lips opening outward (native/openwind src/kernel.rs T_REED, T_LIPS). Its bodies are render/synthesis/geometry's (tools/save_brass_body.py)."
+    },
+    trumpet: {
+      is: "lip-reed",
+      about: "The B-flat trumpet."
+    },
+    trombone: {
+      is: "lip-reed",
+      about: "The tenor trombone, its slide moving."
+    },
+    horn: {
+      is: "lip-reed",
+      about: "The French horn, its bore a horn in F (Kemp 2002)."
+    },
+    tuba: {
+      is: "lip-reed",
+      about: "The tuba in C (an Alexander CC, Campbell et al. 2021)."
     }
   }
 };
@@ -1912,7 +1952,7 @@ var winds_default = {
 // registry/players/winds.json
 var winds_default2 = {
   schema: "musebots.registry-players/1",
-  about: "What the players of the woodwinds do, on the objects' tree (registry/README.md): a node's values are its players'; one a node does not give, its parent's.",
+  about: "What the players of the winds do, the woodwinds' and the brass's, on the objects' tree (registry/README.md): a node's values are its players'; one a node does not give, its parent's.",
   nodes: {
     "reed-woodwind": {
       values: {
@@ -1941,6 +1981,24 @@ var winds_default2 = {
             contact: { value: [[0.25, 0.115], [0.5, 0.347]], unit: "s", kind: "literature", source: "pamies-vila-hofmann-chatziioannou-2018", at: "3.1.2; Table 1", note: "[the notes' inter-onset interval, the tongue's contact with the reed]: clarinettists' staccato eighths at 120 and 60 bpm, the note stopped by the tongue (their technique I); sd 31 and 27 ms" },
             silence: { value: [[0.25, 0.084], [0.5, 0.302]], unit: "s", kind: "literature", source: "pamies-vila-hofmann-chatziioannou-2018", at: "3.1.2; Table 1", note: "[the notes' inter-onset interval, the silence between notes]: the same staccato eighths at 120 and 60 bpm, stopped by the tongue (technique I); sd 37 and 43 ms" }
           }
+        },
+        flow: {
+          turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow through the reed's channel turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a clarinet's reed channel's flow, its level measured", date: "2026-11-03", found: "none measured: J. O. Smith, Physical Audio Signal Processing, 'Single-Reed Theory' -- synthesis models' noise modulated by the reed 'despite a lack of firm basis in acoustic measurements to date', turbulence near the reed's closing the basic model's chief omission; a reed channel's flow laminar-like below a Reynolds number of about 4000, seldom reached in saxophones and clarinets (TU Delft repository); a synthesis patent's noise following the breath, its level unmeasured" }] }
+        }
+      }
+    },
+    "lip-reed": {
+      values: {
+        flow: {
+          turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow between the lips turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the lips' slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017's trumpet; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a brass player's lips' flow, its level measured or modelled", date: "2026-11-03", found: "none measured: C. Vergez & X. Rodet's trumpet model (ICMC 2001), the jet out of the lips losing its energy to turbulence in the mouthpiece's cup, no noise level; Adachi & Sato's lips, and Giordano's (ISMA 2017) Navier-Stokes flow over them, no level given" }] }
+        }
+      }
+    },
+    "jet-woodwind": {
+      values: {
+        breath: {
+          perHz: { value: 0.8, unit: "Pa/Hz", kind: "literature", source: "fletcher-1975", at: '"p = 0.008 v" mbar at a note of v Hz', note: "four flutists' blowing pressure rising with the note's frequency, its jet's speed sqrt(2p/rho): 20 m/s at D4, 40 at D6 (the same number as render/synthesis/workers/openwind_worker.py WOODWINDS jet pressure, the worker's own until it reads the registry)" },
+          ffOverPp: { range: [1, 2], unit: "", kind: "literature", source: "fletcher-1975", note: "two of his four flutists raising their pressure about twice from pp to ff, two holding it" }
         }
       }
     }
@@ -2381,6 +2439,41 @@ var levels_default = {
   }
 };
 
+// registry/method/personality.json
+var personality_default = {
+  schema: "musebots.registry-methods/1",
+  about: "A player's personality (public/shared/performers/personality.js; docs/PLAYER_PERSONALITY.md): how far it pushes its instrument's idiom and what lines it prefers, each lever a draw from its seed within the range here, or given (a spec's, an LLM's later). Every range holds the line planner's own value (line.js LINE, wind-line.js WIND_LINE, flute_clodbot.js FLUTE), so that a personality is a place among the planner's settings, never outside them.",
+  methods: {
+    personality: {
+      about: "The levers, each a share 0 to 1 drawn from the player's seed (its ensemble's seed, its identity and its instrument), read across its range here; daring is the one that reaches toward the instrument's limits (its facts, instrument-facts.js), tone the one from a clean tone to its extremes -- its techniques, its rhythmic grammars and its ranges in its tone's parameters -- the rest its style.",
+      source: "ours",
+      settings: {
+        dynamicSteps: { value: 2, unit: "marks", kind: "setting", reason: "how many dynamic marks the most daring player goes past the dynamics comfortable in a register (wind-line.js WIND_LINE lowMost f and highLeast p): to fff low and ppp high, the scale's ends (dynamics.js)" },
+        shortest: { range: [0.08, 0.12], unit: "s", kind: "setting", reason: "its quickest note, the most daring's the planner's own (line.js LINE.shortest: a wind's double tonguing near it), the least daring's a single-tongued note's at some 8 notes a second (Bertsch & Hoole 2014, players-ranges.mjs repeatRate)" },
+        phraseRange: { range: [12, 18], unit: "semitones", kind: "setting", reason: "a phrase's widest range, about the planner's 14 (line.js LINE.phraseRange)" },
+        density: { range: [0.25, 0.5], unit: "share", kind: "setting", reason: "its density among equals, about the flute's 0.35 (flute_clodbot.js FLUTE)" },
+        loudness: { range: [0.4, 0.6], unit: "share", kind: "setting", reason: "its loudness among equals, about the flute's 0.5" },
+        fioriture: { range: [0.2, 0.55], unit: "share", kind: "setting", reason: "its fioriture as a soloist, about the flute's 0.35" },
+        leap: { range: [0.08, 0.32], unit: "share", kind: "setting", reason: "a leap's chance in its motif, about the planner's 0.18 (line.js LINE.leap)" },
+        slurs: { range: [2, 6], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, about the planner's 4 (LINE.slurMost)" },
+        motifFewest: { range: [3, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
+        motifMost: { range: [5, 7], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest" },
+        runs: { range: [3, 6], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, about the planner's 4 (LINE.runMost)" },
+        rests: { range: [0.3, 0.7], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
+        commas: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, about the planner's 0.2 (LINE.commaShare)" },
+        landing: { range: [0.4, 1], unit: "share", kind: "setting", reason: "how high above its floor a cadence may land, a share of its span, about the planner's 0.75 (LINE.landing's upper end)" },
+        grammarLeast: { value: 0.15, unit: "share", kind: "setting", reason: "the least weight a motif's grammar is given, against the most preferred's 1, so that every grammar stays open to it (line.js chooseMotif)" },
+        quoting: { range: [0.5, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: given them, it prefers them more often than not" },
+        techniques: { range: [0, 0.6], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's three phrases in five, each still the instrument's own" },
+        toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
+        vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
+        harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
+        rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
+      }
+    }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x = 1, y = b / a;
@@ -2467,7 +2560,8 @@ var FILES = Object.freeze({
   "players/winds.json": winds_default2,
   "stimuli/stimuli.json": stimuli_default,
   "method/strings.json": strings_default,
-  "method/levels.json": levels_default
+  "method/levels.json": levels_default,
+  "method/personality.json": personality_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
@@ -3699,6 +3793,7 @@ var FELT_TEMPO = Object.freeze({
 });
 
 // public/shared/opening-time.js
+var DEFAULT_SEED = 20260916;
 var OPENING_TIME = Object.freeze({
   // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
   phraseSeconds: Object.freeze([5, 13]),
@@ -3743,8 +3838,10 @@ var LINE = Object.freeze({
   climaxSpan: Object.freeze([8, 11]),
   phraseRange: 14,
   // The silence after the cadence: a share of the bar's last group, at least a catch breath (s), at most a share of the
-  // held tone. The comma after the idea and its repetition: a share of their last note, where it is long enough (s).
+  // held tone, written on the group's half beats (the share among them nearest its own: a player's own share drawn,
+  // personality.js). The comma after the idea and its repetition: a share of their last note, where it is long enough (s).
   restShare: 0.5,
+  restDivisions: 2,
   restLeast: 0.4,
   restMostShare: 0.5,
   commaShare: 0.2,
@@ -3821,6 +3918,19 @@ var FNV_SPAN = 2 ** 32;
 var TWO32 = 2 ** 32;
 var TWO20 = 2 ** 20;
 var TWO52 = 2 ** 52;
+
+// public/shared/performers/player-noise.js
+var NOISED = (path) => player("instrument", `noise.${path}`);
+var ACTION_PROFILE = Object.freeze({
+  beta: NOISED("action.beta"),
+  low: NOISED("action.low"),
+  high: NOISED("action.high"),
+  tremor: Object.freeze({ hz: NOISED("tremor.hz"), q: NOISED("tremor.q"), share: NOISED("tremor.share") })
+});
+var WINDS_NOISE = Object.freeze({
+  kinds: Object.freeze({ breath: { sd: NOISED("breath.pressure"), path: ["breath", "pressure"] }, lips: { sd: NOISED("lips.tension"), path: ["lips", "tension"] } }),
+  profile: ACTION_PROFILE
+});
 
 // public/shared/performers/physical-strings-calibration.json
 var physical_strings_calibration_default = {
@@ -7650,6 +7760,7 @@ var wind_multiphonics_default = {
     "e-flat-clarinet": [],
     "bass-clarinet": [],
     "english-horn": [],
+    contrabassoon: [],
     "soprano-saxophone": [],
     "alto-saxophone": [],
     "tenor-saxophone": [],
@@ -7668,6 +7779,7 @@ var measuredOf = (instrument, measured3) => Object.freeze((measured3 ?? []).map(
   diagram: Object.freeze({ instrument, keys: m.keys })
 })));
 var WIND_MULTIPHONICS = Object.freeze(Object.fromEntries(Object.entries(wind_multiphonics_default.instruments).map(([instrument, measured3]) => [instrument, measuredOf(instrument, measured3)])));
+var FLUTTER_HZ = Object.freeze([28, 33]);
 var WIND_TECHNIQUE_WORDS = Object.freeze({ hum: "hum", growl: "growl", flutter: "flz.", mute: null, multiphonic: MULTIPHONIC_WORD });
 var MUTE_WORDS = Object.freeze({
   straight: "con sord. (straight)",
@@ -15865,7 +15977,6 @@ var [SEMITONES_RATIO, RATIO_SEMITONES, PLACE_SEMITONES, FINGER_PLACE, CENTS_SEMI
   "helmholtz-force-scale",
   "db-gain"
 ].map(equationOf);
-var NOISED = (path) => player("instrument", `noise.${path}`);
 var PLAYER_NOISE = Object.freeze({
   kinds: Object.freeze({
     force: { sd: NOISED("bow.force"), path: ["bow", "force"] },
@@ -15873,7 +15984,7 @@ var PLAYER_NOISE = Object.freeze({
     contact: { sd: NOISED("bow.contact"), path: ["bow", "contact"] },
     finger: { sd: NOISED("finger.pitch"), path: ["finger", "pitch"] }
   }),
-  profile: Object.freeze({ beta: NOISED("action.beta"), low: NOISED("action.low"), high: NOISED("action.high"), tremor: { hz: NOISED("tremor.hz"), q: NOISED("tremor.q"), share: NOISED("tremor.share") } })
+  profile: ACTION_PROFILE
 });
 var noiseFields = (what, temperature) => {
   const { sd } = PLAYER_NOISE.kinds[what], { beta, low, high, tremor } = PLAYER_NOISE.profile;
@@ -16148,10 +16259,10 @@ var WIND_VIBRATO = Object.freeze({
   oboe: Object.freeze({ rate: 5, width: 22 }),
   bassoon: Object.freeze({ rate: 5, width: 22 }),
   clarinet: Object.freeze({ rate: 5, width: 0 }),
-  horn: Object.freeze({ rate: 5, width: 0 }),
-  trumpet: Object.freeze({ rate: 5.5, width: 10 }),
-  trombone: Object.freeze({ rate: 5, width: 0 }),
-  tuba: Object.freeze({ rate: 5, width: 0 }),
+  horn: Object.freeze({ rate: 4.7, width: 0 }),
+  trumpet: Object.freeze({ rate: 4.8, width: 15.1 }),
+  trombone: Object.freeze({ rate: 4.55, width: 0 }),
+  tuba: Object.freeze({ rate: 4.7, width: 0 }),
   // (The rest of the woodwinds: the English horn's and contrabassoon's as their family's; the E-flat and bass clarinets'
   // none, as the clarinet's; the saxophones' their jaw's, a classical saxophonist's, wider than a double reed's.)
   "english-horn": Object.freeze({ rate: 5, width: 22 }),
@@ -16163,7 +16274,7 @@ var WIND_VIBRATO = Object.freeze({
   "tenor-saxophone": Object.freeze({ rate: 5, width: 26 }),
   "baritone-saxophone": Object.freeze({ rate: 5, width: 22 })
 });
-var WIND_VIBRATO_REACH = Object.freeze({ clarinet: 20, "e-flat-clarinet": 20, "bass-clarinet": 16, horn: 16, trombone: 30, tuba: 16 });
+var WIND_VIBRATO_REACH = Object.freeze({ clarinet: 20, "e-flat-clarinet": 20, "bass-clarinet": 16, horn: 16, trombone: 15.7, tuba: 16 });
 var BOWED_VIBRATO = { violin: MEASURED_VIBRATO.violin, viola: AUTHORED_VIBRATO.viola, cello: AUTHORED_VIBRATO.cello, contrabass: MEASURED_VIBRATO.contrabass };
 var of = (key, name) => bySize(Object.fromEntries(Object.entries(BOWED_VIBRATO).map(([n, v]) => [n, v[key]])), name);
 var kinds = {
@@ -16203,6 +16314,13 @@ var FAMILY = {
   tuba: "brass",
   ...Object.fromEntries(GIVEN_BOWED.map((i) => [i.name, "strings"]))
 };
+
+// public/shared/performers/personality.js
+var LATER = Object.freeze(["tone"]);
+var LEVERS = Object.freeze(["daring", "density", "loudness", "fioriture", "leap", "slurs", "motifLength", "runs", "rests", "commas", "landing", "phraseRange", "quoting", ...LATER]);
+var TONE_RANGES = Object.freeze(["vibrato", "depth", "pressure", "contact"]);
+var RANGE = "personality";
+var ORDINARY = Object.freeze({ vibrato: () => 1 / setting(RANGE, "vibratoMost"), depth: () => 0, pressure: () => 1 / 2, contact: () => 1 / 2 });
 
 // public/shared/performers/sound-power.json
 var sound_power_default = {
@@ -17013,6 +17131,7 @@ var WIND_SLIDE_SPEED = Object.freeze({
   "tenor-saxophone": 10,
   "baritone-saxophone": 10
 });
+var MODEL_NAMES = Object.freeze({ alto: "alto-flute" });
 var WIND_LINE = Object.freeze({
   ...LINE,
   // How much faster a dynamic spends the breath (authored), the loudest dynamic the low register plays and the softest
@@ -24808,6 +24927,116 @@ var PLAYERS_SPAN = Object.freeze({
 });
 var MOST2 = brass_lips_targets_default.trumpet.most.mouthPressure;
 
+// render/synthesis/geometry/brass-mutes.json
+var brass_mutes_default = {
+  about: "Each brass instrument's mutes as its players' kit has them, mm (render/synthesis/src/brass-mutes.mjs muteIn sets each in its bell; NESS's and OpenWInD's bodies both take them). A straight mute: a cone closed at its wide end, open at its narrow tip, held in the bell by its corks -- inserted until they touch, where the bell is narrowest about it -- the sound out through the ring they leave, its hollow a resonator opening into the bell at its tip. A cup mute: a straight mute with a bowl round its wide end, the sound out of the bell into the bowl and out through the ring between its rim and the bell. A harmon: sealed in the bell by its cork, the sound through its chamber and out of its front hole, or the stem's tube and little bell in it. A stopping hand: the bell closed where it is `cork` wide to a ring `gap` wide. Each dimension {value, source}, and where nobody measured it a `range` -- what mutes of its kind are made within -- the value fitted to what was measured of mutes in their bells (render/synthesis/tools/fit_mutes.py: `fitted`, with its data) or, nothing measured to fit it to, the range's middle, said so (`chosen`).",
+  instruments: {
+    trumpet: {
+      straight: {
+        kind: "straight",
+        length: { value: 160, source: "Denis Wick DW5504 trumpet straight mute, spun aluminium: 16 x 10.01 x 10.01 cm (its dealers' listings: johnpacker.co.uk/products/denis-wick-dw5504-bb-trumpet-bb-cornet-straight-mute, lamusainstrumentos.es/denis-wick-5504-trumpet-straight-mute.html; read 3 November 2026)" },
+        base: { value: 100, source: "Denis Wick DW5504, as `length`" },
+        tip: { value: 27, range: [20, 34], chosen: true, source: "its open tip's outer diameter: unmeasured (no maker gives it); within what the bell holds ahead of its corks" },
+        gap: { value: 3.5, range: [2, 5], chosen: true, source: "its corks' thickness, the ring they leave: unmeasured; cork strip as mutes are corked" },
+        wall: { value: 1, range: [0.6, 1.5], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      },
+      cup: {
+        kind: "cup",
+        length: { value: 150, range: [130, 170], chosen: true, source: "its cone's length to its bowl's bottom: unmeasured (Denis Wick DW5531 adjustable cup mute, 19.05 x 11.43 x 11.43 cm overall with its bowl: its dealers' listings, woodsysmusic.com/products/denis-wick-dw5531-adjustable-cup-mute-for-bb-trumpet-or-cornet; read 3 November 2026)" },
+        base: { value: 90, range: [80, 100], chosen: true, source: "its cone's widest, where its bowl joins it: unmeasured" },
+        tip: { value: 27, range: [20, 34], chosen: true, source: "as its straight mute's" },
+        gap: { value: 3.5, range: [2, 5], chosen: true, source: "as its straight mute's" },
+        wall: { value: 1, range: [0.6, 1.5], chosen: true, source: "as its straight mute's" },
+        cup: { value: 114, source: "Denis Wick DW5531's bowl, its widest: 11.43 cm (as `length`)" },
+        depth: { value: 30, range: [15, 45], chosen: true, source: "its bowl's depth past the bell's rim: unmeasured" },
+        overlap: { value: 10, range: [4, 20], chosen: true, source: "how far its bowl's rim reaches back over the bell, the length of the ring the sound leaves by: unmeasured" },
+        rimGap: { value: 6, range: [2, 12], chosen: true, source: "the ring between its bowl's rim and the bell, as it is set (an adjustable cup mute's): unmeasured; Martinez-Montejo et al. 2016 (ICA2016-399) measured a trumpet cup mute's first resonance in the bell near 1200 Hz, Campbell, Gilbert & Myers 2021 (doi:10.1121/at.2021.17.2.13) that it depends critically on this gap" }
+      },
+      "harmon-stem-out": {
+        kind: "harmon",
+        cork: { value: 52, range: [45, 60], chosen: true, source: "the bell's width where its cork seals it: unmeasured" },
+        chamber: { value: [95, 85], range: [[85, 105], [70, 100]], chosen: true, source: "its chamber's diameter and length: unmeasured" },
+        exit: { value: [22, 12], range: [[18, 28], [8, 16]], chosen: true, source: "its front hole's diameter and its neck's length, stem out: unmeasured" }
+      },
+      "harmon-stem-in": {
+        kind: "harmon",
+        cork: { value: 52, range: [45, 60], chosen: true, source: "as stem out" },
+        chamber: { value: [95, 85], range: [[85, 105], [70, 100]], chosen: true, source: "as stem out" },
+        exit: { value: [12, 60], range: [[10, 15], [50, 75]], chosen: true, source: "its stem's tube, diameter and length: unmeasured" },
+        bell: { value: [34, 14], range: [[28, 40], [10, 20]], chosen: true, source: "its stem's little bell, diameter and length: unmeasured" }
+      }
+    },
+    trombone: {
+      straight: {
+        kind: "straight",
+        length: { value: 290, source: "Denis Wick DW5505 tenor trombone straight mute, spun aluminium: 29.01 x 14 x 14 cm (its dealers' listings: johnpacker.co.uk/products/denis-wick-dw5505-tenor-trombone-straight-mute, chamberlainmusic.com/products/dw5505; read 3 November 2026)" },
+        base: { value: 140, source: "Denis Wick DW5505, as `length`" },
+        tip: { value: 40, range: [30, 55], chosen: true, source: "its open tip's outer diameter: unmeasured" },
+        gap: { value: 3.5, range: [2, 6], chosen: true, source: "its corks' thickness: unmeasured" },
+        wall: { value: 1.2, range: [0.8, 2], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      },
+      cup: {
+        kind: "cup",
+        length: { value: 250, range: [220, 290], chosen: true, source: "its cone's length to its bowl: unmeasured (no maker's dimensions found)" },
+        base: { value: 130, range: [115, 145], chosen: true, source: "its cone's widest: unmeasured" },
+        tip: { value: 40, range: [30, 55], chosen: true, source: "as its straight mute's" },
+        gap: { value: 3.5, range: [2, 6], chosen: true, source: "as its straight mute's" },
+        wall: { value: 1.2, range: [0.8, 2], chosen: true, source: "as its straight mute's" },
+        cup: { value: 185, range: [170, 200], chosen: true, source: "its bowl's widest: unmeasured" },
+        depth: { value: 45, range: [25, 70], chosen: true, source: "its bowl's depth past the bell's rim: unmeasured" },
+        overlap: { value: 15, range: [6, 30], chosen: true, source: "how far its bowl's rim reaches back over the bell: unmeasured" },
+        rimGap: { value: 8, range: [3, 15], chosen: true, source: "the ring between its bowl's rim and the bell: unmeasured; Martinez-Montejo et al. 2016 measured a trombone cup mute damping its impedance's peaks above 800 Hz and keeping its tuning" }
+      },
+      "harmon-stem-out": {
+        kind: "harmon",
+        cork: { value: 86, range: [75, 100], chosen: true, source: "the bell's width where its cork seals it: unmeasured" },
+        chamber: { value: [150, 130], range: [[135, 170], [110, 150]], chosen: true, source: "its chamber: unmeasured" },
+        exit: { value: [30, 15], range: [[25, 38], [10, 20]], chosen: true, source: "its front hole: unmeasured" }
+      },
+      "harmon-stem-in": {
+        kind: "harmon",
+        cork: { value: 86, range: [75, 100], chosen: true, source: "as stem out" },
+        chamber: { value: [150, 130], range: [[135, 170], [110, 150]], chosen: true, source: "as stem out" },
+        exit: { value: [16, 85], range: [[13, 20], [70, 100]], chosen: true, source: "its stem's tube: unmeasured" },
+        bell: { value: [48, 20], range: [[40, 56], [15, 25]], chosen: true, source: "its stem's little bell: unmeasured" }
+      }
+    },
+    horn: {
+      straight: {
+        kind: "straight",
+        length: { value: 190, source: "Denis Wick DW5524 French horn straight mute: 19 x 11.51 x 11.51 cm (its dealers' listings: lamusainstrumentos.es/en/denis-wick-5524-french-horn-straight-mute.html, target.com 7.48 x 4.53 x 4.53 in; read 3 November 2026)" },
+        base: { value: 115, source: "Denis Wick DW5524, as `length`" },
+        tip: { value: 40, range: [30, 55], chosen: true, source: "its open tip's outer diameter: unmeasured" },
+        gap: { value: 4, range: [2, 7], chosen: true, source: "its corks' thickness: unmeasured (thicker corks open its sound, low notes less stable: D. Palacio Buil 2026, Technical and Acoustic Study on the Horn Mutes, researchcatalogue.net/view/3944849/3980181)" },
+        wall: { value: 1.2, range: [0.8, 2], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      },
+      stopped: {
+        kind: "hand",
+        cork: { value: 95, range: [80, 110], chosen: true, source: "where the right hand closes the bell: unmeasured" },
+        gap: { value: 2.5, range: [1, 4], chosen: true, source: "the ring the hand leaves: unmeasured" }
+      }
+    },
+    tuba: {
+      straight: {
+        kind: "straight",
+        length: { value: 725, range: [710, 740], source: "Denis Wick DW5518 tuba straight mute, spun aluminium: 73.99 x 32 x 32 cm, approx. 71 cm long (its dealers' listings: johnpacker.co.uk/prod/denis-wick-dw5518-tuba-mute-straight, thomann.co.uk/denis_wick_tuba_straight_dw5518.htm; read 3 November 2026), the two lengths its range" },
+        base: { value: 320, source: "Denis Wick DW5518, as `length`" },
+        tip: { value: 80, range: [60, 110], chosen: true, source: "its open tip's outer diameter: unmeasured" },
+        gap: { value: 5, range: [3, 9], chosen: true, source: "its corks' thickness: unmeasured (its maker gives extra corks for larger tubas)" },
+        wall: { value: 1.5, range: [1, 2.5], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      }
+    }
+  },
+  measuredInBells: [
+    { instrument: "trombone", mute: "straight", parasitic: 77, source: `D. M. Campbell, J. Gilbert & A. Myers 2021, "'Put a Sock in It!' Mutes for Musical Horns", Acoustics Today 17(2) 13-21, doi:10.1121/at.2021.17.2.13, Fig. 10: a tenor trombone's impedance in first position with a straight mute, a small added peak at 77 Hz, its second to fourth peaks raised a little` },
+    { instrument: "trombone", mute: "straight", parasitic: 140, source: "E. Martinez-Montejo, P. L. Rendon, L. Ruiz-Huerta, L. Vega-Alvarado & A. Caballero-Ruiz 2016, Characterisation of brass instruments with mutes through experimental means and finite-element simulations, Proc. 22nd ICA, ICA2016-399, Fig. 2: a small impedance peak at around 140 Hz, the peaks shifted up a little (research-downloads/brass/mutes/)" },
+    { instrument: "trumpet", mute: "cup", risesAt: 1200, source: "Martinez-Montejo et al. 2016, Fig. 3: a distinct rise in the trumpet's impedance with its cup mute in near 1200 Hz, the cup mute's own first peak" }
+  ]
+};
+
+// render/synthesis/src/brass-mutes.mjs
+var BRASS_MUTES = brass_mutes_default.instruments;
+
 // render/synthesis/src/ness.mjs
 function measuredBore(points) {
   const [x0] = points[0], out = [];
@@ -24827,6 +25056,7 @@ function drawnOut(bore, ratio, at2) {
 var TRUMPET_VALVES = [600, 630, 660];
 var TRUMPET_DRAWN = 1.03404;
 var TRUMPET_ADDED = (TRUMPET_DRAWN - 1) * KAUSEL_2021.trumpet.length;
+var kitOf = (model) => Object.freeze(Object.fromEntries(Object.entries(BRASS_MUTES[model]).map(([name, mute]) => [name, mute.kind])));
 var NESS_LIPS = globalThis.process?.env?.MUSEBOTS_NESS_LIPS || "deployed";
 if (!["deployed", "measured"].includes(NESS_LIPS)) throw new Error(`MUSEBOTS_NESS_LIPS: ${NESS_LIPS} (deployed or measured)`);
 var SLIDE_SLURS = globalThis.process?.env?.MUSEBOTS_SLIDE_SLURS || "tongued";
@@ -24862,12 +25092,7 @@ var BRASS = Object.freeze({
     lips: Object.freeze({ Sr: 146e-7, mu: 537e-7, sigma: 10, H: 29e-5, w: 0.01 }),
     // (Its mouth pressure from the softest note to the loudest, Pa: the documented examples' 1.8 to 4 kPa, a little wider.)
     pressure: Object.freeze([1500, 6e3]),
-    mutes: Object.freeze({
-      straight: Object.freeze({ kind: "annulus", cork: 45, gap: 3 }),
-      cup: Object.freeze({ kind: "annulus", cork: 50, gap: 6 }),
-      "harmon-stem-out": Object.freeze({ kind: "harmon", cork: 52, chamber: [95, 85], exit: [22, 12] }),
-      "harmon-stem-in": Object.freeze({ kind: "harmon", cork: 52, chamber: [95, 85], exit: [12, 60], bell: [34, 14] })
-    })
+    mutes: kitOf("trumpet")
   }),
   trombone: Object.freeze({
     source: "measured: a pBone tenor trombone whole, slide in, with its mouthpiece, 479 points (W. Kausel, A. Mayer & J. W. Beauchamp 2021, JASA 149(4) 2698, doi:10.1121/10.0004303, supplement, CC BY 4.0)",
@@ -24915,12 +25140,7 @@ var BRASS = Object.freeze({
       Object.freeze([302.242, Object.freeze({ Sr: 3806e-8, mu: 9776e-8, sigma: 1238, H: 172e-6, w: 0.01198, inwardRatio: 1.482, inwardQ: 1.798, inwardCoupling: 1.27 })])
     ]),
     pressure: Object.freeze([1e3, 5e3]),
-    mutes: Object.freeze({
-      straight: Object.freeze({ kind: "annulus", cork: 78, gap: 4 }),
-      cup: Object.freeze({ kind: "annulus", cork: 84, gap: 8 }),
-      "harmon-stem-out": Object.freeze({ kind: "harmon", cork: 86, chamber: [150, 130], exit: [30, 15] }),
-      "harmon-stem-in": Object.freeze({ kind: "harmon", cork: 86, chamber: [150, 130], exit: [16, 85], bell: [48, 20] })
-    })
+    mutes: kitOf("trombone")
   }),
   horn: Object.freeze({
     source: "measured: a French horn by pulse reflectometry to 53.7 mm across (Kemp 2002, Fig. 7.9), a crooked horn sounding in D, its cylinder drawn in along its axis to sound F (0.764 of its length); its bell from there to Koehler's measured rim (MIMEd 14586) as a Bessel horn; its mouthpiece GW's FH-2's rim, throat and cup, its throat's and whole length designed (ness-horn-bore.json, tools/horn_measured_bore.py)",
@@ -24936,11 +25156,7 @@ var BRASS = Object.freeze({
     valves: Object.freeze({ position: Object.freeze([1500, 1530, 1560]), short: Object.freeze([20, 20, 20]), bypass: Object.freeze([371, 162, 625]) }),
     lips: Object.freeze({ Sr: 12e-6, mu: 46e-6, sigma: 10, H: 26e-5, w: 9e-3 }),
     pressure: Object.freeze([1200, 5500]),
-    mutes: Object.freeze({
-      straight: Object.freeze({ kind: "annulus", cork: 92, gap: 5 }),
-      // (Stopped: the right hand closing the bell where it is some 95 mm wide, a gap of 2.5 mm left: + on the page.)
-      stopped: Object.freeze({ kind: "annulus", cork: 95, gap: 2.5 })
-    })
+    mutes: kitOf("horn")
   }),
   tuba: Object.freeze({
     source: "measured: an Alexander tuba in 16-ft C from its mouthpipe to 95 mm across (Campbell, Gilbert & Myers 2021, Fig. 7.46), another Alexander tuba's bell from there to 270 mm (Fig. 6.9), its flare's length fitted to sound C; its mouthpiece a maker's rim and throat (Werden: Bach 18), its cup's depth and backbore designed (ness-tuba-bore.json, tools/tuba_measured_bore.py)",
@@ -24969,7 +25185,7 @@ var BRASS = Object.freeze({
       Object.freeze([160, Object.freeze({ Sr: 146e-7, mu: 537e-7, sigma: 5, H: 29e-5, w: 0.01 })])
     ]),
     pressure: Object.freeze([600, 3500]),
-    mutes: Object.freeze({ straight: Object.freeze({ kind: "annulus", cork: 150, gap: 6 }) })
+    mutes: kitOf("tuba")
   })
 });
 var NESS_BRASS = Object.freeze(Object.fromEntries(Object.entries(BRASS).map(([model, spec]) => [model, NESS_LIPS === "measured" && spec.measuredLips ? Object.freeze({ ...spec, lips: spec.measuredLips }) : spec])));
@@ -25296,7 +25512,7 @@ var NUMBERS = [
   "temperature"
 ];
 var number = (v) => Number.isFinite(+v) ? +v : null;
-function stringsDial({ type, variant, seed: seed2, from, start, variants, fitted, gainDb, neutralDb, finger, heardThrough, labels, send, keep, kept, forget }) {
+function stringsDial({ type, variant, seed: seed2, from, start, variants, fitted, gainDb, neutralDb, finger, heardThrough, labels, send, keep, kept, forget, clock = () => performance.now() / 1e3, every: every2 = 5e-3 }) {
   const kindOf = (type2) => {
     const name = INSTRUMENTS[type2], body = name, { hz, measured: measured3, source: source2 } = airMode(body), scaled = bowedOf(name).bodyScale ?? null;
     const radiation = fitted ? string_body_radiation_default.instruments[scaled ? scaled.from : name] : null;
@@ -25374,8 +25590,11 @@ function stringsDial({ type, variant, seed: seed2, from, start, variants, fitted
   function listen(listener) {
     listeners.add(listener);
     return () => {
-      if (listeners.delete(listener) && !listeners.size) send(`l ${least("bowLift")}
+      if (listeners.delete(listener) && !listeners.size) {
+        stopSolo();
+        send(`l ${least("bowLift")}
 `);
+      }
     };
   }
   function setting2(ask) {
@@ -25445,15 +25664,64 @@ ${correctionLine(state.corrected)}` : null;
         return null;
     }
   }
-  function handle(method, path, body = {}) {
-    if (method === "GET" && path === "/state") return { status: 200, json: state };
+  let soloist = null, playerSettings = { seed: DEFAULT_SEED, seconds: 60, personality: {} }, solos = null;
+  const soloists = () => solos ??= import("./soloist/strings.js");
+  const playerShown = () => ({ ...playerSettings, levers: LEVERS, grammars: LINE.grammars, ranges: TONE_RANGES });
+  const soloShown = () => soloist && { said: soloist.line ? soloist.line.shown(clock()) : soloist.said, playing: soloist.playing };
+  function stopSolo() {
+    if (!soloist?.line) return;
+    soloist = { said: soloist.line.shown(clock()), playing: false };
+    send(`l ${least("bowLift")}
+`);
+  }
+  async function solo(given3) {
+    stopSolo();
+    if (!given3.on) return { status: 200, json: { soloist: soloShown(), player: playerShown() } };
+    const { composeSolo, StringsLine, playerSettingsOf } = await soloists();
+    const of2 = (name) => given3[name] === void 0 ? playerSettings[name] : name === "personality" ? given3[name] : Number(given3[name]);
+    try {
+      playerSettings = playerSettingsOf({ seed: of2("seed"), seconds: of2("seconds"), personality: of2("personality") });
+    } catch (error) {
+      return { status: 400, text: error.message };
+    }
+    send(`l ${least("bowLift")}
+${[0, 1, 2, 3].map((s) => `m ${s} 0 1 1
+y ${s} 0 ${state.vibrato.rate} ${AUTHORED_VIBRATO.step}`).join("\n")}
+`);
+    const composed = await composeSolo({ instrument: state.instrument, variant: state.variant, fingerboard: state.fingerboard, ...playerSettings });
+    const start2 = clock() + least("bowLift") + composed.lead + every2;
+    soloist = { line: new StringsLine(composed, { send, start: start2, every: every2 }), playing: true };
+    return { status: 200, json: { soloist: { said: soloist.line.shown(start2), playing: true }, player: playerShown() } };
+  }
+  function due() {
+    if (!soloist?.line) return 0;
+    const now = clock(), sent = soloist.line.take(now);
+    if (soloist.line.done(now)) stopSolo();
+    return sent;
+  }
+  async function handle(method, path, body = {}) {
+    if (method === "GET" && path === "/state") return { status: 200, json: { ...state, soloist: soloShown(), player: playerShown() } };
+    if (method === "POST" && path === "/soloist") return await solo(body);
+    if (method === "POST" && path === "/player") {
+      try {
+        const { playerSettingsOf } = await soloists();
+        playerSettings = playerSettingsOf(body);
+      } catch (error) {
+        return { status: 400, text: error.message };
+      }
+      return { status: 200, json: { player: playerShown() } };
+    }
     if (method === "POST" && path === "/set") {
       const asks = body.asks ?? [], lines = asks.map(setting2), bad = asks.filter((_, i) => lines[i] == null);
       if (bad.length) return { status: 400, text: `refused: ${JSON.stringify(bad)}` };
       for (const ask of asks) {
+        if (ask.do === "stop") stopSolo();
         if (ask.do === "seed") state.seed = +ask.seed;
         if (ask.do === "correct") state.corrected = ask.on;
-        if (ask.do === "instrument") Object.assign(state, kindOf(+ask.type), { type: +ask.type, variant: +ask.variant });
+        if (ask.do === "instrument") {
+          stopSolo();
+          Object.assign(state, kindOf(+ask.type), { type: +ask.type, variant: +ask.variant });
+        }
       }
       send(lines.map((line2) => `${line2}
 `).join(""));
@@ -25469,7 +25737,7 @@ ${correctionLine(state.corrected)}` : null;
   }
   send(`${correctionLine(state.corrected)}
 `);
-  return { state, heard, listen, handle };
+  return { state, heard, listen, handle, due };
 }
 
 // native/live/site/strings-worker.js
@@ -25484,7 +25752,7 @@ var AWAKE = 5;
 var ready = (async () => {
   const packed = await got("strings/manifest.json");
   const [{ default: create }, module] = await Promise.all([import(at("strings-live.js").href), got("strings-live.wasm", "arrayBuffer").then((bytes) => WebAssembly.compile(bytes))]);
-  let dial = null;
+  let dial = null, madeFrames = 0, step = 0, rateHere = 1;
   const host = await create({
     instantiateWasm(imports, receive) {
       WebAssembly.instantiate(module, imports).then((made2) => receive(made2, module));
@@ -25507,12 +25775,18 @@ var ready = (async () => {
       return "this browser";
     },
     kept: () => [],
-    forget: () => null
+    forget: () => null,
+    clock: () => (madeFrames + step / 2) / rateHere,
+    every: BUFFER_SECONDS
   });
   const frames = host._live_begin(packed.dial.type, packed.dial.variant, packed.dial.seed, BUFFER_SECONDS), rate = dial.state.rate;
   if (!frames) throw new Error("the strings' host did not begin");
+  step = frames;
+  rateHere = rate;
   const made = () => {
+    dial.due();
     const at2 = host._live_fill() >> 2;
+    madeFrames += frames;
     return host.HEAPF32.slice(at2, at2 + frames);
   };
   return { dial, frames, rate, made };
@@ -25559,7 +25833,7 @@ self.onmessage = async ({ data }) => {
       dial.listen((line2) => self.postMessage({ line: line2 }));
       return;
     }
-    const { id, method, path, given: body } = data, answer = dial.handle(method, path, body ?? {});
+    const { id, method, path, given: body } = data, answer = await dial.handle(method, path, body ?? {});
     self.postMessage({ id, status: answer.status, json: answer.json, text: answer.text });
   } catch (error) {
     if (data.id !== void 0) self.postMessage({ id: data.id, status: 500, text: error.message });

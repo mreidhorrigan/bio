@@ -4,16 +4,30 @@ function lipsRow(rules, lip, pressure, valves = null) {
   const { lips, rows, cents } = rules.grid, at2 = Math.min(Math.max(1200 * Math.log2(lip / lips[0]) / cents, 0), lips.length - 1), k = Math.min(Math.floor(at2), lips.length - 2), share = at2 - k;
   const own2 = rows[k].map((v, c) => v + (rows[k + 1][c] - v) * share);
   own2[rules.columns.indexOf(rules.breath)] = pressure / own2[rules.columns.indexOf(rules.closing)];
-  if (!rules.valves) return own2;
-  const row = new Array(rules.valves.width).fill(1);
-  rules.valves.lips.forEach((at3, c) => row[at3] = own2[c]);
-  rules.valves.columns.forEach((columns, v) => columns.forEach((at3) => row[at3] = valves?.[v] ?? 1));
+  const laid = rowLayout(rules);
+  if (!laid) return own2;
+  const row = new Array(laid.width).fill(1);
+  laid.lips.forEach((at3, c) => row[at3] = own2[c]);
+  (rules.valves?.columns ?? []).forEach((columns, v) => columns.forEach((at3) => row[at3] = valves?.[v] ?? 1));
+  (laid.closed ?? []).forEach((at3) => row[at3] = 0);
   return row;
 }
+var rowLayout = (rules) => rules.valves ?? rules.row ?? null;
 var lipsColumn = (rules, name) => {
-  const c = rules.columns.indexOf(name);
-  return rules.valves ? rules.valves.lips[c] : c;
+  const c = rules.columns.indexOf(name), laid = rowLayout(rules);
+  return laid ? laid.lips[c] : c;
 };
+function lipsDirection(rules, lip, pressure, valves = null) {
+  const h = rules.grid.cents, [down, up] = [-h, h].map((c) => lipsRow(rules, lip * 2 ** (c / 1200), pressure, valves)), columns = [], slopes = [];
+  down.forEach((v, c) => {
+    const w = up[c];
+    if (v > 0 && w > 0 && w !== v) {
+      columns.push(c);
+      slopes.push(600 * Math.log2(w / v) / h);
+    }
+  });
+  return { columns, slopes };
+}
 var noteKey = (n) => n.fingering ? `${n.fingering} ${n.partial}` : n.position != null ? `${n.position} ${n.partial}` : String(n.partial);
 
 // render/synthesis/brass-lips-targets.json
@@ -932,6 +946,8 @@ var sources_default = {
   about: "Every source a registry value cites, once (registry/README.md). literature: a published measurement or standard, its DOI checked with Crossref where it has one; vernacular: a maker's chart, a retailer's page, players' common knowledge, looked up, with the page and a saved copy; other: Printables, a dataset, an engine's own data, a CT, with where it is and its licence. Saved copies are in the trunk's research-downloads/.",
   sources: {
     "fletcher-rossing-1998": { kind: "literature", authors: "N. H. Fletcher, T. D. Rossing", title: "The Physics of Musical Instruments", year: 1998, doi: "10.1007/978-0-387-21603-4", edition: "2nd", publisher: "Springer" },
+    "weinzierl-2017": { kind: "literature", authors: "S. Weinzierl, M. Vorländer, G. Behler, F. Brinkmann, H. von Coler, E. Detzner, J. Krämer, A. Lindau, M. Pollow, F. Schulz, N. R. Shabtai", title: "A Database of Anechoic Microphone Array Measurements of Musical Instruments", year: 2017, doi: "10.14279/depositonce-5861.2", url: "https://depositonce.tu-berlin.de/handle/11303/6305.2", note: "a published dataset, its DOI checked on DataCite (not on Crossref); its recordings in the trunk's research-downloads/tu-berlin-anechoic/, read by native/openwind/turbulence-fit.mjs and tools/sound_power_table.py" },
+    "fletcher-1975": { kind: "literature", authors: "N. H. Fletcher", title: "Acoustical correlates of flute performance technique", year: 1975, doi: "10.1121/1.380430", in: "The Journal of the Acoustical Society of America 57(1), 233-237", note: "its laws as render/synthesis/workers/openwind_worker.py quotes them; the paper not yet fetched (research/SOURCES_TO_FETCH.md)" },
     "fletcher-1964": { kind: "literature", authors: "H. Fletcher", title: "Normal Vibration Frequencies of a Stiff Piano String", year: 1964, doi: "10.1121/1.1918933", in: "JASA 36(1), 203-209" },
     "schelleng-1973": { kind: "literature", authors: "J. C. Schelleng", title: "The bowed string and the player", year: 1973, doi: "10.1121/1.1913322", in: "JASA 53(1), 26-41" },
     "schoonderwaldt-2009": { kind: "literature", authors: "E. Schoonderwaldt", title: "The player and the bowed string: Coordination of bowing parameters in violin and viola performance", year: 2009, doi: "10.1121/1.3203209", in: "JASA 126(5), 2709-2720" },
@@ -1056,7 +1072,7 @@ var equations_default = {
 var modules_default = {
   schema: "musebots.registry-modules/1",
   about: "The modules whose values are the registry's (registry/README.md): an owned module holds no number about an instrument, a player, the physics or a method -- the registry's test reads it -- and a pending one is still to move, listed in REGISTRY.md.",
-  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js"],
+  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js"],
   pending: ["public/shared/performers/vibrato.js", "public/shared/performers/instrument-ranges.js"]
 };
 
@@ -2751,7 +2767,7 @@ var bowed_default2 = {
 // registry/objects/winds.json
 var winds_default = {
   schema: "musebots.registry-objects/1",
-  about: "The woodwinds as a tree of types (registry/README.md), begun with what their players share: a vocal tract upstream of the reed (players/winds.json), one model whose values are its players' -- measured of clarinettists, every reed player's until their own are measured. Their bodies are still render/synthesis/geometry's (research/REGISTRY_PLAN.md, the woodwinds' step).",
+  about: "The winds, woodwinds and brass, as a tree of types (registry/README.md), begun with what their players share: a vocal tract upstream of the reed (players/winds.json), one model whose values are its players' -- measured of clarinettists, every reed player's until their own are measured. Their bodies are still render/synthesis/geometry's (research/REGISTRY_PLAN.md, the woodwinds' step).",
   nodes: {
     "reed-woodwind": {
       is: "instrument",
@@ -2801,6 +2817,44 @@ var winds_default = {
     "baritone-saxophone": {
       is: "reed-woodwind",
       about: "The baritone saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+    },
+    "jet-woodwind": {
+      is: "instrument",
+      abstract: true,
+      about: "A woodwind sounded by its player's jet across an edge: its blowing pressure follows the note's frequency as flutists were measured blowing it (players/winds.json; Fletcher 1975)."
+    },
+    flute: {
+      is: "jet-woodwind",
+      about: "The concert flute in C."
+    },
+    "alto-flute": {
+      is: "jet-woodwind",
+      about: "The alto flute in G, the flute scaled to its bore (tools/design_openwind_woodwind.py flute_like): its players' law the flutists' until its own is measured."
+    },
+    piccolo: {
+      is: "jet-woodwind",
+      about: "The piccolo in C, the flute scaled to its bore: its players' law the flutists' until its own is measured."
+    },
+    "lip-reed": {
+      is: "instrument",
+      abstract: true,
+      about: "A brass instrument, sounded by its player's lips buzzing into its mouthpiece: the flow between them the reed's, its lips opening outward (native/openwind src/kernel.rs T_REED, T_LIPS). Its bodies are render/synthesis/geometry's (tools/save_brass_body.py)."
+    },
+    trumpet: {
+      is: "lip-reed",
+      about: "The B-flat trumpet."
+    },
+    trombone: {
+      is: "lip-reed",
+      about: "The tenor trombone, its slide moving."
+    },
+    horn: {
+      is: "lip-reed",
+      about: "The French horn, its bore a horn in F (Kemp 2002)."
+    },
+    tuba: {
+      is: "lip-reed",
+      about: "The tuba in C (an Alexander CC, Campbell et al. 2021)."
     }
   }
 };
@@ -2808,7 +2862,7 @@ var winds_default = {
 // registry/players/winds.json
 var winds_default2 = {
   schema: "musebots.registry-players/1",
-  about: "What the players of the woodwinds do, on the objects' tree (registry/README.md): a node's values are its players'; one a node does not give, its parent's.",
+  about: "What the players of the winds do, the woodwinds' and the brass's, on the objects' tree (registry/README.md): a node's values are its players'; one a node does not give, its parent's.",
   nodes: {
     "reed-woodwind": {
       values: {
@@ -2837,6 +2891,24 @@ var winds_default2 = {
             contact: { value: [[0.25, 0.115], [0.5, 0.347]], unit: "s", kind: "literature", source: "pamies-vila-hofmann-chatziioannou-2018", at: "3.1.2; Table 1", note: "[the notes' inter-onset interval, the tongue's contact with the reed]: clarinettists' staccato eighths at 120 and 60 bpm, the note stopped by the tongue (their technique I); sd 31 and 27 ms" },
             silence: { value: [[0.25, 0.084], [0.5, 0.302]], unit: "s", kind: "literature", source: "pamies-vila-hofmann-chatziioannou-2018", at: "3.1.2; Table 1", note: "[the notes' inter-onset interval, the silence between notes]: the same staccato eighths at 120 and 60 bpm, stopped by the tongue (technique I); sd 37 and 43 ms" }
           }
+        },
+        flow: {
+          turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow through the reed's channel turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a clarinet's reed channel's flow, its level measured", date: "2026-11-03", found: "none measured: J. O. Smith, Physical Audio Signal Processing, 'Single-Reed Theory' -- synthesis models' noise modulated by the reed 'despite a lack of firm basis in acoustic measurements to date', turbulence near the reed's closing the basic model's chief omission; a reed channel's flow laminar-like below a Reynolds number of about 4000, seldom reached in saxophones and clarinets (TU Delft repository); a synthesis patent's noise following the breath, its level unmeasured" }] }
+        }
+      }
+    },
+    "lip-reed": {
+      values: {
+        flow: {
+          turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow between the lips turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the lips' slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017's trumpet; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a brass player's lips' flow, its level measured or modelled", date: "2026-11-03", found: "none measured: C. Vergez & X. Rodet's trumpet model (ICMC 2001), the jet out of the lips losing its energy to turbulence in the mouthpiece's cup, no noise level; Adachi & Sato's lips, and Giordano's (ISMA 2017) Navier-Stokes flow over them, no level given" }] }
+        }
+      }
+    },
+    "jet-woodwind": {
+      values: {
+        breath: {
+          perHz: { value: 0.8, unit: "Pa/Hz", kind: "literature", source: "fletcher-1975", at: '"p = 0.008 v" mbar at a note of v Hz', note: "four flutists' blowing pressure rising with the note's frequency, its jet's speed sqrt(2p/rho): 20 m/s at D4, 40 at D6 (the same number as render/synthesis/workers/openwind_worker.py WOODWINDS jet pressure, the worker's own until it reads the registry)" },
+          ffOverPp: { range: [1, 2], unit: "", kind: "literature", source: "fletcher-1975", note: "two of his four flutists raising their pressure about twice from pp to ff, two holding it" }
         }
       }
     }
@@ -3277,6 +3349,41 @@ var levels_default = {
   }
 };
 
+// registry/method/personality.json
+var personality_default = {
+  schema: "musebots.registry-methods/1",
+  about: "A player's personality (public/shared/performers/personality.js; docs/PLAYER_PERSONALITY.md): how far it pushes its instrument's idiom and what lines it prefers, each lever a draw from its seed within the range here, or given (a spec's, an LLM's later). Every range holds the line planner's own value (line.js LINE, wind-line.js WIND_LINE, flute_clodbot.js FLUTE), so that a personality is a place among the planner's settings, never outside them.",
+  methods: {
+    personality: {
+      about: "The levers, each a share 0 to 1 drawn from the player's seed (its ensemble's seed, its identity and its instrument), read across its range here; daring is the one that reaches toward the instrument's limits (its facts, instrument-facts.js), tone the one from a clean tone to its extremes -- its techniques, its rhythmic grammars and its ranges in its tone's parameters -- the rest its style.",
+      source: "ours",
+      settings: {
+        dynamicSteps: { value: 2, unit: "marks", kind: "setting", reason: "how many dynamic marks the most daring player goes past the dynamics comfortable in a register (wind-line.js WIND_LINE lowMost f and highLeast p): to fff low and ppp high, the scale's ends (dynamics.js)" },
+        shortest: { range: [0.08, 0.12], unit: "s", kind: "setting", reason: "its quickest note, the most daring's the planner's own (line.js LINE.shortest: a wind's double tonguing near it), the least daring's a single-tongued note's at some 8 notes a second (Bertsch & Hoole 2014, players-ranges.mjs repeatRate)" },
+        phraseRange: { range: [12, 18], unit: "semitones", kind: "setting", reason: "a phrase's widest range, about the planner's 14 (line.js LINE.phraseRange)" },
+        density: { range: [0.25, 0.5], unit: "share", kind: "setting", reason: "its density among equals, about the flute's 0.35 (flute_clodbot.js FLUTE)" },
+        loudness: { range: [0.4, 0.6], unit: "share", kind: "setting", reason: "its loudness among equals, about the flute's 0.5" },
+        fioriture: { range: [0.2, 0.55], unit: "share", kind: "setting", reason: "its fioriture as a soloist, about the flute's 0.35" },
+        leap: { range: [0.08, 0.32], unit: "share", kind: "setting", reason: "a leap's chance in its motif, about the planner's 0.18 (line.js LINE.leap)" },
+        slurs: { range: [2, 6], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, about the planner's 4 (LINE.slurMost)" },
+        motifFewest: { range: [3, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
+        motifMost: { range: [5, 7], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest" },
+        runs: { range: [3, 6], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, about the planner's 4 (LINE.runMost)" },
+        rests: { range: [0.3, 0.7], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
+        commas: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, about the planner's 0.2 (LINE.commaShare)" },
+        landing: { range: [0.4, 1], unit: "share", kind: "setting", reason: "how high above its floor a cadence may land, a share of its span, about the planner's 0.75 (LINE.landing's upper end)" },
+        grammarLeast: { value: 0.15, unit: "share", kind: "setting", reason: "the least weight a motif's grammar is given, against the most preferred's 1, so that every grammar stays open to it (line.js chooseMotif)" },
+        quoting: { range: [0.5, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: given them, it prefers them more often than not" },
+        techniques: { range: [0, 0.6], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's three phrases in five, each still the instrument's own" },
+        toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
+        vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
+        harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
+        rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
+      }
+    }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x = 1, y = b / a;
@@ -3363,7 +3470,8 @@ var FILES = Object.freeze({
   "players/winds.json": winds_default2,
   "stimuli/stimuli.json": stimuli_default,
   "method/strings.json": strings_default,
-  "method/levels.json": levels_default
+  "method/levels.json": levels_default,
+  "method/personality.json": personality_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
@@ -4307,6 +4415,7 @@ var FELT_TEMPO = Object.freeze({
 });
 
 // public/shared/opening-time.js
+var DEFAULT_SEED = 20260916;
 var OPENING_TIME = Object.freeze({
   // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
   phraseSeconds: Object.freeze([5, 13]),
@@ -4351,8 +4460,10 @@ var LINE = Object.freeze({
   climaxSpan: Object.freeze([8, 11]),
   phraseRange: 14,
   // The silence after the cadence: a share of the bar's last group, at least a catch breath (s), at most a share of the
-  // held tone. The comma after the idea and its repetition: a share of their last note, where it is long enough (s).
+  // held tone, written on the group's half beats (the share among them nearest its own: a player's own share drawn,
+  // personality.js). The comma after the idea and its repetition: a share of their last note, where it is long enough (s).
   restShare: 0.5,
+  restDivisions: 2,
   restLeast: 0.4,
   restMostShare: 0.5,
   commaShare: 0.2,
@@ -4825,6 +4936,7 @@ var WIND_SLIDE_SPEED = Object.freeze({
   "tenor-saxophone": 10,
   "baritone-saxophone": 10
 });
+var MODEL_NAMES = Object.freeze({ alto: "alto-flute" });
 var WIND_LINE = Object.freeze({
   ...LINE,
   // How much faster a dynamic spends the breath (authored), the loudest dynamic the low register plays and the softest
@@ -5123,6 +5235,7 @@ var wind_multiphonics_default = {
     "e-flat-clarinet": [],
     "bass-clarinet": [],
     "english-horn": [],
+    contrabassoon: [],
     "soprano-saxophone": [],
     "alto-saxophone": [],
     "tenor-saxophone": [],
@@ -5141,6 +5254,7 @@ var measuredOf = (instrument, measured3) => Object.freeze((measured3 ?? []).map(
   diagram: Object.freeze({ instrument, keys: m.keys })
 })));
 var WIND_MULTIPHONICS = Object.freeze(Object.fromEntries(Object.entries(wind_multiphonics_default.instruments).map(([instrument, measured3]) => [instrument, measuredOf(instrument, measured3)])));
+var FLUTTER_HZ = Object.freeze([28, 33]);
 var WIND_TECHNIQUE_WORDS = Object.freeze({ hum: "hum", growl: "growl", flutter: "flz.", mute: null, multiphonic: MULTIPHONIC_WORD });
 var MUTE_WORDS = Object.freeze({
   straight: "con sord. (straight)",
@@ -5205,6 +5319,36 @@ var VocalTract = class _VocalTract {
     return { resonances: this.resonances, seconds };
   }
 };
+
+// public/shared/performers/turbulence.js
+function turbulenceEntry(model) {
+  let entry2;
+  try {
+    entry2 = playerEntry(model, "flow.turbulence");
+  } catch {
+    return null;
+  }
+  return { value: entry2.value, unit: entry2.unit, kind: entry2.kind, what: "its flow's turbulent fluctuation, a share of the flow per root hertz" };
+}
+var turbulenceOf = (model) => turbulenceEntry(model)?.value ?? null;
+
+// public/shared/performers/player-noise.js
+var NOISED = (path) => player("instrument", `noise.${path}`);
+var ACTION_PROFILE = Object.freeze({
+  beta: NOISED("action.beta"),
+  low: NOISED("action.low"),
+  high: NOISED("action.high"),
+  tremor: Object.freeze({ hz: NOISED("tremor.hz"), q: NOISED("tremor.q"), share: NOISED("tremor.share") })
+});
+var WINDS_NOISE = Object.freeze({
+  kinds: Object.freeze({ breath: { sd: NOISED("breath.pressure"), path: ["breath", "pressure"] }, lips: { sd: NOISED("lips.tension"), path: ["lips", "tension"] } }),
+  profile: ACTION_PROFILE
+});
+var windsNoiseKinds = (kind) => kind === "lips" ? ["breath", "lips"] : ["breath"];
+function windsNoiseLine(what, temperature, seed2) {
+  const { sd } = WINDS_NOISE.kinds[what], { beta, low, high, tremor } = WINDS_NOISE.profile;
+  return { ...seed2 == null ? {} : { seed: seed2 }, what, sd, temperature, beta, low, high, tremor: { ...tremor } };
+}
 
 // public/shared/performers/bow.js
 var PLANNER = (name) => setting("bow-planner", name);
@@ -5314,10 +5458,10 @@ var WIND_VIBRATO = Object.freeze({
   oboe: Object.freeze({ rate: 5, width: 22 }),
   bassoon: Object.freeze({ rate: 5, width: 22 }),
   clarinet: Object.freeze({ rate: 5, width: 0 }),
-  horn: Object.freeze({ rate: 5, width: 0 }),
-  trumpet: Object.freeze({ rate: 5.5, width: 10 }),
-  trombone: Object.freeze({ rate: 5, width: 0 }),
-  tuba: Object.freeze({ rate: 5, width: 0 }),
+  horn: Object.freeze({ rate: 4.7, width: 0 }),
+  trumpet: Object.freeze({ rate: 4.8, width: 15.1 }),
+  trombone: Object.freeze({ rate: 4.55, width: 0 }),
+  tuba: Object.freeze({ rate: 4.7, width: 0 }),
   // (The rest of the woodwinds: the English horn's and contrabassoon's as their family's; the E-flat and bass clarinets'
   // none, as the clarinet's; the saxophones' their jaw's, a classical saxophonist's, wider than a double reed's.)
   "english-horn": Object.freeze({ rate: 5, width: 22 }),
@@ -5329,7 +5473,7 @@ var WIND_VIBRATO = Object.freeze({
   "tenor-saxophone": Object.freeze({ rate: 5, width: 26 }),
   "baritone-saxophone": Object.freeze({ rate: 5, width: 22 })
 });
-var WIND_VIBRATO_REACH = Object.freeze({ clarinet: 20, "e-flat-clarinet": 20, "bass-clarinet": 16, horn: 16, trombone: 30, tuba: 16 });
+var WIND_VIBRATO_REACH = Object.freeze({ clarinet: 20, "e-flat-clarinet": 20, "bass-clarinet": 16, horn: 16, trombone: 15.7, tuba: 16 });
 var BOWED_VIBRATO = { violin: MEASURED_VIBRATO.violin, viola: AUTHORED_VIBRATO.viola, cello: AUTHORED_VIBRATO.cello, contrabass: MEASURED_VIBRATO.contrabass };
 var of = (key, name) => bySize(Object.fromEntries(Object.entries(BOWED_VIBRATO).map(([n, v]) => [n, v[key]])), name);
 var kinds = {
@@ -5368,6 +5512,123 @@ var FAMILY = {
   tuba: "brass",
   ...Object.fromEntries(GIVEN_BOWED.map((i) => [i.name, "strings"]))
 };
+
+// render/synthesis/geometry/brass-mutes.json
+var brass_mutes_default = {
+  about: "Each brass instrument's mutes as its players' kit has them, mm (render/synthesis/src/brass-mutes.mjs muteIn sets each in its bell; NESS's and OpenWInD's bodies both take them). A straight mute: a cone closed at its wide end, open at its narrow tip, held in the bell by its corks -- inserted until they touch, where the bell is narrowest about it -- the sound out through the ring they leave, its hollow a resonator opening into the bell at its tip. A cup mute: a straight mute with a bowl round its wide end, the sound out of the bell into the bowl and out through the ring between its rim and the bell. A harmon: sealed in the bell by its cork, the sound through its chamber and out of its front hole, or the stem's tube and little bell in it. A stopping hand: the bell closed where it is `cork` wide to a ring `gap` wide. Each dimension {value, source}, and where nobody measured it a `range` -- what mutes of its kind are made within -- the value fitted to what was measured of mutes in their bells (render/synthesis/tools/fit_mutes.py: `fitted`, with its data) or, nothing measured to fit it to, the range's middle, said so (`chosen`).",
+  instruments: {
+    trumpet: {
+      straight: {
+        kind: "straight",
+        length: { value: 160, source: "Denis Wick DW5504 trumpet straight mute, spun aluminium: 16 x 10.01 x 10.01 cm (its dealers' listings: johnpacker.co.uk/products/denis-wick-dw5504-bb-trumpet-bb-cornet-straight-mute, lamusainstrumentos.es/denis-wick-5504-trumpet-straight-mute.html; read 3 November 2026)" },
+        base: { value: 100, source: "Denis Wick DW5504, as `length`" },
+        tip: { value: 27, range: [20, 34], chosen: true, source: "its open tip's outer diameter: unmeasured (no maker gives it); within what the bell holds ahead of its corks" },
+        gap: { value: 3.5, range: [2, 5], chosen: true, source: "its corks' thickness, the ring they leave: unmeasured; cork strip as mutes are corked" },
+        wall: { value: 1, range: [0.6, 1.5], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      },
+      cup: {
+        kind: "cup",
+        length: { value: 150, range: [130, 170], chosen: true, source: "its cone's length to its bowl's bottom: unmeasured (Denis Wick DW5531 adjustable cup mute, 19.05 x 11.43 x 11.43 cm overall with its bowl: its dealers' listings, woodsysmusic.com/products/denis-wick-dw5531-adjustable-cup-mute-for-bb-trumpet-or-cornet; read 3 November 2026)" },
+        base: { value: 90, range: [80, 100], chosen: true, source: "its cone's widest, where its bowl joins it: unmeasured" },
+        tip: { value: 27, range: [20, 34], chosen: true, source: "as its straight mute's" },
+        gap: { value: 3.5, range: [2, 5], chosen: true, source: "as its straight mute's" },
+        wall: { value: 1, range: [0.6, 1.5], chosen: true, source: "as its straight mute's" },
+        cup: { value: 114, source: "Denis Wick DW5531's bowl, its widest: 11.43 cm (as `length`)" },
+        depth: { value: 30, range: [15, 45], chosen: true, source: "its bowl's depth past the bell's rim: unmeasured" },
+        overlap: { value: 10, range: [4, 20], chosen: true, source: "how far its bowl's rim reaches back over the bell, the length of the ring the sound leaves by: unmeasured" },
+        rimGap: { value: 6, range: [2, 12], chosen: true, source: "the ring between its bowl's rim and the bell, as it is set (an adjustable cup mute's): unmeasured; Martinez-Montejo et al. 2016 (ICA2016-399) measured a trumpet cup mute's first resonance in the bell near 1200 Hz, Campbell, Gilbert & Myers 2021 (doi:10.1121/at.2021.17.2.13) that it depends critically on this gap" }
+      },
+      "harmon-stem-out": {
+        kind: "harmon",
+        cork: { value: 52, range: [45, 60], chosen: true, source: "the bell's width where its cork seals it: unmeasured" },
+        chamber: { value: [95, 85], range: [[85, 105], [70, 100]], chosen: true, source: "its chamber's diameter and length: unmeasured" },
+        exit: { value: [22, 12], range: [[18, 28], [8, 16]], chosen: true, source: "its front hole's diameter and its neck's length, stem out: unmeasured" }
+      },
+      "harmon-stem-in": {
+        kind: "harmon",
+        cork: { value: 52, range: [45, 60], chosen: true, source: "as stem out" },
+        chamber: { value: [95, 85], range: [[85, 105], [70, 100]], chosen: true, source: "as stem out" },
+        exit: { value: [12, 60], range: [[10, 15], [50, 75]], chosen: true, source: "its stem's tube, diameter and length: unmeasured" },
+        bell: { value: [34, 14], range: [[28, 40], [10, 20]], chosen: true, source: "its stem's little bell, diameter and length: unmeasured" }
+      }
+    },
+    trombone: {
+      straight: {
+        kind: "straight",
+        length: { value: 290, source: "Denis Wick DW5505 tenor trombone straight mute, spun aluminium: 29.01 x 14 x 14 cm (its dealers' listings: johnpacker.co.uk/products/denis-wick-dw5505-tenor-trombone-straight-mute, chamberlainmusic.com/products/dw5505; read 3 November 2026)" },
+        base: { value: 140, source: "Denis Wick DW5505, as `length`" },
+        tip: { value: 40, range: [30, 55], chosen: true, source: "its open tip's outer diameter: unmeasured" },
+        gap: { value: 3.5, range: [2, 6], chosen: true, source: "its corks' thickness: unmeasured" },
+        wall: { value: 1.2, range: [0.8, 2], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      },
+      cup: {
+        kind: "cup",
+        length: { value: 250, range: [220, 290], chosen: true, source: "its cone's length to its bowl: unmeasured (no maker's dimensions found)" },
+        base: { value: 130, range: [115, 145], chosen: true, source: "its cone's widest: unmeasured" },
+        tip: { value: 40, range: [30, 55], chosen: true, source: "as its straight mute's" },
+        gap: { value: 3.5, range: [2, 6], chosen: true, source: "as its straight mute's" },
+        wall: { value: 1.2, range: [0.8, 2], chosen: true, source: "as its straight mute's" },
+        cup: { value: 185, range: [170, 200], chosen: true, source: "its bowl's widest: unmeasured" },
+        depth: { value: 45, range: [25, 70], chosen: true, source: "its bowl's depth past the bell's rim: unmeasured" },
+        overlap: { value: 15, range: [6, 30], chosen: true, source: "how far its bowl's rim reaches back over the bell: unmeasured" },
+        rimGap: { value: 8, range: [3, 15], chosen: true, source: "the ring between its bowl's rim and the bell: unmeasured; Martinez-Montejo et al. 2016 measured a trombone cup mute damping its impedance's peaks above 800 Hz and keeping its tuning" }
+      },
+      "harmon-stem-out": {
+        kind: "harmon",
+        cork: { value: 86, range: [75, 100], chosen: true, source: "the bell's width where its cork seals it: unmeasured" },
+        chamber: { value: [150, 130], range: [[135, 170], [110, 150]], chosen: true, source: "its chamber: unmeasured" },
+        exit: { value: [30, 15], range: [[25, 38], [10, 20]], chosen: true, source: "its front hole: unmeasured" }
+      },
+      "harmon-stem-in": {
+        kind: "harmon",
+        cork: { value: 86, range: [75, 100], chosen: true, source: "as stem out" },
+        chamber: { value: [150, 130], range: [[135, 170], [110, 150]], chosen: true, source: "as stem out" },
+        exit: { value: [16, 85], range: [[13, 20], [70, 100]], chosen: true, source: "its stem's tube: unmeasured" },
+        bell: { value: [48, 20], range: [[40, 56], [15, 25]], chosen: true, source: "its stem's little bell: unmeasured" }
+      }
+    },
+    horn: {
+      straight: {
+        kind: "straight",
+        length: { value: 190, source: "Denis Wick DW5524 French horn straight mute: 19 x 11.51 x 11.51 cm (its dealers' listings: lamusainstrumentos.es/en/denis-wick-5524-french-horn-straight-mute.html, target.com 7.48 x 4.53 x 4.53 in; read 3 November 2026)" },
+        base: { value: 115, source: "Denis Wick DW5524, as `length`" },
+        tip: { value: 40, range: [30, 55], chosen: true, source: "its open tip's outer diameter: unmeasured" },
+        gap: { value: 4, range: [2, 7], chosen: true, source: "its corks' thickness: unmeasured (thicker corks open its sound, low notes less stable: D. Palacio Buil 2026, Technical and Acoustic Study on the Horn Mutes, researchcatalogue.net/view/3944849/3980181)" },
+        wall: { value: 1.2, range: [0.8, 2], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      },
+      stopped: {
+        kind: "hand",
+        cork: { value: 95, range: [80, 110], chosen: true, source: "where the right hand closes the bell: unmeasured" },
+        gap: { value: 2.5, range: [1, 4], chosen: true, source: "the ring the hand leaves: unmeasured" }
+      }
+    },
+    tuba: {
+      straight: {
+        kind: "straight",
+        length: { value: 725, range: [710, 740], source: "Denis Wick DW5518 tuba straight mute, spun aluminium: 73.99 x 32 x 32 cm, approx. 71 cm long (its dealers' listings: johnpacker.co.uk/prod/denis-wick-dw5518-tuba-mute-straight, thomann.co.uk/denis_wick_tuba_straight_dw5518.htm; read 3 November 2026), the two lengths its range" },
+        base: { value: 320, source: "Denis Wick DW5518, as `length`" },
+        tip: { value: 80, range: [60, 110], chosen: true, source: "its open tip's outer diameter: unmeasured" },
+        gap: { value: 5, range: [3, 9], chosen: true, source: "its corks' thickness: unmeasured (its maker gives extra corks for larger tubas)" },
+        wall: { value: 1.5, range: [1, 2.5], chosen: true, source: "spun aluminium's thickness: unmeasured" }
+      }
+    }
+  },
+  measuredInBells: [
+    { instrument: "trombone", mute: "straight", parasitic: 77, source: `D. M. Campbell, J. Gilbert & A. Myers 2021, "'Put a Sock in It!' Mutes for Musical Horns", Acoustics Today 17(2) 13-21, doi:10.1121/at.2021.17.2.13, Fig. 10: a tenor trombone's impedance in first position with a straight mute, a small added peak at 77 Hz, its second to fourth peaks raised a little` },
+    { instrument: "trombone", mute: "straight", parasitic: 140, source: "E. Martinez-Montejo, P. L. Rendon, L. Ruiz-Huerta, L. Vega-Alvarado & A. Caballero-Ruiz 2016, Characterisation of brass instruments with mutes through experimental means and finite-element simulations, Proc. 22nd ICA, ICA2016-399, Fig. 2: a small impedance peak at around 140 Hz, the peaks shifted up a little (research-downloads/brass/mutes/)" },
+    { instrument: "trumpet", mute: "cup", risesAt: 1200, source: "Martinez-Montejo et al. 2016, Fig. 3: a distinct rise in the trumpet's impedance with its cup mute in near 1200 Hz, the cup mute's own first peak" }
+  ]
+};
+
+// render/synthesis/src/brass-mutes.mjs
+var BRASS_MUTES = brass_mutes_default.instruments;
+
+// public/shared/performers/personality.js
+var LATER = Object.freeze(["tone"]);
+var LEVERS = Object.freeze(["daring", "density", "loudness", "fioriture", "leap", "slurs", "motifLength", "runs", "rests", "commas", "landing", "phraseRange", "quoting", ...LATER]);
+var TONE_RANGES = Object.freeze(["vibrato", "depth", "pressure", "contact"]);
+var RANGE = "personality";
+var ORDINARY = Object.freeze({ vibrato: () => 1 / setting(RANGE, "vibratoMost"), depth: () => 0, pressure: () => 1 / 2, contact: () => 1 / 2 });
 
 // public/shared/estimation/pitch-yin.js
 var YIN_DEFAULTS = Object.freeze({ minHz: 60, maxHz: 1200, threshold: 0.15, decimate: 4, silenceRms: 2e-3 });
@@ -6462,8 +6723,9 @@ var RISE = BREATH.probeRise;
 var SLIDE_SPEED = 2;
 var SLIDE_LEAST = 0.2;
 var TECHNIQUE = Object.freeze({
-  flutter: Object.freeze({ hz: 25, depth: 0.7, hzReach: [5, 60], depthReach: [0, 1] }),
-  hum: Object.freeze({ interval: -12, level: 0.2, intervalReach: [-36, 12], levelReach: [0, 1] })
+  flutter: Object.freeze({ hz: (FLUTTER_HZ[0] + FLUTTER_HZ[1]) / 2, depth: 0.7, hzReach: [5, 60], depthReach: [0, 1] }),
+  hum: Object.freeze({ interval: -12, level: 0.2, intervalReach: [-36, 12], levelReach: [0, 1] }),
+  growl: Object.freeze({ interval: -12, level: 0.2, rough: 0.6, intervalReach: [-36, 12], levelReach: [0, 1], roughReach: [0, 1] })
 });
 var slideSeconds = (from, to) => {
   const travel = Math.abs(to - from) / 2;
@@ -6472,6 +6734,9 @@ var slideSeconds = (from, to) => {
 function windsDial(env) {
   const { log = console.log, warn = console.error } = env;
   let current = null, version = 0;
+  const bodies = /* @__PURE__ */ new Map();
+  let muting = null, quiet = 0;
+  const RUNG = 0.5;
   const state = {
     midi: null,
     note: null,
@@ -6484,6 +6749,7 @@ function windsDial(env) {
     between: null,
     blowing: false,
     tract: null,
+    turbulence: 0,
     lip: null,
     lipDialled: false,
     valves: null,
@@ -6499,7 +6765,9 @@ function windsDial(env) {
     breathing: { on: false, litres: BREATH_LITRES, inhale: LUNGS.inhale.seconds },
     flutter: { on: false, hz: TECHNIQUE.flutter.hz, depth: TECHNIQUE.flutter.depth },
     hum: { on: false, interval: TECHNIQUE.hum.interval, level: TECHNIQUE.hum.level },
-    swell: 1
+    growl: { on: false, interval: TECHNIQUE.growl.interval, level: TECHNIQUE.growl.level, rough: TECHNIQUE.growl.rough },
+    swell: 1,
+    noise: { player: 1, breath: 1, lips: 1 }
   };
   const held = { breath: 0, tongue: 1 };
   const lungs = new Lungs();
@@ -6524,19 +6792,7 @@ function windsDial(env) {
   }
   const holdAs = (row, seconds, how) => send(played(row, how), seconds, current.presence != null ? JET_FLOOR * row[current.breath] : void 0);
   const hold = (row, seconds) => holdAs(row, seconds);
-  const eased2 = (x) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, x)));
-  const lineAt = (frame) => {
-    const l = current.line;
-    if (!l) return null;
-    const p = l.frames > 0 ? eased2((frame - l.at) / l.frames) : 1;
-    return l.from.map((a, k) => a + (l.to[k] - a) * p);
-  };
-  function send(row, seconds, floor) {
-    const now = current.frames;
-    current.line = { from: lineAt(now) ?? row, to: row, at: now, frames: Math.max(0, Math.round(seconds * WINDS_RATE)), floor };
-    if (current.roll) roll();
-    else current.stream.hold(row, seconds, floor);
-  }
+  const send = (row, seconds, floor) => current.stream.hold(row, seconds, floor);
   let queue = [];
   function after(seconds, run, tag = "tongue") {
     const at2 = current.frames + Math.max(1, Math.round(seconds * WINDS_RATE));
@@ -6549,16 +6805,23 @@ function windsDial(env) {
   const tonguing = () => queue.some((e) => e.tag === "tongue");
   const PULL_MOST = 16384;
   let soloist = null;
+  let playerSettings = { seed: DEFAULT_SEED, seconds: 60, personality: {} };
+  const playerShown = () => ({ ...playerSettings, levers: LEVERS, grammars: LINE.grammars, ranges: TONE_RANGES });
   async function solo(given2) {
     const now = current.frames / WINDS_RATE;
     if (soloist?.line) {
       soloist = { said: soloist.line.shown(now), playing: false };
       withdrawn({ by: "soloist", from: now });
       if (state.blowing) await change("/blow", { on: false });
+      await givenBack();
     }
     if (!given2.on) return { status: 200, json: { ...playing(), soloist } };
-    const { composeSolo, SoloLine } = await import("./soloist/soloist.js");
-    const composed2 = await composeSolo({ model: current.model, kind: current.kind, seed: Number(given2.seed), seconds: Number(given2.seconds) });
+    pageOwn = ownOf();
+    const { composeSolo, SoloLine, playerSettingsOf } = await import("./soloist/soloist.js");
+    const of2 = (name) => given2[name] === void 0 ? playerSettings[name] : name === "personality" ? given2[name] : Number(given2[name]);
+    playerSettings = playerSettingsOf({ seed: of2("seed"), seconds: of2("seconds"), personality: of2("personality") });
+    const { windsEngineOf } = await import("./soloist/soloist.js");
+    const composed2 = await composeSolo({ model: current.model, kind: current.kind, ...playerSettings, compass: [Math.min(...current.notes), Math.max(...current.notes)], engine: windsEngineOf(shown()) });
     const dial = shown(), lead = Math.max(dial.strokeLeast.tongued, dial.strokeLeast.legato) + PULL_MOST / WINDS_RATE, start = current.frames / WINDS_RATE + lead;
     const send2 = async (path, asked) => {
       try {
@@ -6664,8 +6927,9 @@ function windsDial(env) {
       held.breath = 0;
       held.tongue = 1;
       hold(state.row, least("breathFall"));
+      quiet = current.frames + Math.round((least("breathFall") + RUNG) * WINDS_RATE);
     }
-    flutter();
+    techniques();
     sway();
   }
   function fromRest() {
@@ -6675,18 +6939,18 @@ function windsDial(env) {
       attackNow(state.rise);
     }
   }
-  function spending({ asHeld = false } = {}) {
+  const spends = () => Boolean(current && state.pitch != null && state.row && state.breathing.on && state.blowing && !lungs.taking);
+  function playersSpend() {
     if (!current || state.pitch == null || !state.row) return 0;
-    if (!asHeld && (!state.breathing.on || !state.blowing || lungs.taking)) return 0;
     const b = current.breath, rules = state.rules?.[b], share = rules > 0 ? state.row[b] * state.swell / rules : 1;
-    return airflowOf(current.model).of({ dynamic: state.dynamic, midi: state.pitch, share }) * (asHeld ? 1 : held.breath * held.tongue * (current.roll ? 1 - current.roll.depth / 2 : 1));
+    return airflowOf(current.model).of({ dynamic: state.dynamic, midi: state.pitch, share });
   }
   function breathe() {
     cancel("tongue");
     cancel("repeat");
     cancel("attack");
     lungs.breathe();
-    flutter();
+    techniques();
     held.breath = 0;
     held.tongue = 1;
     hold(state.row, least("breathFall"));
@@ -6695,7 +6959,7 @@ function windsDial(env) {
       lungs.filled();
       fromRest();
       repeating();
-      flutter();
+      techniques();
       sway();
     }, "breath");
   }
@@ -6710,56 +6974,24 @@ function windsDial(env) {
   }
   function sway(seconds = 0.2) {
     const sounding2 = state.blowing && !lungs.taking;
-    if (state.hum.on) {
-      oscillate("hum", { columns: [current.breath], depths: [sounding2 ? state.hum.level : 0], cents: [false], rate: hummed(), seconds });
-      return;
-    }
     const { on, width, rate } = state.vibrato, v = on && sounding2 ? width / 2 : 0;
-    if (current.lips) oscillate("vibrato", { columns: [current.columns.findIndex((c) => c[0] === "reed" && c[2] === "pulsation")], depths: [v], cents: [true], rate, seconds });
-    else oscillate("vibrato", { columns: [current.breath], depths: [VIBRATO_SHARE * v], cents: [false], rate, seconds });
+    if (current.lips) {
+      const way = lipsDirection(current.lips, state.lip, 1, state.valves), got2 = on && width > 0 ? pressed(width / 2) : null, depth = v && got2 ? got2.depth : 0;
+      current.heard = got2 && 2 * got2.heard;
+      current.stream.vibrato({ columns: way.columns, depths: way.slopes.map((s) => s * depth), cents: way.columns.map(() => true), rate, seconds });
+    } else current.stream.vibrato({ columns: [current.breath], depths: [VIBRATO_SHARE * v], cents: [false], rate, seconds });
   }
-  function oscillate(kind, line2) {
-    cancel("sway");
-    const o = current.oscillator;
-    if (o && o.kind !== kind && o.line.depths.some((d) => d !== 0) && line2.seconds > 0) {
-      const off = { ...o.line, depths: o.line.depths.map(() => 0), seconds: line2.seconds };
-      current.stream.vibrato(off);
-      current.oscillator = { kind: o.kind, line: off };
-      after(line2.seconds, () => {
-        current.stream.vibrato(line2);
-        current.oscillator = { kind, line: line2 };
-      }, "sway");
-      return;
-    }
-    current.stream.vibrato(line2);
-    current.oscillator = { kind, line: line2 };
-  }
-  const hummed = () => windTechniqueAt({ kind: "hum", interval: state.hum.interval, level: state.hum.level }, state.pitch).hum.hz;
-  function flutter() {
-    cancel("flutter");
-    if (state.flutter.on && state.blowing && !lungs.taking) {
-      current.roll = { from: current.frames, turn: 0, hz: state.flutter.hz, depth: state.flutter.depth };
-      rolling();
-      return;
-    }
-    if (!current.roll) return;
-    const l = current.line, half = Math.round(WINDS_RATE / (2 * current.roll.hz));
-    current.roll = null;
-    if (l) current.stream.hold(l.to, Math.max(l.at + l.frames - current.frames, half) / WINDS_RATE, l.floor);
-  }
-  const turnAt = (r) => r.from + Math.round(r.turn * WINDS_RATE / (2 * r.hz));
-  function roll() {
-    const r = current.roll, at2 = turnAt(r), row = lineAt(at2);
-    if (!row) return;
-    if (r.turn % 2) row[current.breath] *= 1 - r.depth;
-    current.stream.hold(row, Math.max(1, at2 - current.frames) / WINDS_RATE, current.line.floor);
-  }
-  function rolling() {
-    const r = current.roll;
-    r.turn++;
-    roll();
-    queue.push({ at: turnAt(r), run: rolling, tag: "flutter" });
-    queue.sort((a, b) => a.at - b.at);
+  const voiced = (kind) => windTechniqueAt({ kind, ...state[kind] }, state.pitch)[kind];
+  const hummed = (kind) => voiced(kind).hz;
+  function techniques() {
+    const sounding2 = state.blowing && !lungs.taking && state.pitch != null, on = (kind) => sounding2 && state[kind].on;
+    current.stream.technique({
+      column: current.breath,
+      seconds: least("technique"),
+      ...on("hum") ? { hum: voiced("hum") } : {},
+      ...on("growl") ? { growl: voiced("growl") } : {},
+      ...on("flutter") ? { flutter: { hz: state.flutter.hz, depth: state.flutter.depth } } : {}
+    });
   }
   const vibratoOf = (model) => {
     const own2 = WIND_VIBRATO[model] ?? WIND_VIBRATO[{ "alto-flute": "alto" }[model]] ?? { rate: 5, width: 0 };
@@ -6787,10 +7019,14 @@ function windsDial(env) {
     }
     return (low + high) / 2;
   }
+  function lipsHeld() {
+    const own2 = current.lips.slide && state.note != null && current.notes[state.note] === state.pitch ? current.lips.notes[state.note] : null;
+    return { pitch: state.lipDialled && !current.lips.slide ? pitchOfLips(state.lip, state.dynamic) : state.pitch, own: own2 };
+  }
   const attackHeld = () => {
     if (!(current?.lips && state.lip)) return null;
-    const own2 = current.lips.slide && state.note != null && current.notes[state.note] === state.pitch ? current.lips.notes[state.note] : null;
-    return attackOn(state.lipDialled && !current.lips.slide ? pitchOfLips(state.lip, state.dynamic) : state.pitch, state.dynamic, own2);
+    const { pitch, own: own2 } = lipsHeld();
+    return attackOn(pitch, state.dynamic, own2);
   };
   function standardOf(rules) {
     const charted2 = rules.notes.filter((n) => n.names?.length).map((n) => n.midi), [low, high] = [Math.min(...charted2), Math.max(...charted2)];
@@ -6845,11 +7081,36 @@ function windsDial(env) {
       const a2 = current.attacks?.notes.find((a3) => noteKey(a3) === noteKey(n))?.dynamics[dynamic];
       return a2?.share != null ? a2 : null;
     };
-    const notes = current.lips.notes, { k, share: shared } = charted(pitch), { a: na, b: nb, share } = own2 ? { a: own2, b: own2, share: 0 } : current.lips.slide ? onSlide(pitch, dynamic).on : { a: notes[k], b: notes[Math.min(k + 1, notes.length - 1)], share: shared };
-    const a = at2(na), b = at2(nb);
+    const { a: na, b: nb, share } = partialsAbout(pitch, dynamic, own2), a = at2(na), b = at2(nb);
     const kept = (g) => g && { share: g.share, settleAfter: g.settleAfter };
     if (!a || !b || share === 0 || share === 1) return kept(share === 1 ? b ?? a : a ?? b);
     return { share: Math.exp(Math.log(a.share) + (Math.log(b.share) - Math.log(a.share)) * share), settleAfter: a.settleAfter + (b.settleAfter - a.settleAfter) * share };
+  }
+  function partialsAbout(pitch, dynamic, own2 = null) {
+    const notes = current.lips.notes, { k, share } = charted(pitch);
+    return own2 ? { a: own2, b: own2, share: 0 } : current.lips.slide ? onSlide(pitch, dynamic).on : { a: notes[k], b: notes[Math.min(k + 1, notes.length - 1)], share };
+  }
+  function pressed(half) {
+    const law = current.vibrato, { pitch, own: own2 } = lipsHeld(), { a, b, share } = partialsAbout(pitch, state.dynamic, own2);
+    const at2 = (n) => {
+      const p = n.pressures[state.dynamic], by = Object.values(law?.notes.find((m) => noteKey(m) === noteKey(n))?.dynamics ?? {}).filter((d) => d.heard?.[0] != null).map((d) => ({ p: d.pressure, ...heardAs(law.depths, d.heard, half) })).sort((x3, y3) => x3.p - y3.p), j = by.findIndex((d) => d.p >= p);
+      if (!by.length) return null;
+      if (j <= 0) return by.at(j);
+      const [x2, y2] = [by[j - 1], by[j]], s = Math.log(p / x2.p) / Math.log(y2.p / x2.p);
+      return { depth: x2.depth + (y2.depth - x2.depth) * s, heard: x2.heard + (y2.heard - x2.heard) * s };
+    };
+    const [x, y] = [at2(a), at2(b)];
+    if (!x || !y || share === 0 || share === 1) return share === 1 ? y ?? x : x ?? y;
+    return { depth: x.depth + (y.depth - x.depth) * share, heard: x.heard + (y.heard - x.heard) * share };
+  }
+  function heardAs(depths, heard, half) {
+    let [d0, h0] = [0, 0];
+    for (const [k, h] of heard.entries()) {
+      if (h == null) break;
+      if (h >= half) return { depth: d0 + (depths[k] - d0) * (half - h0) / (h - h0), heard: half };
+      [d0, h0] = [depths[k], h];
+    }
+    return { depth: d0, heard: h0 };
   }
   async function sounding(pitch, dynamic) {
     if (current.lips) return onLips(pitch, dynamic);
@@ -6909,7 +7170,8 @@ function windsDial(env) {
     });
     state.row = composed();
     changed(before, { pitch: { from, to: pitch }, moving: found.out != null ? slideTo(found.out) : 0 });
-    if (state.hum.on) sway();
+    if (made.lips) sway();
+    if (state.hum.on || state.growl.on) techniques();
   }
   const tractMeasured = (of2) => {
     try {
@@ -6923,6 +7185,16 @@ function windsDial(env) {
   function tract(resonances) {
     state.tract = new VocalTract(resonances);
     current.stream.tract(state.tract.resonances, least("tract"));
+  }
+  function turbulence(level) {
+    state.turbulence = level;
+    current.stream.turbulence(level);
+  }
+  const TURBULENCE_MOST = 0.01;
+  const NOISE_MOST = 5;
+  function noise(temperatures, seeded = false) {
+    state.noise = { ...state.noise, ...temperatures };
+    windsNoiseKinds(current.kind).forEach((what, k) => current.stream.noise(windsNoiseLine(what, state.noise.player * state.noise[what], seeded && k === 0 ? DEFAULT_SEED : void 0)));
   }
   let wanted = null, loading = null, failed = null, loader = null;
   const step = (said) => {
@@ -6952,7 +7224,6 @@ function windsDial(env) {
   }
   async function takeUp(model) {
     log(`The ${model}'s body ...`);
-    const kind = env.kinds[model], brass = kind === "lips";
     if (current && state.blowing) await serial(() => {
       cancel("repeat");
       cancel("tongue");
@@ -6960,21 +7231,68 @@ function windsDial(env) {
       cancel("breath");
       lungs.filled();
       state.blowing = false;
-      flutter();
+      techniques();
       held.breath = 0;
       held.tongue = 1;
       hold(state.row, least("breathFall"));
       sway();
     });
-    const body = await env.body(model), folder = body.folder;
-    if (wanted !== model) return;
-    step("its engine");
-    const stream2 = env.engine({ model, folder, onError: (said) => warn(`  the engine: ${said}`) });
+    const made = await bodyOf(model, null, () => wanted === model, step);
+    if (!made) return;
+    await serial(() => {
+      const before = current;
+      givenBack({ played: false });
+      current = made;
+      version++;
+      queue = [];
+      refused = [];
+      pace = null;
+      soloist = null;
+      muting = null;
+      quiet = 0;
+      making.clear();
+      for (const kept of /* @__PURE__ */ new Set([before, ...bodies.values()])) if (kept && kept !== made) {
+        kept.glides?.stop();
+        kept.stream.close();
+      }
+      bodies.clear();
+      bodies.set(null, made);
+      Object.assign(state, { x: {}, fingers: {}, blowing: false, lip: null, lipDialled: false, valves: null, slide: null, slideDialled: false, vibrato: { on: false, ...vibratoOf(model) }, row: null, pitch: null });
+      Object.assign(held, { breath: 0, tongue: 1 });
+      if (made.neutral) state.dynamic = made.neutral.dynamic;
+      const k = made.neutral ? made.neutral.note : Math.floor(made.notes.length / 2), middle2 = made.notes[k];
+      Object.assign(state, {
+        pitch: middle2,
+        midi: middle2,
+        note: k,
+        rules: [...made.rows.get(state.dynamic)[k]],
+        lip: made.lips ? made.lips.notes[k].lip : null,
+        valves: made.lips?.notes[k].valves ?? null,
+        between: { low: middle2, high: middle2, share: 0, sounds: null }
+      });
+      if (made.neutral?.breath) state.x[made.breath] = made.neutral.breath;
+      state.row = composed();
+      state.vibrato.on = state.vibrato.width > 0;
+      holdAs(state.row, 0);
+      if (made.lips?.slide) slideTo(made.lips.notes[k].out);
+      tract(normalTract(model, 440 * 2 ** ((middle2 - 69) / 12)));
+      turbulence(turbulenceOf(model) ?? 0);
+      noise({}, true);
+      sway(0);
+    });
+    log(`  the ${model} ready${made.stream.threads > 1 ? `, its engine on ${made.stream.threads} cores` : ""}`);
+  }
+  async function bodyOf(model, mute, still, said) {
+    const kind = env.kinds[model], brass = kind === "lips";
+    const body = await env.body(model, { mute }), folder = body.folder;
+    if (!still()) return null;
+    said("its engine");
+    const stream2 = env.engine({ model, folder, onError: (said2) => warn(`  the engine: ${said2}`) });
     try {
       await stream2.ready;
       const columns = await stream2.columns(), rules = body.rules;
-      const width = brass ? rules.valves?.width ?? rules.columns.length : null;
-      if (brass && !(width === columns.length && rules.columns.every((name) => columns[lipsColumn(rules, name)]?.[0] === "reed" && columns[lipsColumn(rules, name)][2] === name) && (rules.valves?.columns ?? []).flat().every((k) => columns[k]?.[0] === "opening"))) throw new Error(`the ${model}'s saved rows are not its engine's columns`);
+      const width = brass ? rowLayout(rules)?.width ?? rules.columns.length : null;
+      if (brass && !(width === columns.length && rules.columns.every((name) => columns[lipsColumn(rules, name)]?.[0] === "reed" && columns[lipsColumn(rules, name)][2] === name) && [...(rules.valves?.columns ?? []).flat(), ...rowLayout(rules)?.closed ?? []].every((k) => columns[k]?.[0] === "opening"))) throw new Error(`the ${model}'s saved rows are not its engine's columns`);
       const at2 = (kind_, name) => {
         const k = columns.findIndex((c) => c[0] === kind_ && c[2] === name);
         return k < 0 ? null : k;
@@ -6983,14 +7301,19 @@ function windsDial(env) {
       const made = {
         model,
         kind,
+        mute,
         folder,
         name: body.name,
         stream: stream2,
         columns,
         frames: 0,
+        flow: 0,
+        blown: null,
         notes: rules.notes.map((n) => n.midi),
         lips: brass ? rules : null,
         attacks: brass ? body.attacks : null,
+        vibrato: brass ? body.vibrato : null,
+        heard: null,
         holes: laid.holes,
         // (How its body is laid out for the engine -- its losses, its mesh, its elements' order, its precision and rates:
         // the page's physics.)
@@ -7008,50 +7331,100 @@ function windsDial(env) {
       made.neutral = env.neutral(folder);
       if (made.neutral && made.notes[made.neutral.note] !== made.neutral.midi) made.neutral = null;
       for (const dynamic of Object.keys(DYNAMIC_VELOCITY)) {
-        step(`its notes at ${dynamic}`);
+        said(`its notes at ${dynamic}`);
         made.rows.set(dynamic, await rowsOf(made, dynamic));
-        if (wanted !== model) {
+        if (!still()) {
           stream2.close();
-          return;
+          return null;
         }
       }
       env.impedance(made, { current: () => current === made });
-      await serial(() => {
-        const before = current;
-        current = made;
-        version++;
-        queue = [];
-        refused = [];
-        pace = null;
-        soloist = null;
-        before?.glides?.stop();
-        before?.stream.close();
-        Object.assign(state, { x: {}, fingers: {}, blowing: false, lip: null, lipDialled: false, valves: null, slide: null, slideDialled: false, vibrato: { on: false, ...vibratoOf(model) }, row: null, pitch: null });
-        Object.assign(held, { breath: 0, tongue: 1 });
-        if (made.neutral) state.dynamic = made.neutral.dynamic;
-        const k = made.neutral ? made.neutral.note : Math.floor(made.notes.length / 2), middle2 = made.notes[k];
-        Object.assign(state, {
-          pitch: middle2,
-          midi: middle2,
-          note: k,
-          rules: [...made.rows.get(state.dynamic)[k]],
-          lip: made.lips ? made.lips.notes[k].lip : null,
-          valves: made.lips?.notes[k].valves ?? null,
-          between: { low: middle2, high: middle2, share: 0, sounds: null }
-        });
-        if (made.neutral?.breath) state.x[made.breath] = made.neutral.breath;
-        state.row = composed();
-        state.vibrato.on = state.vibrato.width > 0;
-        holdAs(state.row, 0);
-        if (made.lips?.slide) slideTo(made.lips.notes[k].out);
-        tract(normalTract(model, 440 * 2 ** ((middle2 - 69) / 12)));
-        sway(0);
-      });
-      log(`  the ${model} ready${stream2.threads > 1 ? `, its engine on ${stream2.threads} cores` : ""}`);
+      return made;
     } catch (error) {
       stream2.close();
       throw error;
     }
+  }
+  function muteTo(mute, { ready: ready2 = false } = {}) {
+    const model = current.model, own2 = BRASS_MUTES[model] ?? {};
+    if (mute !== null && !Object.hasOwn(own2, mute)) throw new Error(Object.keys(own2).length ? `the ${model}'s mutes: ${Object.keys(own2).join(", ")}, or none` : `the ${model} takes no mute`);
+    if (ready2) {
+      readied(mute).catch((error) => warn(`The ${model}'s ${mute} mute: ${error.message}`));
+      return;
+    }
+    if (mute === current.mute) {
+      muting = null;
+      return;
+    }
+    const asked = { mute, made: bodies.get(mute) ?? null, error: null, since: Date.now() };
+    muting = asked;
+    if (asked.made) return;
+    readied(mute).then((made) => {
+      if (muting === asked && made) asked.made = made;
+    }, (error) => {
+      asked.error = error.message;
+      if (muting === asked) warn(`The ${model}'s ${mute} mute: ${error.message}`);
+    });
+  }
+  const making = /* @__PURE__ */ new Map();
+  let closed = false;
+  function readied(mute) {
+    if (bodies.has(mute)) return Promise.resolve(bodies.get(mute));
+    if (making.has(mute)) return making.get(mute).promise;
+    const model = current.model, kept = () => !closed && current?.model === model, job = { step: "its body" };
+    const done = () => {
+      if (making.get(mute) === job) making.delete(mute);
+    };
+    job.promise = bodyOf(model, mute, kept, (said) => {
+      job.step = said;
+    }).then((made) => {
+      done();
+      if (!made) return null;
+      if (kept() && !bodies.has(mute)) {
+        bodies.set(mute, made);
+        return made;
+      }
+      made.stream.close();
+      return kept() ? bodies.get(mute) ?? null : null;
+    }, (error) => {
+      done();
+      throw error;
+    });
+    making.set(mute, job);
+    return job.promise;
+  }
+  function changedOver() {
+    const from = current, to = muting.made;
+    muting = null;
+    to.frames = from.frames;
+    to.flow = 0;
+    to.blown = null;
+    current = to;
+    const [low, high] = [Math.min(...to.notes), Math.max(...to.notes)], pitch = Math.min(Math.max(state.pitch, low), high);
+    const k = state.midi === state.pitch ? to.notes.indexOf(pitch) : -1;
+    const found = k >= 0 ? { row: to.rows.get(state.dynamic)[k], lip: to.lips.notes[k].lip, valves: to.lips.notes[k].valves ?? null, out: to.lips.notes[k].out ?? null, low: pitch, high: pitch, share: 0, sounds: null } : onLips(pitch, state.dynamic);
+    const near = to.notes.reduce((a, m, j) => Math.abs(m - pitch) < Math.abs(to.notes[a] - pitch) ? j : a, 0);
+    Object.assign(state, {
+      pitch,
+      midi: to.notes[k >= 0 ? k : near],
+      note: k >= 0 ? k : near,
+      rules: [...found.row],
+      lip: state.lipDialled ? state.lip : found.lip,
+      valves: found.valves ?? null,
+      between: { low: found.low, high: found.high, share: found.share, sounds: found.sounds }
+    });
+    state.row = composed();
+    holdAs(state.row, 0);
+    if (to.lips.slide) {
+      state.slide = state.slideDialled || found.out == null ? state.slide : found.out;
+      if (state.slide != null) to.stream.slide(state.slide, 0);
+    }
+    tract(state.tract.resonances);
+    turbulence(state.turbulence);
+    noise({}, true);
+    techniques();
+    sway(0);
+    log(`  the ${to.model} ${to.mute ? `with its ${to.mute} mute in` : "open"}`);
   }
   let rendering = Promise.resolve();
   const serial = (job) => rendering = rendering.catch(() => {
@@ -7062,17 +7435,39 @@ function windsDial(env) {
     if (soloist?.line) {
       const now = current.frames / WINDS_RATE;
       await soloist.line.take(now);
-      if (soloist.line.done(now)) soloist = { said: soloist.line.shown(now), playing: false };
+      if (soloist.line.done(now)) {
+        soloist = { said: soloist.line.shown(now), playing: false };
+        await givenBack();
+      }
     }
-    const t = performance.now(), out = new Float32Array(frames), made = current;
+    const t = performance.now(), out = new Float32Array(frames);
+    let made = current;
+    const changing = () => Boolean(muting?.made) && !state.blowing, over = () => {
+      if (changing() && made.frames >= quiet) {
+        changedOver();
+        made = current;
+      }
+    };
     for (let got2 = 0; got2 < frames; ) {
-      while (queue.length && queue[0].at <= made.frames) await queue.shift().run();
-      const flow = spending();
-      const next = Math.min(frames - got2, queue.length ? queue[0].at - made.frames : frames - got2, flow > 0 ? Math.max(1, Math.ceil(lungs.secondsLeft(flow) * WINDS_RATE)) : Infinity);
+      over();
+      while (queue.length && queue[0].at <= made.frames) {
+        await queue.shift().run();
+        over();
+      }
+      const spending = spends(), flow = made.flow;
+      const next = Math.min(
+        frames - got2,
+        queue.length ? queue[0].at - made.frames : frames - got2,
+        spending && flow > 0 ? Math.max(1, Math.ceil(lungs.secondsLeft(flow) * WINDS_RATE)) : Infinity,
+        changing() && quiet > made.frames ? quiet - made.frames : Infinity
+      );
       out.set(await made.stream.render(next), got2);
       got2 += next;
       made.frames += next;
-      if (flow > 0 && current === made && lungs.spend(flow, next / WINDS_RATE)) breathe();
+      const air = await made.stream.air();
+      if (air.seconds > 0) made.flow = air.litres / air.seconds;
+      if (state.blowing && !lungs.taking && made.flow > 0) made.blown = made.flow;
+      if (spending && current === made && lungs.spend(made.flow, air.seconds)) breathe();
     }
     const taken = (performance.now() - t) / 1e3 / (frames / WINDS_RATE);
     pace = pace == null ? taken : 0.9 * pace + 0.1 * taken;
@@ -7116,10 +7511,16 @@ function windsDial(env) {
       unplayed: lips ? lips.unplayed : null,
       lipReach: lips ? [lips.grid.lips[0], lips.grid.lips.at(-1)] : null,
       unattacked: attacks ? attacks.notes.map((a) => Object.entries(a.dynamics).filter(([, g]) => g.share == null).map(([d]) => d)) : null,
+      // (Its mutes, the one in, the one asked and how far its body has come, and those kept taken up.)
+      mute: current.mute,
+      mutes: Object.keys(BRASS_MUTES[current.model] ?? {}),
+      muting: muting && { mute: muting.mute, ready: Boolean(muting.made), step: muting.made ? null : making.get(muting.mute)?.step ?? "its body", seconds: (Date.now() - muting.since) / 1e3, error: muting.error },
+      mutesKept: [...bodies.keys()],
       vibratoOwn: vibratoOf(current.model),
       layout: current.layout,
       players: current.players,
       lungs: { ...LUNGS, breath: BREATH_LITRES, airflow: airflowOf(current.model).source },
+      noise: { kinds: windsNoiseKinds(current.kind).map((what) => ({ what, sd: WINDS_NOISE.kinds[what].sd })), profile: WINDS_NOISE.profile, most: NOISE_MOST },
       neutral: current.neutral ? {
         note: current.neutral.note,
         midi: current.neutral.midi,
@@ -7131,7 +7532,8 @@ function windsDial(env) {
       } : null,
       played: playing(),
       refused,
-      soloist: soloShown()
+      soloist: soloShown(),
+      player: playerShown()
     };
   }
   const LIMITS = () => ({
@@ -7147,6 +7549,9 @@ function windsDial(env) {
     flutterDepth: TECHNIQUE.flutter.depthReach,
     humInterval: TECHNIQUE.hum.intervalReach,
     humLevel: TECHNIQUE.hum.levelReach,
+    growlInterval: TECHNIQUE.growl.intervalReach,
+    growlLevel: TECHNIQUE.growl.levelReach,
+    growlRough: TECHNIQUE.growl.roughReach,
     swell: [1 / REACH, REACH]
   });
   const fingeringOf = (row) => current?.lips?.valves ? current.lips.valves.columns.map(([k]) => row[k] < 0.5 ? "1" : "0").join("") : null;
@@ -7155,9 +7560,11 @@ function windsDial(env) {
     tract: state.tract?.resonances ?? [],
     attack: attackHeld(),
     fingering: state.row ? fingeringOf(state.row) : null,
-    lungs: { air: lungs.air, taking: lungs.taking, flow: spending({ asHeld: true }) },
-    hummed: current && state.pitch != null ? hummed() : null,
-    position: current?.lips?.slide && state.slide != null ? positionAt(state.slide) : null
+    lungs: { air: lungs.air, taking: lungs.taking, flow: current?.blown ?? null, players: playersSpend() },
+    hummed: current && state.pitch != null ? hummed("hum") : null,
+    growled: current && state.pitch != null ? hummed("growl") : null,
+    position: current?.lips?.slide && state.slide != null ? positionAt(state.slide) : null,
+    vibratoHeard: current?.lips ? current.heard : null
   });
   async function change(path, given2) {
     const before = state.row;
@@ -7218,6 +7625,7 @@ function windsDial(env) {
         Object.assign(state, { lip, lipDialled: true, rules: lipsRow(current.lips, lip, playersBreath(440 * 2 ** ((state.pitch - 69) / 12), DYNAMIC_VELOCITY[state.dynamic]), state.valves) });
         state.row = composed();
         changed(before);
+        sway();
         break;
       }
       // (A trombone's slide drawn by itself, `out` m of tube past its first position, as its players draw it: its lips
@@ -7286,28 +7694,32 @@ function windsDial(env) {
           if (state.blowing) {
             fromRest();
             repeating();
-            flutter();
+            techniques();
             sway();
           }
         }
         break;
       }
-      // (Its flutter: on while it is blown, `hz` turns of the roll a second, `depth` of the breath closed off; its hum:
-      // on, the hummed pitch `interval` semitones from the note, its breath swung `level` of itself.)
+      // (Its flutter: on while it is blown, `hz` turns of the roll a second, `depth` of the breath closed off; its hum and
+      // its growl: on, the voice's pitch `interval` semitones from the note, its breath swung `level` of itself, a growl's
+      // voice `rough`.)
       case "/flutter": {
         const hz = given2.hz === void 0 ? state.flutter.hz : Number(given2.hz), depth = given2.depth === void 0 ? state.flutter.depth : Number(given2.depth), limits = LIMITS();
         if (!(hz >= limits.flutterHz[0] && hz <= limits.flutterHz[1])) throw new Error(`a flutter from ${limits.flutterHz[0]} to ${limits.flutterHz[1]} times a second`);
         if (!(depth >= limits.flutterDepth[0] && depth <= limits.flutterDepth[1])) throw new Error(`a flutter's depth from ${limits.flutterDepth[0]} to ${limits.flutterDepth[1]}`);
         state.flutter = { on: given2.on === void 0 ? state.flutter.on : Boolean(given2.on), hz, depth };
-        flutter();
+        techniques();
         break;
       }
-      case "/hum": {
-        const interval = given2.interval === void 0 ? state.hum.interval : Number(given2.interval), level = given2.level === void 0 ? state.hum.level : Number(given2.level), limits = LIMITS();
-        if (!(interval >= limits.humInterval[0] && interval <= limits.humInterval[1])) throw new Error(`a hummed pitch from ${limits.humInterval[0]} to ${limits.humInterval[1]} semitones from the note`);
-        if (!(level >= limits.humLevel[0] && level <= limits.humLevel[1])) throw new Error(`a hum's level from ${limits.humLevel[0]} to ${limits.humLevel[1]}`);
-        state.hum = { on: given2.on === void 0 ? state.hum.on : Boolean(given2.on), interval, level };
-        sway();
+      case "/hum":
+      case "/growl": {
+        const kind = path.slice(1), own2 = state[kind], limits = LIMITS(), of2 = (name) => given2[name] === void 0 ? own2[name] : Number(given2[name]);
+        const interval = of2("interval"), level = of2("level"), rough = kind === "growl" ? of2("rough") : void 0;
+        if (!(interval >= limits[`${kind}Interval`][0] && interval <= limits[`${kind}Interval`][1])) throw new Error(`a ${kind}'s pitch from ${limits[`${kind}Interval`][0]} to ${limits[`${kind}Interval`][1]} semitones from the note`);
+        if (!(level >= limits[`${kind}Level`][0] && level <= limits[`${kind}Level`][1])) throw new Error(`a ${kind}'s level from ${limits[`${kind}Level`][0]} to ${limits[`${kind}Level`][1]}`);
+        if (kind === "growl" && !(rough >= limits.growlRough[0] && rough <= limits.growlRough[1])) throw new Error(`a growl's roughness from ${limits.growlRough[0]} to ${limits.growlRough[1]}`);
+        state[kind] = { on: given2.on === void 0 ? own2.on : Boolean(given2.on), interval, level, ...kind === "growl" ? { rough } : {} };
+        techniques();
         break;
       }
       case "/repeat": {
@@ -7339,6 +7751,29 @@ function windsDial(env) {
         if (!Array.isArray(given2.resonances) || !given2.resonances.every((r) => r.frequency > 0 && r.q > 0 && r.peak >= 0)) throw new Error("resonances, each its frequency, q and peak");
         tract(given2.resonances);
         break;
+      // (Its reed's or lips' flow's turbulence, a share of the flow per root hertz -- native/openwind/turbulence-fit.mjs
+      // trying levels -- none for a jet's.)
+      case "/turbulence": {
+        const level = Number(given2.level);
+        if (!["reed", "lips"].includes(current.kind) || !(level >= 0 && level <= TURBULENCE_MOST)) throw new Error(`a reed's or the lips' turbulence from 0 to ${TURBULENCE_MOST}`);
+        turbulence(level);
+        break;
+      }
+      // (A brass player's mute put in, or none: `mute`, one of its mutes (/state mutes), or null -- put in once its body
+      // is ready and the bell has rung down after its breath (/state muting); `ready`, its body only made ready.)
+      case "/mute": {
+        if (!(given2.mute === null || given2.mute === void 0 || typeof given2.mute === "string")) throw new Error("a mute's name, or null");
+        muteTo(given2.mute ?? null, { ready: given2.ready === true });
+        break;
+      }
+      // (Its player's noise: the player's temperature, or a kind's its body's player has.)
+      case "/noise": {
+        const asked = {};
+        for (const k of ["player", ...windsNoiseKinds(current.kind)]) if (given2[k] !== void 0) asked[k] = Number(given2[k]);
+        if (!Object.keys(asked).length || !Object.values(asked).every((t) => t >= 0 && t <= NOISE_MOST)) throw new Error(`the player's noise, or its ${windsNoiseKinds(current.kind).join(" or ")}'s, from 0 to ${NOISE_MOST}`);
+        noise(asked);
+        break;
+      }
       default:
         return null;
     }
@@ -7360,10 +7795,13 @@ function windsDial(env) {
     "/breathing",
     "/flutter",
     "/hum",
+    "/growl",
     "/repeat",
     "/vibrato",
     "/swell",
-    "/tract"
+    "/tract",
+    "/turbulence",
+    "/mute"
   ]);
   let refused = [];
   async function later(path, given2) {
@@ -7371,12 +7809,48 @@ function windsDial(env) {
     const seconds = Number(given2.at), { at: _, by = null, ...rest } = given2;
     if (!(seconds >= 0)) throw new Error("a time from 0 s on the dial's clock");
     const at2 = Math.round(seconds * WINDS_RATE);
-    if (at2 <= current.frames) return { status: 200, json: { ...await change(path, rest), rules: state.rules } };
-    queue.push({ at: at2, tag: "given", by, run: () => change(path, rest).catch((error) => {
-      refused = [...refused.slice(-9), { path, at: seconds, error: error.message }];
-    }) });
+    if (at2 <= current.frames) {
+      voicing(path, rest, by);
+      return { status: 200, json: { ...await change(path, rest), rules: state.rules } };
+    }
+    queue.push({ at: at2, tag: "given", by, run: () => {
+      voicing(path, rest, by);
+      return change(path, rest).catch((error) => {
+        refused = [...refused.slice(-9), { path, at: seconds, error: error.message }];
+      });
+    } });
     queue.sort((a, b) => a.at - b.at);
     return { status: 200, json: { queued: path, at: seconds } };
+  }
+  const VOICES = ["flutter", "hum", "growl"], voicedBy = {};
+  function voicing(path, given2, by) {
+    const kind = path.slice(1);
+    if (VOICES.includes(kind) && given2.on !== void 0) voicedBy[kind] = given2.on ? by : null;
+  }
+  async function unvoiced(by) {
+    for (const kind of VOICES) if (voicedBy[kind] === by) {
+      voicedBy[kind] = null;
+      if (state[kind]?.on) await change(`/${kind}`, { on: false });
+    }
+  }
+  let pageOwn = null;
+  const ownOf = () => ({ articulation: state.articulation, stroke: state.stroke, softSeconds: state.softSeconds, rise: state.rise, breathAttack: state.breathAttack, swell: state.swell });
+  async function givenBack({ played: played2 = true } = {}) {
+    if (!pageOwn) return;
+    const { swell, ...tongue } = pageOwn;
+    pageOwn = null;
+    Object.assign(state, tongue);
+    if (!played2) {
+      for (const kind of VOICES) if (voicedBy[kind] === "soloist") {
+        voicedBy[kind] = null;
+        state[kind] = { ...state[kind], on: false };
+      }
+      state.swell = swell;
+      return;
+    }
+    await unvoiced("soloist");
+    if (state.repeat.on) repeating();
+    if (state.swell !== swell) await change("/swell", { share: swell });
   }
   function withdrawn({ by = null, from }) {
     const seconds = Number(from);
@@ -7385,10 +7859,83 @@ function windsDial(env) {
     queue = queue.filter((e) => !(e.tag === "given" && e.by === by && e.at >= at2));
     return { status: 200, json: { withdrawn: before - queue.length } };
   }
+  function settingsOf() {
+    const name = (k) => current.columns[k].join(":"), named = (values) => Object.fromEntries(Object.entries(values).map(([k, v]) => [name(k), v]));
+    const row = (values) => Object.fromEntries(current.columns.map((c, k) => [c.join(":"), values[k]]));
+    return {
+      family: "winds",
+      model: current.model,
+      body: current.name,
+      mute: current.mute ?? null,
+      pitch: state.pitch,
+      charted: state.between?.low === state.between?.high,
+      note: state.note,
+      dynamic: state.dynamic,
+      dials: named(state.x),
+      holes: named(state.fingers),
+      lip: state.lipDialled ? state.lip : null,
+      slide: state.slideDialled ? state.slide : null,
+      articulation: { articulation: state.articulation, stroke: state.stroke, softSeconds: state.softSeconds, rise: state.rise },
+      attack: state.breathAttack,
+      breathing: state.breathing,
+      flutter: state.flutter,
+      hum: state.hum,
+      growl: state.growl,
+      repeat: state.repeat,
+      vibrato: state.vibrato,
+      swell: state.swell,
+      tract: state.tract?.resonances ?? [],
+      turbulence: state.turbulence,
+      noise: state.noise,
+      player: playerSettings,
+      plays: { row: row(state.row), rules: row(state.rules), fingering: fingeringOf(state.row) }
+    };
+  }
+  async function applySettings(s) {
+    if (s?.family !== "winds") throw new Error(`a winds dial's settings (family "winds")`);
+    if (s.model !== current.model) throw new Error(`settings for the ${s.model}: take it up first`);
+    const column = (name) => current.columns.findIndex((c) => c.join(":") === name), refused2 = [];
+    let made = 0;
+    const run = async (path, given2) => {
+      try {
+        await change(path, given2);
+        made++;
+      } catch (error) {
+        refused2.push({ path, error: error.message });
+      }
+    };
+    await run("/pitch", s.charted && Number.isInteger(s.note) ? { pitch: s.pitch, dynamic: s.dynamic, charted: true, note: s.note } : { pitch: s.pitch, dynamic: s.dynamic });
+    if (s.lip != null) await run("/lip", { lip: s.lip });
+    if (s.slide != null) await run("/slide", { out: s.slide });
+    for (const [route, values, key] of [["/dial", s.dials, "x"], ["/hole", s.holes, "value"]]) for (const [name, v] of Object.entries(values ?? {})) {
+      const k = column(name);
+      if (k < 0) refused2.push({ path: route, error: `no column ${name} on this body` });
+      else await run(route, { column: k, [key]: v });
+    }
+    if (s.articulation) await run("/articulation", s.articulation);
+    if (s.attack) await run("/attack", { points: s.attack });
+    for (const what of ["breathing", "flutter", "hum", "growl", "repeat", "vibrato"]) if (s[what]) await run(`/${what}`, s[what]);
+    if (s.swell != null) await run("/swell", { share: s.swell });
+    if (s.tract) await run("/tract", { resonances: s.tract });
+    if (s.turbulence != null && ["reed", "lips"].includes(current.kind)) await run("/turbulence", { level: s.turbulence });
+    if (s.noise) await run("/noise", s.noise);
+    if (s.player) {
+      try {
+        const { playerSettingsOf } = await import("./soloist/soloist.js");
+        playerSettings = playerSettingsOf(s.player);
+        made++;
+      } catch (error) {
+        refused2.push({ path: "/soloist", error: error.message });
+      }
+    }
+    if ((s.mute ?? null) !== (current.mute ?? null) && BRASS_MUTES[current.model]) await run("/mute", { mute: s.mute ?? null });
+    return { status: 200, json: { ...playing(), rules: state.rules, loaded: { made, refused: refused2 }, player: playerShown() } };
+  }
   async function handle(method, path, query, given2 = {}) {
     try {
       if (path === "/state") return { status: 200, json: shown() };
       if (path === "/impedance") return { status: 200, json: current?.impedance ?? null };
+      if (path === "/settings" && method !== "POST") return current ? { status: 200, json: settingsOf() } : { status: 400, json: { error: "no instrument yet" } };
       if (path === "/audio") {
         const frames = Math.min(Math.max(1, Number(query?.get("frames")) || 1024), PULL_MOST);
         const samples = await serial(() => pulled(frames));
@@ -7412,6 +7959,7 @@ function windsDial(env) {
           at: (/* @__PURE__ */ new Date()).toISOString(),
           model: current.model,
           body: current.name,
+          ...current.mute ? { mute: current.mute } : {},
           midi: state.midi,
           pitch: state.pitch,
           ...current.lips ? { lip: state.lip } : {},
@@ -7430,7 +7978,8 @@ function windsDial(env) {
           vibrato: state.vibrato,
           breathing: state.breathing,
           flutter: state.flutter,
-          hum: state.hum
+          hum: state.hum,
+          growl: state.growl
         });
         return { status: 200, json: { kept } };
       }
@@ -7438,6 +7987,7 @@ function windsDial(env) {
       if (given2.version !== void 0 && given2.version !== version) return { status: 409, json: { error: "another instrument was taken up", version } };
       if (path === "/withdraw") return await serial(() => withdrawn(given2));
       if (path === "/soloist") return await serial(() => solo(given2));
+      if (path === "/settings") return await serial(() => applySettings(given2.settings));
       if (given2.at != null) return await serial(() => later(path, given2));
       const answer = await serial(() => change(path, given2));
       if (answer === null) return { status: 404 };
@@ -7447,8 +7997,11 @@ function windsDial(env) {
     }
   }
   const close = () => {
-    current?.glides?.stop();
-    current?.stream.close();
+    closed = true;
+    for (const made of /* @__PURE__ */ new Set([current, ...bodies.values()])) if (made) {
+      made.glides?.stop();
+      made.stream.close();
+    }
   };
   return { choose, handle, close };
 }
@@ -7622,9 +8175,15 @@ async function openwindEngine(bytes, { thread = null, said } = {}) {
         },
         // The live dial's, as the stream binary takes them (src/bin/musebots-openwind-stream.rs): its controls' columns
         // (`c`), the row a group's line gives `seconds` after its start (`o`), its controls held at a row (`h`: stream.rs
-        // HeldLine), a vibrato on it (`v`), its player's tract (`t`), its slide (`s`).
+        // HeldLine), a vibrato on it (`v`), its player's techniques on it (`k`: stream.rs TechniqueLine, a hum, a growl, a
+        // flutter on its breath's column), its player's tract (`t`), its slide (`s`), its flow's turbulence (`n`), its
+        // player's noise of one kind (`p`: stream.rs NoiseLine, player-noise.js windsNoiseLine), the air its player spent
+        // since it was last asked (`a`: stream.rs Air, {litres, seconds}).
         columns() {
           return answer(x.ow_columns(stream2));
+        },
+        air() {
+          return answer(x.ow_air(stream2));
         },
         row(line2, seconds) {
           return answer(holding([json({ line: line2, seconds })], ([{ at: at2, length }]) => x.ow_row(stream2, at2, length)));
@@ -7635,8 +8194,17 @@ async function openwindEngine(bytes, { thread = null, said } = {}) {
         vibrato({ columns, depths, cents = [], rate, seconds = 0 }) {
           given2(x.ow_vibrato, stream2, { columns, depths, cents, rate, seconds });
         },
+        technique({ column, hum, growl, flutter, seconds = 0 }) {
+          given2(x.ow_technique, stream2, { column, hum, growl, flutter, seconds });
+        },
         tract(resonances, seconds = 0) {
           given2(x.ow_tract, stream2, { resonances, seconds });
+        },
+        turbulence(level) {
+          given2(x.ow_turbulence, stream2, { level });
+        },
+        noise(line2) {
+          given2(x.ow_noise, stream2, line2);
         },
         slide(out, seconds = 0) {
           given2(x.ow_slide, stream2, { out, seconds });
@@ -7785,9 +8353,13 @@ function liveStream(engine2, files, { single = false, threads = 1, most = null, 
     })(),
     columns: async () => player2.columns(),
     row: async (line2, seconds) => player2.row(line2, seconds),
+    air: async () => player2.air(),
     hold: said((row, seconds, floor) => player2.hold(row, seconds, floor)),
     tract: said((resonances, seconds) => player2.tract(resonances, seconds)),
+    turbulence: said((level) => player2.turbulence(level)),
+    noise: said((line2) => player2.noise(line2)),
     vibrato: said((line2) => player2.vibrato(line2)),
+    technique: said((line2) => player2.technique(line2)),
     slide: said((out, seconds) => player2.slide(out, seconds)),
     async render(frames) {
       if (closed) throw new Error("the winds' player has ended");
@@ -7824,15 +8396,18 @@ var engine = got(threaded ? "openwind-threads.wasm" : "openwind.wasm", "arrayBuf
 var fetched = /* @__PURE__ */ new Map();
 var loaded = /* @__PURE__ */ new Map();
 var cores = /* @__PURE__ */ new Map();
-function filesOf(m) {
-  const folder = `winds/${m.model}`, of2 = (file) => `${folder}/${file}`, has = (file) => m.files.includes(file) ? got(of2(file)) : null;
+function filesOf(m, mute = null) {
+  const own2 = mute ? m.mutes?.[mute] : m;
+  if (!own2) return Promise.reject(new Error(`the ${m.model}'s body with its ${mute} mute is not published here`));
+  const folder = mute ? `winds/${m.model}/muted/${mute}` : `winds/${m.model}`, of2 = (file) => `${folder}/${file}`, has = (file) => own2.files.includes(file) ? got(of2(file)) : null;
   if (!fetched.has(folder)) fetched.set(folder, (async () => {
-    const [laid, rules, attacks, neutral, rows, glides, impedance] = await Promise.all(["body.json", "rules.json", "attacks.json", "neutral.json", "rows.json", "glides.json", "impedance.json"].map(has));
+    const [laid, rules, attacks, vibrato, neutral, rows, glides, impedance] = await Promise.all(["body.json", "rules.json", "attacks.json", "vibrato.json", "neutral.json", "rows.json", "glides.json", "impedance.json"].map(has));
     const files = {
       folder,
       laid,
       rules,
       attacks,
+      vibrato,
       neutral,
       rows,
       glides,
@@ -7856,9 +8431,9 @@ var ready = (async () => {
   const dial = windsDial({
     instruments: instruments.map((m) => m.model),
     kinds: Object.fromEntries(instruments.map((m) => [m.model, m.kind])),
-    body: async (model) => {
-      const m = by[model], f = await filesOf(m);
-      return { folder: f.folder, name: m.name, rules: f.rules, laid: { ...f.laid, single: f.laid.single || m.single }, attacks: f.attacks };
+    body: async (model, { mute = null } = {}) => {
+      const m = by[model], f = await filesOf(m, mute);
+      return { folder: f.folder, name: mute ? m.mutes[mute].name : m.name, rules: f.rules, laid: { ...f.laid, single: f.laid.single || m.single }, attacks: f.attacks, vibrato: f.vibrato };
     },
     // (On the cores found fastest for it here, the first time it is taken up: openwind-stream.js fastestCores.)
     engine: ({ model, folder, onError }) => {

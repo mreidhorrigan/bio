@@ -42,6 +42,10 @@ table.reading td{white-space:normal}table.reading td:first-child{width:220px}
 #status{min-height:2.9em;font-size:14px;margin:4px 0}#status.failed{color:var(--warn)}
 .said{color:var(--warn);font-size:13px;min-height:2.9em}
 .solo{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px}.solo label{font-size:14px}#w-soloSaid{font-size:13px;min-height:1.4em}
+/* (The musebot's personality (musebot.js): a lever not set here shows its draw, dimmed.) */
+details.musebot{margin:2px 0 6px}details.musebot summary{font-size:14px;color:var(--muted);cursor:pointer}
+.row.drawn input[type=range],.row.drawn input[type=number]{opacity:.5}.musebotNote{margin:6px 0 0}
+#settingsSaid{font-size:13px;min-height:1.4em}
 #w-pitchSaid{min-height:2.9em}
 #s-way{font-size:20px;margin-left:10px;vertical-align:middle;display:inline-block;width:6.2em;white-space:nowrap}
 .radios label,.strings label{margin-right:14px;font-size:14px;white-space:nowrap}
@@ -83,6 +87,11 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div class="meter"><div id="s-meter"></div></div>
     <table class="readouts"><tbody><tr><td>Level</td><td id="s-level">silent</td></tr></tbody></table>
     <div class="said" id="s-said"></div>
+    <div class="solo"><button id="s-solo" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player, told what this dial plays of it -- played on it as its synthesizer; everything in it drawn from its seed">▶ A musebot plays</button>
+      <label>seed <input type="number" id="s-soloSeed" min="0" step="1"></label>
+      <label>at most <input type="number" id="s-soloSeconds" min="5" max="600" step="5" value="60"> s</label></div>
+    <div class="muted" id="s-soloSaid"></div>
+    <details class="musebot"><summary>The musebot's personality</summary><div id="s-personality"></div></details>
   </div>
   <div data-family="winds" hidden>
     <button id="w-blow" class="big" title="space">Blow</button>
@@ -93,6 +102,7 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
       <label>seed <input type="number" id="w-soloSeed" min="0" step="1"></label>
       <label>at most <input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"> s</label></div>
     <div class="muted" id="w-soloSaid"></div>
+    <details class="musebot"><summary>The musebot's personality</summary><div id="w-personality"></div></details>
     <div class="meter"><div id="w-meter"></div></div>
     <table class="readouts"><tbody>
       <tr><td>Heard</td><td id="w-heard">--</td></tr>
@@ -160,6 +170,10 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div class="muted" id="w-fingerNote">Each hole's opening, 0 closed to 1 open: the pitch's, until the pitch moves.</div>
     <div class="holes" id="w-holes"></div><div id="w-slideBox"></div>
   </fieldset>
+  <fieldset id="w-muteSet" hidden><legend>Mute</legend>
+    <div class="row"><label for="w-mute">In the bell</label><select id="w-mute"></select><span></span></div>
+    <div class="muted" id="w-muteNote"></div>
+  </fieldset>
   <fieldset><legend>Tongue</legend>
     <div class="row"><label>Articulation</label><span class="radios">
       <label><input type="radio" name="w-articulation" value="slurred"> slurred</label>
@@ -183,11 +197,17 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div class="row"><label><input type="checkbox" id="w-vibrating"> Vibrato</label><span class="muted" id="w-vibratoNote"></span><span></span></div>
     <div id="w-vibrato"></div>
   </fieldset>
-  <fieldset><legend>Flutter and hum</legend>
+  <fieldset><legend>The player's noise</legend>
+    <div class="note">What a player's breath and lips never hold exactly, drawn afresh from the seed: 0 the exact machine, 1 a player's (each kind's size ours, slight, until measured).</div>
+    <div id="w-noise"></div>
+  </fieldset>
+  <fieldset><legend>Flutter, hum and growl</legend>
     <div class="row"><label><input type="checkbox" id="w-fluttering"> Flutter</label><span class="muted">the tongue's roll closing the breath off while it is blown</span><span></span></div>
     <div id="w-flutter"></div>
     <div class="row"><label><input type="checkbox" id="w-humming"> Hum</label><span class="muted">the player's voice through the instrument</span><span></span></div>
     <div id="w-hum"></div>
+    <div class="row"><label><input type="checkbox" id="w-growling"> Growl</label><span class="muted">the voice made rough, its period doubled, with breath noise</span><span></span></div>
+    <div id="w-growl"></div>
     <div class="note" id="w-humNote"></div>
     <div class="note" id="w-techniqueNote"></div>
   </fieldset>
@@ -282,6 +302,12 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <button id="w-keep">Keep</button><span class="muted" id="w-kept"></span>
   </fieldset>
 </div>
+<fieldset><legend>Settings as a file</legend>
+  <button id="saveSettings" title="every setting made here -- the player's, the instrument's, the model's and the musebot's -- with the words written above, as a file">Save settings</button>
+  <button id="loadSettings" title="a saved file's settings, its instrument taken up first">Load settings…</button>
+  <input type="file" id="settingsFile" accept=".json,application/json" hidden>
+  <div class="muted" id="settingsSaid"></div>
+</fieldset>
 
 <script type="module" src="live.js"></script>
 </body>
