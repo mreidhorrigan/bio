@@ -764,1205 +764,186 @@ var RHYTHM_VOCABULARY = Object.freeze(Object.fromEntries([
   clave({ id: "brazilian.bossa-nova-clave", tradition: "Brazilian", name: "Bossa nova clave", pulses: 16, onsets: [0, 3, 6, 10, 13], direction: null, source: [TOUSSAINT] })
 ].map((record) => [record.id, record])));
 
-// public/shared/meter-space.js
-var METER_SPACE = Object.freeze({
-  numerators: Object.freeze([1, 40]),
-  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
-  // with a tempo).
-  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
-  // A bar's groups: 2s and 3s mostly, now and then a 1 or a 4.
-  groupSizes: Object.freeze([[2, 4], [3, 4], [1, 0.3], [4, 1]].map(Object.freeze)),
-  // The share of draws grouped as they draw, rather than as the meter's most-threes.
-  ownGrouping: 0.7,
-  // Pulses a unit.
-  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
-  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
-  talas: 0.12,
-  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
-  barSeconds: Object.freeze([0.5, 10])
-});
-var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
-
-// public/shared/felt-meter-catalog.js
-var freeze = (value3) => {
-  if (value3 && typeof value3 === "object") {
-    Object.values(value3).forEach(freeze);
-    Object.freeze(value3);
+// public/transcript/rational.js
+var gcd = (a, b) => {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b) {
+    [a, b] = [b, a % b];
   }
+  return a;
+};
+var safe = (value3, what2) => {
+  if (!Number.isSafeInteger(value3)) throw new RangeError(`Rational ${what2} ${value3} is outside the safe integer range`);
   return value3;
 };
-var FELT_METER_POLICY = freeze({
-  "id": "score-selection-v2",
-  "evidence": "authored-policy-not-human-calibration",
-  "favoredBeatSeconds": [
-    "2/5",
-    "4/5"
-  ],
-  "candidateBeatSeconds": [
-    "3/10",
-    "1"
-  ],
-  "cyclePreferenceMaxSeconds": "4",
-  "cycleMinimumSeconds": null,
-  "catalog": [
-    { "id": "2/4-in-2", "numerator": 2, "denominator": 4, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
-    { "id": "3/4-in-3", "numerator": 3, "denominator": 4, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
-    { "id": "4/4-in-4", "numerator": 4, "denominator": 4, "beatWeights": [1, 1, 1, 1], "groups": [2, 2], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
-    { "id": "2/2-in-2", "numerator": 2, "denominator": 2, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
-    { "id": "3/2-in-3", "numerator": 3, "denominator": 2, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
-    { "id": "6/8-in-2", "numerator": 6, "denominator": 8, "beatWeights": [3, 3], "groups": [3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
-    { "id": "9/8-in-3", "numerator": 9, "denominator": 8, "beatWeights": [3, 3, 3], "groups": [3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
-    { "id": "12/8-in-4", "numerator": 12, "denominator": 8, "beatWeights": [3, 3, 3, 3], "groups": [3, 3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
-    { "id": "5/4-in-5", "numerator": 5, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["75", "200"] },
-    { "id": "7/4-in-7", "numerator": 7, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1, 1, 1], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["105", "150"], "candidateQuarterBPM": ["105", "200"] },
-    { "id": "5/4-in-2", "numerator": 5, "denominator": 4, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
-    { "id": "7/4-in-3", "numerator": 7, "denominator": 4, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
-    { "id": "5/8-in-2", "numerator": 5, "denominator": 8, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "7/8-in-3", "numerator": 7, "denominator": 8, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "8/8-in-3", "numerator": 8, "denominator": 8, "beatWeights": [3, 3, 2], "groups": [3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "9/8-in-4", "numerator": 9, "denominator": 8, "beatWeights": [2, 2, 2, 3], "groups": [2, 2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "11/8-in-5", "numerator": 11, "denominator": 8, "beatWeights": [2, 2, 3, 2, 2], "groups": [2, 2, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
-    { "id": "13/8-in-5", "numerator": 13, "denominator": 8, "beatWeights": [3, 3, 3, 2, 2], "groups": [3, 3, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["195/2", "200"] },
-    { "id": "17/8-in-6", "numerator": 17, "denominator": 8, "beatWeights": [3, 3, 3, 3, 3, 2], "groups": [3, 3, 3, 3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/2", "150"], "candidateQuarterBPM": ["255/2", "200"] },
-    { "id": "5/16-in-2", "numerator": 5, "denominator": 16, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
-    { "id": "7/16-in-3", "numerator": 7, "denominator": 16, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
-    { "id": "17/16-in-7", "numerator": 17, "denominator": 16, "beatWeights": [2, 2, 3, 2, 2, 3, 3], "groups": [2, 2, 3, 2, 2, 3, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/4", "75"], "candidateQuarterBPM": ["255/4", "100"] },
-    { "id": "17/16-in-4", "numerator": 17, "denominator": 16, "beatWeights": [4, 4, 4, 5], "groups": [4, 4, 4, 5], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["375/4", "150"], "candidateQuarterBPM": ["75", "200"] },
-    { "id": "107/32-in-5", "numerator": 107, "denominator": 32, "beatWeights": [19, 19, 19, 25, 25], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["1875/8", "1425/4"], "candidateQuarterBPM": ["1605/8", "475"] },
-    { "id": "107/32-in-2", "numerator": 107, "denominator": 32, "beatWeights": [57, 50], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 1, "dots": 0 }, "favoredQuarterBPM": ["4275/8", "1875/2"], "candidateQuarterBPM": ["855/2", "1250"] }
-  ]
-});
-var FELT_METER_CATALOG = FELT_METER_POLICY.catalog;
-
-// public/shared/tempo-range.js
-var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
-
-// public/shared/meter-reading.js
-var EDITORIAL_ACTIONS = Object.freeze([
-  "PUBLISH_STANDARD",
-  "PUBLISH_GROUPED",
-  "PUBLISH_SPECIALIST_WITH_LEGEND",
-  "KEEP_WITH_SUPPORT",
-  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
-  "HOLD_FOR_REVIEW",
-  "FREE_TIME_BY_INTENT"
-]);
-
-// public/shared/metric-home/grouping.js
-var REMAINDER_UNITS = Object.freeze([3, 2]);
-
-// public/shared/metric-home/nested.js
-var NESTING = Object.freeze({
-  // The longest group a listener hears as one (seconds; meterform_clodbot's and grouping-choice.js's longestGroupSeconds,
-  // ours, within the few seconds a measure can last: London 2012, Hearing in Time, 2nd ed.,
-  // doi:10.1093/acprof:oso/9780199744374.001.0001).
-  longestSeconds: 5,
-  // A split into sections is told apart by their lengths: the shorter section at least this share of the span and the
-  // two sections' shares differing by at least `contrast` (37/107 against 70/107 differ by 0.31). Ours.
-  shortestShare: 0.25,
-  contrast: 0.12,
-  // Candidate splits offered at most for one span, the best first. Ours.
-  offered: 12,
-  // Groups under one at most (grouping.js MAX_GROUPS_UNDER_ONE, Scansion Maker's: four or more are grouped again).
-  maxParts: 3
-});
-
-// public/shared/felt-tempo.js
-var value = (text) => {
-  const [n, d = "1"] = String(text).split("/");
-  return Number(n) / Number(d);
+var MAX = BigInt(Number.MAX_SAFE_INTEGER);
+var bigGcd = (a, b) => {
+  if (a < 0n) a = -a;
+  if (b < 0n) b = -b;
+  while (b) {
+    [a, b] = [b, a % b];
+  }
+  return a;
 };
-var band = (list) => [value(list[0]), value(list[1])];
-var FELT_TEMPO = Object.freeze({
-  beat: Object.freeze(band(FELT_METER_POLICY.candidateBeatSeconds)),
-  favoredBeat: Object.freeze(band(FELT_METER_POLICY.favoredBeatSeconds)),
-  longestBarSeconds: NESTING.longestSeconds
-});
-
-// public/shared/opening-time.js
-var DEFAULT_SEED = 20260916;
-var OPENING_TIME = Object.freeze({
-  // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
-  phraseSeconds: Object.freeze([5, 13]),
-  // A phrase's bars at most (ours: meterspace_clodbot's).
-  phraseBarsAtMost: 8,
-  // The band's density before any is heard, drawn between these (ours).
-  density: Object.freeze([0.35, 0.85]),
-  // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
-  // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
-  reference: 4
-});
-
-// native/live/musebot.js
-var words = (name2) => name2.replace(/[A-Z]/g, (c) => ` ${c.toLowerCase()}`);
-function musebotControls({ box, seed: seed2, seconds }) {
-  let built = null, shown4 = null;
-  function share(into, id, name2, { grammar = false } = {}) {
-    const r = document.createElement("div");
-    r.className = "row";
-    r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="range" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
-    r.querySelector("span").textContent = words(name2);
-    r.title = `${grammar ? `its motifs' ${name2} grammar's share` : `its ${words(name2)}`}: drawn from its seed unless ticked, 0 to 1 across its range (registry/method/personality.json)`;
-    const [tick, range, number] = r.querySelectorAll("input");
-    range.id = `${id}-${name2}`;
-    r.querySelector("label").htmlFor = range.id;
-    const drawnShown = () => r.classList.toggle("drawn", !tick.checked);
-    const set = (v) => {
-      range.value = v;
-      number.value = (+v).toFixed(2);
-    };
-    range.oninput = () => {
-      tick.checked = true;
-      number.value = (+range.value).toFixed(2);
-      drawnShown();
-    };
-    number.onchange = () => {
-      const v = +number.value;
-      if (Number.isFinite(v) && v >= 0 && v <= 1) {
-        tick.checked = true;
-        range.value = v;
-        drawnShown();
-      } else number.value = (+range.value).toFixed(2);
-    };
-    tick.onchange = drawnShown;
-    into.append(r);
-    set(0.5);
-    drawnShown();
-    return {
-      name: name2,
-      grammar,
-      get given() {
-        return tick.checked;
-      },
-      value: () => +range.value,
-      take(v, given) {
-        tick.checked = given;
-        if (v != null) set(v);
-        drawnShown();
-      }
-    };
-  }
-  function span(into, id, name2) {
-    const r = document.createElement("div");
-    r.className = "row";
-    r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="number" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
-    r.querySelector("span").textContent = words(name2);
-    r.title = `its range of ${words(name2)}, its low and high shares of its span on its instrument: drawn from its seed unless ticked (personality.js TONE_RANGES; docs/PLAYER_PERSONALITY.md)`;
-    const [tick, low, high] = r.querySelectorAll("input");
-    low.id = `${id}-range-${name2}`;
-    r.querySelector("label").htmlFor = low.id;
-    let last = [0, 1];
-    const drawnShown = () => r.classList.toggle("drawn", !tick.checked);
-    const set = ([a, b]) => {
-      low.value = (+a).toFixed(2);
-      high.value = (+b).toFixed(2);
-      last = [+a, +b];
-    };
-    low.onchange = high.onchange = () => {
-      const a = +low.value, b = +high.value;
-      if (!(a >= 0 && a <= 1 && b >= 0 && b <= 1)) {
-        set(last);
-        return;
-      }
-      set([Math.min(a, b), Math.max(a, b)]);
-      tick.checked = true;
-      drawnShown();
-    };
-    tick.onchange = drawnShown;
-    into.append(r);
-    set(last);
-    drawnShown();
-    return {
-      name: name2,
-      range: true,
-      get given() {
-        return tick.checked;
-      },
-      value: () => [...last],
-      take(v, given) {
-        tick.checked = given;
-        if (v != null) set(v);
-        drawnShown();
-      }
-    };
-  }
-  function build2(player2) {
-    box.replaceChildren();
-    const id = box.id || "musebot", head = document.createElement("div");
-    head.className = "note musebotNote";
-    head.textContent = "Each drawn from its seed unless ticked; a piece's draw shown on those not ticked.";
-    const all = document.createElement("button");
-    all.type = "button";
-    all.textContent = "All from its seed";
-    all.onclick = () => {
-      for (const s2 of built) s2.take(null, false);
-    };
-    box.append(head, all);
-    const levers = player2.levers.map((name2) => share(box, id, name2));
-    const g = document.createElement("div");
-    g.className = "curveLabel";
-    g.textContent = "Its motifs' grammars";
-    box.append(g);
-    built = [...levers, ...(player2.grammars ?? []).map((name2) => share(box, id, name2, { grammar: true }))];
-    if (player2.ranges?.length) {
-      const r = document.createElement("div");
-      r.className = "curveLabel";
-      r.textContent = "Its tone's ranges, low and high";
-      box.append(r);
-      built.push(...player2.ranges.map((name2) => span(box, id, name2)));
-    }
-  }
-  return {
-    // (What a piece is asked with: the levers, grammars and ranges ticked, each by its name.)
-    given() {
-      const personality = {}, grammars = {}, ranges = {};
-      for (const s2 of built ?? []) if (s2.given) (s2.range ? ranges : s2.grammar ? grammars : personality)[s2.name] = s2.value();
-      if (Object.keys(grammars).length) personality.grammars = grammars;
-      if (Object.keys(ranges).length) personality.ranges = ranges;
-      return { seed: Number(seed2.value), seconds: Number(seconds.value), personality };
-    },
-    // (The dial's player: its controls built the first time, and set again only when it changes -- a file loaded, a
-    // piece asked -- so that what is being set here is not undone by a poll; `drawn`, a piece's own levers.)
-    show(player2, drawn = null) {
-      if (!player2?.levers) return;
-      if (!built) build2(player2);
-      const now = JSON.stringify([player2.seed, player2.seconds, player2.personality, drawn?.levers ?? null, drawn?.ranges ?? null]);
-      if (now === shown4) return;
-      shown4 = now;
-      if (document.activeElement !== seed2) seed2.value = player2.seed;
-      if (document.activeElement !== seconds) seconds.value = player2.seconds;
-      const given = player2.personality ?? {};
-      for (const s2 of built) {
-        const set = s2.range ? given.ranges?.[s2.name] : s2.grammar ? given.grammars?.[s2.name] : given[s2.name];
-        s2.take(set ?? (s2.range ? drawn?.ranges?.[s2.name] : s2.grammar ? drawn?.grammars?.[s2.name] : drawn?.levers?.[s2.name]) ?? null, set != null);
-      }
-    }
-  };
-}
-
-// native/live/strings.js
-var $ = (id) => document.getElementById(`s-${id}`);
-var NAMES = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
-var name = (midi) => {
-  const n = Math.round(midi), c = Math.round(100 * (midi - n));
-  return `${NAMES[(n % 12 + 12) % 12]}${Math.floor(n / 12) - 1}${c ? ` ${c > 0 ? "+" : ""}${c} ¢` : ""}`;
+var fromBig = (numerator, denominator, what2) => {
+  const divisor = bigGcd(numerator, denominator) || 1n, n = numerator / divisor, d = denominator / divisor;
+  if (n > MAX || -n > MAX || d > MAX || -d > MAX) throw new RangeError(`Rational ${what2} ${n}/${d} is outside the safe integer range`);
+  return new Rational(Number(n), Number(d));
 };
-var midiOf = (f) => 69 + 12 * Math.log2(f / 440);
-var state;
-var s = 0;
-var bowing = false;
-var bridge = false;
-var direction = 1;
-var builds = [];
-var INSTRUMENT_OF = [];
-var value2 = {};
-var setters = {};
-var notes = {};
-function dial(box, id, label3, { min, max, log, value: start, step = "any", onchange, note }) {
-  for (const taken of [id, `${id}N`, `${id}Note`]) if ($(taken)) throw new Error(`dial ${id}: the id s-${taken} is taken`);
-  const row2 = document.createElement("div");
-  row2.className = "row";
-  row2.innerHTML = `<label for="s-${id}"></label><input type="range" id="s-${id}" step="any"><input type="number" id="s-${id}N" step="${step}">`;
-  row2.querySelector("label").textContent = label3;
-  $(box).append(row2);
-  if (note !== void 0) {
-    const n = document.createElement("div");
-    n.className = "note";
-    n.id = `s-${id}Note`;
-    n.textContent = note;
-    $(box).append(n);
-    notes[id] = n;
+var Rational = class _Rational {
+  constructor(numerator, denominator = 1) {
+    safe(numerator, "numerator");
+    safe(denominator, "denominator");
+    if (denominator === 0) throw new RangeError("A rational cannot have a zero denominator");
+    const divisor = gcd(numerator, denominator) || 1, sign = denominator < 0 ? -1 : 1;
+    this.n = numerator === 0 ? 0 : sign * numerator / divisor;
+    this.d = sign * denominator / divisor;
+    Object.freeze(this);
   }
-  const range = $(id), number = $(id + "N"), to = (v) => log ? Math.log(v) : v, from = (x2) => log ? Math.exp(x2) : x2;
-  const bounds = (lo, hi) => {
-    range.min = to(lo);
-    range.max = to(hi);
-    min = lo;
-    max = hi;
-    range.value = to(Math.min(max, Math.max(min, value2[id])));
-  };
-  const set = (v, quiet) => {
-    value2[id] = v;
-    range.value = to(Math.min(max, Math.max(min, v)));
-    number.value = +(+v).toPrecision(4);
-    if (!quiet) onchange?.();
-  };
-  range.min = to(min);
-  range.max = to(max);
-  range.oninput = () => set(from(+range.value));
-  number.onchange = () => {
-    const v = +number.value;
-    if (Number.isFinite(v) && (!log || v > 0)) set(v);
-    else number.value = value2[id];
-  };
-  set(start, true);
-  setters[id] = Object.assign(set, { bounds, place: (v) => (to(v) - range.min) / (range.max - range.min) });
-}
-async function ask(asks) {
-  if (!asks.length) return;
-  const r = await fetch("/strings/set", { method: "POST", body: JSON.stringify({ asks }) });
-  $("said").textContent = r.ok ? "" : `The model refused a setting: ${await r.text()}`;
-}
-var pending = /* @__PURE__ */ new Map();
-function later(key, build2) {
-  if (!pending.size) requestAnimationFrame(() => {
-    const asks = [...pending.values()].flatMap((b) => b());
-    pending.clear();
-    ask(asks);
-  });
-  pending.set(key, build2);
-}
-var finger = () => 1 - 2 ** (-value2.pitch / 12);
-var pos = () => value2.beta * (1 - finger());
-var alternating = () => $("alternate").checked;
-var fingerAsk = () => ({ do: "finger", string: s, finger: finger(), firmness: value2.firmness });
-var dampingAsk = () => ({ do: "damping", string: s, ratio: value2.damping });
-var bowAsk = () => ({ do: "bow", string: s, pos: pos(), force: value2.force, vel: direction * value2.speed });
-var strokeAsk = () => ({ do: "stroke", string: s, pos: pos(), force: value2.force, vel: direction * value2.speed, acc: value2.speed / value2.start });
-var alternateAsk = () => ({ do: "alternate", string: s, stroke: alternating() ? value2.stroke / 100 : 0, end: value2.end, start: value2.start });
-var vibratoAsk = (string = s) => ({ do: "vibrato", string, width: $("vibrating").checked ? value2.width : 0, rate: value2.rate });
-var buildAsk = (string = s) => ({ do: "build", string, ...builds[string] });
-var radiateAsk = () => ({ do: "radiate", corner: $("radiating").checked ? value2.corner : 0, order: +$("falling").value });
-var correctAsk = () => ({ do: "correct", on: $("correcting").checked });
-var heardDb = () => state.neutralDb ?? state.gainDb + state.rendersDb - state.startedRendersDb;
-var cornerFor = (corrected) => corrected && state.correctedRadiation ? state.correctedRadiation.hz : state.airMode.hz;
-var hairAsk = (string = s) => ({ do: "hair", string, width: value2.hair / 1e3 });
-var NOISE_KINDS = [
-  ["force", "Bow force", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the force asked.`],
-  ["speed", "Bow speed", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the speed asked.`],
-  ["contact", "The bow's place", (sd) => `At 1, ${+(1e3 * sd).toPrecision(2)} thousandths of the string's length.`],
-  ["finger", "The finger's pitch", (sd) => `At 1, ${sd} cents.`]
-];
-var noiseId = (kind) => `noise${kind[0].toUpperCase()}${kind.slice(1)}`;
-var noiseAsks = () => NOISE_KINDS.map(([kind]) => ({ do: "noise", what: kind, temperature: value2.noisePlayer * value2[noiseId(kind)] }));
-var noiseAt = (player2, kinds = {}) => {
-  setters.noisePlayer(player2, true);
-  for (const [kind] of NOISE_KINDS) setters[noiseId(kind)](kinds[kind] ?? 1, true);
+  static of(value3, denominator) {
+    if (value3 instanceof _Rational) return value3;
+    if (denominator !== void 0) return new _Rational(value3, denominator);
+    if (Array.isArray(value3)) return new _Rational(value3[0], value3[1] ?? 1);
+    if (typeof value3 === "string") {
+      const match = value3.trim().match(/^(-?\d+)(?:\s*\/\s*(-?\d+))?$/);
+      if (!match) throw new TypeError(`"${value3}" is not a rational (write it as n or n/d)`);
+      return new _Rational(Number(match[1]), match[2] === void 0 ? 1 : Number(match[2]));
+    }
+    if (typeof value3 === "number") {
+      if (Number.isInteger(value3)) return new _Rational(value3, 1);
+      throw new TypeError(`${value3} is not an integer; supply an exact fraction or compose it with rational operations`);
+    }
+    if (value3 && typeof value3 === "object" && "n" in value3 && "d" in value3) return new _Rational(value3.n, value3.d);
+    throw new TypeError(`Cannot make a rational from ${value3}`);
+  }
+  // An observational approximation by continued fractions: the first convergent within `tolerance` whose denominator
+  // is at most `maxDenominator`, or null. It cannot establish a composer's intent and is not an authored-score input.
+  static approximate(value3, { tolerance = 1e-9, maxDenominator = 1e7 } = {}) {
+    if (!Number.isFinite(value3)) return null;
+    const sign = value3 < 0 ? -1 : 1, x2 = Math.abs(value3);
+    let h0 = 0, h1 = 1, k0 = 1, k1 = 0, rest3 = x2;
+    for (let step = 0; step < 64; step++) {
+      const whole = Math.floor(rest3), h2 = whole * h1 + h0, k2 = whole * k1 + k0;
+      if (k2 > maxDenominator || !Number.isSafeInteger(h2)) break;
+      h0 = h1;
+      h1 = h2;
+      k0 = k1;
+      k1 = k2;
+      if (Math.abs(x2 - h1 / k1) <= tolerance) return new _Rational(sign * h1, k1);
+      const fraction = rest3 - whole;
+      if (fraction < 1e-15) break;
+      rest3 = 1 / fraction;
+    }
+    return k1 && Math.abs(x2 - h1 / k1) <= tolerance ? new _Rational(sign * h1, k1) : null;
+  }
+  static get ZERO() {
+    return ZERO;
+  }
+  static get ONE() {
+    return ONE;
+  }
+  // A product of safe integers is exact while it is a safe integer itself, and so is a sum of two; past that the
+  // float arithmetic rounds, and the rounding can cancel back into range as a wrong answer (the mathematical audit's
+  // I05: 9007199254740991/3 + -6004799503160661/2 is -1/6, and came back -1/3). So a sum past it is taken in big
+  // integers and reduced before it is judged: one whose reduced form fits is exact, and one that does not throws.
+  add(other) {
+    const o = _Rational.of(other), divisor = gcd(this.d, o.d), left = this.n * (o.d / divisor), right = o.n * (this.d / divisor), denominator = this.d / divisor * o.d;
+    if (Number.isSafeInteger(left) && Number.isSafeInteger(right) && Number.isSafeInteger(left + right) && Number.isSafeInteger(denominator))
+      return new _Rational(left + right, denominator);
+    return fromBig(BigInt(this.n) * BigInt(o.d / divisor) + BigInt(o.n) * BigInt(this.d / divisor), BigInt(this.d / divisor) * BigInt(o.d), "sum");
+  }
+  sub(other) {
+    return this.add(_Rational.of(other).neg());
+  }
+  mul(other) {
+    const o = _Rational.of(other), a = gcd(this.n, o.d) || 1, b = gcd(o.n, this.d) || 1;
+    return new _Rational(safe(this.n / a * (o.n / b), "product"), safe(this.d / b * (o.d / a), "denominator"));
+  }
+  div(other) {
+    const o = _Rational.of(other);
+    if (o.n === 0) throw new RangeError("Division of a rational by zero");
+    return this.mul(new _Rational(o.d, o.n));
+  }
+  neg() {
+    return new _Rational(-this.n, this.d);
+  }
+  abs() {
+    return this.n < 0 ? this.neg() : this;
+  }
+  // By cross-multiplication, in floats while both products are safe integers and in big integers past that, so
+  // two values compare even where their difference could not be held (1/9007199254740991 against 1/9007199254740990).
+  cmp(other) {
+    const o = _Rational.of(other);
+    if (this.d === o.d) return Math.sign(this.n - o.n);
+    const left = this.n * o.d, right = o.n * this.d;
+    if (Number.isSafeInteger(left) && Number.isSafeInteger(right)) return Math.sign(left - right);
+    const a = BigInt(this.n) * BigInt(o.d), b = BigInt(o.n) * BigInt(this.d);
+    return a < b ? -1 : a > b ? 1 : 0;
+  }
+  eq(other) {
+    const o = _Rational.of(other);
+    return this.n === o.n && this.d === o.d;
+  }
+  lt(other) {
+    return this.cmp(other) < 0;
+  }
+  le(other) {
+    return this.cmp(other) <= 0;
+  }
+  gt(other) {
+    return this.cmp(other) > 0;
+  }
+  ge(other) {
+    return this.cmp(other) >= 0;
+  }
+  min(other) {
+    const o = _Rational.of(other);
+    return this.le(o) ? this : o;
+  }
+  max(other) {
+    const o = _Rational.of(other);
+    return this.ge(o) ? this : o;
+  }
+  isZero() {
+    return this.n === 0;
+  }
+  isInteger() {
+    return this.d === 1;
+  }
+  sign() {
+    return Math.sign(this.n);
+  }
+  floor() {
+    return Math.floor(this.n / this.d);
+  }
+  ceil() {
+    return Math.ceil(this.n / this.d);
+  }
+  // The part within the unit: x - floor(x), always in [0, 1).
+  fraction() {
+    return this.sub(this.floor());
+  }
+  // How many whole `unit`s fit, and what is left: a position split into a count of spans and the place within one.
+  divmod(unit2) {
+    const u = _Rational.of(unit2), count = this.div(u).floor();
+    return [count, this.sub(u.mul(count))];
+  }
+  toNumber() {
+    return this.n / this.d;
+  }
+  toString() {
+    return this.d === 1 ? String(this.n) : `${this.n}/${this.d}`;
+  }
+  toJSON() {
+    return this.toString();
+  }
+  valueOf() {
+    throw new TypeError("A Rational has no implicit number value; use toNumber() or the comparison methods");
+  }
 };
-var BUILD = [
-  ["T", "Tension (N)", "build"],
-  ["L", "Length (m)", "build"],
-  ["d", "Diameter (m)", "build"],
-  ["pl", "Linear density (kg/m)", "build"],
-  ["E", "Young's modulus (Pa)", "build"],
-  ["mus", "Static friction μs", "buildPhysics"],
-  ["mud", "Dynamic friction μd", "buildPhysics"],
-  ["v0", "Friction curve slope v0 (m/s)", "buildPhysics"],
-  ["loss", "Modes' losses (× own)", "buildPhysics"],
-  ["slope", "Losses tilt (× n^slope)", "buildPhysics"],
-  ["modes", "Modes (the most)", "buildPhysics"]
-];
-var ownBuild = (k) => ({ T: k.T, L: k.L, d: k.d, pl: k.pl, E: k.E, mus: k.mus, mud: k.mud, v0: k.v0, loss: 1, slope: 0, modes: k.N });
-var startBuild = (k) => ({ ...ownBuild(k), modes: state.mostModes });
-var inUse = { modes: [], points: [], cellMm: [] };
-var openHz = (k) => Math.sqrt(k.T / k.pl) / (2 * k.L);
-function way() {
-  $("way").textContent = bowing ? direction > 0 ? "↓ down-bow" : "↑ up-bow" : "";
-}
-function read() {
-  const k = builds[s];
-  if (!k) return;
-  const f0 = openHz(k), length = k.L * (1 - finger()), Z2 = Math.sqrt(k.T * k.pl), v = value2.speed, b = value2.beta, F2 = value2.force;
-  const most = 2 * Z2 * v / (b * (k.mus - k.mud)), corner = 2 * Z2 * v / b;
-  notes.pitch.textContent = `${name(midiOf(f0) + value2.pitch)} · finger ${(100 * finger()).toFixed(1)} % of the string from the nut`;
-  notes.beta.textContent = `${(1e3 * b * length).toFixed(1)} mm from the bridge, of ${(1e3 * length).toFixed(0)} mm sounding · smaller is nearer the bridge (sul ponticello), larger toward the fingerboard (sul tasto)`;
-  notes.stroke.textContent = `${(value2.stroke / state.bow.length).toFixed(0)} % of a ${(100 * state.bow.length).toFixed(0)} cm bow · a stroke lasts about ${(value2.stroke / 100 / value2.speed).toFixed(2)} s at this speed`;
-  const rows = [
-    ["The force most for a clean (Helmholtz) tone", k.mus > k.mud ? `${most.toFixed(2)} N — you are at ${(100 * F2 / most).toFixed(0)} % of it` : "none: μs is not over μd"],
-    ["Helmholtz force on the bridge, 2Zv/β", `${corner.toFixed(2)} N (${(20 * Math.log10(corner)).toFixed(1)} dB re 1 N): what loudness the stroke asks`],
-    ["Speed over contact point, v/β", `${(v / b).toFixed(2)} m/s`],
-    ["This string", `open ${name(midiOf(f0))} (${f0.toFixed(1)} Hz), impedance Z ${Z2.toFixed(3)} kg/s`]
-  ];
-  $("reading").innerHTML = rows.map(([a, b2]) => `<tr><td>${a}</td><td>${b2}</td></tr>`).join("");
-  attackSaid();
-}
-function strings2() {
-  $("strings").innerHTML = builds.map((k, i) => `<label><input type="radio" name="s-string" value="${i}"${i === s ? " checked" : ""}> ${name(midiOf(openHz(k)))} string</label>`).join("");
-  for (const r of document.querySelectorAll("input[name=s-string]")) r.onchange = () => cross(+r.value);
-}
-function cross(next) {
-  const was = s;
-  if (next === was) return;
-  const asks = [{ do: "vibrato", string: was, width: 0, rate: value2.rate }, ...bowing ? [{ do: "lift", string: was, pos: pos(), vel: direction * value2.speed }] : []];
-  s = next;
-  limits();
-  showBuild();
-  asks.push(fingerAsk(), dampingAsk(), vibratoAsk(), hairAsk());
-  if (bowing) asks.push(alternateAsk(), strokeAsk());
-  ask(asks);
-  read();
-  hairNote();
-}
-var fingerboard = () => $("limitFingerboard").checked;
-var hairLimited = () => $("limitHair").checked;
-function limits() {
-  const top = fingerboard() ? state.fingerboard : Math.max(state.fingerboard, state.range.range[1] - midiOf(openHz(builds[s])));
-  setters.pitch.bounds(0, top);
-  if (value2.pitch > top) setters.pitch(top, true);
-  const length = builds[s].L * (1 - finger()), nearest = Math.min(0.5, hairLimited() ? Math.max(0.02, value2.hair / 2e3 / length) : 0.02);
-  setters.beta.bounds(nearest, 0.5);
-  if (value2.beta < nearest) setters.beta(nearest, true);
-  hairNote();
-  drawPlayers();
-  $("fingerboardLimit").textContent = `at most ${state.fingerboard.toFixed(1)} semitones over the open string, where it meets the end of the ${state.name}'s fingerboard (Goldblatt's measurements)`;
-  $("hairLimit").textContent = `its middle at least half the hair on the string from the bridge (${(value2.hair / 2).toFixed(1)} mm): a violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; the ${state.name}'s not found measured`}`;
-}
-var bands = {};
-function drawPlayers() {
-  const R = state.players;
-  if (!R) return;
-  const open = midiOf(openHz(builds[s])), shortly2 = (v) => String(+(+v).toPrecision(2));
-  const WRITTEN2 = { pitch: (v) => name(Math.round(open + v)), force: (v) => `${shortly2(v)} N`, width: (v) => `${Math.round(v)} ¢`, rate: (v) => `${shortly2(v)} Hz`, damping: (v) => `${shortly2(v)}×` };
-  for (const [id, set] of Object.entries(setters)) {
-    if (id === "volume") continue;
-    const entry = id === "pitch" && R.pitch ? { ...R.pitch, range: R.pitch.range.map((m) => m - open) } : R[id] ?? null;
-    (bands[id] ??= playersBand($(id)))(entry, set.place, WRITTEN2[id] ?? shortly2);
-  }
-}
-function hairNote() {
-  const modes = inUse.modes[s] ?? state.strings[s].N, cells = inUse.points[s] ?? 0, cell = inUse.cellMm[s];
-  notes.hair.textContent = value2.hair > 0 && cells > 0 ? `${cells > 1 ? `${cells} cells of ${(value2.hair / cells).toFixed(1)} mm` : `one cell, ${value2.hair.toFixed(1)} mm`}, each sticking and slipping on its own: its ${modes} modes hold cells no finer than ${Number.isFinite(cell) ? cell.toFixed(1) : "?"} mm apart (more modes, finer cells); under the ribbon's ${(1e3 * state.bow.hairWidth).toFixed(0)} mm, the bow tilted` : "Artifastring's point bow";
-  notes.modes.textContent = `${modes} in use, as many as asked and as its rate holds (Artifastring's own ${state.strings[s].N}): more resolve the bow's hair more finely, and take more processing`;
-}
-function bodyNote() {
-  const c = state.correctedRadiation;
-  const b = state.bodyScaled;
-  $("bodyNote").textContent = (b ? `Its body: Artifastring's ${b.from} bodies scaled to the ${state.name}'s size, every resonance ${b.ratio} times lower (the ratio of the two instruments' lowest air modes) -- for now, until a measured bass body is fitted. ` : "") + `Corrected: Artifastring's ${b ? b.from : state.name} bodies, whose highs fall as a low-pass filter's do, brought to the instrument's radiation by the renders' own filter${b ? ", scaled with them" : ""}. Radiating: a body sounds nothing at 0 Hz, so the bow's drag, building as a stroke starts, is not heard as a low thump. Lowest air mode (A0): ${state.airMode.hz} Hz, ${state.airMode.source}.` + (c ? ` Corrected, the fall starts at ${c.hz} Hz, where the correction's own cut stops` + (c.scaled ? ` (the ${b.from}'s, scaled).` : ` (within ${c.offDb} dB of the radiation under A0, against ${c.unradiatedOffDb} dB without it).`) : "");
-}
-function showBuild() {
-  const own2 = state.strings[s];
-  for (const [key] of BUILD) {
-    if (!["loss", "slope", "modes"].includes(key)) setters[key].bounds(own2[key] / 10, own2[key] * 10);
-    setters[key](builds[s][key], true);
-  }
-}
-function play() {
-  bowing = !bowing;
-  $("play").classList.toggle("on", bowing);
-  $("play").textContent = bowing ? "■ Stop" : "▶ Play";
-  way();
-  return ask(bowing ? [alternateAsk(), strokeAsk()] : [{ do: "stop" }]);
-}
-function reverse() {
-  direction = -direction;
-  way();
-  if (bowing) ask([{ ...alternateAsk(), stroke: 0 }, strokeAsk(), alternateAsk()]);
-}
-var arrived = null;
-async function instrument(type, variant) {
-  if (bowing) play();
-  const got = new Promise((done) => {
-    arrived = { left: 4, done };
-  });
-  await ask([{ do: "stop" }, { do: "instrument", type, variant }]);
-  await got;
-  state = await (await fetch("/strings/state", { cache: "no-store" })).json();
-  builds = state.strings.map(startBuild);
-  s = Math.min(s, builds.length - 1);
-  inUse = state.inUse;
-  variants();
-  strings2();
-  limits();
-  showBuild();
-  $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
-  setters.corner(cornerFor($("correcting").checked), true);
-  bodyNote();
-  await ask([fingerAsk(), dampingAsk(), radiateAsk(), ...builds.map((_, i) => buildAsk(i)), hairAsk()]);
-  read();
-  describe();
-}
-function variants() {
-  const n = state.variants[state.instrument];
-  $("variant").innerHTML = Array.from({ length: n }, (_, i) => `<option value="${i}"${i === state.variant ? " selected" : ""}>no. ${i}</option>`).join("");
-  $("variants").textContent = `of ${n}`;
-}
-function describe() {
-  document.getElementById("what").textContent = `The ${state.name} on Artifastring, heard through ${state.heardThrough}: ${state.bodyScaled ? `the ${state.bodyScaled.from}'s body` : "Artifastring's"} no. ${state.variant}, seed ${state.seed} · ` + (state.neutral ? `taken up on its neutral note, from ${state.neutral.map.split("/").pop()}` : `its good note made from ${state.from.split("/").pop()}`);
-}
-async function init(status2) {
-  for (const until = performance.now() + 6e4; ; ) {
-    state = await (await fetch("/strings/state", { cache: "no-store" })).json();
-    if (state.rate && Object.keys(state.constants).length && state.strings.filter(Boolean).length === 4) break;
-    if (performance.now() > until) throw new Error("its host did not say its strings within a minute");
-    status2.textContent = "Starting the strings' host ...";
-    await new Promise((done) => setTimeout(done, 250));
-  }
-  INSTRUMENT_OF = Object.keys(state.variants);
-  soloShown();
-  const st = state.start;
-  s = st.string;
-  direction = st.direction;
-  builds = state.strings.map(startBuild);
-  inUse = state.inUse;
-  variants();
-  strings2();
-  $("seed").value = state.seed;
-  const semis = -12 * Math.log2(1 - st.finger), beta = st.pos / (1 - st.finger);
-  const times = [st.startSeconds, state.bow.endSeconds];
-  const bowed = () => {
-    if (bowing) later("bow", () => [bowAsk()]);
-    read();
-  };
-  const strokes = () => {
-    if (bowing) later("alternate", () => [alternateAsk()]);
-    read();
-  };
-  dial("strokes", "stroke", "Bow a stroke (cm)", { min: state.bow.length, max: 100 * state.bow.length, log: true, value: Math.min(100 * state.bow.length, 100 * st.drawn), onchange: strokes, note: "" });
-  dial("strokes", "start", "A stroke's start (s)", {
-    min: Math.min(...times) / 10,
-    max: Math.max(...times) * 10,
-    log: true,
-    value: st.startSeconds,
-    onchange: () => {
-      started();
-      strokes();
-    },
-    note: "How long the bow takes to come up to speed: at Play, and in every stroke after a turn."
-  });
-  dial("strokes", "end", "A stroke's end (s)", {
-    min: Math.min(...times) / 10,
-    max: Math.max(...times) * 10,
-    log: true,
-    value: state.bow.endSeconds,
-    onchange: strokes,
-    note: "How long the bow takes to slow into the turn; from there it comes up to speed the other way over the start."
-  });
-  attackCurves();
-  dial("left", "pitch", "Pitch (semitones)", { min: 0, max: 1, value: semis, onchange: () => {
-    limits();
-    later("finger", () => [fingerAsk()]);
-    bowed();
-  }, note: "" });
-  dial("left", "firmness", "Finger firmness", {
-    min: 1e-3,
-    max: 1,
-    log: true,
-    value: 1,
-    onchange: () => later("finger", () => [fingerAsk()]),
-    note: "A share of Artifastring's finger stiffness (K_FINGER): 1 a finger stopping the string; light, it touches and sounds a harmonic."
-  });
-  const fingertip = state.finger, artifastring = fingertip.artifastring / fingertip.damping;
-  dial("left", "damping", "Finger damping (× a fingertip's)", {
-    min: 0.1,
-    max: 10 * Math.ceil(artifastring / 10),
-    log: true,
-    value: 1,
-    onchange: () => later("damping", () => [dampingAsk()]),
-    note: `1: a fingertip's measured, ${fingertip.damping} N·s/m (Wiertlewski & Hayward 2012); a light touch its pad's, in proportion. Artifastring's own, ${Math.round(artifastring)}: stopped notes dead within a fifth of a second, the high ones with sidebands.`
-  });
-  dial("right", "beta", "Contact point β", { min: 0.02, max: 0.5, log: true, value: beta, onchange: () => {
-    limits();
-    bowed();
-  }, note: "" });
-  dial("right", "force", "Bow force (N)", { min: 0.1, max: 4, log: true, value: st.force, onchange: bowed });
-  dial("right", "speed", "Bow speed (m/s)", { min: st.speed / 10, max: st.speed * 10, log: true, value: st.speed, onchange: bowed });
-  dial("right", "hair", "Bow hair on the string (mm)", {
-    min: 0,
-    max: 1e3 * state.bow.hairWidth,
-    value: 1e3 * state.bow.hairWidth,
-    step: 0.1,
-    onchange: () => {
-      limits();
-      later("hair", () => [hairAsk()]);
-      bowed();
-    },
-    note: ""
-  });
-  const vibrated = () => {
-    $("vibrating").checked = true;
-    later("vibrato", () => [vibratoAsk()]);
-  };
-  dial("vibrato", "width", "Width (cents)", {
-    min: state.vibrato.width / 10,
-    max: state.vibrato.width * 10,
-    log: true,
-    value: state.vibrato.width,
-    onchange: vibrated,
-    note: "Peak to peak: the pitch goes half of it above and half below."
-  });
-  dial("vibrato", "rate", "Rate (Hz)", { min: state.vibrato.rate / 10, max: state.vibrato.rate * 10, log: true, value: state.vibrato.rate, onchange: vibrated });
-  $("vibrating").onchange = () => later("vibrato", () => [vibratoAsk()]);
-  $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
-  const profile = state.noise.profile, noised = () => later("noise", noiseAsks);
-  dial("noise", "noisePlayer", "The player's temperature", {
-    min: 0,
-    max: 5,
-    value: 1,
-    step: 0.05,
-    onchange: noised,
-    note: `Each kind drawn with its power falling as 1/f^${profile.beta} from ${profile.low} to ${profile.high} Hz, a ${profile.tremor.hz} Hz tremor carrying ${Math.round(100 * profile.tremor.share)} % of it.`
-  });
-  for (const [kind, label3, size] of NOISE_KINDS) dial("noise", noiseId(kind), label3, { min: 0, max: 5, value: 1, step: 0.05, onchange: noised, note: size(state.noise.kinds[kind].sd) });
-  const pulls = Object.values(state.pluck.pull);
-  dial("plucking", "pluckPos", "Where (β)", { min: 0.02, max: 0.5, log: true, value: state.pluck.position });
-  dial("plucking", "pluckForce", "Pull (N)", { min: Math.min(...pulls), max: Math.max(...pulls), log: true, value: state.pluck.pull.mf });
-  const built = (key) => () => {
-    builds[s][key] = value2[key];
-    later("build", () => [buildAsk()]);
-    read();
-    strings2();
-  };
-  for (const [key, label3, box] of BUILD) {
-    const own2 = state.strings[s][key];
-    dial(box, key, label3, key === "slope" ? { min: -2, max: 2, value: 0, step: 0.01, onchange: built(key) } : key === "loss" ? { min: 0.1, max: 10, log: true, value: 1, onchange: built(key) } : key === "modes" ? { min: 4, max: state.mostModes, log: true, value: state.mostModes, step: 1, onchange: () => {
-      setters.modes(Math.round(value2.modes), true);
-      built("modes")();
-    }, note: "" } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: built(key) });
-  }
-  const CONSTANTS = [
-    ["A_noise", "Friction noise (share of v0)", "estimated from listening"],
-    ["PLUCK_VELOCITY", "Pluck: finger speed (m/s)", "estimated from listening"],
-    ["PLUCK_DISPLACEMENT", "Pluck: pull (m at full)", "estimated from listening"],
-    ["PLUCK_SECONDS", "Pluck: held (s)", "estimated from listening"],
-    ["K_PLUCK", "Pluck: stiffness (N/m)"],
-    ["R_PLUCK", "Pluck: damping (kg/s)"],
-    ["PLUCK_WIDTH", "Pluck: width (m)"],
-    ["FINGER_WIDTH", "Finger: width (m)"]
-  ];
-  for (const [key, label3, said2] of CONSTANTS) {
-    const own2 = state.constants[key];
-    dial("constants", key, label3, key === "A_noise" ? { min: 0, max: own2 * 10, value: own2, step: 1e-3, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 });
-  }
-  $("ownConstants").onclick = () => {
-    for (const [key] of CONSTANTS) setters[key](state.constants[key], true);
-    ask(CONSTANTS.map(([key]) => ({ do: "constant", name: key, value: state.constants[key] })));
-  };
-  dial("listening", "volume", "Volume (dB)", {
-    min: -40,
-    max: 40,
-    value: 0,
-    step: 0.5,
-    onchange: () => later("gain", () => [{ do: "gain", gain: 10 ** ((heardDb() + value2.volume) / 20) }]),
-    note: "0 dB: the instrument's neutral note at broadcast loudness (EBU R128). Louder or softer playing is heard louder or softer against it."
-  });
-  $("correcting").checked = state.corrected;
-  dial("body", "corner", "Radiation falls under (Hz)", { min: 20, max: 1e3, log: true, value: cornerFor(state.corrected), onchange: () => {
-    $("radiating").checked = true;
-    later("radiate", () => [radiateAsk()]);
-  } });
-  $("radiating").onchange = $("falling").onchange = () => later("radiate", () => [radiateAsk()]);
-  $("correcting").onchange = () => {
-    setters.corner(cornerFor($("correcting").checked), true);
-    later("correct", () => [correctAsk(), radiateAsk()]);
-  };
-  const limited = () => {
-    limits();
-    later("finger", () => [fingerAsk()]);
-    bowed();
-  };
-  $("limitFingerboard").onchange = $("limitHair").onchange = limited;
-  new EventSource("/strings/events").onmessage = (e) => {
-    const [word, ...rest3] = e.data.split(" ");
-    if (word === "level") {
-      const db = Number(rest3[0]);
-      $("meter").style.width = `${Number.isFinite(db) ? Math.max(0, Math.min(100, 100 + 100 * db / 60)) : 0}%`;
-      $("level").textContent = Number.isFinite(db) ? `${db.toFixed(1)} dB of full scale (rms)` : "silent";
-    } else if (word === "turn") {
-      if (+rest3[0] === s) {
-        direction = rest3[1] === "down" ? 1 : -1;
-        way();
-      }
-    } else if (word === "runaway") $("said").textContent = `The model ran away at ${rest3[0]} s and was started again (a moment of silence).`;
-    else if (word === "string" && arrived && !--arrived.left) {
-      arrived.done();
-      arrived = null;
-    } else if (word === "modes") {
-      inUse.modes[+rest3[0]] = +rest3[1];
-      hairNote();
-    } else if (word === "hair") {
-      inUse.points[+rest3[0]] = +rest3[1];
-      inUse.cellMm[+rest3[0]] = +rest3[2];
-      hairNote();
-    }
-  };
-  limits();
-  showBuild();
-  read();
-  bodyNote();
-  describe();
-  await ask([{ do: "gain", gain: 10 ** (heardDb() / 20) }, fingerAsk(), radiateAsk(), ...builds.map((_, i) => buildAsk(i)), hairAsk(), ...noiseAsks()]);
-  $("good").onclick = () => state.neutral ? neutral() : good();
-  $("play").onclick = play;
-  $("reverse").onclick = reverse;
-  $("alternate").onchange = () => {
-    if (bowing) ask([alternateAsk()]);
-    read();
-  };
-  $("output").onclick = () => {
-    bridge = !bridge;
-    $("output").textContent = bridge ? "Hearing: the bridge force (no body)" : "Hearing: the instrument";
-    ask([{ do: "output", bridge }]);
-  };
-  $("pluck").onclick = () => ask([{ do: "pluck", string: s, pos: value2.pluckPos * (1 - finger()), force: value2.pluckForce }]);
-  $("ownBuild").onclick = () => {
-    builds[s] = ownBuild(state.strings[s]);
-    showBuild();
-    ask([buildAsk()]);
-    read();
-    strings2();
-  };
-  $("variant").onchange = () => instrument(state.type, +$("variant").value);
-  $("reseed").onclick = async () => {
-    const seed2 = Math.round(+$("seed").value);
-    if (seed2 >= 0) {
-      await ask([{ do: "seed", seed: seed2 }]);
-      state.seed = seed2;
-      describe();
-    }
-  };
-  $("keep").onclick = async () => {
-    const r = await fetch("/strings/keep", { method: "POST", body: JSON.stringify({ words: $("words").value, ...settingsNow() }) });
-    $("kept").textContent = r.ok ? ` kept (${(/* @__PURE__ */ new Date()).toLocaleTimeString()})` : ` not kept: ${await r.text()}`;
-    if (r.ok) {
-      $("words").value = "";
-      kept2();
-    }
-  };
-  kept2();
-}
-function settingsNow() {
-  return {
-    string: s,
-    openHz: openHz(builds[s]),
-    pitchSemitones: value2.pitch,
-    finger: finger(),
-    firmness: value2.firmness,
-    damping: value2.damping,
-    dampingNsPerM: value2.damping * state.finger.damping,
-    beta: value2.beta,
-    pos: pos(),
-    force: value2.force,
-    speed: value2.speed,
-    direction,
-    bowing,
-    alternating: alternating(),
-    strokeCm: value2.stroke,
-    startSeconds: value2.start,
-    endSeconds: value2.end,
-    attack: { shape: $("attackFrom").value, force: forceCurve.get(), speed: speedCurve.get() },
-    vibrato: $("vibrating").checked ? { widthCents: value2.width, rateHz: value2.rate } : null,
-    build: builds[s],
-    constants: Object.fromEntries(Object.keys(state.constants).map((key) => [key, value2[key]])),
-    heard: bridge ? "bridge force" : "instrument",
-    body: { corrected: $("correcting").checked, radiated: $("radiating").checked, cornerHz: value2.corner, order: +$("falling").value },
-    limits: { fingerboard: fingerboard(), hair: hairLimited() },
-    hairMm: value2.hair,
-    noise: { player: value2.noisePlayer, ...Object.fromEntries(NOISE_KINDS.map(([kind]) => [kind, value2[noiseId(kind)]])) }
-  };
-}
-async function kept2() {
-  const all = (await (await fetch("/strings/kept", { cache: "no-store" })).json()).reverse();
-  $("keptNone").style.display = all.length ? "none" : "";
-  $("keptList").innerHTML = "";
-  for (const k of all) {
-    const row2 = document.createElement("tr"), open = k.openHz ? midiOf(k.openHz) : null;
-    const what2 = [
-      k.instrument,
-      open != null && k.pitchSemitones != null ? name(open + k.pitchSemitones) : null,
-      k.beta != null ? `β ${k.beta.toFixed(3)}` : null,
-      k.force != null ? `${k.force.toFixed(2)} N` : null,
-      k.speed != null ? `${k.speed.toFixed(3)} m/s` : null,
-      k.strokeCm != null && k.alternating ? `${k.strokeCm.toFixed(1)} cm a stroke` : null,
-      k.vibrato ? `vibrato ${k.vibrato.widthCents.toFixed(0)} ¢ at ${k.vibrato.rateHz.toFixed(2)} Hz` : null,
-      k.heard === "bridge force" ? "bridge force" : null
-    ].filter(Boolean).join(" · ");
-    row2.innerHTML = `<td>${new Date(k.at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td><td><b></b><br><span class="muted"></span></td><td><button>Load</button><button>Delete</button></td>`;
-    row2.querySelector("b").textContent = k.words || "(no words)";
-    row2.querySelector(".muted").textContent = what2;
-    const [load3, forget] = row2.querySelectorAll("button");
-    load3.onclick = () => recall(k);
-    forget.onclick = async () => {
-      if (!confirm(`Delete "${k.words || "(no words)"}"?`)) return;
-      const r = await fetch("/strings/forget", { method: "POST", body: JSON.stringify({ at: k.at }) });
-      if (!r.ok) $("said").textContent = await r.text();
-      kept2();
-    };
-    $("keptList").append(row2);
-  }
-}
-var forceCurve = null;
-var speedCurve = null;
-var riseOf = (points) => points.findIndex((p, k) => k && p[1] > 0);
-var startOf = (points) => {
-  const k = riseOf(points);
-  return points[k][0] - points[k - 1][0];
-};
-var startingAt = (points, seconds) => segmentLasting(points, riseOf(points), seconds, LONGEST);
-var ownForce = (points) => points.every((p) => p[1] === 1);
-var ownSpeed = (points) => points.length === 2 && points[1][2] === "straight";
-var asked = { force: null, speed: null };
-function attackAsks() {
-  const now = { force: ownForce(forceCurve.get()) ? null : forceCurve.get(), speed: ownSpeed(speedCurve.get()) ? null : speedCurve.get() };
-  const asks = ["force", "speed"].filter((what2) => JSON.stringify(now[what2]) !== JSON.stringify(asked[what2])).map((what2) => ({ do: "attack", what: what2, points: now[what2] }));
-  asked = now;
-  return asks;
-}
-function shaped(name2) {
-  const start = value2.start, a = state.attacks;
-  if (name2 === "neutral" || !a) return { force: [[0, 1], [start, 1]], speed: [[0, 0], [start, 1, "straight"]] };
-  if (name2 === "silence") return bowedAttack(a, { attack: start });
-  const onset = a.articulations[name2];
-  return bowedAttack(a, { attack: start, onset, bite: onset.bite });
-}
-function shape(name2) {
-  const { force, speed } = shaped(name2);
-  forceCurve.set(force);
-  speedCurve.set(speed);
-  $("attackFrom").value = name2;
-  attackSaid();
-}
-function started() {
-  const name2 = $("attackFrom").value;
-  if (name2 === "drawn") speedCurve.set(startingAt(speedCurve.get(), value2.start));
-  else shape(name2);
-  later("attack", attackAsks);
-}
-function attackSaid() {
-  if (!forceCurve || !builds[s]) return;
-  const [ft, fy] = peakOf(forceCurve.get()), [vt, vy] = peakOf(speedCurve.get());
-  $("attackSaid").textContent = `Its force at most ${(fy * value2.force).toFixed(2)} N (${fy.toFixed(2)}×, ${Math.round(1e3 * ft)} ms in), its speed at most ${(vy * value2.speed).toFixed(3)} m/s (${vy.toFixed(2)}×, ${Math.round(1e3 * vt)} ms in); settled ${Math.round(1e3 * Math.max(forceCurve.get().at(-1)[0], speedCurve.get().at(-1)[0]))} ms in.`;
-}
-function attackCurves() {
-  const a = state.attacks;
-  $("attackFrom").innerHTML = `<option value="neutral">as the neutral note is played: set down, drawn up to speed</option>` + (a ? `<option value="silence">the renders' attack from silence</option>` + Object.keys(a.articulations).map((n) => `<option value="${n}">the renders' ${n}</option>`).join("") : "") + `<option value="drawn" disabled>as drawn</option>`;
-  $("attackNote").textContent = a ? `The renders' attacks as they play them at ${a.dynamic}: ${a.fitted ? `the ${state.name}'s fitted onset` : "the model's authored onset (physical-strings.js MODEL.onset; no onset fitted yet)"}, each over the stroke's start dialled. A note held quietly may need its attack to peak over what it settles at to start.` : "The renders' attacks come with the strings' server restarted.";
-  const drawn = () => {
-    $("attackFrom").value = "drawn";
-    attackSaid();
-    later("attack", attackAsks);
-  };
-  forceCurve = curveEditor($("forceCurve"), {
-    kind: attackKind({ straight: true }),
-    label: "Bow force at a stroke's start",
-    color: "var(--strings)",
-    change: drawn,
-    meaning: (y2) => `${(y2 * value2.force).toFixed(2)} N`
-  });
-  speedCurve = curveEditor($("speedCurve"), {
-    kind: attackKind({ from: 0, straight: true }),
-    label: "Bow speed at a stroke's start",
-    color: "var(--strings)",
-    meaning: (y2) => `${(y2 * value2.speed).toFixed(3)} m/s`,
-    change: (points) => {
-      const start = startOf(points);
-      if (Math.abs(start - value2.start) > 1e-6) {
-        setters.start(start, true);
-        if (bowing) later("alternate", () => [alternateAsk()]);
-      }
-      drawn();
-    }
-  });
-  $("attackFrom").onchange = () => {
-    shape($("attackFrom").value);
-    later("attack", attackAsks);
-  };
-  shape("neutral");
-}
-var chosen = () => {
-};
-async function recall(k) {
-  if (k.type != null && (k.type !== state.type || (k.variant ?? 0) !== state.variant)) {
-    await instrument(k.type, k.variant ?? 0);
-    chosen(INSTRUMENT_OF[k.type]);
-  }
-  if (k.string != null && k.string !== s && builds[k.string]) cross(k.string);
-  const damping = Number.isFinite(k.dampingNsPerM) ? k.dampingNsPerM / state.finger.damping : k.damping * state.finger.artifastring / state.finger.damping;
-  for (const [id, v] of [
-    ["pitch", k.pitchSemitones],
-    ["firmness", k.firmness],
-    ["damping", damping],
-    ["beta", k.beta],
-    ["force", k.force],
-    ["speed", k.speed],
-    ["stroke", k.strokeCm],
-    ["start", k.startSeconds],
-    ["end", k.endSeconds]
-  ]) if (Number.isFinite(v)) setters[id](v, true);
-  if (k.alternating != null) $("alternate").checked = k.alternating;
-  if (k.attack) {
-    forceCurve.set(k.attack.force);
-    speedCurve.set(k.attack.speed);
-    $("attackFrom").value = k.attack.shape ?? "drawn";
-    attackSaid();
-  } else shape("neutral");
-  $("vibrating").checked = Boolean(k.vibrato);
-  if (k.vibrato) {
-    setters.width(k.vibrato.widthCents, true);
-    setters.rate(k.vibrato.rateHz, true);
-  }
-  if (k.build) {
-    builds[s] = { ...builds[s], ...k.build };
-    showBuild();
-    strings2();
-  }
-  const constants = Object.entries(k.constants ?? {}).filter(([key, v]) => setters[key] && Number.isFinite(v));
-  for (const [key, v] of constants) setters[key](v, true);
-  setters.hair(Number.isFinite(k.hairMm) ? k.hairMm : 0, true);
-  if (k.noise) noiseAt(k.noise.player, k.noise);
-  else noiseAt(0);
-  if (k.body) {
-    $("radiating").checked = k.body.radiated;
-    $("falling").value = String(k.body.order);
-    if (Number.isFinite(k.body.cornerHz)) setters.corner(k.body.cornerHz, true);
-  }
-  const before = $("correcting").checked && k.body?.corrected == null;
-  $("correcting").checked = k.body?.corrected ?? false;
-  const past = [];
-  if (fingerboard() && k.pitchSemitones > state.fingerboard) {
-    $("limitFingerboard").checked = false;
-    past.push("past the fingerboard's end");
-  }
-  if (hairLimited() && value2.beta * builds[s].L * (1 - finger()) < state.bow.hairWidth / 2) {
-    $("limitHair").checked = false;
-    past.push("with the bow nearer the bridge than half its hair's width");
-  }
-  limits();
-  const asks = [fingerAsk(), dampingAsk(), vibratoAsk(), ...attackAsks(), ...k.build ? [buildAsk()] : [], ...constants.map(([name2, v]) => ({ do: "constant", name: name2, value: v })), correctAsk(), radiateAsk(), hairAsk(), ...noiseAsks()];
-  if (bowing) asks.push(alternateAsk(), bowAsk());
-  await ask(asks);
-  read();
-  $("said").textContent = [
-    past.length ? `This setting plays ${past.join(" and ")}: switched off under The hands' reach to play it.` : "",
-    before ? "Kept before bodies were corrected: heard as it was then, uncorrected (switch it on under Instrument)." : "",
-    k.noise ? "" : "Kept before the hands' noise: heard as it was then, without it.",
-    Number.isFinite(k.dampingNsPerM) || !Number.isFinite(k.damping) ? "" : "Kept before the finger's measured damping: its stopping finger heard as it was then, Artifastring's own."
-  ].filter(Boolean).join(" ");
-}
-async function good() {
-  const p = state.pick, st = p.start, was = bowing;
-  if (bowing) play();
-  if (state.variant !== p.variant && p.variant < state.variants[state.instrument]) await instrument(state.type, p.variant);
-  if (st.string !== s && builds[st.string]) cross(st.string);
-  builds = state.strings.map((k2, i) => ({ ...ownBuild(k2), modes: builds[i]?.modes ?? state.mostModes }));
-  showBuild();
-  strings2();
-  const k = state.strings[s], q = p.string, own2 = state.type === p.type || !q;
-  const force = own2 ? st.force : st.force * Math.sqrt(k.T * k.pl) / Math.sqrt(q.T * q.pl) * (k.mus - k.mud) / (q.mus - q.mud);
-  const set = {
-    pitch: -12 * Math.log2(1 - st.finger),
-    firmness: 1,
-    damping: 1,
-    beta: st.pos / (1 - st.finger),
-    force,
-    speed: st.speed,
-    stroke: Math.min(100 * state.bow.length, 100 * st.drawn),
-    start: st.startSeconds,
-    end: state.bow.endSeconds,
-    width: state.vibrato.width,
-    rate: state.vibrato.rate,
-    corner: cornerFor(true),
-    volume: 0,
-    ...state.constants
-  };
-  for (const [id, v] of Object.entries(set)) if (setters[id] && Number.isFinite(v)) setters[id](v, true);
-  direction = st.direction;
-  $("alternate").checked = true;
-  $("vibrating").checked = false;
-  $("correcting").checked = true;
-  $("radiating").checked = true;
-  $("falling").value = "2";
-  bridge = false;
-  $("output").textContent = "Hearing: the instrument";
-  limits();
-  noiseAt(1);
-  shape("neutral");
-  await ask([
-    { do: "seed", seed: p.seed },
-    ...builds.map((_, i) => buildAsk(i)),
-    ...Object.entries(state.constants).map(([name2, v]) => ({ do: "constant", name: name2, value: v })),
-    fingerAsk(),
-    dampingAsk(),
-    vibratoAsk(),
-    ...attackAsks(),
-    { do: "gain", gain: 10 ** (heardDb() / 20) },
-    { do: "output", bridge: false },
-    correctAsk(),
-    radiateAsk(),
-    hairAsk(),
-    ...noiseAsks()
-  ]);
-  state.seed = p.seed;
-  $("seed").value = p.seed;
-  describe();
-  read();
-  way();
-  if (was) await play();
-  $("said").textContent = own2 ? "" : `A good note made from the ${INSTRUMENT_OF[p.type]}'s: the same bowing at the same place on Schelleng's diagram, ${force.toFixed(2)} N here.`;
-}
-var begun = null;
-var taking = Promise.resolve();
-var placed = /* @__PURE__ */ new Set();
-async function neutral() {
-  const n = state.neutral, was = bowing;
-  if (bowing) play();
-  if (state.variant !== n.variant) await instrument(state.type, n.variant);
-  if (n.string !== s && builds[n.string]) cross(n.string);
-  builds = state.strings.map((k, i) => ({ ...ownBuild(k), modes: builds[i]?.modes ?? state.mostModes }));
-  showBuild();
-  strings2();
-  const set = {
-    pitch: n.stop,
-    firmness: 1,
-    damping: 1,
-    beta: n.contact,
-    force: n.force,
-    speed: n.speed,
-    stroke: 100 * state.bow.length,
-    start: n.attack,
-    end: state.bow.endSeconds,
-    width: state.vibrato.width,
-    rate: state.vibrato.rate,
-    corner: cornerFor(true),
-    volume: 0,
-    ...state.constants
-  };
-  for (const [id, v] of Object.entries(set)) if (setters[id] && Number.isFinite(v)) setters[id](v, true);
-  $("alternate").checked = true;
-  $("vibrating").checked = false;
-  $("correcting").checked = true;
-  $("radiating").checked = true;
-  $("falling").value = "2";
-  bridge = false;
-  $("output").textContent = "Hearing: the instrument";
-  limits();
-  noiseAt(1);
-  shape("neutral");
-  await ask([
-    ...builds.map((_, i) => buildAsk(i)),
-    ...Object.entries(state.constants).map(([name2, v]) => ({ do: "constant", name: name2, value: v })),
-    fingerAsk(),
-    dampingAsk(),
-    vibratoAsk(),
-    ...attackAsks(),
-    { do: "gain", gain: 10 ** (heardDb() / 20) },
-    { do: "output", bridge: false },
-    correctAsk(),
-    radiateAsk(),
-    hairAsk(),
-    ...noiseAsks()
-  ]);
-  describe();
-  read();
-  way();
-  if (was) await play();
-  $("said").textContent = "";
-}
-var neutralSaid = (n) => `its neutral note (${n.dynamic}, ${name(n.pitch)} on its ${["first", "second", "third", "fourth", "fifth", "sixth"][n.string] ?? `${n.string + 1}th`} string, ${+n.force.toPrecision(3)} N at ${+n.speed.toPrecision(3)} m/s, settling in ${n.settlesMs} ms${n.withinLimit ? "" : ` -- none of its notes within listeners' ${state.neutralLimitMs} ms`}; the neutral-note fit's ${n.rehearsal ? "rehearsal " : ""}map, round ${n.round})`;
-function take(model2, { status: status2, choose: choose2 }) {
-  chosen = choose2 ?? chosen;
-  return taking = taking.catch(() => {
-  }).then(async () => {
-    begun ??= init(status2);
-    await begun.catch((error) => {
-      begun = null;
-      throw error;
-    });
-    const type = INSTRUMENT_OF.indexOf(model2);
-    if (type < 0) throw new Error(`no ${model2} among the strings`);
-    status2.classList.remove("failed");
-    if (type !== state.type || !placed.has(type)) {
-      status2.textContent = `Taking up the ${model2.replace(/-/g, " ")} ...`;
-      if (type !== state.type) await instrument(type, 0);
-      await (state.neutral ? neutral() : good());
-      placed.add(type);
-    }
-    status2.textContent = `The ${state.name}, ready: heard through ${state.heardThrough}, on ` + (state.neutral ? neutralSaid(state.neutral) : `its good note${type === state.pick.type ? " (the note it started from)" : " (the violin's note, bowed at the same place on Schelleng's diagram)"}`) + ".";
-    describe();
-  }).catch((error) => {
-    status2.classList.add("failed");
-    status2.textContent = `The strings could not take up the ${model2}: ${error.message}`;
-  });
-}
-$("soloSeed").value = DEFAULT_SEED;
-var musebot = musebotControls({ box: $("personality"), seed: $("soloSeed"), seconds: $("soloSeconds") });
-var following = null;
-$("solo").onclick = async () => {
-  if (!state) return;
-  const on = !state.soloist?.playing;
-  if (on) {
-    if (bowing) play();
-    $("soloSaid").textContent = "Its band composes the piece ...";
-  }
-  const r = await fetch("/strings/soloist", { method: "POST", body: JSON.stringify(on ? { on, ...musebot.given() } : { on }) });
-  if (!r.ok) {
-    $("soloSaid").textContent = await r.text();
-    return;
-  }
-  state = { ...state, ...await r.json() };
-  soloShown();
-  follow();
-};
-async function follow() {
-  clearTimeout(following);
-  state = await (await fetch("/strings/state", { cache: "no-store" })).json();
-  soloShown();
-  if (state.soloist?.playing) following = setTimeout(follow, 500);
-}
-var minutes = (x2) => `${Math.floor(x2 / 60)}:${String(Math.floor(x2 % 60)).padStart(2, "0")}`;
-function soloShown() {
-  const playing = Boolean(state.soloist?.playing), said2 = state.soloist?.said, tone = said2?.personality?.tone;
-  $("solo").textContent = playing ? "■ Stop the musebot" : "▶ A musebot plays";
-  $("solo").classList.toggle("on", playing);
-  musebot.show(state.player, said2?.personality);
-  if (!said2) return;
-  $("soloSaid").textContent = `${said2.player} on the ${state.name}, seed ${said2.seed}: ${playing ? "" : "played "}${minutes(Math.min(said2.at, said2.seconds))} of ${minutes(said2.seconds)}, ${said2.notes} notes` + (said2.late ? `; ${said2.late} lines came late` : "") + (said2.personality ? `; its register ${name(said2.personality.register[0])} to ${name(said2.personality.register[1])}` : "") + (tone ? `; its tone ${said2.personality.levers.tone.toFixed(2)}: ${tone.kinds.length ? `${tone.kinds.join(", ")} in ${Math.round(100 * tone.share)}% of phrases` : "no techniques"}, vibrato ${tone.vibrato[0].toFixed(1)} to ${tone.vibrato[1].toFixed(1)} × its players'` : "") + ".";
-}
-async function settings() {
-  await taking.catch(() => {
-  });
-  if (!state) throw new Error("no instrument yet");
-  const model2 = INSTRUMENT_OF[state.type];
-  return {
-    model: model2,
-    settings: { family: "strings", model: model2, type: state.type, variant: state.variant, seed: state.seed, ...settingsNow(), player: musebot.given() },
-    words: $("words").value,
-    heard: { through: bridge ? "bridge force" : "instrument", bowing, said: $("listening").textContent }
-  };
-}
-async function load(file) {
-  await taking.catch(() => {
-  });
-  if (!state) throw new Error("no instrument yet");
-  const k = file.settings;
-  if (Number.isInteger(k.seed) && k.seed !== state.seed) {
-    await ask([{ do: "seed", seed: k.seed }]);
-    state.seed = k.seed;
-    describe();
-  }
-  await recall(k);
-  if (file.words) $("words").value = file.words;
-  const refused = [];
-  if (k.player) {
-    const r = await fetch("/strings/player", { method: "POST", body: JSON.stringify(k.player) });
-    if (r.ok) {
-      state = { ...state, ...await r.json() };
-      soloShown();
-    } else refused.push({ path: "/player", error: await r.text() });
-  }
-  return { made: "every one", refused };
-}
-function rest() {
-  if (bowing) play();
-  if (state?.soloist?.playing) fetch("/strings/soloist", { method: "POST", body: JSON.stringify({ on: false }) }).then(follow);
-}
-function keys(e) {
-  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
-  if (e.code === "Space") {
-    e.preventDefault();
-    play();
-  } else if (e.key === "r") reverse();
-  else if (e.key === "p") $("pluck").click();
-}
-
-// native/live/winds.js
-var winds_exports = {};
-__export(winds_exports, {
-  keys: () => keys2,
-  load: () => load2,
-  rest: () => rest2,
-  settings: () => settings2,
-  take: () => take2
-});
+var ZERO = new Rational(0, 1);
+var ONE = new Rational(1, 1);
 
 // registry/sources.json
 var sources_default = {
@@ -3894,14 +2875,12 @@ var winds_default2 = {
           resonances: { value: [300, 1300, 2300], unit: "Hz", kind: "literature", source: "fritz-wolfe-2005", at: "II.D", note: "usually three resonances of the tract from 0.1 to 3 kHz, typically at 0.3, 1.3 and 2.3 kHz, varying among players and playing conditions" },
           first: {
             frequency: { range: [200, 300], unit: "Hz", kind: "literature", source: "fritz-wolfe-2005", at: "III; Table I", note: "its first peak present for every player, hardly varied with how they played: 200-300 Hz (220-280 in Table I)" },
-            peak: { range: [18e5, 56e5], unit: "Pa s/m^3", kind: "literature", source: "fritz-wolfe-2005", at: "III; Table I", note: "1.8-5.6 MPa s/m^3 for most players (to 18 in Table I), a tenth of the bore's" },
-            q: { value: 4, unit: "", kind: "unmeasured", reason: "ours: a start for the player's ear (native/openwind/live.mjs) and the fit; its width is drawn in the measured spectra but nowhere given", searched: [{ where: "registry sources", query: "fritz-wolfe-2005: the tract's impedance in clarinettists' mouths as they played", date: "2026-10-30", found: "each resonance's frequency and its peak's magnitude (Table I; Figs. 5-8), drawn but not given as a width or Q; its waveguide model's losses (wall r = 408 rad/s, w/2pi 15 Hz; q 4 rad/s; 1.5 MPa s/m^3 at the glottis), not a resonance's width" }, { where: "registry sources", query: "chen-smith-wolfe-2009: the impedance in the mouth during normal playing, bends and glissandi", date: "2026-10-30", found: "each resonance's frequency and magnitude (Fig. 7), no width" }] }
+            peak: { range: [18e5, 56e5], unit: "Pa s/m^3", kind: "literature", source: "fritz-wolfe-2005", at: "III; Table I", note: "1.8-5.6 MPa s/m^3 for most players (to 18 in Table I), a tenth of the bore's" }
           },
           normal: {
-            above: { value: 600, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "above about 600 Hz in normal playing the resonance in the mouth follows the note; below, the tract kept as it is" },
-            offset: { value: 150, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "the resonance in the mouth about 150 Hz above the sounding pitch, on average, in normal playing above 600 Hz" },
-            peak: { value: 9e6, unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "about 9 MPa s/m^3 on average in normal playing, against the operating bore peak's 40-90: little effect on the sounding frequency" },
-            q: { value: 8, unit: "", kind: "unmeasured", reason: "ours: a start for the player's ear (native/openwind/live.mjs) and the fit; its width is drawn in the measured spectra but nowhere given", searched: [{ where: "registry sources", query: "fritz-wolfe-2005: the tract's impedance in clarinettists' mouths as they played", date: "2026-10-30", found: "each resonance's frequency and its peak's magnitude (Table I; Figs. 5-8), drawn but not given as a width or Q; its waveguide model's losses (wall r = 408 rad/s, w/2pi 15 Hz; q 4 rad/s; 1.5 MPa s/m^3 at the glottis), not a resonance's width" }, { where: "registry sources", query: "chen-smith-wolfe-2009: the impedance in the mouth during normal playing, bends and glissandi", date: "2026-10-30", found: "each resonance's frequency and magnitude (Fig. 7), no width" }] }
+            held: { value: 600, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "under notes of about 450 Hz the resonance in the mouth held at a constant frequency, near 600 Hz for these players; over them, it follows the note (offset)" },
+            offset: { value: 150, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "the resonance in the mouth about 150 Hz (100-200) above the sounding pitch, on average, in normal playing from notes of about 450 Hz to at least 1400" },
+            peak: { value: 9e6, unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "about 9 MPa s/m^3 on average in normal playing, against the operating bore peak's 40-90: little effect on the sounding frequency" }
           },
           bend: {
             peak: { range: [2e7, 6e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.B", note: "pitch bending and glissandi in the second register and above: as high as 60 MPa s/m^3, comparable with the bore's; 32 at 705 Hz bent a note 190 cents" }
@@ -4402,6 +3381,12 @@ var personality_default = {
         toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
         vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
         harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
+        tuplets: { range: [0, 1], unit: "share", kind: "setting", reason: `its rhythm on the rhythm engine (line-rhythm.js, where its player is switched to it): how much a division other than the meter space's own two and three weighs against them (meter-space.js METER_SPACE.layers), from none -- only twos and threes -- to as much as a three: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note (the owner, 2 October 2026: "make sure EVERY tuplet ratio is allowed")` },
+        syncopation: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how often a span whose parts are alike has the layer under them regrouped by a syncopation and its resolution (euclidean.js syncopate), from never to wherever one fits" },
+        syncopationLength: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: a syncopation's length L in events (the owner, 4 November 2026), drawn from two of its span's parts to all of them, toward the whole by this share (line-rhythm.js toward: a half draws evenly)" },
+        syncopationMeter: { range: [0.3, 1], unit: "share", kind: "setting", reason: `its rhythm on the engine: a syncopation's meter M, a cardinality dissonant with its layer that repeats in L, drawn toward the largest by this share: "usually weighted toward L" (the owner, 4 November 2026), so most players' shares lean toward it and some away` },
+        syncopationRepeats: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how many times a syncopation's meter repeats in L (the owner, 4 November 2026), toward the most by this share" },
+        syncopationWithin: { range: [0, 0.7], unit: "share", kind: "setting", reason: `its rhythm on the engine: the length, 0 to L, of a syncopation within the syncopation, its groups beginning there syncopated again -- "the usual weighting is toward 0, but it's not the only possible one" (the owner, 4 November 2026): most players' shares lean toward 0, some toward L` },
         rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
       }
     }
@@ -4671,21 +3656,4281 @@ function settingEntry(method, name2, stack = []) {
   const value3 = leaf.derive ? equation(leaf.derive.equation, Object.fromEntries(Object.entries(leaf.derive.inputs).map(([k, p]) => [k, input(p)]))) : leaf.value ?? leaf.range ?? null;
   return Object.freeze({ ...leaf, method, name: name2, value: value3 });
 }
+var setting = (method, name2) => settingEntry(method, name2).value;
+
+// public/shared/felt-meter-catalog.js
+var freeze = (value3) => {
+  if (value3 && typeof value3 === "object") {
+    Object.values(value3).forEach(freeze);
+    Object.freeze(value3);
+  }
+  return value3;
+};
+var FELT_METER_POLICY = freeze({
+  "id": "score-selection-v2",
+  "evidence": "authored-policy-not-human-calibration",
+  "favoredBeatSeconds": [
+    "2/5",
+    "4/5"
+  ],
+  "candidateBeatSeconds": [
+    "3/10",
+    "1"
+  ],
+  "cyclePreferenceMaxSeconds": "4",
+  "cycleMinimumSeconds": null,
+  "catalog": [
+    { "id": "2/4-in-2", "numerator": 2, "denominator": 4, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "3/4-in-3", "numerator": 3, "denominator": 4, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "4/4-in-4", "numerator": 4, "denominator": 4, "beatWeights": [1, 1, 1, 1], "groups": [2, 2], "kind": "standard", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["60", "200"] },
+    { "id": "2/2-in-2", "numerator": 2, "denominator": 2, "beatWeights": [1, 1], "groups": [1, 1], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
+    { "id": "3/2-in-3", "numerator": 3, "denominator": 2, "beatWeights": [1, 1, 1], "groups": [3], "kind": "standard", "reference": { "unit": 2, "dots": 0 }, "favoredQuarterBPM": ["150", "300"], "candidateQuarterBPM": ["120", "400"] },
+    { "id": "6/8-in-2", "numerator": 6, "denominator": 8, "beatWeights": [3, 3], "groups": [3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "9/8-in-3", "numerator": 9, "denominator": 8, "beatWeights": [3, 3, 3], "groups": [3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "12/8-in-4", "numerator": 12, "denominator": 8, "beatWeights": [3, 3, 3, 3], "groups": [3, 3, 3, 3], "kind": "standard", "reference": { "unit": 4, "dots": 1 }, "favoredQuarterBPM": ["225/2", "225"], "candidateQuarterBPM": ["90", "300"] },
+    { "id": "5/4-in-5", "numerator": 5, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["75", "150"], "candidateQuarterBPM": ["75", "200"] },
+    { "id": "7/4-in-7", "numerator": 7, "denominator": 4, "beatWeights": [1, 1, 1, 1, 1, 1, 1], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["105", "150"], "candidateQuarterBPM": ["105", "200"] },
+    { "id": "5/4-in-2", "numerator": 5, "denominator": 4, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
+    { "id": "7/4-in-3", "numerator": 7, "denominator": 4, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225", "300"], "candidateQuarterBPM": ["180", "400"] },
+    { "id": "5/8-in-2", "numerator": 5, "denominator": 8, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "7/8-in-3", "numerator": 7, "denominator": 8, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "8/8-in-3", "numerator": 8, "denominator": 8, "beatWeights": [3, 3, 2], "groups": [3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "9/8-in-4", "numerator": 9, "denominator": 8, "beatWeights": [2, 2, 2, 3], "groups": [2, 2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "11/8-in-5", "numerator": 11, "denominator": 8, "beatWeights": [2, 2, 3, 2, 2], "groups": [2, 2, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["90", "200"] },
+    { "id": "13/8-in-5", "numerator": 13, "denominator": 8, "beatWeights": [3, 3, 3, 2, 2], "groups": [3, 3, 3, 2, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/2", "150"], "candidateQuarterBPM": ["195/2", "200"] },
+    { "id": "17/8-in-6", "numerator": 17, "denominator": 8, "beatWeights": [3, 3, 3, 3, 3, 2], "groups": [3, 3, 3, 3, 3, 2], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/2", "150"], "candidateQuarterBPM": ["255/2", "200"] },
+    { "id": "5/16-in-2", "numerator": 5, "denominator": 16, "beatWeights": [2, 3], "groups": [2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
+    { "id": "7/16-in-3", "numerator": 7, "denominator": 16, "beatWeights": [2, 2, 3], "groups": [2, 2, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["225/4", "75"], "candidateQuarterBPM": ["45", "100"] },
+    { "id": "17/16-in-7", "numerator": 17, "denominator": 16, "beatWeights": [2, 2, 3, 2, 2, 3, 3], "groups": [2, 2, 3, 2, 2, 3, 3], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["255/4", "75"], "candidateQuarterBPM": ["255/4", "100"] },
+    { "id": "17/16-in-4", "numerator": 17, "denominator": 16, "beatWeights": [4, 4, 4, 5], "groups": [4, 4, 4, 5], "kind": "grouped", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["375/4", "150"], "candidateQuarterBPM": ["75", "200"] },
+    { "id": "107/32-in-5", "numerator": 107, "denominator": 32, "beatWeights": [19, 19, 19, 25, 25], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 4, "dots": 0 }, "favoredQuarterBPM": ["1875/8", "1425/4"], "candidateQuarterBPM": ["1605/8", "475"] },
+    { "id": "107/32-in-2", "numerator": 107, "denominator": 32, "beatWeights": [57, 50], "groups": [57, 50], "kind": "specialist", "reference": { "unit": 1, "dots": 0 }, "favoredQuarterBPM": ["4275/8", "1875/2"], "candidateQuarterBPM": ["855/2", "1250"] }
+  ]
+});
+var FELT_METER_CATALOG = FELT_METER_POLICY.catalog;
+
+// public/shared/metric-home/grouping.js
+var REMAINDER_UNITS = Object.freeze([3, 2]);
+
+// public/shared/metric-home/nested.js
+var NESTING = Object.freeze({
+  // The longest group a listener hears as one (seconds; meterform_clodbot's and grouping-choice.js's longestGroupSeconds,
+  // ours, within the few seconds a measure can last: London 2012, Hearing in Time, 2nd ed.,
+  // doi:10.1093/acprof:oso/9780199744374.001.0001).
+  longestSeconds: 5,
+  // A split into sections is told apart by their lengths: the shorter section at least this share of the span and the
+  // two sections' shares differing by at least `contrast` (37/107 against 70/107 differ by 0.31). Ours.
+  shortestShare: 0.25,
+  contrast: 0.12,
+  // Candidate splits offered at most for one span, the best first. Ours.
+  offered: 12,
+  // Groups under one at most (grouping.js MAX_GROUPS_UNDER_ONE, Scansion Maker's: four or more are grouped again).
+  maxParts: 3
+});
+
+// public/shared/tempo-range.js
+var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
+
+// public/shared/felt-tempo.js
+var value = (text) => {
+  const [n, d = "1"] = String(text).split("/");
+  return Number(n) / Number(d);
+};
+var band = (list) => [value(list[0]), value(list[1])];
+var FELT_TEMPO = Object.freeze({
+  beat: Object.freeze(band(FELT_METER_POLICY.candidateBeatSeconds)),
+  favoredBeat: Object.freeze(band(FELT_METER_POLICY.favoredBeatSeconds)),
+  longestBarSeconds: NESTING.longestSeconds
+});
+
+// public/shared/euclidean.js
+var RHYTHM = Object.freeze({
+  beat: Object.freeze([60 / setting("rhythm-layers", "fastestBeat"), 60 / setting("rhythm-layers", "slowestBeat")]),
+  shortestPeriod: setting("rhythm-layers", "shortestPeriod")
+});
+
+// public/shared/meter-space.js
+var METER_SPACE = Object.freeze({
+  numerators: Object.freeze([1, 40]),
+  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
+  // with a tempo).
+  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
+  // The parts a span of a bar is split into at each level of its nesting, two or three (never more than three under
+  // one: metric-home/grouping.js MAX_GROUPS_UNDER_ONE), down to its groups of two and three units (drawGrouping).
+  layers: Object.freeze([[2, 1], [3, 1]].map(Object.freeze)),
+  // Pulses a unit.
+  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
+  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
+  talas: 0.12,
+  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
+  barSeconds: Object.freeze([0.5, 10])
+});
+var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
+
+// public/shared/meter-reading.js
+var EDITORIAL_ACTIONS = Object.freeze([
+  "PUBLISH_STANDARD",
+  "PUBLISH_GROUPED",
+  "PUBLISH_SPECIALIST_WITH_LEGEND",
+  "KEEP_WITH_SUPPORT",
+  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
+  "HOLD_FOR_REVIEW",
+  "FREE_TIME_BY_INTENT"
+]);
+
+// public/shared/opening-time.js
+var DEFAULT_SEED = 20260916;
+var OPENING_TIME = Object.freeze({
+  // A phrase's length, in seconds, drawn log-uniform between these (ours: about meterspace_clodbot's eight).
+  phraseSeconds: Object.freeze([5, 13]),
+  // A phrase's bars at most (ours: meterspace_clodbot's).
+  phraseBarsAtMost: 8,
+  // The band's density before any is heard, drawn between these (ours).
+  density: Object.freeze([0.35, 0.85]),
+  // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
+  // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
+  reference: 4
+});
+
+// native/live/musebot.js
+var words = (name2) => name2.replace(/[A-Z]/g, (c) => ` ${c.toLowerCase()}`);
+function musebotControls({ box, seed: seed2, seconds }) {
+  let built = null, shown4 = null;
+  function share(into, id, name2, { grammar = false } = {}) {
+    const r = document.createElement("div");
+    r.className = "row";
+    r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="range" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
+    r.querySelector("span").textContent = words(name2);
+    r.title = `${grammar ? `its motifs' ${name2} grammar's share` : `its ${words(name2)}`}: drawn from its seed unless ticked, 0 to 1 across its range (registry/method/personality.json)`;
+    const [tick, range, number] = r.querySelectorAll("input");
+    range.id = `${id}-${name2}`;
+    r.querySelector("label").htmlFor = range.id;
+    const drawnShown = () => r.classList.toggle("drawn", !tick.checked);
+    const set = (v) => {
+      range.value = v;
+      number.value = (+v).toFixed(2);
+    };
+    range.oninput = () => {
+      tick.checked = true;
+      number.value = (+range.value).toFixed(2);
+      drawnShown();
+    };
+    number.onchange = () => {
+      const v = +number.value;
+      if (Number.isFinite(v) && v >= 0 && v <= 1) {
+        tick.checked = true;
+        range.value = v;
+        drawnShown();
+      } else number.value = (+range.value).toFixed(2);
+    };
+    tick.onchange = drawnShown;
+    into.append(r);
+    set(0.5);
+    drawnShown();
+    return {
+      name: name2,
+      grammar,
+      get given() {
+        return tick.checked;
+      },
+      value: () => +range.value,
+      take(v, given) {
+        tick.checked = given;
+        if (v != null) set(v);
+        drawnShown();
+      }
+    };
+  }
+  function span(into, id, name2) {
+    const r = document.createElement("div");
+    r.className = "row";
+    r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="number" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
+    r.querySelector("span").textContent = words(name2);
+    r.title = `its range of ${words(name2)}, its low and high shares of its span on its instrument: drawn from its seed unless ticked (personality.js TONE_RANGES; docs/PLAYER_PERSONALITY.md)`;
+    const [tick, low, high] = r.querySelectorAll("input");
+    low.id = `${id}-range-${name2}`;
+    r.querySelector("label").htmlFor = low.id;
+    let last = [0, 1];
+    const drawnShown = () => r.classList.toggle("drawn", !tick.checked);
+    const set = ([a, b]) => {
+      low.value = (+a).toFixed(2);
+      high.value = (+b).toFixed(2);
+      last = [+a, +b];
+    };
+    low.onchange = high.onchange = () => {
+      const a = +low.value, b = +high.value;
+      if (!(a >= 0 && a <= 1 && b >= 0 && b <= 1)) {
+        set(last);
+        return;
+      }
+      set([Math.min(a, b), Math.max(a, b)]);
+      tick.checked = true;
+      drawnShown();
+    };
+    tick.onchange = drawnShown;
+    into.append(r);
+    set(last);
+    drawnShown();
+    return {
+      name: name2,
+      range: true,
+      get given() {
+        return tick.checked;
+      },
+      value: () => [...last],
+      take(v, given) {
+        tick.checked = given;
+        if (v != null) set(v);
+        drawnShown();
+      }
+    };
+  }
+  function build2(player2) {
+    box.replaceChildren();
+    const id = box.id || "musebot", head = document.createElement("div");
+    head.className = "note musebotNote";
+    head.textContent = "Each drawn from its seed unless ticked; a piece's draw shown on those not ticked.";
+    const all = document.createElement("button");
+    all.type = "button";
+    all.textContent = "All from its seed";
+    all.onclick = () => {
+      for (const s2 of built) s2.take(null, false);
+    };
+    box.append(head, all);
+    const levers = player2.levers.map((name2) => share(box, id, name2));
+    const g = document.createElement("div");
+    g.className = "curveLabel";
+    g.textContent = "Its motifs' grammars";
+    box.append(g);
+    built = [...levers, ...(player2.grammars ?? []).map((name2) => share(box, id, name2, { grammar: true }))];
+    if (player2.ranges?.length) {
+      const r = document.createElement("div");
+      r.className = "curveLabel";
+      r.textContent = "Its tone's ranges, low and high";
+      box.append(r);
+      built.push(...player2.ranges.map((name2) => span(box, id, name2)));
+    }
+  }
+  return {
+    // (What a piece is asked with: the levers, grammars and ranges ticked, each by its name.)
+    given() {
+      const personality = {}, grammars = {}, ranges = {};
+      for (const s2 of built ?? []) if (s2.given) (s2.range ? ranges : s2.grammar ? grammars : personality)[s2.name] = s2.value();
+      if (Object.keys(grammars).length) personality.grammars = grammars;
+      if (Object.keys(ranges).length) personality.ranges = ranges;
+      return { seed: Number(seed2.value), seconds: Number(seconds.value), personality };
+    },
+    // (The dial's player: its controls built the first time, and set again only when it changes -- a file loaded, a
+    // piece asked -- so that what is being set here is not undone by a poll; `drawn`, a piece's own levers.)
+    show(player2, drawn = null) {
+      if (!player2?.levers) return;
+      if (!built) build2(player2);
+      const now = JSON.stringify([player2.seed, player2.seconds, player2.personality, drawn?.levers ?? null, drawn?.ranges ?? null]);
+      if (now === shown4) return;
+      shown4 = now;
+      if (document.activeElement !== seed2) seed2.value = player2.seed;
+      if (document.activeElement !== seconds) seconds.value = player2.seconds;
+      const given = player2.personality ?? {};
+      for (const s2 of built) {
+        const set = s2.range ? given.ranges?.[s2.name] : s2.grammar ? given.grammars?.[s2.name] : given[s2.name];
+        s2.take(set ?? (s2.range ? drawn?.ranges?.[s2.name] : s2.grammar ? drawn?.grammars?.[s2.name] : drawn?.levers?.[s2.name]) ?? null, set != null);
+      }
+    }
+  };
+}
+
+// native/live/strings.js
+var $ = (id) => document.getElementById(`s-${id}`);
+var NAMES = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
+var name = (midi) => {
+  const n = Math.round(midi), c = Math.round(100 * (midi - n));
+  return `${NAMES[(n % 12 + 12) % 12]}${Math.floor(n / 12) - 1}${c ? ` ${c > 0 ? "+" : ""}${c} ¢` : ""}`;
+};
+var midiOf = (f) => 69 + 12 * Math.log2(f / 440);
+var state;
+var s = 0;
+var bowing = false;
+var bridge = false;
+var direction = 1;
+var builds = [];
+var INSTRUMENT_OF = [];
+var value2 = {};
+var setters = {};
+var notes = {};
+function dial(box, id, label3, { min, max, log, value: start, step = "any", onchange, note }) {
+  for (const taken of [id, `${id}N`, `${id}Note`]) if ($(taken)) throw new Error(`dial ${id}: the id s-${taken} is taken`);
+  const row2 = document.createElement("div");
+  row2.className = "row";
+  row2.innerHTML = `<label for="s-${id}"></label><input type="range" id="s-${id}" step="any"><input type="number" id="s-${id}N" step="${step}">`;
+  row2.querySelector("label").textContent = label3;
+  $(box).append(row2);
+  if (note !== void 0) {
+    const n = document.createElement("div");
+    n.className = "note";
+    n.id = `s-${id}Note`;
+    n.textContent = note;
+    $(box).append(n);
+    notes[id] = n;
+  }
+  const range = $(id), number = $(id + "N"), to = (v) => log ? Math.log(v) : v, from = (x2) => log ? Math.exp(x2) : x2;
+  const bounds = (lo, hi) => {
+    range.min = to(lo);
+    range.max = to(hi);
+    min = lo;
+    max = hi;
+    range.value = to(Math.min(max, Math.max(min, value2[id])));
+  };
+  const set = (v, quiet) => {
+    value2[id] = v;
+    range.value = to(Math.min(max, Math.max(min, v)));
+    number.value = +(+v).toPrecision(4);
+    if (!quiet) onchange?.();
+  };
+  range.min = to(min);
+  range.max = to(max);
+  range.oninput = () => set(from(+range.value));
+  number.onchange = () => {
+    const v = +number.value;
+    if (Number.isFinite(v) && (!log || v > 0)) set(v);
+    else number.value = value2[id];
+  };
+  set(start, true);
+  setters[id] = Object.assign(set, { bounds, place: (v) => (to(v) - range.min) / (range.max - range.min) });
+}
+async function ask(asks) {
+  if (!asks.length) return;
+  const r = await fetch("/strings/set", { method: "POST", body: JSON.stringify({ asks }) });
+  $("said").textContent = r.ok ? "" : `The model refused a setting: ${await r.text()}`;
+}
+var pending = /* @__PURE__ */ new Map();
+function later(key, build2) {
+  if (!pending.size) requestAnimationFrame(() => {
+    const asks = [...pending.values()].flatMap((b) => b());
+    pending.clear();
+    ask(asks);
+  });
+  pending.set(key, build2);
+}
+var finger = () => 1 - 2 ** (-value2.pitch / 12);
+var pos = () => value2.beta * (1 - finger());
+var alternating = () => $("alternate").checked;
+var fingerAsk = () => ({ do: "finger", string: s, finger: finger(), firmness: value2.firmness });
+var dampingAsk = () => ({ do: "damping", string: s, ratio: value2.damping });
+var bowAsk = () => ({ do: "bow", string: s, pos: pos(), force: value2.force, vel: direction * value2.speed });
+var strokeAsk = () => ({ do: "stroke", string: s, pos: pos(), force: value2.force, vel: direction * value2.speed, acc: value2.speed / value2.start });
+var alternateAsk = () => ({ do: "alternate", string: s, stroke: alternating() ? value2.stroke / 100 : 0, end: value2.end, start: value2.start });
+var vibratoAsk = (string = s) => ({ do: "vibrato", string, width: $("vibrating").checked ? value2.width : 0, rate: value2.rate });
+var buildAsk = (string = s) => ({ do: "build", string, ...builds[string] });
+var radiateAsk = () => ({ do: "radiate", corner: $("radiating").checked ? value2.corner : 0, order: +$("falling").value });
+var correctAsk = () => ({ do: "correct", on: $("correcting").checked });
+var heardDb = () => state.neutralDb ?? state.gainDb + state.rendersDb - state.startedRendersDb;
+var cornerFor = (corrected) => corrected && state.correctedRadiation ? state.correctedRadiation.hz : state.airMode.hz;
+var hairAsk = (string = s) => ({ do: "hair", string, width: value2.hair / 1e3 });
+var NOISE_KINDS = [
+  ["force", "Bow force", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the force asked.`],
+  ["speed", "Bow speed", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the speed asked.`],
+  ["contact", "The bow's place", (sd) => `At 1, ${+(1e3 * sd).toPrecision(2)} thousandths of the string's length.`],
+  ["finger", "The finger's pitch", (sd) => `At 1, ${sd} cents.`]
+];
+var noiseId = (kind) => `noise${kind[0].toUpperCase()}${kind.slice(1)}`;
+var noiseAsks = () => NOISE_KINDS.map(([kind]) => ({ do: "noise", what: kind, temperature: value2.noisePlayer * value2[noiseId(kind)] }));
+var noiseAt = (player2, kinds = {}) => {
+  setters.noisePlayer(player2, true);
+  for (const [kind] of NOISE_KINDS) setters[noiseId(kind)](kinds[kind] ?? 1, true);
+};
+var BUILD = [
+  ["T", "Tension (N)", "build"],
+  ["L", "Length (m)", "build"],
+  ["d", "Diameter (m)", "build"],
+  ["pl", "Linear density (kg/m)", "build"],
+  ["E", "Young's modulus (Pa)", "build"],
+  ["mus", "Static friction μs", "buildPhysics"],
+  ["mud", "Dynamic friction μd", "buildPhysics"],
+  ["v0", "Friction curve slope v0 (m/s)", "buildPhysics"],
+  ["loss", "Modes' losses (× own)", "buildPhysics"],
+  ["slope", "Losses tilt (× n^slope)", "buildPhysics"],
+  ["modes", "Modes (the most)", "buildPhysics"]
+];
+var ownBuild = (k) => ({ T: k.T, L: k.L, d: k.d, pl: k.pl, E: k.E, mus: k.mus, mud: k.mud, v0: k.v0, loss: 1, slope: 0, modes: k.N });
+var startBuild = (k) => ({ ...ownBuild(k), modes: state.mostModes });
+var inUse = { modes: [], points: [], cellMm: [] };
+var openHz = (k) => Math.sqrt(k.T / k.pl) / (2 * k.L);
+function way() {
+  $("way").textContent = bowing ? direction > 0 ? "↓ down-bow" : "↑ up-bow" : "";
+}
+function read() {
+  const k = builds[s];
+  if (!k) return;
+  const f0 = openHz(k), length = k.L * (1 - finger()), Z2 = Math.sqrt(k.T * k.pl), v = value2.speed, b = value2.beta, F2 = value2.force;
+  const most = 2 * Z2 * v / (b * (k.mus - k.mud)), corner = 2 * Z2 * v / b;
+  notes.pitch.textContent = `${name(midiOf(f0) + value2.pitch)} · finger ${(100 * finger()).toFixed(1)} % of the string from the nut`;
+  notes.beta.textContent = `${(1e3 * b * length).toFixed(1)} mm from the bridge, of ${(1e3 * length).toFixed(0)} mm sounding · smaller is nearer the bridge (sul ponticello), larger toward the fingerboard (sul tasto)`;
+  notes.stroke.textContent = `${(value2.stroke / state.bow.length).toFixed(0)} % of a ${(100 * state.bow.length).toFixed(0)} cm bow · a stroke lasts about ${(value2.stroke / 100 / value2.speed).toFixed(2)} s at this speed`;
+  const rows = [
+    ["The force most for a clean (Helmholtz) tone", k.mus > k.mud ? `${most.toFixed(2)} N — you are at ${(100 * F2 / most).toFixed(0)} % of it` : "none: μs is not over μd"],
+    ["Helmholtz force on the bridge, 2Zv/β", `${corner.toFixed(2)} N (${(20 * Math.log10(corner)).toFixed(1)} dB re 1 N): what loudness the stroke asks`],
+    ["Speed over contact point, v/β", `${(v / b).toFixed(2)} m/s`],
+    ["This string", `open ${name(midiOf(f0))} (${f0.toFixed(1)} Hz), impedance Z ${Z2.toFixed(3)} kg/s`]
+  ];
+  $("reading").innerHTML = rows.map(([a, b2]) => `<tr><td>${a}</td><td>${b2}</td></tr>`).join("");
+  attackSaid();
+}
+function strings2() {
+  $("strings").innerHTML = builds.map((k, i) => `<label><input type="radio" name="s-string" value="${i}"${i === s ? " checked" : ""}> ${name(midiOf(openHz(k)))} string</label>`).join("");
+  for (const r of document.querySelectorAll("input[name=s-string]")) r.onchange = () => cross(+r.value);
+}
+function cross(next) {
+  const was = s;
+  if (next === was) return;
+  const asks = [{ do: "vibrato", string: was, width: 0, rate: value2.rate }, ...bowing ? [{ do: "lift", string: was, pos: pos(), vel: direction * value2.speed }] : []];
+  s = next;
+  limits();
+  showBuild();
+  asks.push(fingerAsk(), dampingAsk(), vibratoAsk(), hairAsk());
+  if (bowing) asks.push(alternateAsk(), strokeAsk());
+  ask(asks);
+  read();
+  hairNote();
+}
+var fingerboard = () => $("limitFingerboard").checked;
+var hairLimited = () => $("limitHair").checked;
+function limits() {
+  const top = fingerboard() ? state.fingerboard : Math.max(state.fingerboard, state.range.range[1] - midiOf(openHz(builds[s])));
+  setters.pitch.bounds(0, top);
+  if (value2.pitch > top) setters.pitch(top, true);
+  const length = builds[s].L * (1 - finger()), nearest = Math.min(0.5, hairLimited() ? Math.max(0.02, value2.hair / 2e3 / length) : 0.02);
+  setters.beta.bounds(nearest, 0.5);
+  if (value2.beta < nearest) setters.beta(nearest, true);
+  hairNote();
+  drawPlayers();
+  $("fingerboardLimit").textContent = `at most ${state.fingerboard.toFixed(1)} semitones over the open string, where it meets the end of the ${state.name}'s fingerboard (Goldblatt's measurements)`;
+  $("hairLimit").textContent = `its middle at least half the hair on the string from the bridge (${(value2.hair / 2).toFixed(1)} mm): a violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; the ${state.name}'s not found measured`}`;
+}
+var bands = {};
+function drawPlayers() {
+  const R = state.players;
+  if (!R) return;
+  const open = midiOf(openHz(builds[s])), shortly2 = (v) => String(+(+v).toPrecision(2));
+  const WRITTEN2 = { pitch: (v) => name(Math.round(open + v)), force: (v) => `${shortly2(v)} N`, width: (v) => `${Math.round(v)} ¢`, rate: (v) => `${shortly2(v)} Hz`, damping: (v) => `${shortly2(v)}×` };
+  for (const [id, set] of Object.entries(setters)) {
+    if (id === "volume") continue;
+    const entry = id === "pitch" && R.pitch ? { ...R.pitch, range: R.pitch.range.map((m) => m - open) } : R[id] ?? null;
+    (bands[id] ??= playersBand($(id)))(entry, set.place, WRITTEN2[id] ?? shortly2);
+  }
+}
+function hairNote() {
+  const modes = inUse.modes[s] ?? state.strings[s].N, cells = inUse.points[s] ?? 0, cell = inUse.cellMm[s];
+  notes.hair.textContent = value2.hair > 0 && cells > 0 ? `${cells > 1 ? `${cells} cells of ${(value2.hair / cells).toFixed(1)} mm` : `one cell, ${value2.hair.toFixed(1)} mm`}, each sticking and slipping on its own: its ${modes} modes hold cells no finer than ${Number.isFinite(cell) ? cell.toFixed(1) : "?"} mm apart (more modes, finer cells); under the ribbon's ${(1e3 * state.bow.hairWidth).toFixed(0)} mm, the bow tilted` : "Artifastring's point bow";
+  notes.modes.textContent = `${modes} in use, as many as asked and as its rate holds (Artifastring's own ${state.strings[s].N}): more resolve the bow's hair more finely, and take more processing`;
+}
+function bodyNote() {
+  const c = state.correctedRadiation;
+  const b = state.bodyScaled;
+  $("bodyNote").textContent = (b ? `Its body: Artifastring's ${b.from} bodies scaled to the ${state.name}'s size, every resonance ${b.ratio} times lower (the ratio of the two instruments' lowest air modes) -- for now, until a measured bass body is fitted. ` : "") + `Corrected: Artifastring's ${b ? b.from : state.name} bodies, whose highs fall as a low-pass filter's do, brought to the instrument's radiation by the renders' own filter${b ? ", scaled with them" : ""}. Radiating: a body sounds nothing at 0 Hz, so the bow's drag, building as a stroke starts, is not heard as a low thump. Lowest air mode (A0): ${state.airMode.hz} Hz, ${state.airMode.source}.` + (c ? ` Corrected, the fall starts at ${c.hz} Hz, where the correction's own cut stops` + (c.scaled ? ` (the ${b.from}'s, scaled).` : ` (within ${c.offDb} dB of the radiation under A0, against ${c.unradiatedOffDb} dB without it).`) : "");
+}
+function showBuild() {
+  const own2 = state.strings[s];
+  for (const [key] of BUILD) {
+    if (!["loss", "slope", "modes"].includes(key)) setters[key].bounds(own2[key] / 10, own2[key] * 10);
+    setters[key](builds[s][key], true);
+  }
+}
+function play() {
+  bowing = !bowing;
+  $("play").classList.toggle("on", bowing);
+  $("play").textContent = bowing ? "■ Stop" : "▶ Play";
+  way();
+  return ask(bowing ? [alternateAsk(), strokeAsk()] : [{ do: "stop" }]);
+}
+function reverse() {
+  direction = -direction;
+  way();
+  if (bowing) ask([{ ...alternateAsk(), stroke: 0 }, strokeAsk(), alternateAsk()]);
+}
+var arrived = null;
+async function instrument(type, variant) {
+  if (bowing) play();
+  const got = new Promise((done) => {
+    arrived = { left: 4, done };
+  });
+  await ask([{ do: "stop" }, { do: "instrument", type, variant }]);
+  await got;
+  state = await (await fetch("/strings/state", { cache: "no-store" })).json();
+  builds = state.strings.map(startBuild);
+  s = Math.min(s, builds.length - 1);
+  inUse = state.inUse;
+  variants();
+  strings2();
+  limits();
+  showBuild();
+  $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
+  setters.corner(cornerFor($("correcting").checked), true);
+  bodyNote();
+  await ask([fingerAsk(), dampingAsk(), radiateAsk(), ...builds.map((_, i) => buildAsk(i)), hairAsk()]);
+  read();
+  describe();
+}
+function variants() {
+  const n = state.variants[state.instrument];
+  $("variant").innerHTML = Array.from({ length: n }, (_, i) => `<option value="${i}"${i === state.variant ? " selected" : ""}>no. ${i}</option>`).join("");
+  $("variants").textContent = `of ${n}`;
+}
+function describe() {
+  document.getElementById("what").textContent = `The ${state.name} on Artifastring, heard through ${state.heardThrough}: ${state.bodyScaled ? `the ${state.bodyScaled.from}'s body` : "Artifastring's"} no. ${state.variant}, seed ${state.seed} · ` + (state.neutral ? `taken up on its neutral note, from ${state.neutral.map.split("/").pop()}` : `its good note made from ${state.from.split("/").pop()}`);
+}
+async function init(status2) {
+  for (const until = performance.now() + 6e4; ; ) {
+    state = await (await fetch("/strings/state", { cache: "no-store" })).json();
+    if (state.rate && Object.keys(state.constants).length && state.strings.filter(Boolean).length === 4) break;
+    if (performance.now() > until) throw new Error("its host did not say its strings within a minute");
+    status2.textContent = "Starting the strings' host ...";
+    await new Promise((done) => setTimeout(done, 250));
+  }
+  INSTRUMENT_OF = Object.keys(state.variants);
+  soloShown();
+  const st = state.start;
+  s = st.string;
+  direction = st.direction;
+  builds = state.strings.map(startBuild);
+  inUse = state.inUse;
+  variants();
+  strings2();
+  $("seed").value = state.seed;
+  const semis = -12 * Math.log2(1 - st.finger), beta = st.pos / (1 - st.finger);
+  const times = [st.startSeconds, state.bow.endSeconds];
+  const bowed = () => {
+    if (bowing) later("bow", () => [bowAsk()]);
+    read();
+  };
+  const strokes = () => {
+    if (bowing) later("alternate", () => [alternateAsk()]);
+    read();
+  };
+  dial("strokes", "stroke", "Bow a stroke (cm)", { min: state.bow.length, max: 100 * state.bow.length, log: true, value: Math.min(100 * state.bow.length, 100 * st.drawn), onchange: strokes, note: "" });
+  dial("strokes", "start", "A stroke's start (s)", {
+    min: Math.min(...times) / 10,
+    max: Math.max(...times) * 10,
+    log: true,
+    value: st.startSeconds,
+    onchange: () => {
+      started();
+      strokes();
+    },
+    note: "How long the bow takes to come up to speed: at Play, and in every stroke after a turn."
+  });
+  dial("strokes", "end", "A stroke's end (s)", {
+    min: Math.min(...times) / 10,
+    max: Math.max(...times) * 10,
+    log: true,
+    value: state.bow.endSeconds,
+    onchange: strokes,
+    note: "How long the bow takes to slow into the turn; from there it comes up to speed the other way over the start."
+  });
+  attackCurves();
+  dial("left", "pitch", "Pitch (semitones)", { min: 0, max: 1, value: semis, onchange: () => {
+    limits();
+    later("finger", () => [fingerAsk()]);
+    bowed();
+  }, note: "" });
+  dial("left", "firmness", "Finger firmness", {
+    min: 1e-3,
+    max: 1,
+    log: true,
+    value: 1,
+    onchange: () => later("finger", () => [fingerAsk()]),
+    note: "A share of Artifastring's finger stiffness (K_FINGER): 1 a finger stopping the string; light, it touches and sounds a harmonic."
+  });
+  const fingertip = state.finger, artifastring = fingertip.artifastring / fingertip.damping;
+  dial("left", "damping", "Finger damping (× a fingertip's)", {
+    min: 0.1,
+    max: 10 * Math.ceil(artifastring / 10),
+    log: true,
+    value: 1,
+    onchange: () => later("damping", () => [dampingAsk()]),
+    note: `1: a fingertip's measured, ${fingertip.damping} N·s/m (Wiertlewski & Hayward 2012); a light touch its pad's, in proportion. Artifastring's own, ${Math.round(artifastring)}: stopped notes dead within a fifth of a second, the high ones with sidebands.`
+  });
+  dial("right", "beta", "Contact point β", { min: 0.02, max: 0.5, log: true, value: beta, onchange: () => {
+    limits();
+    bowed();
+  }, note: "" });
+  dial("right", "force", "Bow force (N)", { min: 0.1, max: 4, log: true, value: st.force, onchange: bowed });
+  dial("right", "speed", "Bow speed (m/s)", { min: st.speed / 10, max: st.speed * 10, log: true, value: st.speed, onchange: bowed });
+  dial("right", "hair", "Bow hair on the string (mm)", {
+    min: 0,
+    max: 1e3 * state.bow.hairWidth,
+    value: 1e3 * state.bow.hairWidth,
+    step: 0.1,
+    onchange: () => {
+      limits();
+      later("hair", () => [hairAsk()]);
+      bowed();
+    },
+    note: ""
+  });
+  const vibrated = () => {
+    $("vibrating").checked = true;
+    later("vibrato", () => [vibratoAsk()]);
+  };
+  dial("vibrato", "width", "Width (cents)", {
+    min: state.vibrato.width / 10,
+    max: state.vibrato.width * 10,
+    log: true,
+    value: state.vibrato.width,
+    onchange: vibrated,
+    note: "Peak to peak: the pitch goes half of it above and half below."
+  });
+  dial("vibrato", "rate", "Rate (Hz)", { min: state.vibrato.rate / 10, max: state.vibrato.rate * 10, log: true, value: state.vibrato.rate, onchange: vibrated });
+  $("vibrating").onchange = () => later("vibrato", () => [vibratoAsk()]);
+  $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
+  const profile = state.noise.profile, noised = () => later("noise", noiseAsks);
+  dial("noise", "noisePlayer", "The player's temperature", {
+    min: 0,
+    max: 5,
+    value: 1,
+    step: 0.05,
+    onchange: noised,
+    note: `Each kind drawn with its power falling as 1/f^${profile.beta} from ${profile.low} to ${profile.high} Hz, a ${profile.tremor.hz} Hz tremor carrying ${Math.round(100 * profile.tremor.share)} % of it.`
+  });
+  for (const [kind, label3, size] of NOISE_KINDS) dial("noise", noiseId(kind), label3, { min: 0, max: 5, value: 1, step: 0.05, onchange: noised, note: size(state.noise.kinds[kind].sd) });
+  const pulls = Object.values(state.pluck.pull);
+  dial("plucking", "pluckPos", "Where (β)", { min: 0.02, max: 0.5, log: true, value: state.pluck.position });
+  dial("plucking", "pluckForce", "Pull (N)", { min: Math.min(...pulls), max: Math.max(...pulls), log: true, value: state.pluck.pull.mf });
+  const built = (key) => () => {
+    builds[s][key] = value2[key];
+    later("build", () => [buildAsk()]);
+    read();
+    strings2();
+  };
+  for (const [key, label3, box] of BUILD) {
+    const own2 = state.strings[s][key];
+    dial(box, key, label3, key === "slope" ? { min: -2, max: 2, value: 0, step: 0.01, onchange: built(key) } : key === "loss" ? { min: 0.1, max: 10, log: true, value: 1, onchange: built(key) } : key === "modes" ? { min: 4, max: state.mostModes, log: true, value: state.mostModes, step: 1, onchange: () => {
+      setters.modes(Math.round(value2.modes), true);
+      built("modes")();
+    }, note: "" } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: built(key) });
+  }
+  const CONSTANTS = [
+    ["A_noise", "Friction noise (share of v0)", "estimated from listening"],
+    ["PLUCK_VELOCITY", "Pluck: finger speed (m/s)", "estimated from listening"],
+    ["PLUCK_DISPLACEMENT", "Pluck: pull (m at full)", "estimated from listening"],
+    ["PLUCK_SECONDS", "Pluck: held (s)", "estimated from listening"],
+    ["K_PLUCK", "Pluck: stiffness (N/m)"],
+    ["R_PLUCK", "Pluck: damping (kg/s)"],
+    ["PLUCK_WIDTH", "Pluck: width (m)"],
+    ["FINGER_WIDTH", "Finger: width (m)"]
+  ];
+  for (const [key, label3, said2] of CONSTANTS) {
+    const own2 = state.constants[key];
+    dial("constants", key, label3, key === "A_noise" ? { min: 0, max: own2 * 10, value: own2, step: 1e-3, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 });
+  }
+  $("ownConstants").onclick = () => {
+    for (const [key] of CONSTANTS) setters[key](state.constants[key], true);
+    ask(CONSTANTS.map(([key]) => ({ do: "constant", name: key, value: state.constants[key] })));
+  };
+  dial("listening", "volume", "Volume (dB)", {
+    min: -40,
+    max: 40,
+    value: 0,
+    step: 0.5,
+    onchange: () => later("gain", () => [{ do: "gain", gain: 10 ** ((heardDb() + value2.volume) / 20) }]),
+    note: "0 dB: the instrument's neutral note at broadcast loudness (EBU R128). Louder or softer playing is heard louder or softer against it."
+  });
+  $("correcting").checked = state.corrected;
+  dial("body", "corner", "Radiation falls under (Hz)", { min: 20, max: 1e3, log: true, value: cornerFor(state.corrected), onchange: () => {
+    $("radiating").checked = true;
+    later("radiate", () => [radiateAsk()]);
+  } });
+  $("radiating").onchange = $("falling").onchange = () => later("radiate", () => [radiateAsk()]);
+  $("correcting").onchange = () => {
+    setters.corner(cornerFor($("correcting").checked), true);
+    later("correct", () => [correctAsk(), radiateAsk()]);
+  };
+  const limited = () => {
+    limits();
+    later("finger", () => [fingerAsk()]);
+    bowed();
+  };
+  $("limitFingerboard").onchange = $("limitHair").onchange = limited;
+  new EventSource("/strings/events").onmessage = (e) => {
+    const [word, ...rest3] = e.data.split(" ");
+    if (word === "level") {
+      const db = Number(rest3[0]);
+      $("meter").style.width = `${Number.isFinite(db) ? Math.max(0, Math.min(100, 100 + 100 * db / 60)) : 0}%`;
+      $("level").textContent = Number.isFinite(db) ? `${db.toFixed(1)} dB of full scale (rms)` : "silent";
+    } else if (word === "turn") {
+      if (+rest3[0] === s) {
+        direction = rest3[1] === "down" ? 1 : -1;
+        way();
+      }
+    } else if (word === "runaway") $("said").textContent = `The model ran away at ${rest3[0]} s and was started again (a moment of silence).`;
+    else if (word === "string" && arrived && !--arrived.left) {
+      arrived.done();
+      arrived = null;
+    } else if (word === "modes") {
+      inUse.modes[+rest3[0]] = +rest3[1];
+      hairNote();
+    } else if (word === "hair") {
+      inUse.points[+rest3[0]] = +rest3[1];
+      inUse.cellMm[+rest3[0]] = +rest3[2];
+      hairNote();
+    }
+  };
+  limits();
+  showBuild();
+  read();
+  bodyNote();
+  describe();
+  await ask([{ do: "gain", gain: 10 ** (heardDb() / 20) }, fingerAsk(), radiateAsk(), ...builds.map((_, i) => buildAsk(i)), hairAsk(), ...noiseAsks()]);
+  $("good").onclick = () => state.neutral ? neutral() : good();
+  $("play").onclick = play;
+  $("reverse").onclick = reverse;
+  $("alternate").onchange = () => {
+    if (bowing) ask([alternateAsk()]);
+    read();
+  };
+  $("output").onclick = () => {
+    bridge = !bridge;
+    $("output").textContent = bridge ? "Hearing: the bridge force (no body)" : "Hearing: the instrument";
+    ask([{ do: "output", bridge }]);
+  };
+  $("pluck").onclick = () => ask([{ do: "pluck", string: s, pos: value2.pluckPos * (1 - finger()), force: value2.pluckForce }]);
+  $("ownBuild").onclick = () => {
+    builds[s] = ownBuild(state.strings[s]);
+    showBuild();
+    ask([buildAsk()]);
+    read();
+    strings2();
+  };
+  $("variant").onchange = () => instrument(state.type, +$("variant").value);
+  $("reseed").onclick = async () => {
+    const seed2 = Math.round(+$("seed").value);
+    if (seed2 >= 0) {
+      await ask([{ do: "seed", seed: seed2 }]);
+      state.seed = seed2;
+      describe();
+    }
+  };
+  $("keep").onclick = async () => {
+    const r = await fetch("/strings/keep", { method: "POST", body: JSON.stringify({ words: $("words").value, ...settingsNow() }) });
+    $("kept").textContent = r.ok ? ` kept (${(/* @__PURE__ */ new Date()).toLocaleTimeString()})` : ` not kept: ${await r.text()}`;
+    if (r.ok) {
+      $("words").value = "";
+      kept2();
+    }
+  };
+  kept2();
+}
+function settingsNow() {
+  return {
+    string: s,
+    openHz: openHz(builds[s]),
+    pitchSemitones: value2.pitch,
+    finger: finger(),
+    firmness: value2.firmness,
+    damping: value2.damping,
+    dampingNsPerM: value2.damping * state.finger.damping,
+    beta: value2.beta,
+    pos: pos(),
+    force: value2.force,
+    speed: value2.speed,
+    direction,
+    bowing,
+    alternating: alternating(),
+    strokeCm: value2.stroke,
+    startSeconds: value2.start,
+    endSeconds: value2.end,
+    attack: { shape: $("attackFrom").value, force: forceCurve.get(), speed: speedCurve.get() },
+    vibrato: $("vibrating").checked ? { widthCents: value2.width, rateHz: value2.rate } : null,
+    build: builds[s],
+    constants: Object.fromEntries(Object.keys(state.constants).map((key) => [key, value2[key]])),
+    heard: bridge ? "bridge force" : "instrument",
+    body: { corrected: $("correcting").checked, radiated: $("radiating").checked, cornerHz: value2.corner, order: +$("falling").value },
+    limits: { fingerboard: fingerboard(), hair: hairLimited() },
+    hairMm: value2.hair,
+    noise: { player: value2.noisePlayer, ...Object.fromEntries(NOISE_KINDS.map(([kind]) => [kind, value2[noiseId(kind)]])) }
+  };
+}
+async function kept2() {
+  const all = (await (await fetch("/strings/kept", { cache: "no-store" })).json()).reverse();
+  $("keptNone").style.display = all.length ? "none" : "";
+  $("keptList").innerHTML = "";
+  for (const k of all) {
+    const row2 = document.createElement("tr"), open = k.openHz ? midiOf(k.openHz) : null;
+    const what2 = [
+      k.instrument,
+      open != null && k.pitchSemitones != null ? name(open + k.pitchSemitones) : null,
+      k.beta != null ? `β ${k.beta.toFixed(3)}` : null,
+      k.force != null ? `${k.force.toFixed(2)} N` : null,
+      k.speed != null ? `${k.speed.toFixed(3)} m/s` : null,
+      k.strokeCm != null && k.alternating ? `${k.strokeCm.toFixed(1)} cm a stroke` : null,
+      k.vibrato ? `vibrato ${k.vibrato.widthCents.toFixed(0)} ¢ at ${k.vibrato.rateHz.toFixed(2)} Hz` : null,
+      k.heard === "bridge force" ? "bridge force" : null
+    ].filter(Boolean).join(" · ");
+    row2.innerHTML = `<td>${new Date(k.at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</td><td><b></b><br><span class="muted"></span></td><td><button>Load</button><button>Delete</button></td>`;
+    row2.querySelector("b").textContent = k.words || "(no words)";
+    row2.querySelector(".muted").textContent = what2;
+    const [load3, forget] = row2.querySelectorAll("button");
+    load3.onclick = () => recall(k);
+    forget.onclick = async () => {
+      if (!confirm(`Delete "${k.words || "(no words)"}"?`)) return;
+      const r = await fetch("/strings/forget", { method: "POST", body: JSON.stringify({ at: k.at }) });
+      if (!r.ok) $("said").textContent = await r.text();
+      kept2();
+    };
+    $("keptList").append(row2);
+  }
+}
+var forceCurve = null;
+var speedCurve = null;
+var riseOf = (points) => points.findIndex((p, k) => k && p[1] > 0);
+var startOf = (points) => {
+  const k = riseOf(points);
+  return points[k][0] - points[k - 1][0];
+};
+var startingAt = (points, seconds) => segmentLasting(points, riseOf(points), seconds, LONGEST);
+var ownForce = (points) => points.every((p) => p[1] === 1);
+var ownSpeed = (points) => points.length === 2 && points[1][2] === "straight";
+var asked = { force: null, speed: null };
+function attackAsks() {
+  const now = { force: ownForce(forceCurve.get()) ? null : forceCurve.get(), speed: ownSpeed(speedCurve.get()) ? null : speedCurve.get() };
+  const asks = ["force", "speed"].filter((what2) => JSON.stringify(now[what2]) !== JSON.stringify(asked[what2])).map((what2) => ({ do: "attack", what: what2, points: now[what2] }));
+  asked = now;
+  return asks;
+}
+function shaped(name2) {
+  const start = value2.start, a = state.attacks;
+  if (name2 === "neutral" || !a) return { force: [[0, 1], [start, 1]], speed: [[0, 0], [start, 1, "straight"]] };
+  if (name2 === "silence") return bowedAttack(a, { attack: start });
+  const onset = a.articulations[name2];
+  return bowedAttack(a, { attack: start, onset, bite: onset.bite });
+}
+function shape(name2) {
+  const { force, speed } = shaped(name2);
+  forceCurve.set(force);
+  speedCurve.set(speed);
+  $("attackFrom").value = name2;
+  attackSaid();
+}
+function started() {
+  const name2 = $("attackFrom").value;
+  if (name2 === "drawn") speedCurve.set(startingAt(speedCurve.get(), value2.start));
+  else shape(name2);
+  later("attack", attackAsks);
+}
+function attackSaid() {
+  if (!forceCurve || !builds[s]) return;
+  const [ft, fy] = peakOf(forceCurve.get()), [vt, vy] = peakOf(speedCurve.get());
+  $("attackSaid").textContent = `Its force at most ${(fy * value2.force).toFixed(2)} N (${fy.toFixed(2)}×, ${Math.round(1e3 * ft)} ms in), its speed at most ${(vy * value2.speed).toFixed(3)} m/s (${vy.toFixed(2)}×, ${Math.round(1e3 * vt)} ms in); settled ${Math.round(1e3 * Math.max(forceCurve.get().at(-1)[0], speedCurve.get().at(-1)[0]))} ms in.`;
+}
+function attackCurves() {
+  const a = state.attacks;
+  $("attackFrom").innerHTML = `<option value="neutral">as the neutral note is played: set down, drawn up to speed</option>` + (a ? `<option value="silence">the renders' attack from silence</option>` + Object.keys(a.articulations).map((n) => `<option value="${n}">the renders' ${n}</option>`).join("") : "") + `<option value="drawn" disabled>as drawn</option>`;
+  $("attackNote").textContent = a ? `The renders' attacks as they play them at ${a.dynamic}: ${a.fitted ? `the ${state.name}'s fitted onset` : "the model's authored onset (physical-strings.js MODEL.onset; no onset fitted yet)"}, each over the stroke's start dialled. A note held quietly may need its attack to peak over what it settles at to start.` : "The renders' attacks come with the strings' server restarted.";
+  const drawn = () => {
+    $("attackFrom").value = "drawn";
+    attackSaid();
+    later("attack", attackAsks);
+  };
+  forceCurve = curveEditor($("forceCurve"), {
+    kind: attackKind({ straight: true }),
+    label: "Bow force at a stroke's start",
+    color: "var(--strings)",
+    change: drawn,
+    meaning: (y2) => `${(y2 * value2.force).toFixed(2)} N`
+  });
+  speedCurve = curveEditor($("speedCurve"), {
+    kind: attackKind({ from: 0, straight: true }),
+    label: "Bow speed at a stroke's start",
+    color: "var(--strings)",
+    meaning: (y2) => `${(y2 * value2.speed).toFixed(3)} m/s`,
+    change: (points) => {
+      const start = startOf(points);
+      if (Math.abs(start - value2.start) > 1e-6) {
+        setters.start(start, true);
+        if (bowing) later("alternate", () => [alternateAsk()]);
+      }
+      drawn();
+    }
+  });
+  $("attackFrom").onchange = () => {
+    shape($("attackFrom").value);
+    later("attack", attackAsks);
+  };
+  shape("neutral");
+}
+var chosen = () => {
+};
+async function recall(k) {
+  if (k.type != null && (k.type !== state.type || (k.variant ?? 0) !== state.variant)) {
+    await instrument(k.type, k.variant ?? 0);
+    chosen(INSTRUMENT_OF[k.type]);
+  }
+  if (k.string != null && k.string !== s && builds[k.string]) cross(k.string);
+  const damping = Number.isFinite(k.dampingNsPerM) ? k.dampingNsPerM / state.finger.damping : k.damping * state.finger.artifastring / state.finger.damping;
+  for (const [id, v] of [
+    ["pitch", k.pitchSemitones],
+    ["firmness", k.firmness],
+    ["damping", damping],
+    ["beta", k.beta],
+    ["force", k.force],
+    ["speed", k.speed],
+    ["stroke", k.strokeCm],
+    ["start", k.startSeconds],
+    ["end", k.endSeconds]
+  ]) if (Number.isFinite(v)) setters[id](v, true);
+  if (k.alternating != null) $("alternate").checked = k.alternating;
+  if (k.attack) {
+    forceCurve.set(k.attack.force);
+    speedCurve.set(k.attack.speed);
+    $("attackFrom").value = k.attack.shape ?? "drawn";
+    attackSaid();
+  } else shape("neutral");
+  $("vibrating").checked = Boolean(k.vibrato);
+  if (k.vibrato) {
+    setters.width(k.vibrato.widthCents, true);
+    setters.rate(k.vibrato.rateHz, true);
+  }
+  if (k.build) {
+    builds[s] = { ...builds[s], ...k.build };
+    showBuild();
+    strings2();
+  }
+  const constants = Object.entries(k.constants ?? {}).filter(([key, v]) => setters[key] && Number.isFinite(v));
+  for (const [key, v] of constants) setters[key](v, true);
+  setters.hair(Number.isFinite(k.hairMm) ? k.hairMm : 0, true);
+  if (k.noise) noiseAt(k.noise.player, k.noise);
+  else noiseAt(0);
+  if (k.body) {
+    $("radiating").checked = k.body.radiated;
+    $("falling").value = String(k.body.order);
+    if (Number.isFinite(k.body.cornerHz)) setters.corner(k.body.cornerHz, true);
+  }
+  const before = $("correcting").checked && k.body?.corrected == null;
+  $("correcting").checked = k.body?.corrected ?? false;
+  const past = [];
+  if (fingerboard() && k.pitchSemitones > state.fingerboard) {
+    $("limitFingerboard").checked = false;
+    past.push("past the fingerboard's end");
+  }
+  if (hairLimited() && value2.beta * builds[s].L * (1 - finger()) < state.bow.hairWidth / 2) {
+    $("limitHair").checked = false;
+    past.push("with the bow nearer the bridge than half its hair's width");
+  }
+  limits();
+  const asks = [fingerAsk(), dampingAsk(), vibratoAsk(), ...attackAsks(), ...k.build ? [buildAsk()] : [], ...constants.map(([name2, v]) => ({ do: "constant", name: name2, value: v })), correctAsk(), radiateAsk(), hairAsk(), ...noiseAsks()];
+  if (bowing) asks.push(alternateAsk(), bowAsk());
+  await ask(asks);
+  read();
+  $("said").textContent = [
+    past.length ? `This setting plays ${past.join(" and ")}: switched off under The hands' reach to play it.` : "",
+    before ? "Kept before bodies were corrected: heard as it was then, uncorrected (switch it on under Instrument)." : "",
+    k.noise ? "" : "Kept before the hands' noise: heard as it was then, without it.",
+    Number.isFinite(k.dampingNsPerM) || !Number.isFinite(k.damping) ? "" : "Kept before the finger's measured damping: its stopping finger heard as it was then, Artifastring's own."
+  ].filter(Boolean).join(" ");
+}
+async function good() {
+  const p = state.pick, st = p.start, was = bowing;
+  if (bowing) play();
+  if (state.variant !== p.variant && p.variant < state.variants[state.instrument]) await instrument(state.type, p.variant);
+  if (st.string !== s && builds[st.string]) cross(st.string);
+  builds = state.strings.map((k2, i) => ({ ...ownBuild(k2), modes: builds[i]?.modes ?? state.mostModes }));
+  showBuild();
+  strings2();
+  const k = state.strings[s], q = p.string, own2 = state.type === p.type || !q;
+  const force = own2 ? st.force : st.force * Math.sqrt(k.T * k.pl) / Math.sqrt(q.T * q.pl) * (k.mus - k.mud) / (q.mus - q.mud);
+  const set = {
+    pitch: -12 * Math.log2(1 - st.finger),
+    firmness: 1,
+    damping: 1,
+    beta: st.pos / (1 - st.finger),
+    force,
+    speed: st.speed,
+    stroke: Math.min(100 * state.bow.length, 100 * st.drawn),
+    start: st.startSeconds,
+    end: state.bow.endSeconds,
+    width: state.vibrato.width,
+    rate: state.vibrato.rate,
+    corner: cornerFor(true),
+    volume: 0,
+    ...state.constants
+  };
+  for (const [id, v] of Object.entries(set)) if (setters[id] && Number.isFinite(v)) setters[id](v, true);
+  direction = st.direction;
+  $("alternate").checked = true;
+  $("vibrating").checked = false;
+  $("correcting").checked = true;
+  $("radiating").checked = true;
+  $("falling").value = "2";
+  bridge = false;
+  $("output").textContent = "Hearing: the instrument";
+  limits();
+  noiseAt(1);
+  shape("neutral");
+  await ask([
+    { do: "seed", seed: p.seed },
+    ...builds.map((_, i) => buildAsk(i)),
+    ...Object.entries(state.constants).map(([name2, v]) => ({ do: "constant", name: name2, value: v })),
+    fingerAsk(),
+    dampingAsk(),
+    vibratoAsk(),
+    ...attackAsks(),
+    { do: "gain", gain: 10 ** (heardDb() / 20) },
+    { do: "output", bridge: false },
+    correctAsk(),
+    radiateAsk(),
+    hairAsk(),
+    ...noiseAsks()
+  ]);
+  state.seed = p.seed;
+  $("seed").value = p.seed;
+  describe();
+  read();
+  way();
+  if (was) await play();
+  $("said").textContent = own2 ? "" : `A good note made from the ${INSTRUMENT_OF[p.type]}'s: the same bowing at the same place on Schelleng's diagram, ${force.toFixed(2)} N here.`;
+}
+var begun = null;
+var taking = Promise.resolve();
+var placed = /* @__PURE__ */ new Set();
+async function neutral() {
+  const n = state.neutral, was = bowing;
+  if (bowing) play();
+  if (state.variant !== n.variant) await instrument(state.type, n.variant);
+  if (n.string !== s && builds[n.string]) cross(n.string);
+  builds = state.strings.map((k, i) => ({ ...ownBuild(k), modes: builds[i]?.modes ?? state.mostModes }));
+  showBuild();
+  strings2();
+  const set = {
+    pitch: n.stop,
+    firmness: 1,
+    damping: 1,
+    beta: n.contact,
+    force: n.force,
+    speed: n.speed,
+    stroke: 100 * state.bow.length,
+    start: n.attack,
+    end: state.bow.endSeconds,
+    width: state.vibrato.width,
+    rate: state.vibrato.rate,
+    corner: cornerFor(true),
+    volume: 0,
+    ...state.constants
+  };
+  for (const [id, v] of Object.entries(set)) if (setters[id] && Number.isFinite(v)) setters[id](v, true);
+  $("alternate").checked = true;
+  $("vibrating").checked = false;
+  $("correcting").checked = true;
+  $("radiating").checked = true;
+  $("falling").value = "2";
+  bridge = false;
+  $("output").textContent = "Hearing: the instrument";
+  limits();
+  noiseAt(1);
+  shape("neutral");
+  await ask([
+    ...builds.map((_, i) => buildAsk(i)),
+    ...Object.entries(state.constants).map(([name2, v]) => ({ do: "constant", name: name2, value: v })),
+    fingerAsk(),
+    dampingAsk(),
+    vibratoAsk(),
+    ...attackAsks(),
+    { do: "gain", gain: 10 ** (heardDb() / 20) },
+    { do: "output", bridge: false },
+    correctAsk(),
+    radiateAsk(),
+    hairAsk(),
+    ...noiseAsks()
+  ]);
+  describe();
+  read();
+  way();
+  if (was) await play();
+  $("said").textContent = "";
+}
+var neutralSaid = (n) => `its neutral note (${n.dynamic}, ${name(n.pitch)} on its ${["first", "second", "third", "fourth", "fifth", "sixth"][n.string] ?? `${n.string + 1}th`} string, ${+n.force.toPrecision(3)} N at ${+n.speed.toPrecision(3)} m/s, settling in ${n.settlesMs} ms${n.withinLimit ? "" : ` -- none of its notes within listeners' ${state.neutralLimitMs} ms`}; the neutral-note fit's ${n.rehearsal ? "rehearsal " : ""}map, round ${n.round})`;
+function take(model2, { status: status2, choose: choose2 }) {
+  chosen = choose2 ?? chosen;
+  return taking = taking.catch(() => {
+  }).then(async () => {
+    begun ??= init(status2);
+    await begun.catch((error) => {
+      begun = null;
+      throw error;
+    });
+    const type = INSTRUMENT_OF.indexOf(model2);
+    if (type < 0) throw new Error(`no ${model2} among the strings`);
+    status2.classList.remove("failed");
+    if (type !== state.type || !placed.has(type)) {
+      status2.textContent = `Taking up the ${model2.replace(/-/g, " ")} ...`;
+      if (type !== state.type) await instrument(type, 0);
+      await (state.neutral ? neutral() : good());
+      placed.add(type);
+    }
+    status2.textContent = `The ${state.name}, ready: heard through ${state.heardThrough}, on ` + (state.neutral ? neutralSaid(state.neutral) : `its good note${type === state.pick.type ? " (the note it started from)" : " (the violin's note, bowed at the same place on Schelleng's diagram)"}`) + ".";
+    describe();
+  }).catch((error) => {
+    status2.classList.add("failed");
+    status2.textContent = `The strings could not take up the ${model2}: ${error.message}`;
+  });
+}
+$("soloSeed").value = DEFAULT_SEED;
+var musebot = musebotControls({ box: $("personality"), seed: $("soloSeed"), seconds: $("soloSeconds") });
+var following = null;
+$("solo").onclick = async () => {
+  if (!state) return;
+  const on = !state.soloist?.playing;
+  if (on) {
+    if (bowing) play();
+    $("soloSaid").textContent = "Its band composes the piece ...";
+  }
+  const r = await fetch("/strings/soloist", { method: "POST", body: JSON.stringify(on ? { on, ...musebot.given() } : { on }) });
+  if (!r.ok) {
+    $("soloSaid").textContent = await r.text();
+    return;
+  }
+  state = { ...state, ...await r.json() };
+  soloShown();
+  follow();
+};
+async function follow() {
+  clearTimeout(following);
+  state = await (await fetch("/strings/state", { cache: "no-store" })).json();
+  soloShown();
+  if (state.soloist?.playing) following = setTimeout(follow, 500);
+}
+var minutes = (x2) => `${Math.floor(x2 / 60)}:${String(Math.floor(x2 % 60)).padStart(2, "0")}`;
+function soloShown() {
+  const playing = Boolean(state.soloist?.playing), said2 = state.soloist?.said, tone = said2?.personality?.tone;
+  $("solo").textContent = playing ? "■ Stop the musebot" : "▶ A musebot plays";
+  $("solo").classList.toggle("on", playing);
+  musebot.show(state.player, said2?.personality);
+  if (!said2) return;
+  $("soloSaid").textContent = `${said2.player} on the ${state.name}, seed ${said2.seed}: ${playing ? "" : "played "}${minutes(Math.min(said2.at, said2.seconds))} of ${minutes(said2.seconds)}, ${said2.notes} notes` + (said2.late ? `; ${said2.late} lines came late` : "") + (said2.personality ? `; its register ${name(said2.personality.register[0])} to ${name(said2.personality.register[1])}` : "") + (tone ? `; its tone ${said2.personality.levers.tone.toFixed(2)}: ${tone.kinds.length ? `${tone.kinds.join(", ")} in ${Math.round(100 * tone.share)}% of phrases` : "no techniques"}, vibrato ${tone.vibrato[0].toFixed(1)} to ${tone.vibrato[1].toFixed(1)} × its players'` : "") + ".";
+}
+async function settings() {
+  await taking.catch(() => {
+  });
+  if (!state) throw new Error("no instrument yet");
+  const model2 = INSTRUMENT_OF[state.type];
+  return {
+    model: model2,
+    settings: { family: "strings", model: model2, type: state.type, variant: state.variant, seed: state.seed, ...settingsNow(), player: musebot.given() },
+    words: $("words").value,
+    heard: { through: bridge ? "bridge force" : "instrument", bowing, said: $("listening").textContent }
+  };
+}
+async function load(file) {
+  await taking.catch(() => {
+  });
+  if (!state) throw new Error("no instrument yet");
+  const k = file.settings;
+  if (Number.isInteger(k.seed) && k.seed !== state.seed) {
+    await ask([{ do: "seed", seed: k.seed }]);
+    state.seed = k.seed;
+    describe();
+  }
+  await recall(k);
+  if (file.words) $("words").value = file.words;
+  const refused = [];
+  if (k.player) {
+    const r = await fetch("/strings/player", { method: "POST", body: JSON.stringify(k.player) });
+    if (r.ok) {
+      state = { ...state, ...await r.json() };
+      soloShown();
+    } else refused.push({ path: "/player", error: await r.text() });
+  }
+  return { made: "every one", refused };
+}
+function rest() {
+  if (bowing) play();
+  if (state?.soloist?.playing) fetch("/strings/soloist", { method: "POST", body: JSON.stringify({ on: false }) }).then(follow);
+}
+function keys(e) {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    play();
+  } else if (e.key === "r") reverse();
+  else if (e.key === "p") $("pluck").click();
+}
+
+// native/live/winds.js
+var winds_exports = {};
+__export(winds_exports, {
+  keys: () => keys2,
+  load: () => load2,
+  rest: () => rest2,
+  settings: () => settings2,
+  take: () => take2
+});
+
+// public/shared/performers/vocal-tract-space.json
+var vocal_tract_space_default = {
+  schema: "musebots.vocal-tract-space/1",
+  about: "The vocal tract's shapes as a space, and clarinettists' tract over it in normal playing and bending: baked by scripts/build-vocal-tract-space.mjs from Story 2008 (doi:10.1121/1.2805683, Table I) and Chen, Smith & Wolfe 2009 (doi:10.1121/1.3177269); never edited by hand.",
+  space: {
+    slice: 398182e-8,
+    narrowest: 2e-3,
+    mean: [
+      682562e-8,
+      701316e-8,
+      73937e-7,
+      820137e-8,
+      980321e-8,
+      0.0118585,
+      0.0132461,
+      0.0131441,
+      0.0119637,
+      0.010877,
+      0.010721,
+      0.0112871,
+      0.0118154,
+      0.0122577,
+      0.0127781,
+      0.0131557,
+      0.0134105,
+      0.0136724,
+      0.0138382,
+      0.0135696,
+      0.0131867,
+      0.0133485,
+      0.0138404,
+      0.0139618,
+      0.0137847,
+      0.0135986,
+      0.0136608,
+      0.0142434,
+      0.0153946,
+      0.0167353,
+      0.0180177,
+      0.0192634,
+      0.0204236,
+      0.0213301,
+      0.0219444,
+      0.0222347,
+      0.0221152,
+      0.0212815,
+      0.0196145,
+      0.0174393,
+      0.0151251,
+      0.0134128,
+      0.0126324,
+      0.0120319
+    ],
+    modes: [
+      [
+        -325461e-8,
+        860174e-8,
+        0.0166497,
+        0.0197962,
+        0.0131959,
+        -449119e-8,
+        -0.0349821,
+        -0.0664761,
+        -0.0779976,
+        -0.0751289,
+        -0.0816898,
+        -0.103577,
+        -0.136755,
+        -0.169908,
+        -0.189851,
+        -0.1961,
+        -0.196508,
+        -0.195262,
+        -0.188229,
+        -0.178944,
+        -0.167498,
+        -0.134171,
+        -0.0790312,
+        -0.0267457,
+        0.0148321,
+        0.0518364,
+        0.0885548,
+        0.125393,
+        0.160465,
+        0.192509,
+        0.221303,
+        0.244644,
+        0.257273,
+        0.261952,
+        0.260203,
+        0.251677,
+        0.235678,
+        0.214484,
+        0.188838,
+        0.150598,
+        0.102588,
+        0.0675618,
+        0.0552619,
+        0.0548142
+      ],
+      [
+        -0.0134757,
+        -0.0254734,
+        -0.0413729,
+        -0.0478771,
+        -0.073033,
+        -0.114066,
+        -0.121857,
+        -0.0917489,
+        -0.0688011,
+        -0.0742452,
+        -0.12005,
+        -0.175636,
+        -0.19007,
+        -0.15618,
+        -0.0959171,
+        -0.0325192,
+        0.017831,
+        0.0554604,
+        0.0807467,
+        0.101214,
+        0.118583,
+        0.139116,
+        0.16881,
+        0.2059,
+        0.236207,
+        0.255088,
+        0.264494,
+        0.24988,
+        0.207584,
+        0.161107,
+        0.123262,
+        0.0773626,
+        0.0130525,
+        -0.0519226,
+        -0.107006,
+        -0.167586,
+        -0.224471,
+        -0.243294,
+        -0.204737,
+        -0.112845,
+        0.0149832,
+        0.154219,
+        0.244691,
+        0.262313
+      ]
+    ],
+    variances: [
+      0.7433,
+      0.1467
+    ],
+    span: [
+      [
+        -0.057338,
+        0.0498515
+      ],
+      [
+        -0.0299411,
+        0.0201988
+      ]
+    ],
+    locations: {
+      i: [
+        -0.057338,
+        693801e-8
+      ],
+      ɪ: [
+        -0.0429019,
+        0.0108507
+      ],
+      e: [
+        -0.0332669,
+        327933e-8
+      ],
+      ε: [
+        -0.0171766,
+        9782e-6
+      ],
+      æ: [
+        358393e-9,
+        0.0112822
+      ],
+      ʌ: [
+        0.0312991,
+        528175e-8
+      ],
+      ɑ: [
+        0.0498515,
+        0.0201988
+      ],
+      ɔ: [
+        0.0478849,
+        509129e-8
+      ],
+      o: [
+        0.0257987,
+        -0.0205054
+      ],
+      ʊ: [
+        0.0148818,
+        -0.0222576
+      ],
+      u: [
+        -0.0193911,
+        -0.0299411
+      ]
+    },
+    airway: {
+      glottis: {
+        area: 15e-6,
+        thickness: 3e-3,
+        resistance: 34e5
+      },
+      trachea: 9e-3,
+      insertion: 0.01,
+      piston: 39e-4
+    },
+    fitted: {
+      "airway.glottis.resistance": {
+        range: [
+          1e6,
+          34e5
+        ],
+        first: 249,
+        to: "the middle shape's first resonance at the middle of the first peaks Fritz & Wolfe 2005 measured, 220-280 Hz"
+      }
+    }
+  },
+  normal: {
+    peak: 9e6,
+    reach: 1475,
+    rows: [
+      {
+        target: 600,
+        reached: true,
+        coords: [
+          -0.0233555,
+          -0.0283195
+        ],
+        second: {
+          frequency: 600,
+          peak: 9e6,
+          q: 3.777
+        },
+        resonances: [
+          {
+            frequency: 259.82,
+            q: 0.8417,
+            peak: 469e4
+          },
+          {
+            frequency: 568.79,
+            q: 4.675,
+            peak: 6901e3
+          }
+        ],
+        misfit: 0.0584
+      },
+      {
+        target: 625,
+        reached: true,
+        coords: [
+          -0.0233929,
+          -0.0273188
+        ],
+        second: {
+          frequency: 625,
+          peak: 9e6,
+          q: 4.018
+        },
+        resonances: [
+          {
+            frequency: 257.15,
+            q: 0.7994,
+            peak: 4586e3
+          },
+          {
+            frequency: 595.34,
+            q: 4.843,
+            peak: 7111e3
+          },
+          {
+            frequency: 3385.7,
+            q: 4.424,
+            peak: 1885e3
+          }
+        ],
+        misfit: 0.0481
+      },
+      {
+        target: 650,
+        reached: true,
+        coords: [
+          -0.023329,
+          -0.0263186
+        ],
+        second: {
+          frequency: 650,
+          peak: 9e6,
+          q: 4.266
+        },
+        resonances: [
+          {
+            frequency: 254.47,
+            q: 0.7816,
+            peak: 4467e3
+          },
+          {
+            frequency: 621.52,
+            q: 5.038,
+            peak: 727e4
+          },
+          {
+            frequency: 3343.3,
+            q: 4.092,
+            peak: 1675e3
+          }
+        ],
+        misfit: 0.047
+      },
+      {
+        target: 675,
+        reached: true,
+        coords: [
+          -0.0232332,
+          -0.0252937
+        ],
+        second: {
+          frequency: 675,
+          peak: 9e6,
+          q: 4.501
+        },
+        resonances: [
+          {
+            frequency: 251.8,
+            q: 0.7686,
+            peak: 4368e3
+          },
+          {
+            frequency: 647.8,
+            q: 5.229,
+            peak: 7424e3
+          },
+          {
+            frequency: 3324.7,
+            q: 3.935,
+            peak: 1593e3
+          }
+        ],
+        misfit: 0.0458
+      },
+      {
+        target: 700,
+        reached: true,
+        coords: [
+          -0.0231156,
+          -0.0242457
+        ],
+        second: {
+          frequency: 700,
+          peak: 9e6,
+          q: 4.721
+        },
+        resonances: [
+          {
+            frequency: 249.22,
+            q: 0.7605,
+            peak: 4288e3
+          },
+          {
+            frequency: 674.06,
+            q: 5.418,
+            peak: 7575e3
+          },
+          {
+            frequency: 3303.8,
+            q: 3.754,
+            peak: 1504e3
+          }
+        ],
+        misfit: 0.0448
+      },
+      {
+        target: 725,
+        reached: true,
+        coords: [
+          -0.0229694,
+          -0.0231784
+        ],
+        second: {
+          frequency: 725,
+          peak: 9e6,
+          q: 4.931
+        },
+        resonances: [
+          {
+            frequency: 246.8,
+            q: 0.7561,
+            peak: 4223e3
+          },
+          {
+            frequency: 700.26,
+            q: 5.604,
+            peak: 7716e3
+          },
+          {
+            frequency: 3287.7,
+            q: 3.599,
+            peak: 1439e3
+          }
+        ],
+        misfit: 0.044
+      },
+      {
+        target: 750,
+        reached: true,
+        coords: [
+          -0.0227902,
+          -0.0220929
+        ],
+        second: {
+          frequency: 750,
+          peak: 9e6,
+          q: 5.139
+        },
+        resonances: [
+          {
+            frequency: 244.56,
+            q: 0.7549,
+            peak: 4171e3
+          },
+          {
+            frequency: 726.42,
+            q: 5.786,
+            peak: 784e4
+          },
+          {
+            frequency: 3273.8,
+            q: 3.455,
+            peak: 1385e3
+          }
+        ],
+        misfit: 0.0432
+      },
+      {
+        target: 775,
+        reached: true,
+        coords: [
+          -0.0225774,
+          -0.0209887
+        ],
+        second: {
+          frequency: 775,
+          peak: 9e6,
+          q: 5.353
+        },
+        resonances: [
+          {
+            frequency: 242.51,
+            q: 0.7562,
+            peak: 4129e3
+          },
+          {
+            frequency: 752.54,
+            q: 5.967,
+            peak: 7946e3
+          },
+          {
+            frequency: 3258.6,
+            q: 3.294,
+            peak: 1328e3
+          }
+        ],
+        misfit: 0.0426
+      },
+      {
+        target: 800,
+        reached: true,
+        coords: [
+          -0.0223347,
+          -0.0198652
+        ],
+        second: {
+          frequency: 800,
+          peak: 9e6,
+          q: 5.565
+        },
+        resonances: [
+          {
+            frequency: 240.66,
+            q: 0.7595,
+            peak: 4097e3
+          },
+          {
+            frequency: 778.63,
+            q: 6.147,
+            peak: 8034e3
+          },
+          {
+            frequency: 3243.4,
+            q: 3.13,
+            peak: 1275e3
+          }
+        ],
+        misfit: 0.0421
+      },
+      {
+        target: 825,
+        reached: true,
+        coords: [
+          -0.022071,
+          -0.0187215
+        ],
+        second: {
+          frequency: 825,
+          peak: 9e6,
+          q: 5.773
+        },
+        resonances: [
+          {
+            frequency: 239.01,
+            q: 0.7642,
+            peak: 4072e3
+          },
+          {
+            frequency: 804.67,
+            q: 6.325,
+            peak: 8109e3
+          },
+          {
+            frequency: 3231.4,
+            q: 2.98,
+            peak: 1235e3
+          }
+        ],
+        misfit: 0.0417
+      },
+      {
+        target: 850,
+        reached: true,
+        coords: [
+          -0.0218012,
+          -0.0175549
+        ],
+        second: {
+          frequency: 850,
+          peak: 9e6,
+          q: 5.981
+        },
+        resonances: [
+          {
+            frequency: 237.53,
+            q: 0.77,
+            peak: 4053e3
+          },
+          {
+            frequency: 830.64,
+            q: 6.505,
+            peak: 8181e3
+          },
+          {
+            frequency: 3220.4,
+            q: 2.833,
+            peak: 1202e3
+          }
+        ],
+        misfit: 0.0414
+      },
+      {
+        target: 875,
+        reached: true,
+        coords: [
+          -0.0215461,
+          -0.0163577
+        ],
+        second: {
+          frequency: 875,
+          peak: 9e6,
+          q: 6.149
+        },
+        resonances: [
+          {
+            frequency: 236.38,
+            q: 0.7844,
+            peak: 4024e3
+          },
+          {
+            frequency: 856.65,
+            q: 6.735,
+            peak: 8247e3
+          },
+          {
+            frequency: 3201.2,
+            q: 0.468,
+            peak: 201500
+          }
+        ],
+        misfit: 0.0493
+      },
+      {
+        target: 900,
+        reached: true,
+        coords: [
+          -0.0212952,
+          -0.0151222
+        ],
+        second: {
+          frequency: 900,
+          peak: 9e6,
+          q: 6.305
+        },
+        resonances: [
+          {
+            frequency: 235.24,
+            q: 0.8006,
+            peak: 3993e3
+          },
+          {
+            frequency: 882.87,
+            q: 6.956,
+            peak: 8321e3
+          },
+          {
+            frequency: 2585.7,
+            q: 19.13,
+            peak: 556e3
+          }
+        ],
+        misfit: 0.0496
+      },
+      {
+        target: 925,
+        reached: true,
+        coords: [
+          -0.0209479,
+          -0.0138914
+        ],
+        second: {
+          frequency: 925,
+          peak: 9e6,
+          q: 6.524
+        },
+        resonances: [
+          {
+            frequency: 234.2,
+            q: 0.8092,
+            peak: 3986e3
+          },
+          {
+            frequency: 908.82,
+            q: 7.132,
+            peak: 834e4
+          },
+          {
+            frequency: 2570.6,
+            q: 20.13,
+            peak: 657200
+          }
+        ],
+        misfit: 0.0494
+      },
+      {
+        target: 950,
+        reached: true,
+        coords: [
+          -0.0206688,
+          -0.0126228
+        ],
+        second: {
+          frequency: 950,
+          peak: 9e6,
+          q: 6.682
+        },
+        resonances: [
+          {
+            frequency: 233.29,
+            q: 0.8181,
+            peak: 3982e3
+          },
+          {
+            frequency: 934.72,
+            q: 7.318,
+            peak: 8408e3
+          },
+          {
+            frequency: 2556,
+            q: 20.65,
+            peak: 767400
+          }
+        ],
+        misfit: 0.0494
+      },
+      {
+        target: 975,
+        reached: true,
+        coords: [
+          -0.0203488,
+          -0.011317
+        ],
+        second: {
+          frequency: 975,
+          peak: 9e6,
+          q: 6.848
+        },
+        resonances: [
+          {
+            frequency: 232.46,
+            q: 0.8275,
+            peak: 3979e3
+          },
+          {
+            frequency: 960.95,
+            q: 7.502,
+            peak: 8453e3
+          },
+          {
+            frequency: 2542,
+            q: 20.95,
+            peak: 891600
+          }
+        ],
+        misfit: 0.0495
+      },
+      {
+        target: 1e3,
+        reached: true,
+        coords: [
+          -0.0200161,
+          -0.0100087
+        ],
+        second: {
+          frequency: 1e3,
+          peak: 9e6,
+          q: 7.026
+        },
+        resonances: [
+          {
+            frequency: 231.74,
+            q: 0.8371,
+            peak: 3978e3
+          },
+          {
+            frequency: 986.74,
+            q: 7.679,
+            peak: 8485e3
+          },
+          {
+            frequency: 2528.3,
+            q: 20.87,
+            peak: 1022e3
+          }
+        ],
+        misfit: 0.0495
+      },
+      {
+        target: 1025,
+        reached: true,
+        coords: [
+          -0.0196959,
+          -864322e-8
+        ],
+        second: {
+          frequency: 1025,
+          peak: 9e6,
+          q: 7.163
+        },
+        resonances: [
+          {
+            frequency: 231.08,
+            q: 0.8472,
+            peak: 3979e3
+          },
+          {
+            frequency: 1013,
+            q: 7.861,
+            peak: 8534e3
+          },
+          {
+            frequency: 2514.1,
+            q: 20.83,
+            peak: 1173e3
+          }
+        ],
+        misfit: 0.0497
+      },
+      {
+        target: 1050,
+        reached: true,
+        coords: [
+          -0.0193474,
+          -728144e-8
+        ],
+        second: {
+          frequency: 1050,
+          peak: 9e6,
+          q: 7.316
+        },
+        resonances: [
+          {
+            frequency: 230.5,
+            q: 0.8572,
+            peak: 3981e3
+          },
+          {
+            frequency: 1038.7,
+            q: 8.032,
+            peak: 8561e3
+          },
+          {
+            frequency: 2500.4,
+            q: 20.56,
+            peak: 1334e3
+          }
+        ],
+        misfit: 0.0499
+      },
+      {
+        target: 1075,
+        reached: true,
+        coords: [
+          -0.0189744,
+          -586352e-8
+        ],
+        second: {
+          frequency: 1075,
+          peak: 9e6,
+          q: 7.482
+        },
+        resonances: [
+          {
+            frequency: 229.97,
+            q: 0.8677,
+            peak: 3984e3
+          },
+          {
+            frequency: 1065,
+            q: 8.2,
+            peak: 8581e3
+          },
+          {
+            frequency: 2486,
+            q: 20.17,
+            peak: 1514e3
+          }
+        ],
+        misfit: 0.0501
+      },
+      {
+        target: 1100,
+        reached: true,
+        coords: [
+          -0.0186708,
+          -442523e-8
+        ],
+        second: {
+          frequency: 1100,
+          peak: 9e6,
+          q: 7.538
+        },
+        resonances: [
+          {
+            frequency: 229.5,
+            q: 0.878,
+            peak: 3988e3
+          },
+          {
+            frequency: 1090.9,
+            q: 8.373,
+            peak: 8654e3
+          },
+          {
+            frequency: 2471.6,
+            q: 19.74,
+            peak: 1712e3
+          }
+        ],
+        misfit: 0.0504
+      },
+      {
+        target: 1125,
+        reached: true,
+        coords: [
+          -0.0182108,
+          -296989e-8
+        ],
+        second: {
+          frequency: 1125,
+          peak: 9e6,
+          q: 7.748
+        },
+        resonances: [
+          {
+            frequency: 229.07,
+            q: 0.8887,
+            peak: 3993e3
+          },
+          {
+            frequency: 1116.9,
+            q: 8.513,
+            peak: 8621e3
+          },
+          {
+            frequency: 2456.7,
+            q: 19.17,
+            peak: 1923e3
+          }
+        ],
+        misfit: 0.0506
+      },
+      {
+        target: 1150,
+        reached: true,
+        coords: [
+          -0.0178234,
+          -145031e-8
+        ],
+        second: {
+          frequency: 1150,
+          peak: 9e6,
+          q: 7.854
+        },
+        resonances: [
+          {
+            frequency: 228.68,
+            q: 0.8994,
+            peak: 4e6
+          },
+          {
+            frequency: 1143.3,
+            q: 8.663,
+            peak: 8655e3
+          },
+          {
+            frequency: 2441.1,
+            q: 18.58,
+            peak: 2157e3
+          }
+        ],
+        misfit: 0.0509
+      },
+      {
+        target: 1175,
+        reached: true,
+        coords: [
+          -0.017463,
+          8251e-8
+        ],
+        second: {
+          frequency: 1175,
+          peak: 9e6,
+          q: 7.888
+        },
+        resonances: [
+          {
+            frequency: 228.04,
+            q: 0.8409,
+            peak: 4071e3
+          },
+          {
+            frequency: 1169.1,
+            q: 8.219,
+            peak: 881e4
+          },
+          {
+            frequency: 2425.8,
+            q: 13.48,
+            peak: 2688e3
+          },
+          {
+            frequency: 3465.2,
+            q: 28.46,
+            peak: 2111e4
+          }
+        ],
+        misfit: 0.0283
+      },
+      {
+        target: 1200,
+        reached: true,
+        coords: [
+          -0.0169357,
+          163891e-8
+        ],
+        second: {
+          frequency: 1200,
+          peak: 9e6,
+          q: 8.073
+        },
+        resonances: [
+          {
+            frequency: 227.71,
+            q: 0.8517,
+            peak: 4078e3
+          },
+          {
+            frequency: 1195.2,
+            q: 8.303,
+            peak: 8769e3
+          },
+          {
+            frequency: 2409.1,
+            q: 13.28,
+            peak: 2957e3
+          },
+          {
+            frequency: 3422.6,
+            q: 29.05,
+            peak: 2083e4
+          }
+        ],
+        misfit: 0.0282
+      },
+      {
+        target: 1225,
+        reached: true,
+        coords: [
+          -0.0164298,
+          326434e-8
+        ],
+        second: {
+          frequency: 1225,
+          peak: 9e6,
+          q: 8.185
+        },
+        resonances: [
+          {
+            frequency: 227.39,
+            q: 0.8628,
+            peak: 4086e3
+          },
+          {
+            frequency: 1221.7,
+            q: 8.388,
+            peak: 8769e3
+          },
+          {
+            frequency: 2391.3,
+            q: 13.06,
+            peak: 3243e3
+          },
+          {
+            frequency: 3379.5,
+            q: 29.46,
+            peak: 2038e4
+          }
+        ],
+        misfit: 0.0281
+      },
+      {
+        target: 1250,
+        reached: true,
+        coords: [
+          -0.0159344,
+          493344e-8
+        ],
+        second: {
+          frequency: 1250,
+          peak: 9e6,
+          q: 8.233
+        },
+        resonances: [
+          {
+            frequency: 227.1,
+            q: 0.8743,
+            peak: 4095e3
+          },
+          {
+            frequency: 1248.1,
+            q: 8.472,
+            peak: 8802e3
+          },
+          {
+            frequency: 2372.5,
+            q: 12.81,
+            peak: 3536e3
+          },
+          {
+            frequency: 3336.9,
+            q: 29.7,
+            peak: 1977e4
+          }
+        ],
+        misfit: 0.0281
+      },
+      {
+        target: 1275,
+        reached: true,
+        coords: [
+          -0.0154249,
+          663085e-8
+        ],
+        second: {
+          frequency: 1275,
+          peak: 9e6,
+          q: 8.249
+        },
+        resonances: [
+          {
+            frequency: 226.83,
+            q: 0.8863,
+            peak: 4104e3
+          },
+          {
+            frequency: 1274.1,
+            q: 8.548,
+            peak: 8851e3
+          },
+          {
+            frequency: 2352.8,
+            q: 12.55,
+            peak: 3826e3
+          },
+          {
+            frequency: 3295,
+            q: 29.8,
+            peak: 1897e4
+          }
+        ],
+        misfit: 0.0281
+      },
+      {
+        target: 1300,
+        reached: true,
+        coords: [
+          -0.0147622,
+          835533e-8
+        ],
+        second: {
+          frequency: 1300,
+          peak: 9e6,
+          q: 8.367
+        },
+        resonances: [
+          {
+            frequency: 226.57,
+            q: 0.8997,
+            peak: 4114e3
+          },
+          {
+            frequency: 1300.3,
+            q: 8.588,
+            peak: 882e4
+          },
+          {
+            frequency: 2331.6,
+            q: 12.27,
+            peak: 4103e3
+          },
+          {
+            frequency: 3254.3,
+            q: 29.79,
+            peak: 18e6
+          }
+        ],
+        misfit: 0.0281
+      },
+      {
+        target: 1325,
+        reached: true,
+        coords: [
+          -0.0140229,
+          0.0101463
+        ],
+        second: {
+          frequency: 1325,
+          peak: 9e6,
+          q: 8.472
+        },
+        resonances: [
+          {
+            frequency: 226.31,
+            q: 0.9144,
+            peak: 4124e3
+          },
+          {
+            frequency: 1327,
+            q: 8.611,
+            peak: 8781e3
+          },
+          {
+            frequency: 2308.7,
+            q: 11.95,
+            peak: 4361e3
+          },
+          {
+            frequency: 3213.9,
+            q: 29.58,
+            peak: 1685e4
+          }
+        ],
+        misfit: 0.0282
+      },
+      {
+        target: 1350,
+        reached: true,
+        coords: [
+          -0.0132203,
+          0.0120006
+        ],
+        second: {
+          frequency: 1350,
+          peak: 9e6,
+          q: 8.532
+        },
+        resonances: [
+          {
+            frequency: 226.06,
+            q: 0.9305,
+            peak: 4136e3
+          },
+          {
+            frequency: 1353.8,
+            q: 8.624,
+            peak: 8754e3
+          },
+          {
+            frequency: 2283.8,
+            q: 11.6,
+            peak: 4583e3
+          },
+          {
+            frequency: 3174.5,
+            q: 29.36,
+            peak: 156e5
+          }
+        ],
+        misfit: 0.0284
+      },
+      {
+        target: 1375,
+        reached: true,
+        coords: [
+          -0.012334,
+          0.0139109
+        ],
+        second: {
+          frequency: 1375,
+          peak: 9e6,
+          q: 8.559
+        },
+        resonances: [
+          {
+            frequency: 225.81,
+            q: 0.9485,
+            peak: 4148e3
+          },
+          {
+            frequency: 1380.8,
+            q: 8.623,
+            peak: 8732e3
+          },
+          {
+            frequency: 2256.9,
+            q: 11.21,
+            peak: 475e4
+          },
+          {
+            frequency: 3136.5,
+            q: 29.15,
+            peak: 143e5
+          }
+        ],
+        misfit: 0.0286
+      },
+      {
+        target: 1400,
+        reached: true,
+        coords: [
+          -0.0113412,
+          0.0158709
+        ],
+        second: {
+          frequency: 1400,
+          peak: 9e6,
+          q: 8.568
+        },
+        resonances: [
+          {
+            frequency: 225.57,
+            q: 0.9686,
+            peak: 4162e3
+          },
+          {
+            frequency: 1407.8,
+            q: 8.606,
+            peak: 871e4
+          },
+          {
+            frequency: 2227.8,
+            q: 10.78,
+            peak: 4844e3
+          },
+          {
+            frequency: 3100.2,
+            q: 28.91,
+            peak: 1297e4
+          }
+        ],
+        misfit: 0.029
+      },
+      {
+        target: 1425,
+        reached: true,
+        coords: [
+          -0.0102188,
+          0.0178735
+        ],
+        second: {
+          frequency: 1425,
+          peak: 9e6,
+          q: 8.561
+        },
+        resonances: [
+          {
+            frequency: 225.33,
+            q: 0.9912,
+            peak: 4178e3
+          },
+          {
+            frequency: 1435,
+            q: 8.571,
+            peak: 8682e3
+          },
+          {
+            frequency: 2196.4,
+            q: 10.29,
+            peak: 4849e3
+          },
+          {
+            frequency: 3066.2,
+            q: 28.77,
+            peak: 1169e4
+          }
+        ],
+        misfit: 0.0295
+      },
+      {
+        target: 1450,
+        reached: true,
+        coords: [
+          -894671e-8,
+          0.0199074
+        ],
+        second: {
+          frequency: 1450,
+          peak: 9e6,
+          q: 8.542
+        },
+        resonances: [
+          {
+            frequency: 225.09,
+            q: 1.017,
+            peak: 4195e3
+          },
+          {
+            frequency: 1462.3,
+            q: 8.519,
+            peak: 8644e3
+          },
+          {
+            frequency: 2162.5,
+            q: 9.746,
+            peak: 4758e3
+          },
+          {
+            frequency: 3034.7,
+            q: 28.76,
+            peak: 1049e4
+          }
+        ],
+        misfit: 0.0302
+      },
+      {
+        target: 1475,
+        reached: true,
+        coords: [
+          -804447e-8,
+          0.0201988
+        ],
+        second: {
+          frequency: 1458.3,
+          peak: 8462e3,
+          q: 8.286
+        },
+        resonances: [
+          {
+            frequency: 224.99,
+            q: 1.026,
+            peak: 42e5
+          },
+          {
+            frequency: 1471.7,
+            q: 8.309,
+            peak: 8118e3
+          },
+          {
+            frequency: 2155.7,
+            q: 9.65,
+            peak: 4765e3
+          },
+          {
+            frequency: 3032.5,
+            q: 28.93,
+            peak: 1044e4
+          }
+        ],
+        misfit: 0.0304
+      },
+      {
+        target: 1500,
+        reached: false,
+        coords: [
+          -727542e-8,
+          0.0201988
+        ],
+        second: {
+          frequency: 1462.6,
+          peak: 7987e3,
+          q: 8.151
+        },
+        resonances: [
+          {
+            frequency: 224.92,
+            q: 1.031,
+            peak: 4201e3
+          },
+          {
+            frequency: 1477.8,
+            q: 8.095,
+            peak: 7584e3
+          },
+          {
+            frequency: 2153.8,
+            q: 9.641,
+            peak: 4798e3
+          },
+          {
+            frequency: 3034.9,
+            q: 29.1,
+            peak: 1055e4
+          }
+        ],
+        misfit: 0.0305
+      },
+      {
+        target: 1525,
+        reached: false,
+        coords: [
+          -658425e-8,
+          0.0201988
+        ],
+        second: {
+          frequency: 1466.2,
+          peak: 7565e3,
+          q: 7.982
+        },
+        resonances: [
+          {
+            frequency: 224.85,
+            q: 1.036,
+            peak: 4202e3
+          },
+          {
+            frequency: 1483.2,
+            q: 7.906,
+            peak: 7129e3
+          },
+          {
+            frequency: 2152.2,
+            q: 9.639,
+            peak: 483e4
+          },
+          {
+            frequency: 3037.1,
+            q: 29.25,
+            peak: 1065e4
+          }
+        ],
+        misfit: 0.0306
+      },
+      {
+        target: 1550,
+        reached: false,
+        coords: [
+          -594771e-8,
+          0.0201988
+        ],
+        second: {
+          frequency: 1469.5,
+          peak: 7184e3,
+          q: 7.808
+        },
+        resonances: [
+          {
+            frequency: 224.79,
+            q: 1.041,
+            peak: 4203e3
+          },
+          {
+            frequency: 1488.2,
+            q: 7.735,
+            peak: 6732e3
+          },
+          {
+            frequency: 2150.8,
+            q: 9.644,
+            peak: 4862e3
+          },
+          {
+            frequency: 3039.2,
+            q: 29.39,
+            peak: 1074e4
+          }
+        ],
+        misfit: 0.0307
+      },
+      {
+        target: 1575,
+        reached: false,
+        coords: [
+          -518859e-8,
+          0.0201988
+        ],
+        second: {
+          frequency: 1473.5,
+          peak: 6746e3,
+          q: 7.585
+        },
+        resonances: [
+          {
+            frequency: 224.71,
+            q: 1.046,
+            peak: 4205e3
+          },
+          {
+            frequency: 1494.3,
+            q: 7.535,
+            peak: 6283e3
+          },
+          {
+            frequency: 2149.2,
+            q: 9.657,
+            peak: 4902e3
+          },
+          {
+            frequency: 3041.9,
+            q: 29.57,
+            peak: 1084e4
+          }
+        ],
+        misfit: 0.0308
+      }
+    ]
+  },
+  bend: {
+    peak: 3464e4,
+    reach: 1350,
+    rows: [
+      {
+        target: 450,
+        reached: true,
+        coords: [
+          -0.0429852,
+          -0.0269954
+        ],
+        second: {
+          frequency: 450,
+          peak: 3464e4,
+          q: 5.072
+        },
+        resonances: [
+          {
+            frequency: 267.33,
+            q: 1.168,
+            peak: 5831e3
+          },
+          {
+            frequency: 434.7,
+            q: 5.7,
+            peak: 3103e4
+          }
+        ],
+        misfit: 0.0878
+      },
+      {
+        target: 475,
+        reached: true,
+        coords: [
+          -0.0429511,
+          -0.026228
+        ],
+        second: {
+          frequency: 475,
+          peak: 3464e4,
+          q: 5.445
+        },
+        resonances: [
+          {
+            frequency: 268.86,
+            q: 1.078,
+            peak: 5536e3
+          },
+          {
+            frequency: 459.97,
+            q: 5.964,
+            peak: 3095e4
+          }
+        ],
+        misfit: 0.0867
+      },
+      {
+        target: 500,
+        reached: true,
+        coords: [
+          -0.042864,
+          -0.0254552
+        ],
+        second: {
+          frequency: 500,
+          peak: 3464e4,
+          q: 5.801
+        },
+        resonances: [
+          {
+            frequency: 268.6,
+            q: 1,
+            peak: 5257e3
+          },
+          {
+            frequency: 485.45,
+            q: 6.25,
+            peak: 3101e4
+          }
+        ],
+        misfit: 0.085
+      },
+      {
+        target: 525,
+        reached: true,
+        coords: [
+          -0.042725,
+          -0.0246785
+        ],
+        second: {
+          frequency: 525,
+          peak: 3464e4,
+          q: 6.15
+        },
+        resonances: [
+          {
+            frequency: 267.15,
+            q: 0.937,
+            peak: 501e4
+          },
+          {
+            frequency: 511.02,
+            q: 6.556,
+            peak: 3116e4
+          }
+        ],
+        misfit: 0.0829
+      },
+      {
+        target: 550,
+        reached: true,
+        coords: [
+          -0.0425631,
+          -0.0238867
+        ],
+        second: {
+          frequency: 550,
+          peak: 3464e4,
+          q: 6.467
+        },
+        resonances: [
+          {
+            frequency: 209.87,
+            q: 0.3,
+            peak: 3351e3
+          },
+          {
+            frequency: 536.51,
+            q: 6.894,
+            peak: 3068e4
+          }
+        ],
+        misfit: 0.121
+      },
+      {
+        target: 575,
+        reached: true,
+        coords: [
+          -0.0423725,
+          -0.0230765
+        ],
+        second: {
+          frequency: 575,
+          peak: 3464e4,
+          q: 6.786
+        },
+        resonances: [
+          {
+            frequency: 207.2,
+            q: 0.3,
+            peak: 3344e3
+          },
+          {
+            frequency: 562.65,
+            q: 7.405,
+            peak: 3131e4
+          }
+        ],
+        misfit: 0.115
+      },
+      {
+        target: 600,
+        reached: true,
+        coords: [
+          -0.0420721,
+          -0.0222889
+        ],
+        second: {
+          frequency: 600,
+          peak: 3464e4,
+          q: 7.15
+        },
+        resonances: [
+          {
+            frequency: 210.26,
+            q: 0.3,
+            peak: 3319e3
+          },
+          {
+            frequency: 588.42,
+            q: 7.931,
+            peak: 3169e4
+          }
+        ],
+        misfit: 0.109
+      },
+      {
+        target: 625,
+        reached: true,
+        coords: [
+          -0.0418797,
+          -0.0214325
+        ],
+        second: {
+          frequency: 625,
+          peak: 3464e4,
+          q: 7.398
+        },
+        resonances: [
+          {
+            frequency: 212.15,
+            q: 0.3,
+            peak: 3284e3
+          },
+          {
+            frequency: 614.29,
+            q: 8.455,
+            peak: 3235e4
+          }
+        ],
+        misfit: 0.104
+      },
+      {
+        target: 650,
+        reached: true,
+        coords: [
+          -0.0415397,
+          -0.0206127
+        ],
+        second: {
+          frequency: 650,
+          peak: 3464e4,
+          q: 7.78
+        },
+        resonances: [
+          {
+            frequency: 212.96,
+            q: 0.3,
+            peak: 3247e3
+          },
+          {
+            frequency: 639.68,
+            q: 8.906,
+            peak: 3258e4
+          }
+        ],
+        misfit: 0.1
+      },
+      {
+        target: 675,
+        reached: true,
+        coords: [
+          -0.0412244,
+          -0.0197485
+        ],
+        second: {
+          frequency: 675,
+          peak: 3464e4,
+          q: 8.105
+        },
+        resonances: [
+          {
+            frequency: 212.99,
+            q: 0.3,
+            peak: 3209e3
+          },
+          {
+            frequency: 665.3,
+            q: 9.341,
+            peak: 3287e4
+          },
+          {
+            frequency: 3354.6,
+            q: 100,
+            peak: 53660
+          }
+        ],
+        misfit: 0.0969
+      },
+      {
+        target: 700,
+        reached: true,
+        coords: [
+          -0.0409506,
+          -0.0188467
+        ],
+        second: {
+          frequency: 700,
+          peak: 3464e4,
+          q: 8.38
+        },
+        resonances: [
+          {
+            frequency: 212.39,
+            q: 0.3,
+            peak: 3171e3
+          },
+          {
+            frequency: 690.83,
+            q: 9.762,
+            peak: 3325e4
+          },
+          {
+            frequency: 3337.5,
+            q: 100,
+            peak: 54310
+          }
+        ],
+        misfit: 0.094
+      },
+      {
+        target: 725,
+        reached: true,
+        coords: [
+          -0.0406771,
+          -0.0179237
+        ],
+        second: {
+          frequency: 725,
+          peak: 3464e4,
+          q: 8.644
+        },
+        resonances: [
+          {
+            frequency: 245.15,
+            q: 0.7435,
+            peak: 4095e3
+          },
+          {
+            frequency: 715.98,
+            q: 9.073,
+            peak: 3304e4
+          },
+          {
+            frequency: 3320,
+            q: 3.665,
+            peak: 2099e3
+          }
+        ],
+        misfit: 0.054
+      },
+      {
+        target: 750,
+        reached: true,
+        coords: [
+          -0.0403774,
+          -0.0169843
+        ],
+        second: {
+          frequency: 750,
+          peak: 3464e4,
+          q: 8.905
+        },
+        resonances: [
+          {
+            frequency: 242.93,
+            q: 0.7449,
+            peak: 4054e3
+          },
+          {
+            frequency: 741.35,
+            q: 9.376,
+            peak: 3323e4
+          },
+          {
+            frequency: 3302.7,
+            q: 3.511,
+            peak: 1992e3
+          }
+        ],
+        misfit: 0.0529
+      },
+      {
+        target: 775,
+        reached: true,
+        coords: [
+          -0.0400409,
+          -0.016028
+        ],
+        second: {
+          frequency: 775,
+          peak: 3464e4,
+          q: 9.181
+        },
+        resonances: [
+          {
+            frequency: 240.94,
+            q: 0.7482,
+            peak: 4024e3
+          },
+          {
+            frequency: 766.74,
+            q: 9.667,
+            peak: 3333e4
+          },
+          {
+            frequency: 3290.3,
+            q: 3.384,
+            peak: 1917e3
+          }
+        ],
+        misfit: 0.0519
+      },
+      {
+        target: 800,
+        reached: true,
+        coords: [
+          -0.0396684,
+          -0.0150534
+        ],
+        second: {
+          frequency: 800,
+          peak: 3464e4,
+          q: 9.489
+        },
+        resonances: [
+          {
+            frequency: 239.18,
+            q: 0.7529,
+            peak: 4001e3
+          },
+          {
+            frequency: 792.13,
+            q: 9.948,
+            peak: 3334e4
+          },
+          {
+            frequency: 3279.5,
+            q: 3.26,
+            peak: 1852e3
+          }
+        ],
+        misfit: 0.051
+      },
+      {
+        target: 825,
+        reached: true,
+        coords: [
+          -0.0392754,
+          -0.0140587
+        ],
+        second: {
+          frequency: 825,
+          peak: 3464e4,
+          q: 9.831
+        },
+        resonances: [
+          {
+            frequency: 237.61,
+            q: 0.7587,
+            peak: 3984e3
+          },
+          {
+            frequency: 817.42,
+            q: 10.22,
+            peak: 3331e4
+          },
+          {
+            frequency: 3269.1,
+            q: 3.13,
+            peak: 1791e3
+          }
+        ],
+        misfit: 0.0503
+      },
+      {
+        target: 850,
+        reached: true,
+        coords: [
+          -0.0389013,
+          -0.0130362
+        ],
+        second: {
+          frequency: 850,
+          peak: 3464e4,
+          q: 10.17
+        },
+        resonances: [
+          {
+            frequency: 236.23,
+            q: 0.7653,
+            peak: 3972e3
+          },
+          {
+            frequency: 842.54,
+            q: 10.49,
+            peak: 3332e4
+          },
+          {
+            frequency: 3257.1,
+            q: 2.983,
+            peak: 1725e3
+          }
+        ],
+        misfit: 0.0497
+      },
+      {
+        target: 875,
+        reached: true,
+        coords: [
+          -0.038606,
+          -0.0119617
+        ],
+        second: {
+          frequency: 875,
+          peak: 3464e4,
+          q: 10.32
+        },
+        resonances: [
+          {
+            frequency: 234.99,
+            q: 0.7727,
+            peak: 3964e3
+          },
+          {
+            frequency: 867.66,
+            q: 10.79,
+            peak: 3356e4
+          },
+          {
+            frequency: 3246.7,
+            q: 2.837,
+            peak: 1672e3
+          }
+        ],
+        misfit: 0.0492
+      },
+      {
+        target: 900,
+        reached: true,
+        coords: [
+          -0.038343,
+          -0.0108196
+        ],
+        second: {
+          frequency: 900,
+          peak: 3464e4,
+          q: 10.42
+        },
+        resonances: [
+          {
+            frequency: 234.21,
+            q: 0.8032,
+            peak: 3912e3
+          },
+          {
+            frequency: 892.75,
+            q: 11.16,
+            peak: 3364e4
+          },
+          {
+            frequency: 2604,
+            q: 18.98,
+            peak: 584100
+          }
+        ],
+        misfit: 0.0615
+      },
+      {
+        target: 925,
+        reached: true,
+        coords: [
+          -0.037828,
+          -972743e-8
+        ],
+        second: {
+          frequency: 925,
+          peak: 3464e4,
+          q: 10.9
+        },
+        resonances: [
+          {
+            frequency: 233.28,
+            q: 0.8114,
+            peak: 3911e3
+          },
+          {
+            frequency: 917.95,
+            q: 11.39,
+            peak: 333e5
+          },
+          {
+            frequency: 2587,
+            q: 21.3,
+            peak: 715300
+          }
+        ],
+        misfit: 0.061
+      },
+      {
+        target: 950,
+        reached: true,
+        coords: [
+          -0.0375369,
+          -855833e-8
+        ],
+        second: {
+          frequency: 950,
+          peak: 3464e4,
+          q: 11.03
+        },
+        resonances: [
+          {
+            frequency: 232.44,
+            q: 0.8201,
+            peak: 391e4
+          },
+          {
+            frequency: 942.82,
+            q: 11.68,
+            peak: 3357e4
+          },
+          {
+            frequency: 2573.8,
+            q: 22.19,
+            peak: 846500
+          }
+        ],
+        misfit: 0.0607
+      },
+      {
+        target: 975,
+        reached: true,
+        coords: [
+          -0.0371406,
+          -732554e-8
+        ],
+        second: {
+          frequency: 975,
+          peak: 3464e4,
+          q: 11.28
+        },
+        resonances: [
+          {
+            frequency: 231.67,
+            q: 0.8291,
+            peak: 3912e3
+          },
+          {
+            frequency: 968.65,
+            q: 11.94,
+            peak: 3361e4
+          },
+          {
+            frequency: 2559.6,
+            q: 22.49,
+            peak: 995600
+          }
+        ],
+        misfit: 0.0604
+      },
+      {
+        target: 1e3,
+        reached: true,
+        coords: [
+          -0.0367285,
+          -61144e-7
+        ],
+        second: {
+          frequency: 1e3,
+          peak: 3464e4,
+          q: 11.53
+        },
+        resonances: [
+          {
+            frequency: 231.03,
+            q: 0.8378,
+            peak: 3915e3
+          },
+          {
+            frequency: 993.27,
+            q: 12.18,
+            peak: 3357e4
+          },
+          {
+            frequency: 2546.2,
+            q: 22.85,
+            peak: 1165e3
+          }
+        ],
+        misfit: 0.0601
+      },
+      {
+        target: 1025,
+        reached: true,
+        coords: [
+          -0.0363681,
+          -477382e-8
+        ],
+        second: {
+          frequency: 1025,
+          peak: 3464e4,
+          q: 11.68
+        },
+        resonances: [
+          {
+            frequency: 230.43,
+            q: 0.8471,
+            peak: 392e4
+          },
+          {
+            frequency: 1019.1,
+            q: 12.46,
+            peak: 3376e4
+          },
+          {
+            frequency: 2532.4,
+            q: 22.53,
+            peak: 1355e3
+          }
+        ],
+        misfit: 0.0598
+      },
+      {
+        target: 1050,
+        reached: true,
+        coords: [
+          -0.0359463,
+          -346943e-8
+        ],
+        second: {
+          frequency: 1050,
+          peak: 3464e4,
+          q: 11.91
+        },
+        resonances: [
+          {
+            frequency: 229.93,
+            q: 0.8557,
+            peak: 3926e3
+          },
+          {
+            frequency: 1043.7,
+            q: 12.69,
+            peak: 3376e4
+          },
+          {
+            frequency: 2518.1,
+            q: 22.22,
+            peak: 1563e3
+          }
+        ],
+        misfit: 0.0596
+      },
+      {
+        target: 1075,
+        reached: true,
+        coords: [
+          -0.035463,
+          -203829e-8
+        ],
+        second: {
+          frequency: 1075,
+          peak: 3464e4,
+          q: 12.14
+        },
+        resonances: [
+          {
+            frequency: 229.46,
+            q: 0.8645,
+            peak: 3933e3
+          },
+          {
+            frequency: 1069.6,
+            q: 12.91,
+            peak: 3369e4
+          },
+          {
+            frequency: 2502.9,
+            q: 21.68,
+            peak: 1811e3
+          }
+        ],
+        misfit: 0.0593
+      },
+      {
+        target: 1100,
+        reached: true,
+        coords: [
+          -0.0351972,
+          -546067e-9
+        ],
+        second: {
+          frequency: 1100,
+          peak: 3464e4,
+          q: 12.15
+        },
+        resonances: [
+          {
+            frequency: 229.05,
+            q: 0.8729,
+            peak: 3941e3
+          },
+          {
+            frequency: 1094.4,
+            q: 13.2,
+            peak: 3424e4
+          },
+          {
+            frequency: 2487.5,
+            q: 20.9,
+            peak: 2077e3
+          }
+        ],
+        misfit: 0.059
+      },
+      {
+        target: 1125,
+        reached: true,
+        coords: [
+          -0.0345067,
+          940814e-9
+        ],
+        second: {
+          frequency: 1125,
+          peak: 3464e4,
+          q: 12.55
+        },
+        resonances: [
+          {
+            frequency: 228.31,
+            q: 0.8011,
+            peak: 4031e3
+          },
+          {
+            frequency: 1121,
+            q: 12.87,
+            peak: 3417e4
+          },
+          {
+            frequency: 2471.1,
+            q: 13.79,
+            peak: 2719e3
+          },
+          {
+            frequency: 3481.9,
+            q: 29.75,
+            peak: 2698e4
+          }
+        ],
+        misfit: 0.0299
+      },
+      {
+        target: 1150,
+        reached: true,
+        coords: [
+          -0.0340316,
+          263908e-8
+        ],
+        second: {
+          frequency: 1150,
+          peak: 3464e4,
+          q: 12.64
+        },
+        resonances: [
+          {
+            frequency: 227.97,
+            q: 0.8113,
+            peak: 404e4
+          },
+          {
+            frequency: 1146.9,
+            q: 13.09,
+            peak: 3439e4
+          },
+          {
+            frequency: 2452.2,
+            q: 13.72,
+            peak: 3062e3
+          },
+          {
+            frequency: 3424.1,
+            q: 30.24,
+            peak: 2543e4
+          }
+        ],
+        misfit: 0.0296
+      },
+      {
+        target: 1175,
+        reached: true,
+        coords: [
+          -0.0336356,
+          440877e-8
+        ],
+        second: {
+          frequency: 1175,
+          peak: 3464e4,
+          q: 12.59
+        },
+        resonances: [
+          {
+            frequency: 227.68,
+            q: 0.8217,
+            peak: 405e4
+          },
+          {
+            frequency: 1171.6,
+            q: 13.33,
+            peak: 3492e4
+          },
+          {
+            frequency: 2432.1,
+            q: 13.63,
+            peak: 3413e3
+          },
+          {
+            frequency: 3368,
+            q: 30.39,
+            peak: 2356e4
+          }
+        ],
+        misfit: 0.0293
+      },
+      {
+        target: 1200,
+        reached: true,
+        coords: [
+          -0.0327985,
+          619915e-8
+        ],
+        second: {
+          frequency: 1200,
+          peak: 3464e4,
+          q: 13.04
+        },
+        resonances: [
+          {
+            frequency: 227.44,
+            q: 0.8326,
+            peak: 4062e3
+          },
+          {
+            frequency: 1196.6,
+            q: 13.42,
+            peak: 3438e4
+          },
+          {
+            frequency: 2409.4,
+            q: 13.47,
+            peak: 376e4
+          },
+          {
+            frequency: 3313.9,
+            q: 30.24,
+            peak: 2142e4
+          }
+        ],
+        misfit: 0.0291
+      },
+      {
+        target: 1225,
+        reached: true,
+        coords: [
+          -0.0319809,
+          828117e-8
+        ],
+        second: {
+          frequency: 1225,
+          peak: 3464e4,
+          q: 13.24
+        },
+        resonances: [
+          {
+            frequency: 227.19,
+            q: 0.8451,
+            peak: 4075e3
+          },
+          {
+            frequency: 1222.5,
+            q: 13.57,
+            peak: 3427e4
+          },
+          {
+            frequency: 2382.5,
+            q: 13.26,
+            peak: 4112e3
+          },
+          {
+            frequency: 3256.6,
+            q: 29.73,
+            peak: 1887e4
+          }
+        ],
+        misfit: 0.0287
+      },
+      {
+        target: 1250,
+        reached: true,
+        coords: [
+          -0.0311473,
+          0.0106675
+        ],
+        second: {
+          frequency: 1250,
+          peak: 3464e4,
+          q: 13.28
+        },
+        resonances: [
+          {
+            frequency: 226.96,
+            q: 0.86,
+            peak: 4091e3
+          },
+          {
+            frequency: 1248.2,
+            q: 13.77,
+            peak: 3459e4
+          },
+          {
+            frequency: 2350.8,
+            q: 13,
+            peak: 441e4
+          },
+          {
+            frequency: 3197.6,
+            q: 28.99,
+            peak: 1595e4
+          }
+        ],
+        misfit: 0.0284
+      },
+      {
+        target: 1275,
+        reached: true,
+        coords: [
+          -0.0301341,
+          0.013408
+        ],
+        second: {
+          frequency: 1275,
+          peak: 3464e4,
+          q: 13.17
+        },
+        resonances: [
+          {
+            frequency: 226.74,
+            q: 0.8782,
+            peak: 4109e3
+          },
+          {
+            frequency: 1273.2,
+            q: 14.02,
+            peak: 351e5
+          },
+          {
+            frequency: 2312.7,
+            q: 12.66,
+            peak: 4568e3
+          },
+          {
+            frequency: 3137.9,
+            q: 27.95,
+            peak: 1282e4
+          }
+        ],
+        misfit: 0.0282
+      },
+      {
+        target: 1300,
+        reached: true,
+        coords: [
+          -0.0285334,
+          0.0164368
+        ],
+        second: {
+          frequency: 1300,
+          peak: 3464e4,
+          q: 13.53
+        },
+        resonances: [
+          {
+            frequency: 226.52,
+            q: 0.9011,
+            peak: 4131e3
+          },
+          {
+            frequency: 1298,
+            q: 14.19,
+            peak: 3485e4
+          },
+          {
+            frequency: 2268.1,
+            q: 12.17,
+            peak: 4491e3
+          },
+          {
+            frequency: 3080.3,
+            q: 26.88,
+            peak: 9914e3
+          }
+        ],
+        misfit: 0.0281
+      },
+      {
+        target: 1325,
+        reached: true,
+        coords: [
+          -0.026208,
+          0.0201988
+        ],
+        second: {
+          frequency: 1324.8,
+          peak: 3457e4,
+          q: 14.02
+        },
+        resonances: [
+          {
+            frequency: 226.26,
+            q: 0.9343,
+            peak: 4159e3
+          },
+          {
+            frequency: 1323.2,
+            q: 14.41,
+            peak: 3447e4
+          },
+          {
+            frequency: 2211.8,
+            q: 11.41,
+            peak: 4031e3
+          },
+          {
+            frequency: 3019.6,
+            q: 25.97,
+            peak: 7159e3
+          }
+        ],
+        misfit: 0.0283
+      },
+      {
+        target: 1350,
+        reached: true,
+        coords: [
+          -0.0250617,
+          0.0201988
+        ],
+        second: {
+          frequency: 1333.9,
+          peak: 3188e4,
+          q: 13.67
+        },
+        resonances: [
+          {
+            frequency: 226.21,
+            q: 0.938,
+            peak: 4163e3
+          },
+          {
+            frequency: 1333.7,
+            q: 13.98,
+            peak: 3173e4
+          },
+          {
+            frequency: 2207.7,
+            q: 11.25,
+            peak: 4109e3
+          },
+          {
+            frequency: 3017.6,
+            q: 26.1,
+            peak: 7386e3
+          }
+        ],
+        misfit: 0.0284
+      },
+      {
+        target: 1375,
+        reached: false,
+        coords: [
+          -0.023544,
+          0.0201988
+        ],
+        second: {
+          frequency: 1348.1,
+          peak: 2859e4,
+          q: 13.21
+        },
+        resonances: [
+          {
+            frequency: 226.14,
+            q: 0.9433,
+            peak: 4167e3
+          },
+          {
+            frequency: 1347.2,
+            q: 13.42,
+            peak: 2837e4
+          },
+          {
+            frequency: 2202.3,
+            q: 11.04,
+            peak: 42e5
+          },
+          {
+            frequency: 3015.6,
+            q: 26.27,
+            peak: 7686e3
+          }
+        ],
+        misfit: 0.0284
+      },
+      {
+        target: 1400,
+        reached: false,
+        coords: [
+          -0.0228835,
+          0.0201988
+        ],
+        second: {
+          frequency: 1353,
+          peak: 2731e4,
+          q: 12.99
+        },
+        resonances: [
+          {
+            frequency: 226.11,
+            q: 0.9457,
+            peak: 4169e3
+          },
+          {
+            frequency: 1352.9,
+            q: 13.18,
+            peak: 2701e4
+          },
+          {
+            frequency: 2200.1,
+            q: 10.95,
+            peak: 4236e3
+          },
+          {
+            frequency: 3015,
+            q: 26.35,
+            peak: 7815e3
+          }
+        ],
+        misfit: 0.0285
+      },
+      {
+        target: 1425,
+        reached: false,
+        coords: [
+          -0.0210284,
+          0.0201988
+        ],
+        second: {
+          frequency: 1368.8,
+          peak: 2365e4,
+          q: 12.29
+        },
+        resonances: [
+          {
+            frequency: 226.01,
+            q: 0.9531,
+            peak: 4174e3
+          },
+          {
+            frequency: 1368.7,
+            q: 12.5,
+            peak: 2348e4
+          },
+          {
+            frequency: 2193.9,
+            q: 10.71,
+            peak: 4326e3
+          },
+          {
+            frequency: 3013.9,
+            q: 26.59,
+            peak: 8176e3
+          }
+        ],
+        misfit: 0.0286
+      },
+      {
+        target: 1450,
+        reached: false,
+        coords: [
+          -0.0205776,
+          0.0201988
+        ],
+        second: {
+          frequency: 1372.1,
+          peak: 2297e4,
+          q: 12.21
+        },
+        resonances: [
+          {
+            frequency: 225.98,
+            q: 0.955,
+            peak: 4175e3
+          },
+          {
+            frequency: 1372.4,
+            q: 12.34,
+            peak: 2268e4
+          },
+          {
+            frequency: 2192.4,
+            q: 10.65,
+            peak: 4345e3
+          },
+          {
+            frequency: 3013.8,
+            q: 26.65,
+            peak: 8263e3
+          }
+        ],
+        misfit: 0.0287
+      },
+      {
+        target: 1475,
+        reached: false,
+        coords: [
+          -0.0200735,
+          0.0201988
+        ],
+        second: {
+          frequency: 1375.7,
+          peak: 2212e4,
+          q: 12.04
+        },
+        resonances: [
+          {
+            frequency: 225.95,
+            q: 0.9572,
+            peak: 4176e3
+          },
+          {
+            frequency: 1376.6,
+            q: 12.16,
+            peak: 2182e4
+          },
+          {
+            frequency: 2190.8,
+            q: 10.59,
+            peak: 4366e3
+          },
+          {
+            frequency: 3013.8,
+            q: 26.73,
+            peak: 8359e3
+          }
+        ],
+        misfit: 0.0287
+      },
+      {
+        target: 1500,
+        reached: false,
+        coords: [
+          -0.0180959,
+          0.0201988
+        ],
+        second: {
+          frequency: 1391.4,
+          peak: 1891e4,
+          q: 11.33
+        },
+        resonances: [
+          {
+            frequency: 225.82,
+            q: 0.9663,
+            peak: 4181e3
+          },
+          {
+            frequency: 1392.7,
+            q: 11.46,
+            peak: 187e5
+          },
+          {
+            frequency: 2184.5,
+            q: 10.36,
+            peak: 444e4
+          },
+          {
+            frequency: 3014.3,
+            q: 27.02,
+            peak: 8733e3
+          }
+        ],
+        misfit: 0.0289
+      },
+      {
+        target: 1525,
+        reached: false,
+        coords: [
+          -0.0177528,
+          0.0201988
+        ],
+        second: {
+          frequency: 1393.8,
+          peak: 1848e4,
+          q: 11.29
+        },
+        resonances: [
+          {
+            frequency: 225.8,
+            q: 0.968,
+            peak: 4181e3
+          },
+          {
+            frequency: 1395.5,
+            q: 11.34,
+            peak: 182e5
+          },
+          {
+            frequency: 2183.4,
+            q: 10.33,
+            peak: 4452e3
+          },
+          {
+            frequency: 3014.5,
+            q: 27.08,
+            peak: 8797e3
+          }
+        ],
+        misfit: 0.029
+      },
+      {
+        target: 1550,
+        reached: false,
+        coords: [
+          -0.0174295,
+          0.0201988
+        ],
+        second: {
+          frequency: 1396,
+          peak: 1805e4,
+          q: 11.21
+        },
+        resonances: [
+          {
+            frequency: 225.77,
+            q: 0.9696,
+            peak: 4182e3
+          },
+          {
+            frequency: 1398.1,
+            q: 11.23,
+            peak: 1774e4
+          },
+          {
+            frequency: 2182.4,
+            q: 10.29,
+            peak: 4462e3
+          },
+          {
+            frequency: 3014.8,
+            q: 27.13,
+            peak: 8857e3
+          }
+        ],
+        misfit: 0.029
+      },
+      {
+        target: 1575,
+        reached: false,
+        coords: [
+          -0.0169087,
+          0.0201988
+        ],
+        second: {
+          frequency: 1399.5,
+          peak: 1732e4,
+          q: 11.03
+        },
+        resonances: [
+          {
+            frequency: 225.74,
+            q: 0.9722,
+            peak: 4183e3
+          },
+          {
+            frequency: 1402.3,
+            q: 11.05,
+            peak: 1703e4
+          },
+          {
+            frequency: 2180.8,
+            q: 10.24,
+            peak: 4479e3
+          },
+          {
+            frequency: 3015.2,
+            q: 27.21,
+            peak: 8953e3
+          }
+        ],
+        misfit: 0.0291
+      }
+    ]
+  }
+};
+
+// public/shared/performers/vocal-tract-played.js
+function playedTract(how, target, baked = vocal_tract_space_default) {
+  const { rows } = baked[how], step = rows[1].target - rows[0].target;
+  const at = Math.min(Math.max((target - rows[0].target) / step, 0), rows.length - 1), k = Math.min(Math.floor(at), rows.length - 2), share = at - k;
+  const [a, b] = [rows[k].resonances, rows[k + 1].resonances], blend = (u, v) => u ** (1 - share) * v ** share;
+  return Array.from({ length: Math.max(a.length, b.length) }, (_, i) => {
+    const p = a[i], q = b[i];
+    if (p && q) return { frequency: blend(p.frequency, q.frequency), q: blend(p.q, q.q), peak: blend(p.peak, q.peak) };
+    const only = p ?? q;
+    return { ...only, peak: only.peak * (p ? 1 - share : share) };
+  }).filter((r) => r.peak > 0);
+}
 
 // public/shared/performers/vocal-tract.js
 var VocalTract = class _VocalTract {
   constructor(resonances = []) {
     this.resonances = resonances.map((r) => ({ frequency: r.frequency, q: r.q, peak: r.peak }));
   }
-  // The tract as the instrument's players keep it in normal playing at a note sounding at `hz`: its first resonance
-  // within its measured range (the geometric middle of each), and above the note's following frequency the resonance
-  // that follows it, as measured (its offset above the note, its peak, on average).
+  // The tract as the instrument's players keep it in normal playing at a note sounding at `hz`: the shape whose
+  // resonance is held where they hold it under the notes it does not follow, and over them follows the note, some way
+  // above it (Chen, Smith & Wolfe 2009 III.C: held near 600 Hz under notes of about 450 Hz, about 150 Hz above the note
+  // over them, at about 9 MPa s/m^3), with every other resonance that shape has.
   static normal(instrument2, hz) {
-    const middle = ([a, b]) => Math.sqrt(a * b), at = (path) => playerEntry(instrument2, `tract.${path}`);
-    const resonances = [{ frequency: middle(at("first.frequency").range), q: player(instrument2, "tract.first.q"), peak: middle(at("first.peak").range) }];
-    if (hz >= player(instrument2, "tract.normal.above"))
-      resonances.push({ frequency: hz + player(instrument2, "tract.normal.offset"), q: player(instrument2, "tract.normal.q"), peak: player(instrument2, "tract.normal.peak") });
-    return new _VocalTract(resonances);
+    return new _VocalTract(playedTract("normal", Math.max(player(instrument2, "tract.normal.held"), hz + player(instrument2, "tract.normal.offset"))));
+  }
+  // The tract bending a note: the shape whose resonance stands at `frequency` at the height bends and glissandi were
+  // measured at (Chen, Smith & Wolfe 2009 III.B), the nearest the shapes come where they come no nearer.
+  static bent(instrument2, frequency) {
+    playerEntry(instrument2, "tract.bend.peak");
+    return new _VocalTract(playedTract("bend", frequency));
   }
   // Its impedance at `hz` (complex, Pa s/m^3): what the reed meets upstream, in series with the bore's.
   impedance(hz) {
@@ -5488,7 +8733,7 @@ function build(s2) {
   const range = (path) => playerEntry(s2.model, `tract.${path}`);
   MEASURED = s2.tractMeasured ? {
     first: { f: range("first.frequency").range, p: range("first.peak").range },
-    above: player(s2.model, "tract.normal.above"),
+    held: player(s2.model, "tract.normal.held"),
     offset: player(s2.model, "tract.normal.offset"),
     normal: player(s2.model, "tract.normal.peak"),
     bend: range("bend.peak").range
@@ -5534,6 +8779,10 @@ function build(s2) {
 }
 function refresh() {
   if (!P || !S?.model) return;
+  if (dragging < 0) {
+    tract = new VocalTract(P.tract ?? []);
+    draw();
+  }
   $2("blow").textContent = P.blowing ? "Blowing" : "Blow";
   $2("blow").classList.toggle("on", P.blowing);
   $2("tongueNow").disabled = !P.blowing || busy;
@@ -5722,7 +8971,7 @@ $2("neutral").onclick = async () => {
   shown2(S);
   if (r.pitch !== void 0) took(r);
   const k = S.neutral ? S.neutral.note : Math.floor(S.notes.length / 2);
-  if (S.kind !== "air" && S.tractMeasured) setTract(VocalTract.normal(S.model, hzOf(S.notes[k])).resonances);
+  if (S.kind !== "air" && S.tractMeasured) sendTract({ follow: true });
 };
 for (const r of document.querySelectorAll("input[name=w-articulation]")) r.onchange = () => sendArticulation({ articulation: r.value });
 $2("repeating").onchange = () => sendRepeat({ on: $2("repeating").checked });
@@ -5798,7 +9047,7 @@ var setTract = (resonances) => {
   draw();
   sendTract({ resonances: tract.resonances });
 };
-$2("normal").onclick = () => setTract(VocalTract.normal(S.model, heard ?? hzOf(P.pitch)).resonances);
+$2("normal").onclick = () => sendTract({ follow: true });
 $2("none").onclick = () => setTract([]);
 var canvas = $2("plot");
 var F = [50, 6e3];
@@ -5833,7 +9082,7 @@ function draw() {
     g.fillStyle = css("--band");
     g.fillRect(x(MEASURED.first.f[0]), y(MEASURED.first.p[1]), x(MEASURED.first.f[1]) - x(MEASURED.first.f[0]), y(MEASURED.first.p[0]) - y(MEASURED.first.p[1]));
     g.fillStyle = css("--bend");
-    g.fillRect(x(MEASURED.above), y(MEASURED.bend[1]), W2 - x(MEASURED.above), y(MEASURED.bend[0]) - y(MEASURED.bend[1]));
+    g.fillRect(x(MEASURED.held), y(MEASURED.bend[1]), W2 - x(MEASURED.held), y(MEASURED.bend[0]) - y(MEASURED.bend[1]));
   }
   g.strokeStyle = css("--line");
   g.fillStyle = css("--muted");
@@ -5861,10 +9110,10 @@ function draw() {
     g.lineTo(x(h * f0), H2);
     g.stroke();
   }
-  if (MEASURED && f0 >= MEASURED.above) {
+  if (MEASURED) {
     g.fillStyle = css("--accent");
     g.beginPath();
-    g.arc(x(f0 + MEASURED.offset), y(MEASURED.normal), 3, 0, 7);
+    g.arc(x(Math.max(MEASURED.held, f0 + MEASURED.offset)), y(MEASURED.normal), 3, 0, 7);
     g.fill();
   }
   const line2 = (fn, color, width, dash = []) => {
@@ -5912,7 +9161,7 @@ function draw() {
 }
 function legend() {
   const brass = S.kind === "lips", air = S.kind === "air";
-  $2("legend").textContent = `Grey: the bore's input impedance ${brass ? S.slide ? "at its slide's nearest position" : S.valves ? "at its fingering, as its valves stand (each pressed past half way)" : "(its one fingering, open)" : "for the nearest charted fingering"}${impedance ? "" : " (being computed: a minute or two, the first time)"}. ` + (air ? "The jet is blown from the mouth's pressure: no tract stands before it in the engine. " : `Red: the tract's impedance; dashed: the two in series, what the ${brass ? "lips meet" : "reed meets"}. `) + "Blue lines: the pitch heard and its harmonics. " + (MEASURED ? `Shaded: measured -- clarinettists' first resonance (Fritz & Wolfe 2005), and above ${MEASURED.above} Hz the peaks of bends and glissandi (Chen, Smith & Wolfe 2009); the dot, where their tract sits in normal playing, ${MEASURED.offset} Hz above the note.` : air ? "" : `No ${label(S.model)} players' tract is measured yet: double-click to add a resonance.`);
+  $2("legend").textContent = `Grey: the bore's input impedance ${brass ? S.slide ? "at its slide's nearest position" : S.valves ? "at its fingering, as its valves stand (each pressed past half way)" : "(its one fingering, open)" : "for the nearest charted fingering"}${impedance ? "" : " (being computed: a minute or two, the first time)"}. ` + (air ? "The jet is blown from the mouth's pressure: no tract stands before it in the engine. " : `Red: the tract's impedance; dashed: the two in series, what the ${brass ? "lips meet" : "reed meets"}. `) + "Blue lines: the pitch heard and its harmonics. " + (MEASURED ? `Shaded: measured -- clarinettists' first resonance (Fritz & Wolfe 2005), and above ${MEASURED.held} Hz the peaks of bends and glissandi (Chen, Smith & Wolfe 2009); the dot, where their tract keeps its resonance in normal playing, ${MEASURED.offset} Hz above the note, held at ${MEASURED.held} Hz under it -- the tract a shape's, its resonances its physics', following the note${P.tractFollows ? "" : " when asked for again"}.` : air ? "" : `No ${label(S.model)} players' tract is measured yet: double-click to add a resonance.`);
 }
 var dragging = -1;
 var near = (e) => {

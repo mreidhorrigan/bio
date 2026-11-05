@@ -1960,14 +1960,12 @@ var winds_default2 = {
           resonances: { value: [300, 1300, 2300], unit: "Hz", kind: "literature", source: "fritz-wolfe-2005", at: "II.D", note: "usually three resonances of the tract from 0.1 to 3 kHz, typically at 0.3, 1.3 and 2.3 kHz, varying among players and playing conditions" },
           first: {
             frequency: { range: [200, 300], unit: "Hz", kind: "literature", source: "fritz-wolfe-2005", at: "III; Table I", note: "its first peak present for every player, hardly varied with how they played: 200-300 Hz (220-280 in Table I)" },
-            peak: { range: [18e5, 56e5], unit: "Pa s/m^3", kind: "literature", source: "fritz-wolfe-2005", at: "III; Table I", note: "1.8-5.6 MPa s/m^3 for most players (to 18 in Table I), a tenth of the bore's" },
-            q: { value: 4, unit: "", kind: "unmeasured", reason: "ours: a start for the player's ear (native/openwind/live.mjs) and the fit; its width is drawn in the measured spectra but nowhere given", searched: [{ where: "registry sources", query: "fritz-wolfe-2005: the tract's impedance in clarinettists' mouths as they played", date: "2026-10-30", found: "each resonance's frequency and its peak's magnitude (Table I; Figs. 5-8), drawn but not given as a width or Q; its waveguide model's losses (wall r = 408 rad/s, w/2pi 15 Hz; q 4 rad/s; 1.5 MPa s/m^3 at the glottis), not a resonance's width" }, { where: "registry sources", query: "chen-smith-wolfe-2009: the impedance in the mouth during normal playing, bends and glissandi", date: "2026-10-30", found: "each resonance's frequency and magnitude (Fig. 7), no width" }] }
+            peak: { range: [18e5, 56e5], unit: "Pa s/m^3", kind: "literature", source: "fritz-wolfe-2005", at: "III; Table I", note: "1.8-5.6 MPa s/m^3 for most players (to 18 in Table I), a tenth of the bore's" }
           },
           normal: {
-            above: { value: 600, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "above about 600 Hz in normal playing the resonance in the mouth follows the note; below, the tract kept as it is" },
-            offset: { value: 150, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "the resonance in the mouth about 150 Hz above the sounding pitch, on average, in normal playing above 600 Hz" },
-            peak: { value: 9e6, unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "about 9 MPa s/m^3 on average in normal playing, against the operating bore peak's 40-90: little effect on the sounding frequency" },
-            q: { value: 8, unit: "", kind: "unmeasured", reason: "ours: a start for the player's ear (native/openwind/live.mjs) and the fit; its width is drawn in the measured spectra but nowhere given", searched: [{ where: "registry sources", query: "fritz-wolfe-2005: the tract's impedance in clarinettists' mouths as they played", date: "2026-10-30", found: "each resonance's frequency and its peak's magnitude (Table I; Figs. 5-8), drawn but not given as a width or Q; its waveguide model's losses (wall r = 408 rad/s, w/2pi 15 Hz; q 4 rad/s; 1.5 MPa s/m^3 at the glottis), not a resonance's width" }, { where: "registry sources", query: "chen-smith-wolfe-2009: the impedance in the mouth during normal playing, bends and glissandi", date: "2026-10-30", found: "each resonance's frequency and magnitude (Fig. 7), no width" }] }
+            held: { value: 600, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "under notes of about 450 Hz the resonance in the mouth held at a constant frequency, near 600 Hz for these players; over them, it follows the note (offset)" },
+            offset: { value: 150, unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "the resonance in the mouth about 150 Hz (100-200) above the sounding pitch, on average, in normal playing from notes of about 450 Hz to at least 1400" },
+            peak: { value: 9e6, unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.C", note: "about 9 MPa s/m^3 on average in normal playing, against the operating bore peak's 40-90: little effect on the sounding frequency" }
           },
           bend: {
             peak: { range: [2e7, 6e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2009", at: "III.B", note: "pitch bending and glissandi in the second register and above: as high as 60 MPa s/m^3, comparable with the bore's; 32 at 705 Hz bent a note 190 cents" }
@@ -2468,6 +2466,12 @@ var personality_default = {
         toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
         vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
         harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
+        tuplets: { range: [0, 1], unit: "share", kind: "setting", reason: `its rhythm on the rhythm engine (line-rhythm.js, where its player is switched to it): how much a division other than the meter space's own two and three weighs against them (meter-space.js METER_SPACE.layers), from none -- only twos and threes -- to as much as a three: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note (the owner, 2 October 2026: "make sure EVERY tuplet ratio is allowed")` },
+        syncopation: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how often a span whose parts are alike has the layer under them regrouped by a syncopation and its resolution (euclidean.js syncopate), from never to wherever one fits" },
+        syncopationLength: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: a syncopation's length L in events (the owner, 4 November 2026), drawn from two of its span's parts to all of them, toward the whole by this share (line-rhythm.js toward: a half draws evenly)" },
+        syncopationMeter: { range: [0.3, 1], unit: "share", kind: "setting", reason: `its rhythm on the engine: a syncopation's meter M, a cardinality dissonant with its layer that repeats in L, drawn toward the largest by this share: "usually weighted toward L" (the owner, 4 November 2026), so most players' shares lean toward it and some away` },
+        syncopationRepeats: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how many times a syncopation's meter repeats in L (the owner, 4 November 2026), toward the most by this share" },
+        syncopationWithin: { range: [0, 0.7], unit: "share", kind: "setting", reason: `its rhythm on the engine: the length, 0 to L, of a syncopation within the syncopation, its groups beginning there syncopated again -- "the usual weighting is toward 0, but it's not the only possible one" (the owner, 4 November 2026): most players' shares lean toward 0, some toward L` },
         rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
       }
     }
@@ -3698,25 +3702,6 @@ var RHYTHM_VOCABULARY = Object.freeze(Object.fromEntries([
   clave({ id: "brazilian.bossa-nova-clave", tradition: "Brazilian", name: "Bossa nova clave", pulses: 16, onsets: [0, 3, 6, 10, 13], direction: null, source: [TOUSSAINT] })
 ].map((record2) => [record2.id, record2])));
 
-// public/shared/meter-space.js
-var METER_SPACE = Object.freeze({
-  numerators: Object.freeze([1, 40]),
-  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
-  // with a tempo).
-  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
-  // A bar's groups: 2s and 3s mostly, now and then a 1 or a 4.
-  groupSizes: Object.freeze([[2, 4], [3, 4], [1, 0.3], [4, 1]].map(Object.freeze)),
-  // The share of draws grouped as they draw, rather than as the meter's most-threes.
-  ownGrouping: 0.7,
-  // Pulses a unit.
-  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
-  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
-  talas: 0.12,
-  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
-  barSeconds: Object.freeze([0.5, 10])
-});
-var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
-
 // public/shared/felt-meter-catalog.js
 var freeze2 = (value3) => {
   if (value3 && typeof value3 === "object") {
@@ -3768,20 +3753,6 @@ var FELT_METER_POLICY = freeze2({
 });
 var FELT_METER_CATALOG = FELT_METER_POLICY.catalog;
 
-// public/shared/tempo-range.js
-var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
-
-// public/shared/meter-reading.js
-var EDITORIAL_ACTIONS = Object.freeze([
-  "PUBLISH_STANDARD",
-  "PUBLISH_GROUPED",
-  "PUBLISH_SPECIALIST_WITH_LEGEND",
-  "KEEP_WITH_SUPPORT",
-  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
-  "HOLD_FOR_REVIEW",
-  "FREE_TIME_BY_INTENT"
-]);
-
 // public/shared/metric-home/nested.js
 var NESTING = Object.freeze({
   // The longest group a listener hears as one (seconds; meterform_clodbot's and grouping-choice.js's longestGroupSeconds,
@@ -3798,6 +3769,9 @@ var NESTING = Object.freeze({
   maxParts: 3
 });
 
+// public/shared/tempo-range.js
+var TEMPO_LIMITS = Object.freeze({ notated: Object.freeze([40, 220]), coordinate: Object.freeze([30, 720]) });
+
 // public/shared/felt-tempo.js
 var value2 = (text) => {
   const [n, d = "1"] = String(text).split("/");
@@ -3809,6 +3783,41 @@ var FELT_TEMPO = Object.freeze({
   favoredBeat: Object.freeze(band(FELT_METER_POLICY.favoredBeatSeconds)),
   longestBarSeconds: NESTING.longestSeconds
 });
+
+// public/shared/euclidean.js
+var RHYTHM = Object.freeze({
+  beat: Object.freeze([60 / setting("rhythm-layers", "fastestBeat"), 60 / setting("rhythm-layers", "slowestBeat")]),
+  shortestPeriod: setting("rhythm-layers", "shortestPeriod")
+});
+
+// public/shared/meter-space.js
+var METER_SPACE = Object.freeze({
+  numerators: Object.freeze([1, 40]),
+  // Power-of-two denominators mostly; the irrational ones besides (docs/NOTATION.md writes those as the real meter nearest,
+  // with a tempo).
+  denominators: Object.freeze([[2, 1], [3, 1], [4, 4], [5, 1], [6, 1], [8, 4], [10, 1], [12, 2], [16, 3], [24, 1], [32, 1]].map(Object.freeze)),
+  // The parts a span of a bar is split into at each level of its nesting, two or three (never more than three under
+  // one: metric-home/grouping.js MAX_GROUPS_UNDER_ONE), down to its groups of two and three units (drawGrouping).
+  layers: Object.freeze([[2, 1], [3, 1]].map(Object.freeze)),
+  // Pulses a unit.
+  subdivisions: Object.freeze([[1, 1], [2, 3], [3, 2], [4, 3], [5, 1], [6, 1]].map(Object.freeze)),
+  // The share of draws that are a named cycle (the rhythm vocabulary's talas).
+  talas: 0.12,
+  // A bar the band plays, in seconds at its tempo (longer bars: meterform's sections).
+  barSeconds: Object.freeze([0.5, 10])
+});
+var TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id) => RHYTHM_VOCABULARY[id].kind === "tala").sort());
+
+// public/shared/meter-reading.js
+var EDITORIAL_ACTIONS = Object.freeze([
+  "PUBLISH_STANDARD",
+  "PUBLISH_GROUPED",
+  "PUBLISH_SPECIALIST_WITH_LEGEND",
+  "KEEP_WITH_SUPPORT",
+  "PREFER_LOCAL_BARS_WITH_CYCLE_BRACKET",
+  "HOLD_FOR_REVIEW",
+  "FREE_TIME_BY_INTENT"
+]);
 
 // public/shared/opening-time.js
 var DEFAULT_SEED = 20260916;
@@ -3823,6 +3832,11 @@ var OPENING_TIME = Object.freeze({
   // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
   reference: 4
 });
+
+// public/shared/performers/line-rhythm.js
+var RHYTHM_SHARES = Object.freeze(["tuplets", "syncopation", "length", "meter", "repeats", "within"]);
+var LAYERS = new Map(METER_SPACE.layers);
+var LEAST = Math.min(...LAYERS.values());
 
 // public/shared/performers/line.js
 var LINE = Object.freeze({
@@ -3888,7 +3902,10 @@ var LINE = Object.freeze({
   // A phrase's swell (phraseSwell): its level from this share of its loudness at its ends to this at its apex, and where
   // in the phrase its apex may be.
   swell: Object.freeze([0.65, 1.25]),
-  peak: Object.freeze([0.2, 0.9])
+  peak: Object.freeze([0.2, 0.9]),
+  // Its rhythms on the rhythm engine (line-rhythm.js): its player's shares (personality.js playingOf: tuplets,
+  // syncopation, length, meter, repeats, within), or none, its own rhythms as above.
+  rhythm: null
 });
 var PHRASE_OFFSETS = Object.freeze([0, 1 / 2, 1 / 4, 3 / 4]);
 
@@ -16334,8 +16351,8 @@ var FAMILY = {
 };
 
 // public/shared/performers/personality.js
-var LATER = Object.freeze(["tone"]);
-var LEVERS = Object.freeze(["daring", "density", "loudness", "fioriture", "leap", "slurs", "motifLength", "runs", "rests", "commas", "landing", "phraseRange", "quoting", ...LATER]);
+var RHYTHM_LEVERS = Object.freeze(["tuplets", "syncopation", "syncopationLength", "syncopationMeter", "syncopationRepeats", "syncopationWithin"]);
+var LEVERS = Object.freeze(["daring", "density", "loudness", "fioriture", "leap", "slurs", "motifLength", "runs", "rests", "commas", "landing", "phraseRange", "quoting", "tone", ...RHYTHM_LEVERS]);
 var TONE_RANGES = Object.freeze(["vibrato", "depth", "pressure", "contact"]);
 var RANGE = "personality";
 var ORDINARY = Object.freeze({ vibrato: () => 1 / setting(RANGE, "vibratoMost"), depth: () => 0, pressure: () => 1 / 2, contact: () => 1 / 2 });
