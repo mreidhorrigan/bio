@@ -2474,6 +2474,23 @@ var personality_default = {
   }
 };
 
+// registry/method/rhythm.json
+var rhythm_default = {
+  schema: "musebots.registry-methods/1",
+  about: "The rhythm engine (docs/RHYTHM_TO_FORM.md, the owner's specification, 4 November 2026; public/shared/euclidean.js): its rhythmic layers, an isochronous chain, each M events of the one below per event of its own, from the shortest a listener hears as rhythm up to the piece.",
+  methods: {
+    "rhythm-layers": {
+      about: "Where the layers stand in time: the beat's band, in which the layer X(0) lies, and the shortest period any layer has (euclidean.js RHYTHM, layerChain, divisions).",
+      source: "ours",
+      settings: {
+        slowestBeat: { value: 60, unit: "BPM", kind: "setting", reason: "the owner, 4 November 2026: X(0) is 'an isochronous continuing series of events ... in the tempo range of about 60–180 BPM (1–3 Hz)'; 'The tempo is based approximately on human heart rates'" },
+        fastestBeat: { value: 180, unit: "BPM", kind: "setting", reason: "the owner's band's fastest, as slowestBeat" },
+        shortestPeriod: { value: 0.05, unit: "s", kind: "setting", reason: "the owner, 4 November 2026: 'Layer X(n) is the minimum layer if its period is less than 50ms (or its tempo is less than 20Hz). This minimum results from the phenomenal threshold at which tempo becomes pitch': read as the shortest period a layer may have, a layer under it being pitch, not rhythm" }
+      }
+    }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x = 1, y = b / a;
@@ -2561,7 +2578,8 @@ var FILES = Object.freeze({
   "stimuli/stimuli.json": stimuli_default,
   "method/strings.json": strings_default,
   "method/levels.json": levels_default,
-  "method/personality.json": personality_default
+  "method/personality.json": personality_default,
+  "method/rhythm.json": rhythm_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
@@ -24663,6 +24681,7 @@ var brass_lips_targets_default = {
     boutin2020: { authors: "H. Boutin, J. Smith & J. Wolfe", year: 2020, title: 'Trombone lip mechanics with inertive and compliant loads ("lipping up and down")', journal: "J. Acoust. Soc. Am. 147(6), 4133-4144", doi: "10.1121/10.0001466", held: "research-downloads/brass/lips/boutin-2020-lipping/" },
     schwab2004: { authors: "B. Schwab & A. Schultze-Florey", year: 2004, title: "Velopharyngeal insufficiency in woodwind and brass players", journal: "Medical Problems of Performing Artists 19, 21-25", doi: "10.21091/mppa.2004.1004", held: "no: as campbell2021 (Sect. 2.1.3) reports it" },
     newton2008: { authors: "M. J. Newton, M. Campbell & J. Gilbert", year: 2008, title: "Mechanical response measurements of real and artificial brass players lips", journal: "J. Acoust. Soc. Am. 123(1), EL14-EL20", doi: "10.1121/1.2805042", held: "research-downloads/brass/from-owner-2026-10-24/el14_1_1.2805042.pdf" },
+    newton2009: { authors: "M. J. Newton", year: 2009, title: "Experimental mechanical and fluid mechanical investigations of the brass instrument lip-reed and the human vocal folds", journal: "PhD thesis, University of Edinburgh (M. Campbell supervising)", handle: "http://hdl.handle.net/1842/3140", held: "research-downloads/brass/lips/newton-2009-thesis/MichaelNewton_PhDThesis_May2009.pdf" },
     cullen2000: { authors: "J. S. Cullen, J. Gilbert & D. M. Campbell", year: 2e3, title: "Brass instruments: linear stability analysis and experiments with an artificial mouth", journal: "Acta Acustica united with Acustica 86(4), 704-724", doi: null, hal: "hal-00474993", held: "research-downloads/brass/lips/cullen-2000/ (its text layer unreadable: read from its pages; Crossref holds no DOI for it)" },
     velut2017: { authors: "L. Velut, C. Vergez, J. Gilbert & M. Djahanbani", year: 2017, title: "How well can linear stability analysis predict the behaviour of an outward-striking valve brass instrument model?", journal: "Acta Acustica united with Acustica 103(1), 132-148", doi: "10.3813/AAA.919039", held: "research-downloads/brass/from-owner-2026-10-25/VelutEtColl_LSABrassInstrumentPedalNote_AAA2017.pdf" },
     stevenson2009: { authors: "S. D. F. Stevenson", year: 2009, title: "Experimental investigations of lip motion in brass instrument playing", type: "PhD thesis, University of Edinburgh (supervised by D. M. Campbell)", doi: null, handle: "http://hdl.handle.net/1842/4349", held: "research-downloads/brass/lips/stevenson-2009/Stevenson2009.pdf (the Edinburgh Research Archive's, fetched 31 October 2026)" },
@@ -24777,7 +24796,9 @@ var brass_lips_targets_default = {
       outward: [
         { note: "B-flat 1", hz: 58, resonance: 32, inward: 74, from: "the text", says: "In the case of the B1 pedal note shown in the figure this resonance was at 32 Hz, identified from the -90 degree phase crossing. The played frequency was 58 Hz ... For the B1 pedal note this resonance was at 74 Hz" },
         { note: "F2", hz: 87, resonance: [49, 60], from: "Fig. 4, its phase read by tools/figure_crossings.py: near -90 degrees from 49 to 60 Hz" },
-        { note: "B-flat 2", hz: 116, resonance: 76.5, from: "Fig. 4, its phase read by tools/figure_crossings.py (its B-flat 1 read 33.7 Hz against the text's 32)" }
+        { note: "B-flat 2", hz: 116, resonance: 76.5, from: "Fig. 4, its phase read by tools/figure_crossings.py (its B-flat 1 read 33.7 Hz against the text's 32)" },
+        { note: "B-flat 2", hz: 116, resonance: [55, 58], inward: [165, 173], player: "TJ", source: "newton2009", from: "section 4.4.2, Fig. 4.12, the text", says: "For this embouchure the dominant resonance occurred between 55Hz and 58Hz in the magnitude curves ... Both curves in figure 4.12 show a clear second resonance, which occurs between 165Hz and 173Hz" },
+        { note: "F3", hz: 170, resonance: 100, inward: 200, player: "TJ", source: "newton2009", from: "section 4.4.2, Fig. 4.13, the text: F3 played at 170 Hz on the double-shanked mouthpiece", says: "Once again a clear outward striking resonance can be seen at approximately 100Hz, with a Q factor of about 1.7 ... A further resonance is also seen around 200Hz, which shows inward striking character" }
       ],
       tolerance: { value: 0.05, says: "the resonance frequencies and the phase angles at these frequencies match to within 5% (the video method against the transmission method, on artificial lips)" },
       says: "All curves reveal one dominant resonance. This resonance consistently lies below the frequency of the played note ... the playing frequencies of all the notes fell between the two resonances"
@@ -25090,6 +25111,22 @@ var BRASS = Object.freeze({
     // its rim): its valve slides unmeasured, its list its open path.)
     valves: Object.freeze({ position: Object.freeze(TRUMPET_VALVES.map((x) => +(x + TRUMPET_ADDED).toFixed(2))), short: Object.freeze([20, 20, 20]), bypass: Object.freeze([150.2, 63.9, 241.4]) }),
     lips: Object.freeze({ Sr: 146e-7, mu: 537e-7, sigma: 10, H: 29e-5, w: 0.01 }),
+    // (Its lips as measured, two modes -- the dial's bodies' (save_brass_body.py given), NESS's where
+    // MUSEBOTS_NESS_LIPS=measured (NESS_LIPS). Fitted (tools/fit_lips.py fit --second, measuredLipsFit) to a trumpeter's
+    // measured thresholds at F3, C4, F4, C5 and F5 (brass-lips-targets.json: Fletcher & Tarnopolsky 1999's GC), each met
+    // within 4% of its spread on its partial, and to the trombonists' lips as measured in their mouthpieces (Newton,
+    // Campbell & Gilbert 2008; Newton 2009), each register's at the share of its note theirs stood at: its outward lips at
+    // 0.57 to 0.66 of its notes at Q 1.47 to 1.49, its inward at 1.35 to 1.40 of them -- the one-mass lips above at Q 63 to
+    // 290 over its registers, where players' are damped to 1.2-1.8. Above F5 its F5's; its NESS calibration not yet
+    // measured on them, 4 November 2026.)
+    measuredLips: Object.freeze([
+      Object.freeze([100.314, Object.freeze({ Sr: 1526e-8, mu: 5185e-8, sigma: 428, H: 2823e-7, w: 9991e-6, inwardRatio: 2.355, inwardQ: 1.7, inwardCoupling: 1.139 })]),
+      Object.freeze([165.917, Object.freeze({ Sr: 2001e-8, mu: 4374e-8, sigma: 700.2, H: 2568e-7, w: 974e-5, inwardRatio: 2.179, inwardQ: 1.776, inwardCoupling: 1.089 })]),
+      Object.freeze([215.434, Object.freeze({ Sr: 1936e-8, mu: 4494e-8, sigma: 912.3, H: 2554e-7, w: 9483e-6, inwardRatio: 2.195, inwardQ: 1.75, inwardCoupling: 1.165 })]),
+      Object.freeze([346.228, Object.freeze({ Sr: 3367e-8, mu: 3491e-8, sigma: 1467, H: 2444e-7, w: 8647e-6, inwardRatio: 2.111, inwardQ: 1.752, inwardCoupling: 1.082 })]),
+      Object.freeze([463.721, Object.freeze({ Sr: 3303e-8, mu: 319e-7, sigma: 1956, H: 2239e-7, w: 9671e-6, inwardRatio: 2.099, inwardQ: 1.772, inwardCoupling: 1.103 })])
+    ]),
+    measuredLipsFit: "lips-fits/trumpet-second.json",
     // (Its mouth pressure from the softest note to the loudest, Pa: the documented examples' 1.8 to 4 kPa, a little wider.)
     pressure: Object.freeze([1500, 6e3]),
     mutes: kitOf("trumpet")
@@ -25124,21 +25161,21 @@ var BRASS = Object.freeze({
       Object.freeze([89.415, Object.freeze({ Sr: 3139e-8, mu: 1174e-7, sigma: 6.901, H: 4074e-7, w: 0.01278 })]),
       Object.freeze([305.164, Object.freeze({ Sr: 2719e-8, mu: 1684e-7, sigma: 8.611, H: 2574e-7, w: 0.01183 })])
     ]),
-    // (Its lips as measured, two modes -- played where MUSEBOTS_NESS_LIPS=measured (NESS_LIPS), with their own calibration
-    // (NESS_CALIBRATION_FILES.measured); not yet by default: its legato phrase's first slur breaks where the slide begins
-    // to move, 13 dB for some 15 ms (research/MODELING_GAPS.md, "A slurred trombone's tone breaks on its measured lips"),
-    // and its notes 73-77 are unheld (its lips above F4 unmeasured). Fitted (tools/fit_lips.py fit --second,
-    // lips-fits/trombone.json) to the same targets and to Newton, Campbell & Gilbert 2008's measured lips: the outward
-    // resonance under the note at Q 1.2-1.8, an inward one above it -- its inward mode played by NESS's inward-lips patch
-    // (inwardOf). Reached by continuation from the one-mass fit, which went no nearer the measured damping than 0.86 of
-    // the way: the outward lips at Q 1.46 and 1.53 and B-flat 2's at 75.99 Hz (measured 76.5), the inward at 148.2 Hz
-    // (Newton's ratio: 148.7); B-flat 2 1.4% over its resonance (players 1.1%), its harmonic within 0.6 dB and F4's 0.8,
-    // F4's threshold 4% over its measured one; NESS holds B-flat 2 and F4 at the players' pressures within 1.8 and 3.6
-    // cents of the balance (research/BRASS_LIPS_FIT_PLAN.md Status).)
+    // (Its lips as measured, two modes -- the dial's bodies' (save_brass_body.py given), NESS's where
+    // MUSEBOTS_NESS_LIPS=measured (NESS_LIPS), with their own calibration (NESS_CALIBRATION_FILES.measured); not yet NESS's
+    // by default: on the lips before these its legato phrase's first slur broke where the slide began to move, 13 dB for
+    // some 15 ms (research/MODELING_GAPS.md, "A slurred trombone's tone breaks on its measured lips"), and that
+    // calibration is of those lips, not yet measured again on these. Fitted (tools/fit_lips.py fit --second,
+    // measuredLipsFit) to the same targets and to the trombonists' lips as measured in their mouthpieces (Newton, Campbell
+    // & Gilbert 2008; Newton 2009's second player, 4 November 2026), each register's at the share of its note theirs stood
+    // at: the outward lips at 0.65 and 0.67 of B-flat 2 and F4 at Q 1.46 and 1.48 -- F4's at 0.86 before, unanchored, over
+    // every measured player's -- the inward at 1.30 and 1.38 of them; their harmonics, flows and thresholds within their
+    // spreads. Reached by continuation from the one-mass fit; its notes above F4 F4's lips, unmeasured.)
     measuredLips: Object.freeze([
-      Object.freeze([75.986, Object.freeze({ Sr: 3522e-8, mu: 895e-7, sigma: 326.2, H: 4878e-7, w: 0.013, inwardRatio: 1.951, inwardQ: 1.613, inwardCoupling: 1.314 })]),
-      Object.freeze([302.242, Object.freeze({ Sr: 3806e-8, mu: 9776e-8, sigma: 1238, H: 172e-6, w: 0.01198, inwardRatio: 1.482, inwardQ: 1.798, inwardCoupling: 1.27 })])
+      Object.freeze([75.827, Object.freeze({ Sr: 34e-6, mu: 9126e-8, sigma: 326.4, H: 5251e-7, w: 0.01302, inwardRatio: 1.993, inwardQ: 1.611, inwardCoupling: 1.373 })]),
+      Object.freeze([235.516, Object.freeze({ Sr: 6076e-8, mu: 1286e-7, sigma: 999.7, H: 1523e-7, w: 0.0119, inwardRatio: 2.04, inwardQ: 1.676, inwardCoupling: 1.198 })])
     ]),
+    measuredLipsFit: "lips-fits/trombone-second.json",
     pressure: Object.freeze([1e3, 5e3]),
     mutes: kitOf("trombone")
   }),
@@ -25155,6 +25192,18 @@ var BRASS = Object.freeze({
     // 337 cents -- and to be sized again on this bore (scripts/size-ness-valves.mjs).)
     valves: Object.freeze({ position: Object.freeze([1500, 1530, 1560]), short: Object.freeze([20, 20, 20]), bypass: Object.freeze([371, 162, 625]) }),
     lips: Object.freeze({ Sr: 12e-6, mu: 46e-6, sigma: 10, H: 26e-5, w: 9e-3 }),
+    // (Its lips as measured, two modes -- the dial's bodies' (save_brass_body.py given), NESS's where
+    // MUSEBOTS_NESS_LIPS=measured. Fitted (tools/fit_lips.py fit --second, measuredLipsFit) to its players' F3 threshold
+    // (Stevenson 2009's JC) and A4 blown pp (Bouhuys 1964), each on its partial, and to the trombonists' lips as measured
+    // in their mouthpieces (Newton, Campbell & Gilbert 2008; Newton 2009), each register's at the share of its note theirs
+    // stood at: its outward lips at 0.58 and 0.67 of F3 and A4 at Q 1.42 and 1.47, its inward at 1.34 and 1.39 of them --
+    // the one-mass lips above at Q 63 to 185 over its registers. Its NESS calibration not yet measured on them, 4 November
+    // 2026.)
+    measuredLips: Object.freeze([
+      Object.freeze([101.063, Object.freeze({ Sr: 1019e-8, mu: 554e-7, sigma: 447.6, H: 2889e-7, w: 8116e-6, inwardRatio: 2.318, inwardQ: 1.714, inwardCoupling: 1.25 })]),
+      Object.freeze([294.312, Object.freeze({ Sr: 1898e-8, mu: 2951e-8, sigma: 1255, H: 2571e-7, w: 0.01366, inwardRatio: 2.079, inwardQ: 1.839, inwardCoupling: 1.19 })])
+    ]),
+    measuredLipsFit: "lips-fits/horn-second.json",
     pressure: Object.freeze([1200, 5500]),
     mutes: kitOf("horn")
   }),

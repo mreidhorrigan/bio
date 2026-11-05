@@ -42,6 +42,7 @@ var brass_lips_targets_default = {
     boutin2020: { authors: "H. Boutin, J. Smith & J. Wolfe", year: 2020, title: 'Trombone lip mechanics with inertive and compliant loads ("lipping up and down")', journal: "J. Acoust. Soc. Am. 147(6), 4133-4144", doi: "10.1121/10.0001466", held: "research-downloads/brass/lips/boutin-2020-lipping/" },
     schwab2004: { authors: "B. Schwab & A. Schultze-Florey", year: 2004, title: "Velopharyngeal insufficiency in woodwind and brass players", journal: "Medical Problems of Performing Artists 19, 21-25", doi: "10.21091/mppa.2004.1004", held: "no: as campbell2021 (Sect. 2.1.3) reports it" },
     newton2008: { authors: "M. J. Newton, M. Campbell & J. Gilbert", year: 2008, title: "Mechanical response measurements of real and artificial brass players lips", journal: "J. Acoust. Soc. Am. 123(1), EL14-EL20", doi: "10.1121/1.2805042", held: "research-downloads/brass/from-owner-2026-10-24/el14_1_1.2805042.pdf" },
+    newton2009: { authors: "M. J. Newton", year: 2009, title: "Experimental mechanical and fluid mechanical investigations of the brass instrument lip-reed and the human vocal folds", journal: "PhD thesis, University of Edinburgh (M. Campbell supervising)", handle: "http://hdl.handle.net/1842/3140", held: "research-downloads/brass/lips/newton-2009-thesis/MichaelNewton_PhDThesis_May2009.pdf" },
     cullen2000: { authors: "J. S. Cullen, J. Gilbert & D. M. Campbell", year: 2e3, title: "Brass instruments: linear stability analysis and experiments with an artificial mouth", journal: "Acta Acustica united with Acustica 86(4), 704-724", doi: null, hal: "hal-00474993", held: "research-downloads/brass/lips/cullen-2000/ (its text layer unreadable: read from its pages; Crossref holds no DOI for it)" },
     velut2017: { authors: "L. Velut, C. Vergez, J. Gilbert & M. Djahanbani", year: 2017, title: "How well can linear stability analysis predict the behaviour of an outward-striking valve brass instrument model?", journal: "Acta Acustica united with Acustica 103(1), 132-148", doi: "10.3813/AAA.919039", held: "research-downloads/brass/from-owner-2026-10-25/VelutEtColl_LSABrassInstrumentPedalNote_AAA2017.pdf" },
     stevenson2009: { authors: "S. D. F. Stevenson", year: 2009, title: "Experimental investigations of lip motion in brass instrument playing", type: "PhD thesis, University of Edinburgh (supervised by D. M. Campbell)", doi: null, handle: "http://hdl.handle.net/1842/4349", held: "research-downloads/brass/lips/stevenson-2009/Stevenson2009.pdf (the Edinburgh Research Archive's, fetched 31 October 2026)" },
@@ -156,7 +157,9 @@ var brass_lips_targets_default = {
       outward: [
         { note: "B-flat 1", hz: 58, resonance: 32, inward: 74, from: "the text", says: "In the case of the B1 pedal note shown in the figure this resonance was at 32 Hz, identified from the -90 degree phase crossing. The played frequency was 58 Hz ... For the B1 pedal note this resonance was at 74 Hz" },
         { note: "F2", hz: 87, resonance: [49, 60], from: "Fig. 4, its phase read by tools/figure_crossings.py: near -90 degrees from 49 to 60 Hz" },
-        { note: "B-flat 2", hz: 116, resonance: 76.5, from: "Fig. 4, its phase read by tools/figure_crossings.py (its B-flat 1 read 33.7 Hz against the text's 32)" }
+        { note: "B-flat 2", hz: 116, resonance: 76.5, from: "Fig. 4, its phase read by tools/figure_crossings.py (its B-flat 1 read 33.7 Hz against the text's 32)" },
+        { note: "B-flat 2", hz: 116, resonance: [55, 58], inward: [165, 173], player: "TJ", source: "newton2009", from: "section 4.4.2, Fig. 4.12, the text", says: "For this embouchure the dominant resonance occurred between 55Hz and 58Hz in the magnitude curves ... Both curves in figure 4.12 show a clear second resonance, which occurs between 165Hz and 173Hz" },
+        { note: "F3", hz: 170, resonance: 100, inward: 200, player: "TJ", source: "newton2009", from: "section 4.4.2, Fig. 4.13, the text: F3 played at 170 Hz on the double-shanked mouthpiece", says: "Once again a clear outward striking resonance can be seen at approximately 100Hz, with a Q factor of about 1.7 ... A further resonance is also seen around 200Hz, which shows inward striking character" }
       ],
       tolerance: { value: 0.05, says: "the resonance frequencies and the phase angles at these frequencies match to within 5% (the video method against the transmission method, on artificial lips)" },
       says: "All curves reveal one dominant resonance. This resonance consistently lies below the frequency of the played note ... the playing frequencies of all the notes fell between the two resonances"
@@ -3384,6 +3387,23 @@ var personality_default = {
   }
 };
 
+// registry/method/rhythm.json
+var rhythm_default = {
+  schema: "musebots.registry-methods/1",
+  about: "The rhythm engine (docs/RHYTHM_TO_FORM.md, the owner's specification, 4 November 2026; public/shared/euclidean.js): its rhythmic layers, an isochronous chain, each M events of the one below per event of its own, from the shortest a listener hears as rhythm up to the piece.",
+  methods: {
+    "rhythm-layers": {
+      about: "Where the layers stand in time: the beat's band, in which the layer X(0) lies, and the shortest period any layer has (euclidean.js RHYTHM, layerChain, divisions).",
+      source: "ours",
+      settings: {
+        slowestBeat: { value: 60, unit: "BPM", kind: "setting", reason: "the owner, 4 November 2026: X(0) is 'an isochronous continuing series of events ... in the tempo range of about 60–180 BPM (1–3 Hz)'; 'The tempo is based approximately on human heart rates'" },
+        fastestBeat: { value: 180, unit: "BPM", kind: "setting", reason: "the owner's band's fastest, as slowestBeat" },
+        shortestPeriod: { value: 0.05, unit: "s", kind: "setting", reason: "the owner, 4 November 2026: 'Layer X(n) is the minimum layer if its period is less than 50ms (or its tempo is less than 20Hz). This minimum results from the phenomenal threshold at which tempo becomes pitch': read as the shortest period a layer may have, a layer under it being pitch, not rhythm" }
+      }
+    }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x = 1, y = b / a;
@@ -3471,7 +3491,8 @@ var FILES = Object.freeze({
   "stimuli/stimuli.json": stimuli_default,
   "method/strings.json": strings_default,
   "method/levels.json": levels_default,
-  "method/personality.json": personality_default
+  "method/personality.json": personality_default,
+  "method/rhythm.json": rhythm_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
@@ -5090,6 +5111,35 @@ var LEVELLED = Object.freeze(["openwind", "ness"]);
 // render/synthesis/src/openwind-passages.mjs
 var VIBRATO_SHARE = 4e-3;
 
+// public/shared/performers/brass-tongue.js
+var TONGUE_OPENING = Object.freeze({
+  rate: 25e-4,
+  range: Object.freeze([2e-3, 3e-3]),
+  unit: "m^2/s",
+  basis: "measured",
+  source: `K. L. Poort 1995, "Stop consonant production: an articulation and acoustic study", S.M. thesis, MIT: the voiceless alveolar stop's constriction opening at 20-30 cm^2/s over its first 10 ms, from its articulation and its burst (11-16 ms)`
+});
+var lipsAperture = (zeta, closing, { zc, rho }) => zeta * Math.sqrt(rho * closing / 2) / zc;
+function releasedShare(t, aperture2, rate = TONGUE_OPENING.rate) {
+  if (!(aperture2 > 0)) return 1;
+  const x = Math.max(0, t) * rate / aperture2;
+  return x * x / (1 + x * x);
+}
+var RELEASE_STEPS = Object.freeze([[0.25, 2], [0.5, 4], [1, 8]]);
+function releaseCourse(aperture2, { rate = TONGUE_OPENING.rate, steps = RELEASE_STEPS } = {}) {
+  const half = aperture2 > 0 ? aperture2 / rate : 0;
+  if (!half) return [[0, 1]];
+  const at2 = [];
+  let x = 0;
+  for (const [step, to] of steps) while (x + step <= to + 1e-9) at2.push(x += step);
+  return at2.map((x2, k) => [half * x2, k === at2.length - 1 ? 1 : releasedShare(half * x2, aperture2, rate)]);
+}
+function tongueLetGo(aperture2, shut, release, rate = TONGUE_OPENING.rate) {
+  const course = aperture2 > 0 ? releaseCourse(aperture2, { rate }) : [[release, 1]], end = course.at(-1)[0];
+  const share = (since) => since >= end || !(aperture2 > 0) ? 1 : releasedShare(since, aperture2, rate);
+  return { times: course.map((p) => p[0]), at: (since) => since <= 0 ? shut : shut + (1 - shut) * share(since) };
+}
+
 // public/shared/performers/drawn-curves.js
 var POINTS = 64;
 function curveAt(points, t) {
@@ -5630,9 +5680,8 @@ var TONE_RANGES = Object.freeze(["vibrato", "depth", "pressure", "contact"]);
 var RANGE = "personality";
 var ORDINARY = Object.freeze({ vibrato: () => 1 / setting(RANGE, "vibratoMost"), depth: () => 0, pressure: () => 1 / 2, contact: () => 1 / 2 });
 
-// public/shared/estimation/pitch-yin.js
-var YIN_DEFAULTS = Object.freeze({ minHz: 60, maxHz: 1200, threshold: 0.15, decimate: 4, silenceRms: 2e-3 });
-var NOTE_DEFAULTS = Object.freeze({ clarity: 0.8, stableFrames: 2, releaseFrames: 2, changeSemitones: 0.6 });
+// public/shared/estimation/harmonic-series.js
+var SERIES = Object.freeze({ window: 16384, reading: 8192, apart: 0.4, floor: -45, peaks: 12, cents: 30, series: 0.95, lowest: 3, lattice: 0.9, steady: 30, simplest: 4, silent: -60 });
 
 // public/shared/sha1.js
 var encoder = new TextEncoder();
@@ -5679,6 +5728,7 @@ function shareAt(glide, pitch) {
   }
   return null;
 }
+var GLIDE_EAR = `series ${SERIES.reading} ${SERIES.series}`;
 var GlideBook = class {
   constructor({ kept = {}, steps = 24 } = {}) {
     this.kept = kept;
@@ -5688,7 +5738,7 @@ var GlideBook = class {
     this.working = false;
   }
   key(a, b) {
-    return sha1Hex(JSON.stringify({ a, b, steps: this.steps })).slice(0, 20);
+    return sha1Hex(JSON.stringify({ a, b, steps: this.steps, ear: GLIDE_EAR })).slice(0, 20);
   }
   // (The glide from row `a` to row `b` where it is kept, else null: none measured.)
   known(a, b) {
@@ -6785,9 +6835,9 @@ function windsDial(env) {
   const ofDial = (k, v, x) => !x || !dialled(k) || current.lips && columnName(k) === "pulsation" ? v : columnName(k) in ADDITIVE ? v + ADDITIVE[columnName(k)] * x : v > 0 ? v * REACH ** x : v;
   const composed = () => state.rules.map((v, k) => current.columns[k][0] === "opening" ? state.fingers[k] ?? v : ofDial(k, v, state.x[k] ?? 0));
   function played(row, { breath = held.breath, tongue = held.tongue } = {}) {
-    const out = [...row], { breath: b, zeta } = current;
-    out[b] = row[b] * breath * state.swell * (current.kind === "lips" ? tongue : 1);
-    if (zeta != null) out[zeta] = row[zeta] * tongue;
+    const out = [...row], { breath: b, zeta } = current, lips = current.kind === "lips";
+    out[b] = row[b] * breath * state.swell * (lips ? tongue : 1);
+    if (zeta != null) out[zeta] = row[zeta] * (lips && tongue > TONGUE.shut ? 1 : tongue);
     return out;
   }
   const holdAs = (row, seconds, how) => send(played(row, how), seconds, current.presence != null ? JET_FLOOR * row[current.breath] : void 0);
@@ -6847,8 +6897,14 @@ function windsDial(env) {
       holdAs(before, touch);
       after(touch, () => hold(state.row, Math.max(length - touch, least(fingered()))));
       after(length, () => {
-        held.tongue = 1;
-        legato ? hold(state.row, TONGUE.release) : attackNow(TONGUE.release);
+        if (legato) {
+          held.tongue = 1;
+          hold(state.row, TONGUE.release);
+        } else if (kind === "lips") attackNow(TONGUE.release, { shut: 0 });
+        else {
+          held.tongue = 1;
+          attackNow(TONGUE.release);
+        }
       });
       return length;
     }
@@ -6867,6 +6923,10 @@ function windsDial(env) {
     after(length, () => attackNow(TONGUE.release));
     return length;
   }
+  function released() {
+    const { zeta, closing, reed } = current, aperture2 = current.kind === "lips" && reed && closing != null ? lipsAperture(state.row[zeta], state.row[closing], reed) : 0;
+    return tongueLetGo(aperture2, TONGUE.shut, TONGUE.release);
+  }
   function attackNow(seconds, { shut = null } = {}) {
     cancel("attack");
     const attack = attackHeld(), lips = current.lips && attack && attack.share !== 1 ? attack : null, settle = lips ? (shut ?? 0) + lips.settleAfter : null;
@@ -6876,22 +6936,26 @@ function windsDial(env) {
         send(played(state.row).map((v, k) => own2[k] ? v * from[k] / own2[k] : v), span2);
       } else hold(state.row, span2);
     };
+    const tongue = shut != null ? released() : null;
     if (state.breathAttack.length === 2) {
       held.breath = 1;
       held.tongue = shut != null ? TONGUE.shut : 1;
       holdAt(0, seconds);
-      if (shut != null) after(shut, () => {
-        held.tongue = 1;
-        holdAt(shut, TONGUE.release);
-      }, "attack");
+      if (tongue) tongue.times.forEach((t, k) => {
+        const from = k ? tongue.times[k - 1] : 0;
+        after(shut + from, () => {
+          held.tongue = tongue.at(t);
+          holdAt(shut + from, t - from);
+        }, "attack");
+      });
       if (lips) after(settle, () => hold(state.row, least("lips")), "attack");
       return;
     }
     const curve = firstEndingAt(state.breathAttack, seconds);
-    const times = [.../* @__PURE__ */ new Set([...curve.slice(1).map((p) => p[0]), ...lips ? [settle, settle + least("lips")] : [], ...shut != null ? [shut, shut + TONGUE.release] : []])].filter((t) => t > 0).sort((a, b) => a - b);
+    const times = [.../* @__PURE__ */ new Set([...curve.slice(1).map((p) => p[0]), ...lips ? [settle, settle + least("lips")] : [], ...tongue ? [shut, ...tongue.times.map((t) => shut + t)] : []])].filter((t) => t > 0).sort((a, b) => a - b);
     const move = (t, span2) => {
       held.breath = curveAt(curve, t);
-      held.tongue = shut != null && t <= shut ? TONGUE.shut : 1;
+      held.tongue = tongue ? tongue.at(t - shut) : 1;
       holdAt(t, span2);
     };
     times.forEach((t, k) => {
@@ -7321,6 +7385,10 @@ function windsDial(env) {
         breath: kind === "air" ? at2("flute", "Uj") : at2("reed", "gamma"),
         presence: kind === "air" ? at2("flute", "presence") : null,
         zeta: kind === "air" ? null : at2("reed", "zeta"),
+        // (A brass body's lips' closing pressure and its bore's entrance -- its characteristic impedance and its air's
+        // density -- their aperture's: brass-tongue.js lipsAperture.)
+        closing: brass ? at2("reed", "closing_pressure") : null,
+        reed: brass ? laid.reed ?? null : null,
         rows: /* @__PURE__ */ new Map(),
         glided: /* @__PURE__ */ new Set(),
         impedance: null,
