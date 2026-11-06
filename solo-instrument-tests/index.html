@@ -11,11 +11,21 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6);--players:rgba(124,199,154,.65)}}
 :root[data-theme="dark"]{--bg:#1b1c1e;--fg:#ecebe6;--muted:#9a998f;--line:#3a3b3e;--accent:#e2774f;--strings:#8ab4e0;--warn:#e08a6e;--on:#7cc79a;--bore:#8f8e88;--sum:#ecebe6;--band:rgba(226,119,79,.14);--bend:rgba(110,160,226,.14);--harm:rgba(110,160,226,.6);--players:rgba(124,199,154,.65)}
 body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,sans-serif;margin:0;padding:16px;max-width:860px}
-h1{font-size:18px;margin:0 0 2px}.muted{color:var(--muted);font-size:13px}
-/* (The three kinds of setting, each under its own heading: what the player does, what the instrument is, and what the
-   model's physics holds.) */
+h1{font-size:18px;margin:0 0 2px}.muted{color:var(--muted);font-size:13px}a{color:var(--accent);text-underline-offset:2px}
+/* (Each part of the page under its own heading: who plays, the musebot, what the player does, what the instrument is,
+   what the model's physics holds, and what is heard and kept.) */
 h2{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:26px 0 0;padding-top:8px;border-top:2px solid var(--line)}
 h2 + .muted{margin:2px 0 0}
+/* (The page's parts in a bar kept at its top: its headings, and under them the boxes of the part being read, each a link,
+   the one being read marked; a row too long for the page scrolled on its own.) */
+#sections{position:sticky;top:0;z-index:2;background:var(--bg);margin:12px -16px 0;padding:6px 16px 2px;border-bottom:1px solid var(--line)}
+#sections div{display:flex;gap:0 16px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}#sections div::-webkit-scrollbar{display:none}
+#sections a{color:var(--muted);text-decoration:none;font-size:13px;padding:3px 0 4px;border-bottom:2px solid transparent}
+#sections a:hover{color:var(--fg)}#sections a[aria-current]{color:var(--fg);border-bottom-color:var(--accent)}
+#sections .parts a{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+#sections .boxes:empty{display:none}
+#sections div.more{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent)}
+h2,fieldset{scroll-margin-top:calc(var(--bar,64px) + 10px)}
 fieldset{border:1px solid var(--line);border-radius:8px;margin:14px 0;padding:10px 14px;min-width:0}legend{color:var(--muted);font-size:13px;padding:0 4px}
 fieldset.bare{border:0;padding:0;margin:0}fieldset.bare:disabled{opacity:.45}
 .row{display:grid;grid-template-columns:170px 1fr 104px;gap:10px;align-items:center;margin:8px 0}
@@ -31,6 +41,11 @@ input[type=number],select{width:104px;box-sizing:border-box;font:inherit;backgro
 button{font:inherit;padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;margin:4px 6px 4px 0}
 button.on{background:var(--on);color:var(--bg);border-color:var(--on)}button:disabled{opacity:.5;cursor:default}
 button.big{font-size:18px;padding:12px 26px;font-weight:600;min-width:8.5em}
+/* (Who plays: you or the musebot, each a button alike, side by side, and under each what it plays from.) */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,17em));gap:4px 14px;margin:10px 0 6px}
+.duo button.big{width:100%;margin:0}.duo .muted{margin-top:4px}
+.also{margin:4px 0 0}
+@media (max-width:560px){.duo{grid-template-columns:1fr 1fr}.duo button.big{font-size:15px;padding:10px 6px;min-width:0;white-space:nowrap}}
 .meter{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:8px 0 2px}.meter div{height:100%;width:0;background:var(--accent);transition:width 60ms linear}
 [data-family="strings"] .meter div{background:var(--strings)}
 /* (What changes as it plays -- the pitch heard, the level, the engine's pace, the bow's way, what is being made, a
@@ -41,13 +56,14 @@ table.reading td{white-space:normal}table.reading td:first-child{width:220px}
 .readouts td{font-variant-numeric:tabular-nums}
 #status{min-height:2.9em;font-size:14px;margin:4px 0}#status.failed{color:var(--warn)}
 .said{color:var(--warn);font-size:13px;min-height:2.9em}
-.solo{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px}.solo label{font-size:14px}#w-soloSaid{font-size:13px;min-height:1.4em}
+.soloSaid{min-height:2.9em}
+/* (Its piece rendered first (prerender.js): its button under the musebot's, and what it made, heard and kept.) */
+.duo button.render{width:100%;margin:8px 0 0}
+.rendered .meter div{background:var(--muted)}.rendered audio{display:block;width:100%;max-width:34em;margin:6px 0 2px}.rendered a{font-size:14px}
 /* (The musebot's personality (musebot.js): a lever not set here shows its draw, dimmed.) */
-details.musebot{margin:2px 0 6px}details.musebot summary{font-size:14px;color:var(--muted);cursor:pointer}
-.row.drawn input[type=range],.row.drawn input[type=number]{opacity:.5}.musebotNote{margin:6px 0 0}
+.row.drawn input[type=range],.row.drawn input[type=number]{opacity:.5}.musebotNote{margin:0 0 6px}
 #settingsSaid{font-size:13px;min-height:1.4em}
 #w-pitchSaid{min-height:2.9em}
-#s-way{font-size:20px;margin-left:10px;vertical-align:middle;display:inline-block;width:6.2em;white-space:nowrap}
 .radios label,.strings label{margin-right:14px;font-size:14px;white-space:nowrap}
 /* (The fingering drawn as its players read it, beside the note it plays: a woodwind's LilyPond diagram, every key outlined,
    its size its family's whatever is pressed, so nothing moves as the fingers do.) */
@@ -69,40 +85,51 @@ svg.curve:focus{outline:none}svg.curve:focus-visible{outline:2px solid var(--lin
 .curveTools{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;font-size:13px}.curveTools input{width:5.5em}
 .curveLabel{font-size:14px;margin-top:8px}
 input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px}
-@media (max-width:560px){.row{grid-template-columns:1fr 96px}.row>input[type=range],.row>.track{grid-column:1/3;grid-row:2}.note{margin-left:0}td:first-child{width:72px}table.reading td:first-child{width:40%}}
+@media (max-width:560px){.row{grid-template-columns:1fr 96px}.row>input[type=range],.row>.track,.row>.radios{grid-column:1/3;grid-row:2}.note{margin-left:0}td:first-child{width:72px}table.reading td:first-child{width:40%}}
 </style>
 </head>
 <body>
 <h1>Solo instrument tests</h1>
-<div class="muted" id="what">Every instrument we model, played live: its player, its instrument and its physics dialled by ear.</div>
+<div class="muted" id="what">Every instrument we model, played live, by you or by a musebot: its player, its instrument, its physics and the musebot's personality dialled by ear.</div>
+<nav id="sections" aria-label="The page's parts"><div class="parts"></div><div class="boxes"></div></nav>
 
-<fieldset><legend>Play</legend>
+<h2 id="part-play">Play</h2>
+<div class="muted">Who plays the instrument: you, as the dials under Player set it, or a musebot, as its personality under Musebot sets it.</div>
+<fieldset><legend>Instrument</legend>
   <div class="row"><label for="instrument">Instrument</label><select id="instrument"></select><span></span></div>
   <div id="status"></div>
   <div data-family="strings" hidden>
-    <button id="s-play" class="big" title="space">▶ Play</button><span id="s-way"></span>
-    <button id="s-reverse" title="r">Change bow now (r)</button>
-    <button id="s-pluck" title="p">Pluck (p)</button>
-    <button id="s-good" title="every dial back to its neutral note on this instrument (a good note made from the violin's where it has none)">↺ Neutral note</button>
+    <div class="duo">
+      <div><button id="s-play" class="big" title="space">▶ Play</button><div class="muted">you bow it, as the dials under <a href="#part-player">Player</a> set it (space)</div></div>
+      <div><button id="s-solo" class="big" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player, told what this dial plays of it -- played on it as its synthesizer; everything in it drawn from its seed">▶ A musebot plays</button>
+        <div class="muted">a piece its band composes, as its seed and personality under <a href="#part-musebot">Musebot</a> set it</div>
+        <button id="s-render" class="render" title="the piece composed, then made by this dial as fast or as slowly as this computer can, and heard once it is made: the same instrument as dialled">Render its piece first</button>
+        <div class="muted">then hear it: for a computer too slow to play it live</div></div>
+    </div>
+    <div class="also">
+      <button id="s-reverse" title="r">Change bow now (r)</button>
+      <button id="s-pluck" title="p">Pluck (p)</button>
+      <button id="s-good" title="every dial back to its neutral note on this instrument (a good note made from the violin's where it has none)">↺ Neutral note</button>
+    </div>
     <div class="meter"><div id="s-meter"></div></div>
-    <table class="readouts"><tbody><tr><td>Level</td><td id="s-level">silent</td></tr></tbody></table>
+    <table class="readouts"><tbody><tr><td>Level</td><td id="s-level">silent</td></tr><tr><td>Bow</td><td id="s-way"></td></tr></tbody></table>
     <div class="said" id="s-said"></div>
-    <div class="solo"><button id="s-solo" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player, told what this dial plays of it -- played on it as its synthesizer; everything in it drawn from its seed">▶ A musebot plays</button>
-      <label>seed <input type="number" id="s-soloSeed" min="0" step="1"></label>
-      <label>at most <input type="number" id="s-soloSeconds" min="5" max="600" step="5" value="60"> s</label></div>
-    <div class="muted" id="s-soloSaid"></div>
-    <details class="musebot"><summary>The musebot's personality</summary><div id="s-personality"></div></details>
+    <div class="muted soloSaid" id="s-soloSaid"></div>
+    <div class="rendered" id="s-rendered" hidden></div>
   </div>
   <div data-family="winds" hidden>
-    <button id="w-blow" class="big" title="space">Blow</button>
-    <button id="w-tongueNow" title="t">Tongue now (t)</button>
-    <button id="w-neutral" title="its neutral note, at its dynamic, every dial back to the rules' value there">↺ Neutral note</button>
-    <button id="w-reset" title="every dial back to the rules' value at this pitch and dynamic, the holes the pitch's">↺ Back to the rules</button>
-    <div class="solo"><button id="w-solo" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player -- played on it; everything in it drawn from its seed">▶ A musebot plays</button>
-      <label>seed <input type="number" id="w-soloSeed" min="0" step="1"></label>
-      <label>at most <input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"> s</label></div>
-    <div class="muted" id="w-soloSaid"></div>
-    <details class="musebot"><summary>The musebot's personality</summary><div id="w-personality"></div></details>
+    <div class="duo">
+      <div><button id="w-blow" class="big" title="space">Blow</button><div class="muted">you play it, as the dials under <a href="#part-player">Player</a> set it (space)</div></div>
+      <div><button id="w-solo" class="big" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player -- played on it; everything in it drawn from its seed">▶ A musebot plays</button>
+        <div class="muted">a piece its band composes, as its seed and personality under <a href="#part-musebot">Musebot</a> set it</div>
+        <button id="w-render" class="render" title="the piece composed, then made by this dial as fast or as slowly as this computer can, and heard once it is made: the same instrument as dialled">Render its piece first</button>
+        <div class="muted">then hear it: for a computer too slow to play it live</div></div>
+    </div>
+    <div class="also">
+      <button id="w-tongueNow" title="t">Tongue now (t)</button>
+      <button id="w-neutral" title="its neutral note, at its dynamic, every dial back to the rules' value there">↺ Neutral note</button>
+      <button id="w-reset" title="every dial back to the rules' value at this pitch and dynamic, the holes the pitch's">↺ Back to the rules</button>
+    </div>
     <div class="meter"><div id="w-meter"></div></div>
     <table class="readouts"><tbody>
       <tr><td>Heard</td><td id="w-heard">--</td></tr>
@@ -110,10 +137,31 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
       <tr><td>Engine</td><td id="w-engine">--</td></tr>
     </tbody></table>
     <div class="said" id="w-said"></div>
+    <div class="muted soloSaid" id="w-soloSaid"></div>
+    <div class="rendered" id="w-rendered" hidden></div>
   </div>
 </fieldset>
 
-<h2>Player</h2>
+<h2 id="part-musebot">Musebot</h2>
+<div class="muted">What the musebot is: this instrument's player in a band -- plex_clodbot, MemoryBOT and it -- that composes a piece and plays it here, everything in it drawn from its seed, its personality too but what is set here.</div>
+<div data-family="strings" class="musebot" hidden>
+  <fieldset><legend>Its piece</legend>
+    <div class="row"><label for="s-soloSeed">Seed</label><input type="number" id="s-soloSeed" min="0" step="1"><span></span></div>
+    <div class="row"><label for="s-soloSeconds">At most (s)</label><input type="number" id="s-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
+    <div class="note">Played by ▶ A musebot plays, under <a href="#part-play">Play</a>, or rendered first and then heard: your bow stopped as it starts, the musebot bowing, turning its bow and making its vibrato.</div>
+  </fieldset>
+  <div id="s-personality"></div>
+</div>
+<div data-family="winds" class="musebot" hidden>
+  <fieldset><legend>Its piece</legend>
+    <div class="row"><label for="w-soloSeed">Seed</label><input type="number" id="w-soloSeed" min="0" step="1"><span></span></div>
+    <div class="row"><label for="w-soloSeconds">At most (s)</label><input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
+    <div class="note">Played by ▶ A musebot plays, under <a href="#part-play">Play</a>, or rendered first and then heard: the dials under Player following what it plays.</div>
+  </fieldset>
+  <div id="w-personality"></div>
+</div>
+
+<h2 id="part-player">Player</h2>
 <div class="muted">What the player does: the note, the hands, the breath and the mouth.</div>
 <div data-family="strings" hidden>
   <fieldset><legend>Left hand</legend>
@@ -220,7 +268,7 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </fieldset>
 </div>
 
-<h2>Instrument</h2>
+<h2 id="part-instrument">Instrument</h2>
 <div class="muted">What the instrument is: its body, its strings or bore, its reed.</div>
 <div data-family="strings" hidden>
   <fieldset><legend>Which one</legend>
@@ -253,7 +301,7 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </fieldset>
 </div>
 
-<h2>Physics</h2>
+<h2 id="part-physics">Physics</h2>
 <div class="muted">What the model holds: its laws' constants, its losses and resolution, and what they say of the playing.</div>
 <div data-family="strings" hidden>
   <fieldset><legend>This string's friction and losses</legend>
@@ -281,7 +329,7 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </fieldset>
 </div>
 
-<h2>Listening and keeping</h2>
+<h2 id="part-keeping">Listening and keeping</h2>
 <div data-family="strings" hidden>
   <fieldset><legend>Listening</legend>
     <button id="s-output">Hearing: the instrument</button>

@@ -380,7 +380,33 @@ var init_sources = __esm({
         "chen-smith-wolfe-2009": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Pitch bending and glissandi on the clarinet: Roles of the vocal tract and partial tone hole closure", year: 2009, doi: "10.1121/1.3177269", in: "The Journal of the Acoustical Society of America 126(3), 1511-1520", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2009-clarinet-pitch-bending.pdf" },
         "wiertlewski-hayward-2012": { kind: "literature", authors: "M. Wiertlewski, V. Hayward", title: "Transducer for mechanical impedance testing over a wide frequency range through active feedback", year: 2012, doi: "10.1063/1.3683572", in: "Review of Scientific Instruments 83(2), 025001", saved: "research-downloads/strings/finger/wiertlewski-hayward-2012-transducer-impedance-rsi.pdf" },
         "hennig-2011": { kind: "literature", authors: "H. Hennig, R. Fleischmann, A. Fredebohm, Y. Hagmayer, J. Nagler, A. Witt, F. J. Theis, T. Geisel", title: "The Nature and Perception of Fluctuations in Human Musical Rhythms", year: 2011, doi: "10.1371/journal.pone.0026457", in: "PLoS ONE 6(10), e26457", saved: "research-downloads/performer-noise/hennig-2011-fluctuations-human-musical-rhythms.pdf" },
-        "mcauley-marsden-2000": { kind: "literature", authors: "J. H. McAuley, C. D. Marsden", title: "Physiological and pathological tremors and rhythmic central motor control", year: 2e3, doi: "10.1093/brain/123.8.1545", in: "Brain 123(8), 1545-1567", read: "its abstract (PubMed 10908186)" }
+        "mcauley-marsden-2000": { kind: "literature", authors: "J. H. McAuley, C. D. Marsden", title: "Physiological and pathological tremors and rhythmic central motor control", year: 2e3, doi: "10.1093/brain/123.8.1545", in: "Brain 123(8), 1545-1567", read: "its abstract (PubMed 10908186)" },
+        "huron-1989-textures": { kind: "literature", authors: "D. Huron", title: "Characterizing Musical Textures", year: 1989, noDoi: "a conference paper without one: its handle hdl:2027/spo.bbp2372.1989.033 (Michigan Publishing)", in: "Proceedings of the 1989 International Computer Music Conference, Columbus, Ohio, 131-134", note: "texture as a bounded space of onset synchronization and semblant pitch motion (parallel and similar motions against contrary and oblique), monophony, homophony, polyphony and heterophony its quadrants, the works of each measured into their regions (Figure 1: hymns high in synchrony and about a third semblant, Bach's fugues and sinfonias low in both, Chinese, Siamese and Korean heterophony some 0.3 to 0.45 in synchrony and 0.5 to 0.75 semblant), and the space reversed as a composer's production model: the texture space's synchrony and semblance and its named locations' regions (public/shared/texture-space.js, test/texture-space.test.mjs)", saved: "research-downloads/counterpoint/Huron 1989 Characterizing musical textures (ICMC).pdf" },
+        "bent-1983": { kind: "literature", authors: "M. Bent", title: '"Resfacta" and "Cantare Super Librum"', year: 1983, doi: "10.1525/jams.1983.36.3.03a00020", in: "Journal of the American Musicological Society 36(3), 371-391", note: "Tinctoris (Liber de arte contrapuncti, 1477, II.20) as Bent reads him: in res facta every part is bound to every other, while singers over the book (cantare super librum) are each bound to the tenor and need not be to one another -- a difference of how the parts are bound, not of writing against improvising: the texture space's binding (public/shared/texture-space.js), a process's parts bound to its first part alone at 0, every part to every other at 1" },
+        "brown-1976": { kind: "literature", authors: "H. M. Brown", title: "Embellishing Sixteenth-Century Music", year: 1976, noDoi: "a book without one: ISBN 978-0-19-323175-7 (Oxford University Press, London; Early Music Series 1)", note: "the diminution treatises (Ganassi 1535, Ortiz 1553, Dalla Casa 1584, Bovicelli 1594 and others) as Brown reads them: a composition's notes divided by its performer into quicker passaggi, each leaving a note and arriving at the next, the composition's counterpoint unchanged beneath them" },
+        "huron-1989-denumerability": { kind: "literature", authors: "D. Huron", title: "Voice Denumerability in Polyphonic Music of Homogeneous Timbres", year: 1989, doi: "10.2307/40285438", in: "Music Perception 6(4), 361-382", note: "identification of the voices falls from three to four: the counterpoint space's statistics taking over from its rules (conducting/counterpoint.js)" },
+        "huron-2001": { kind: "literature", authors: "D. Huron", title: "Tone and Voice: A Derivation of the Rules of Voice-Leading from Perceptual Principles", year: 2001, doi: "10.1525/mp.2001.19.1.1", in: "Music Perception 19(1), 1-64", note: "the counterpoint space's rules as perception's (conducting/counterpoint.js)" },
+        "ebcioglu-1990": { kind: "literature", authors: "K. Ebcioğlu", title: "An expert system for harmonizing chorales in the style of J.S. Bach", year: 1990, doi: "10.1016/0743-1066(90)90055-A", in: "The Journal of Logic Programming 8(1-2), 145-185", note: "counterpoint as constraint search (conducting/counterpoint.js)" },
+        "herremans-sorensen-2013": { kind: "literature", authors: "D. Herremans, K. Sörensen", title: "Composing fifth species counterpoint music with a variable neighborhood search algorithm", year: 2013, doi: "10.1016/j.eswa.2013.05.071", in: "Expert Systems with Applications 40(16), 6427-6437", note: "counterpoint's rules as weighted costs (conducting/counterpoint.js)" },
+        "hemmecke-koppe-lee-weismantel-2010": { kind: "literature", authors: "R. Hemmecke, M. Köppe, J. Lee, R. Weismantel", title: "Nonlinear Integer Programming", year: 2010, doi: "10.1007/978-3-540-68279-0_15", in: "50 Years of Integer Programming 1958-2008 (Springer), 561-618", note: "counterpoint's costs as a nonlinear integer program over linear constraints, where its complexity turns; the trunk's research-downloads/optimization/ (the owner's download, 5 November 2026)" },
+        "samarotto-2009": { kind: "literature", authors: "F. Samarotto", title: '"Plays of Opposing Motion": Contra-Structural Melodic Impulses in Voice-leading Analysis', year: 2009, doi: "10.30535/mto.15.2.4", in: "Music Theory Online 15(2)", note: "a line's directionality and ambitus against the structure it prolongs; the trunk's research-downloads/counterpoint/ (the owner's download, 5 November 2026)" },
+        "open-music-theory": { kind: "literature", authors: "M. Gotham, K. Gullings, C. Hamm, B. Hughes, B. Jarvis, M. Lavengood, J. Peterson (eds.)", title: "Open Music Theory, version 2", year: 2021, noDoi: "an open textbook without one (VIVA Pressbooks, CC BY-SA 4.0): https://viva.pressbooks.pub/openmusictheory", note: "its chapters Texture (Gotham & Brady: monophony, heterophony, homophony, polyphony), Metrical Dissonance (Gotham), Swing Rhythms (Lavengood) and the five species of counterpoint (Shaffer & Gotham); the whole book in the trunk's research-downloads/rhythm/ (the owner's download, 5 November 2026)" },
+        "xenakis-1955": { kind: "literature", authors: "I. Xenakis", title: "La crise de la musique sérielle", year: 1955, noDoi: "a journal of 1955 without them: https://www.iannis-xenakis.org/en/?p=3720", in: "Gravesaner Blätter 1, 2-4", note: "a dense linear polyphony heard as a mass, the statistical mean of its parts' states replacing their rules: the texture space's masses as counterpoint extended" },
+        "xenakis-1992": { kind: "literature", authors: "I. Xenakis", title: "Formalized Music: Thought and Mathematics in Composition, revised edition", year: 1992, noDoi: "a book (Pendragon Press, Stuyvesant NY), its ISBN not checked here", note: "chapter 1: Pithoprakta's glissandi, their speeds by Gauss's law; Achorripsis's events by Poisson's: the texture space's glide and chance" },
+        "schaeffer-1966": { kind: "literature", authors: "P. Schaeffer", title: "Treatise on Musical Objects: An Essay across Disciplines", year: 2017, doi: "10.1525/9780520967465", in: "translated by C. North and J. Dack (University of California Press; Crossref dates its online edition 2019) from Traité des objets musicaux, Éditions du Seuil, 1966", note: "the typology of sound objects by their sustainment: an impulse, a sustained sound and an iteration, apart from what sounds them: the texture space's impulse and sustain (public/shared/texture-space.js), which each instrument's player plays as its own (a bowed string's point plucked, a wind's tongued as short as it goes)" },
+        "gibson-2022": { kind: "literature", authors: "B. Gibson", title: "The Use of Stochastic Distributions in the Instrumental Works of Iannis Xenakis: Between Chance and Intuition", year: 2022, noDoi: "in the Universidade de Évora's repository without one: https://dspace.uevora.pt/rdpc/bitstream/10174/34491/1/", note: "which of Xenakis's instrumental works draw their events by Poisson's, Gauss's and the exponential laws, and where he set the draws aside: the texture space's chance" },
+        "levy-2013": { kind: "literature", authors: "B. Levy", title: "'Rules as Strict as Palestrina's': The Regulation of Pitch and Rhythm in Ligeti's Requiem", year: 2013, doi: "10.1017/s1478572213000029", in: "Twentieth-Century Music 10(2), 203-230", note: "micropolyphony's canon under rules: the texture space's canon a counterpoint" },
+        "bernard-1994": { kind: "literature", authors: "J. W. Bernard", title: "Voice Leading as a Spatial Function in the Music of Ligeti", year: 1994, doi: "10.2307/854260", in: "Music Analysis 13(2/3), 227-253", note: "a mass's voice leading as a function of the space it fills: the texture space's places and motion" },
+        "douglas-noble-mcadams-2016": { kind: "literature", authors: "C. Douglas, J. Noble, S. McAdams", title: "Auditory Scene Analysis and the Perception of Sound Mass in Ligeti's Continuum", year: 2016, doi: "10.1525/mp.2016.33.3.287", in: "Music Perception 33(3), 287-305", note: "parts fuse into a mass by their density, rate and register, not at one threshold: the texture space's dimensions continuous" },
+        "toussaint-2005": { kind: "literature", authors: "G. T. Toussaint", title: "The Euclidean algorithm generates traditional musical rhythms", year: 2005, noDoi: "a conference paper without one: https://archive.bridgesmathart.org/2005/bridges2005-47.pdf", in: "Proceedings of Bridges 2005, 47-56", note: "the rhythm engine's Euclidean rhythms (shared/euclidean.js); the trunk's research-downloads/rhythm/" },
+        "clough-douthett-1991": { kind: "literature", authors: "J. Clough, J. Douthett", title: "Maximally Even Sets", year: 1991, doi: "10.2307/843811", in: "Journal of Music Theory 35(1/2), 93-173", note: "the rhythm engine's evenness (shared/euclidean.js)" },
+        "block-douthett-1994": { kind: "literature", authors: "S. Block, J. Douthett", title: "Vector Products and Intervallic Weighting", year: 1994, doi: "10.2307/843826", in: "Journal of Music Theory 38(1), 21-41", note: "shared/euclidean.js" },
+        "demaine-et-al-2009": { kind: "literature", authors: "E. D. Demaine, F. Gomez-Martin, H. Meijer, D. Rappaport, P. Taslakian, G. T. Toussaint, T. Winograd, D. R. Wood", title: "The distance geometry of music", year: 2009, doi: "10.1016/j.comgeo.2008.04.005", in: "Computational Geometry 42(5), 429-454", note: "the rhythm engine's rotations (shared/euclidean.js)" },
+        "cohn-2001": { kind: "literature", authors: "R. Cohn", title: "Complex Hemiolas, Ski-Hill Graphs and Metric Spaces", year: 2001, doi: "10.1111/1468-2249.00141", in: "Music Analysis 20(3), 295-326", note: "meters as products of twos and threes (shared/euclidean.js, meter-space.js)" },
+        "biamonte-2014": { kind: "literature", authors: "N. Biamonte", title: "Formal Functions of Metric Dissonance in Rock Music", year: 2014, doi: "10.30535/mto.20.2.1", in: "Music Theory Online 20(2)", note: "grouping and displacement dissonances by their formal function (shared/euclidean.js); the trunk's research-downloads/rhythm/" },
+        "temperley-1999": { kind: "literature", authors: "D. Temperley", title: "Syncopation in rock: a perceptual perspective", year: 1999, doi: "10.1017/S0261143000008710", in: "Popular Music 18(1), 19-40", note: "a syncopation as a rotation (shared/euclidean.js)" },
+        "longuet-higgins-lee-1984": { kind: "literature", authors: "H. C. Longuet-Higgins, C. S. Lee", title: "The Rhythmic Interpretation of Monophonic Music", year: 1984, doi: "10.2307/40285271", in: "Music Perception 1(4), 424-441", note: "metrical weights (shared/euclidean.js)" },
+        "gillick-et-al-2019": { kind: "literature", authors: "J. Gillick, A. Roberts, J. Engel, D. Eck, D. Bamman", title: "Learning to Groove with Inverse Sequence Transformations", year: 2019, noDoi: "a conference paper without one: https://proceedings.mlr.press/v97/gillick19a.html", in: "Proceedings of the 36th International Conference on Machine Learning, PMLR 97", note: "the Groove MIDI Dataset v1.0.0 (CC BY 4.0), the feels' measured swing and offsets (shared/performance-timing.js MEASURED_TIMING, scripts/measure-drum-timing.mjs, measure-drum-groove.mjs)" }
       }
     };
   }
@@ -1972,7 +1998,7 @@ var init_bowed2 = __esm({
                       micropolyphony: { value: 1.5, unit: "weight", kind: "unmeasured", reason: "ours: a canon", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                       cluster: { value: 1, unit: "weight", kind: "unmeasured", reason: "ours: a cluster", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                       line: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom a line", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                      pizzicati: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom pizzicati", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+                      points: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom points", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                     }
                   },
                   many: {
@@ -1980,8 +2006,8 @@ var init_bowed2 = __esm({
                     weights: {
                       micropolyphony: { value: 3, unit: "weight", kind: "unmeasured", reason: "ours: many parts the masses: micropolyphony", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                       cluster: { value: 2.5, unit: "weight", kind: "unmeasured", reason: "ours: clusters", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                      glissandi: { value: 2.5, unit: "weight", kind: "unmeasured", reason: "ours: glissandi", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                      pizzicati: { value: 2, unit: "weight", kind: "unmeasured", reason: "ours: pizzicati clouds", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+                      glides: { value: 2.5, unit: "weight", kind: "unmeasured", reason: "ours: glides", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+                      points: { value: 2, unit: "weight", kind: "unmeasured", reason: "ours: clouds of points", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                       counterpoint: { value: 1.5, unit: "weight", kind: "unmeasured", reason: "ours: counterpoint still", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                       chord: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom chords", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                     }
@@ -2041,27 +2067,12 @@ var init_bowed2 = __esm({
                 },
                 parameters: {
                   micropolyphony: {
-                    divisions: { value: [0, 1], unit: "share of its playable divisions", kind: "unmeasured", reason: "ours: each part's grid a share of this, spread over its parts", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    drift: { value: [0.03, 0.09], unit: "share slower a part", kind: "unmeasured", reason: "ours: each part this much slower than the last, the canon thickening", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                     cantusNotes: { value: [12, 20], unit: "notes", kind: "unmeasured", reason: "ours: the cantus's length", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                   },
-                  glissandi: {
-                    spread: { value: [2, 4], unit: "semitones a second", kind: "unmeasured", reason: "ours: the speeds' spread, Xenakis's normal law (Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] },
-                    seconds: { value: [0.8, 3.5], unit: "s", kind: "unmeasured", reason: "ours: a glissando's length", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }, { where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] },
-                    hold: { value: [0, 0.8], unit: "share of its note", kind: "unmeasured", reason: "ours: how much holds its first pitch before it slides, a pool's own, most nearer the top (the owner, 2 October 2026: fewer attacks straight into glissandi)", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] }
-                  },
-                  pizzicati: {
-                    seconds: { value: [0.12, 0.2], unit: "s", kind: "unmeasured", reason: "ours: a pluck held this long", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    pulse: { value: [0, 1], unit: "0 free, 1 on the meter's positions", kind: "unmeasured", reason: "ours: a cloud's pulse drawn within this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
-                  },
-                  chord: {
-                    pulse: { value: [0, 1], unit: "0 held, 1 every subdivision", kind: "unmeasured", reason: "ours: a chord's pulse drawn within this, most near its low end", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    gate: { value: [0.35, 1], unit: "share of the time to its next stroke", kind: "unmeasured", reason: "ours: a pulsed chord sounding this much", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+                  points: {
+                    seconds: { value: [0.12, 0.2], unit: "s", kind: "unmeasured", reason: "ours: a point sounding this long (s), as a player plays its shortest sound: a bowed string's pluck ringing as a sampled bank's recordings ring", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                   },
                   counterpoint: {
-                    pulse: { value: [0.35, 0.95], unit: "0 held, 1 every subdivision", kind: "unmeasured", reason: "ours: its parts' pulses spread over this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    rigor: { value: [0.4, 1], unit: "share", kind: "unmeasured", reason: "ours: its rule sets' rigour", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    imitation: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how often its lower parts imitate its top", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                     prolation: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how often its imitation is a converging tempo canon", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                   },
                   line: {
@@ -2071,11 +2082,9 @@ var init_bowed2 = __esm({
                     canon: { value: [0, 0.25], unit: "share of entries", kind: "unmeasured", reason: "ours: and entering late, a canon", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                   },
                   figuration: {
-                    tones: { value: [1, 5], unit: "tones", kind: "unmeasured", reason: "ours: its walk over so many of the harmony's tones", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                     direction: { value: [-1, 1], unit: "down to up", kind: "unmeasured", reason: "ours: which way", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                     turn: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how often it turns", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    anchor: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how surely its lowest tone takes the strong positions", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                    rate: { value: [0.25, 0.8], unit: "share of its players' quickest", kind: "unmeasured", reason: "ours: its rate", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+                    anchor: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how surely its lowest tone takes the strong positions", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                   }
                 },
                 players: {
@@ -2088,7 +2097,8 @@ var init_bowed2 = __esm({
                 doublings: { value: 3, unit: "halvings", kind: "unmeasured", reason: "ours: below it the desks playing halved this many times toward silence, each doubling of players some 3 dB", searched: [{ where: "web search", query: 'orchestral dynamics number of string players desks playing pianissimo "half section" doubling players loudness 3 dB measured', date: "2026-10-29", found: "none measured: a section's size changing its tone as well as its loudness (orchestration writing); whole orchestras' sound power 3-4 dB apart in halls (Kahle 1995); equal uncorrelated sources adding 3 dB a doubling, the physics" }] }
               },
               glissando: {
-                spread: { value: 3, unit: "semitones a second", kind: "unmeasured", reason: "ours: a part's glissandi's speeds normal about none with this spread (Xenakis's Gaussian law, Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] }
+                spread: { value: 3, unit: "semitones a second", kind: "unmeasured", reason: "ours: a part's glissandi's speeds normal about none with this spread (Xenakis's Gaussian law, Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] },
+                seconds: { value: [0.8, 3.5], unit: "s", kind: "unmeasured", reason: "ours: a glissando's length, the archived strings_clodbot's (its glissandi drawn so); the section's glides now by the texture space's chance, their lengths a cloud's density's", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }, { where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] }
               },
               lineBand: { value: 7, unit: "semitones", kind: "unmeasured", reason: "ours: a line shared by sections planed within its centre's band at least this either way", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
               tremoloSkew: { value: 3, unit: "power of its draw", kind: "unmeasured", reason: "ours: a pool's tremolo the cube of a uniform draw over its range, most pools near its low end", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
@@ -2804,21 +2814,22 @@ var init_personality = __esm({
           settings: {
             dynamicSteps: { value: 2, unit: "marks", kind: "setting", reason: "how many dynamic marks the most daring player goes past the dynamics comfortable in a register (wind-line.js WIND_LINE lowMost f and highLeast p): to fff low and ppp high, the scale's ends (dynamics.js)" },
             shortest: { range: [0.08, 0.12], unit: "s", kind: "setting", reason: "its quickest note, the most daring's the planner's own (line.js LINE.shortest: a wind's double tonguing near it), the least daring's a single-tongued note's at some 8 notes a second (Bertsch & Hoole 2014, players-ranges.mjs repeatRate)" },
-            phraseRange: { range: [12, 18], unit: "semitones", kind: "setting", reason: "a phrase's widest range, about the planner's 14 (line.js LINE.phraseRange)" },
-            density: { range: [0.25, 0.5], unit: "share", kind: "setting", reason: "its density among equals, about the flute's 0.35 (flute_clodbot.js FLUTE)" },
-            loudness: { range: [0.4, 0.6], unit: "share", kind: "setting", reason: "its loudness among equals, about the flute's 0.5" },
-            fioriture: { range: [0.2, 0.55], unit: "share", kind: "setting", reason: "its fioriture as a soloist, about the flute's 0.35" },
-            leap: { range: [0.08, 0.32], unit: "share", kind: "setting", reason: "a leap's chance in its motif, about the planner's 0.18 (line.js LINE.leap)" },
-            slurs: { range: [2, 6], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, about the planner's 4 (LINE.slurMost)" },
-            motifFewest: { range: [3, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
-            motifMost: { range: [5, 7], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest" },
-            runs: { range: [3, 6], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, about the planner's 4 (LINE.runMost)" },
-            rests: { range: [0.3, 0.7], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
-            commas: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, about the planner's 0.2 (LINE.commaShare)" },
+            phraseRange: { range: [10, 30], unit: "semitones", kind: "setting", reason: "a phrase's widest range, from a tenth to two octaves and a half as it dares, about the planner's 14 (line.js LINE.phraseRange)" },
+            density: { range: [0, 1], unit: "share", kind: "setting", reason: `its density: from its motif's main notes alone, 0, to every held note divided at its quickest, 1 -- the line planner's whole span (line.js planLine: a phrase sparser than the motif it was made at simplified, a denser one divided), its motif made at its density among equals (flute_clodbot.js FLUTE, 0.35; bowedstring_clodbot.js BOWEDSTRING) and that among them (the owner, 5 November 2026: "changing the personality parameters doesn't seem to be able to result in any real extremes"; CLAUDE.md, range before personality)` },
+            loudness: { range: [0.05, 0.95], unit: "share", kind: "setting", reason: "its loudness, from a line kept to ppp's edge to one at fff's, about the flute's 0.5" },
+            fioriture: { range: [0, 1], unit: "share", kind: "setting", reason: "its fioriture as a soloist, from none to a run on every long note that has room for one, about the flute's 0.35" },
+            leap: { range: [0, 0.7], unit: "share", kind: "setting", reason: "a leap's chance in its motif, from a motif all steps to one mostly leaps, about the planner's 0.18 (line.js LINE.leap)" },
+            slurs: { range: [1, 16], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, from every one tongued, 1, to sixteen under one slur, about the planner's 4 (LINE.slurMost)" },
+            slurSegments: { range: [0, 1], unit: "share", kind: "setting", reason: "the share of its phrase's segments slurred whole, long notes and all (line.js LINE.slurSegments), on the slurs' draw: from long notes always separate -- the planner's own, none -- to a legato player's every segment one slur, tongued where each begins" },
+            motifFewest: { range: [2, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
+            motifMost: { range: [4, 12], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest, from a motif of a few notes to a long one" },
+            runs: { range: [2, 12], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, from a line that turns at every third note to one that runs an octave and more, about the planner's 4 (LINE.runMost)" },
+            rests: { range: [0.1, 1], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
+            commas: { range: [0, 0.6], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, from none to most of it, about the planner's 0.2 (LINE.commaShare)" },
             landing: { range: [0.4, 1], unit: "share", kind: "setting", reason: "how high above its floor a cadence may land, a share of its span, about the planner's 0.75 (LINE.landing's upper end)" },
             grammarLeast: { value: 0.15, unit: "share", kind: "setting", reason: "the least weight a motif's grammar is given, against the most preferred's 1, so that every grammar stays open to it (line.js chooseMotif)" },
-            quoting: { range: [0.5, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: given them, it prefers them more often than not" },
-            techniques: { range: [0, 0.6], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's three phrases in five, each still the instrument's own" },
+            quoting: { range: [0, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: from never to always" },
+            techniques: { range: [0, 1], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's every phrase, each still the instrument's own" },
             toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
             vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
             harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
@@ -2851,6 +2862,255 @@ var init_rhythm = __esm({
             slowestBeat: { value: 60, unit: "BPM", kind: "setting", reason: "the owner, 4 November 2026: X(0) is 'an isochronous continuing series of events ... in the tempo range of about 60–180 BPM (1–3 Hz)'; 'The tempo is based approximately on human heart rates'" },
             fastestBeat: { value: 180, unit: "BPM", kind: "setting", reason: "the owner's band's fastest, as slowestBeat" },
             shortestPeriod: { value: 0.05, unit: "s", kind: "setting", reason: "the owner, 4 November 2026: 'Layer X(n) is the minimum layer if its period is less than 50ms (or its tempo is less than 20Hz). This minimum results from the phenomenal threshold at which tempo becomes pitch': read as the shortest period a layer may have, a layer under it being pitch, not rhythm" }
+          }
+        }
+      }
+    };
+  }
+});
+
+// registry/method/texture.json
+var texture_default;
+var init_texture = __esm({
+  "registry/method/texture.json"() {
+    texture_default = {
+      schema: "musebots.registry-methods/1",
+      about: `The texture space (public/shared/texture-space.js; docs/TEXTURE_SPACE.md): the named textures as locations among dimensions that name no instrument and no technique, so that every texture is an extension of the others and every point between them is one. The owner, 5 November 2026: "we need a layer of abstraction apart from instrument-specific textures but that can lead to them"; "to the extent possible, we want to avoid binding underlying musebot algorithms to specific instrumental techniques until they get close to the instrument". Each location's ranges the strings' textures' own, now said once; what a location does not read set so that a blend through it stays a texture.`,
+      methods: {
+        "texture-space": {
+          about: "The texture space (public/shared/texture-space.js; docs/TEXTURE_SPACE.md): every texture a point among sixteen dimensions that name no instrument and no technique, each a share 0 to 1, each named texture a location of ranges [low, high] within them (the methods texture-<name> below). A pool draws its point within its location's ranges -- or a blend's, every range moved alike -- from its seed, each dimension evenly but those skewed here. Its two axes Huron's (1989): onset synchronization and semblant motion; the rest what the strings' ten textures had each done apart, said once.",
+          source: "ours",
+          settings: {
+            pulseSkew: { value: 2, unit: "power of its draw", kind: "setting", reason: "a pool's pulse is its draw squared across its range, so most pools near its low end: a chord held more often than struck again, a cloud freer than pulsed (string-section.js, as the strings' chords and pizzicati were drawn)" },
+            semblanceSkew: { value: 0.5, unit: "power of its draw", kind: "setting", reason: `a pool's semblance is its draw's square root across its range, so most pools near its top: a counterpoint's lower parts imitating its top often (the owner, 3 October 2026: canons and fugues "more important"), as its imitation was drawn` },
+            glideSkew: { value: 2, unit: "power of its draw", kind: "setting", reason: `a pool's glide is its draw squared across its range, so most pools near its least: a note holding its pitch before it slides more often than sliding from its attack (the owner, 2 October 2026: bots "attack directly into glissandos in ways that I think should occur less often for their instruments")` },
+            figureTones: { range: [1, 5], unit: "tones", kind: "setting", reason: "a compound melody's walk over one to five of the harmony's tones, its compound a share across them: a trill's two, an Alberti bass's three, an arpeggio's more", was: "the strings' specification's figuration.tones, [1,5] tones" },
+            divisions: { range: [0, 1], unit: "share of its playable divisions", kind: "setting", reason: `a part whose time is its own (its entry delayed, its pace drifting) is written on a lattice of its own: the beat divided from two to as many times as its player plays notes in it, the parts' shares spread evenly over this range from a drawn offset (no fixed set of tuplets: the owner, 2 October 2026, "the real limits are possible playing ... speed of the shortest notes")`, was: "the strings' specification's micropolyphony.divisions, [0,1] share of its playable divisions: each part's grid a share of this, spread over its parts", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+          }
+        },
+        "texture-line": {
+          about: "One line, every part in unison or at the octave: monophony, Huron's synchrony and semblance both whole (its parts' rhythms and pitches planned once for all: line.js planLine).",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "one tone at a time, no figure" },
+            synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part sounds each onset: monophony at the top of Huron's synchrony", sources: ["huron-1989-textures"] },
+            semblance: { value: 1, unit: "share", kind: "setting", reason: "every part moves as the others: monophony at the end of Huron's semblant motion", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "one voice, no voices to rule between" },
+            binding: { value: 1, unit: "share", kind: "setting", reason: "one voice: no part to bind it to" },
+            between: { value: 0, unit: "share", kind: "setting", reason: "not read: a line is planned against the line pools above it by its own planner (section-voices.js sectionLines)" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "not read: a line's fioriture are its player's (personality.js fioriture: line.js planLine)" },
+            pulse: { range: [0.35, 0.95], unit: "share", kind: "setting", reason: "not read by a line, which its planner rhythms; a melody's, as a counterpoint's parts move, where a blend draws the process family" },
+            chance: { value: 0, unit: "share", kind: "setting", reason: "its onsets planned, none by chance" },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "its notes sustained" },
+            sustain: { value: 0.97, unit: "share", kind: "setting", reason: "each note sounds this share of its written length (section-voices.js ARTICULATION): its notes joined, never run together" },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no note slides" },
+            motion: { value: 0.1, unit: "share", kind: "setting", reason: "not read by a line, which its planner moves; a melody's steps and leaps where a blend draws the process family" },
+            continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's lattice" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "every part entering together (a line shared by sections enters as its conductor's entries say: entries.js)" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "no part follows another's material in its own rhythm: a line's parts are one" },
+            places: { value: 0, unit: "share", kind: "setting", reason: "one place: every part the line" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+          }
+        },
+        "texture-counterpoint": {
+          about: "Voices of their own: polyphony, low in Huron's synchrony and semblance (conducting/counterpoint.js counterLine under drawnRules).",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "one tone at a time in each voice" },
+            synchrony: { value: 0, unit: "share", kind: "setting", reason: "each voice its own rhythm, none taking the top's: Bach's fugues and sinfonias low in Huron's onset synchronization; toward 1, the share of its voices on the top's rhythm, first species's note against note", sources: ["huron-1989-textures"] },
+            semblance: { range: [0, 1], unit: "share", kind: "setting", reason: "the share of its lower voices imitating its top, a canon among them, most pools often (texture-space semblanceSkew); the voices free, non-semblant, where none does", sources: ["huron-1989-textures"], was: "the strings' specification's counterpoint.imitation, [0,1] share: how often its lower parts imitate its top", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            rules: { range: [0.4, 1], unit: "share", kind: "setting", reason: "its rule sets' rigour: how strictly its drawn blend binds (counterpoint.js drawnRules)", sources: ["huron-2001", "ebcioglu-1990"], was: "the strings' specification's counterpoint.rigor, [0.4,1] share: its rule sets' rigour", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            binding: { value: 1, unit: "share", kind: "setting", reason: "res facta: every voice planned against every voice above it (counterLine against every line planned), each part bound to every other, as Tinctoris's res facta is in Bent's reading", sources: ["bent-1983"] },
+            between: { range: [0, 1], unit: "share", kind: "setting", reason: `its parts bound to the pools above it as to one another, a score written whole, or each pool's idiom its own (the owner, 5 November 2026: "the types of textures Charles Ives and Alfred Schnittke employed where several different idioms co-occurred"); read where its blends draw the process, the planned counterpoint planning its pool alone` },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: `res facta sung as it is written, its notes none diminished; a performer's diminutions over it, its counterpoint unchanged beneath them, a point toward a share of them (the owner, 5 November 2026: "scores follow counterpoint rules but performance ornaments sometimes deviate")`, sources: ["brown-1976"] },
+            pulse: { range: [0.35, 0.95], unit: "share", kind: "setting", reason: "its voices' pulses, spread over this range from a drawn offset so they move at their own rates, one holding as another moves (section-voices.js pulsed)", was: "the strings' specification's counterpoint.pulse, [0.35,0.95] 0 held, 1 every subdivision: its parts' pulses spread over this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            chance: { value: 0, unit: "share", kind: "setting", reason: "its rhythms on the meter's positions" },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "its notes sustained" },
+            sustain: { value: 0.97, unit: "share", kind: "setting", reason: "as a line's (ARTICULATION)" },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no note slides" },
+            motion: { value: 0.1, unit: "share", kind: "setting", reason: "not read by counterpoint, which its rules move; a melody's steps where a blend draws the process family" },
+            continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's lattice" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time (its imitation's converging tempo canon its own choice, its prolation)" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "not read by counterpoint, whose imitators enter a felt group apart" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "not read by counterpoint, whose voices are planned" },
+            places: { value: 1, unit: "share", kind: "setting", reason: "each voice its own place in the band, the top highest" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+          }
+        },
+        "texture-figuration": {
+          about: "A compound melody: every part one walk over the harmony's tones, each in its own place (figuration.js, compound-melody.js).",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { range: [0, 1], unit: "share", kind: "setting", reason: "its walk over any of the space's figure tones (texture-space figureTones, one to five: a trill's two, an Alberti bass's three, an arpeggio's more), this share across them", was: "the strings' specification's figuration.tones, [1,5] tones: its walk over so many of the harmony's tones", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part the same walk at once" },
+            semblance: { value: 1, unit: "share", kind: "setting", reason: "every part the same figure, each in its own place: parallel, semblant motion", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "its voices led by the least motion, not by a counterpoint's rules" },
+            binding: { value: 1, unit: "share", kind: "setting", reason: "not read: one figure's walk, planned" },
+            between: { value: 0, unit: "share", kind: "setting", reason: "not read: planned by its figuration" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "not read: planned by its figuration" },
+            pulse: { range: [0.25, 0.8], unit: "share", kind: "setting", reason: "its rate: this share of as many notes a second as its players' quickest allow", was: "the strings' specification's figuration.rate, [0.25,0.8] share of its players' quickest: its rate", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            chance: { value: 0, unit: "share", kind: "setting", reason: "on the meter's positions" },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "its notes sustained" },
+            sustain: { value: 0.97, unit: "share", kind: "setting", reason: "as a line's" },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no note slides" },
+            motion: { value: 0.1, unit: "share", kind: "setting", reason: "not read by a figuration, which its walk moves; a melody's steps where a blend draws the process family" },
+            continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's lattice" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "every part together" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "not read by a figuration, whose parts are planned" },
+            places: { value: 1, unit: "share", kind: "setting", reason: "each part its own place in the band" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+          }
+        },
+        "texture-chord": {
+          about: "A tone a part, struck together: homophony, high in Huron's synchrony and low in his semblance.",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+            synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part strikes the pool's onsets: homophony high in Huron's onset synchronization (hymns)", sources: ["huron-1989-textures"] },
+            semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own tone, voice-led apart: hymns some third semblant in Huron's measure, as voice-leading by the nearest tone leaves them", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "its parts led by the nearest tone, not a counterpoint's rules" },
+            binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+            between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+            pulse: { range: [0, 1], unit: "share", kind: "setting", reason: "0 each tone held until the harmony moves it; 1 struck again on every subdivision; between, the meter's levels in turn; most pools near its low end (texture-space pulseSkew)", was: "the strings' specification's chord.pulse, [0,1] 0 held, 1 every subdivision: a chord's pulse drawn within this, most near its low end", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            chance: { value: 0, unit: "share", kind: "setting", reason: "on the meter's positions" },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "its tones sustained" },
+            sustain: { range: [0.35, 1], unit: "share", kind: "setting", reason: "a struck chord sounding this share of the time to its next stroke", was: "the strings' specification's chord.gate, [0.35,1] share of the time to its next stroke: a pulsed chord sounding this much", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no tone slides" },
+            motion: { value: 0.02, unit: "share", kind: "setting", reason: "a step at a time: struck again, each part moves to the chord's next tone within its reach, never striking one pitch over and over (the owner, 5 October 2026, of Op. 3.30)" },
+            continuum: { value: 0, unit: "share", kind: "setting", reason: "the harmony's tones" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "every part together" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "every part on the harmony's onsets: none following in a rhythm of its own" },
+            places: { value: 1, unit: "share", kind: "setting", reason: "each part its own place in the band, from the top" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn, at least an octave where its parts sound the harmony's tones" }
+          }
+        },
+        "texture-cluster": {
+          about: "The parts spread evenly over a band narrower than the lattice, held: a chord off the lattice, packed.",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+            synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part together", sources: ["huron-1989-textures"] },
+            semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own pitch", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "no rules between its parts" },
+            binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+            between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+            pulse: { value: 0, unit: "share", kind: "setting", reason: "held to the phrase's end" },
+            chance: { value: 0, unit: "share", kind: "setting", reason: "no onset by chance" },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+            sustain: { value: 1, unit: "share", kind: "setting", reason: "held through" },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no slide" },
+            motion: { value: 0, unit: "share", kind: "setting", reason: "held where it is: a mass's stasis (Atmospheres)", sources: ["douglas-noble-mcadams-2016"] },
+            continuum: { value: 1, unit: "share", kind: "setting", reason: "each pitch where it falls, between the keys too" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "every part together" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "every part on the pool's onsets: none following in a rhythm of its own" },
+            places: { value: 1, unit: "share", kind: "setting", reason: "each part its own place, evenly over the band" },
+            packing: { value: 1, unit: "share", kind: "setting", reason: "packed: its band a part to a fraction of a semitone, as the section's specification draws a cluster's (string-section.js pool.cluster)" }
+          }
+        },
+        "texture-micropolyphony": {
+          about: "Ligeti's canon of one cantus, each part entering in turn, a little slower than the one before: a counterpoint whose voices are one line, heard as a mass.",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+            synchrony: { value: 0, unit: "share", kind: "setting", reason: "each part its own time: low in Huron's onset synchronization", sources: ["huron-1989-textures"] },
+            semblance: { value: 1, unit: "share", kind: "setting", reason: "every part the same cantus, read in its own time (Ligeti's canons under rules as strict as Palestrina's)", sources: ["levy-2013"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "its cantus a walk by steps, no voices ruled between" },
+            binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+            between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+            pulse: { value: 0.5, unit: "share", kind: "setting", reason: "a note a group of the meter, the cantus's" },
+            chance: { value: 0, unit: "share", kind: "setting", reason: "no onset by chance" },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+            sustain: { value: 0.98, unit: "share", kind: "setting", reason: "each note sounding nearly its whole step" },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no slide" },
+            motion: { value: 0.02, unit: "share", kind: "setting", reason: "a step at a time: the cantus a walk on the ladder, a moving note never repeated" },
+            continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's ladder" },
+            drift: { range: [0.03, 0.09], unit: "share", kind: "setting", reason: "each part this share slower than the one before, the canon thickening", was: "the strings' specification's micropolyphony.drift, [0.03,0.09] share slower a part: each part this much slower than the last, the canon thickening", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            delay: { value: 1, unit: "share", kind: "setting", reason: "the parts' entries spread over the cantus's first group, every part entered within it" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "its parts in canon, each the cantus in its own time: none following the band's" },
+            places: { value: 0, unit: "share", kind: "setting", reason: "every part over the band whole, a voice leading that fills its space", sources: ["bernard-1994"] },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+          }
+        },
+        "texture-heterophony": {
+          about: "One melody played by every part at once, each in its own rhythm: Huron's fourth quadrant, semblant but not synchronous (the Chinese, Siamese and Korean works his figure measures).",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+            synchrony: { value: 0, unit: "share", kind: "setting", reason: "fitted: no part on the melody's rhythm alone: every part strikes where the melody moves and in a rhythm of its own besides", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+            semblance: { value: 1, unit: "share", kind: "setting", reason: "every part the one melody, moving where it moves (its anticipations Huron's semblant motion the less)", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "one melody, no voices ruled between" },
+            binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+            between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+            pulse: { value: 0.25, unit: "share", kind: "setting", reason: "fitted: the melody's onsets and each part's own drawn a quarter of the time to the meter's strongest positions", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+            chance: { value: 1, unit: "share", kind: "setting", reason: "fitted: every onset a Poisson arrival, so each part's own fall apart from the melody's and the others'", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+            sustain: { value: 0.97, unit: "share", kind: "setting", reason: "as a line's" },
+            glide: { range: [0, 0.2], unit: "share", kind: "setting", reason: "a part sliding into its note, a heterophony's inflection, little" },
+            motion: { value: 0.02, unit: "share", kind: "setting", reason: "its melody a walk by steps" },
+            continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's ladder" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "every part at the melody's moment, no canon" },
+            anticipation: { value: 0.2, unit: "share", kind: "setting", reason: "fitted: a fifth of each part's own onsets between the melody's moves taking its next note early", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+            places: { value: 0, unit: "share", kind: "setting", reason: "every part in the melody's register" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+          }
+        },
+        "texture-glides": {
+          about: "Each part sliding from pitch to pitch, its onsets by chance: Xenakis's glissandi (Pithoprakta).",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+            synchrony: { value: 0, unit: "share", kind: "setting", reason: "each part its own onsets", sources: ["huron-1989-textures"] },
+            semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own path", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "no rules: a mass's mean state in their place", sources: ["xenakis-1955"] },
+            binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+            between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+            pulse: { value: 0, unit: "share", kind: "setting", reason: "free of the meter" },
+            chance: { value: 1, unit: "share", kind: "setting", reason: "its onsets Poisson arrivals, the intervals between them by the exponential law", sources: ["xenakis-1992", "gibson-2022"] },
+            impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+            sustain: { range: [0.7, 1], unit: "share", kind: "setting", reason: "each slide sounding to its next, a rest now and then as a cloud thins" },
+            glide: { range: [0.2, 1], unit: "share", kind: "setting", reason: "the share of each note spent sliding, the rest holding its first pitch; most pools near its least (texture-space glideSkew)", was: "the strings' specification's glissandi.hold, [0,0.8] share of its note: how much holds its first pitch before it slides, a pool's own, most nearer the top (the owner, 2 October 2026: fewer attacks straight into glissandi)", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] },
+            motion: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "its steps' spread a share of its region per mean interval, its speeds normal about none (Pithoprakta's Gauss's law: the strings' 2 to 4 semitones a second over a band of some 16 at an onset a second)", sources: ["xenakis-1992"], was: "the strings' specification's glissandi.spread, [2,4] semitones a second: the speeds' spread, Xenakis's normal law (Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] },
+            continuum: { value: 1, unit: "share", kind: "setting", reason: "anywhere between the keys" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "its entries by chance" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "a glide's part following another's material takes its moves as they come" },
+            places: { value: 0, unit: "share", kind: "setting", reason: "every part over the band whole" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+          }
+        },
+        "texture-points": {
+          about: "A cloud of impulses, each part's by chance anywhere in the band: Xenakis's pizzicato clouds, as any instrument plays a point.",
+          source: "ours, its sources by key on each setting",
+          settings: {
+            compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+            synchrony: { value: 0, unit: "share", kind: "setting", reason: "each part its own onsets", sources: ["huron-1989-textures"] },
+            semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own pitches", sources: ["huron-1989-textures"] },
+            rules: { value: 0, unit: "share", kind: "setting", reason: "no rules", sources: ["xenakis-1955"] },
+            binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+            between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+            ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+            pulse: { range: [0, 1], unit: "share", kind: "setting", reason: "how often an onset is drawn to the meter's next position, most clouds free (texture-space pulseSkew)", was: "the strings' specification's pizzicati.pulse, [0,1] 0 free, 1 on the meter's positions: a cloud's pulse drawn within this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+            chance: { value: 1, unit: "share", kind: "setting", reason: "Poisson arrivals (Achorripsis's law)", sources: ["xenakis-1992", "gibson-2022"] },
+            impulse: { value: 1, unit: "share", kind: "setting", reason: "every note an impulse: each player's shortest sound, a bowed string's plucked", sources: ["schaeffer-1966"] },
+            sustain: { value: 0, unit: "share", kind: "setting", reason: "none held" },
+            glide: { value: 0, unit: "share", kind: "setting", reason: "no slide" },
+            motion: { value: 1, unit: "share", kind: "setting", reason: "each pitch anywhere in its region, the last no guide" },
+            continuum: { value: 1, unit: "share", kind: "setting", reason: "anywhere between the keys" },
+            drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+            delay: { value: 0, unit: "share", kind: "setting", reason: "its entries by chance" },
+            anticipation: { value: 0, unit: "share", kind: "setting", reason: "a point's part following another's material takes its moves as they come" },
+            places: { value: 0, unit: "share", kind: "setting", reason: "every part over the band whole" },
+            packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
           }
         }
       }
@@ -3136,6 +3396,7 @@ var init_registry = __esm({
     init_levels();
     init_personality();
     init_rhythm();
+    init_texture();
     init_equations2();
     FILES = Object.freeze({
       "sources.json": sources_default,
@@ -3151,7 +3412,8 @@ var init_registry = __esm({
       "method/strings.json": strings_default,
       "method/levels.json": levels_default,
       "method/personality.json": personality_default,
-      "method/rhythm.json": rhythm_default
+      "method/rhythm.json": rhythm_default,
+      "method/texture.json": texture_default
     });
     KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
     within = (folder, key2) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key2] ?? {})));
@@ -5651,10 +5913,17 @@ var init_tempo_range = __esm({
 });
 
 // public/shared/felt-tempo.js
+function levelsAbove(meter, groups) {
+  const sections = sectionLevels(meter);
+  if (!sections) return metricTree(groups).levels.slice(1).map((level) => level.spans);
+  const deepest = sections.at(-1), trees = groupsBySection(groups, deepest).map((pieces) => metricTree(pieces).levels.slice(1).map((level) => level.spans));
+  const depth = Math.max(0, ...trees.map((tree) => tree.length));
+  return [...Array.from({ length: depth }, (_, d) => trees.flatMap((tree, k2) => tree[d] ?? [deepest[k2]])), ...[...sections].reverse()];
+}
 function meterLevels(meter) {
   const n = Math.max(1, Math.round(Number(meter?.numerator) || 1)), groups = Array.isArray(meter?.groups) && meter.groups.reduce((a, b) => a + b, 0) === n ? meter.groups.map(Number) : [n];
   const within3 = groups.map((group2) => metricTree(cellsOf2(group2)).levels.map((level) => level.spans)), depth = Math.max(...within3.map((list15) => list15.length));
-  const levels = [[1], ...Array.from({ length: depth }, (_, d) => within3.flatMap((list15, k2) => list15[d] ?? [groups[k2]])), ...metricTree(groups).levels.map((level) => level.spans)];
+  const levels = [[1], ...Array.from({ length: depth }, (_, d) => within3.flatMap((list15, k2) => list15[d] ?? [groups[k2]])), groups, ...levelsAbove(meter, groups)];
   const beats2 = meter?.metricReading?.beatWeights;
   if (Array.isArray(beats2) && beats2.length && beats2.every((w) => w > 0)) levels.push(beats2.map(Number));
   return levels.filter((spans2, k2, all) => all.findIndex((other3) => other3.join() === spans2.join()) === k2);
@@ -5688,6 +5957,7 @@ var init_felt_tempo = __esm({
     init_felt_meter_catalog();
     init_nested();
     init_grouping();
+    init_sections();
     init_tempo_range();
     value2 = (text18) => {
       const [n, d = "1"] = String(text18).split("/");
@@ -6000,11 +6270,20 @@ function interpolateMeter(a, b, t, { maxDenominator = 64 } = {}) {
     between: { from: a.label ?? `${a.numerator}/${a.denominator}`, to: b.label ?? `${b.numerator}/${b.denominator}`, t }
   };
 }
-function drawGrouping(numerator, random2 = unitRandom) {
+function drawNesting(numerator, random2 = unitRandom) {
   const n = Math.max(1, Math.round(numerator));
-  if (n <= 3) return [n];
+  if (n <= 3) return n;
   const k2 = n < 6 ? 2 : weighted(METER_SPACE.layers, random2), sizes = grouping(k2, n, Math.floor(random2() * k2));
-  return sizes.flatMap((size) => drawGrouping(size, random2));
+  return sizes.map((size) => drawNesting(size, random2));
+}
+function nestingLevels(nesting) {
+  const span2 = (node) => Array.isArray(node) ? node.reduce((sum9, part) => sum9 + span2(part), 0) : node, levels = [];
+  let nodes2 = Array.isArray(nesting) ? nesting : [nesting];
+  while (nodes2.some(Array.isArray)) {
+    levels.push(nodes2.map(span2));
+    nodes2 = nodes2.flatMap((node) => Array.isArray(node) ? node : [node]);
+  }
+  return levels;
 }
 function drawMeter(random2 = unitRandom, { numerators = METER_SPACE.numerators, subdivision = null, talas = true, denominator: fixed = null } = {}) {
   if (talas && random2() < METER_SPACE.talas) {
@@ -6022,10 +6301,10 @@ function drawMeter(random2 = unitRandom, { numerators = METER_SPACE.numerators, 
     }
   }
   const numerator = numerators[0] + Math.floor(random2() * (numerators[1] - numerators[0] + 1)), denominator = fixed ?? weighted(METER_SPACE.denominators, random2);
-  const groups = drawGrouping(numerator, random2);
-  return { numerator, denominator, groups, subdivision: subdivision ?? weighted(METER_SPACE.subdivisions, random2), label: `${groups.join("+")}/${denominator}` };
+  const nesting = drawNesting(numerator, random2), groups = nestingGroups(nesting), sections = nestingLevels(nesting);
+  return { numerator, denominator, groups, ...sections.length ? { sections } : {}, subdivision: subdivision ?? weighted(METER_SPACE.subdivisions, random2), label: `${nestingLabel(nesting)}/${denominator}` };
 }
-var LIMIT, gcd6, reduced, barDuration, copy, groupsOf2, METER_SPACE, weighted, TALAS;
+var LIMIT, gcd6, reduced, barDuration, copy, groupsOf2, METER_SPACE, weighted, TALAS, nestingGroups, nestingLabel;
 var init_meter_space = __esm({
   "public/shared/meter-space.js"() {
     init_rhythm_vocabulary();
@@ -6081,6 +6360,8 @@ var init_meter_space = __esm({
       return list15.at(-1)[0];
     };
     TALAS = Object.freeze(Object.keys(RHYTHM_VOCABULARY).filter((id4) => RHYTHM_VOCABULARY[id4].kind === "tala").sort());
+    nestingGroups = (nesting) => Array.isArray(nesting) ? nesting.flatMap(nestingGroups) : [nesting];
+    nestingLabel = (nesting) => Array.isArray(nesting) ? nesting.map((part) => Array.isArray(part) ? `(${nestingLabel(part)})` : String(part)).join("+") : String(nesting);
   }
 });
 
@@ -6278,6 +6559,7 @@ function openingTime(seed3) {
     numerator: drawn4.numerator,
     denominator: drawn4.denominator,
     groups: Object.freeze([...drawn4.groups]),
+    ...drawn4.sections ? { sections: Object.freeze(drawn4.sections.map((level) => Object.freeze([...level]))) } : {},
     subdivision: drawn4.subdivision,
     phraseBars: phraseBarsFor(drawn4, bpm, phraseSeconds),
     label: drawn4.label,
@@ -6402,7 +6684,7 @@ function syncopated(span2, parts2, context3) {
   const { groups, resolution } = syncopate(length, { meter, repeats, resolution: mu });
   const within3 = Math.round(toward(random2(), shares.within) * length), event2 = parts2[0].end.sub(parts2[0].at).div(mu);
   let at2 = 0;
-  const grouped2 = groups.map((size) => {
+  const grouped3 = groups.map((size) => {
     const group2 = { at: span2.at.add(event2.mul(at2)), end: span2.at.add(event2.mul(at2 + size)) }, inner = at2 < within3;
     at2 += size;
     const events3 = equalParts(group2, size);
@@ -6412,7 +6694,7 @@ function syncopated(span2, parts2, context3) {
   const rest = parts2.slice(length / mu).map((part) => grow(part, context3));
   return Object.freeze({
     ...leaf(span2),
-    children: Object.freeze([...grouped2, ...rest]),
+    children: Object.freeze([...grouped3, ...rest]),
     syncopation: Object.freeze({ length, meter, repeats, resolution: resolution.groups, within: within3, mu })
   });
 }
@@ -7253,12 +7535,12 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   const drawOf = (k2) => (Math.imul(hash16, [2246822519, 3266489917][k2]) >>> 8) / 16777216, shape = choices.recallCadence ?? { augment: 0, fragment: 0 };
   const cadenceShape = recalls ? { augment: drawOf(0) < shape.augment ? 2 : 1, keep: +(1 - shape.fragment * drawOf(1)).toFixed(3) } : null;
   const tickOf = (bar2, position2) => {
-    const p = authoredFraction(position2), whole8 = p.floor(), fraction4 = p.sub(whole8);
-    const beat = beats2[Math.min(whole8, beats2.length - 1)], extra = whole8 >= beats2.length ? whole8 - beats2.length + 1 : 0;
+    const p = authoredFraction(position2), whole9 = p.floor(), fraction4 = p.sub(whole9);
+    const beat = beats2[Math.min(whole9, beats2.length - 1)], extra = whole9 >= beats2.length ? whole9 - beats2.length + 1 : 0;
     return authoredFraction(bar2 * pulses).add(authoredFraction(beat?.start ?? 0)).add(authoredFraction(beat?.length ?? pulses / beats2.length).mul(fraction4.add(extra)));
   };
   const timeOf2 = (bar2, position2) => {
-    const whole8 = Math.floor(position2 + 1e-9), fraction4 = position2 - whole8, beat = beats2[Math.min(whole8, beats2.length - 1)], extra = whole8 >= beats2.length ? whole8 - beats2.length + 1 : 0;
+    const whole9 = Math.floor(position2 + 1e-9), fraction4 = position2 - whole9, beat = beats2[Math.min(whole9, beats2.length - 1)], extra = whole9 >= beats2.length ? whole9 - beats2.length + 1 : 0;
     return (bar2 * pulses + (beat?.start ?? 0) + (beat?.length ?? pulses / beats2.length) * (fraction4 + extra)) * tick;
   };
   const made2 = Number.isFinite(own2.density) ? own2.density : density;
@@ -7319,8 +7601,8 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
     const most2 = Math.floor(span2 / (choices.shortest ?? LINE.shortest) + 1e-9);
     return most2 < 2 ? 1 : Math.min(most2, divisionOf(density, { seconds: span2, choices }));
   };
-  const holds = (cell) => bar ? bar.secondsOf(cellInterval(cell).at, cellInterval(cell).end) >= 2 * quickest - 1e-12 : cell.beats >= 1 - 1e-9;
-  const figureOf = (cell) => notesIn(cellInterval(cell).at, cellInterval(cell).end, (most2) => countOf(density, most2, { least: 2 }));
+  const holds = (cell) => bar ? bar.secondsOf(cellInterval(cell).at, cellInterval(cell).end) >= FIGURE_LEAST * quickest - 1e-9 : cell.beats >= 1 - 1e-9;
+  const figureOf = (cell) => notesIn(cellInterval(cell).at, cellInterval(cell).end, (most2) => countOf(density, most2, { least: FIGURE_LEAST }));
   const held2 = played.cells.flatMap((cell, k2) => holds(cell) && !cell.rest && !played.cells[k2 + 1]?.rest ? [k2] : []), chosen = drawnSet(held2.length, held2.length * more, random2);
   const divided = played.cells.map((cell, k2) => chosen.has(held2.indexOf(k2)) && held2.includes(k2));
   const skeletonCells = segments.flatMap((segment2, s) => segment2.cells.map((cell, k2) => ({
@@ -7420,9 +7702,19 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
     note.dynamic = choices.dynamics[Math.min(choices.dynamics.length - 1, Math.floor(level * choices.dynamics.length))];
     note.velocity = choices.velocity[note.dynamic];
   });
+  const legato = clamp2(Number(choices.slurSegments) || 0, 0, 1), whole8 = /* @__PURE__ */ new Set();
+  if (legato > 0) {
+    for (const segment2 of new Set(notes.map((note) => note.segment))) if (legato >= 1 || random2() < legato) whole8.add(segment2);
+  }
   let slur = 0, run15 = 0;
   notes.forEach((note, k2) => {
     const before4 = notes[k2 - 1], joined = before4 && note.start - before4.end < 1e-6;
+    if (whole8.has(note.segment)) {
+      if (!joined || before4.segment !== note.segment) slur++;
+      note.slur = `w${slur}`;
+      run15 = 0;
+      return;
+    }
     if (note.division > 1 && (run15 === 0 || run15 >= choices.slurMost || before4.division <= 1 || !joined)) {
       slur++;
       run15 = 0;
@@ -7463,7 +7755,7 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   }
   return { status: "planned", notes, motif: own2, apex: pitches[apex], variation, lead: landing != null ? pitches[landing] : null, ...choice ? { choice } : {}, ...cadenceShape ? { cadence: cadenceShape } : {} };
 }
-var openingBeatSeconds, LINE, clamp2, RULE, fit2, smooth, swellLevel, PHRASE_OFFSETS, meterKey, trillFree, stepOf, heardMotif, backOf;
+var openingBeatSeconds, FIGURE_LEAST, LINE, clamp2, RULE, fit2, smooth, swellLevel, PHRASE_OFFSETS, meterKey, trillFree, stepOf, heardMotif, backOf;
 var init_line = __esm({
   "public/shared/performers/line.js"() {
     init_fioritura();
@@ -7479,6 +7771,7 @@ var init_line = __esm({
       const meter = bandMeter();
       return meter.numerator * 60 / Math.max(1, bandTempo()) / Math.max(1, (meter.groups ?? [meter.numerator]).length);
     };
+    FIGURE_LEAST = 2;
     LINE = Object.freeze({
       // How finely a divided felt beat may be divided, from the least density to the most, and the dynamics a phrase spans:
       // the system's scored range, ppp to fff (dynamics.js; the owner, 10 October 2026).
@@ -7493,6 +7786,9 @@ var init_line = __esm({
       // The longest slur of quick notes, and a leap's chance in a motif.
       slurMost: 4,
       leap: 0.18,
+      // The share of a phrase's segments (its idea, its repetition, its answer, ...) slurred whole, long notes and all,
+      // tongued where each begins: a legato player's (personality.js, its slurs). None here: long notes separate.
+      slurSegments: 0,
       // The share of a held note a soloist's run may take.
       ornamentShare: "2/3",
       // A motif's fewest and most notes, its widest drift (pool steps from its first note to its last), and the density it
@@ -27844,7 +28140,7 @@ function compileCounterpointProfile(spec) {
       return result15;
     };
     const pairAt = (slice, pair3) => {
-      const grouped2 = byVoice2(slice), a = grouped2.get(pair3[0]) ?? [], b = grouped2.get(pair3[1]) ?? [];
+      const grouped3 = byVoice2(slice), a = grouped3.get(pair3[0]) ?? [], b = grouped3.get(pair3[1]) ?? [];
       return !a.length || !b.length ? "N/A" : a.length !== 1 || b.length !== 1 ? "UNKNOWN" : [a[0], b[0]];
     };
     const preceding = /* @__PURE__ */ new Map();
@@ -29396,8 +29692,8 @@ var SECTION_LEANINGS = Object.freeze({
   figuration: Object.freeze({ tonality: 1, mechanism: 0.7, complexity: 0.3, attack: 0.3 }),
   micropolyphony: Object.freeze({ complexity: 1.2, mechanism: -0.8, attack: -0.5 }),
   cluster: Object.freeze({ tonality: -1, complexity: 0.5, attack: -0.3 }),
-  glissandi: Object.freeze({ tonality: -0.8, mechanism: -1, continuity: -0.4 }),
-  pizzicati: Object.freeze({ attack: 1.2, space: 0.3, mechanism: 0.3 })
+  glides: Object.freeze({ tonality: -0.8, mechanism: -1, continuity: -0.4 }),
+  points: Object.freeze({ attack: 1.2, space: 0.3, mechanism: 0.3 })
 });
 function sectionAesthetic(vector4) {
   const value4 = aesthetic(vector4);
@@ -29534,6 +29830,62 @@ function mulberry32(seed3) {
   };
 }
 
+// public/shared/texture-space.js
+init_registry();
+init_fnv1a();
+var TEXTURE_DIMENSIONS = Object.freeze({
+  compound: "a compound melody's tones: a figure walking this share across the space's figure tones (FIGURE_TONES) of the harmony's",
+  synchrony: "the share of the parts striking the pool's own onsets, the rest each its own (Huron's onset synchronization)",
+  semblance: "the share of the parts playing the pool's own material, the rest each its own (Huron's semblant motion)",
+  rules: "how strictly a counterpoint's rules bind its voices: a planned counterpoint's rigour (counterpoint.js drawnRules), the share of a process's notes its rules choose among its walk's proposals (section-voices.js processVoice)",
+  binding: "which of its parts its rules bind each part to: the pool's first part alone (0: Tinctoris's singing over the book, each part at least concordant with the tenor) to every part above it (1: his res facta, every part bound to every other; Bent 1983)",
+  between: "how far its rules bind its parts to the pools sounding above it as to its own: none (0: each pool's idiom its own, several at once, as Ives's and Schnittke's) to as far (1)",
+  ornament: "the share of a part's held notes whose end becomes a run to its next note, as florid as it is often, exempt from its rules: bound only to leave the note and land on the next (the diminution treatises' passaggi; Brown 1976)",
+  pulse: "how far the meter's positions hold the onsets: none (held, or free) to every subdivision, the meter's levels in turn",
+  chance: "the share of onsets placed by Poisson arrivals (Xenakis), the rest by the pulse",
+  impulse: "the share of the parts whose notes are impulses (Schaeffer): each player's shortest sound",
+  sustain: "the share of the time to its next onset a sustained note sounds",
+  glide: "the share of each note spent sliding from the pitch before it",
+  motion: "a step's spread, a share of its place's span an onset, normal about none (Xenakis's speeds); 0 holds its pitch",
+  continuum: "how far a pitch leaves the harmony's lattice for the continuum",
+  drift: "how much slower each part's time runs than the one before it (a canon thickening)",
+  delay: "how far within a group of the meter the parts' entries spread (a canon's)",
+  anticipation: "the share of a following part's own onsets that take the material's next note early (a heterophony's: its motion oblique to the others', Huron's semblant motion the less)",
+  places: "each part in its own place in the band (1), or every part over the band whole (0)",
+  packing: "the band packed narrower than the lattice, a fraction of a semitone a part (a cluster's)"
+});
+var TEXTURE_NAMES = Object.freeze(Object.keys(METHODS).filter((id4) => id4.startsWith("texture-") && id4 !== "texture-space").map((id4) => id4.slice("texture-".length)));
+var asRange = (value4) => Array.isArray(value4) ? [...value4] : [value4, value4];
+var TEXTURE_SPACE = styleSpace({
+  name: "the texture",
+  dimensions: TEXTURE_DIMENSIONS,
+  locations: Object.fromEntries(TEXTURE_NAMES.map((name12) => [name12, Object.fromEntries(Object.keys(TEXTURE_DIMENSIONS).map((key2) => [key2, asRange(setting(`texture-${name12}`, key2))]))]))
+});
+var TEXTURE_ALIASES = Object.freeze({ pizzicati: "points", glissandi: "glides" });
+var textureName = (name12) => TEXTURE_ALIASES[name12] ?? name12;
+var PLANNED = Object.freeze(["line", "counterpoint", "figuration"]);
+var familyOf = (name12) => PLANNED.includes(textureName(name12)) ? textureName(name12) : "process";
+var SKEWS = Object.freeze({ pulse: setting("texture-space", "pulseSkew"), semblance: setting("texture-space", "semblanceSkew"), glide: setting("texture-space", "glideSkew") });
+var OWN_DIVISIONS = Object.freeze(setting("texture-space", "divisions"));
+var FIGURE_TONES = Object.freeze(setting("texture-space", "figureTones"));
+function textureLocation(given3) {
+  try {
+    if (typeof given3 === "string") return TEXTURE_SPACE.locate(textureName(given3));
+    if (!given3 || typeof given3 !== "object" || Array.isArray(given3)) return null;
+    return TEXTURE_SPACE.locate(Object.fromEntries(Object.entries(given3).map(([key2, value4]) => [textureName(key2), TEXTURE_DIMENSIONS[key2] && typeof value4 === "number" ? [value4, value4] : value4])));
+  } catch {
+    return null;
+  }
+}
+var seededSource = (seed3, name12) => mulberry32(fnv1a(String(name12), FNV_OFFSET ^ Number(seed3) >>> 0));
+function drawnPoint(point, seed3) {
+  return Object.freeze(Object.fromEntries(Object.keys(TEXTURE_DIMENSIONS).map((key2) => {
+    const [low, high] = point[key2];
+    return [key2, +(low + (high - low) * seededSource(seed3, `texture:${key2}`)() ** (SKEWS[key2] ?? 1)).toFixed(4)];
+  })));
+}
+var pointOfRole = (role) => role?.point ? textureLocation(role.point) : textureLocation(role?.texture ?? "");
+
 // public/shared/performers/string-section.js
 var SECTION = (path) => group("violin-family", `section.${path}`, "players");
 var OWN = (name12) => setting("strings-section", name12);
@@ -29583,7 +29935,12 @@ function parseSeats(value4, seats) {
   return mine;
 }
 var GROUPINGS = Object.freeze(["sections", "choirs", "all"]);
-var TEXTURES = Object.freeze(["line", "chord", "counterpoint", "figuration", "micropolyphony", "cluster", "glissandi", "pizzicati", "tacet", "hit"]);
+var TEXTURES = Object.freeze([...TEXTURE_NAMES, "tacet", "hit"]);
+var renamed = (weights) => {
+  const out = {};
+  for (const [id4, weight3] of Object.entries(weights)) out[textureName(id4)] = (out[textureName(id4)] ?? 0) + weight3;
+  return out;
+};
 var AUTHORED = SECTION("specification");
 var STRING_SPECIFICATION = Object.freeze({
   // From phrase to phrase: the same formation again, part of the way to a new one (at a tenth drawn), or a new one.
@@ -29645,31 +30002,25 @@ var STRING_SPECIFICATION = Object.freeze({
   // soloist then plays a line, one front-chair player of one of its sections, while the orchestra recedes.
   solo: AUTHORED.solo,
   // The piece's last phrase: the section tutti (a split within this) in chords to its end, where the constraints allow.
-  // What each texture's parts are made of, drawn a pool, said in the formation and played from it:
-  // - micropolyphony (mass_clodbot's canon): each part's division of the beat, from a range, each part the next; each part
-  //   this share slower than the one before (the canon thickening); the cantus's length in notes;
-  // - glissandi (Xenakis's, Pithoprakta: their speeds from Gauss's law, Formalized Music, 1963/1992, ch. 1): the speeds'
-  //   spread (semitones a second) and a glissando's length (s);
-  // - pizzicati: how long a pluck is held (s; a sampled bank's recordings ring as they ring).
-  // (A micropolyphony's parts each on a grid of its own: `divisions`, from two to a part's share of as many as its beat
-  // holds playable notes, shares spread over the parts (section-voices.js; no fixed set of tuplets: the owner, 2
-  // October 2026, "the real limits are possible playing ... speed of the shortest notes").)
-  // (And how much of each glissando holds its first pitch before it slides, a pool's own: 0 sliding from its attack,
-  // as Pithoprakta's do; most pools nearer its top, a held tone sliding into the next -- the owner, 2 October 2026:
-  // bots "attack directly into glissandos in ways that I think should occur less often for their instruments"; the
-  // square root of a uniform draw.)
-  // - a chord's pulse (0, each tone held until the harmony moves it; 1, struck again on every subdivision of the meter;
-  //   between, the meter's levels in turn: section-voices.js) and its gate (how much of the time to its next stroke a
-  //   pulsed chord sounds); a pizzicati cloud's pulse (0 free, 1 on the meter's positions). A pool's own pulse is the
-  //   square of a uniform draw over its range, so most pools near its low end; a character moves the range
-  //   (aesthetic.js sectionAesthetic).
-  // - a counterpoint's parts' pulses (each part's rhythm: the meter's levels coming in as its pulse rises, section-voices.js
-  //   pulsed), spread over this range from a drawn offset so its voices move at their own rates, and its rule sets'
-  //   rigour (conducting/counterpoint.js drawnRules: how strictly its drawn blend binds).
-  //   And how often its lower parts imitate its top (a canon among its voices, each entry a felt group after the last):
-  //   a pool's own share, the square root of a uniform draw over this range, so most pools imitate often. And how
-  //   often its imitation is a converging tempo canon (each imitating part faster, all arriving together:
-  //   section-voices.js tempoCanon), a pool's own share drawn over the whole range.
+  // Where each texture stands in the texture space (texture-space.js TEXTURE_SPACE: each dimension a range a pool draws its
+  // own point within, drawnPoint; the registry's, registry/method/texture.json, each with its reason and sources): its
+  // onsets the pool's or each part's own (synchrony), its material the pool's or each part's own (semblance), its
+  // counterpoint's rules, its pulse (0 held or free, 1 every subdivision, the meter's levels coming in between:
+  // section-voices.js pulsed), its Poisson arrivals (chance), its impulses, how much of the time to its next onset a note
+  // sounds (sustain), how much of it slides (glide), how far its steps reach (motion), how far its pitches leave the
+  // harmony's lattice (continuum), its parts' drift and entries (a canon's), each part's own place in the band (places)
+  // and its packing (a cluster's). A spec narrows or moves any of them (`locations`: {chord: {pulse: [0, .3]}}); a
+  // character's lens moves its pulses and sustains (inCharacter).
+  locations: TEXTURE_SPACE.locations,
+  // And what each texture's family makes of it, its planner's own details, drawn a pool (parametersFor), said in the
+  // formation and played from it:
+  // - a process's (section-voices.js processVoice: every texture not planned as a phrase): an impulse sounding this long
+  //   (s; a bowed string's pluck rings as a sampled bank's recordings ring); a micropolyphony's cantus, so many notes
+  //   (then again);
+  // - a counterpoint's: how often its imitation is a converging tempo canon (each imitating part faster, all arriving
+  //   together: section-voices.js tempoCanon), a pool's own share drawn over the whole range. (Its parts' pulses spread
+  //   over its location's pulse from a drawn offset so its voices move at their own rates, its rules' rigour and how
+  //   often its lower parts imitate its top, its semblance, the point's.)
   // - a line's own rubato over the conductor's beat (the owner: "melodic parts take their own rubato over them"): its
   //   notes behind (or ahead of) the beat by up to this share of its phrase at the phrase's middle, together again at
   //   its ends, its depth a pool's own draw and its way its own, no further than its conductor's ownTime
@@ -29682,9 +30033,10 @@ var STRING_SPECIFICATION = Object.freeze({
   //   approaches previously established"; their density had been a fixed share of their level, a third to a half).
   // (And, a line shared by several sections, how often an entry of it is planed at an interval not an octave, and
   // how often it enters late, a canon: conducting/entries.js -- the pool's own shares, drawn from its seed.)
-  // - a figuration's walk over the harmony's tones (figuration.js: how many, which way, how often it turns, how surely
-  //   its lowest tone takes the meter's strong positions) and its rate, a share of as many notes a second as its
-  //   players' quickest allow: Alberti basses, arpeggios, broken chords, trills and every state between.
+  // - a figuration's walk over the harmony's tones (figuration.js: which way, how often it turns, how surely its lowest
+  //   tone takes the meter's strong positions; how many tones its compound melody walks, and its rate, a share of as many
+  //   notes a second as its players' quickest allow, the point's compound and pulse): Alberti basses, arpeggios, broken
+  //   chords, trills and every state between.
   parameters: AUTHORED.parameters,
   // Each player's own inflection of their part, drawn once from their seat: at most so many cents, and so many seconds
   // late, so a part played by many is a section's sound, not one note copied -- its lateness a few milliseconds, never
@@ -29715,7 +30067,9 @@ function specificationOf(override = null, base3 = STRING_SPECIFICATION) {
     }
     return out;
   };
-  const spec = merge(base3, override, "specification.");
+  const byName = (value4) => isObject(value4) ? Object.fromEntries(Object.entries(value4).map(([id4, v]) => [textureName(id4), v])) : value4;
+  const spec = merge(base3, { ...override, ...override.locations ? { locations: byName(override.locations) } : {}, ...override.parameters ? { parameters: byName(override.parameters) } : {} }, "specification.");
+  if (override.textures) spec.textures = spec.textures.map((band2) => ({ ...band2, weights: renamed(band2.weights ?? {}) }));
   for (const [id4, weight3] of Object.entries(spec.groupings)) if (!GROUPINGS.includes(id4) || !(weight3 >= 0)) throw new RangeError(`specification.groupings.${id4}`);
   for (const split2 of spec.splits) {
     range(split2.range, "a split");
@@ -29726,6 +30080,14 @@ function specificationOf(override = null, base3 = STRING_SPECIFICATION) {
     for (const [id4, weight3] of Object.entries(band2.weights)) if (!TEXTURES.includes(id4) || !(weight3 >= 0)) throw new RangeError(`A texture's weight: ${id4}`);
   }
   for (const key2 of ["centre", "width", "density", "level"]) range(spec.pool[key2], `specification.pool.${key2}`);
+  for (const [name12, location2] of Object.entries(spec.locations)) {
+    if (!TEXTURE_SPACE.locations[name12]) throw new RangeError(`specification.locations.${name12}: a texture is one of ${TEXTURE_NAMES.join(", ")}`);
+    for (const [key2, value4] of Object.entries(location2)) {
+      if (!TEXTURE_DIMENSIONS[key2]) throw new RangeError(`specification.locations.${name12}.${key2}: no dimension of the texture space`);
+      range(value4, `specification.locations.${name12}.${key2}`);
+      if (value4[0] < 0 || value4[1] > 1) throw new RangeError(`specification.locations.${name12}.${key2} is within 0..1`);
+    }
+  }
   if (!(spec.rest.from >= 0 && spec.rest.to <= 1 && spec.rest.from <= spec.rest.to && spec.rest.ask >= 0 && spec.rest.ask <= 1)) throw new RangeError("specification.rest is {from, to, ask} within 0..1");
   if (!(spec.solo.ask >= 0 && spec.solo.ask <= 1)) throw new RangeError("specification.solo is {ask} within 0..1");
   for (const [texture, values] of Object.entries(spec.parameters)) for (const [key2, value4] of Object.entries(values)) range(value4, `specification.parameters.${texture}.${key2}`);
@@ -29758,7 +30120,11 @@ var weighted2 = (list15, random2) => {
 };
 var within2 = (value4, [low, high]) => Math.max(low, Math.min(high, value4));
 var across = ([low, high], random2) => low + (high - low) * random2();
-var poolParameters = (texture, parts2, seed3, spec = STRING_SPECIFICATION) => parametersFor(texture, parts2, spec, seededSource(seed3, "parameters"));
+var poolParameters = (texture, parts2, seed3, spec = STRING_SPECIFICATION, point = null) => parametersFor(texture, parts2, spec, seededSource2(seed3, "parameters"), point ?? pointOf(texture, spec), seed3);
+var pointOf = (texture, spec) => {
+  const name12 = textureName(texture);
+  return spec.locations?.[name12] ?? textureLocation(name12);
+};
 function withLineage(formation, previous, random2) {
   const before4 = new Map((previous?.pools ?? []).filter((pool) => pool.lineage).map((pool) => [pool.id, pool.lineage]));
   return { ...formation, pools: formation.pools.map((pool) => {
@@ -29766,69 +30132,67 @@ function withLineage(formation, previous, random2) {
     return { ...pool, seed: seed3, lineage: Object.freeze(kept ? { root: kept.root, age: kept.age + 1 } : { root: Math.floor(random2() * SEED_SPAN), age: 0 }) };
   }) };
 }
-function parametersFor(texture, k2, spec, random2) {
-  const p = spec.parameters[texture];
-  if (!p) return null;
-  if (texture === "micropolyphony") {
-    const [low, high] = p.divisions, offset = random2();
-    return Object.freeze({ divisions: Object.freeze(Array.from({ length: k2 }, (_, part) => +(low + (high - low) * ((offset + part / Math.max(1, k2)) % 1)).toFixed(4))), drift: +across(p.drift, random2).toFixed(4), cantusNotes: Math.max(1, Math.round(across(p.cantusNotes, random2))) });
-  }
-  if (texture === "glissandi") return Object.freeze({ spread: +across(p.spread, random2).toFixed(3), seconds: Object.freeze([...p.seconds]), ...p.hold ? { hold: +(p.hold[0] + (p.hold[1] - p.hold[0]) * Math.sqrt(random2())).toFixed(3) } : {} });
-  if (texture === "pizzicati") return Object.freeze({ seconds: +across(p.seconds, random2).toFixed(3), ...p.pulse ? { pulse: +(p.pulse[0] + (p.pulse[1] - p.pulse[0]) * random2() ** 2).toFixed(3) } : {} });
-  if (texture === "line") {
+function parametersFor(texture, k2, spec, random2, location2, seed3) {
+  const name12 = textureName(texture), p = spec.parameters[name12] ?? {};
+  if (!location2) return null;
+  const point = drawnPoint(location2, seed3);
+  if (name12 === "line") {
     const rubato = +(across(p.rubato, random2) * (random2() < 1 / 2 ? -1 : 1)).toFixed(4);
     return Object.freeze({ rubato, ...p.density ? { density: +across(p.density, random2).toFixed(3) } : {} });
   }
-  if (texture === "figuration") return Object.freeze({ tones: Math.round(across(p.tones, random2)), direction: +across(p.direction, random2).toFixed(3), turn: +across(p.turn, random2).toFixed(3), anchor: +across(p.anchor, random2).toFixed(3), rate: +across(p.rate, random2).toFixed(3) });
-  if (texture === "chord") return Object.freeze({ pulse: +(p.pulse[0] + (p.pulse[1] - p.pulse[0]) * random2() ** 2).toFixed(3), gate: +across(p.gate, random2).toFixed(3) });
-  if (texture === "counterpoint") {
-    const [low, high] = p.pulse, offset = random2();
+  if (name12 === "counterpoint") {
+    const [low, high] = location2.pulse, offset = random2();
     return Object.freeze({
       pulses: Object.freeze(Array.from({ length: k2 }, (_, part) => +(low + (high - low) * ((offset + part / Math.max(1, k2)) % 1)).toFixed(4))),
-      rigor: +across(p.rigor, random2).toFixed(3),
-      imitation: +(p.imitation[0] + (p.imitation[1] - p.imitation[0]) * Math.sqrt(random2())).toFixed(3),
+      rigor: point.rules,
+      imitation: point.semblance,
+      ...point.binding < 1 ? { binding: point.binding } : {},
+      ...point.ornament > 0 ? { ornament: point.ornament } : {},
       ...p.prolation ? { prolation: +across(p.prolation, random2).toFixed(3) } : {}
     });
   }
-  return null;
+  if (name12 === "figuration") return Object.freeze({ tones: Math.round(FIGURE_TONES[0] + (FIGURE_TONES[1] - FIGURE_TONES[0]) * point.compound), direction: +across(p.direction, random2).toFixed(3), turn: +across(p.turn, random2).toFixed(3), anchor: +across(p.anchor, random2).toFixed(3), rate: point.pulse });
+  if (familyOf(name12) !== "process") return null;
+  const impulse = spec.parameters.points?.seconds, cantus = spec.parameters.micropolyphony?.cantusNotes;
+  return Object.freeze({ ...impulse ? { seconds: +across(impulse, random2).toFixed(3) } : {}, ...name12 === "micropolyphony" && cantus ? { cantusNotes: Math.max(1, Math.round(across(cantus, random2))) } : {} });
 }
 var STRING_VOCABULARY = Object.freeze({
   grouping: Object.freeze({ values: GROUPINGS }),
-  texture: Object.freeze({ values: TEXTURES }),
+  texture: Object.freeze({ values: Object.freeze([...TEXTURES, ...Object.keys(TEXTURE_ALIASES)]) }),
   split: Object.freeze({ low: 0, high: 1 }),
   level: Object.freeze({ low: 0, high: 1 }),
   players: Object.freeze({ low: 0, high: 1 })
 });
 function checkedConstraints2(value4 = {}) {
-  return checkedConstraints(Object.fromEntries(Object.entries(value4 ?? {}).filter(([key2]) => key2 in STRING_VOCABULARY)), STRING_VOCABULARY);
+  const asked = Object.entries(value4 ?? {}).filter(([key2]) => key2 in STRING_VOCABULARY).map(([key2, given3]) => [key2, key2 !== "texture" ? given3 : Array.isArray(given3) ? given3.map(textureName) : typeof given3 === "string" ? textureName(given3) : given3]);
+  return checkedConstraints(Object.fromEntries(asked), STRING_VOCABULARY);
 }
 function inCharacter(spec, character) {
   const lens = sectionAesthetic(character), meet = (own2, wanted) => {
     const low = Math.max(own2[0], wanted[0]), high = Math.min(own2[1], wanted[1]);
     return Object.freeze(low <= high ? [low, high] : wanted[1] < own2[0] ? [own2[0], own2[0]] : [own2[1], own2[1]]);
   };
-  const parameters2 = { ...spec.parameters };
-  if (spec.parameters.chord) parameters2.chord = Object.freeze({ ...spec.parameters.chord, pulse: meet(spec.parameters.chord.pulse, lens.pulse), gate: meet(spec.parameters.chord.gate, lens.gate) });
-  if (spec.parameters.pizzicati?.pulse) parameters2.pizzicati = Object.freeze({ ...spec.parameters.pizzicati, pulse: meet(spec.parameters.pizzicati.pulse, lens.pulse) });
+  const locations = { ...spec.locations }, moved = (name12, changes) => {
+    if (locations[name12]) locations[name12] = Object.freeze({ ...locations[name12], ...Object.fromEntries(Object.entries(changes).map(([key2, wanted]) => [key2, meet(locations[name12][key2], wanted)])) });
+  };
+  moved("chord", { pulse: lens.pulse, sustain: lens.gate });
+  moved("points", { pulse: lens.pulse });
   return Object.freeze({
     ...spec,
-    parameters: Object.freeze(parameters2),
+    locations: Object.freeze(locations),
     textures: Object.freeze(spec.textures.map((entry3) => Object.freeze({ ...entry3, weights: Object.freeze(Object.fromEntries(Object.entries(entry3.weights).map(([id4, w]) => [id4, w * (lens.weights[id4] ?? 1)]))) }))),
     pool: Object.freeze({ ...spec.pool, density: Object.freeze(spec.pool.density.map((d) => +(d * lens.density).toFixed(3))) })
   });
 }
 function inLean(spec, lean) {
   if (!lean || !Object.keys(lean).length) return spec;
-  return Object.freeze({ ...spec, textures: Object.freeze(spec.textures.map((entry3) => Object.freeze({ ...entry3, weights: Object.freeze(Object.fromEntries(Object.entries(entry3.weights).map(([id4, w]) => [id4, w * Math.max(0, Number(lean[id4] ?? 1))]))) }))) });
+  const by = Object.fromEntries(Object.entries(lean).map(([id4, factor2]) => [textureName(id4), factor2]));
+  return Object.freeze({ ...spec, textures: Object.freeze(spec.textures.map((entry3) => Object.freeze({ ...entry3, weights: Object.freeze(Object.fromEntries(Object.entries(entry3.weights).map(([id4, w]) => [id4, w * Math.max(0, Number(by[id4] ?? 1))]))) }))) });
 }
 function inElongation(spec, factor2) {
-  const E = Math.max(1, factor2), slower = (range3) => Object.freeze(range3.map((x) => +(x / E).toFixed(4))), p = { ...spec.parameters };
-  if (p.glissandi) p.glissandi = Object.freeze({ ...p.glissandi, seconds: Object.freeze(p.glissandi.seconds.map((x) => +(x * E).toFixed(3))) });
-  if (p.chord) p.chord = Object.freeze({ ...p.chord, pulse: slower(p.chord.pulse) });
-  if (p.pizzicati?.pulse) p.pizzicati = Object.freeze({ ...p.pizzicati, pulse: slower(p.pizzicati.pulse) });
-  if (p.figuration) p.figuration = Object.freeze({ ...p.figuration, rate: slower(p.figuration.rate) });
-  if (p.micropolyphony) p.micropolyphony = Object.freeze({ ...p.micropolyphony, divisions: slower(p.micropolyphony.divisions) });
-  return Object.freeze({ ...spec, parameters: Object.freeze(p), pool: Object.freeze({ ...spec.pool, density: slower(spec.pool.density) }), elongation: E });
+  const E = Math.max(1, factor2), slower = (range3) => Object.freeze(range3.map((x) => +(x / E).toFixed(4)));
+  const locations = Object.fromEntries(Object.entries(spec.locations).map(([name12, location2]) => [name12, ["line", "counterpoint"].includes(name12) ? location2 : Object.freeze({ ...location2, pulse: slower(location2.pulse) })]));
+  return Object.freeze({ ...spec, locations: Object.freeze(locations), pool: Object.freeze({ ...spec.pool, density: slower(spec.pool.density) }), elongation: E });
 }
 function formationPlan(seats, { random: random2, grouping: grouping2 = null, split: split2 = null, texture = null, constraints = {}, specification = STRING_SPECIFICATION, order: order4 = SECTION_ORDER, character = null, elongation = 1 } = {}) {
   const charactered = character ? inCharacter(specification, character) : specification, spec = elongation > 1 ? inElongation(charactered, elongation) : charactered, bound = checkedConstraints2({ ...constraints, ...grouping2 != null ? { grouping: grouping2 } : {}, ...split2 != null ? { split: split2 } : {}, ...texture != null ? { texture } : {} });
@@ -29842,23 +30206,26 @@ function formationPlan(seats, { random: random2, grouping: grouping2 = null, spl
   const { centre, width, cluster, density, level, players = [1, 1] } = spec.pool;
   const levelBound = bound.level ? [within2(bound.level[0], level), within2(bound.level[1], level)] : null;
   const share = +(bound.players ? within2(across(players, random2), bound.players) : across(players, random2)).toFixed(3);
-  const grouped2 = pools(seats, chosenGrouping, { choirs: spec.choirs, order: order4 }).map((pool) => ({ pool, level: +(levelBound ? within2(across(level, random2), levelBound) : across(level, random2)).toFixed(3), seed: Math.floor(random2() * SEED_SPAN) }));
-  const reach = grouped2.map(({ pool, level: level2 }) => frontDesks(pool.seats, { level: level2 }).length), all = reach.reduce((sum9, n) => sum9 + n, 0), total = playersOf(share, all);
+  const grouped3 = pools(seats, chosenGrouping, { choirs: spec.choirs, order: order4 }).map((pool) => ({ pool, level: +(levelBound ? within2(across(level, random2), levelBound) : across(level, random2)).toFixed(3), seed: Math.floor(random2() * SEED_SPAN) }));
+  const reach = grouped3.map(({ pool, level: level2 }) => frontDesks(pool.seats, { level: level2 }).length), all = reach.reduce((sum9, n) => sum9 + n, 0), total = playersOf(share, all);
   const counts = total >= all ? reach : shareAmong(total, reach, random2);
-  return Object.freeze({ grouping: chosenGrouping, split: +chosenSplit.toFixed(4), ...share < 1 ? { players: share } : {}, pools: Object.freeze(grouped2.map(({ pool, level: poolLevel, seed: seed3 }, index) => {
+  return Object.freeze({ grouping: chosenGrouping, split: +chosenSplit.toFixed(4), ...share < 1 ? { players: share } : {}, pools: Object.freeze(grouped3.map(({ pool, level: poolLevel, seed: seed3 }, index) => {
     const fewer = counts[index] < reach[index], playing = frontDesks(pool.seats, { level: poolLevel, ...fewer ? { playing: counts[index], seed: seed3 } : {} }).length;
     const divided = partsOf(pool.seats.length, chosenSplit, pool.seats.map(deskKey)), k2 = Math.max(...partsOf(Math.max(1, playing), chosenSplit)) + 1;
     const low = Math.min(...pool.seats.map((seat) => seat.register[0])), high = Math.max(...pool.seats.map((seat) => seat.register[1]));
     const allowed = texturesFor(k2, spec).filter(([id4]) => !bound.texture || bound.texture.includes(id4));
     const chosen = !playing ? "tacet" : allowed.length ? weighted2(allowed, random2) : bound.texture[Math.floor(random2() * bound.texture.length)];
     const parts2 = chosen === "line" ? divided.map(() => 0) : divided;
+    const location2 = pointOf(chosen, spec), own2 = location2 && location2 !== TEXTURE_SPACE.locations[chosen] && JSON.stringify(location2) !== JSON.stringify(TEXTURE_SPACE.locations[chosen]);
+    const packing = location2 ? drawnPoint(location2, seed3).packing : 0, packed = (u) => (1 - packing) * (width[0] + (width[1] - width[0]) * u) + packing * (cluster.base + Math.min(k2, cluster.mostParts) * (cluster.perPart[0] + (cluster.perPart[1] - cluster.perPart[0]) * u));
     const made2 = {
       id: pool.id,
       seats: Object.freeze(pool.seats.map((seat) => seat.id)),
       parts: Object.freeze(parts2),
       texture: chosen,
+      ...own2 ? { point: location2 } : {},
       centre: +(low + (high - low) * across(centre, random2)).toFixed(3),
-      width: +(chosen === "cluster" ? cluster.base + Math.min(k2, cluster.mostParts) * across(cluster.perPart, random2) : across(width, random2)).toFixed(3),
+      width: +packed(random2()).toFixed(3),
       density: +across(density, random2).toFixed(3),
       level: poolLevel,
       seed: seed3,
@@ -29867,41 +30234,41 @@ function formationPlan(seats, { random: random2, grouping: grouping2 = null, spl
     };
     const sectionsOf = [...new Set(pool.seats.map((seat) => seat.section))];
     if (chosen === "line" && sectionsOf.length > 1) {
-      const own2 = seededSource(seed3, "entries"), line = spec.parameters?.line ?? {}, half = Math.max(LINE_BAND, made2.width), band2 = [made2.centre - half, made2.centre + half];
+      const own3 = seededSource2(seed3, "entries"), line = spec.parameters?.line ?? {}, half = Math.max(LINE_BAND, made2.width), band2 = [made2.centre - half, made2.centre + half];
       const sections = sectionsOf.map((id4) => {
         const seats2 = pool.seats.filter((seat) => seat.section === id4);
         return { id: id4, register: [Math.min(...seats2.map((seat) => seat.register[0])), Math.max(...seats2.map((seat) => seat.register[1]))] };
       });
-      const entries = lineEntries({ sections, band: band2, planing: line.planing ? across(line.planing, own2) : 0, canon: line.canon ? across(line.canon, own2) : 0, random: own2 });
+      const entries = lineEntries({ sections, band: band2, planing: line.planing ? across(line.planing, own3) : 0, canon: line.canon ? across(line.canon, own3) : 0, random: own3 });
       if (entries) {
         made2.entries = entries;
         made2.entryRegisters = Object.freeze(Object.fromEntries(sections.map((s) => [s.id, Object.freeze([...s.register])])));
       }
     }
-    const parameters2 = poolParameters(chosen, k2, made2.seed, spec), [tLow, tHigh] = spec.pool.tremolo ?? [0, 0];
-    const tremolo = +(tLow + (tHigh - tLow) * seededSource(made2.seed, "tremolo")() ** TREMOLO_SKEW).toFixed(3);
+    const parameters2 = poolParameters(chosen, k2, made2.seed, spec, location2), [tLow, tHigh] = spec.pool.tremolo ?? [0, 0];
+    const tremolo = +(tLow + (tHigh - tLow) * seededSource2(made2.seed, "tremolo")() ** TREMOLO_SKEW).toFixed(3);
     const keen = Object.fromEntries(["pressure", "contact", "harmonic", "multiphonic", "hum", "growl", "flutter", "mute"].map((t) => [t, poolWant(spec.techniques, pool.seats, t)]));
     const wanted = (given3, t) => given3 ? { ...given3, share: Math.min(1, (given3.share ?? 0) * keen[t]) } : given3;
-    const { share: coloured = 0, least = 0, loud = 1, skew = 1 } = wanted(spec.pool.contact, "contact") ?? {}, colour = seededSource(made2.seed, "contact");
+    const { share: coloured = 0, least = 0, loud = 1, skew = 1 } = wanted(spec.pool.contact, "contact") ?? {}, colour = seededSource2(made2.seed, "contact");
     const farthest = Math.max(least, 1 - (1 - loud) * Math.max(0, Math.min(1, Number(made2.level) || 0)));
     const contact = colour() < coloured ? +((colour() < 1 / 2 ? -1 : 1) * (least + (farthest - least) * colour() ** skew)).toFixed(3) : 0;
     const breath = spec.pool.technique ? { ...spec.pool.technique, share: Math.min(1, (spec.pool.technique.share ?? 0) * Math.max(keen.hum, keen.growl, keen.flutter)), wants: { hum: keen.hum, growl: keen.growl, flutter: keen.flutter } } : spec.pool.technique;
     const articulation = articulationFor(made2, spec.pool.articulation);
-    const pressure = pressureFor(made2, wanted(spec.pool.pressure, "pressure")), technique = windTechniqueFor(made2, breath, seededSource(made2.seed, "technique")), mute = muteFor(made2, wanted(spec.pool.mute, "mute"), seededSource(made2.seed, "mute"));
-    const harmonic = harmonicFor(made2, wanted(spec.pool.harmonic, "harmonic"), seededSource(made2.seed, "harmonic")), multiphonic = harmonic ? null : multiphonicFor(made2, wanted(spec.pool.multiphonic, "multiphonic"), seededSource(made2.seed, "multiphonic"));
+    const pressure = pressureFor(made2, wanted(spec.pool.pressure, "pressure")), technique = windTechniqueFor(made2, breath, seededSource2(made2.seed, "technique")), mute = muteFor(made2, wanted(spec.pool.mute, "mute"), seededSource2(made2.seed, "mute"));
+    const harmonic = harmonicFor(made2, wanted(spec.pool.harmonic, "harmonic"), seededSource2(made2.seed, "harmonic")), multiphonic = harmonic ? null : multiphonicFor(made2, wanted(spec.pool.multiphonic, "multiphonic"), seededSource2(made2.seed, "multiphonic"));
     const keenest = Object.entries(keen).some(([, want]) => want !== 1) ? Object.freeze(keen) : null;
     return Object.freeze({ ...made2, ...keenest ? { keenest } : {}, ...tremolo > 0 ? { tremolo } : {}, ...contact ? { contact } : {}, ...pressure ? { pressure } : {}, ...articulation ? { articulation } : {}, ...technique ? { technique } : {}, ...mute ? { mute } : {}, ...harmonic ? { harmonic } : {}, ...multiphonic ? { multiphonic } : {}, ...parameters2 ? { parameters: parameters2 } : {} });
   })) });
 }
 function pressureFor(pool, { share = 0, least = 0, skew = 1 } = {}) {
-  const draw = seededSource(pool.seed, "pressure");
+  const draw = seededSource2(pool.seed, "pressure");
   if (!(draw() < share)) return 0;
   const level = Math.max(0, Math.min(1, Number(pool.level) || 0)), reach = Math.abs(aboutMiddle(level));
   if (reach <= least) return 0;
   return +((level < 1 / 2 ? -1 : 1) * (least + (reach - least) * draw() ** skew)).toFixed(3);
 }
 function articulationFor(pool, { share = 0, least = 0, skew = 1 } = {}) {
-  const draw = seededSource(pool.seed, "articulation");
+  const draw = seededSource2(pool.seed, "articulation");
   if (!(draw() < share)) return null;
   const reach = Math.max(least, Math.min(1, Number(pool.level) || 0));
   return articulationAlong(least + (reach - least) * draw() ** skew);
@@ -29912,12 +30279,13 @@ function formationBetween(a, b, t, seats) {
   const split2 = (1 - t) * a.split + t * b.split, by = new Map(a.pools.map((pool) => [pool.id, pool])), mix = (x, y) => +((1 - t) * x + t * y).toFixed(4);
   return Object.freeze({ grouping: b.grouping, split: +split2.toFixed(4), pools: Object.freeze(b.pools.map((pool) => {
     const from = by.get(pool.id) ?? pool, parts2 = partsOf(pool.seats.length, split2, pool.seats.map(deskKey));
-    const texture = t < 1 / 2 ? from.texture : pool.texture, parameters2 = (t < 1 / 2 ? from : pool).parameters;
-    const { parameters: dropped, ...rest } = pool;
+    const texture = t < 1 / 2 ? from.texture : pool.texture, parameters2 = (t < 1 / 2 ? from : pool).parameters, point = pointBetween(from, pool, t);
+    const { parameters: dropped, point: own2, ...rest } = pool;
     return Object.freeze({
       ...rest,
       parts: Object.freeze(parts2),
       texture,
+      ...point ? { point } : {},
       centre: mix(from.centre, pool.centre),
       width: mix(from.width, pool.width),
       density: mix(from.density, pool.density),
@@ -29937,6 +30305,15 @@ function formationBetween(a, b, t, seats) {
       ...parameters2 ? { parameters: parameters2 } : {}
     });
   })) });
+}
+function pointBetween(a, b, t) {
+  if (familyOf(a.texture) !== "process" || familyOf(b.texture) !== "process" || !TEXTURE_SPACE.locations[textureName(a.texture)] || !TEXTURE_SPACE.locations[textureName(b.texture)]) return (t < 1 / 2 ? a : b).point ?? null;
+  if (!a.point && !b.point) {
+    if (textureName(a.texture) === textureName(b.texture)) return null;
+    return Object.freeze({ [textureName(a.texture)]: +(1 - t).toFixed(4), [textureName(b.texture)]: +t.toFixed(4) });
+  }
+  const [from, to] = [a, b].map((pool) => textureLocation(pool.point ?? pool.texture)), between6 = TEXTURE_SPACE.between(from, to, t);
+  return Object.freeze(Object.fromEntries(Object.keys(TEXTURE_DIMENSIONS).map((key2) => [key2, Object.freeze(between6[key2].map((x) => +x.toFixed(4)))])));
 }
 function compactFormation(formation, seats) {
   const sectionOf2 = new Map(seats.map((seat) => [seat.id, seat.section]));
@@ -29971,7 +30348,7 @@ function frontDesks(seats, pool) {
   for (const seat of seats) most.set(seat.section, Math.max(most.get(seat.section) ?? 0, deskOf(seat)));
   const front = seats.filter((seat) => deskOf(seat) <= desksPlaying(pool.level, most.get(seat.section)));
   if (!Number.isInteger(pool.playing) || pool.playing >= front.length) return front;
-  const sections = [...new Set(front.map((seat) => seat.section))], counts = shareAmong(pool.playing, sections.map((section2) => front.filter((seat) => seat.section === section2).length), seededSource(pool.seed ?? 0, "players"));
+  const sections = [...new Set(front.map((seat) => seat.section))], counts = shareAmong(pool.playing, sections.map((section2) => front.filter((seat) => seat.section === section2).length), seededSource2(pool.seed ?? 0, "players"));
   const order4 = (a, b) => (a.desk ?? a.chair ?? 1) - (b.desk ?? b.chair ?? 1) || (a.chair ?? 0) - (b.chair ?? 0);
   const chosen = new Set(sections.flatMap((section2, i) => front.filter((seat) => seat.section === section2).sort(order4).slice(0, counts[i])));
   return front.filter((seat) => chosen.has(seat));
@@ -29990,12 +30367,19 @@ function seatRoles(formation) {
   const out = /* @__PURE__ */ new Map();
   for (const pool of formation.pools) {
     const k2 = Math.max(...pool.parts) + 1;
-    pool.seats.forEach((seat, i) => out.set(seat, { pool: pool.id, ...pool.entries ? { entry: pool.entries[String(seat).split(".")[0]] ?? null, section: String(seat).split(".")[0], entries: pool.entries, ...pool.entryRegisters ? { entryRegisters: pool.entryRegisters } : {} } : {}, part: pool.parts[i], parts: k2, texture: pool.texture, centre: pool.centre, width: pool.width, density: pool.density, level: pool.level, ...pool.contact ? { contact: pool.contact } : {}, ...pool.pressure ? { pressure: pool.pressure } : {}, ...pool.articulation ? { articulation: pool.articulation } : {}, ...pool.technique ? { technique: pool.technique } : {}, ...pool.mute ? { mute: pool.mute } : {}, ...pool.harmonic ? { harmonic: pool.harmonic } : {}, ...pool.multiphonic ? { multiphonic: pool.multiphonic } : {}, ...pool.keenest ? { keenest: pool.keenest } : {}, ...pool.tremolo > 0 ? { tremolo: pool.tremolo, ...pool.tremoloRate ? { tremoloRate: pool.tremoloRate } : {} } : {}, ...pool.material ? { material: pool.material } : {}, ...pool.elongation > 1 ? { elongation: pool.elongation } : {}, ...pool.inversion > 0 ? { inversion: pool.inversion } : {}, ...pool.parameters ? { parameters: pool.parameters } : {}, ...pool.given ? { given: pool.given } : {}, ...Number.isFinite(pool.givenOctave) ? { givenOctave: pool.givenOctave } : {}, ...pool.retrograde ? { retrograde: true } : {}, ...Number.isFinite(pool.contour) ? { contour: pool.contour } : {}, ...pool.ending ? { ending: pool.ending } : {}, ...Number.isFinite(pool.told) ? { told: pool.told } : {}, ...pool.tapeLine ? { tapeLine: pool.tapeLine } : {}, ...pool.themeLine ? { themeLine: pool.themeLine } : {}, ...pool.motifUse ? { motifUse: pool.motifUse } : {}, ...pool.motifFallback ? { motifFallback: { ...pool.motifFallback, pool: pool.motifFallback.id, part: pool.motifFallback.parts[pool.motifFallback.seats.indexOf(seat)] ?? 0, parts: Math.max(...pool.motifFallback.parts) + 1 } } : {}, ...pool.lineage ? { lineage: pool.lineage } : {}, ...pool.vibrato ? { vibrato: pool.vibrato } : {}, ...pool.latitude > 0 ? { latitude: pool.latitude, ...formation.region ? { region: formation.region } : {} } : {}, ...formation.repetition ? { repetition: formation.repetition } : {}, ...Number.isFinite(formation.ownTime) ? { ownTime: formation.ownTime } : {}, seed: pool.seed }));
+    pool.seats.forEach((seat, i) => out.set(seat, { pool: pool.id, ...pool.entries ? { entry: pool.entries[String(seat).split(".")[0]] ?? null, section: String(seat).split(".")[0], entries: pool.entries, ...pool.entryRegisters ? { entryRegisters: pool.entryRegisters } : {} } : {}, part: pool.parts[i], parts: k2, texture: pool.texture, centre: pool.centre, width: pool.width, density: pool.density, level: pool.level, ...pool.contact ? { contact: pool.contact } : {}, ...pool.pressure ? { pressure: pool.pressure } : {}, ...pool.articulation ? { articulation: pool.articulation } : {}, ...pool.technique ? { technique: pool.technique } : {}, ...pool.mute ? { mute: pool.mute } : {}, ...pool.harmonic ? { harmonic: pool.harmonic } : {}, ...pool.multiphonic ? { multiphonic: pool.multiphonic } : {}, ...pool.keenest ? { keenest: pool.keenest } : {}, ...pool.tremolo > 0 ? { tremolo: pool.tremolo, ...pool.tremoloRate ? { tremoloRate: pool.tremoloRate } : {} } : {}, ...pool.material ? { material: pool.material } : {}, ...pool.elongation > 1 ? { elongation: pool.elongation } : {}, ...pool.inversion > 0 ? { inversion: pool.inversion } : {}, ...pool.parameters ? { parameters: pool.parameters } : {}, ...pool.point ? { point: pool.point } : {}, ...pool.given ? { given: pool.given } : {}, ...Number.isFinite(pool.givenOctave) ? { givenOctave: pool.givenOctave } : {}, ...pool.retrograde ? { retrograde: true } : {}, ...Number.isFinite(pool.contour) ? { contour: pool.contour } : {}, ...pool.ending ? { ending: pool.ending } : {}, ...Number.isFinite(pool.told) ? { told: pool.told } : {}, ...pool.tapeLine ? { tapeLine: pool.tapeLine } : {}, ...pool.themeLine ? { themeLine: pool.themeLine } : {}, ...pool.motifUse ? { motifUse: pool.motifUse } : {}, ...pool.motifFallback ? { motifFallback: { ...pool.motifFallback, pool: pool.motifFallback.id, part: pool.motifFallback.parts[pool.motifFallback.seats.indexOf(seat)] ?? 0, parts: Math.max(...pool.motifFallback.parts) + 1 } } : {}, ...pool.lineage ? { lineage: pool.lineage } : {}, ...pool.vibrato ? { vibrato: pool.vibrato } : {}, ...pool.latitude > 0 ? { latitude: pool.latitude, ...formation.region ? { region: formation.region } : {} } : {}, ...formation.repetition ? { repetition: formation.repetition } : {}, ...Number.isFinite(formation.ownTime) ? { ownTime: formation.ownTime } : {}, seed: pool.seed }));
   }
   const lines = formation.pools.filter((pool) => pool.texture === "line" && !pool.given && !pool.entries && pool.seats.length), first = new Map(lines.map((pool) => [pool.id, out.get(pool.seats[0])]));
   for (const pool of lines) {
     const above = lines.filter((other3) => other3 !== pool && Number(other3.centre) > Number(pool.centre)).sort((a, b) => b.centre - a.centre).map((other3) => first.get(other3.id));
     if (above.length) for (const seat of pool.seats) out.get(seat).above = above;
+  }
+  const sounding2 = formation.pools.filter((pool) => pool.seats.length && pointOfRole(pool));
+  for (const pool of sounding2) {
+    const point = familyOf(pool.texture) === "process" ? drawnPoint(pointOfRole(pool), pool.seed ?? 0) : null;
+    if (!(point?.rules > 0 && point.between > 0)) continue;
+    const over = sounding2.filter((other3) => other3 !== pool && Number(other3.centre) > Number(pool.centre)).sort((a, b) => b.centre - a.centre).map((other3) => out.get(other3.seats[0]));
+    if (over.length) for (const seat of pool.seats) out.get(seat).over = over;
   }
   return out;
 }
@@ -30005,13 +30389,13 @@ function formationSummary(formation, sections = STRING_SECTIONS) {
     return `${name12}: ${k2 === 1 ? "tutti" : k2 === n ? `a ${n}` : `div. a ${k2}`}, ${pool.texture}`;
   }).join("; ");
 }
-var seededSource = (seed3, name12 = "") => mulberry32(fnv1a(String(name12), FNV_OFFSET ^ seed3 >>> 0));
+var seededSource2 = (seed3, name12 = "") => mulberry32(fnv1a(String(name12), FNV_OFFSET ^ seed3 >>> 0));
 var PLAYER = STRING_SPECIFICATION.players;
 function playerOffsets(seatId, players = PLAYER) {
-  const random2 = seededSource(SALT_PLAYER, seatId);
+  const random2 = seededSource2(SALT_PLAYER, seatId);
   return Object.freeze({ cents: aboutMiddle(random2()) * players.cents, seconds: random2() * players.seconds });
 }
-var GLISSANDO = Object.freeze({ spread: player("violin-family", "section.glissando.spread"), seconds: STRING_SPECIFICATION.parameters.glissandi.seconds });
+var GLISSANDO = Object.freeze({ spread: player("violin-family", "section.glissando.spread"), seconds: player("violin-family", "section.glissando.seconds") });
 var arcAt = (position2) => Math.sin(Math.PI * Math.max(0, Math.min(1, position2)));
 var arcPeak = 1 / 2;
 
@@ -31745,8 +32129,8 @@ function intoKeyed(pitch5, keyed, pool = []) {
 var windSeatKind = (id4) => Object.entries(WIND_KINDS).find(([, kind]) => kind.order.includes(String(id4).split(".")[0]))?.[0] ?? null;
 var windTextures = Object.freeze([
   Object.freeze({ parts: Object.freeze([1, 1]), weights: Object.freeze({ line: 3, chord: 1 }) }),
-  Object.freeze({ parts: Object.freeze([2, 6]), weights: Object.freeze({ counterpoint: 4, chord: 1.5, cluster: 1.5, micropolyphony: 1, line: 1, glissandi: 0.5 }) }),
-  Object.freeze({ parts: Object.freeze([7, null]), weights: Object.freeze({ counterpoint: 2, chord: 1, cluster: 2, micropolyphony: 2, glissandi: 1 }) })
+  Object.freeze({ parts: Object.freeze([2, 6]), weights: Object.freeze({ counterpoint: 4, chord: 1.5, cluster: 1.5, micropolyphony: 1, line: 1, glides: 0.5 }) }),
+  Object.freeze({ parts: Object.freeze([7, null]), weights: Object.freeze({ counterpoint: 2, chord: 1, cluster: 2, micropolyphony: 2, glides: 1 }) })
 ]);
 var ASKS = Object.freeze({ winds: 0.3, brass: 0.35, saxophones: 0.3 });
 var SOLOS = Object.freeze({ winds: 0.2, brass: 0.1, saxophones: 0.25 });
@@ -34191,6 +34575,10 @@ function pairCost(pitch5, { previous, partner, strong, rules, above = null }) {
     if (kind === "dissonant" && !strong && Math.abs(move) > COUNTERPOINT.step) cost += rules.unpreparedDissonance;
   }
   return cost;
+}
+function heardCost(pitch5, { previous = null, leap = 0, against = [], strong = false, rules, above = null }) {
+  const sorted2 = against.length > COUNTERPOINT.heard ? [...against].sort((a, b) => a.pitch - b.pitch) : against;
+  return noteCost(pitch5, { previous, leap, against: heardPartners(pitch5, { shared: against, sorted: sorted2, own: [] }), strong, rules, above });
 }
 function perfectDegrees(collection2, period2 = 12) {
   const classes = [];
@@ -39373,7 +39761,7 @@ function subjectAffordance({ subjects, conditions, collection: collection2, rule
     length: exact2(Math.max(...notes.map((note) => note.start + note.length))),
     events: notes.map((note, k2) => ({ id: `${id4}e${k2}`, ...spanText(note), pitch: pitchOf2(note.pitch) }))
   });
-  const familyOf4 = (i, condition) => {
+  const familyOf5 = (i, condition) => {
     const subject = subjects[i], entry3 = moved(subject, condition), delay = Number(condition.delay) || 0;
     const placed3 = [subject, entry3.map((note) => ({ ...note, start: note.start + delay }))], all = placed3.flat(), end = Math.max(...all.map((note) => note.start + note.length));
     const moving = placed3[1].some((note, k2) => k2 > 0 && subject.some((other3, j) => j > 0 && Math.abs(other3.start - note.start) < 1e-9));
@@ -39412,7 +39800,7 @@ function subjectAffordance({ subjects, conditions, collection: collection2, rule
   };
   let spec;
   try {
-    const families = subjects.map((_, i) => conditions.map((condition) => familyOf4(i, condition)));
+    const families = subjects.map((_, i) => conditions.map((condition) => familyOf5(i, condition)));
     const registered = subjects.map((_, i) => {
       const ready = prepareDispositionFamily(families[i][0]);
       if (ready.status !== "PASS") throw new Error(ready.reason);
@@ -40630,6 +41018,13 @@ function repetitionCost(notes, tolerance = REPETITION) {
 var mayGoOn = ({ since, strikes }, at2, tolerance = REPETITION) => !(Number.isFinite(since) && (at2 - since >= tolerance.seconds || strikes >= tolerance.strikes));
 
 // public/shared/performers/section-voices.js
+init_fnv1a();
+init_fioritura();
+var EPSILON3 = 1e-9;
+var INSTANT2 = 1e-6;
+var OCTAVE2 = 12;
+var KEPT2 = Object.freeze({ plans: 512, ensembles: 64 });
+var SECOND_SEED = 2654435769;
 var SECTION_VOICES = Object.freeze({
   shortest: 2 * BOW.changeSeconds,
   // A line's own rubato where no conductor says how far its own time may stray (s): a melody's lead, at most (plex_clodbot
@@ -40651,8 +41046,8 @@ var materialOf = (role) => role.material ?? role.pool;
 var voiceKey = (role) => role.texture === "line" ? materialOf(role) : `${materialOf(role)}:${role.part}`;
 var intoCompass = (pitch5, seat) => {
   let p = pitch5;
-  while (p < seat.low) p += 12;
-  while (p > seat.high) p -= 12;
+  while (p < seat.low) p += OCTAVE2;
+  while (p > seat.high) p -= OCTAVE2;
   return p < seat.low ? null : p;
 };
 function dynamicOf3(level) {
@@ -40669,16 +41064,22 @@ var groupsOf3 = (meter) => {
   return groups.length ? groups : [Math.max(1, Number(meter?.numerator) || 1)];
 };
 function divisionOf2(classes) {
-  for (let n = 12; n <= 72; n++) if (classes.every((pc) => Math.abs(pc - Math.round(pc * n / 12) * 12 / n) < 1e-3)) return n;
+  for (let n = OCTAVE2; n <= 72; n++) if (classes.every((pc) => Math.abs(pc - Math.round(pc * n / OCTAVE2) * OCTAVE2 / n) < 1e-3)) return n;
   return null;
 }
+var LADDERS = /* @__PURE__ */ new Map();
 function ladderOf2(pool) {
-  const heard = [...new Set((pool() ?? []).map(Number).filter(Number.isFinite).map((p) => +modulo8(p, 12).toFixed(6)))].sort((a, b) => a - b);
-  const n = heard.length >= 5 ? null : divisionOf2(heard), near9 = (k2) => n ? +(Math.round(k2 * n / 12) * 12 / n).toFixed(6) : k2;
-  const twelve = Array.from({ length: 12 }, (_, k2) => heard.find((own2) => Math.min(modulo8(own2 - k2, 12), modulo8(k2 - own2, 12)) < 0.5) ?? near9(k2));
-  const classes = heard.length >= 5 ? heard : [...new Set([...heard, ...twelve].map((pc) => +modulo8(pc, 12).toFixed(6)))].sort((a, b) => a - b), out = [];
-  for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of classes) out.push(12 * octave2 + pc);
-  return out.sort((a, b) => a - b);
+  const tones = pool() ?? [], key2 = JSON.stringify(tones);
+  if (LADDERS.has(key2)) return LADDERS.get(key2);
+  const heard = [...new Set(tones.map(Number).filter(Number.isFinite).map((p) => +modulo8(p, OCTAVE2).toFixed(6)))].sort((a, b) => a - b);
+  const n = heard.length >= 5 ? null : divisionOf2(heard), near9 = (k2) => n ? +(Math.round(k2 * n / OCTAVE2) * OCTAVE2 / n).toFixed(6) : k2;
+  const twelve = Array.from({ length: OCTAVE2 }, (_, k2) => heard.find((own2) => Math.min(modulo8(own2 - k2, OCTAVE2), modulo8(k2 - own2, OCTAVE2)) < 0.5) ?? near9(k2));
+  const classes = heard.length >= 5 ? heard : [...new Set([...heard, ...twelve].map((pc) => +modulo8(pc, OCTAVE2).toFixed(6)))].sort((a, b) => a - b), out = [];
+  for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of classes) out.push(OCTAVE2 * octave2 + pc);
+  const ladder2 = Object.freeze(out.sort((a, b) => a - b));
+  LADDERS.set(key2, ladder2);
+  if (LADDERS.size > KEPT2.plans) LADDERS.delete(LADDERS.keys().next().value);
+  return ladder2;
 }
 var nearestIn = (list15, target) => list15.reduce((best, p) => Math.abs(p - target) < Math.abs(best - target) ? p : best, list15[0]);
 var METRIC_LEVELS = ["bar", "group", "note", "subdivision"];
@@ -40686,27 +41087,13 @@ var METRIC_WEIGHTS = Object.freeze(Object.fromEntries(METRIC_LEVELS.map((level, 
 function metricalGrid(meter, beatSeconds) {
   const groups = groupsOf3(meter), sub4 = Math.max(1, Math.round(Number(meter?.subdivision) || 1)), unit9 = beatSeconds / sub4, positions = [];
   let note = 0;
-  const { bar, group: grouped2, note: noted, subdivision } = METRIC_WEIGHTS;
+  const { bar, group: grouped3, note: noted, subdivision } = METRIC_WEIGHTS;
   groups.forEach((size, group2) => {
-    for (let n = 0; n < size; n++, note++) for (let s = 0; s < sub4; s++) positions.push({ scoreAt: String(note * sub4 + s), at: (note * sub4 + s) * unit9, weight: s ? subdivision : n ? noted : group2 ? grouped2 : bar });
+    for (let n = 0; n < size; n++, note++) for (let s = 0; s < sub4; s++) positions.push({ scoreAt: String(note * sub4 + s), at: (note * sub4 + s) * unit9, weight: s ? subdivision : n ? noted : group2 ? grouped3 : bar });
   });
   return { positions, barSeconds: note * beatSeconds, barTicks: note * sub4 };
 }
 var pulsed = (weight3, pulse, draw) => Math.max(0, Math.min(1, (pulse - (1 - weight3)) / 0.25)) > draw;
-function pulseOf({ meter, beatSeconds, start, pulse, seed: seed3, pool }) {
-  if (!(pulse > 0) || !(beatSeconds > 0)) return null;
-  const { positions, barSeconds: barSeconds3 } = metricalGrid(meter, beatSeconds), on = positions.filter((position2, k2) => pulsed(position2.weight, pulse, seededSource(seed3 ?? 0, `pulse:${pool}:${k2}`)()));
-  if (!on.length) return null;
-  const barTicks = positions.length;
-  const pointAfter = (t) => {
-    const bar = Math.max(0, Math.floor((t - start) / barSeconds3 - 1e-9));
-    for (let b = bar; ; b++) for (const position2 of on) {
-      const at2 = start + b * barSeconds3 + position2.at;
-      if (at2 >= t - 1e-9) return { at: at2, scoreAt: Rational.of(b * barTicks).add(position2.scoreAt) };
-    }
-  };
-  return { pointAfter, after: (t) => pointAfter(t).at };
-}
 var fromTop = (part, parts2) => parts2 - 1 - part;
 var LINES = /* @__PURE__ */ new Map();
 var COUNTERED = /* @__PURE__ */ new Map();
@@ -40719,20 +41106,20 @@ function sectionLines(role, options) {
   const against = role.above.map((other3) => sectionLines(other3, options)).filter((line) => line?.length).map((line) => line.map((note) => ({ pitch: note.pitch, start: note.at - options.downbeat, length: notated(note) })));
   let out = own2;
   if (against.length) {
-    const [low, high] = lineRegister(role, (options.pool ?? []).map(Number).filter(Number.isFinite)) ?? [NaN, NaN], ladder2 = ladderOf2(() => options.pool), steps = ladder2.filter((p) => p >= low - 1e-9 && p <= high + 1e-9);
+    const [low, high] = lineRegister(role, (options.pool ?? []).map(Number).filter(Number.isFinite)) ?? [NaN, NaN], ladder2 = ladderOf2(() => options.pool), steps = ladder2.filter((p) => p >= low - EPSILON3 && p <= high + EPSILON3);
     if (steps.length >= 3) {
-      const random2 = seededSource(role.seed ?? 0, "lines:counterpoint"), { positions, barSeconds: barSeconds3 } = metricalGrid(options.meter, options.beatSeconds);
+      const random2 = seededSource2(role.seed ?? 0, "lines:counterpoint"), { positions, barSeconds: barSeconds3 } = metricalGrid(options.meter, options.beatSeconds);
       const strong = (t) => {
         const within3 = (t % barSeconds3 + barSeconds3) % barSeconds3;
-        return positions.some((position2) => position2.weight >= 0.75 && Math.abs(position2.at - within3) < 1e-6);
+        return positions.some((position2) => position2.weight >= 0.75 && Math.abs(position2.at - within3) < INSTANT2);
       };
-      const { rules } = drawnRules(random2, { voices: against.length + 1, classes: new Set(ladder2.map((p) => +modulo8(p, 12).toFixed(4))).size });
+      const { rules } = drawnRules(random2, { voices: against.length + 1, classes: new Set(ladder2.map((p) => +modulo8(p, OCTAVE2).toFixed(4))).size });
       const { line } = counterLine({ against, rhythm: own2.map((note) => ({ start: note.at - options.downbeat, length: notated(note) })), steps, rules, strong, random: random2, above: false });
       if (line.length === own2.length) out = own2.map(({ source: _, ...note }, k2) => ({ ...note, pitch: line[k2].pitch }));
     }
   }
   COUNTERED.set(key2, out);
-  if (COUNTERED.size > 512) COUNTERED.delete(COUNTERED.keys().next().value);
+  if (COUNTERED.size > KEPT2.plans) COUNTERED.delete(COUNTERED.keys().next().value);
   return out;
 }
 var ENTRIES_CHOSEN = /* @__PURE__ */ new Map();
@@ -40761,52 +41148,60 @@ function sectionCounterpoint(role, { downbeat, phrase, beatSeconds, meter, pool 
     beatSeconds,
     groupsOf3(meter),
     meter?.subdivision,
-    [...new Set(tones.map((p) => +modulo8(p, 12).toFixed(4)))].sort((a, b) => a - b),
+    [...new Set(tones.map((p) => +modulo8(p, OCTAVE2).toFixed(4)))].sort((a, b) => a - b),
     parameters2.pulses ?? null,
     parameters2.rigor ?? null,
     parameters2.imitation ?? null,
-    parameters2.prolation ?? null
+    parameters2.prolation ?? null,
+    parameters2.binding ?? null,
+    parameters2.ornament ?? null
   ]);
   if (VOICES2.has(key2)) return VOICES2.get(key2);
-  const random2 = seededSource(role.seed ?? 0, `counterpoint:${materialOf(role)}`), { positions, barSeconds: barSeconds3 } = metricalGrid(meter, beatSeconds);
-  const bars = Math.max(1, Math.round(phrase / Math.max(1e-6, barSeconds3))), length = Math.min(phrase, bars * barSeconds3);
-  const ladder2 = ladderOf2(() => tones), classes = new Set(ladder2.map((p) => +modulo8(p, 12).toFixed(4))).size;
+  const random2 = seededSource2(role.seed ?? 0, `counterpoint:${materialOf(role)}`), { positions, barSeconds: barSeconds3 } = metricalGrid(meter, beatSeconds);
+  const bars = Math.max(1, Math.round(phrase / Math.max(INSTANT2, barSeconds3))), length = Math.min(phrase, bars * barSeconds3);
+  const ladder2 = ladderOf2(() => tones), classes = new Set(ladder2.map((p) => +modulo8(p, OCTAVE2).toFixed(4))).size;
   const { rules } = drawnRules(random2, { rigor: Number.isFinite(parameters2.rigor) ? parameters2.rigor : 1, voices: parts2, classes });
   const strong = (t) => {
     const within3 = (t % barSeconds3 + barSeconds3) % barSeconds3;
-    return positions.some((position2) => position2.weight >= 0.75 && Math.abs(position2.at - within3) < 1e-6);
+    return positions.some((position2) => position2.weight >= 0.75 && Math.abs(position2.at - within3) < INSTANT2);
   };
-  const span2 = Math.max(12, (Number(role.width) || 7) * 2), c2 = Number(role.centre) || 60, reach = Math.max(5, span2 / parts2);
+  const span2 = Math.max(OCTAVE2, (Number(role.width) || 7) * 2), c2 = Number(role.centre) || 60, reach = Math.max(5, span2 / parts2);
   const pulses = Array.isArray(parameters2.pulses) && parameters2.pulses.length ? parameters2.pulses : [0.5];
-  const targetOf = (part) => c2 - span2 / 2 + span2 * (fromTop(part, parts2) + 0.5) / parts2, stepsOf = (part) => ladder2.filter((p) => p >= targetOf(part) - reach - 1e-9 && p <= targetOf(part) + reach + 1e-9);
+  const targetOf = (part) => c2 - span2 / 2 + span2 * (fromTop(part, parts2) + 0.5) / parts2, stepsOf = (part) => ladder2.filter((p) => p >= targetOf(part) - reach - EPSILON3 && p <= targetOf(part) + reach + EPSILON3);
   const rhythmOf = (part) => {
     const scoreBar = groupsOf3(meter).reduce((sum9, g) => sum9 + g, 0) * (Number(meter.subdivision) || 1);
-    const pulse = pulses[part % pulses.length], own2 = seededSource(role.seed ?? 0, `counterpoint:rhythm:${materialOf(role)}:${part}`), onsets = [];
+    const pulse = pulses[part % pulses.length], own2 = seededSource2(role.seed ?? 0, `counterpoint:rhythm:${materialOf(role)}:${part}`), onsets = [];
     for (let bar = 0; bar < bars; bar++) for (const position2 of positions) {
       const at2 = bar * barSeconds3 + position2.at;
-      if (at2 < length - 1e-6 && (at2 < 1e-9 || pulsed(position2.weight, pulse, own2()))) onsets.push({ at: at2, scoreAt: Rational.of(bar * scoreBar).add(Rational.of(position2.scoreAt)) });
+      if (at2 < length - INSTANT2 && (at2 < EPSILON3 || pulsed(position2.weight, pulse, own2()))) onsets.push({ at: at2, scoreAt: Rational.of(bar * scoreBar).add(Rational.of(position2.scoreAt)) });
     }
     return onsets.map((point, k2) => ({ start: point.at, length: (onsets[k2 + 1]?.at ?? length) - point.at, scoreTime: scoreTime(point.scoreAt, (onsets[k2 + 1]?.scoreAt ?? Rational.of(bars * scoreBar)).sub(point.scoreAt), { axis: "phrase" }) }));
   };
   const imitation = Math.max(0, Math.min(1, Number(parameters2.imitation) || 0)), group2 = groupsOf3(meter)[0] * beatSeconds;
   const imitators = [];
-  for (let part = 1; part < parts2; part++) if (imitation > 0 && seededSource(role.seed ?? 0, `counterpoint:imitates:${materialOf(role)}:${part}`)() < imitation)
-    imitators.push({ part, delay: (imitators.length + 1) * group2, transpose: 12 * Math.round((targetOf(part) - targetOf(0)) / 12), scoreDelay: (imitators.length + 1) * groupsOf3(meter)[0] * (Number(meter.subdivision) || 1) });
+  for (let part = 1; part < parts2; part++) if (imitation > 0 && seededSource2(role.seed ?? 0, `counterpoint:imitates:${materialOf(role)}:${part}`)() < imitation)
+    imitators.push({ part, delay: (imitators.length + 1) * group2, transpose: OCTAVE2 * Math.round((targetOf(part) - targetOf(0)) / OCTAVE2), scoreDelay: (imitators.length + 1) * groupsOf3(meter)[0] * (Number(meter.subdivision) || 1) });
   const lines = new Array(parts2).fill(null), planned = () => lines.filter((line) => line?.length);
   const topSteps = stepsOf(0);
   const prolation = Math.max(0, Math.min(1, Number(parameters2.prolation) || 0));
-  const canon2 = imitators.length && topSteps.length && prolation > 0 && seededSource(role.seed ?? 0, `counterpoint:prolation:${materialOf(role)}`)() < prolation ? tempoCanon({ rhythm: rhythmOf(0), imitators, length, group: group2, meter, beatSeconds, barSeconds: barSeconds3, tones, targetOf, topSteps, rules, strong, random: seededSource(role.seed ?? 0, `counterpoint:prolation:ratio:${materialOf(role)}`) }) : null;
+  const canon2 = imitators.length && topSteps.length && prolation > 0 && seededSource2(role.seed ?? 0, `counterpoint:prolation:${materialOf(role)}`)() < prolation ? tempoCanon({ rhythm: rhythmOf(0), imitators, length, group: group2, meter, beatSeconds, barSeconds: barSeconds3, tones, targetOf, topSteps, rules, strong, random: seededSource2(role.seed ?? 0, `counterpoint:prolation:ratio:${materialOf(role)}`) }) : null;
   if (canon2) canon2.forEach((line, k2) => {
     lines[k2 ? imitators[k2 - 1].part : 0] = line;
   });
   else if (topSteps.length) {
     const { line } = counterLine({ against: [], rhythm: rhythmOf(0), steps: topSteps, rules, strong, random: random2, self: imitators.map(({ delay, transpose: transpose2 }) => ({ delay, transpose: transpose2 })) });
     lines[0] = line;
-    for (const { part, delay, transpose: transpose2, scoreDelay } of imitators) lines[part] = line.filter((note) => note.start + delay < length - 1e-6).map((note) => ({ ...note, scoreTime: (() => {
+    for (const { part, delay, transpose: transpose2, scoreDelay } of imitators) lines[part] = line.filter((note) => note.start + delay < length - INSTANT2).map((note) => ({ ...note, scoreTime: (() => {
       const shifted = readScoreTime({ scoreTime: shiftScoreTime(note.scoreTime, scoreDelay) }), end = Rational.of(bars * groupsOf3(meter).reduce((a, b) => a + b, 0) * (Number(meter.subdivision) || 1));
       return scoreTime(shifted.at, shifted.end.min(end).sub(shifted.at), { axis: "phrase" });
     })(), pitch: note.pitch + transpose2, start: note.start + delay, length: Math.min(note.length, length - note.start - delay) }));
   }
+  const binding2 = Number.isFinite(parameters2.binding) ? Math.max(0, Math.min(1, parameters2.binding)) : 1;
+  const boundTo = (part) => {
+    if (binding2 >= 1) return planned();
+    const others = lines.map((line, k2) => k2 && line?.length ? k2 : null).filter((k2) => k2 != null).sort((a, b) => Math.abs(a - part) - Math.abs(b - part) || a - b);
+    return [0, ...others.slice(0, Math.round(binding2 * others.length))].map((k2) => lines[k2]).filter((line) => line?.length);
+  };
   for (let part = 1; part < parts2; part++) {
     if (lines[part]) continue;
     const steps = stepsOf(part);
@@ -40814,12 +41209,45 @@ function sectionCounterpoint(role, { downbeat, phrase, beatSeconds, meter, pool 
       lines[part] = [];
       continue;
     }
-    lines[part] = counterLine({ against: planned(), rhythm: rhythmOf(part), steps, rules, strong, random: random2, above: false }).line;
+    lines[part] = counterLine({ against: boundTo(part), rhythm: rhythmOf(part), steps, rules, strong, random: random2, above: false }).line;
   }
   for (let part = 0; part < parts2; part++) lines[part] ??= [];
-  const out = lines.map((line) => line.map((note) => ({ ...scoreTimeFields(note), at: +(downbeat + note.start).toFixed(6), pitch: note.pitch, seconds: Math.max(0.05, note.length * ARTICULATION2), written: +note.length.toFixed(6), strong: strong(note.start) })));
+  const ornament = Math.max(0, Math.min(1, Number(parameters2.ornament) || 0));
+  if (ornament > 0) lines.forEach((line, part) => {
+    const steps = stepsOf(part), ornamented = [];
+    line.forEach((note, k2) => {
+      ornamented.push(note);
+      const next2 = line[k2 + 1];
+      if (!next2 || !note.scoreTime || Math.abs(next2.start - note.start - note.length) > INSTANT2 || !(seededSource2(role.seed ?? 0, `counterpoint:ornament:${materialOf(role)}:${part}:${k2}`)() < ornament)) return;
+      const symbolic = readScoreTime(note), spanTicks = symbolic.duration.mul(authoredFraction(1 - FIORITURA.held)).floor(), tick = note.length / symbolic.duration.toNumber();
+      if (!(spanTicks >= 1)) return;
+      const range3 = [Math.min(steps[0] ?? note.pitch, note.pitch, next2.pitch), Math.max(steps.at(-1) ?? note.pitch, note.pitch, next2.pitch)];
+      const run15 = planFioritura({ from: note.pitch, to: next2.pitch, pool: ladder2, range: range3, spanTicks, tickSeconds: tick, amount: ornament, random: seededSource2(role.seed ?? 0, `counterpoint:ornament:run:${materialOf(role)}:${part}:${k2}`) });
+      if (!run15) return;
+      const runAt = symbolic.end.sub(spanTicks), runStart = note.start + runAt.sub(symbolic.at).toNumber() * tick;
+      ornamented[ornamented.length - 1] = { ...note, length: runStart - note.start, scoreTime: scoreTime(symbolic.at, runAt.sub(symbolic.at), { axis: "phrase" }), legato: true };
+      run15.notes.forEach((step2, i) => ornamented.push({
+        scoreTime: shiftScoreTime(step2.scoreTime, runAt, { axis: "phrase" }),
+        pitch: step2.pitch,
+        start: runStart + step2.at * tick,
+        length: ((run15.notes[i + 1]?.at ?? spanTicks) - step2.at) * tick,
+        ornament: true,
+        ...Math.abs(step2.at - step2.written) > EPSILON3 ? { lag: (step2.at - step2.written) * tick } : {}
+      }));
+    });
+    lines[part] = ornamented;
+  });
+  const out = lines.map((line) => line.map((note) => ({
+    ...scoreTimeFields(note),
+    at: +(downbeat + note.start).toFixed(6),
+    pitch: note.pitch,
+    seconds: Math.max(0.05, note.length * (note.ornament || note.legato ? 1 : ARTICULATION2)),
+    written: +note.length.toFixed(6),
+    strong: strong(note.start),
+    ...note.ornament ? { ornament: true, ...note.lag ? { lag: +note.lag.toFixed(6) } : {} } : {}
+  })));
   VOICES2.set(key2, out);
-  if (VOICES2.size > 512) VOICES2.delete(VOICES2.keys().next().value);
+  if (VOICES2.size > KEPT2.plans) VOICES2.delete(VOICES2.keys().next().value);
   return out;
 }
 function tempoCanon({ rhythm: rhythm2, imitators, length, group: group2, meter, beatSeconds, barSeconds: barSeconds3, tones, targetOf, topSteps, rules, strong, random: random2 }) {
@@ -40829,8 +41257,8 @@ function tempoCanon({ rhythm: rhythm2, imitators, length, group: group2, meter, 
   if (!candidates2.length) return null;
   const option = (top2) => {
     const span2 = length / top2.ratio;
-    if (span2 < barSeconds3 - 1e-9) return null;
-    const onsets = rhythm2.filter((r2) => r2.start < span2 - 1e-9);
+    if (span2 < barSeconds3 - EPSILON3) return null;
+    const onsets = rhythm2.filter((r2) => r2.start < span2 - EPSILON3);
     if (onsets.length < 2) return null;
     const last2 = onsets.at(-1).start, source4 = onsets.map((r2, k2) => ({ start: r2.start, length: (onsets[k2 + 1]?.start ?? span2) - r2.start, scoreTime: scoreTime(readScoreTime(r2).at, (k2 + 1 < onsets.length ? readScoreTime(onsets[k2 + 1]).at : endTick.div(Rational.of(top2.exact))).sub(readScoreTime(r2).at), { axis: "phrase" }) })), ratios2 = [top2];
     for (const _ of imitators) {
@@ -40898,20 +41326,20 @@ function breathHolds(instrument, level = 0.5) {
   return kind.phonationSeconds / ((WIND_LINE.breathDynamics[dynamicOf3(level).dynamic] ?? 1) * Math.max(1, ...Object.values(kind.registers ?? {})));
 }
 function givenShift(pitches, { centre, compass = null }) {
-  const mean4 = pitches.reduce((sum9, p) => sum9 + p, 0) / pitches.length, nearest3 = 12 * Math.round((centre - mean4) / 12) || 0;
+  const mean4 = pitches.reduce((sum9, p) => sum9 + p, 0) / pitches.length, nearest3 = OCTAVE2 * Math.round((centre - mean4) / OCTAVE2) || 0;
   if (!compass || !Number.isFinite(compass.low) || !Number.isFinite(compass.high)) return nearest3;
-  const low = Math.min(...pitches), high = Math.max(...pitches), from = Math.ceil((compass.low - low) / 12), to = Math.floor((compass.high - high) / 12);
+  const low = Math.min(...pitches), high = Math.max(...pitches), from = Math.ceil((compass.low - low) / OCTAVE2), to = Math.floor((compass.high - high) / OCTAVE2);
   if (from > to) return nearest3;
   let best = null;
-  for (let k2 = from; k2 <= to; k2++) if (best == null || Math.abs(12 * k2 - nearest3) < Math.abs(best - nearest3)) best = 12 * k2;
+  for (let k2 = from; k2 <= to; k2++) if (best == null || Math.abs(OCTAVE2 * k2 - nearest3) < Math.abs(best - nearest3)) best = OCTAVE2 * k2;
   return best;
 }
 function lineRegister(role, pitches) {
   const centre = Number(role.centre);
   if (!pitches.length || !Number.isFinite(centre)) return null;
-  const near9 = [...new Set(pitches.map((p) => +modulo8(p, 12).toFixed(6)))].flatMap((pc) => {
-    const nearest3 = centre + modulo8(pc - centre + 6, 12) - 6;
-    return [nearest3 - 12, nearest3, nearest3 + 12];
+  const near9 = [...new Set(pitches.map((p) => +modulo8(p, OCTAVE2).toFixed(6)))].flatMap((pc) => {
+    const nearest3 = centre + modulo8(pc - centre + 6, OCTAVE2) - 6;
+    return [nearest3 - OCTAVE2, nearest3, nearest3 + OCTAVE2];
   }).map((p) => Math.abs(p - centre)).sort((a, b) => a - b);
   const half = Math.max(Number(role.width) || 0, LINE.phraseRange / 2, near9[2]);
   return [centre - half, centre + half];
@@ -40924,9 +41352,9 @@ function lineageMotif(role, { meter, beatSeconds }) {
   const key2 = JSON.stringify([role.lineage.root, groups.map((group2) => [group2.first, group2.count]), felt, (role.above ?? []).map((other3) => other3.lineage?.root ?? null)]);
   if (MOTIFS.has(key2)) return MOTIFS.get(key2);
   const heard = (role.above ?? []).map((other3) => lineageMotif(other3, { meter, beatSeconds })).filter(Boolean);
-  const { motif } = chooseMotif({ groups, density: LINE.motifDensity, heard, random: seededSource(role.lineage.root, "motif"), beatSeconds: felt });
+  const { motif } = chooseMotif({ groups, density: LINE.motifDensity, heard, random: seededSource2(role.lineage.root, "motif"), beatSeconds: felt });
   MOTIFS.set(key2, motif);
-  if (MOTIFS.size > 512) MOTIFS.delete(MOTIFS.keys().next().value);
+  if (MOTIFS.size > KEPT2.plans) MOTIFS.delete(MOTIFS.keys().next().value);
   return motif;
 }
 var lineDensity = (role) => {
@@ -40935,7 +41363,7 @@ var lineDensity = (role) => {
 };
 function sectionLine(role, { downbeat, phrase, beatSeconds, meter, pool, instrument = null, planBeat = null, shortest = null }) {
   const ratio3 = Number(planBeat) > 0 ? beatSeconds / planBeat : 1;
-  if (Math.abs(ratio3 - 1) < 1e-9) return lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument, shortest });
+  if (Math.abs(ratio3 - 1) < EPSILON3) return lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument, shortest });
   const planned = lineAt(role, { downbeat: 0, phrase: phrase / ratio3, beatSeconds: planBeat, meter, pool, instrument, shortest: shortest / ratio3 });
   if (!planned) return planned;
   const out = planned.map((note) => ({ ...note, at: +(downbeat + note.at * ratio3).toFixed(6), seconds: note.seconds * ratio3, ...Number.isFinite(note.written) ? { written: +(note.written * ratio3).toFixed(6) } : {}, ...note.lag ? { lag: note.lag * ratio3 } : {} }));
@@ -40943,7 +41371,7 @@ function sectionLine(role, { downbeat, phrase, beatSeconds, meter, pool, instrum
   return out;
 }
 function lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument = null, shortest = null }) {
-  const grid = metricalGrid(meter, beatSeconds), bars = Math.max(1, Math.round(phrase / Math.max(1e-6, grid.barSeconds))), asked = Math.max(1, Number(role.elongation) || 1);
+  const grid = metricalGrid(meter, beatSeconds), bars = Math.max(1, Math.round(phrase / Math.max(INSTANT2, grid.barSeconds))), asked = Math.max(1, Number(role.elongation) || 1);
   const pitches = (pool ?? []).map(Number).filter(Number.isFinite), register = lineRegister(role, pitches);
   if (!register) return null;
   const key2 = JSON.stringify([role.seed, role.centre, role.width, role.level, shortest ?? null, role.elongation ?? 1, role.inversion ?? 0, Boolean(role.retrograde), Number(role.contour) || 0, role.ending ?? null, role.tapeLine ?? null, role.themeLine ?? null, String(role.pool ?? ""), role.lineage ?? null, lineDensity(role), (role.above ?? []).map((other3) => other3.lineage?.root ?? null), +downbeat.toFixed(3), +phrase.toFixed(3), beatSeconds, pitches, instrument]);
@@ -40979,13 +41407,13 @@ function lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument =
     choices,
     density: lineDensity(role),
     loudness: level,
-    phraseIndex: Number.isInteger(role.lineage?.age) ? role.lineage.age : Math.max(0, Math.round(downbeat / Math.max(1e-6, phrase))),
+    phraseIndex: Number.isInteger(role.lineage?.age) ? role.lineage.age : Math.max(0, Math.round(downbeat / Math.max(INSTANT2, phrase))),
     ...ending ? { final: ending } : {},
-    random: seededSource(role.seed, "line")
+    random: seededSource2(role.seed, "line")
   });
   let planned = null, elongation = null;
   if (asked > 1) {
-    const sourceBars = Math.max(1, Math.ceil(bars / asked - 1e-9)), source3 = plan2(sourceBars);
+    const sourceBars = Math.max(1, Math.ceil(bars / asked - EPSILON3)), source3 = plan2(sourceBars);
     if (source3.status === "planned" && source3.notes.length) {
       const exact12 = (note) => {
         const { at: at2, end } = readScoreTime(note);
@@ -40995,7 +41423,7 @@ function lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument =
         const [from, to] = written2(note);
         return (to - from) * beatSeconds;
       }));
-      const chosen = G ? nearestElongation(asked, elongationCandidates(meter, { sourceDivision: G }), { most: sustainOf(instrument, level) / Math.max(1e-6, longest) }) : null;
+      const chosen = G ? nearestElongation(asked, elongationCandidates(meter, { sourceDivision: G }), { most: sustainOf(instrument, level) / Math.max(INSTANT2, longest) }) : null;
       if (chosen?.ratio > 1) {
         const r2 = chosen.ratio, length = sourceBars * pulsesPerBar / sub4, horizon = phrase / beatSeconds;
         const horizonTicks = authoredFraction(bars * pulsesPerBar);
@@ -41038,7 +41466,7 @@ function lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument =
     notes = planned.notes.map((note) => ({
       ...scoreTimeFields(note),
       at: +(downbeat + note.start).toFixed(6),
-      pitch: note.pitch + inversion * (2 * first - 2 * note.pitch) + tilt * (note.start / Math.max(1e-6, phrase) - 0.5),
+      pitch: note.pitch + inversion * (2 * first - 2 * note.pitch) + tilt * (note.start / Math.max(INSTANT2, phrase) - 0.5),
       seconds: Math.max(0.05, (note.end - note.start) * ARTICULATION2),
       written: +(note.end - note.start).toFixed(6),
       ...note.lag ? { lag: note.lag } : {},
@@ -41048,20 +41476,20 @@ function lineAt(role, { downbeat, phrase, beatSeconds, meter, pool, instrument =
     if (elongation) Object.defineProperty(notes, "elongation", { value: elongation });
   }
   LINES.set(key2, notes);
-  if (LINES.size > 512) LINES.delete(LINES.keys().next().value);
+  if (LINES.size > KEPT2.plans) LINES.delete(LINES.keys().next().value);
   return notes;
 }
 function improvisation(role, { start, beatSeconds, meter = null, pool, compass, heard, shortest = SECTION_VOICES.shortest }) {
   const latitude = Math.max(0, Math.min(1, Number(role.latitude) || 0));
   if (!(latitude > 0)) return null;
-  const key2 = voiceKey(role), plan2 = seededSource(role.seed ?? 0, `improvise:${key2}`), draw = seededSource(role.seed ?? 0, `improvise pitch:${key2}`), states = /* @__PURE__ */ new Map();
-  const reach = Math.max(12, (Number(role.width) || 7) * 2), low = Number.isFinite(compass?.low) ? compass.low : (Number(role.centre) || 60) - reach, high = Number.isFinite(compass?.high) ? compass.high : (Number(role.centre) || 60) + reach;
+  const key2 = voiceKey(role), plan2 = seededSource2(role.seed ?? 0, `improvise:${key2}`), draw = seededSource2(role.seed ?? 0, `improvise pitch:${key2}`), states = /* @__PURE__ */ new Map();
+  const reach = Math.max(OCTAVE2, (Number(role.width) || 7) * 2), low = Number.isFinite(compass?.low) ? compass.low : (Number(role.centre) || 60) - reach, high = Number.isFinite(compass?.high) ? compass.high : (Number(role.centre) || 60) + reach;
   const scaleOf = (chord) => {
-    if (Array.isArray(role.region?.system)) return collectionPitches({ system: role.region.system, period: Number(role.region.period) || 12 }, { tonic: Number(role.region.tonic) || 0, low, high });
-    const classes = chordScale(TWELVE_TONE_LEVELS, [...new Set(chord.map((pitch5) => +modulo8(pitch5, 12).toFixed(6)))], {})?.set.pitchClasses ?? [], out = [];
+    if (Array.isArray(role.region?.system)) return collectionPitches({ system: role.region.system, period: Number(role.region.period) || OCTAVE2 }, { tonic: Number(role.region.tonic) || 0, low, high });
+    const classes = chordScale(TWELVE_TONE_LEVELS, [...new Set(chord.map((pitch5) => +modulo8(pitch5, OCTAVE2).toFixed(6)))], {})?.set.pitchClasses ?? [], out = [];
     for (let octave2 = 0; octave2 <= 10; octave2++) for (const pc of classes) {
-      const pitch5 = 12 * octave2 + pc;
-      if (pitch5 >= low - 1e-9 && pitch5 <= high + 1e-9) out.push(pitch5);
+      const pitch5 = OCTAVE2 * octave2 + pc;
+      if (pitch5 >= low - EPSILON3 && pitch5 <= high + EPSILON3) out.push(pitch5);
     }
     return out;
   };
@@ -41081,14 +41509,351 @@ function improvisation(role, { start, beatSeconds, meter = null, pool, compass, 
 function peakOf(notes, start, phrase) {
   if (!notes?.length) return null;
   let top = notes[0];
-  for (const note of notes) if (note.pitch > top.pitch + 1e-9) top = note;
-  return Math.max(0, Math.min(1, (top.at - start) / Math.max(1e-6, phrase)));
+  for (const note of notes) if (note.pitch > top.pitch + EPSILON3) top = note;
+  return Math.max(0, Math.min(1, (top.at - start) / Math.max(INSTANT2, phrase)));
+}
+function meterLattice(meter, beatSeconds) {
+  const { positions, barTicks } = metricalGrid(meter, beatSeconds);
+  return { positions: positions.map((position2, units) => ({ units, weight: position2.weight })), barUnits: barTicks, unitSeconds: beatSeconds / (Number(meter?.subdivision) || 1), unitTicks: Rational.of(1) };
+}
+function ownLattice(meter, beatSeconds, division, stretch) {
+  const { bar, group: grouped3, note: noted, subdivision } = METRIC_WEIGHTS, positions = [];
+  let units = 0;
+  groupsOf3(meter).forEach((size, group2) => {
+    const span2 = Math.max(size, Math.round(size * division * stretch)), beats2 = new Set(Array.from({ length: size }, (_, n) => Math.round(n * span2 / size)));
+    for (let u = 0; u < span2; u++) positions.push({ units: units + u, weight: !u ? group2 ? grouped3 : bar : beats2.has(u) ? noted : subdivision });
+    units += span2;
+  });
+  return { positions, barUnits: units, unitSeconds: beatSeconds / division, unitTicks: new Rational(Number(meter?.subdivision) || 1, division) };
+}
+function together(a, b) {
+  let x, y;
+  const least = () => x == null ? y : y == null ? x : Math.min(x, y);
+  return { first() {
+    x = a.first();
+    y = b.first();
+    return least();
+  }, after(at2) {
+    if (x === at2) x = a.after(x);
+    if (y === at2) y = b.after(y);
+    return least();
+  } };
+}
+function onsetStream(lattice, { pulse, chance, density, source: source3 }) {
+  const on = lattice.positions.filter((position2, k2) => pulsed(position2.weight, pulse, source3(`pulse:${k2}`)()));
+  const draw = source3("onsets"), keeps = pulse > 0 && on.length > 0, rate2 = (keeps ? density : chance * density) * lattice.unitSeconds;
+  const nextOn = (u) => {
+    for (let bar = Math.max(0, Math.floor(u / lattice.barUnits)); ; bar++) for (const position2 of on) {
+      const at2 = bar * lattice.barUnits + position2.units;
+      if (at2 >= u) return at2;
+    }
+  };
+  const after = (u) => {
+    if (keeps && !(draw() < chance)) return nextOn(u + 1);
+    if (!(rate2 > EPSILON3)) return null;
+    const at2 = u + Math.max(1, Math.ceil(-Math.log(Math.max(1e-12, draw())) / rate2));
+    return keeps && draw() < pulse ? nextOn(at2) : at2;
+  };
+  return { first: () => keeps || rate2 > EPSILON3 ? after(-1) : 0, after };
+}
+function walked(previous, random2, { centre, half }, { motion, continuum }, tones) {
+  const u = random2(), g = normalFrom(random2), low = centre - half, high = centre + half;
+  let raw = previous == null ? centre + (2 * u - 1) * half * motion : previous + g * motion * 2 * half;
+  for (let turn = 0; turn < 4 && (raw < low || raw > high); turn++) raw = raw < low ? 2 * low - raw : 2 * high - raw;
+  raw = clamp8(raw, low, high);
+  if (!(continuum < 1) || !tones.length) return raw;
+  const inside = tones.filter((p) => p >= low - EPSILON3 && p <= high + EPSILON3), near9 = inside.length ? inside : tones;
+  let snapped = nearestIn(near9, raw);
+  if (previous != null && motion > 0 && Math.abs(snapped - previous) < 0.25) {
+    const sorted2 = [...new Set(near9)].sort((a, b) => a - b), k2 = sorted2.findIndex((p) => Math.abs(p - snapped) < 0.25), way = g < 0 ? -1 : 1;
+    snapped = sorted2[k2 + way] ?? sorted2[k2 - way] ?? snapped;
+  }
+  return snapped + continuum * (raw - snapped);
+}
+function ensembleOf(role, count12, voiceOf2) {
+  const notes = [], voices = [], windows = [];
+  let harmony = null;
+  const sounding2 = (list15, t) => {
+    for (let k2 = list15.length - 1; k2 >= 0; k2--) if (list15[k2].at <= t + EPSILON3) return t < list15[k2].at + list15[k2].seconds - EPSILON3 ? list15[k2] : null;
+    return null;
+  };
+  const heardOf = (parts2) => (t, before4) => parts2.flatMap((j) => {
+    const note = notes[j] && sounding2(notes[j], t);
+    if (!note) return [];
+    const was = before4 == null ? null : sounding2(notes[j], before4);
+    return [{ pitch: note.pitch, before: was?.pitch ?? null }];
+  });
+  for (let j = 0; j < count12; j++) {
+    notes.push([]);
+    voices.push(voiceOf2({ ...role, part: j }, heardOf, () => harmony));
+  }
+  const ensemble = {
+    windows,
+    forks: /* @__PURE__ */ new Map(),
+    heard: heardOf,
+    // (A run (`ornament`) heard as the note it leaves, held through it: the rules bind the notes beneath the runs.)
+    play(window2) {
+      harmony = window2.harmony;
+      voices.forEach((voice, j) => {
+        for (const note of voice.events(window2.now, window2.until, window2.options)) {
+          const held2 = notes[j].at(-1);
+          if (!note.ornament) notes[j].push(note);
+          else if (held2) notes[j][notes[j].length - 1] = { ...held2, seconds: Math.max(held2.seconds, note.at + note.seconds - held2.at) };
+        }
+      });
+      windows.push(window2);
+    },
+    replayed(played) {
+      const copy6 = ensembleOf(role, count12, voiceOf2);
+      for (const window2 of windows.slice(0, played)) copy6.play(window2);
+      return copy6;
+    }
+  };
+  return ensemble;
+}
+var ROLE_KEYS = /* @__PURE__ */ new WeakMap();
+function roleKey(role) {
+  if (!ROLE_KEYS.has(role)) {
+    const { over, ...rest } = role, text18 = JSON.stringify([rest, (over ?? []).map(roleKey)]);
+    ROLE_KEYS.set(role, `${fnv1a(text18).toString(36)}.${fnv1a(text18, FNV_OFFSET ^ SECOND_SEED).toString(36)}`);
+  }
+  return ROLE_KEYS.get(role);
+}
+var ENSEMBLES = /* @__PURE__ */ new Map();
+function heardEnsemble(key2, made2) {
+  let ensemble = ENSEMBLES.get(key2), cursor2 = 0;
+  if (!ensemble) {
+    ensemble = made2();
+    ENSEMBLES.set(key2, ensemble);
+    if (ENSEMBLES.size > KEPT2.ensembles) ENSEMBLES.delete(ENSEMBLES.keys().next().value);
+  }
+  return { play(now2, until, { position: position2, left, scoreWindow: scoreWindow2 }, harmony) {
+    const options = { position: position2, left, scoreWindow: scoreWindow2 }, window2 = { now: now2, until, options, harmony: harmony && [...harmony], key: JSON.stringify([now2, until, position2, left, `${Rational.of(scoreWindow2.at)}`, `${Rational.of(scoreWindow2.end)}`, harmony]) };
+    if (cursor2 < ensemble.windows.length && ensemble.windows[cursor2].key !== window2.key) {
+      const fork = `${cursor2} ${window2.key}`;
+      if (!ensemble.forks.has(fork)) ensemble.forks.set(fork, ensemble.replayed(cursor2));
+      ensemble = ensemble.forks.get(fork);
+    }
+    if (cursor2 === ensemble.windows.length) ensemble.play(window2);
+    cursor2++;
+  }, heard: (parts2) => (t, before4) => ensemble.heard(parts2)(t, before4) };
+}
+function processVoice(role, { point, parameters: parameters2, start, beatSeconds, meter, pool, shortest, band: band2, written: written2, windowOf, heldTo, onScoreRevision, heard = null }) {
+  const part = Number(role.part) || 0, parts2 = Math.max(1, Number(role.parts) || 1), key2 = materialOf(role), seed3 = role.seed ?? 0;
+  const pooled = (name12) => seededSource2(seed3, `texture:${key2}:${name12}`), mine = (name12) => seededSource2(seed3, `texture:${key2}:${part}:${name12}`);
+  const among2 = (name12) => mine(name12)() < point[name12];
+  const synchronous = among2("synchrony"), semblant = among2("semblance"), impulsive = among2("impulse"), ownTime = !synchronous && (point.delay > 0 || point.drift > 0);
+  const { pulse, chance, sustain, glide, continuum } = point, density = Math.max(0, Number(role.density) || 0), groups = groupsOf3(meter);
+  let lattice = meterLattice(meter, beatSeconds), entry3 = 0;
+  if (ownTime) {
+    const given3 = Array.isArray(parameters2?.divisions) && parameters2.divisions.length ? parameters2.divisions[part % parameters2.divisions.length] : null;
+    const [low, high] = OWN_DIVISIONS, share = given3 ?? low + (high - low) * ((pooled("divisions")() + part / parts2) % 1), most = Math.max(2, Math.floor(beatSeconds / shortest + EPSILON3));
+    const division = share > 1 ? Math.round(share) : Math.round(2 + share / Math.max(1, Number(role.elongation) || 1) * (most - 2));
+    lattice = ownLattice(meter, beatSeconds, division, 1 + point.drift * part);
+    entry3 = Math.round(part / parts2 * point.delay * groups.reduce((sum9, g) => sum9 + g, 0) / groups.length * division);
+  }
+  const follows = semblant && !synchronous && !ownTime, poolOnsets = () => onsetStream(meterLattice(meter, beatSeconds), { pulse, chance, density, source: (name12) => pooled(`onsets:${name12}`) });
+  const own2 = onsetStream(lattice, { pulse, chance, density, source: synchronous ? (name12) => pooled(`onsets:${name12}`) : (name12) => mine(`onsets:${name12}`) });
+  const stream2 = follows ? together(own2, poolOnsets()) : own2, poolStream = follows ? poolOnsets() : null;
+  let poolAt, poolIndex = -1;
+  const poolIndexAt = (units) => {
+    if (poolAt === void 0) poolAt = poolStream.first();
+    while (poolAt != null && poolAt <= units) {
+      poolIndex++;
+      poolAt = poolStream.after(poolAt);
+    }
+    return Math.max(0, poolIndex);
+  };
+  const indexOf = (units, k2) => {
+    if (!follows) return k2;
+    const heard2 = poolIndexAt(units);
+    return Math.max(lastIndex, heard2 > heardBefore ? heard2 : heard2 + (mine(`anticipation:${k2}`)() < point.anticipation ? 1 : 0));
+  };
+  const loop = Number(parameters2?.cantusNotes) > 0 ? Math.round(parameters2.cantusNotes) : Infinity, material2 = [];
+  const stepOf2 = (k2) => semblant ? seededSource2(seed3, `texture:${key2}:step:${k2}`) : mine(`step:${k2}`);
+  const { part: _, ...shared } = role, made2 = [start, beatSeconds, meter, shortest], nearer2 = Math.round(point.binding * Math.max(0, part - 1));
+  const scope23 = part > 0 ? [.../* @__PURE__ */ new Set([0, ...Array.from({ length: nearer2 }, (_2, k2) => part - 1 - k2)])] : [];
+  const ensemble = point.rules > 0 && part > 0 && !heard ? heardEnsemble(
+    JSON.stringify(["parts", roleKey(shared), point, parameters2, ...made2]),
+    () => ensembleOf(role, parts2 - 1, (copy6, hears, harmony2) => processVoice(copy6, { point, parameters: parameters2, start, beatSeconds, meter, pool: harmony2, shortest, band: band2, written: written2, windowOf, heldTo, onScoreRevision: () => {
+    }, heard: hears }))
+  ) : null;
+  const above = point.rules > 0 && part > 0 ? heard ?? ensemble.heard : null;
+  const over = point.rules > 0 && point.between > 0 ? (role.over ?? []).map((other3) => {
+    const { part: __, ...whole8 } = other3, count13 = Math.max(1, Number(other3.parts) || 1), all = Array.from({ length: count13 }, (_2, j) => j);
+    const ensemble2 = heardEnsemble(
+      JSON.stringify(["pool", roleKey(whole8), ...made2]),
+      () => ensembleOf(other3, count13, (copy6, hears, harmony2) => makeVoice(copy6, { random: seededSource2(copy6.seed, voiceKey(copy6)), start, beatSeconds, meter, pool: harmony2, shortest }))
+    );
+    return { play: ensemble2.play, heard: ensemble2.heard(all) };
+  }) : [];
+  const ownParts = above?.(scope23), choosing = Boolean(ownParts || over.length);
+  let rules = null;
+  const partners = (at2, before4, n) => {
+    const others = over.length && mine(`between:${n}`)() < point.between ? over.flatMap((other3) => other3.heard(at2, before4)) : [];
+    return ownParts ? [...ownParts(at2, before4), ...others] : others;
+  };
+  const chosen = (n, from, proposed, place2, tones, { at: at2, strong }) => {
+    const against = partners(at2, previousAt, n);
+    if (!against.length) return proposed;
+    let best = proposed, least = heardCost(proposed, { previous, leap, against, strong, rules, above: false });
+    for (let i = 1; i < COUNTERPOINT.beam; i++) {
+      const pitch5 = walked(from, mine(`propose:${n}:${i}`), place2, point, tones), cost = heardCost(pitch5, { previous, leap, against, strong, rules, above: false });
+      if (cost < least - EPSILON3) {
+        least = cost;
+        best = pitch5;
+      }
+    }
+    return best;
+  };
+  const materialAt = (index, place2, tones, heardAt = null, kept = true) => {
+    if (index < material2.length) return material2[index];
+    let pitch5 = material2.at(-1) ?? null;
+    for (let n = material2.length; n <= index; n++) {
+      const k2 = n % loop, from = k2 ? pitch5 : null, proposed = walked(from, stepOf2(k2), place2, point, tones);
+      pitch5 = choosing && heardAt && mine(`rules:${n}`)() < point.rules ? chosen(n, from, proposed, place2, tones, heardAt) : proposed;
+      if (kept) material2.push(pitch5);
+    }
+    return pitch5;
+  };
+  const placeAt = (position2) => {
+    const { centre: c2, width: w } = band2(position2), { places, packing } = point, span2 = (1 - packing) * Math.max(OCTAVE2, 2 * w) + packing * w, target = c2 - span2 / 2 + span2 * (fromTop(part, parts2) + 0.5) / parts2;
+    return { centre: c2 + places * (target - c2), half: (1 - places) * span2 / 2 + places * (1 - packing) * Math.max(5, span2 / parts2) };
+  };
+  const tonesOf = () => {
+    if (!synchronous) return ladderOf2(pool);
+    const heard2 = (pool() ?? []).map(Number).filter(Number.isFinite), out = [];
+    for (const pc of new Set(heard2.map((p) => +modulo8(p, OCTAVE2).toFixed(6)))) for (let octave2 = 1; octave2 <= 8; octave2++) out.push(OCTAVE2 * octave2 + pc);
+    return out.sort((a, b) => a - b);
+  };
+  let heardKey = null, heardTones = null, heardClasses = null;
+  const harmonyNow = () => {
+    const key3 = JSON.stringify(pool() ?? []);
+    if (key3 !== heardKey) {
+      heardKey = key3;
+      heardTones = tonesOf();
+      heardClasses = heardTones.map((p) => +modulo8(p, OCTAVE2).toFixed(4)).sort((a, b) => a - b).join(",");
+    }
+    return { tones: heardTones, classes: heardClasses };
+  };
+  const sub4 = Number(meter?.subdivision) || 1, impulseTicks = Rational.of(Math.max(1, Math.min(sub4, Math.floor(sub4 * (Number(meter?.denominator) || 4) / 8))));
+  const impulseSeconds = Math.max(0.01, Number(parameters2?.seconds) || poolParameters("points", 1, seed3)?.seconds || 0.15), tolerance = repetitionOf(role.repetition ?? null);
+  const unit9 = lattice.unitSeconds, timeOf2 = (units) => start + (entry3 + units) * unit9, scoreOf = (units) => Rational.of(entry3 + units).mul(lattice.unitTicks);
+  let authored = null, serial = 0;
+  const compose = (at2, end, window2) => {
+    if (authored && Rational.of(at2).gt(readScoreTime(authored).at) && Rational.of(at2).lt(readScoreTime(authored).end)) {
+      authored = { ...authored, scoreTime: written2(readScoreTime(authored).at, at2, window2) };
+      onScoreRevision(authored);
+    }
+    authored = { scoreId: String(serial++), scoreTime: written2(at2, end, window2) };
+    return authored;
+  };
+  let next2, following, count12 = 0, lastIndex = -1, heardBefore = -1, previous = null, previousAt = null, leap = 0, run15 = null, harmony = null, held2 = false, passage = null;
+  return { events(now2, until, options) {
+    const { position: position2, left } = options, window2 = windowOf(options), out = [];
+    if (next2 === void 0) next2 = stream2.first();
+    const place2 = placeAt(position2), { tones, classes } = harmonyNow();
+    const ornaments = () => {
+      if (passage && !passage.notes && passage.runStart < until - EPSILON3) {
+        const { units, k: k2, spanUnits, runStart, runAt } = passage;
+        passage.notes = [];
+        if (synchronous && continuum < 1 && !tones.length) return;
+        const to = materialAt(indexOf(units, k2), place2, tones, { at: Math.min(timeOf2(units), until - INSTANT2), strong: lattice.positions[modulo8(units, lattice.barUnits)]?.weight >= METRIC_WEIGHTS.group - EPSILON3 }, false), ladder2 = ladderOf2(pool);
+        let low = Math.min(place2.centre - place2.half, previous, to), high = Math.max(place2.centre + place2.half, previous, to);
+        while (ornamentPitches(ladder2, [low, high]).length < FIORITURA.leastNotes) {
+          low = ladder2.findLast((p) => p < low - EPSILON3) ?? low - 1;
+          high = ladder2.find((p) => p > high + EPSILON3) ?? high + 1;
+        }
+        const plan2 = planFioritura({ from: previous, to, pool: ladder2, range: [low, high], spanTicks: spanUnits, tickSeconds: unit9, amount: point.ornament, random: mine(`ornament:run:${k2}`) });
+        passage.notes = (plan2?.notes ?? []).map((step2, i, steps) => {
+          const { at: a, end: e3 } = readScoreTime(step2);
+          return { scoreAt: runAt.add(a.mul(lattice.unitTicks)), scoreEnd: runAt.add(e3.mul(lattice.unitTicks)), at: runStart + step2.at * unit9, endAt: runStart + (steps[i + 1]?.at ?? spanUnits) * unit9, pitch: +step2.pitch.toFixed(4), lag: (step2.at - step2.written) * unit9 };
+        });
+        passage.last = passage.notes.at(-1)?.pitch ?? null;
+      }
+      if (passage?.notes) while (passage.notes.length && passage.notes[0].at < until - EPSILON3) {
+        const note = passage.notes.shift();
+        if (note.at < now2 - EPSILON3) continue;
+        out.push({ ...compose(note.scoreAt, note.scoreEnd, window2), at: note.at, pitch: note.pitch, seconds: heldTo(note.at, note.endAt - note.at, left, now2), ...Math.abs(note.lag) > EPSILON3 ? { lag: +note.lag.toFixed(6) } : {}, ornament: true });
+      }
+    };
+    if (choosing) {
+      const harmony2 = pool() ?? null;
+      ensemble?.play(now2, until, options, harmony2);
+      for (const other3 of over) other3.play(now2, until, options, harmony2);
+      rules ??= drawnRules(pooled("rules"), { rigor: 1, voices: parts2, classes: new Set(tones.map((p) => +modulo8(p, OCTAVE2).toFixed(4))).size || OCTAVE2 }).rules;
+    }
+    const ahead = next2 == null ? Infinity : timeOf2(next2);
+    if (previous != null && synchronous && continuum < 1 && tones.length && ahead > now2 + EPSILON3 && left > 0 && !(passage && (passage.notes || passage.runStart <= now2 + EPSILON3))) {
+      const moved = classes !== harmony, inside = tones.filter((p) => Math.abs(p - place2.centre) <= place2.half + EPSILON3), near9 = inside.length ? inside : tones;
+      let pitch5 = moved ? nearestIn(near9, previous) : previous;
+      if (held2 && Math.abs(pitch5 - previous) < 0.25 && run15 && !mayGoOn(run15, now2, tolerance)) {
+        const others = near9.filter((p) => Math.abs(p - pitch5) > 0.25);
+        if (others.length) pitch5 = nearestIn(others, pitch5);
+      }
+      if (Math.abs(pitch5 - previous) >= 0.25) {
+        const end = passage ? passage.runAt : next2 == null ? window2.end : scoreOf(next2);
+        out.push({ ...compose(window2.at, end, window2), at: now2, pitch: +pitch5.toFixed(4), seconds: passage ? heldTo(now2, passage.runStart - now2, left, now2) : held2 ? heldTo(now2, left, left, now2) : heldTo(now2, Math.max(0.05, sustain * (ahead - now2)), left, now2) });
+        leap = pitch5 - previous;
+        previous = pitch5;
+        previousAt = now2;
+        run15 = { pitch: pitch5, since: now2, strikes: 1 };
+      }
+    }
+    harmony = classes;
+    ornaments();
+    while (next2 != null) {
+      const at2 = timeOf2(next2), scoreAt = scoreOf(next2);
+      if (at2 >= until - EPSILON3 || scoreAt.ge(window2.end) || left <= at2 - now2) break;
+      if (following === void 0) following = stream2.after(next2);
+      const last2 = following == null;
+      if (at2 < now2 - EPSILON3 && !last2) {
+        next2 = following;
+        following = void 0;
+        count12++;
+        continue;
+      }
+      const index = indexOf(next2, count12), arriving = passage?.k === count12 ? passage.last : null;
+      if (follows) heardBefore = poolIndexAt(next2);
+      if (passage && count12 >= passage.k) passage = null;
+      if (!(synchronous && continuum < 1 && !tones.length)) {
+        const when = Math.max(at2, now2), pitch5 = materialAt(index, place2, tones, { at: when, strong: lattice.positions[modulo8(next2, lattice.barUnits)]?.weight >= METRIC_WEIGHTS.group - EPSILON3 });
+        const from = at2 < now2 - EPSILON3 ? window2.at : scoreAt, endAt = last2 ? Infinity : timeOf2(following), end = last2 ? window2.end : scoreOf(following);
+        if (impulsive) out.push({ scoreTime: written2(from, Rational.of(end).min(Rational.of(from).add(impulseTicks)), window2), at: when, pitch: +pitch5.toFixed(4), seconds: heldTo(when, impulseSeconds, left, now2), point: true });
+        else {
+          const before4 = glide > 0 ? arriving ?? previous ?? walked(null, mine("from"), place2, { motion: 1, continuum: 1 }, []) : null;
+          const spanUnits = !last2 && point.ornament > 0 && at2 >= now2 - EPSILON3 ? Math.floor((following - next2) * (1 - FIORITURA.held)) : 0;
+          const runs = spanUnits >= 1 && spanUnits * unit9 >= FIORITURA.leastSeconds && Rational.of(end).lt(window2.end) && endAt < now2 + left - EPSILON3 && mine(`ornament:${count12}`)() < point.ornament;
+          const runAt = runs ? Rational.of(end).sub(Rational.of(spanUnits).mul(lattice.unitTicks)) : null, runStart = runs ? endAt - spanUnits * unit9 : null;
+          out.push({
+            ...compose(from, runs ? runAt : end, window2),
+            at: when,
+            pitch: +pitch5.toFixed(4),
+            seconds: runs ? heldTo(when, runStart - when, left, now2) : last2 ? heldTo(when, left, left, now2) : heldTo(when, Math.max(0.05, sustain * (endAt - when)), left, now2),
+            ...before4 != null ? { from: +before4.toFixed(4), ...glide < 1 ? { hold: +(1 - glide).toFixed(3) } : {} } : {}
+          });
+          if (runs) passage = { k: count12 + 1, units: following, spanUnits, runAt, runStart, notes: null };
+        }
+        run15 = run15 && Math.abs(run15.pitch - pitch5) < 0.25 ? { ...run15, strikes: run15.strikes + 1 } : { pitch: pitch5, since: when, strikes: 1 };
+        leap = previous == null ? 0 : pitch5 - previous;
+        previous = pitch5;
+        previousAt = when;
+        lastIndex = index;
+        held2 = last2;
+        if (passage && !passage.notes) ornaments();
+      }
+      count12++;
+      next2 = following;
+      following = void 0;
+    }
+    return out;
+  } };
 }
 function makeVoice(role, { random: random2, start, beatSeconds, meter = null, pool, instrument = "violin", bandBeat = beatSeconds, bandBeatTicks = null, compass = null, planBeat = null, heard = null, shortest: quickest = null, onScoreRevision = () => {
 } }) {
   const shortest = Math.max(SECTION_VOICES.shortest, Number(quickest) || 0);
   const { texture, part, parts: parts2, centre, width, density, level } = role, band2 = (position2) => ({ centre: centre + 3 * arcAt(position2), width: width * (0.6 + 0.4 * arcAt(position2)) });
-  const parameters2 = role.parameters ?? poolParameters(texture, parts2, role.seed), groups = groupsOf3(meter);
+  const parameters2 = role.parameters ?? poolParameters(texture, parts2, role.seed, void 0, pointOfRole(role));
   const heldTo = (at2, seconds2, left, now2) => Math.max(0.05, Math.min(seconds2, left - (at2 - now2)));
   const sub4 = Number(meter?.subdivision) || 1, tick = beatSeconds / sub4;
   const written2 = (at2, end, window2) => scoreTime(at2, Rational.of(end).min(Rational.of(window2.end)).sub(Rational.of(at2)), { axis: "phrase" });
@@ -41104,18 +41869,26 @@ function makeVoice(role, { random: random2, start, beatSeconds, meter = null, po
     const sounded = /* @__PURE__ */ new Set();
     return { events(now2, until, { position: position2, left }) {
       if (!planned) {
-        const phrase = Math.max(1e-6, now2 + left - start);
+        const phrase = Math.max(INSTANT2, now2 + left - start);
         planned = sectionCounterpoint(role, { downbeat: start, phrase, beatSeconds, meter, pool: pool() })?.[part] ?? [];
         peak = peakOf(planned, start, phrase);
       }
       const out = [];
       for (const [index, note] of planned.entries()) {
-        if (note.at < now2 - 1e-9 || note.at >= until - 1e-9 || sounded.has(index)) continue;
+        if (note.at < now2 - EPSILON3 || note.at >= until - EPSILON3 || sounded.has(index)) continue;
         sounded.add(index);
-        const near9 = followHarmony(note.pitch, pool(), [note.pitch - 12, note.pitch + 12]), stepwise = last2 != null && Math.abs(note.pitch - last2) <= 2.5 + 1e-9;
-        const pitch5 = note.strong || !stepwise ? near9 : note.pitch;
-        last2 = pitch5;
-        out.push({ ...scoreTimeFields(note), at: note.at, pitch: pitch5, seconds: heldTo(note.at, note.seconds, left, now2), ...Number.isFinite(note.written) ? { written: heldTo(note.at, note.written, left, now2) } : {}, ...peak != null ? { peak } : {} });
+        const near9 = followHarmony(note.pitch, pool(), [note.pitch - OCTAVE2, note.pitch + OCTAVE2]), stepwise = last2 != null && Math.abs(note.pitch - last2) <= 2.5 + EPSILON3;
+        const pitch5 = note.ornament ? note.pitch : note.strong || !stepwise ? near9 : note.pitch;
+        if (!note.ornament) last2 = pitch5;
+        out.push({
+          ...scoreTimeFields(note),
+          at: note.at,
+          pitch: pitch5,
+          seconds: heldTo(note.at, note.seconds, left, now2),
+          ...Number.isFinite(note.written) ? { written: heldTo(note.at, note.written, left, now2) } : {},
+          ...peak != null ? { peak } : {},
+          ...note.ornament ? { ornament: true, ...note.lag ? { lag: note.lag } : {} } : {}
+        });
       }
       return out;
     } };
@@ -41133,7 +41906,7 @@ function makeVoice(role, { random: random2, start, beatSeconds, meter = null, po
       return { ...fallback, motifConflict: { motifIds: role.motifUse.motifIds, winner: !requiredPitches ? "physical-compass" : "physical-minimum-note", compromised: "required-motif", resolution: role.motifFallback ? "ordinary formation" : "rest" } };
     }
     const quarterTicks = new Rational((Number(meter?.subdivision) || 1) * (Number(meter?.denominator) || 4), 4);
-    const given3 = role.given.map((note, index) => ({
+    const given4 = role.given.map((note, index) => ({
       scoreTime: scoreTime(authoredFraction(note.written ?? note.at).mul(quarterTicks), authoredFraction(note.writtenQuarters ?? note.quarters).mul(quarterTicks), { axis: "phrase" }),
       at: start + note.at * quarter,
       pitch: required ? requiredPitches[index] : note.pitch + shift,
@@ -41141,16 +41914,16 @@ function makeVoice(role, { random: random2, start, beatSeconds, meter = null, po
       written: note.quarters * quarter,
       ...typeof note.motifId === "string" && Number.isInteger(note.index) ? { source: Object.freeze({ motifId: note.motifId, index: note.index }) } : {}
     }));
-    const improvising = required ? null : improvisation(role, { start, beatSeconds, meter, pool, compass, heard, shortest }), notes = improvising ? improvising.figured(given3) : given3;
+    const improvising = required ? null : improvisation(role, { start, beatSeconds, meter, pool, compass, heard, shortest }), notes = improvising ? improvising.figured(given4) : given4;
     let peak;
     return { events(now2, until, { left, clock: clock7 } = {}) {
       if (peak === void 0) {
-        peak = Number.isFinite(left) ? peakOf(given3, start, Math.max(1e-6, now2 + left - start)) : null;
+        peak = Number.isFinite(left) ? peakOf(given4, start, Math.max(INSTANT2, now2 + left - start)) : null;
         if (peak != null) notes.forEach((note) => {
           note.peak = peak;
         });
       }
-      return notes.filter((note) => note.at >= now2 - 1e-9 && note.at < until - 1e-9).map((note) => note.figure ? { ...note, pitch: improvising.pitch(note, clock7) } : note);
+      return notes.filter((note) => note.at >= now2 - EPSILON3 && note.at < until - EPSILON3).map((note) => note.figure ? { ...note, pitch: improvising.pitch(note, clock7) } : note);
     } };
   }
   if (texture === "line") {
@@ -41164,24 +41937,24 @@ function makeVoice(role, { random: random2, start, beatSeconds, meter = null, po
       const out = [];
       const phrase = left / Math.max(1e-6, 1 - position2), drawn4 = (Number(parameters2?.rubato) || 0) * phrase;
       const allowed = Number.isFinite(role.ownTime) ? role.ownTime : SECTION_VOICES.leads, depth = Math.sign(drawn4) * Math.min(Math.abs(drawn4), allowed);
-      const lagAt = (t) => depth * Math.sin(Math.PI * Math.max(0, Math.min(1, position2 + (t - now2) / Math.max(1e-6, phrase))));
-      planned ??= sectionLines(role, { downbeat: start, phrase: Math.max(1e-6, now2 + left - start), beatSeconds, meter, pool: pool(), instrument, planBeat, shortest: Number(quickest) || null }) ?? [];
+      const lagAt = (t) => depth * Math.sin(Math.PI * Math.max(0, Math.min(1, position2 + (t - now2) / Math.max(INSTANT2, phrase))));
+      planned ??= sectionLines(role, { downbeat: start, phrase: Math.max(INSTANT2, now2 + left - start), beatSeconds, meter, pool: pool(), instrument, planBeat, shortest: Number(quickest) || null }) ?? [];
       {
         if (!line) {
           line = delay ? planned.map((note) => ({ ...note, scoreTime: shiftScoreTime(note.scoreTime, authoredFraction(delayBeats).mul(Number(meter?.subdivision) || 1)), at: +(note.at + delay).toFixed(6) })) : planned;
-          peak = peakOf(line, start, Math.max(1e-6, now2 + left - start));
+          peak = peakOf(line, start, Math.max(INSTANT2, now2 + left - start));
           if (improvising && !planned.elongation) line = improvising.figured(line);
-          if (entry3 && role.entries && role.entryRegisters && role.section && planned.length) sounding2 = sharedEntries(role, { planned, start, beatSeconds, meter, pool: pool(), phrase: Math.max(1e-6, now2 + left - start) })?.[role.section] ?? entry3;
+          if (entry3 && role.entries && role.entryRegisters && role.section && planned.length) sounding2 = sharedEntries(role, { planned, start, beatSeconds, meter, pool: pool(), phrase: Math.max(INSTANT2, now2 + left - start) })?.[role.section] ?? entry3;
         }
         for (const [index, note] of line.entries()) {
-          if (note.at < start - 1e-9 || sounded.has(index)) continue;
+          if (note.at < start - EPSILON3 || sounded.has(index)) continue;
           const moved = note.at + lagAt(note.at);
-          if (moved >= until || note.at < now2 - 1e-9 && moved < now2 - 1e-9) continue;
-          const when = Math.max(now2, moved), pitch5 = note.figure ? improvising.pitch(note, clock7, last2) : followHarmony(note.pitch, pool(), [note.pitch - 12, note.pitch + 12]);
+          if (moved >= until || note.at < now2 - EPSILON3 && moved < now2 - EPSILON3) continue;
+          const when = Math.max(now2, moved), pitch5 = note.figure ? improvising.pitch(note, clock7, last2) : followHarmony(note.pitch, pool(), [note.pitch - OCTAVE2, note.pitch + OCTAVE2]);
           sounded.add(index);
           const lag = when - note.at + (Number(note.lag) || 0);
           last2 = Number.isFinite(pitch5) ? pitch5 : note.pitch;
-          out.push({ ...scoreTimeFields(note), at: when, pitch: entered(last2), seconds: heldTo(when, note.seconds, left, now2), ...Number.isFinite(note.written) ? { written: heldTo(note.at, note.written, left, now2) } : {}, ...Math.abs(lag) > 1e-6 ? { lag: +lag.toFixed(6) } : {}, ...peak != null ? { peak } : {}, ...note.cadence ? { cadence: true } : {}, ...note.source ? { source: note.source } : {} });
+          out.push({ ...scoreTimeFields(note), at: when, pitch: entered(last2), seconds: heldTo(when, note.seconds, left, now2), ...Number.isFinite(note.written) ? { written: heldTo(note.at, note.written, left, now2) } : {}, ...Math.abs(lag) > INSTANT2 ? { lag: +lag.toFixed(6) } : {}, ...peak != null ? { peak } : {}, ...note.cadence ? { cadence: true } : {}, ...note.source ? { source: note.source } : {} });
         }
         return out;
       }
@@ -41195,188 +41968,56 @@ function makeVoice(role, { random: random2, start, beatSeconds, meter = null, po
       const tones = (pool() ?? []).map(Number).filter(Number.isFinite);
       if (!tones.length) return [];
       struck = true;
-      const { centre: c2, width: w } = band2(position2), span2 = Math.max(12, w * 2), target = c2 - span2 / 2 + span2 * (fromTop(part, parts2) + 0.5) / parts2;
+      const { centre: c2, width: w } = band2(position2), span2 = Math.max(OCTAVE2, w * 2), target = c2 - span2 / 2 + span2 * (fromTop(part, parts2) + 0.5) / parts2;
       const candidates2 = [];
-      for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of new Set(tones.map((p) => modulo8(p, 12)))) candidates2.push(12 * octave2 + pc);
+      for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of new Set(tones.map((p) => modulo8(p, OCTAVE2)))) candidates2.push(OCTAVE2 * octave2 + pc);
       const at2 = Math.max(now2, start), seconds2 = Math.max(0.05, Math.min((Number(parameters2?.beats) || 1) * bandBeat, left - (at2 - now2)));
       const length = authoredFraction(parameters2?.beats || 1).mul(bandBeatTicks ?? sub4);
       return [{ scoreTime: written2(window2.at, window2.at.add(length), window2), at: at2, pitch: Number.isFinite(Number(parameters2?.pitch)) ? Number(parameters2.pitch) : nearestIn(candidates2, target), seconds: seconds2 }];
     } };
   }
-  if (texture === "chord") {
-    const pulse2 = pulseOf({ meter, beatSeconds, start, pulse: Number(parameters2?.pulse), seed: role.seed, pool: materialOf(role) }), gate = Math.max(0.05, Math.min(1, Number(parameters2?.gate) || 1));
-    const tolerance = repetitionOf(role.repetition ?? null);
-    let dir = part % 2 ? 1 : -1;
-    const walk = (pitch5, near9) => {
-      const tones = [...new Set(near9.map((p) => +p.toFixed(4)))].sort((a, b) => a - b), others = tones.filter((p) => Math.abs(p - pitch5) > 0.25);
-      if (!others.length) return pitch5;
-      const k2 = tones.findIndex((p) => Math.abs(p - pitch5) < 0.25);
-      if (k2 < 0) return nearestIn(others, pitch5);
-      if (!tones[k2 + dir]) dir = -dir;
-      return tones[k2 + dir] ?? pitch5;
-    };
-    let held2 = null, next3 = pulse2 ? pulse2.pointAfter(start) : null, run15 = null, harmony = null, authored = null, serial = 0;
-    const compose = (at2, end, window2) => {
-      if (authored && Rational.of(at2).gt(readScoreTime(authored).at) && Rational.of(at2).lt(readScoreTime(authored).end)) {
-        authored = { ...authored, scoreTime: written2(readScoreTime(authored).at, at2, window2) };
-        onScoreRevision(authored);
-      }
-      authored = { scoreId: String(serial++), scoreTime: written2(at2, end, window2) };
-      return authored;
-    };
-    const goOn = (pitch5, at2, near9) => {
-      if (run15 && Math.abs(run15.pitch - pitch5) < 0.25 && !mayGoOn(run15, at2, tolerance)) {
-        const others = near9.filter((p) => Math.abs(p - pitch5) > 0.25);
-        if (others.length) pitch5 = nearestIn(others, pitch5);
-      }
-      run15 = run15 && Math.abs(run15.pitch - pitch5) < 0.25 ? { ...run15, strikes: run15.strikes + 1 } : { pitch: pitch5, since: at2, strikes: 1 };
-      return pitch5;
-    };
-    return { events(now2, until, options) {
-      const { position: position2, left } = options, window2 = windowOf(options);
-      const tones = (pool() ?? []).map(Number).filter(Number.isFinite);
-      if (!tones.length) return [];
-      const { centre: c2, width: w } = band2(position2), span2 = Math.max(12, w * 2), target = c2 - span2 / 2 + span2 * (fromTop(part, parts2) + 0.5) / parts2;
-      const classes = [...new Set(tones.map((p) => modulo8(p, 12)))], candidates2 = [];
-      for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of classes) candidates2.push(12 * octave2 + pc);
-      const reach = Math.max(5, span2 / parts2), near9 = candidates2.filter((p) => Math.abs(p - target) <= reach + 1e-9), key2 = classes.map((pc) => +pc.toFixed(4)).sort((a, b) => a - b).join(",");
-      const moved = key2 !== harmony;
-      harmony = key2;
-      let pitch5 = held2 == null || !near9.length ? nearestIn(candidates2, target) : moved ? nearestIn(near9, held2) : held2;
-      const out = [];
-      if (!pulse2) {
-        if (held2 === pitch5 && run15 && !mayGoOn(run15, now2, tolerance)) pitch5 = goOn(pitch5, now2, near9);
-        if (held2 !== pitch5) {
-          if (!run15 || Math.abs(run15.pitch - pitch5) >= 0.25) run15 = { pitch: pitch5, since: now2, strikes: 1 };
-          held2 = pitch5;
-          return [{ ...compose(window2.at, window2.end, window2), at: now2, pitch: pitch5, seconds: heldTo(now2, left, left, now2) }];
-        }
-        return [];
-      }
-      while (next3.at < now2 - 1e-9) next3 = pulse2.pointAfter(next3.at + 1e-6);
-      if (held2 !== pitch5 && next3.at > now2 + 1e-9) {
-        pitch5 = goOn(pitch5, now2, near9);
-        out.push({ ...compose(window2.at, next3.scoreAt, window2), at: now2, pitch: pitch5, seconds: heldTo(now2, Math.max(0.05, gate * (next3.at - now2)), left, now2) });
-      }
-      for (; next3.at < until - 1e-9; next3 = pulse2.pointAfter(next3.at + 1e-6)) {
-        if (left <= next3.at - now2 || next3.scoreAt.ge(window2.end)) break;
-        const after = pulse2.pointAfter(next3.at + 1e-6);
-        pitch5 = goOn(run15 && Math.abs(run15.pitch - pitch5) < 0.25 ? walk(pitch5, near9) : pitch5, next3.at, near9);
-        out.push({ ...compose(next3.scoreAt, after.scoreAt, window2), at: next3.at, pitch: pitch5, seconds: heldTo(next3.at, Math.max(0.05, gate * (after.at - next3.at)), left, now2) });
-      }
-      held2 = pitch5;
-      return out;
-    } };
-  }
   if (texture === "figuration") {
     const { positions, barSeconds: barSeconds3, barTicks } = metricalGrid(meter, beatSeconds), most = 1 / shortest, n = Math.max(1, Math.round(Number(parameters2.tones) || 3)), queue = [];
     const tolerance = repetitionOf(role.repetition ?? null), inverted = (voices2, tones) => voices2.map((v) => tones.find((t) => t > v + 0.25) ?? tones.find((t) => Math.abs(t - v) > 0.25) ?? v).sort((a, b) => a - b);
-    let next3 = start, barIndex = 0, voices = null, since = start;
+    let next2 = start, barIndex = 0, voices = null, since = start;
     return { events(now2, until, options) {
       const { position: position2, left } = options, window2 = windowOf(options);
-      const { centre: c2, width: w } = band2(position2), span2 = Math.max(12, w * 2), low = c2 - span2 / 2 + span2 * fromTop(part, parts2) / parts2, high = low + Math.max(12, span2 / parts2);
-      const classes = [...new Set((pool() ?? []).map(Number).filter(Number.isFinite).map((p) => +modulo8(p, 12).toFixed(6)))], chordTones2 = [];
-      for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of classes) chordTones2.push(12 * octave2 + pc);
-      const tones = chordTones2.filter((p) => p >= low - 1e-9 && p <= high + 1e-9).sort((a, b) => a - b);
+      const { centre: c2, width: w } = band2(position2), span2 = Math.max(OCTAVE2, w * 2), low = c2 - span2 / 2 + span2 * fromTop(part, parts2) / parts2, high = low + Math.max(OCTAVE2, span2 / parts2);
+      const classes = [...new Set((pool() ?? []).map(Number).filter(Number.isFinite).map((p) => +modulo8(p, OCTAVE2).toFixed(6)))], chordTones2 = [];
+      for (let octave2 = 1; octave2 <= 8; octave2++) for (const pc of classes) chordTones2.push(OCTAVE2 * octave2 + pc);
+      const tones = chordTones2.filter((p) => p >= low - EPSILON3 && p <= high + EPSILON3).sort((a, b) => a - b);
       if (tones.length) voices = voices ? leadVoices(voices, tones) : spreadVoices(tones, n);
-      while (next3 < until && left > next3 - now2) {
-        const seconds2 = Math.min(barSeconds3, left - (next3 - now2));
+      while (next2 < until && left > next2 - now2) {
+        const seconds2 = Math.min(barSeconds3, left - (next2 - now2));
         if (!voices?.length || !(seconds2 > 0.05)) {
-          next3 += barSeconds3;
+          next2 += barSeconds3;
           barIndex++;
           continue;
         }
-        if (next3 - since >= tolerance.seconds - 1e-9 && tones.length > 1) {
+        if (next2 - since >= tolerance.seconds - EPSILON3 && tones.length > 1) {
           voices = inverted(voices, tones);
-          since = next3;
+          since = next2;
         }
-        const walk = figure({ set: voices.map((_, k2) => k2), positions, barSeconds: barSeconds3, barTicks, scoreStart: barIndex * barTicks, scoreEnd: Rational.of((barIndex + 1) * barTicks).min(window2.end), start: next3, seconds: seconds2, rate: (parameters2.rate ?? 0.5) * most, shortest, tones: voices.length, direction: parameters2.direction, turn: parameters2.turn, anchor: parameters2.anchor, random: random2 });
-        for (const note of walk) if (note.at >= now2 - 1e-9) queue.push({ ...scoreTimeFields(note), at: note.at, voice: note.pitch, seconds: note.seconds });
-        next3 += barSeconds3;
+        const walk = figure({ set: voices.map((_, k2) => k2), positions, barSeconds: barSeconds3, barTicks, scoreStart: barIndex * barTicks, scoreEnd: Rational.of((barIndex + 1) * barTicks).min(window2.end), start: next2, seconds: seconds2, rate: (parameters2.rate ?? 0.5) * most, shortest, tones: voices.length, direction: parameters2.direction, turn: parameters2.turn, anchor: parameters2.anchor, random: random2 });
+        for (const note of walk) if (note.at >= now2 - EPSILON3) queue.push({ ...scoreTimeFields(note), at: note.at, voice: note.pitch, seconds: note.seconds });
+        next2 += barSeconds3;
         barIndex++;
       }
       const out = [];
-      while (queue.length && queue[0].at < until - 1e-9) {
+      while (queue.length && queue[0].at < until - EPSILON3) {
         const note = queue.shift();
         if (voices?.[note.voice] != null) out.push({ ...scoreTimeFields(note), at: note.at, pitch: +voices[note.voice].toFixed(4), seconds: note.seconds });
       }
       return out;
     } };
   }
-  if (texture === "micropolyphony") {
-    const { divisions: divisions2, drift, cantusNotes } = parameters2, cantusRandom = seededSource(role.seed, `${materialOf(role)}:cantus`), ladder2 = ladderOf2(pool), cantus = [];
-    let index = ladder2.indexOf(nearestIn(ladder2, centre));
-    for (let k2 = 0; k2 < cantusNotes; k2++) {
-      cantus.push(ladder2[index]);
-      const step2 = cantusRandom() < 0.5 ? -1 : 1, to = index + step2;
-      index = Math.abs((ladder2[to] ?? ladder2[index]) - centre) <= width / 2 ? clamp8(to, 0, ladder2.length - 1) : clamp8(index - step2, 0, ladder2.length - 1);
-    }
-    const share = divisions2[part % divisions2.length], most = Math.max(2, Math.floor(beatSeconds / shortest + 1e-9));
-    const division = share > 1 ? share : Math.round(2 + share * (most - 2));
-    const groupBeats = groups.reduce((sum9, g) => sum9 + g, 0) / groups.length, unit9 = beatSeconds / division;
-    const steps = Math.max(1, Math.round(groupBeats * division * (1 + drift * part))), length = steps * unit9, scoreLength = new Rational(steps * sub4, division);
-    const entry3 = Math.round(part / parts2 * groupBeats * division), scoreEntry = new Rational(entry3 * sub4, division);
-    let next3 = { at: start + entry3 * unit9, index: 0 };
-    return { events(now2, until, options) {
-      const { left } = options, window2 = windowOf(options);
-      const out = [];
-      while (next3.at < until - 1e-9) {
-        const scoreAt = scoreEntry.add(scoreLength.mul(next3.index));
-        if (scoreAt.ge(window2.end)) break;
-        if (next3.at >= now2 - 1e-9) out.push({ scoreTime: written2(scoreAt, scoreAt.add(scoreLength), window2), at: next3.at, pitch: cantus[next3.index % cantus.length], seconds: heldTo(next3.at, length * 0.98, left, now2) });
-        next3 = { at: next3.at + length, index: next3.index + 1 };
-      }
-      return out;
-    } };
-  }
-  if (texture === "cluster") {
-    let first = true;
-    return { events(now2, until, options) {
-      const { position: position2, left } = options, window2 = windowOf(options);
-      if (!first) return [];
-      first = false;
-      const { centre: c2, width: w } = band2(position2);
-      return [{ scoreTime: written2(window2.at, window2.end, window2), at: now2, pitch: +(c2 - w / 2 + w * (fromTop(part, parts2) + 0.5) / parts2).toFixed(4), seconds: heldTo(now2, left, left, now2) }];
-    } };
-  }
-  if (texture === "glissandi") {
-    const { spread: spread2, seconds: lengths } = parameters2;
-    const least = Math.max(1, Math.ceil(lengths[0] / tick)), most = Math.max(least, Math.floor(lengths[1] / tick));
-    let next3 = Math.floor(random2() * sub4), from = centre + (random2() * 2 - 1) * width / 2;
-    return { events(now2, until, options) {
-      const { position: position2, left } = options, window2 = windowOf(options);
-      const out = [];
-      while (start + next3 * tick < until - 1e-9 && Rational.of(next3).lt(window2.end)) {
-        const { centre: c2, width: w } = band2(position2), count12 = least + Math.floor(random2() * (most - least + 1)), seconds2 = count12 * tick, at2 = start + next3 * tick;
-        let to = from + normalFrom(random2) * spread2 * seconds2;
-        if (to > c2 + w) to = 2 * (c2 + w) - to;
-        if (to < c2 - w) to = 2 * (c2 - w) - to;
-        to = clamp8(to, c2 - w, c2 + w);
-        if (at2 >= now2 - 1e-9) {
-          const held2 = heldTo(at2, seconds2, left, now2);
-          out.push({ scoreTime: written2(next3, next3 + count12, window2), at: at2, pitch: +to.toFixed(4), from: +from.toFixed(4), seconds: held2, ...parameters2.hold > 0 ? { hold: parameters2.hold } : {} });
-        }
-        from = to;
-        next3 += count12 + (random2() > clamp8(density, 0, 1) ? Math.floor(random2() * count12) : 0);
-      }
-      return out;
-    } };
-  }
-  const plucked = parameters2.seconds, pulse = pulseOf({ meter, beatSeconds, start, pulse: Number(parameters2?.pulse), seed: role.seed, pool: materialOf(role) }), pull2 = Math.max(0, Math.min(1, Number(parameters2?.pulse) || 0));
-  const gap2 = () => Math.max(1, Math.ceil(-Math.log(Math.max(1e-12, random2())) / (Math.max(0.05, density) * tick)));
-  const positionAfter = (at2) => pulse && random2() < pull2 ? pulse.pointAfter(start + at2 * tick).scoreAt.toNumber() : at2;
-  const pluck = Math.max(1, Math.min(sub4, Math.floor(sub4 * (Number(meter?.denominator) || 4) / 8)));
-  let next2 = positionAfter(gap2());
-  return { events(now2, until, options) {
-    const { position: position2, left } = options, window2 = windowOf(options);
-    const out = [];
-    while (start + next2 * tick < until - 1e-9 && Rational.of(next2).lt(window2.end)) {
-      const { centre: c2, width: w } = band2(position2), at2 = start + next2 * tick, after = positionAfter(next2 + gap2());
-      if (at2 >= now2 - 1e-9 && left > at2 - now2) out.push({ scoreTime: written2(next2, Rational.of(after).min(Rational.of(next2).add(pluck)), window2), at: at2, pitch: +(c2 + (random2() * 2 - 1) * w / 2).toFixed(4), seconds: plucked, pluck: true });
-      next2 = after;
-    }
-    return out;
+  const located = pointOfRole(role);
+  if (!located || familyOf(texture) !== "process") return { events() {
+    return [];
   } };
+  const point = { ...drawnPoint(located, role.seed ?? 0) }, given3 = role.parameters ?? {}, number5 = (value4) => Number.isFinite(Number(value4)) && value4 !== null && value4 !== "" ? Number(value4) : null;
+  for (const [from, to, as = (x) => x] of [["pulse", "pulse"], ["gate", "sustain"], ["drift", "drift"], ["hold", "glide", (x) => 1 - x]]) if (number5(given3[from]) != null) point[to] = clamp8(as(number5(given3[from])), 0, 1);
+  return processVoice(role, { point, parameters: parameters2, start, beatSeconds, meter, pool, shortest, band: band2, written: written2, windowOf, heldTo, onScoreRevision });
 }
 
 // public/shared/conducting/rhythmic-tiling.js
@@ -41807,7 +42448,7 @@ function castBattery(count12, { level = 0.5, random: random2 } = {}) {
 }
 function batteryHocket({ ticks, players, index, seed: seed3 }) {
   if (!(players >= 2 && Number.isInteger(ticks) && ticks % players === 0 && index >= 0 && index < players)) return null;
-  const classes = ticks / players, draw = seededSource(seed3 >>> 0, "hocket-cell");
+  const classes = ticks / players, draw = seededSource2(seed3 >>> 0, "hocket-cell");
   const cell = Array.from({ length: classes }, (_, r2) => r2 + classes * Math.floor(draw() * players)).sort((a, b) => a - b);
   let prepared4;
   try {
@@ -41981,7 +42622,7 @@ function percussionFormation(seats, { random: random2, constraints = {}, join: j
       ...cast ? {
         instruments: Object.freeze(Object.fromEntries(ids4.map((id4, i) => [id4, cast[i]]))),
         pulse: batteryPulse(seed3, { character, elongation }),
-        ...ids4.length >= 2 ? { hocket: +(PERCUSSION.hocket[0] + (PERCUSSION.hocket[1] - PERCUSSION.hocket[0]) * seededSource(seed3, "hocket")()).toFixed(3) } : {}
+        ...ids4.length >= 2 ? { hocket: +(PERCUSSION.hocket[0] + (PERCUSSION.hocket[1] - PERCUSSION.hocket[0]) * seededSource2(seed3, "hocket")()).toFixed(3) } : {}
       } : {}
     });
   })) });
@@ -41989,7 +42630,7 @@ function percussionFormation(seats, { random: random2, constraints = {}, join: j
 function batteryPulse(seed3, { character, elongation }) {
   const own2 = PERCUSSION.pulse, wanted = character ? sectionAesthetic(character).pulse : own2;
   const low = Math.max(own2[0], wanted[0]), high = Math.min(own2[1], wanted[1]), range3 = low <= high ? [low, high] : wanted[1] < own2[0] ? [own2[0], own2[0]] : [own2[1], own2[1]];
-  return +((range3[0] + (range3[1] - range3[0]) * seededSource(seed3, "pulse")() ** 2) / Math.max(1, Number(elongation) || 1)).toFixed(3);
+  return +((range3[0] + (range3[1] - range3[0]) * seededSource2(seed3, "pulse")() ** 2) / Math.max(1, Number(elongation) || 1)).toFixed(3);
 }
 var percussionSummary = (formation) => formation.pools.map((pool) => `${PERCUSSION.sections[pool.id]?.abbreviation ?? pool.id}: ${pool.texture === "tacet" ? "tacet" : pool.instruments ? Object.values(pool.instruments).join(", ") : "plays"}`).join("; ");
 
@@ -43439,7 +44080,7 @@ var clamp015 = (x) => Math.max(0, Math.min(1, x));
 function tremoloGesture(role, family = "bowed") {
   const amount = Number(role?.tremolo);
   if (!(amount > 0)) return null;
-  const random2 = seededSource(role.seed ?? 0, `tremolo:${materialOf(role)}`);
+  const random2 = seededSource2(role.seed ?? 0, `tremolo:${materialOf(role)}`);
   if (random2() >= amount) return null;
   const [slow, quick] = TREMOLO_GESTURE.rate[family] ?? TREMOLO_GESTURE.rate.bowed, [shallow, deep] = TREMOLO_GESTURE.depth;
   return Object.freeze({ rate: +(slow * (quick / slow) ** random2()).toFixed(3), peak: +random2().toFixed(3), depth: +(shallow + (deep - shallow) * random2()).toFixed(2), accent: +(random2() ** 3).toFixed(3) });
@@ -44133,9 +44774,9 @@ var SectionSeat = class {
       seats: stringSeats(size),
       bowed: Object.hasOwn(BOWED_INSTRUMENTS, instrument)
     });
-    this.bowRandom = seededSource(SEAT("saltBow"), seat.id);
+    this.bowRandom = seededSource2(SEAT("saltBow"), seat.id);
     this.vibrato = playerVibrato(seat.id, instrument);
-    this.take = Math.floor(seededSource(SEAT("saltTake"), seat.id)() * SEAT("takes"));
+    this.take = Math.floor(seededSource2(SEAT("saltTake"), seat.id)() * SEAT("takes"));
     this.formations = /* @__PURE__ */ new Map();
     this.current = null;
     this.voice = null;
@@ -44251,7 +44892,7 @@ var SectionSeat = class {
       if (!dispatch || dispatch.batch !== tick || !(dispatch.anchor > tick) || entry3.prepared || this.streamOf?.() !== dispatch.stream || clock7.stream?.partTick != null && clock7.stream.partTick !== dispatch.own) continue;
       const role2 = seatRoles(entry3.formation).get(this.seat.id) ?? null;
       if (!role2) continue;
-      const beatSeconds = (clock7.meter.subdivision || bandMeter().subdivision) * beatSpt, bandBeat = ((clock7.ensemble?.meter ?? clock7.meter).subdivision || bandMeter().subdivision) * spt, voice = makeVoice(role2, { random: seededSource(role2.seed, voiceKey(role2)), start: 0, beatSeconds, meter: clock7.meter, pool: this.pool, instrument: this.instrument, shortest: this.seat?.shortest, compass: this.compassFor(role2), heard: this.heard ? (clock8) => this.heard(clock8, `${this.group}:${voiceKey(role2)}`) : null, bandBeat, bandBeatTicks: scoreRate(clock7).mul((clock7.ensemble?.meter ?? clock7.meter).subdivision), onScoreRevision: (revision7) => this.revised(authoredEvent(revision7, dispatch.anchor, clock7)), planBeat: this.plannedBeat(at2, beatSeconds, (clock7.ensemble ?? clock7).bpm) });
+      const beatSeconds = (clock7.meter.subdivision || bandMeter().subdivision) * beatSpt, bandBeat = ((clock7.ensemble?.meter ?? clock7.meter).subdivision || bandMeter().subdivision) * spt, voice = makeVoice(role2, { random: seededSource2(role2.seed, voiceKey(role2)), start: 0, beatSeconds, meter: clock7.meter, pool: this.pool, instrument: this.instrument, shortest: this.seat?.shortest, compass: this.compassFor(role2), heard: this.heard ? (clock8) => this.heard(clock8, `${this.group}:${voiceKey(role2)}`) : null, bandBeat, bandBeatTicks: scoreRate(clock7).mul((clock7.ensemble?.meter ?? clock7.meter).subdivision), onScoreRevision: (revision7) => this.revised(authoredEvent(revision7, dispatch.anchor, clock7)), planBeat: this.plannedBeat(at2, beatSeconds, (clock7.ensemble ?? clock7).bpm) });
       if (voice.motifConflict) this.audio?.report?.("motif_insistence_conflict", voice.motifConflict);
       const lead = (dispatch.anchor - tick) * spt - within3, now3 = this.clockSeconds + within3;
       for (const event2 of voice.events(0, spt, { position: 0, clock: clock7, spt, scoreWindow: scoreWindow(clock7, 0, Math.max(1, Number(entry3.bars) || 1) * perBar), left: Math.max(1, Number(entry3.bars) || 1) * perBar * spt })) this.play({ ...event2, ...authoredEvent(event2, dispatch.anchor, clock7), at: now3 + lead + event2.at }, now3, { role: role2 });
@@ -44282,7 +44923,7 @@ var SectionSeat = class {
         ...plan3.prepared ? { preparedUntilN: plan3.prepared.untilN } : {}
       };
       this.seam = true;
-      this.voice = plan3.prepared?.voice ?? (role2 ? makeVoice(role2, { random: seededSource(role2.seed, voiceKey(role2)), start: 0, beatSeconds, meter: clock7.meter, pool: this.pool, instrument: this.instrument, shortest: this.seat?.shortest, compass: this.compassFor(role2), heard: this.heard ? (clock8) => this.heard(clock8, `${this.group}:${voiceKey(role2)}`) : null, bandBeat: ((clock7.ensemble?.meter ?? clock7.meter).subdivision || bandMeter().subdivision) * spt, bandBeatTicks: scoreRate(clock7).mul((clock7.ensemble?.meter ?? clock7.meter).subdivision), onScoreRevision: (revision7) => this.revised(authoredEvent(revision7, tick - late, clock7)), planBeat: this.plannedBeat(plan3.appliesAt.bar, beatSeconds, (clock7.ensemble ?? clock7).bpm) }) : null);
+      this.voice = plan3.prepared?.voice ?? (role2 ? makeVoice(role2, { random: seededSource2(role2.seed, voiceKey(role2)), start: 0, beatSeconds, meter: clock7.meter, pool: this.pool, instrument: this.instrument, shortest: this.seat?.shortest, compass: this.compassFor(role2), heard: this.heard ? (clock8) => this.heard(clock8, `${this.group}:${voiceKey(role2)}`) : null, bandBeat: ((clock7.ensemble?.meter ?? clock7.meter).subdivision || bandMeter().subdivision) * spt, bandBeatTicks: scoreRate(clock7).mul((clock7.ensemble?.meter ?? clock7.meter).subdivision), onScoreRevision: (revision7) => this.revised(authoredEvent(revision7, tick - late, clock7)), planBeat: this.plannedBeat(plan3.appliesAt.bar, beatSeconds, (clock7.ensemble ?? clock7).bpm) }) : null);
     }
     if (this.voice?.motifConflict && !this.voice.conflictReported) {
       this.voice.conflictReported = true;
@@ -44295,7 +44936,7 @@ var SectionSeat = class {
     const ticksLeft = Math.min(phraseTicks, closing.phase === "final" && Number.isFinite(closing.ticksLeft) ? closing.ticksLeft : Infinity), left = ticksLeft * spt;
     const toEnd = Number.isFinite(closing.ticksLeft) && closing.phase !== "none" && closing.ticksLeft <= phraseTicks ? closing.ticksLeft * spt : null;
     this.current.ending = toEnd != null ? { at: now2 + toEnd, bar: perBar * spt, last: closing.phase === "final" } : null;
-    const spt0 = this.current.spt0 ?? spt, scale = spt / spt0, nowN = elapsed * spt0 + within3 / scale, fromN = Math.max(this.current.catchUp ? 0 : nowN, this.current.preparedUntilN ?? 0), untilN = Math.max(nowN + spt0, fromN);
+    const spt0 = this.current.spt0 ?? spt, scale = spt / spt0, nowN = elapsed * spt0 + within3 / scale, catchUp = this.current.catchUp, fromN = Math.max(catchUp ? 0 : nowN, this.current.preparedUntilN ?? 0), untilN = Math.max(nowN + spt0, fromN);
     this.current.catchUp = false;
     this.current.preparedUntilN = null;
     const earliest = this.current.earliest ?? now2;
@@ -44310,14 +44951,17 @@ var SectionSeat = class {
     const role = this.current.role;
     this.current.leads ??= Boolean(this.say && role.texture === "line" && this.leadsPart(plan2.formation, role));
     const voiced = this.current.leads ? (pitch5) => this.say("voices", [voicesPayload({ voice: `${this.group}:${voiceKey(role)}`, role: "line", pitches: [pitch5], clock: clock7, style: "section" })]) : null;
-    const past = fromN - nowN, placed3 = position2 + past / Math.max(LEAST2, plan2.bars * perBar * spt0);
-    for (const event2 of this.voice.events(fromN, untilN + ahead / scale, { position: placed3, clock: clock7, spt: spt0, scoreWindow: scoreWindow(this.current.scoreClock, elapsed, elapsed + ticksLeft), left: ticksLeft * spt0 - past })) {
+    const phraseN = Math.max(LEAST2, plan2.bars * perBar * spt0), end = untilN + ahead / scale;
+    const windows = catchUp && elapsed > 0 ? [...Array.from({ length: elapsed }, (_, k2) => ({ from: k2 * spt0, until: (k2 + 1) * spt0, at: k2 })).filter(({ from }) => from >= fromN - SAME4), { from: Math.max(fromN, elapsed * spt0), until: end, at: elapsed }] : [{ from: fromN, until: end, at: elapsed }];
+    const events3 = windows.flatMap(({ from, until: until2, at: at2 }) => this.voice.events(from, until2, { position: position2 + (from - nowN) / phraseN, clock: clock7, spt: spt0, scoreWindow: scoreWindow(this.current.scoreClock, at2, elapsed + ticksLeft), left: ticksLeft * spt0 - (from - nowN) }));
+    const lastBegun = Math.max(-Infinity, ...events3.map((event2) => now2 + (event2.at - nowN) * scale).filter((written2) => written2 <= now2 + SAME4));
+    for (const event2 of events3) {
       const written2 = now2 + (event2.at - nowN) * scale, shift = told ? told(written2) : 0, at2 = written2 + shift;
       const symbolic = authoredEvent(event2, this.current.scoreAnchor, this.current.scoreClock);
       const lag = (Number.isFinite(event2.lag) ? event2.lag * scale : 0) + at2 - written2, sounded = { ...event2, ...symbolic, at: at2, seconds: event2.seconds * scale, ...Math.abs(lag) > SAME4 ? { lag } : {} };
       if (written2 < this.clockSeconds) {
         const rest = written2 + sounded.seconds - now2;
-        if (!(rest >= SECTION_VOICES.shortest)) continue;
+        if (!(rest >= SECTION_VOICES.shortest) || written2 < lastBegun - SAME4) continue;
         Object.assign(sounded, { at: now2, seconds: rest });
       }
       const room2 = this.current.ending?.last && !event2.cadence ? Math.max(SECTION_VOICES.shortest, this.current.beatSeconds ?? 0) : SECTION_VOICES.shortest;
@@ -44381,7 +45025,7 @@ var SectionSeat = class {
   // once a piece from its conductor's seed, the same for every player of it), its swell (its dynamics through it).
   vibratoExpression(role, event2, { at: at2, peak, db: db2, law }) {
     const step2 = AUTHORED_VIBRATO.step, { asked = null, seed: seed3 = 0 } = role.vibrato ?? {};
-    const scope23 = vibratoScope(asked, this.instrument, seededSource(Number(seed3) >>> 0, `vibrato:${this.instrument}`));
+    const scope23 = vibratoScope(asked, this.instrument, seededSource2(Number(seed3) >>> 0, `vibrato:${this.instrument}`));
     return {
       intensity: vibratoIntensity({ position: this.positionAt(at2), peak: Number.isFinite(peak) ? peak : arcPeak, seconds: event2.seconds, delay: this.vibrato.delay, accent: Math.max(0, Math.min(1, db2 / FULL_ACCENT)) }),
       scope: scope23,
@@ -44458,13 +45102,13 @@ var SectionSeat = class {
   // also try to assign similar techniques to similar desks whenever possible"; "Stand partners do not ALWAYS share the
   // same technique").
   takes(role, technique) {
-    const seed3 = role?.seed ?? 0, apart3 = seededSource(seed3, `${deskKey(this.seat)}:apart:${technique}`)() < DESK_APART;
+    const seed3 = role?.seed ?? 0, apart3 = seededSource2(seed3, `${deskKey(this.seat)}:apart:${technique}`)() < DESK_APART;
     return takesUp(
       this.techniques,
       { id: this.seat.id, section: this.seat.section, instrument: this.instrument },
       technique,
       role?.keenest?.[technique],
-      seededSource(seed3, apart3 ? `${this.seat.id}:takes:${technique}` : `${deskKey(this.seat)}:takes:${technique}`)
+      seededSource2(seed3, apart3 ? `${this.seat.id}:takes:${technique}` : `${deskKey(this.seat)}:takes:${technique}`)
     );
   }
   // A note of its part: the voice's pitch in its compass, its own few cents and milliseconds, at its part's dynamic, in
@@ -44484,10 +45128,10 @@ var SectionSeat = class {
     const seat = this.seat, compass = this.compassFor(role), asked = intoCompass(event2.pitch, compass);
     if (asked === null) return [];
     const limits = this.bowed ? this.limitsOf() : null;
-    const wanted = event2.pluck ? null : event2.harmonic ?? (role.harmonic && this.takes(role, "harmonic") ? role.harmonic : null) ?? this.harmonic;
+    const wanted = event2.point ? null : event2.harmonic ?? (role.harmonic && this.takes(role, "harmonic") ? role.harmonic : null) ?? this.harmonic;
     const natural6 = wanted && limits?.harmonicNear ? limits.harmonicNear(asked, { partial: wanted.partial ?? null }) : null;
     const harmonic = natural6 ? { ...wanted, ...natural6 } : null;
-    const multiphonic = limits?.multiphonicNear && !event2.pluck && !harmonic && role.multiphonic && this.takes(role, "multiphonic") ? limits.multiphonicNear(role.multiphonic.choice, asked, { compass: [compass.low, compass.high], pool: this.pool?.() ?? [], dynamic: dynamicOf3(role.level).dynamic }) : null;
+    const multiphonic = limits?.multiphonicNear && !event2.point && !harmonic && role.multiphonic && this.takes(role, "multiphonic") ? limits.multiphonicNear(role.multiphonic.choice, asked, { compass: [compass.low, compass.high], pool: this.pool?.() ?? [], dynamic: dynamicOf3(role.level).dynamic }) : null;
     const pitch5 = multiphonic ? multiphonic.pitches[0] : asked;
     const own2 = this.ownFor(role), written2 = Math.max(earliest - now2, event2.at - now2), offset = written2 + own2.seconds, cents3 = multiphonic ? 0 : semitonesOf({ cents: own2.cents });
     const law = { rangeDb: FAMILIES.bowed.rangeDb, exponent: FAMILIES.bowed.velocityExponent ?? VELOCITY_EXPONENT }, shaped = this.attackOf(pitch5, now2 + offset), peak = event2.peak ?? null;
@@ -44499,18 +45143,18 @@ var SectionSeat = class {
     if (this.bowed && harmonic) base3.harmonic = { ...harmonic };
     if (multiphonic) base3.multiphonic = { ...multiphonic, pitches: [...multiphonic.pitches] };
     this.strokesDue = [];
-    const startAt = this.audio.eventStart?.(offset), slurred = this.held != null && !event2.pluck && Number.isFinite(startAt) && this.heldUntil >= startAt - STROKE.legato;
+    const startAt = this.audio.eventStart?.(offset), slurred = this.held != null && !event2.point && Number.isFinite(startAt) && this.heldUntil >= startAt - STROKE.legato;
     const repeated = Number.isFinite(this.heldPitch) && !Number.isFinite(event2.from) && Math.abs(pitch5 - this.heldPitch) < SEAT("samePitch");
     const beat = Number(this.current?.beatSeconds) || Infinity, quick = (Number.isFinite(event2.written) ? event2.written : event2.seconds) < beat - SEAT("quickWithin");
-    const figured = ["line", "figuration"].includes(role.texture), grouped2 = !figured || quick && this.heldQuick && (this.slurRun ?? 1) < LINE.slurMost;
-    const fullBow = bowSeconds(this.instrument, velocity, () => 0), change = slurred && (Boolean(multiphonic) || repeated || !grouped2 || this.seam || !(figured || role.texture === "glissandi") || (this.bowUsed ?? 0) + event2.seconds / fullBow > 1);
+    const figured = ["line", "figuration"].includes(role.texture) || Boolean(event2.ornament), grouped3 = !figured || quick && this.heldQuick && (this.slurRun ?? 1) < LINE.slurMost;
+    const fullBow = bowSeconds(this.instrument, velocity, () => 0), change = slurred && (Boolean(multiphonic) || repeated || !grouped3 || this.seam || !(figured || event2.from != null) || (this.bowUsed ?? 0) + event2.seconds / fullBow > 1);
     this.slurRun = slurred && !change ? (this.slurRun ?? 1) + 1 : 1;
     this.heldQuick = quick;
     const dynamic = scoredDynamicOf(velocity), gentle = Math.max(STROKE.legato, STROKE.entry[dynamic] ?? STROKE.entry.mf);
     const letGo = this.seam ? liftSeconds(velocity) : change ? gentle : STROKE.legato;
     this.seam = false;
     const before4 = Number.isFinite(startAt) && Number.isFinite(this.heldFrom) ? Math.max(0, startAt - this.heldFrom) : Infinity;
-    const biting = seededSource(SEAT("saltBite"), `${seat.id}:${Number.isFinite(event2.writtenTick) ? event2.writtenTick.toFixed(6) : event2.at.toFixed(6)}`);
+    const biting = seededSource2(SEAT("saltBite"), `${seat.id}:${Number.isFinite(event2.writtenTick) ? event2.writtenTick.toFixed(6) : event2.at.toFixed(6)}`);
     const point = this.bowed ? articulationOf2(role.articulation) ?? ownArticulation(velocity) : null;
     const bite = change && this.held != null ? Math.min(STROKE.biteShare * before4, (STROKE.bite[dynamic] ?? 0) * (1 - STROKE.biteSpread + STROKE.biteSpread * biting() / (1 / 2)) + (point?.bite ?? 0)) : 0;
     const late = bite * (STROKE.biteLate[0] + (STROKE.biteLate[1] - STROKE.biteLate[0]) * (bite > 0 ? biting() : 0));
@@ -44524,7 +45168,7 @@ var SectionSeat = class {
     this.heldFrom = startAt;
     this.heldUntil = (startAt ?? 0) + event2.seconds;
     this.heldPitch = pitch5;
-    if (event2.pluck) {
+    if (event2.point) {
       this.held = this.audio.bowedString?.(pitch5 + cents3, event2.seconds, velocity, offset, { ...base3, articulation: "pizzicato", written: asWritten }) ?? null;
       return [{ at: 0, seconds: event2.seconds }];
     }
@@ -44537,7 +45181,7 @@ var SectionSeat = class {
     const hold = this.audio.physical ? Infinity : recorded ? this.audio.strokeHold?.(pitch5 + cents3, velocity) ?? 0 : Infinity, looped = hold === Infinity && recorded;
     const held2 = recorded ? hold > 0 ? hold : this.audio.sustainSeconds?.() || this.audio.strokeSeconds?.(void 0) || 0 : 0, longest = held2 > 0 ? held2 : Infinity;
     const gesture3 = !sliding && !multiphonic && this.bowed ? tremoloGesture(role, "bowed") : null;
-    const strokeSeconds = gesture3 ? 1 / tremoloRate(gesture3, role, this.tremoloPace ??= TREMOLO.pace[0] + (TREMOLO.pace[1] - TREMOLO.pace[0]) * seededSource(SEAT("saltPace"), seat.id)(), "bowed") : Infinity;
+    const strokeSeconds = gesture3 ? 1 / tremoloRate(gesture3, role, this.tremoloPace ??= TREMOLO.pace[0] + (TREMOLO.pace[1] - TREMOLO.pace[0]) * seededSource2(SEAT("saltPace"), seat.id)(), "bowed") : Infinity;
     const tremolo = Boolean(gesture3) && event2.seconds >= TREMOLO_LEAST * strokeSeconds;
     if (tremolo && !this.audio.physical && this.audio.mode === "samples" && this.audio.sampleArticulations?.().has("tremolo")) {
       this.held = this.audio.bowedString?.(pitch5 + cents3, event2.seconds, velocity, offset, { ...base3, articulation: "tremolo", technique: "tremolo" }) ?? null;
@@ -44927,10 +45571,10 @@ var WindSeat = class extends SectionSeat {
     Object.assign(this, { instrument, kind, own: Object.freeze({ ...own2, seconds: own2.seconds + arrival }), seats: windSeats(kind, size) });
     this.vibrato = playerVibrato(seat.id, instrument);
     const [low, high] = BREATH2.early;
-    this.breathRandom = seededSource(2590, seat.id);
+    this.breathRandom = seededSource2(2590, seat.id);
     this.early = low + (high - low) * this.breathRandom();
     this.air = 1;
-    this.slideDraw = seededSource(20765, seat.id);
+    this.slideDraw = seededSource2(20765, seat.id);
     this.slideTongues = this.slideDraw();
   }
   // The share of a full breath a second of `pitch` at `dynamic` spends.
@@ -45017,7 +45661,7 @@ var WindSeat = class extends SectionSeat {
       this.noteHeld = null;
     }
     this.heldUntil = startAt + event2.seconds;
-    const slurred = joined && !breathBefore && ["line", "glissandi"].includes(role.texture) && this.air >= rate2 * event2.seconds;
+    const slurred = joined && !breathBefore && (role.texture === "line" || event2.from != null || Boolean(event2.ornament)) && this.air >= rate2 * event2.seconds;
     const repeated = slurred && this.lastPitch != null && Math.abs(pitch5 + cents3 - this.lastPitch) < BREATH2.samePitch;
     const slideTongued = slurred && !repeated && this.lastPitch != null && slideMoves(this.instrument, this.lastPitch, pitch5 + cents3, { within: BREATH2.samePitch }) === true && this.slideDraw() < this.slideTongues;
     this.lastPitch = pitch5 + cents3;
@@ -45051,7 +45695,7 @@ var WindSeat = class extends SectionSeat {
     }
     this.air = air;
     const [slow, quick] = BREATH2.tremolo.pace, gesture3 = !sliding && role.texture !== "hit" ? tremoloGesture(role, "wind") : null;
-    const each = gesture3 ? 1 / tremoloRate(gesture3, role, this.tonguePace ??= slow + (quick - slow) * seededSource(1806, seat.id)(), "wind") : Infinity;
+    const each = gesture3 ? 1 / tremoloRate(gesture3, role, this.tonguePace ??= slow + (quick - slow) * seededSource2(1806, seat.id)(), "wind") : Infinity;
     const trembles = Boolean(gesture3) && event2.seconds >= 2 * each;
     if (trembles) pieces.splice(0, pieces.length, ...pieces.flatMap((piece3) => {
       const count12 = Math.max(1, Math.round(piece3.seconds / each));
@@ -50720,6 +51364,7 @@ var LIVE_AUTO_MIX = Object.freeze({
 // public/render/spec.js
 init_opening_time();
 init_meter_reading();
+init_sections();
 
 // public/render/outputs.js
 function trimPreroll(sink, frames) {
@@ -52102,8 +52747,8 @@ function normalizeMeter(value4, path, { fail: fail54, fields: fields28, number: 
     else fail54(at2("tempoUnit"), "must be a note's denominator: 1, 2, 4 ... 64");
   }
   if (source3.sections !== void 0) {
-    const levels = meterApi?.normalizeMeter?.({ numerator: meter.numerator, sections: source3.sections }).sections;
-    if (levels) meter.sections = levels;
+    const levels = sectionLevels({ numerator: meter.numerator, sections: source3.sections });
+    if (levels) meter.sections = levels.map((level) => [...level]);
     else fail54(at2("sections"), "must be levels of sections, each summing to the numerator and nesting in the one above");
   }
   if (source3.sectionDynamics !== void 0) {
@@ -54427,7 +55072,7 @@ function presentationPolicy(overrides = {}) {
     familyLimit: positiveInteger4(source3.familyLimit ?? PRESENTATION_DEFAULTS.familyLimit, "familyLimit")
   });
 }
-var familyOf = (motif) => String(motif?.metadata?.parentMotifId || motif?.motifId || "");
+var familyOf2 = (motif) => String(motif?.metadata?.parentMotifId || motif?.motifId || "");
 var TRANSFORMATION_IDENTITIES = Object.freeze({ transpose: 0, timeScale: 1, invert: false, retrograde: false });
 function transformationOf(motif) {
   const applied = motif?.metadata?.transformation;
@@ -54604,7 +55249,7 @@ var PresentationHistory = class {
   // transformed return is both, and saying only one of them loses the fact
   // that mattered. Never stored on the material.
   relate({ motif, family, atBeats = 0, role = "", notes = 0, transformation = null, phraseBeats } = {}) {
-    const line = String(family || familyOf(motif)), policy2 = this.scaled(phraseBeats), changed2 = transformation === null ? transformationOf(motif) : transformation;
+    const line = String(family || familyOf2(motif)), policy2 = this.scaled(phraseBeats), changed2 = transformation === null ? transformationOf(motif) : transformation;
     const previous = this.lastAppearance(line), appearances = this.appearances(line), summary2 = this.families.get(line);
     const also = [];
     if (this.roleRecurred(role)) also.push("roleRecurrence");
@@ -62364,7 +63009,7 @@ var KERNEL_STREAM = Object.freeze({
   // The renderer's resolution: kernels closer than a sample at this rate cannot be told apart.
   sampleRate: 48e3
 });
-var EPSILON3 = 1e-12;
+var EPSILON4 = 1e-12;
 function phaseAt(points2, t) {
   let phase = 0;
   for (let i = 1; i < points2.length; i++) {
@@ -62378,7 +63023,7 @@ function phaseAt(points2, t) {
 }
 function timeInSegment(points2, i, base3, target) {
   const [t0, r0] = points2[i - 1], [t1, r1] = points2[i], slope = t1 > t0 ? (r1 - r0) / (t1 - t0) : 0, need = target - base3;
-  if (Math.abs(slope) < EPSILON3) return t0 + need / r0;
+  if (Math.abs(slope) < EPSILON4) return t0 + need / r0;
   return t0 + 2 * need / (r0 + Math.sqrt(Math.max(0, r0 * r0 + 2 * slope * need)));
 }
 function jitterOf(stream2, index) {
@@ -62397,7 +63042,7 @@ function expandStream(stream2, { from, to }, { choices = KERNEL_STREAM } = {}) {
   if (!(Number.isFinite(from) && to > from)) throw new RangeError("a window from a time to a later one");
   const lo = Math.max(from, stream2.start), hi = Math.min(to, stream2.start + stream2.duration);
   if (!(hi > lo)) return { status: "ok", kernels: [] };
-  const points2 = stream2.points, a = lo - stream2.start, b = hi - stream2.start, first = Math.ceil(phaseAt(points2, a) - EPSILON3), last2 = Math.ceil(phaseAt(points2, b) - EPSILON3) - 1;
+  const points2 = stream2.points, a = lo - stream2.start, b = hi - stream2.start, first = Math.ceil(phaseAt(points2, a) - EPSILON4), last2 = Math.ceil(phaseAt(points2, b) - EPSILON4) - 1;
   const count12 = Math.max(0, last2 - first + 1);
   const fastest = Math.max(...points2.map(([, hz2]) => hz2)), tooClose = 1 / fastest < 1 / choices.sampleRate;
   if (count12 > choices.maxWindowKernels || tooClose) {
@@ -62407,7 +63052,7 @@ function expandStream(stream2, { from, to }, { choices = KERNEL_STREAM } = {}) {
   const kernels = [];
   let segment2 = 1, base3 = 0;
   for (let k2 = first; k2 <= last2; k2++) {
-    while (segment2 < points2.length - 1 && phaseAt(points2, points2[segment2][0]) <= k2 + EPSILON3) {
+    while (segment2 < points2.length - 1 && phaseAt(points2, points2[segment2][0]) <= k2 + EPSILON4) {
       base3 = phaseAt(points2, points2[segment2][0]);
       segment2++;
     }
@@ -62464,7 +63109,7 @@ init_drum_kit();
 init_random_source();
 
 // public/shared/tuning.js
-var EPSILON4 = 1e-9;
+var EPSILON5 = 1e-9;
 var candidateCache = /* @__PURE__ */ new Map();
 var ratioToSemitones = (ratio3) => 12 * Math.log2(Number(ratio3));
 var octaveReduce = (value4) => (Number(value4) % 12 + 12) % 12;
@@ -62500,7 +63145,7 @@ function rationalizeInterval(semitones2, { purity = 1, complexity = 0.12, primeS
   const target = octaveReduce(semitones2), candidates2 = ratioCandidates({ oddLimit });
   return candidates2.reduce((best, candidate) => {
     const distance3 = Math.min(Math.abs(candidate.semitones - target), 12 - Math.abs(candidate.semitones - target));
-    const cost = Math.max(EPSILON4, purity) * distance3 ** 2 + Math.max(0, complexity) * candidate.complexity + Math.max(0, primeSoftness) * Math.log2(candidate.largestPrime);
+    const cost = Math.max(EPSILON5, purity) * distance3 ** 2 + Math.max(0, complexity) * candidate.complexity + Math.max(0, primeSoftness) * Math.log2(candidate.largestPrime);
     return !best || cost < best.cost ? { ...candidate, cost, distance: distance3 } : best;
   }, null);
 }
@@ -62516,7 +63161,7 @@ function tuningSystem({ divisions: divisions2 = 12, period: period2 = 12, purity
 function solveSprings(notes, springs, grounding, iterations) {
   const values = notes.map((note) => note.nominal);
   for (let pass = 0; pass < iterations; pass++) for (let index = 0; index < notes.length; index++) {
-    const ground = Math.max(EPSILON4, grounding[notes[index].chord]), links = springs[index];
+    const ground = Math.max(EPSILON5, grounding[notes[index].chord]), links = springs[index];
     let numerator = ground * notes[index].nominal, denominator = ground;
     for (const { other: other3, target, weight: weight3 } of links) {
       numerator += weight3 * (values[other3] - target);
@@ -62545,7 +63190,7 @@ function adaptiveJustIntonation(chords, { purity = 1, continuity = 0.6, groundin
       let target = targets.get(right) - targets.get(left);
       const nominalDifference = notes[right].nominal - notes[left].nominal;
       target += 12 * Math.round((nominalDifference - target) / 12);
-      springs[left].push({ other: right, target, weight: Math.max(EPSILON4, vertical[chord]) });
+      springs[left].push({ other: right, target, weight: Math.max(EPSILON5, vertical[chord]) });
     }
   }
   for (let chord = 1; chord < rows.length; chord++) for (const left of rows[chord - 1]) for (const right of rows[chord]) {
@@ -62556,7 +63201,7 @@ function adaptiveJustIntonation(chords, { purity = 1, continuity = 0.6, groundin
       springs[right].push({ other: left, target: -target, weight: weight3 });
     }
   }
-  const solved = solveSprings(notes, springs, grounds.map((value4) => Math.max(EPSILON4, Number(value4))), Math.max(1, Math.min(2e3, Math.trunc(iterations))));
+  const solved = solveSprings(notes, springs, grounds.map((value4) => Math.max(EPSILON5, Number(value4))), Math.max(1, Math.min(2e3, Math.trunc(iterations))));
   return rows.map((indices) => indices.map((index) => solved[index]));
 }
 function paletteRatio(interval2, ratios) {
@@ -68379,7 +69024,7 @@ registerRenderEngine("score", createScoreEngine, { capabilities: SCORE_CAPABILIT
 // public/render/timeline.js
 init_random_source();
 var LOOKAHEAD2 = 0.25;
-var EPSILON5 = 1e-9;
+var EPSILON6 = 1e-9;
 var botLabel = ({ index, spec }, field) => `bots[${index}] "${spec.id}" ${field}`;
 var prerollFrames = (sampleRate, lookahead = LOOKAHEAD2) => Math.round(lookahead * sampleRate);
 var renderFrame = (fileSeconds, sampleRate, lookahead = LOOKAHEAD2) => prerollFrames(sampleRate, lookahead) + Math.round(fileSeconds * sampleRate);
@@ -68413,7 +69058,7 @@ function locate2(transport, position2, label2) {
 }
 function reachedAt(transport, position2, tick, label2) {
   const resolved2 = locate2(transport, position2, label2);
-  return resolved2 && (resolved2.tick < tick || resolved2.tick === tick && resolved2.fraction < EPSILON5) ? resolved2 : null;
+  return resolved2 && (resolved2.tick < tick || resolved2.tick === tick && resolved2.fraction < EPSILON6) ? resolved2 : null;
 }
 function startsIn(transport, position2, tick, label2) {
   const resolved2 = locate2(transport, position2, label2);
@@ -68486,7 +69131,7 @@ var RenderTimeline = class {
     if (adapter.done === true) return true;
     const pending2 = adapter.pending;
     if (Array.isArray(pending2)) return !pending2.length && !("endSeconds" in adapter);
-    return entry3.endFileSeconds != null && musicSeconds >= entry3.endFileSeconds - EPSILON5 && clock7?.beatStart !== false;
+    return entry3.endFileSeconds != null && musicSeconds >= entry3.endFileSeconds - EPSILON6 && clock7?.beatStart !== false;
   }
   warnings() {
     const warnings = [];
@@ -69706,7 +70351,7 @@ var GROUP_ADDRESS = "/broadcast/group";
 var CONSTRAINTS_ADDRESS = "/broadcast/group/constraints";
 var FORMATION_ADDRESS = "/broadcast/group/formation";
 var PRESENCE_ADDRESS = "/broadcast/manage/presence";
-var KEPT2 = 64;
+var KEPT3 = 64;
 var GroupTree = class {
   constructor() {
     this.groups = /* @__PURE__ */ new Map();
@@ -69781,7 +70426,7 @@ var GroupTree = class {
     const list15 = (this.constraints.get(group2) ?? []).filter((entry3) => !(entry3.from === from && entry3.bar === (Number.isInteger(bar) ? bar : -1)));
     list15.push({ from, bar: Number.isInteger(bar) ? bar : -1, constraints });
     list15.sort((a, b) => a.bar - b.bar);
-    while (list15.length > KEPT2) list15.shift();
+    while (list15.length > KEPT3) list15.shift();
     this.constraints.set(group2, list15);
     if (!this.groups.has(group2)) this.set(group2, {});
     return true;
@@ -70179,8 +70824,10 @@ var LocalSocket = class {
   emit(type, event2) {
     for (const listener of this.listeners.get(type) || []) listener(event2);
   }
-  deliver(message2) {
-    this.emit("message", { data: JSON.stringify(message2) });
+  // (`data`: the message as its wire carries it, written once for every socket a broadcast reaches, each bot reading its
+  // own copy.)
+  deliver(message2, data = JSON.stringify(message2)) {
+    this.emit("message", { data });
   }
   send(value4) {
     if (this.readyState !== OPEN2) return;
@@ -70451,11 +71098,13 @@ var ClientEnsemble = class {
     return { type: "protocol", source: source3, address, args, clientTime: Date.now(), eventId: `client:${++this.protocolSequence}` };
   }
   broadcast(message2, room2) {
-    for (const [socket, client] of this.clients) if (!room2 || client.room === room2) socket.deliver(message2);
+    let data;
+    for (const [socket, client] of this.clients) if (!room2 || client.room === room2) socket.deliver(message2, data ??= JSON.stringify(message2));
   }
   // To the clients of a room that `wanted` chooses; and a client by its instance.
   broadcastTo(message2, room2, wanted) {
-    for (const [socket, client] of this.clients) if ((!room2 || client.room === room2) && wanted(client)) socket.deliver(message2);
+    let data;
+    for (const [socket, client] of this.clients) if ((!room2 || client.room === room2) && wanted(client)) socket.deliver(message2, data ??= JSON.stringify(message2));
   }
   some(wanted) {
     for (const client of this.clients.values()) if (wanted(client)) return true;
@@ -70695,7 +71344,7 @@ var ClientEnsemble = class {
 };
 
 // public/render/transport.js
-var EPSILON6 = 1e-9;
+var EPSILON7 = 1e-9;
 var OfflineTransport = class extends ClientEnsemble {
   constructor(meterApi = globalThis.MusebotMeter, { bpm, meter, lockTempo = false, lockMeter = false, lookahead = 0.25 } = {}) {
     super(meterApi, { bpm, meter });
@@ -70756,7 +71405,8 @@ var OfflineTransport = class extends ClientEnsemble {
   broadcast(message2, room2) {
     if (message2?.type !== "clock" || typeof this.clockRank !== "function") return super.broadcast(message2, room2);
     const ordered3 = [...this.clients].map(([socket, client], index) => ({ socket, client, index, rank: Number(this.clockRank(client)) || 0 })).sort((left, right) => left.rank - right.rank || left.index - right.index);
-    for (const { socket, client } of ordered3) if ((!room2 || client.room === room2) && this.clients.has(socket)) socket.deliver(message2);
+    let data;
+    for (const { socket, client } of ordered3) if ((!room2 || client.room === room2) && this.clients.has(socket)) socket.deliver(message2, data ??= JSON.stringify(message2));
   }
   // A new ensemble session (the roster emptied and refilled) must not rewind the render timeline.
   prepare(options = {}) {
@@ -70821,7 +71471,7 @@ var OfflineTransport = class extends ClientEnsemble {
   // exact is false while the grid time is extrapolated at the current tempo (the tick is not reached yet).
   resolvePosition(position2 = {}) {
     const latest = this.latestTick, split2 = (value4) => {
-      const whole8 = Math.round(value4), ticks = Math.abs(value4 - whole8) < EPSILON6 ? whole8 : value4, tick = Math.floor(ticks);
+      const whole8 = Math.round(value4), ticks = Math.abs(value4 - whole8) < EPSILON7 ? whole8 : value4, tick = Math.floor(ticks);
       return [tick, ticks - tick];
     };
     if (position2.bar != null) {
@@ -70842,18 +71492,18 @@ var OfflineTransport = class extends ClientEnsemble {
     if (position2.seconds != null) {
       const seconds2 = Number(position2.seconds), times = this.tickSeconds;
       if (!Number.isFinite(seconds2) || seconds2 < 0) throw new RangeError(`Seconds must be a number from 0, not ${position2.seconds}`);
-      if (seconds2 + EPSILON6 >= times[latest]) {
+      if (seconds2 + EPSILON7 >= times[latest]) {
         const [ticks, fraction4] = split2((seconds2 - times[latest]) / this.currentInterval);
         return { tick: latest + ticks, fraction: fraction4, musicSeconds: seconds2, exact: ticks === 0 && fraction4 === 0 };
       }
       let low = 0, high = latest - 1;
       while (low < high) {
         const middle3 = low + high + 1 >> 1;
-        if (times[middle3] <= seconds2 + EPSILON6) low = middle3;
+        if (times[middle3] <= seconds2 + EPSILON7) low = middle3;
         else high = middle3 - 1;
       }
       const hold = this.tickHolds[low] ?? 0, offset = seconds2 - times[low] - hold;
-      return { tick: low, fraction: offset < EPSILON6 ? 0 : offset / this.tickIntervals[low], musicSeconds: seconds2, exact: true };
+      return { tick: low, fraction: offset < EPSILON7 ? 0 : offset / this.tickIntervals[low], musicSeconds: seconds2, exact: true };
     }
     throw new TypeError("A position needs bar (and beat), tick or seconds");
   }
@@ -70884,7 +71534,7 @@ var OfflineTransport = class extends ClientEnsemble {
     if (!Number.isFinite(time)) throw new TypeError("fireDue() needs finite render seconds");
     this.renderSeconds = Math.max(this.renderSeconds, time);
     let fired = 0;
-    while (this.timers.length && this.timers[0].time <= time + EPSILON6) {
+    while (this.timers.length && this.timers[0].time <= time + EPSILON7) {
       const timer = this.timers.shift();
       fired++;
       timer.fn(timer.time);
@@ -71012,7 +71662,7 @@ function installVirtualTime({ epochMs = Date.UTC(2026, 0, 1), getRenderSeconds, 
 }
 
 // public/render/render-session.js
-var EPSILON7 = 1e-9;
+var EPSILON8 = 1e-9;
 var RENDER_SINK = /* @__PURE__ */ Symbol("musebots.render.sink");
 var TIMELINE2 = "timeline";
 var ROOM = "main";
@@ -71186,7 +71836,7 @@ var RenderSession = class _RenderSession {
     const { spec: { length }, transport } = this;
     if (!transport) return false;
     if (length.untilEnding && this.endingBar != null && transport.barStarts[this.endingBar] != null) return true;
-    const reached = length.ticks != null ? transport.latestTick >= length.ticks : length.bars != null ? transport.barStarts[length.bars] != null : transport.musicSeconds >= length.seconds - EPSILON7;
+    const reached = length.ticks != null ? transport.latestTick >= length.ticks : length.bars != null ? transport.barStarts[length.bars] != null : transport.musicSeconds >= length.seconds - EPSILON8;
     return reached && !this.playsOnToEnding();
   }
   // An ending the ensemble committed that the length would cut: where it is reached (at the tempo heard over the last
@@ -72496,7 +73146,7 @@ function linesOf(occurrence2) {
 function overlap(a, b) {
   return a.some((n) => b.some((m) => q2(n.start).cmp(q2(m.start).add(q2(m.length))) < 0 && q2(m.start).cmp(q2(n.start).add(q2(n.length))) < 0));
 }
-function familyOf2(base3, roots, material2, control) {
+function familyOf3(base3, roots, material2, control) {
   const sources = [], members = [], refs2 = ["metric", "tuning", "timbre", "roots"].map((id4) => ({ id: id4, revision: 1 }));
   const dependency = { request: base3.binding, subject: modeled(roots.S), countersubject: modeled(roots.C) };
   for (const occurrence2 of material2) {
@@ -72594,7 +73244,7 @@ function auditCandidate(base3, roots, control, certificate4 = null) {
       guards.push({ occurrence: occurrence2.id, voice: item.voice, ...result14 });
     }
   }
-  const spec = familyOf2(base3, roots, material2, control);
+  const spec = familyOf3(base3, roots, material2, control);
   const ready = control.bounded(DISPOSITION_LIMITS.maxWork, (maxWork) => prepareDispositionFamily(spec, { maxWork }));
   if (ready.status !== "PASS") control.refuse(ready.reason);
   let cert = certificate4;
@@ -82876,7 +83526,7 @@ var ConflictPolicy = (Base) => class extends Base {
 init_meter_tactus();
 init_random_source();
 var UNMETERED_SUBDIVISION2 = 4;
-var EPSILON8 = 1e-9;
+var EPSILON9 = 1e-9;
 var PHRASING = Object.freeze({
   // A portamento: across leastSemitones to mostSemitones, into a note of at least a felt beat, or of arrival times the
   // note before it, from one of at least fromBeats of a felt beat; between notes connected (a line is legato while its
@@ -82916,8 +83566,8 @@ function toneCurve({ swell = 0, lift = 0, drop = 0 }, choices = PHRASING) {
 }
 function linePhrasing({ pitch: pitch5, seconds: seconds2, previous = null, beatSeconds, role = "line", root: root2 = false, accent = 0, last: last2 = false, random: random2 = Math.random, choices = PHRASING }) {
   const g = choices.glide, v = choices.vibrato, t = choices.tone, out = { glide: false, vibratoDepth: 0 };
-  const interval2 = previous ? Math.abs(pitch5 - previous.pitch) : 0, connected = previous !== null && (previous.gapSeconds ?? 0) <= Math.max(g.seconds, g.connectedShare * previous.seconds) + EPSILON8, weighty = (seconds2 >= beatSeconds - EPSILON8 || seconds2 >= g.arrival * (previous?.seconds ?? Infinity) - EPSILON8) && (previous?.seconds ?? 0) >= g.fromBeats * beatSeconds - EPSILON8;
-  if (connected && weighty && interval2 >= g.leastSemitones - EPSILON8 && interval2 <= g.mostSemitones + EPSILON8) {
+  const interval2 = previous ? Math.abs(pitch5 - previous.pitch) : 0, connected = previous !== null && (previous.gapSeconds ?? 0) <= Math.max(g.seconds, g.connectedShare * previous.seconds) + EPSILON9, weighty = (seconds2 >= beatSeconds - EPSILON9 || seconds2 >= g.arrival * (previous?.seconds ?? Infinity) - EPSILON9) && (previous?.seconds ?? 0) >= g.fromBeats * beatSeconds - EPSILON9;
+  if (connected && weighty && interval2 >= g.leastSemitones - EPSILON9 && interval2 <= g.mostSemitones + EPSILON9) {
     const chance = role === "bass" ? root2 ? g.chance.bassRoot : g.chance.bass : g.chance.line;
     if (random2() < chance) out.glide = Math.min(seconds2 * g.share, g.seconds + g.perSemitone * interval2);
   } else if (role === "bass" && root2 && !connected && random2() < g.chance.bassRoot) {
@@ -82934,7 +83584,7 @@ function linePhrasing({ pitch: pitch5, seconds: seconds2, previous = null, beatS
   return out;
 }
 function chordPhrasing({ seconds: seconds2, beatSeconds, accent = 0, last: last2 = false, choices = PHRASING }) {
-  const t = choices.tone, swell = seconds2 >= t.chordBeats * beatSeconds - EPSILON8 ? t.swell : 0, lift = t.accent * clamp0111(accent), drop = last2 ? t.close : 0;
+  const t = choices.tone, swell = seconds2 >= t.chordBeats * beatSeconds - EPSILON9 ? t.swell : 0, lift = t.accent * clamp0111(accent), drop = last2 ? t.close : 0;
   return { glide: false, vibratoDepth: 0, ...swell || lift || drop ? { slideCurve: toneCurve({ swell, lift, drop }, choices) } : {} };
 }
 function feltBeatSecondsAt(clock7) {
@@ -84435,7 +85085,7 @@ var PIANO = Object.freeze({
 });
 var EVENT_ORDER = Object.freeze({ down: 0, release: 1, substitute: 2, up: 3, press: 4 });
 var PEDAL_EVENTS = Object.freeze({ sustain: ["sustainDown", "sustainUp"], sostenuto: ["sostenutoDown", "sostenutoUp"], "half-sustain": ["sustainHalfDown", "sustainUp"] });
-var EPSILON9 = 1e-9;
+var EPSILON10 = 1e-9;
 var pitchClass2 = (key2) => (key2 % 12 + 12) % 12;
 var MANUAL_KEYS = 128;
 var keyOf2 = (key2) => key2 % MANUAL_KEYS;
@@ -84462,7 +85112,7 @@ function keyboardSetup({ id: id4 = "fixed", manuals = [{ id: "keys" }], electron
     const out = [];
     for (const row of rows) for (let key2 = row.lowestKey; key2 <= row.highestKey; key2++) {
       const id5 = row.index * MANUAL_KEYS + key2;
-      if (Math.abs(pitchOf10(id5) - pitch5) <= tolerance + EPSILON9) out.push(id5);
+      if (Math.abs(pitchOf10(id5) - pitch5) <= tolerance + EPSILON10) out.push(id5);
     }
     return out;
   };
@@ -101388,7 +102038,7 @@ function quarterNoteClock(clock7) {
 // public/bots/lib/pulse-release.js
 init_meter_tactus();
 init_score_time();
-var EPSILON10 = 1e-9;
+var EPSILON11 = 1e-9;
 var AHEAD = Object.freeze(Object.fromEntries([
   "ornamentPluck",
   "msynthNote",
@@ -101421,10 +102071,10 @@ var PulseRelease = class {
     this.tick = tick;
     this.perPulse = perPulse;
     this.seconds = secondsPerTick(clock7);
-    const end = this.quarter + this.perPulse - EPSILON10, due2 = [];
+    const end = this.quarter + this.perPulse - EPSILON11, due2 = [];
     while (this.queue.length && this.queue[0].at < end) due2.push(this.queue.shift());
     for (const event2 of due2) {
-      if (event2.at < this.quarter - EPSILON10) {
+      if (event2.at < this.quarter - EPSILON11) {
         this.dropped++;
         continue;
       }
@@ -101444,7 +102094,7 @@ var PulseRelease = class {
       if (!where) return value4.bind(target);
       return (...args) => {
         const offset = Number(args[where.offset]) || 0, pulses = offset / this.seconds;
-        if (!(pulses >= 1 - EPSILON10)) return value4.apply(target, args);
+        if (!(pulses >= 1 - EPSILON11)) return value4.apply(target, args);
         const quarterSeconds = this.seconds / this.perPulse, length = where.duration === null ? NaN : Number(args[where.duration]);
         const written2 = target.scoreTime && typeof target.scoreTime === "object" ? { scoreTime: target.scoreTime, scoreId: target.scoreId, scoreArpeggio: target.scoreArpeggio } : null;
         this.insert({ name: name12, args, at: this.quarter + pulses * this.perPulse, quarters: length / quarterSeconds, quarterSeconds, ...written2 ? { written: written2 } : {} });
@@ -102029,7 +102679,7 @@ var fail33 = (message2) => {
   throw new RangeError(message2);
 };
 var mod6 = (x, n) => (x % n + n) % n;
-var OCTAVE2 = Object.freeze({ kind: "ratio", numerator: "2", denominator: "1" });
+var OCTAVE3 = Object.freeze({ kind: "ratio", numerator: "2", denominator: "1" });
 var degreesOf = (classes, steps, period2) => {
   const whole8 = intervalCents(period2);
   return classes.map((k2) => ({ id: `d${k2}`, interval: { kind: "cents", value: whole8 * k2 / steps } }));
@@ -102039,7 +102689,7 @@ function parseForm(name12) {
   if (!match || !ROW_OPERATIONS.includes(match[1])) fail33(`A form is named by an operation (${ROW_OPERATIONS.join(", ")}) and a transposition, as P0 or RI7: not ${name12}`);
   return { operation: match[1], transposition: Number(match[2]) };
 }
-function rowPackage({ row, steps = row?.length, complete = true, period: period2 = OCTAVE2, forms = ["P0"], partition = null, id: id4 = "row", version = "1", provenance = null } = {}) {
+function rowPackage({ row, steps = row?.length, complete = true, period: period2 = OCTAVE3, forms = ["P0"], partition = null, id: id4 = "row", version = "1", provenance = null } = {}) {
   const definition = rowDefinition(row, { steps, id: id4, complete });
   if (!Array.isArray(forms) || !forms.length || forms.length > 16) fail33("A row package has 1 to 16 forms");
   const parts2 = partition ?? (definition.classes.length === 12 ? [3, 3, 3, 3] : [definition.classes.length]);
@@ -102077,7 +102727,7 @@ function rowPackage({ row, steps = row?.length, complete = true, period: period2
   });
   return Object.freeze({ package: pkg, source: Object.freeze({ kind: "row", row: definition, forms: Object.freeze(statements.map((item) => item.name)), partition: Object.freeze([...parts2]), contexts: Object.freeze(contexts) }) });
 }
-function motivePackage({ graph, phrase = graph?.nodes?.map((node) => node.id), steps = graph?.nodes?.[0]?.motive.steps ?? 12, period: period2 = OCTAVE2, id: id4 = "motives", version = "1", provenance = null } = {}) {
+function motivePackage({ graph, phrase = graph?.nodes?.map((node) => node.id), steps = graph?.nodes?.[0]?.motive.steps ?? 12, period: period2 = OCTAVE3, id: id4 = "motives", version = "1", provenance = null } = {}) {
   if (!graph?.nodes?.length) fail33("A motive package needs a graph with nodes");
   if (!Array.isArray(phrase) || !phrase.length) fail33("A motive package needs a phrase of node ids");
   const nodes2 = new Map(graph.nodes.map((node) => [node.id, node]));
@@ -102190,16 +102840,16 @@ function atonalLanguage(settings = {}) {
       complete: settings.complete ?? row.length === steps2,
       forms: words(settings.forms, String) ?? ATONAL_ROW.forms,
       partition: words(settings.partition) ?? null,
-      period: settings.period ?? OCTAVE2
+      period: settings.period ?? OCTAVE3
     });
   }
   const cell = words(settings.cell) ?? ATONAL_CELL.pitches, steps = settings.steps ?? ATONAL_CELL.steps;
   if (settings.language === "one-off") {
     const { graph: graph2, phrase: phrase2 } = oneOffGraph({ size: cell.length, steps });
-    return motivePackage({ id: "atonal-one-off", graph: graph2, phrase: phrase2, period: settings.period ?? OCTAVE2 });
+    return motivePackage({ id: "atonal-one-off", graph: graph2, phrase: phrase2, period: settings.period ?? OCTAVE3 });
   }
   const { graph, phrase } = cellGraph({ pitches: cell, steps });
-  return motivePackage({ id: "atonal-motives", graph, phrase, period: settings.period ?? OCTAVE2 });
+  return motivePackage({ id: "atonal-motives", graph, phrase, period: settings.period ?? OCTAVE3 });
 }
 var AtonalClodbot = class extends HarrisClodbot {
   constructor(send, audio, settings = {}) {
@@ -103279,7 +103929,7 @@ var PlaysPickups = (Base) => class extends FormMarks(Base) {
 // public/bots/lib/modules/line-motifs.js
 init_line();
 var LINE_MOTIFS = Object.freeze({ kept: 8, cells: 16 });
-var familyOf3 = (by, motif) => {
+var familyOf4 = (by, motif) => {
   const text18 = `${motif?.grammar ?? "free"}:${(motif?.cells ?? []).map((cell) => `${cell.at}/${cell.step}${cell.rest ? "r" : ""}`).join(",")}`;
   let hash16 = 2166136261;
   for (const character of text18) {
@@ -103289,7 +103939,7 @@ var familyOf3 = (by, motif) => {
   return `${by}:motif:${motif?.grammar ?? "free"}:${(hash16 >>> 0).toString(16)}`;
 };
 function occurrenceRecords(notes, { by, phrase, motif }) {
-  const family = familyOf3(by, motif), segments = /* @__PURE__ */ new Map();
+  const family = familyOf4(by, motif), segments = /* @__PURE__ */ new Map();
   notes.forEach((note, index) => {
     if (note.fill || !Number.isInteger(note.segment)) return;
     (segments.get(note.segment) ?? segments.set(note.segment, []).get(note.segment)).push(index);
@@ -105441,9 +106091,9 @@ var MeterSpaceClodbot = class extends MeterFormClodbot {
       const meter = drawMeter(unitRandom, { numerators: [n, n], subdivision: own2, talas: false });
       const scaled = kind === "glided" ? this.home.denominator : this.home.denominator * p / q3;
       meter.denominator = Number.isInteger(scaled) && scaled >= 1 && METER_SPACE.denominators.some(([d]) => d === scaled) ? scaled : this.home.denominator;
-      meter.label = `${meter.groups.join("+")}/${meter.denominator}`;
+      meter.label = meter.label.replace(/\/\d+$/, `/${meter.denominator}`);
       const until = anchor + first, label2 = kind === "glided" ? `${meter.label} at 1:1 to ${p}:${q3} and back` : `${meter.label} at ${p}:${q3}`;
-      const stream2 = { meter: { numerator: meter.numerator, denominator: meter.denominator, groups: [...meter.groups], subdivision: own2, phraseBars: this.home.phraseBars, label: meter.label }, id: label2 };
+      const stream2 = { meter: { numerator: meter.numerator, denominator: meter.denominator, groups: [...meter.groups], ...meter.sections ? { sections: meter.sections } : {}, subdivision: own2, phraseBars: this.home.phraseBars, label: meter.label }, id: label2 };
       const relation2 = kind === "held" ? { ratio: [p, q3] } : kind === "glided" ? { from: [1, 1], to: [p, q3], ticks: glide } : null;
       this.send("/agent/stream", [{ target: id4, stream: stream2, ...relation2 ? { relation: relation2 } : {}, anchor, coordinator: this.instanceId }]);
       if (kind === "glided") this.send("/agent/stream", [{ target: id4, relation: { to: [1, 1], ticks: glide }, anchor: anchor + glide + hold, coordinator: this.instanceId }]);
@@ -108835,6 +109485,7 @@ function playingOf(personality, facts, base3, { rhythm: rhythm2 = false } = {}) 
     phraseRange: across2("phraseRange", daring),
     leap: across2("leap", levers.leap),
     slurMost: Math.round(across2("slurs", levers.slurs)),
+    slurSegments: across2("slurSegments", levers.slurs),
     motifNotes: Object.freeze([Math.round(across2("motifFewest", levers.motifLength)), Math.round(across2("motifMost", levers.motifLength))]),
     runMost: Math.round(across2("runs", levers.runs)),
     restShare: across2("rests", levers.rests),
@@ -109096,7 +109747,7 @@ var BowedStringClodbot = class extends Agent {
         bars,
         ...shaped,
         motif: this.motifToStart?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), register }) ?? this.motif,
-        motifDensity: (this.playing?.shaping ?? BOWEDSTRING).density,
+        motifDensity: BOWEDSTRING.density,
         phraseIndex: this.phraseIndex,
         previousApex: this.previousApex,
         pickup,
@@ -109312,7 +109963,7 @@ var FluteClodbot = class extends Agent {
         bars,
         ...shaped,
         motif: this.motifToStart?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), register }) ?? this.motif,
-        motifDensity: (this.playing?.shaping ?? FLUTE).density,
+        motifDensity: FLUTE.density,
         phraseIndex: this.phraseIndex,
         previousApex: this.previousApex,
         pickup,
@@ -109376,10 +110027,13 @@ var FluteClodbot = class extends Agent {
       const before4 = phrase.notes[index - 1], fromSlur = Boolean(note.slur) && before4?.slur === note.slur;
       const tone = phrase.tone ?? {}, multiphonic = tone.multiphonic && !slurred && !fromSlur ? windMultiphonicNear(tone.multiphonic.choice, pitch5, { instrument: this.instrument, compass: this.facts?.compass.range, pool: this.notes ?? [] }) : null;
       const sounded = multiphonic ? multiphonic.pitches[0] : pitch5, extended = multiphonic ? { multiphonic: { id: multiphonic.id } } : windTechniqueAt(tone.technique ?? null, sounded, { pool: this.notes ?? [], mute: tone.mute ?? null });
+      const joined = { phrased: true, ...fromSlur ? { slurred: true, ...Math.abs(sounded - phrase.lastSounded) < 1e-6 ? { portato: true } : {} } : {} };
+      phrase.lastSounded = sounded;
       const options = {
         instrument: this.instrument,
         family: this.family,
         glide: fromSlur ? BREATH2.slur : false,
+        stroke: { captured: joined },
         ...note.fioritura ? { ownSubdivision: true } : {},
         ...extended ? { extended } : {},
         ...multiphonic ? { multiphonic: { ...multiphonic, pitches: [...multiphonic.pitches] } } : {}
@@ -111422,7 +112076,7 @@ var MemoryBot = class _MemoryBot extends Agent {
   // motif another bot reported sounding (now).
   // A motif's family, through the identity it brings back: a record of a motive heard before keeps that motive's family.
   familyOfMotif(motif) {
-    const own2 = this.familyAliases.get(String(motif?.motifId ?? "")), family = familyOf(motif);
+    const own2 = this.familyAliases.get(String(motif?.motifId ?? "")), family = familyOf2(motif);
     return own2 ?? this.familyAliases.get(family) ?? family;
   }
   hearMaterial(motif, { player: player2 = motif?.author, bar = motif?.metadata?.createdAt?.bar, family: given3 = null } = {}) {
@@ -111799,7 +112453,7 @@ var MemoryBot = class _MemoryBot extends Agent {
         });
         return;
       }
-      this.identities.describe(motif, key2, { family: identity3?.family ?? familyOf(motif), at: at2, beats: beats2 });
+      this.identities.describe(motif, key2, { family: identity3?.family ?? familyOf2(motif), at: at2, beats: beats2 });
       if (identity3) {
         this.familyAliases.set(motif.motifId, identity3.family);
         while (this.familyAliases.size > this.memory.retention.policy.identityLimit) this.familyAliases.delete(this.familyAliases.keys().next().value);
@@ -116023,14 +116677,14 @@ var BatteryClodbot = class extends FormMarks(Closure(Agent)) {
     const bar = clock7.bar, said = this.memberPhraseAt?.(bar), joins = this.joins(), closing = this.closingAt(clock7);
     const start = said?.bar ?? bar, bars = Math.max(1, said?.bars ?? clock7.meter.phraseBars ?? bandPhraseBars());
     const level = Number.isFinite(said?.pool?.level) ? clamp38(said.pool.level, 0, 1) : this.intensityAt(bar, joins);
-    const random2 = seededSource(Number(said?.pool?.seed) || Number(this.settings.seed) || bar + 1, `${this.memberOf?.seat ?? this.instanceId ?? "battery"}:${start}`);
+    const random2 = seededSource2(Number(said?.pool?.seed) || Number(this.settings.seed) || bar + 1, `${this.memberOf?.seat ?? this.instanceId ?? "battery"}:${start}`);
     const instrument = said?.pool?.instruments?.[this.memberOf?.seat] ?? this.settings.instrument ?? castBattery(1, { level, random: random2 })[0];
-    const asked = Number(this.settings.pulse), pulse = said ? clamp38(Number(said.pool?.pulse) || 0, 0, 1) : Number.isFinite(asked) ? clamp38(asked, 0, 1) : seededSource(Number(this.settings.seed) || bar + 1, `${this.instanceId ?? "battery"}:${start}:pulse`)() ** 2;
+    const asked = Number(this.settings.pulse), pulse = said ? clamp38(Number(said.pool?.pulse) || 0, 0, 1) : Number.isFinite(asked) ? clamp38(asked, 0, 1) : seededSource2(Number(this.settings.seed) || bar + 1, `${this.instanceId ?? "battery"}:${start}:pulse`)() ** 2;
     const end = start + bars, join3 = joins.find((one2) => one2.bar === start), next2 = joins.find((one2) => one2.bar === end);
     const arriving = Boolean(join3) && marksJoin({ move: this.intensityAt(start, joins) - this.intensityAt(start - 1, joins) }) && this.intensityAt(start, joins) > this.intensityAt(start - 1, joins);
     const final = said?.final === true || closing.phase === "final" || (closing.ending ? Number(closing.ending.finalBar) < end : false);
     const pool = said?.pool, seats = Array.isArray(pool?.seats) ? pool.seats : [], index = seats.indexOf(this.memberOf?.seat);
-    const hocketing = pulse > 0 && seats.length >= 2 && index >= 0 && Number(pool?.hocket) > 0 && seededSource(Number(pool.seed) >>> 0, `hocket:${start}`)() < Number(pool.hocket);
+    const hocketing = pulse > 0 && seats.length >= 2 && index >= 0 && Number(pool?.hocket) > 0 && seededSource2(Number(pool.seed) >>> 0, `hocket:${start}`)() < Number(pool.hocket);
     const hocket = hocketing ? batteryHocket({ ticks: Number(clock7.meter?.pulsesPerBar) || 0, players: seats.length, index, seed: Number(pool.seed) >>> 0 }) : null;
     const strokes = batteryPhrase(instrument, { meter: clock7.meter, bars, level, arriving, announcing: Boolean(next2), final, secondsPerTick: secondsPerTick(clock7), pulse, random: random2, hocket });
     this.phrase = { start, end, instrument, level, strokes, silent: !this.sounds(BATTERY.instruments[instrument].note) };
@@ -118482,7 +119136,7 @@ var normalFrom2 = (random2) => Math.sqrt(-2 * Math.log(Math.max(1e-12, random2()
 var voiceKey2 = (role) => role.texture === "line" ? role.pool : `${role.pool}:${role.part}`;
 var honoursConstraints = (formation, constraints = {}) => {
   const { grouping: grouping2, split: split2, texture, level } = constraints ?? {}, inRange2 = (value4, range3) => !range3 || value4 >= range3[0] - 1e-9 && value4 <= range3[1] + 1e-9;
-  return (!grouping2 || grouping2.includes(formation.grouping)) && inRange2(formation.split, split2) && formation.pools.every((pool) => (!texture || texture.includes(pool.texture)) && inRange2(pool.level, level));
+  return (!grouping2 || grouping2.includes(formation.grouping)) && inRange2(formation.split, split2) && formation.pools.every((pool) => (!texture || texture.map(textureName).includes(textureName(pool.texture))) && inRange2(pool.level, level));
 };
 var intoCompass2 = (pitch5, seat) => {
   let p = pitch5;
@@ -118496,7 +119150,7 @@ var StringsClodbot = class extends Closure(Agent) {
     this.settings = { size: "full", seats: "vn1.1-8", ...settings };
     this.seats = stringSeats(this.settings.size);
     this.mine = parseSeats(this.settings.seats, this.seats);
-    for (const [key2, list15] of [["grouping", GROUPINGS], ["texture", TEXTURES]]) if (this.settings[key2] != null && !list15.includes(this.settings[key2])) throw new RangeError(`settings.${key2} is one of ${list15.join(", ")}`);
+    for (const [key2, list15] of [["grouping", GROUPINGS], ["texture", TEXTURES]]) if (this.settings[key2] != null && !list15.includes(key2 === "texture" ? textureName(this.settings[key2]) : this.settings[key2])) throw new RangeError(`settings.${key2} is one of ${list15.join(", ")}`);
     if (this.settings.split != null && !(this.settings.split >= 0 && this.settings.split <= 1)) throw new RangeError("settings.split is between 0 and 1");
     const first = this.seats[0];
     this.leads = this.settings.leads === true || this.settings.leads !== false && this.mine.some((seat) => seat.id === first.id);
@@ -118618,7 +119272,7 @@ var StringsClodbot = class extends Closure(Agent) {
     if (!this.voices.has(key2)) {
       const anchor = this.current.scoreAnchor;
       this.voices.set(key2, makeVoice2(role, {
-        random: seededSource(role.seed, key2),
+        random: seededSource2(role.seed, key2),
         start: this.current.start,
         beatSeconds: this.current.beatSeconds,
         pool: () => this.notes,
@@ -118673,7 +119327,7 @@ function ladderOf3(pool) {
 var nearestIn2 = (list15, target) => list15.reduce((best, p) => Math.abs(p - target) < Math.abs(best - target) ? p : best, list15[0]);
 function makeVoice2(role, { random: random2, start, beatSeconds, pool, tick, subdivision, denominator = 4, name: name12 = "strings", onScoreRevision = () => {
 } }) {
-  const { texture, part, parts: parts2, centre, width, density } = role, band2 = (position2) => ({ centre: centre + 3 * arcAt(position2), width: width * (0.6 + 0.4 * arcAt(position2)) });
+  const { part, parts: parts2, centre, width, density } = role, texture = textureName(role.texture), band2 = (position2) => ({ centre: centre + 3 * arcAt(position2), width: width * (0.6 + 0.4 * arcAt(position2)) });
   const sub4 = Number(subdivision) || Math.max(1, Math.round(beatSeconds / tick));
   const ticksIn2 = ([least, most]) => {
     const low = Math.max(1, Math.ceil(least / tick - 1e-9));
@@ -118731,7 +119385,7 @@ function makeVoice2(role, { random: random2, start, beatSeconds, pool, tick, sub
     } };
   }
   if (texture === "micropolyphony") {
-    const cantusRandom = seededSource(role.seed, `${role.pool}:cantus`), ladder2 = ladderOf3(pool), cantus = [];
+    const cantusRandom = seededSource2(role.seed, `${role.pool}:cantus`), ladder2 = ladderOf3(pool), cantus = [];
     let index = ladder2.indexOf(nearestIn2(ladder2, centre));
     for (let k2 = 0; k2 < MASS.cantusNotes; k2++) {
       cantus.push(ladder2[index]);
@@ -118763,7 +119417,7 @@ function makeVoice2(role, { random: random2, start, beatSeconds, pool, tick, sub
       return [{ scoreTime: written2(window2.at, rebow, window2), at: now2, pitch: pitch5, seconds: heldTo(now2, count12 * tick, left, now2) }];
     } };
   }
-  if (texture === "glissandi") {
+  if (texture === "glides") {
     const lengths = ticksIn2(GLISSANDO.seconds);
     let next3 = Math.floor(random2() * sub4), from = centre + (random2() * 2 - 1) * width / 2;
     return { events(now2, until, options) {
@@ -120388,6 +121042,11 @@ function crossNumerators(numerator, bars) {
   for (let n = Math.max(2, Math.ceil(numerator / 2)); n <= 2 * numerator; n++) if (numerator % n !== 0 && n % numerator !== 0 && total % n === 0) out.push(n);
   return out;
 }
+var grouped = (numerator, random2, given3 = null) => {
+  if (given3?.groups) return { groups: Object.freeze([...given3.groups]), ...given3.sections ? { sections: given3.sections } : {} };
+  const nesting = drawNesting(numerator, random2), levels = nestingLevels(nesting);
+  return { groups: Object.freeze(nestingGroups(nesting)), ...levels.length ? { sections: Object.freeze(levels.map((level) => Object.freeze(level))) } : {} };
+};
 function groupMeters(section2, { bars, sections, random: random2 }) {
   if (!sections.length || !(random2() < (GROUP_METERS.chance[section2.role] ?? GROUP_METERS.chance.other))) return {};
   const numerators = crossNumerators(section2.numerator, bars), ratios = tempoRatios(bars, { bpm: section2.tempo?.targetBpm, meter: section2 });
@@ -120404,10 +121063,10 @@ function groupMeters(section2, { bars, sections, random: random2 }) {
         break;
       }
     }
-    return { [group2]: Object.freeze({ ...base3, numerator: section2.numerator, groups: Object.freeze([...section2.groups ?? drawGrouping(section2.numerator, random2)]), relation: Object.freeze({ ratio: Object.freeze([...ratio3]) }) }) };
+    return { [group2]: Object.freeze({ ...base3, numerator: section2.numerator, ...grouped(section2.numerator, random2, section2), relation: Object.freeze({ ratio: Object.freeze([...ratio3]) }) }) };
   }
   const numerator = numerators[Math.floor(random2() * numerators.length)];
-  return { [group2]: Object.freeze({ ...base3, numerator, groups: Object.freeze(drawGrouping(numerator, random2)) }) };
+  return { [group2]: Object.freeze({ ...base3, numerator, ...grouped(numerator, random2) }) };
 }
 
 // public/shared/conducting/fugue-plan.js
@@ -123074,7 +123733,7 @@ function variantsOf(model, state2) {
     hasUnknown: result14.some((list15) => list15.some((variant) => variant.status === "UNKNOWN"))
   };
 }
-function grouped(model, catalogue, possible, state2) {
+function grouped2(model, catalogue, possible, state2) {
   const groups = [];
   for (let i = 0; i < catalogue.voices.length; i++) {
     const byTone = /* @__PURE__ */ new Map();
@@ -123159,7 +123818,7 @@ function unknownResult(model, reason) {
   return finishAudit2("UNKNOWN", reason, model, { certificate: null });
 }
 function flowSearch(model, catalogue, state2) {
-  const known = grouped(model, catalogue, false, state2), baseline = solveGraph(graphOf(model, known, state2), state2);
+  const known = grouped2(model, catalogue, false, state2), baseline = solveGraph(graphOf(model, known, state2), state2);
   if (baseline.status === "SAT") {
     const selection = selectionOf(baseline, known, state2);
     if (coveredSelection(model, selection)) return certifiedSelection(model, selection, state2);
@@ -123168,7 +123827,7 @@ function flowSearch(model, catalogue, state2) {
       if (trial.status === "SAT") return certifiedSelection(model, selectionOf(trial, known, state2), state2);
     }
   }
-  const possible = grouped(model, catalogue, true, state2), relaxation = catalogue.hasUnknown ? solveGraph(graphOf(model, possible, state2), state2) : baseline;
+  const possible = grouped2(model, catalogue, true, state2), relaxation = catalogue.hasUnknown ? solveGraph(graphOf(model, possible, state2), state2) : baseline;
   if (relaxation.status === "UNSAT" && model.definition.domainComplete) {
     const certificate4 = freeze49({ kind: "large-cadence-unsat-flow-v1", modelHash: model.hash, flow: relaxation.certificate });
     hash13(certificate4, state2);
@@ -126548,7 +127207,12 @@ var struckBy = (formation, event2) => ({ ...formation, pools: formation.pools.ma
 })) });
 var honoursConstraints2 = (formation, constraints = {}) => {
   const { grouping: grouping2, split: split2, texture, level } = constraints ?? {}, inRange2 = (value4, range3) => !range3 || value4 >= range3[0] - 1e-9 && value4 <= range3[1] + 1e-9;
-  return (!grouping2 || grouping2.includes(formation.grouping)) && inRange2(formation.split, split2) && formation.pools.every((pool) => (!texture || texture.includes(pool.texture)) && inRange2(pool.level, level));
+  return (!grouping2 || grouping2.includes(formation.grouping)) && inRange2(formation.split, split2) && formation.pools.every((pool) => (!texture || texture.map(textureName).includes(textureName(pool.texture))) && inRange2(pool.level, level));
+};
+var checkedTexture = (texture, said) => {
+  if (texture == null) return null;
+  if (!TEXTURES.includes(textureName(texture))) throw new RangeError(`${said} is one of ${TEXTURES.join(", ")}`);
+  return textureName(texture);
 };
 var withTechniques = (specification, techniques) => techniques ? Object.freeze({ ...specification, techniques: techniquesOf(techniques) }) : specification;
 var resting = (decided, { shared, specification, granted = false }) => {
@@ -126567,13 +127231,13 @@ var strings2 = Object.freeze({
     const size = value4.size ?? "full";
     stringSeats(size);
     if (value4.grouping != null && !GROUPINGS.includes(value4.grouping)) throw new RangeError(`section.grouping is one of ${GROUPINGS.join(", ")}`);
-    if (value4.texture != null && !TEXTURES.includes(value4.texture)) throw new RangeError(`section.texture is one of ${TEXTURES.join(", ")}`);
+    const texture = checkedTexture(value4.texture, "section.texture");
     if (value4.split != null && !(value4.split >= 0 && value4.split <= 1)) throw new RangeError("section.split is between 0 and 1");
     return Object.freeze({
       kind: "strings",
       size,
       ...value4.grouping != null ? { grouping: value4.grouping } : {},
-      ...value4.texture != null ? { texture: value4.texture } : {},
+      ...texture != null ? { texture } : {},
       ...value4.split != null ? { split: value4.split } : {},
       specification: withTechniques(specificationOf(value4.specification ?? null), value4.techniques)
     });
@@ -126618,16 +127282,15 @@ var windKind = (id4) => Object.freeze({
   checked(value4 = {}) {
     const size = value4.size ?? Object.keys(WIND_KINDS[id4].sizes)[1];
     windSizeOf(id4, size);
-    const textures = ["line", "chord", "micropolyphony", "cluster"];
     if (value4.grouping != null && !GROUPINGS.includes(value4.grouping)) throw new RangeError(`section.grouping is one of ${GROUPINGS.join(", ")}`);
-    if (value4.texture != null && !textures.includes(value4.texture)) throw new RangeError(`a ${id4} section's texture is one of ${textures.join(", ")}`);
+    const texture = checkedTexture(value4.texture, `a ${id4} section's texture`);
     if (value4.split != null && !(value4.split >= 0 && value4.split <= 1)) throw new RangeError("section.split is between 0 and 1");
     if (value4.compass != null && value4.compass !== "bodies" && !enginesCompass(value4.compass)) throw new RangeError(`a ${id4} section's compass is 'bodies', its engines' ({instruments: {instrument: {windows: [[low, high]], low?, high?, keyed?, fixed?}}}) or its instruments' own`);
     return Object.freeze({
       kind: id4,
       size,
       ...value4.grouping != null ? { grouping: value4.grouping } : {},
-      ...value4.texture != null ? { texture: value4.texture } : {},
+      ...texture != null ? { texture } : {},
       ...value4.split != null ? { split: value4.split } : {},
       ...value4.compass != null ? { compass: value4.compass } : {},
       specification: withTechniques(windSpecificationOf(id4, value4.specification ?? null), value4.techniques)
@@ -126935,11 +127598,11 @@ var PLEX_CLODBOT = Object.freeze({
       swell: "swell"
     }),
     leanings: Object.freeze({
-      struck: Object.freeze({ pizzicati: 1, chord: 0.5 }),
+      struck: Object.freeze({ points: 1, chord: 0.5 }),
       held: Object.freeze({ chord: 1, cluster: 0.7 }),
-      cloud: Object.freeze({ micropolyphony: 1, pizzicati: 0.7, figuration: 0.5 }),
+      cloud: Object.freeze({ micropolyphony: 1, points: 0.7, figuration: 0.5 }),
       veiled: Object.freeze({ cluster: 1, micropolyphony: 0.5 }),
-      swell: Object.freeze({ glissandi: 1, cluster: 0.5 })
+      swell: Object.freeze({ glides: 1, cluster: 0.5 })
     })
   }),
   // A section that returns recalls an earlier one (the owner, 2 October 2026: "The bots never recapitulate a whole formal
@@ -127425,7 +128088,7 @@ var PlexClodbot = class extends PlexBot {
   breadthOf(unit9, d = Number.isFinite(unit9.value.hdensity) ? unit9.value.hdensity : 0.5) {
     const { level, players } = PLEX_CLODBOT, [lowest, highest] = this.pieceDensities(d), [fewest, most] = this.breadth ?? [0, 1];
     const absolute = clamp0122((d - level.least) / (level.most - level.least)), relative = highest - lowest >= level.flat ? clamp0122((d - lowest) / (highest - lowest)) : absolute;
-    return fewest + (most - fewest) * clamp0122((1 - players.own) * relative + players.own * seededSource(Number(this.ensembleSeed) >>> 0, `players:${unit9.index}`)());
+    return fewest + (most - fewest) * clamp0122((1 - players.own) * relative + players.own * seededSource2(Number(this.ensembleSeed) >>> 0, `players:${unit9.index}`)());
   }
   // The breadth at which at least `voices` (a share of a section's players, 0 to 1) play: a breadth's players are n to
   // its power, rounded (string-section.js playersOf), so the share differs with a section's size n -- three of five at
@@ -127887,7 +128550,7 @@ var PlexClodbot = class extends PlexBot {
       if (this.motifInsistences?.size && FUGUE.kinds.test(this.groupId)) {
         const result14 = insistOnFormation(expanded, this.motifInsistences.values(), {
           quarters: new Rational(entry3.bars * unit9.value.numerator * 4, unit9.value.denominator),
-          random: seededSource(Number(this.ensembleSeed) >>> 0, `motif insistence:${this.groupId}:${entry3.bar}`),
+          random: seededSource2(Number(this.ensembleSeed) >>> 0, `motif insistence:${this.groupId}:${entry3.bar}`),
           softAllowed: !fugue && !/^recall/.test(entry3.move ?? ""),
           compasses: new Map(seats.map((seat) => [seat.id, seat]))
         });
@@ -127929,7 +128592,7 @@ var PlexClodbot = class extends PlexBot {
         mine2 = {};
       }
       const constraints = narrowConstraints(above?.constraints ?? {}, mine2, kind.vocabulary).constraints;
-      const shared = seededSource(Number(this.ensembleSeed) >>> 0, `rest:${bar}`)();
+      const shared = seededSource2(Number(this.ensembleSeed) >>> 0, `rest:${bar}`)();
       const granted = Boolean(this.parentPlan?.payload?.units?.find((item) => item.index === unit9.index)?.layers?.rests?.[bar]?.includes(this.groupId));
       const opens = bar === unit9.startBar && unit9.startBar > this.planner.startBar, closes = bar + bars >= unit9.endBar && !unit9.value.last;
       const decided = kind.decide({
@@ -128005,7 +128668,7 @@ var PlexClodbot = class extends PlexBot {
       }
       const material2 = !fugue && !/^recall/.test(move ?? "") ? this.tapeMaterial(bar, bars) : null;
       if (material2) {
-        const share = this.tapeShare, motif = material2.onsets && seededSource(Number(this.ensembleSeed) >>> 0, `tape motif:${this.groupId}:${bar}`)() < share;
+        const share = this.tapeShare, motif = material2.onsets && seededSource2(Number(this.ensembleSeed) >>> 0, `tape motif:${this.groupId}:${bar}`)() < share;
         formation = { ...formation, pools: formation.pools.map((pool) => pool.texture !== "line" || pool.given || !Number.isFinite(pool.centre) ? pool : (() => {
           const target = material2.pitch + 12 * Math.round((pool.centre - material2.pitch) / 12);
           return { ...pool, centre: +(pool.centre + share * (target - pool.centre)).toFixed(3), ...material2.slope ? { contour: +(share * material2.slope).toFixed(3) } : {}, ...motif ? { tapeLine: material2.onsets } : {} };
@@ -128115,7 +128778,7 @@ var PlexClodbot = class extends PlexBot {
     const { most, augmentation } = PLEX_CLODBOT.canonForm, inverts = most * unitRandom() ** 2, augments = most * unitRandom() ** 2;
     let form = unitRandom() < inverts ? "inversion" : unitRandom() < augments ? "augmentation" : "answer";
     const voices = this.canonParts.map((part, k2) => ({ part, delay: k2 * bar, ...k2 % 2 ? form === "inversion" ? { invert: true } : form === "augmentation" ? { augmentation } : { steps: answer } : { transpose: -12 * Math.floor(k2 / 2) } }));
-    const { round: roundMost, roundBars } = PLEX_CLODBOT.canonForm, roundDraw = seededSource(Number(this.ensembleSeed) >>> 0, `canon:${unit9.index}:round`);
+    const { round: roundMost, roundBars } = PLEX_CLODBOT.canonForm, roundDraw = seededSource2(Number(this.ensembleSeed) >>> 0, `canon:${unit9.index}:round`);
     const asRound = form !== "augmentation" && roundDraw() < roundMost * roundDraw() ** 2 && voices.length <= roundBars && 2 * voices.length + voices.length - 1 <= s.bars;
     const length = asRound ? voices.length : bars;
     if (asRound) {
@@ -128372,7 +129035,7 @@ var PlexClodbot = class extends PlexBot {
     const turn = recall.backward ? source3.length - 1 - k2 % source3.length : k2 % source3.length, index = recall.order?.length === source3.length ? recall.order[turn] : turn;
     const said = source3[index]?.formation;
     if (!said?.pools?.length) return null;
-    const draw = seededSource(Number(this.ensembleSeed) >>> 0, `recall:${this.groupId}:${key2}`), pools4 = said.pools.map((pool) => ({ ...pool }));
+    const draw = seededSource2(Number(this.ensembleSeed) >>> 0, `recall:${this.groupId}:${key2}`), pools4 = said.pools.map((pool) => ({ ...pool }));
     let exchanged = 0;
     const traded = ["texture", "seed", "centre", "width", "density", "parameters", "tremolo", "material"];
     for (let i = 0; i < pools4.length; i++) {
@@ -128459,12 +129122,12 @@ var PlexClodbot = class extends PlexBot {
   // piece (the players' own share: figuration.js inspiredFigure).
   get inspiration() {
     const asked = this.inspirationAsked;
-    return Number.isFinite(asked) ? asked : this.inspirationDrawn ??= +seededSource(Number(this.ensembleSeed) >>> 0, `inspiration:${this.groupId}`)().toFixed(3);
+    return Number.isFinite(asked) ? asked : this.inspirationDrawn ??= +seededSource2(Number(this.ensembleSeed) >>> 0, `inspiration:${this.groupId}`)().toFixed(3);
   }
   // The piece's share of imitating the tape: a spec's settings.imitateTape, else drawn once a piece.
   get tapeShare() {
     const asked = this.imitateTapeAsked, [low, high] = PLEX_CLODBOT.imitateTape.share;
-    return Number.isFinite(asked) ? asked : this.tapeShareDrawn ??= +(low + (high - low) * seededSource(Number(this.ensembleSeed) >>> 0, "imitate-tape")()).toFixed(3);
+    return Number.isFinite(asked) ? asked : this.tapeShareDrawn ??= +(low + (high - low) * seededSource2(Number(this.ensembleSeed) >>> 0, "imitate-tape")()).toFixed(3);
   }
   // A bar's time (s) from the piece's start, by its sections' bars at their tempi (a section's own curves and rubato
   // aside): the tape's clock, as it reads the form.
@@ -128484,7 +129147,7 @@ var PlexClodbot = class extends PlexBot {
   soloFormation(formation, seats, bar, register = null, raised = PLEX_CLODBOT.solo.raise) {
     const playing = formation.pools.filter((pool2) => pool2.texture !== "tacet" && pool2.seats?.length);
     if (!playing.length) return null;
-    const draw = seededSource(Number(this.ensembleSeed) >>> 0, `solo:${this.groupId}:${bar}`);
+    const draw = seededSource2(Number(this.ensembleSeed) >>> 0, `solo:${this.groupId}:${bar}`);
     const away = (seat2) => register == null ? 0 : Math.max(0, (seat2.register?.[0] ?? register) - register, register - (seat2.register?.[1] ?? register));
     const candidates2 = playing.flatMap((pool2) => [...new Set(seats.filter((seat2) => pool2.seats.includes(seat2.id)).map((seat2) => seat2.section))].map((section3) => ({ pool: pool2, section: section3, away: Math.min(...seats.filter((seat2) => seat2.section === section3 && pool2.seats.includes(seat2.id)).map(away)) })));
     const nearest3 = Math.min(...candidates2.map((item) => item.away)), fitting = candidates2.filter((item) => item.away <= nearest3 + 1e-9);
@@ -128514,7 +129177,7 @@ var PlexClodbot = class extends PlexBot {
   // they cannot (each then cleared alone).
   clearingMoves(pools4, seats, register) {
     if (!Number.isFinite(register) || !pools4.length || !pools4.every((pool) => Number.isFinite(Number(pool.centre)))) return null;
-    const { width, clear: [least, most] } = PLEX_CLODBOT.solo, share = this.soloClear ??= +(least + (most - least) * seededSource(Number(this.ensembleSeed) >>> 0, "solo-clear")()).toFixed(3);
+    const { width, clear: [least, most] } = PLEX_CLODBOT.solo, share = this.soloClear ??= +(least + (most - least) * seededSource2(Number(this.ensembleSeed) >>> 0, "solo-clear")()).toFixed(3);
     return clearedTogether(pools4.map((pool) => {
       const centre = Number(pool.centre), half = (Number(pool.width) || width) / 2, overlap2 = Math.min(centre + half, register + width / 2) - Math.max(centre - half, register - width / 2);
       const mine = seats.filter((seat) => pool.seats?.includes(seat.id)), low = Math.min(...mine.map((seat) => seat.register?.[0] ?? centre)), high = Math.max(...mine.map((seat) => seat.register?.[1] ?? centre));
@@ -128525,7 +129188,7 @@ var PlexClodbot = class extends PlexBot {
   // solo's by the piece's clear share of their overlap, within its players' compass. -> the pool.
   clearOf(pool, seats, register) {
     if (!Number.isFinite(register) || !Number.isFinite(Number(pool.centre))) return pool;
-    const { width, clear: [least, most] } = PLEX_CLODBOT.solo, share = this.soloClear ??= +(least + (most - least) * seededSource(Number(this.ensembleSeed) >>> 0, "solo-clear")()).toFixed(3);
+    const { width, clear: [least, most] } = PLEX_CLODBOT.solo, share = this.soloClear ??= +(least + (most - least) * seededSource2(Number(this.ensembleSeed) >>> 0, "solo-clear")()).toFixed(3);
     const centre = Number(pool.centre), half = (Number(pool.width) || width) / 2, overlap2 = Math.min(centre + half, register + width / 2) - Math.max(centre - half, register - width / 2);
     if (!(overlap2 > 0)) return pool;
     const mine = seats.filter((seat) => pool.seats?.includes(seat.id)), low = Math.min(...mine.map((seat) => seat.register?.[0] ?? centre)), high = Math.max(...mine.map((seat) => seat.register?.[1] ?? centre));
@@ -128546,7 +129209,7 @@ var PlexClodbot = class extends PlexBot {
       last: last2,
       ask: rest.ask,
       joins: rest.joins !== false,
-      draw: (bar) => seededSource(Number(this.ensembleSeed) >>> 0, `${this.groupId}:rest:${bar}`)()
+      draw: (bar) => seededSource2(Number(this.ensembleSeed) >>> 0, `${this.groupId}:rest:${bar}`)()
     }) : [];
     const solos = (solo?.ask ?? 0) > 0 ? soloAsks({
       startBar: unit9.startBar,
@@ -128554,7 +129217,7 @@ var PlexClodbot = class extends PlexBot {
       phraseBars,
       last: last2,
       ask: solo.ask,
-      draw: (bar) => seededSource(Number(this.ensembleSeed) >>> 0, `${this.groupId}:solo:${bar}`)()
+      draw: (bar) => seededSource2(Number(this.ensembleSeed) >>> 0, `${this.groupId}:solo:${bar}`)()
     }) : [];
     if (rests.length || solos.length) this.broadcast("group/request", [{
       group: this.groupId,
@@ -128580,7 +129243,7 @@ var PlexClodbot = class extends PlexBot {
       const rests = breadthRests(unit9, {
         sections,
         share: middle2(unit9.layers.constraints.players),
-        draw: (group2, bar) => seededSource(Number(this.ensembleSeed) >>> 0, `breadth:${bar}:${group2}`)(),
+        draw: (group2, bar) => seededSource2(Number(this.ensembleSeed) >>> 0, `breadth:${bar}:${group2}`)(),
         level: Array.isArray(unit9.layers.constraints.level) ? middle2(unit9.layers.constraints.level) : null,
         loudness: (group2) => PLEX_CLODBOT.players.loudness[String(group2).split(":")[0]] ?? 0
       });
@@ -128601,7 +129264,7 @@ var PlexClodbot = class extends PlexBot {
         if (Object.keys(solos).length) {
           unit9.layers.solos = solos;
           const [lowest, highest] = PLEX_CLODBOT.solo.register;
-          unit9.layers.soloRegisters = Object.fromEntries(Object.keys(solos).map((bar) => [bar, +(lowest + (highest - lowest) * seededSource(Number(this.ensembleSeed) >>> 0, `solo-register:${bar}`)()).toFixed(2)]));
+          unit9.layers.soloRegisters = Object.fromEntries(Object.keys(solos).map((bar) => [bar, +(lowest + (highest - lowest) * seededSource2(Number(this.ensembleSeed) >>> 0, `solo-register:${bar}`)()).toFixed(2)]));
           const { raise, recede } = PLEX_CLODBOT.solo, given3 = this.soloGiven ??= /* @__PURE__ */ new Map();
           for (const [bar, group2] of Object.entries(solos).sort((a, b) => Number(a[0]) - Number(b[0]))) {
             const others = sections.filter((other3) => other3 !== group2 && !(unit9.layers.rests?.[bar] ?? []).includes(other3)), shared = soloShares({ soloist: group2, others, raise, recede, history: given3 });
@@ -128628,7 +129291,7 @@ var PlexClodbot = class extends PlexBot {
   latitudeFor(unit9) {
     const asked = this.improvisationAsked, roles = PLEX_CLODBOT.latitude, band2 = roles[unit9.value?.role] ?? roles.other;
     const [low, high] = Array.isArray(asked) ? asked.map(Number) : band2.map((value4) => value4 * (asked == null ? 1 : Number(asked)));
-    return +(low + (high - low) * seededSource(Number(this.ensembleSeed) >>> 0, `latitude:${unit9.index}`)()).toFixed(3);
+    return +(low + (high - low) * seededSource2(Number(this.ensembleSeed) >>> 0, `latitude:${unit9.index}`)()).toFixed(3);
   }
   // A phrase's lines given their latitude (improvise.js): the section of the form's (its parent's layer, else its own),
   // drawn for the phrase between none and twice it, the same for all its lines; a soloist's half the way from that to
@@ -128638,7 +129301,7 @@ var PlexClodbot = class extends PlexBot {
   licensed(formation, { unit: unit9, parentUnit, bar, soloist }) {
     const layers = (parentUnit ?? unit9)?.layers, given3 = Number(layers?.latitude);
     if (!(given3 > 0)) return formation;
-    const drawn4 = Math.min(1, 2 * given3 * seededSource(Number(this.ensembleSeed) >>> 0, `latitude:${this.groupId}:${bar}`)()), region = layers?.harmony?.region ?? null;
+    const drawn4 = Math.min(1, 2 * given3 * seededSource2(Number(this.ensembleSeed) >>> 0, `latitude:${this.groupId}:${bar}`)()), region = layers?.harmony?.region ?? null;
     const mine = soloist === this.groupId ? drawn4 + (1 - drawn4) / 2 : drawn4;
     return {
       ...formation,
@@ -128657,7 +129320,7 @@ var PlexClodbot = class extends PlexBot {
     for (const unit9 of this.planner.units) {
       if (unit9.layers.meters !== void 0 || unit9.value.standIn || unit9.startBar <= (this.lastBar ?? 0)) continue;
       const given3 = this.adoptedLayers.get(unit9.index);
-      unit9.layers.meters = given3 && Object.hasOwn(given3, "meters") ? given3.meters : groupMeters(unit9.value, { bars: unit9.endBar - unit9.startBar, sections: [...sections].sort(), random: seededSource(Number(this.ensembleSeed) >>> 0, `meters:${unit9.index}`) });
+      unit9.layers.meters = given3 && Object.hasOwn(given3, "meters") ? given3.meters : groupMeters(unit9.value, { bars: unit9.endBar - unit9.startBar, sections: [...sections].sort(), random: seededSource2(Number(this.ensembleSeed) >>> 0, `meters:${unit9.index}`) });
       changed2 = true;
     }
     return changed2;
@@ -128689,7 +129352,7 @@ var PlexClodbot = class extends PlexBot {
     let changed2 = false;
     for (const unit9 of this.planner.units) {
       if (unit9.layers.fugue !== void 0 || metered && unit9.layers.meters === void 0 || unit9.value.standIn || unit9.startBar <= (this.lastBar ?? 0)) continue;
-      const random2 = seededSource(Number(this.ensembleSeed) >>> 0, `fugue:${unit9.index}`);
+      const random2 = seededSource2(Number(this.ensembleSeed) >>> 0, `fugue:${unit9.index}`);
       changed2 = true;
       const given3 = this.adoptedLayers.get(unit9.index);
       if (given3 && Object.hasOwn(given3, "fugue")) {
@@ -128715,10 +129378,10 @@ var PlexClodbot = class extends PlexBot {
         repetition: unit9.layers?.repetition ?? this.repetitionAsked
       });
       if (unit9.layers.fugue) unit9.layers.fugue.rigor = this.rigorPolicy;
-      const drawDoubling = seededSource(Number(this.ensembleSeed) >>> 0, `fugue-doubling:${unit9.index}`), fugue = unit9.layers.fugue;
+      const drawDoubling = seededSource2(Number(this.ensembleSeed) >>> 0, `fugue-doubling:${unit9.index}`), fugue = unit9.layers.fugue;
       const voices = fugue ? doubled(orchestrated, { collection: collection2, rules: blendRules(fugue.counterpoint.weights, fugue.counterpoint.strictness), share: this.doublingAsked ?? FUGUE_VOICES.doubling * drawDoubling() ** 2, random: drawDoubling }) : orchestrated;
       if (fugue) fugue.collection = collection2;
-      const drawReturn = seededSource(Number(this.ensembleSeed) >>> 0, `fugue-return:${unit9.index}`), turned = fugue ? returnOrchestration(fugue.entries.map((entry3) => String(entry3.group)), { share: this.reorchestrateAsked ?? FUGUE_VOICES.reorchestrate * drawReturn() ** 2, random: drawReturn }) : null;
+      const drawReturn = seededSource2(Number(this.ensembleSeed) >>> 0, `fugue-return:${unit9.index}`), turned = fugue ? returnOrchestration(fugue.entries.map((entry3) => String(entry3.group)), { share: this.reorchestrateAsked ?? FUGUE_VOICES.reorchestrate * drawReturn() ** 2, random: drawReturn }) : null;
       if (turned) fugue.returnBy = turned;
       if (fugue && voices.some((voice) => voice.parts.length !== 1 || voice.parts[0].seats || voice.parts[0].group !== voice.id))
         fugue.orchestration = Object.fromEntries(voices.map((voice) => [voice.id, voice.parts]));
@@ -128728,7 +129391,7 @@ var PlexClodbot = class extends PlexBot {
   // How many voices a section of the form's fugue has, of its `sections` and `players`: settings.fugueVoices, else drawn
   // (its own draw, the ensemble's seed and the section's: the fugue's other draws as they were).
   fugueVoicesFor(unit9, sections, players) {
-    const asked = this.fugueVoicesAsked, random2 = seededSource(Number(this.ensembleSeed) >>> 0, `fugue-voices:${unit9.index}`);
+    const asked = this.fugueVoicesAsked, random2 = seededSource2(Number(this.ensembleSeed) >>> 0, `fugue-voices:${unit9.index}`);
     if (asked === "seats") return players;
     if (Array.isArray(asked)) return Math.min(players, Math.round(asked[0] + (asked[1] - asked[0]) * random2()));
     if (asked != null) return Math.min(players, Math.round(Number(asked)));
@@ -128751,7 +129414,7 @@ var PlexClodbot = class extends PlexBot {
         unit9.layers.punctuation = given3.punctuation ?? null;
         continue;
       }
-      const random2 = seededSource(Number(this.ensembleSeed) >>> 0, `punctuation:${unit9.index}`), s = unit9.value;
+      const random2 = seededSource2(Number(this.ensembleSeed) >>> 0, `punctuation:${unit9.index}`), s = unit9.value;
       if (s.last || unit9.endBar - unit9.startBar < 2 || !(random2() < this.punctuationShare)) {
         unit9.layers.punctuation = null;
         continue;
@@ -128945,13 +129608,13 @@ var PlexClodbot = class extends PlexBot {
   // piece within PLEX_CLODBOT.punctuation.share.
   get punctuationShare() {
     const [low, high] = PLEX_CLODBOT.punctuation.share;
-    return this.punctuationAsked ?? (this.punctuationDrawn ??= +(low + (high - low) * seededSource(Number(this.ensembleSeed) >>> 0, "punctuation")()).toFixed(3));
+    return this.punctuationAsked ?? (this.punctuationDrawn ??= +(low + (high - low) * seededSource2(Number(this.ensembleSeed) >>> 0, "punctuation")()).toFixed(3));
   }
   // A section's harmony (harmony-plan.js sectionHarmony): from the section before's, the piece's opening region its home.
   // Its elongation, drawn once a piece from the ensemble's seed within its range (settings.elongation).
   get elongation() {
     const [low, high] = this.elongationRange ?? [1, 1];
-    return this.elongationDrawn ??= low === high ? low : low * (high / low) ** seededSource(Number(this.ensembleSeed) >>> 0, "elongation")();
+    return this.elongationDrawn ??= low === high ? low : low * (high / low) ** seededSource2(Number(this.ensembleSeed) >>> 0, "elongation")();
   }
   // A returning section's recall (PLEX_CLODBOT.recall): {from (the section it takes back), phrases (whether each of its
   // own is recalled), exchange}, or null.
@@ -128960,7 +129623,7 @@ var PlexClodbot = class extends PlexBot {
     if (unit9.value.standIn || !range3) return null;
     const earlier = this.planner.units.filter((item) => item.index < unit9.index && !item.value.standIn), source3 = earlier.find((item) => item.value.role === "establish") ?? earlier[0];
     if (!source3) return null;
-    const random2 = ["return", "complex-return"].includes(role) ? unitRandom : seededSource(Number(this.ensembleSeed) >>> 0, `recall:${unit9.index}:within`), [fewest, most] = range3;
+    const random2 = ["return", "complex-return"].includes(role) ? unitRandom : seededSource2(Number(this.ensembleSeed) >>> 0, `recall:${unit9.index}:within`), [fewest, most] = range3;
     const share = fewest + (most - fewest) * Math.sqrt(random2()), exchange = +(least + (greatest - least) * random2() ** 2).toFixed(3);
     const phrases = Array.from({ length: Math.max(1, Number(unit9.value.phrases) || 1) }, (_, k2) => !(unit9.value.last && k2 === Math.max(1, Number(unit9.value.phrases) || 1) - 1) && random2() < share);
     const across3 = +(nearest3 + (farthest - nearest3) * random2() ** 2).toFixed(3);
@@ -128968,7 +129631,7 @@ var PlexClodbot = class extends PlexBot {
     const augment = +(shortest + (longest - shortest) * random2() ** 3).toFixed(3), invert = +(upright + (inverted - upright) * random2() ** 3).toFixed(3), remode = +(kept + (moded - kept) * random2() ** 3).toFixed(3);
     const [forward2, backward] = PLEX_CLODBOT.recall.retrograde, retrograde = +(forward2 + (backward - forward2) * random2() ** 3).toFixed(3);
     const reversed = random2() < retrograde;
-    const draw = seededSource(Number(this.ensembleSeed) >>> 0, `recall:${unit9.index}:order`), [asWas, whole8] = PLEX_CLODBOT.recall.reorder, reorder = +(asWas + (whole8 - asWas) * draw() ** 3).toFixed(3);
+    const draw = seededSource2(Number(this.ensembleSeed) >>> 0, `recall:${unit9.index}:order`), [asWas, whole8] = PLEX_CLODBOT.recall.reorder, reorder = +(asWas + (whole8 - asWas) * draw() ** 3).toFixed(3);
     const n = Math.max(1, Number(source3.value.phrases) || 1), order4 = Array.from({ length: n }, (_, k2) => ({ k: k2, at: k2 + reorder * n * draw() })).sort((a, b) => a.at - b.at).map((item) => item.k);
     const reordered = order4.some((k2, i) => k2 !== i);
     const [steady, growing] = PLEX_CLODBOT.recall.vary, vary = +(steady + (growing - steady) * draw() ** 3).toFixed(3);
@@ -129081,13 +129744,13 @@ var PlexClodbot = class extends PlexBot {
     const start = ahead - (ahead - unit9.startBar) % phraseBars, end = Math.min(unit9.endBar, start + phraseBars);
     const from = Math.max(start, unit9.startBar + (Number(section2.tempo.durationBars) || 0));
     if (end - from < 2 || section2.last && end >= unit9.endBar || ahead < from) return;
-    const { depth: [low, high], phrase: [lightest, fullest], peak: [early, late], rise } = PLEX_CLODBOT.rubato, draw = seededSource(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}`), c2 = this.character;
-    const own2 = lightest + (fullest - lightest) * seededSource(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}:${start}:depth`)();
+    const { depth: [low, high], phrase: [lightest, fullest], peak: [early, late], rise } = PLEX_CLODBOT.rubato, draw = seededSource2(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}`), c2 = this.character;
+    const own2 = lightest + (fullest - lightest) * seededSource2(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}:${start}:depth`)();
     const depth = Math.min(high, (low + (high - low) * draw() ** 2) * own2) * (c2 ? (1 - 0.7 * c2.mechanism) * (1 - 0.4 * c2.continuity) : 1) * (this.rubatoAsked ?? 1);
     if (!(depth > 1e-4)) return;
-    const peak = from + Math.max(1, Math.min(end - from - 1, Math.round((early + (late - early) * seededSource(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}:${start}`)()) * (end - from))));
+    const peak = from + Math.max(1, Math.min(end - from - 1, Math.round((early + (late - early) * seededSource2(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}:${start}`)()) * (end - from))));
     const keeping = this.keepsTime(clock7, phraseBars), [least, most] = PLEX_CLODBOT.rubato.keep;
-    const keep3 = keeping ? (least + (most - least) * seededSource(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}:keep`)()) * (c2 ? 1 - 0.5 * c2.mechanism : 1) : 1, clockDepth = depth * keep3;
+    const keep3 = keeping ? (least + (most - least) * seededSource2(Number(this.ensembleSeed) >>> 0, `rubato:${unit9.index}:keep`)()) * (c2 ? 1 - 0.5 * c2.mechanism : 1) : 1, clockDepth = depth * keep3;
     const plans4 = this.archPlans ??= /* @__PURE__ */ new Map();
     if (!plans4.has(start)) {
       let riseTo2 = bpm * (1 + rise * clockDepth), returned2 = null;

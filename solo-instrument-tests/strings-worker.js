@@ -84,7 +84,33 @@ var sources_default = {
     "chen-smith-wolfe-2009": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Pitch bending and glissandi on the clarinet: Roles of the vocal tract and partial tone hole closure", year: 2009, doi: "10.1121/1.3177269", in: "The Journal of the Acoustical Society of America 126(3), 1511-1520", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2009-clarinet-pitch-bending.pdf" },
     "wiertlewski-hayward-2012": { kind: "literature", authors: "M. Wiertlewski, V. Hayward", title: "Transducer for mechanical impedance testing over a wide frequency range through active feedback", year: 2012, doi: "10.1063/1.3683572", in: "Review of Scientific Instruments 83(2), 025001", saved: "research-downloads/strings/finger/wiertlewski-hayward-2012-transducer-impedance-rsi.pdf" },
     "hennig-2011": { kind: "literature", authors: "H. Hennig, R. Fleischmann, A. Fredebohm, Y. Hagmayer, J. Nagler, A. Witt, F. J. Theis, T. Geisel", title: "The Nature and Perception of Fluctuations in Human Musical Rhythms", year: 2011, doi: "10.1371/journal.pone.0026457", in: "PLoS ONE 6(10), e26457", saved: "research-downloads/performer-noise/hennig-2011-fluctuations-human-musical-rhythms.pdf" },
-    "mcauley-marsden-2000": { kind: "literature", authors: "J. H. McAuley, C. D. Marsden", title: "Physiological and pathological tremors and rhythmic central motor control", year: 2e3, doi: "10.1093/brain/123.8.1545", in: "Brain 123(8), 1545-1567", read: "its abstract (PubMed 10908186)" }
+    "mcauley-marsden-2000": { kind: "literature", authors: "J. H. McAuley, C. D. Marsden", title: "Physiological and pathological tremors and rhythmic central motor control", year: 2e3, doi: "10.1093/brain/123.8.1545", in: "Brain 123(8), 1545-1567", read: "its abstract (PubMed 10908186)" },
+    "huron-1989-textures": { kind: "literature", authors: "D. Huron", title: "Characterizing Musical Textures", year: 1989, noDoi: "a conference paper without one: its handle hdl:2027/spo.bbp2372.1989.033 (Michigan Publishing)", in: "Proceedings of the 1989 International Computer Music Conference, Columbus, Ohio, 131-134", note: "texture as a bounded space of onset synchronization and semblant pitch motion (parallel and similar motions against contrary and oblique), monophony, homophony, polyphony and heterophony its quadrants, the works of each measured into their regions (Figure 1: hymns high in synchrony and about a third semblant, Bach's fugues and sinfonias low in both, Chinese, Siamese and Korean heterophony some 0.3 to 0.45 in synchrony and 0.5 to 0.75 semblant), and the space reversed as a composer's production model: the texture space's synchrony and semblance and its named locations' regions (public/shared/texture-space.js, test/texture-space.test.mjs)", saved: "research-downloads/counterpoint/Huron 1989 Characterizing musical textures (ICMC).pdf" },
+    "bent-1983": { kind: "literature", authors: "M. Bent", title: '"Resfacta" and "Cantare Super Librum"', year: 1983, doi: "10.1525/jams.1983.36.3.03a00020", in: "Journal of the American Musicological Society 36(3), 371-391", note: "Tinctoris (Liber de arte contrapuncti, 1477, II.20) as Bent reads him: in res facta every part is bound to every other, while singers over the book (cantare super librum) are each bound to the tenor and need not be to one another -- a difference of how the parts are bound, not of writing against improvising: the texture space's binding (public/shared/texture-space.js), a process's parts bound to its first part alone at 0, every part to every other at 1" },
+    "brown-1976": { kind: "literature", authors: "H. M. Brown", title: "Embellishing Sixteenth-Century Music", year: 1976, noDoi: "a book without one: ISBN 978-0-19-323175-7 (Oxford University Press, London; Early Music Series 1)", note: "the diminution treatises (Ganassi 1535, Ortiz 1553, Dalla Casa 1584, Bovicelli 1594 and others) as Brown reads them: a composition's notes divided by its performer into quicker passaggi, each leaving a note and arriving at the next, the composition's counterpoint unchanged beneath them" },
+    "huron-1989-denumerability": { kind: "literature", authors: "D. Huron", title: "Voice Denumerability in Polyphonic Music of Homogeneous Timbres", year: 1989, doi: "10.2307/40285438", in: "Music Perception 6(4), 361-382", note: "identification of the voices falls from three to four: the counterpoint space's statistics taking over from its rules (conducting/counterpoint.js)" },
+    "huron-2001": { kind: "literature", authors: "D. Huron", title: "Tone and Voice: A Derivation of the Rules of Voice-Leading from Perceptual Principles", year: 2001, doi: "10.1525/mp.2001.19.1.1", in: "Music Perception 19(1), 1-64", note: "the counterpoint space's rules as perception's (conducting/counterpoint.js)" },
+    "ebcioglu-1990": { kind: "literature", authors: "K. Ebcioğlu", title: "An expert system for harmonizing chorales in the style of J.S. Bach", year: 1990, doi: "10.1016/0743-1066(90)90055-A", in: "The Journal of Logic Programming 8(1-2), 145-185", note: "counterpoint as constraint search (conducting/counterpoint.js)" },
+    "herremans-sorensen-2013": { kind: "literature", authors: "D. Herremans, K. Sörensen", title: "Composing fifth species counterpoint music with a variable neighborhood search algorithm", year: 2013, doi: "10.1016/j.eswa.2013.05.071", in: "Expert Systems with Applications 40(16), 6427-6437", note: "counterpoint's rules as weighted costs (conducting/counterpoint.js)" },
+    "hemmecke-koppe-lee-weismantel-2010": { kind: "literature", authors: "R. Hemmecke, M. Köppe, J. Lee, R. Weismantel", title: "Nonlinear Integer Programming", year: 2010, doi: "10.1007/978-3-540-68279-0_15", in: "50 Years of Integer Programming 1958-2008 (Springer), 561-618", note: "counterpoint's costs as a nonlinear integer program over linear constraints, where its complexity turns; the trunk's research-downloads/optimization/ (the owner's download, 5 November 2026)" },
+    "samarotto-2009": { kind: "literature", authors: "F. Samarotto", title: '"Plays of Opposing Motion": Contra-Structural Melodic Impulses in Voice-leading Analysis', year: 2009, doi: "10.30535/mto.15.2.4", in: "Music Theory Online 15(2)", note: "a line's directionality and ambitus against the structure it prolongs; the trunk's research-downloads/counterpoint/ (the owner's download, 5 November 2026)" },
+    "open-music-theory": { kind: "literature", authors: "M. Gotham, K. Gullings, C. Hamm, B. Hughes, B. Jarvis, M. Lavengood, J. Peterson (eds.)", title: "Open Music Theory, version 2", year: 2021, noDoi: "an open textbook without one (VIVA Pressbooks, CC BY-SA 4.0): https://viva.pressbooks.pub/openmusictheory", note: "its chapters Texture (Gotham & Brady: monophony, heterophony, homophony, polyphony), Metrical Dissonance (Gotham), Swing Rhythms (Lavengood) and the five species of counterpoint (Shaffer & Gotham); the whole book in the trunk's research-downloads/rhythm/ (the owner's download, 5 November 2026)" },
+    "xenakis-1955": { kind: "literature", authors: "I. Xenakis", title: "La crise de la musique sérielle", year: 1955, noDoi: "a journal of 1955 without them: https://www.iannis-xenakis.org/en/?p=3720", in: "Gravesaner Blätter 1, 2-4", note: "a dense linear polyphony heard as a mass, the statistical mean of its parts' states replacing their rules: the texture space's masses as counterpoint extended" },
+    "xenakis-1992": { kind: "literature", authors: "I. Xenakis", title: "Formalized Music: Thought and Mathematics in Composition, revised edition", year: 1992, noDoi: "a book (Pendragon Press, Stuyvesant NY), its ISBN not checked here", note: "chapter 1: Pithoprakta's glissandi, their speeds by Gauss's law; Achorripsis's events by Poisson's: the texture space's glide and chance" },
+    "schaeffer-1966": { kind: "literature", authors: "P. Schaeffer", title: "Treatise on Musical Objects: An Essay across Disciplines", year: 2017, doi: "10.1525/9780520967465", in: "translated by C. North and J. Dack (University of California Press; Crossref dates its online edition 2019) from Traité des objets musicaux, Éditions du Seuil, 1966", note: "the typology of sound objects by their sustainment: an impulse, a sustained sound and an iteration, apart from what sounds them: the texture space's impulse and sustain (public/shared/texture-space.js), which each instrument's player plays as its own (a bowed string's point plucked, a wind's tongued as short as it goes)" },
+    "gibson-2022": { kind: "literature", authors: "B. Gibson", title: "The Use of Stochastic Distributions in the Instrumental Works of Iannis Xenakis: Between Chance and Intuition", year: 2022, noDoi: "in the Universidade de Évora's repository without one: https://dspace.uevora.pt/rdpc/bitstream/10174/34491/1/", note: "which of Xenakis's instrumental works draw their events by Poisson's, Gauss's and the exponential laws, and where he set the draws aside: the texture space's chance" },
+    "levy-2013": { kind: "literature", authors: "B. Levy", title: "'Rules as Strict as Palestrina's': The Regulation of Pitch and Rhythm in Ligeti's Requiem", year: 2013, doi: "10.1017/s1478572213000029", in: "Twentieth-Century Music 10(2), 203-230", note: "micropolyphony's canon under rules: the texture space's canon a counterpoint" },
+    "bernard-1994": { kind: "literature", authors: "J. W. Bernard", title: "Voice Leading as a Spatial Function in the Music of Ligeti", year: 1994, doi: "10.2307/854260", in: "Music Analysis 13(2/3), 227-253", note: "a mass's voice leading as a function of the space it fills: the texture space's places and motion" },
+    "douglas-noble-mcadams-2016": { kind: "literature", authors: "C. Douglas, J. Noble, S. McAdams", title: "Auditory Scene Analysis and the Perception of Sound Mass in Ligeti's Continuum", year: 2016, doi: "10.1525/mp.2016.33.3.287", in: "Music Perception 33(3), 287-305", note: "parts fuse into a mass by their density, rate and register, not at one threshold: the texture space's dimensions continuous" },
+    "toussaint-2005": { kind: "literature", authors: "G. T. Toussaint", title: "The Euclidean algorithm generates traditional musical rhythms", year: 2005, noDoi: "a conference paper without one: https://archive.bridgesmathart.org/2005/bridges2005-47.pdf", in: "Proceedings of Bridges 2005, 47-56", note: "the rhythm engine's Euclidean rhythms (shared/euclidean.js); the trunk's research-downloads/rhythm/" },
+    "clough-douthett-1991": { kind: "literature", authors: "J. Clough, J. Douthett", title: "Maximally Even Sets", year: 1991, doi: "10.2307/843811", in: "Journal of Music Theory 35(1/2), 93-173", note: "the rhythm engine's evenness (shared/euclidean.js)" },
+    "block-douthett-1994": { kind: "literature", authors: "S. Block, J. Douthett", title: "Vector Products and Intervallic Weighting", year: 1994, doi: "10.2307/843826", in: "Journal of Music Theory 38(1), 21-41", note: "shared/euclidean.js" },
+    "demaine-et-al-2009": { kind: "literature", authors: "E. D. Demaine, F. Gomez-Martin, H. Meijer, D. Rappaport, P. Taslakian, G. T. Toussaint, T. Winograd, D. R. Wood", title: "The distance geometry of music", year: 2009, doi: "10.1016/j.comgeo.2008.04.005", in: "Computational Geometry 42(5), 429-454", note: "the rhythm engine's rotations (shared/euclidean.js)" },
+    "cohn-2001": { kind: "literature", authors: "R. Cohn", title: "Complex Hemiolas, Ski-Hill Graphs and Metric Spaces", year: 2001, doi: "10.1111/1468-2249.00141", in: "Music Analysis 20(3), 295-326", note: "meters as products of twos and threes (shared/euclidean.js, meter-space.js)" },
+    "biamonte-2014": { kind: "literature", authors: "N. Biamonte", title: "Formal Functions of Metric Dissonance in Rock Music", year: 2014, doi: "10.30535/mto.20.2.1", in: "Music Theory Online 20(2)", note: "grouping and displacement dissonances by their formal function (shared/euclidean.js); the trunk's research-downloads/rhythm/" },
+    "temperley-1999": { kind: "literature", authors: "D. Temperley", title: "Syncopation in rock: a perceptual perspective", year: 1999, doi: "10.1017/S0261143000008710", in: "Popular Music 18(1), 19-40", note: "a syncopation as a rotation (shared/euclidean.js)" },
+    "longuet-higgins-lee-1984": { kind: "literature", authors: "H. C. Longuet-Higgins, C. S. Lee", title: "The Rhythmic Interpretation of Monophonic Music", year: 1984, doi: "10.2307/40285271", in: "Music Perception 1(4), 424-441", note: "metrical weights (shared/euclidean.js)" },
+    "gillick-et-al-2019": { kind: "literature", authors: "J. Gillick, A. Roberts, J. Engel, D. Eck, D. Bamman", title: "Learning to Groove with Inverse Sequence Transformations", year: 2019, noDoi: "a conference paper without one: https://proceedings.mlr.press/v97/gillick19a.html", in: "Proceedings of the 36th International Conference on Machine Learning, PMLR 97", note: "the Groove MIDI Dataset v1.0.0 (CC BY 4.0), the feels' measured swing and offsets (shared/performance-timing.js MEASURED_TIMING, scripts/measure-drum-timing.mjs, measure-drum-groove.mjs)" }
   }
 };
 
@@ -1646,7 +1672,7 @@ var bowed_default2 = {
                   micropolyphony: { value: 1.5, unit: "weight", kind: "unmeasured", reason: "ours: a canon", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                   cluster: { value: 1, unit: "weight", kind: "unmeasured", reason: "ours: a cluster", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                   line: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom a line", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                  pizzicati: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom pizzicati", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+                  points: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom points", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                 }
               },
               many: {
@@ -1654,8 +1680,8 @@ var bowed_default2 = {
                 weights: {
                   micropolyphony: { value: 3, unit: "weight", kind: "unmeasured", reason: "ours: many parts the masses: micropolyphony", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                   cluster: { value: 2.5, unit: "weight", kind: "unmeasured", reason: "ours: clusters", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                  glissandi: { value: 2.5, unit: "weight", kind: "unmeasured", reason: "ours: glissandi", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                  pizzicati: { value: 2, unit: "weight", kind: "unmeasured", reason: "ours: pizzicati clouds", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+                  glides: { value: 2.5, unit: "weight", kind: "unmeasured", reason: "ours: glides", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+                  points: { value: 2, unit: "weight", kind: "unmeasured", reason: "ours: clouds of points", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                   counterpoint: { value: 1.5, unit: "weight", kind: "unmeasured", reason: "ours: counterpoint still", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                   chord: { value: 0.5, unit: "weight", kind: "unmeasured", reason: "ours: seldom chords", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
                 }
@@ -1715,27 +1741,12 @@ var bowed_default2 = {
             },
             parameters: {
               micropolyphony: {
-                divisions: { value: [0, 1], unit: "share of its playable divisions", kind: "unmeasured", reason: "ours: each part's grid a share of this, spread over its parts", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                drift: { value: [0.03, 0.09], unit: "share slower a part", kind: "unmeasured", reason: "ours: each part this much slower than the last, the canon thickening", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                 cantusNotes: { value: [12, 20], unit: "notes", kind: "unmeasured", reason: "ours: the cantus's length", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
               },
-              glissandi: {
-                spread: { value: [2, 4], unit: "semitones a second", kind: "unmeasured", reason: "ours: the speeds' spread, Xenakis's normal law (Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] },
-                seconds: { value: [0.8, 3.5], unit: "s", kind: "unmeasured", reason: "ours: a glissando's length", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }, { where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] },
-                hold: { value: [0, 0.8], unit: "share of its note", kind: "unmeasured", reason: "ours: how much holds its first pitch before it slides, a pool's own, most nearer the top (the owner, 2 October 2026: fewer attacks straight into glissandi)", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] }
-              },
-              pizzicati: {
-                seconds: { value: [0.12, 0.2], unit: "s", kind: "unmeasured", reason: "ours: a pluck held this long", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                pulse: { value: [0, 1], unit: "0 free, 1 on the meter's positions", kind: "unmeasured", reason: "ours: a cloud's pulse drawn within this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
-              },
-              chord: {
-                pulse: { value: [0, 1], unit: "0 held, 1 every subdivision", kind: "unmeasured", reason: "ours: a chord's pulse drawn within this, most near its low end", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                gate: { value: [0.35, 1], unit: "share of the time to its next stroke", kind: "unmeasured", reason: "ours: a pulsed chord sounding this much", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+              points: {
+                seconds: { value: [0.12, 0.2], unit: "s", kind: "unmeasured", reason: "ours: a point sounding this long (s), as a player plays its shortest sound: a bowed string's pluck ringing as a sampled bank's recordings ring", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
               },
               counterpoint: {
-                pulse: { value: [0.35, 0.95], unit: "0 held, 1 every subdivision", kind: "unmeasured", reason: "ours: its parts' pulses spread over this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                rigor: { value: [0.4, 1], unit: "share", kind: "unmeasured", reason: "ours: its rule sets' rigour", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                imitation: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how often its lower parts imitate its top", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                 prolation: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how often its imitation is a converging tempo canon", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
               },
               line: {
@@ -1745,11 +1756,9 @@ var bowed_default2 = {
                 canon: { value: [0, 0.25], unit: "share of entries", kind: "unmeasured", reason: "ours: and entering late, a canon", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
               },
               figuration: {
-                tones: { value: [1, 5], unit: "tones", kind: "unmeasured", reason: "ours: its walk over so many of the harmony's tones", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                 direction: { value: [-1, 1], unit: "down to up", kind: "unmeasured", reason: "ours: which way", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
                 turn: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how often it turns", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                anchor: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how surely its lowest tone takes the strong positions", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
-                rate: { value: [0.25, 0.8], unit: "share of its players' quickest", kind: "unmeasured", reason: "ours: its rate", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+                anchor: { value: [0, 1], unit: "share", kind: "unmeasured", reason: "ours: how surely its lowest tone takes the strong positions", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
               }
             },
             players: {
@@ -1762,7 +1771,8 @@ var bowed_default2 = {
             doublings: { value: 3, unit: "halvings", kind: "unmeasured", reason: "ours: below it the desks playing halved this many times toward silence, each doubling of players some 3 dB", searched: [{ where: "web search", query: 'orchestral dynamics number of string players desks playing pianissimo "half section" doubling players loudness 3 dB measured', date: "2026-10-29", found: "none measured: a section's size changing its tone as well as its loudness (orchestration writing); whole orchestras' sound power 3-4 dB apart in halls (Kahle 1995); equal uncorrelated sources adding 3 dB a doubling, the physics" }] }
           },
           glissando: {
-            spread: { value: 3, unit: "semitones a second", kind: "unmeasured", reason: "ours: a part's glissandi's speeds normal about none with this spread (Xenakis's Gaussian law, Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] }
+            spread: { value: 3, unit: "semitones a second", kind: "unmeasured", reason: "ours: a part's glissandi's speeds normal about none with this spread (Xenakis's Gaussian law, Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] },
+            seconds: { value: [0.8, 3.5], unit: "s", kind: "unmeasured", reason: "ours: a glissando's length, the archived strings_clodbot's (its glissandi drawn so); the section's glides now by the texture space's chance, their lengths a cloud's density's", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }, { where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] }
           },
           lineBand: { value: 7, unit: "semitones", kind: "unmeasured", reason: "ours: a line shared by sections planed within its centre's band at least this either way", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
           tremoloSkew: { value: 3, unit: "power of its draw", kind: "unmeasured", reason: "ours: a pool's tremolo the cube of a uniform draw over its range, most pools near its low end", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
@@ -2448,21 +2458,22 @@ var personality_default = {
       settings: {
         dynamicSteps: { value: 2, unit: "marks", kind: "setting", reason: "how many dynamic marks the most daring player goes past the dynamics comfortable in a register (wind-line.js WIND_LINE lowMost f and highLeast p): to fff low and ppp high, the scale's ends (dynamics.js)" },
         shortest: { range: [0.08, 0.12], unit: "s", kind: "setting", reason: "its quickest note, the most daring's the planner's own (line.js LINE.shortest: a wind's double tonguing near it), the least daring's a single-tongued note's at some 8 notes a second (Bertsch & Hoole 2014, players-ranges.mjs repeatRate)" },
-        phraseRange: { range: [12, 18], unit: "semitones", kind: "setting", reason: "a phrase's widest range, about the planner's 14 (line.js LINE.phraseRange)" },
-        density: { range: [0.25, 0.5], unit: "share", kind: "setting", reason: "its density among equals, about the flute's 0.35 (flute_clodbot.js FLUTE)" },
-        loudness: { range: [0.4, 0.6], unit: "share", kind: "setting", reason: "its loudness among equals, about the flute's 0.5" },
-        fioriture: { range: [0.2, 0.55], unit: "share", kind: "setting", reason: "its fioriture as a soloist, about the flute's 0.35" },
-        leap: { range: [0.08, 0.32], unit: "share", kind: "setting", reason: "a leap's chance in its motif, about the planner's 0.18 (line.js LINE.leap)" },
-        slurs: { range: [2, 6], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, about the planner's 4 (LINE.slurMost)" },
-        motifFewest: { range: [3, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
-        motifMost: { range: [5, 7], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest" },
-        runs: { range: [3, 6], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, about the planner's 4 (LINE.runMost)" },
-        rests: { range: [0.3, 0.7], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
-        commas: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, about the planner's 0.2 (LINE.commaShare)" },
+        phraseRange: { range: [10, 30], unit: "semitones", kind: "setting", reason: "a phrase's widest range, from a tenth to two octaves and a half as it dares, about the planner's 14 (line.js LINE.phraseRange)" },
+        density: { range: [0, 1], unit: "share", kind: "setting", reason: `its density: from its motif's main notes alone, 0, to every held note divided at its quickest, 1 -- the line planner's whole span (line.js planLine: a phrase sparser than the motif it was made at simplified, a denser one divided), its motif made at its density among equals (flute_clodbot.js FLUTE, 0.35; bowedstring_clodbot.js BOWEDSTRING) and that among them (the owner, 5 November 2026: "changing the personality parameters doesn't seem to be able to result in any real extremes"; CLAUDE.md, range before personality)` },
+        loudness: { range: [0.05, 0.95], unit: "share", kind: "setting", reason: "its loudness, from a line kept to ppp's edge to one at fff's, about the flute's 0.5" },
+        fioriture: { range: [0, 1], unit: "share", kind: "setting", reason: "its fioriture as a soloist, from none to a run on every long note that has room for one, about the flute's 0.35" },
+        leap: { range: [0, 0.7], unit: "share", kind: "setting", reason: "a leap's chance in its motif, from a motif all steps to one mostly leaps, about the planner's 0.18 (line.js LINE.leap)" },
+        slurs: { range: [1, 16], unit: "notes", kind: "setting", reason: "its longest slur of quick notes, from every one tongued, 1, to sixteen under one slur, about the planner's 4 (LINE.slurMost)" },
+        slurSegments: { range: [0, 1], unit: "share", kind: "setting", reason: "the share of its phrase's segments slurred whole, long notes and all (line.js LINE.slurSegments), on the slurs' draw: from long notes always separate -- the planner's own, none -- to a legato player's every segment one slur, tongued where each begins" },
+        motifFewest: { range: [2, 4], unit: "notes", kind: "setting", reason: "its motif's fewest notes, with motifMost on the one draw motifLength: the planner's 3 to 6 (LINE.motifNotes) among them" },
+        motifMost: { range: [4, 12], unit: "notes", kind: "setting", reason: "its motif's most notes, on motifLength's draw with motifFewest, from a motif of a few notes to a long one" },
+        runs: { range: [2, 12], unit: "steps", kind: "setting", reason: "a run's most steps one way outside an ornament, from a line that turns at every third note to one that runs an octave and more, about the planner's 4 (LINE.runMost)" },
+        rests: { range: [0.1, 1], unit: "share", kind: "setting", reason: "the silence after its cadence, a share of the bar's last group, about the planner's 0.5 (LINE.restShare)" },
+        commas: { range: [0, 0.6], unit: "share", kind: "setting", reason: "the comma after its idea, a share of its last note, from none to most of it, about the planner's 0.2 (LINE.commaShare)" },
         landing: { range: [0.4, 1], unit: "share", kind: "setting", reason: "how high above its floor a cadence may land, a share of its span, about the planner's 0.75 (LINE.landing's upper end)" },
         grammarLeast: { value: 0.15, unit: "share", kind: "setting", reason: "the least weight a motif's grammar is given, against the most preferred's 1, so that every grammar stays open to it (line.js chooseMotif)" },
-        quoting: { range: [0.5, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: given them, it prefers them more often than not" },
-        techniques: { range: [0, 0.6], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's three phrases in five, each still the instrument's own" },
+        quoting: { range: [0, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: from never to always" },
+        techniques: { range: [0, 1], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's every phrase, each still the instrument's own" },
         toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
         vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
         harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
@@ -2490,6 +2501,250 @@ var rhythm_default = {
         slowestBeat: { value: 60, unit: "BPM", kind: "setting", reason: "the owner, 4 November 2026: X(0) is 'an isochronous continuing series of events ... in the tempo range of about 60–180 BPM (1–3 Hz)'; 'The tempo is based approximately on human heart rates'" },
         fastestBeat: { value: 180, unit: "BPM", kind: "setting", reason: "the owner's band's fastest, as slowestBeat" },
         shortestPeriod: { value: 0.05, unit: "s", kind: "setting", reason: "the owner, 4 November 2026: 'Layer X(n) is the minimum layer if its period is less than 50ms (or its tempo is less than 20Hz). This minimum results from the phenomenal threshold at which tempo becomes pitch': read as the shortest period a layer may have, a layer under it being pitch, not rhythm" }
+      }
+    }
+  }
+};
+
+// registry/method/texture.json
+var texture_default = {
+  schema: "musebots.registry-methods/1",
+  about: `The texture space (public/shared/texture-space.js; docs/TEXTURE_SPACE.md): the named textures as locations among dimensions that name no instrument and no technique, so that every texture is an extension of the others and every point between them is one. The owner, 5 November 2026: "we need a layer of abstraction apart from instrument-specific textures but that can lead to them"; "to the extent possible, we want to avoid binding underlying musebot algorithms to specific instrumental techniques until they get close to the instrument". Each location's ranges the strings' textures' own, now said once; what a location does not read set so that a blend through it stays a texture.`,
+  methods: {
+    "texture-space": {
+      about: "The texture space (public/shared/texture-space.js; docs/TEXTURE_SPACE.md): every texture a point among sixteen dimensions that name no instrument and no technique, each a share 0 to 1, each named texture a location of ranges [low, high] within them (the methods texture-<name> below). A pool draws its point within its location's ranges -- or a blend's, every range moved alike -- from its seed, each dimension evenly but those skewed here. Its two axes Huron's (1989): onset synchronization and semblant motion; the rest what the strings' ten textures had each done apart, said once.",
+      source: "ours",
+      settings: {
+        pulseSkew: { value: 2, unit: "power of its draw", kind: "setting", reason: "a pool's pulse is its draw squared across its range, so most pools near its low end: a chord held more often than struck again, a cloud freer than pulsed (string-section.js, as the strings' chords and pizzicati were drawn)" },
+        semblanceSkew: { value: 0.5, unit: "power of its draw", kind: "setting", reason: `a pool's semblance is its draw's square root across its range, so most pools near its top: a counterpoint's lower parts imitating its top often (the owner, 3 October 2026: canons and fugues "more important"), as its imitation was drawn` },
+        glideSkew: { value: 2, unit: "power of its draw", kind: "setting", reason: `a pool's glide is its draw squared across its range, so most pools near its least: a note holding its pitch before it slides more often than sliding from its attack (the owner, 2 October 2026: bots "attack directly into glissandos in ways that I think should occur less often for their instruments")` },
+        figureTones: { range: [1, 5], unit: "tones", kind: "setting", reason: "a compound melody's walk over one to five of the harmony's tones, its compound a share across them: a trill's two, an Alberti bass's three, an arpeggio's more", was: "the strings' specification's figuration.tones, [1,5] tones" },
+        divisions: { range: [0, 1], unit: "share of its playable divisions", kind: "setting", reason: `a part whose time is its own (its entry delayed, its pace drifting) is written on a lattice of its own: the beat divided from two to as many times as its player plays notes in it, the parts' shares spread evenly over this range from a drawn offset (no fixed set of tuplets: the owner, 2 October 2026, "the real limits are possible playing ... speed of the shortest notes")`, was: "the strings' specification's micropolyphony.divisions, [0,1] share of its playable divisions: each part's grid a share of this, spread over its parts", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] }
+      }
+    },
+    "texture-line": {
+      about: "One line, every part in unison or at the octave: monophony, Huron's synchrony and semblance both whole (its parts' rhythms and pitches planned once for all: line.js planLine).",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "one tone at a time, no figure" },
+        synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part sounds each onset: monophony at the top of Huron's synchrony", sources: ["huron-1989-textures"] },
+        semblance: { value: 1, unit: "share", kind: "setting", reason: "every part moves as the others: monophony at the end of Huron's semblant motion", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "one voice, no voices to rule between" },
+        binding: { value: 1, unit: "share", kind: "setting", reason: "one voice: no part to bind it to" },
+        between: { value: 0, unit: "share", kind: "setting", reason: "not read: a line is planned against the line pools above it by its own planner (section-voices.js sectionLines)" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "not read: a line's fioriture are its player's (personality.js fioriture: line.js planLine)" },
+        pulse: { range: [0.35, 0.95], unit: "share", kind: "setting", reason: "not read by a line, which its planner rhythms; a melody's, as a counterpoint's parts move, where a blend draws the process family" },
+        chance: { value: 0, unit: "share", kind: "setting", reason: "its onsets planned, none by chance" },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "its notes sustained" },
+        sustain: { value: 0.97, unit: "share", kind: "setting", reason: "each note sounds this share of its written length (section-voices.js ARTICULATION): its notes joined, never run together" },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no note slides" },
+        motion: { value: 0.1, unit: "share", kind: "setting", reason: "not read by a line, which its planner moves; a melody's steps and leaps where a blend draws the process family" },
+        continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's lattice" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "every part entering together (a line shared by sections enters as its conductor's entries say: entries.js)" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "no part follows another's material in its own rhythm: a line's parts are one" },
+        places: { value: 0, unit: "share", kind: "setting", reason: "one place: every part the line" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+      }
+    },
+    "texture-counterpoint": {
+      about: "Voices of their own: polyphony, low in Huron's synchrony and semblance (conducting/counterpoint.js counterLine under drawnRules).",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "one tone at a time in each voice" },
+        synchrony: { value: 0, unit: "share", kind: "setting", reason: "each voice its own rhythm, none taking the top's: Bach's fugues and sinfonias low in Huron's onset synchronization; toward 1, the share of its voices on the top's rhythm, first species's note against note", sources: ["huron-1989-textures"] },
+        semblance: { range: [0, 1], unit: "share", kind: "setting", reason: "the share of its lower voices imitating its top, a canon among them, most pools often (texture-space semblanceSkew); the voices free, non-semblant, where none does", sources: ["huron-1989-textures"], was: "the strings' specification's counterpoint.imitation, [0,1] share: how often its lower parts imitate its top", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        rules: { range: [0.4, 1], unit: "share", kind: "setting", reason: "its rule sets' rigour: how strictly its drawn blend binds (counterpoint.js drawnRules)", sources: ["huron-2001", "ebcioglu-1990"], was: "the strings' specification's counterpoint.rigor, [0.4,1] share: its rule sets' rigour", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        binding: { value: 1, unit: "share", kind: "setting", reason: "res facta: every voice planned against every voice above it (counterLine against every line planned), each part bound to every other, as Tinctoris's res facta is in Bent's reading", sources: ["bent-1983"] },
+        between: { range: [0, 1], unit: "share", kind: "setting", reason: `its parts bound to the pools above it as to one another, a score written whole, or each pool's idiom its own (the owner, 5 November 2026: "the types of textures Charles Ives and Alfred Schnittke employed where several different idioms co-occurred"); read where its blends draw the process, the planned counterpoint planning its pool alone` },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: `res facta sung as it is written, its notes none diminished; a performer's diminutions over it, its counterpoint unchanged beneath them, a point toward a share of them (the owner, 5 November 2026: "scores follow counterpoint rules but performance ornaments sometimes deviate")`, sources: ["brown-1976"] },
+        pulse: { range: [0.35, 0.95], unit: "share", kind: "setting", reason: "its voices' pulses, spread over this range from a drawn offset so they move at their own rates, one holding as another moves (section-voices.js pulsed)", was: "the strings' specification's counterpoint.pulse, [0.35,0.95] 0 held, 1 every subdivision: its parts' pulses spread over this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        chance: { value: 0, unit: "share", kind: "setting", reason: "its rhythms on the meter's positions" },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "its notes sustained" },
+        sustain: { value: 0.97, unit: "share", kind: "setting", reason: "as a line's (ARTICULATION)" },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no note slides" },
+        motion: { value: 0.1, unit: "share", kind: "setting", reason: "not read by counterpoint, which its rules move; a melody's steps where a blend draws the process family" },
+        continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's lattice" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time (its imitation's converging tempo canon its own choice, its prolation)" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "not read by counterpoint, whose imitators enter a felt group apart" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "not read by counterpoint, whose voices are planned" },
+        places: { value: 1, unit: "share", kind: "setting", reason: "each voice its own place in the band, the top highest" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+      }
+    },
+    "texture-figuration": {
+      about: "A compound melody: every part one walk over the harmony's tones, each in its own place (figuration.js, compound-melody.js).",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { range: [0, 1], unit: "share", kind: "setting", reason: "its walk over any of the space's figure tones (texture-space figureTones, one to five: a trill's two, an Alberti bass's three, an arpeggio's more), this share across them", was: "the strings' specification's figuration.tones, [1,5] tones: its walk over so many of the harmony's tones", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part the same walk at once" },
+        semblance: { value: 1, unit: "share", kind: "setting", reason: "every part the same figure, each in its own place: parallel, semblant motion", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "its voices led by the least motion, not by a counterpoint's rules" },
+        binding: { value: 1, unit: "share", kind: "setting", reason: "not read: one figure's walk, planned" },
+        between: { value: 0, unit: "share", kind: "setting", reason: "not read: planned by its figuration" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "not read: planned by its figuration" },
+        pulse: { range: [0.25, 0.8], unit: "share", kind: "setting", reason: "its rate: this share of as many notes a second as its players' quickest allow", was: "the strings' specification's figuration.rate, [0.25,0.8] share of its players' quickest: its rate", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        chance: { value: 0, unit: "share", kind: "setting", reason: "on the meter's positions" },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "its notes sustained" },
+        sustain: { value: 0.97, unit: "share", kind: "setting", reason: "as a line's" },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no note slides" },
+        motion: { value: 0.1, unit: "share", kind: "setting", reason: "not read by a figuration, which its walk moves; a melody's steps where a blend draws the process family" },
+        continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's lattice" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "every part together" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "not read by a figuration, whose parts are planned" },
+        places: { value: 1, unit: "share", kind: "setting", reason: "each part its own place in the band" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+      }
+    },
+    "texture-chord": {
+      about: "A tone a part, struck together: homophony, high in Huron's synchrony and low in his semblance.",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+        synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part strikes the pool's onsets: homophony high in Huron's onset synchronization (hymns)", sources: ["huron-1989-textures"] },
+        semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own tone, voice-led apart: hymns some third semblant in Huron's measure, as voice-leading by the nearest tone leaves them", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "its parts led by the nearest tone, not a counterpoint's rules" },
+        binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+        between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+        pulse: { range: [0, 1], unit: "share", kind: "setting", reason: "0 each tone held until the harmony moves it; 1 struck again on every subdivision; between, the meter's levels in turn; most pools near its low end (texture-space pulseSkew)", was: "the strings' specification's chord.pulse, [0,1] 0 held, 1 every subdivision: a chord's pulse drawn within this, most near its low end", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        chance: { value: 0, unit: "share", kind: "setting", reason: "on the meter's positions" },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "its tones sustained" },
+        sustain: { range: [0.35, 1], unit: "share", kind: "setting", reason: "a struck chord sounding this share of the time to its next stroke", was: "the strings' specification's chord.gate, [0.35,1] share of the time to its next stroke: a pulsed chord sounding this much", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no tone slides" },
+        motion: { value: 0.02, unit: "share", kind: "setting", reason: "a step at a time: struck again, each part moves to the chord's next tone within its reach, never striking one pitch over and over (the owner, 5 October 2026, of Op. 3.30)" },
+        continuum: { value: 0, unit: "share", kind: "setting", reason: "the harmony's tones" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "every part together" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "every part on the harmony's onsets: none following in a rhythm of its own" },
+        places: { value: 1, unit: "share", kind: "setting", reason: "each part its own place in the band, from the top" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn, at least an octave where its parts sound the harmony's tones" }
+      }
+    },
+    "texture-cluster": {
+      about: "The parts spread evenly over a band narrower than the lattice, held: a chord off the lattice, packed.",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+        synchrony: { value: 1, unit: "share", kind: "setting", reason: "every part together", sources: ["huron-1989-textures"] },
+        semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own pitch", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "no rules between its parts" },
+        binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+        between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+        pulse: { value: 0, unit: "share", kind: "setting", reason: "held to the phrase's end" },
+        chance: { value: 0, unit: "share", kind: "setting", reason: "no onset by chance" },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+        sustain: { value: 1, unit: "share", kind: "setting", reason: "held through" },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no slide" },
+        motion: { value: 0, unit: "share", kind: "setting", reason: "held where it is: a mass's stasis (Atmospheres)", sources: ["douglas-noble-mcadams-2016"] },
+        continuum: { value: 1, unit: "share", kind: "setting", reason: "each pitch where it falls, between the keys too" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "every part together" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "every part on the pool's onsets: none following in a rhythm of its own" },
+        places: { value: 1, unit: "share", kind: "setting", reason: "each part its own place, evenly over the band" },
+        packing: { value: 1, unit: "share", kind: "setting", reason: "packed: its band a part to a fraction of a semitone, as the section's specification draws a cluster's (string-section.js pool.cluster)" }
+      }
+    },
+    "texture-micropolyphony": {
+      about: "Ligeti's canon of one cantus, each part entering in turn, a little slower than the one before: a counterpoint whose voices are one line, heard as a mass.",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+        synchrony: { value: 0, unit: "share", kind: "setting", reason: "each part its own time: low in Huron's onset synchronization", sources: ["huron-1989-textures"] },
+        semblance: { value: 1, unit: "share", kind: "setting", reason: "every part the same cantus, read in its own time (Ligeti's canons under rules as strict as Palestrina's)", sources: ["levy-2013"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "its cantus a walk by steps, no voices ruled between" },
+        binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+        between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+        pulse: { value: 0.5, unit: "share", kind: "setting", reason: "a note a group of the meter, the cantus's" },
+        chance: { value: 0, unit: "share", kind: "setting", reason: "no onset by chance" },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+        sustain: { value: 0.98, unit: "share", kind: "setting", reason: "each note sounding nearly its whole step" },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no slide" },
+        motion: { value: 0.02, unit: "share", kind: "setting", reason: "a step at a time: the cantus a walk on the ladder, a moving note never repeated" },
+        continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's ladder" },
+        drift: { range: [0.03, 0.09], unit: "share", kind: "setting", reason: "each part this share slower than the one before, the canon thickening", was: "the strings' specification's micropolyphony.drift, [0.03,0.09] share slower a part: each part this much slower than the last, the canon thickening", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        delay: { value: 1, unit: "share", kind: "setting", reason: "the parts' entries spread over the cantus's first group, every part entered within it" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "its parts in canon, each the cantus in its own time: none following the band's" },
+        places: { value: 0, unit: "share", kind: "setting", reason: "every part over the band whole, a voice leading that fills its space", sources: ["bernard-1994"] },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+      }
+    },
+    "texture-heterophony": {
+      about: "One melody played by every part at once, each in its own rhythm: Huron's fourth quadrant, semblant but not synchronous (the Chinese, Siamese and Korean works his figure measures).",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+        synchrony: { value: 0, unit: "share", kind: "setting", reason: "fitted: no part on the melody's rhythm alone: every part strikes where the melody moves and in a rhythm of its own besides", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+        semblance: { value: 1, unit: "share", kind: "setting", reason: "every part the one melody, moving where it moves (its anticipations Huron's semblant motion the less)", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "one melody, no voices ruled between" },
+        binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+        between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+        pulse: { value: 0.25, unit: "share", kind: "setting", reason: "fitted: the melody's onsets and each part's own drawn a quarter of the time to the meter's strongest positions", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+        chance: { value: 1, unit: "share", kind: "setting", reason: "fitted: every onset a Poisson arrival, so each part's own fall apart from the melody's and the others'", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+        sustain: { value: 0.97, unit: "share", kind: "setting", reason: "as a line's" },
+        glide: { range: [0, 0.2], unit: "share", kind: "setting", reason: "a part sliding into its note, a heterophony's inflection, little" },
+        motion: { value: 0.02, unit: "share", kind: "setting", reason: "its melody a walk by steps" },
+        continuum: { value: 0, unit: "share", kind: "setting", reason: "on the harmony's ladder" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "every part at the melody's moment, no canon" },
+        anticipation: { value: 0.2, unit: "share", kind: "setting", reason: "fitted: a fifth of each part's own onsets between the melody's moves taking its next note early", fit: { method: "MUSEBOTS_METER_SEED=2026-11-05 node scripts/fit-texture-location.mjs heterophony", data: "Huron 1989, Figure 1: his heterophonic works (Chinese, Siamese, Korean) some 0.3 to 0.45 in onset synchronization and 0.5 to 0.75 in semblant motion; a chamber section's every part playing it, over four meters and four seeds, measured as he measured (texture-space.js textureMeasures): 0.41 (0.29 to 0.50) and 0.65 (0.53 to 0.76), the grid's nearest its middle", date: "2026-11-05" }, sources: ["huron-1989-textures"] },
+        places: { value: 0, unit: "share", kind: "setting", reason: "every part in the melody's register" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+      }
+    },
+    "texture-glides": {
+      about: "Each part sliding from pitch to pitch, its onsets by chance: Xenakis's glissandi (Pithoprakta).",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+        synchrony: { value: 0, unit: "share", kind: "setting", reason: "each part its own onsets", sources: ["huron-1989-textures"] },
+        semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own path", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "no rules: a mass's mean state in their place", sources: ["xenakis-1955"] },
+        binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+        between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+        pulse: { value: 0, unit: "share", kind: "setting", reason: "free of the meter" },
+        chance: { value: 1, unit: "share", kind: "setting", reason: "its onsets Poisson arrivals, the intervals between them by the exponential law", sources: ["xenakis-1992", "gibson-2022"] },
+        impulse: { value: 0, unit: "share", kind: "setting", reason: "sustained" },
+        sustain: { range: [0.7, 1], unit: "share", kind: "setting", reason: "each slide sounding to its next, a rest now and then as a cloud thins" },
+        glide: { range: [0.2, 1], unit: "share", kind: "setting", reason: "the share of each note spent sliding, the rest holding its first pitch; most pools near its least (texture-space glideSkew)", was: "the strings' specification's glissandi.hold, [0,0.8] share of its note: how much holds its first pitch before it slides, a pool's own, most nearer the top (the owner, 2 October 2026: fewer attacks straight into glissandi)", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] },
+        motion: { range: [0.1, 0.3], unit: "share", kind: "setting", reason: "its steps' spread a share of its region per mean interval, its speeds normal about none (Pithoprakta's Gauss's law: the strings' 2 to 4 semitones a second over a band of some 16 at an onset a second)", sources: ["xenakis-1992"], was: "the strings' specification's glissandi.spread, [2,4] semitones a second: the speeds' spread, Xenakis's normal law (Pithoprakta), its size ours", searched: [{ where: "web search", query: "Pithoprakta glissandi speeds Gaussian distribution standard deviation Formalized Music Xenakis semitones per second", date: "2026-10-29", found: "Xenakis's own account (Formalized Music, ch. 1): bars 52-60's 1,148 speeds over 58 values by Gauss's law; no spread in semitones a second nor a glissando's length given in what was found" }] },
+        continuum: { value: 1, unit: "share", kind: "setting", reason: "anywhere between the keys" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "its entries by chance" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "a glide's part following another's material takes its moves as they come" },
+        places: { value: 0, unit: "share", kind: "setting", reason: "every part over the band whole" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
+      }
+    },
+    "texture-points": {
+      about: "A cloud of impulses, each part's by chance anywhere in the band: Xenakis's pizzicato clouds, as any instrument plays a point.",
+      source: "ours, its sources by key on each setting",
+      settings: {
+        compound: { value: 0, unit: "share", kind: "setting", reason: "no figure" },
+        synchrony: { value: 0, unit: "share", kind: "setting", reason: "each part its own onsets", sources: ["huron-1989-textures"] },
+        semblance: { value: 0, unit: "share", kind: "setting", reason: "each part its own pitches", sources: ["huron-1989-textures"] },
+        rules: { value: 0, unit: "share", kind: "setting", reason: "no rules", sources: ["xenakis-1955"] },
+        binding: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose (a point toward a counterpoint), each part bound to its pool's first part alone: improvised, as a singer over the book is bound to the tenor (Tinctoris's cantare super librum as Bent reads him)", sources: ["bent-1983"] },
+        between: { value: 0, unit: "share", kind: "setting", reason: "where its rules choose, its pool's idiom its own, unbound to the pools sounding above it" },
+        ornament: { value: 0, unit: "share", kind: "setting", reason: "its notes as its process makes them, none diminished" },
+        pulse: { range: [0, 1], unit: "share", kind: "setting", reason: "how often an onset is drawn to the meter's next position, most clouds free (texture-space pulseSkew)", was: "the strings' specification's pizzicati.pulse, [0,1] 0 free, 1 on the meter's positions: a cloud's pulse drawn within this", searched: [{ where: "web search", query: "corpus orchestral texture annotation classical symphonies first movements", date: "2026-10-29", found: "Le, Giraud, Levé & Maccarini 2022 (DLfM, doi:10.1145/3543882.3543884, checked against Crossref): 7,900 bar-by-bar annotations of 24 first movements of Haydn, Mozart and Beethoven, each part's layer melodic, rhythmic or harmonic (its abstract read); no rates of a section's formations, divisi or these textures, which a count over its annotations could begin to give for that style" }] },
+        chance: { value: 1, unit: "share", kind: "setting", reason: "Poisson arrivals (Achorripsis's law)", sources: ["xenakis-1992", "gibson-2022"] },
+        impulse: { value: 1, unit: "share", kind: "setting", reason: "every note an impulse: each player's shortest sound, a bowed string's plucked", sources: ["schaeffer-1966"] },
+        sustain: { value: 0, unit: "share", kind: "setting", reason: "none held" },
+        glide: { value: 0, unit: "share", kind: "setting", reason: "no slide" },
+        motion: { value: 1, unit: "share", kind: "setting", reason: "each pitch anywhere in its region, the last no guide" },
+        continuum: { value: 1, unit: "share", kind: "setting", reason: "anywhere between the keys" },
+        drift: { value: 0, unit: "share", kind: "setting", reason: "one time" },
+        delay: { value: 0, unit: "share", kind: "setting", reason: "its entries by chance" },
+        anticipation: { value: 0, unit: "share", kind: "setting", reason: "a point's part following another's material takes its moves as they come" },
+        places: { value: 0, unit: "share", kind: "setting", reason: "every part over the band whole" },
+        packing: { value: 0, unit: "share", kind: "setting", reason: "its band as drawn" }
       }
     }
   }
@@ -2583,7 +2838,8 @@ var FILES = Object.freeze({
   "method/strings.json": strings_default,
   "method/levels.json": levels_default,
   "method/personality.json": personality_default,
-  "method/rhythm.json": rhythm_default
+  "method/rhythm.json": rhythm_default,
+  "method/texture.json": texture_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
@@ -3853,6 +4109,9 @@ var LINE = Object.freeze({
   // The longest slur of quick notes, and a leap's chance in a motif.
   slurMost: 4,
   leap: 0.18,
+  // The share of a phrase's segments (its idea, its repetition, its answer, ...) slurred whole, long notes and all,
+  // tongued where each begins: a legato player's (personality.js, its slurs). None here: long notes separate.
+  slurSegments: 0,
   // The share of a held note a soloist's run may take.
   ornamentShare: "2/3",
   // A motif's fewest and most notes, its widest drift (pool steps from its first note to its last), and the density it
@@ -25250,6 +25509,19 @@ var BRASS = Object.freeze({
       Object.freeze([145, Object.freeze({ Sr: 56e-6, mu: 26e-5, sigma: 6, H: 55e-5, w: 0.026 })]),
       Object.freeze([160, Object.freeze({ Sr: 146e-7, mu: 537e-7, sigma: 5, H: 29e-5, w: 0.01 })])
     ]),
+    // (Its lips as measured, two modes -- the dial's bodies' (save_brass_body.py given), NESS's where
+    // MUSEBOTS_NESS_LIPS=measured. Fitted on its measured body (tools/fit_lips.py fit tuba --second, measuredLipsFit) to
+    // a bass tuba player's A1 and A3, their thresholds and their breath blown pp and ff (Bouhuys 1965), each on its
+    // partial, and to the trombonists' lips as measured in their mouthpieces (Newton, Campbell & Gilbert 2008; Newton
+    // 2009), each register's at the share of its note theirs stood at: its outward lips at 0.59 and 0.73 of A1 and A3 at
+    // Q 1.45 and 1.51, its inward at 1.35 and 1.39 of them; its breath within 0.57 of its players' spread, each other
+    // residual within 0.51 of its own (its fit stopped at its 25 evaluations, cost 6.2). Its NESS calibration not yet
+    // measured on them, 5 November 2026.)
+    measuredLips: Object.freeze([
+      Object.freeze([32.299, Object.freeze({ Sr: 7924e-8, mu: 2084e-7, sigma: 139.9, H: 5593e-7, w: 0.02665, inwardRatio: 2.302, inwardQ: 1.635, inwardCoupling: 1.093 })]),
+      Object.freeze([160.547, Object.freeze({ Sr: 2001e-8, mu: 389e-7, sigma: 669.9, H: 1749e-7, w: 8388e-6, inwardRatio: 1.902, inwardQ: 1.896, inwardCoupling: 1.223 })])
+    ]),
+    measuredLipsFit: "lips-fits/tuba-second.json",
     pressure: Object.freeze([600, 3500]),
     mutes: kitOf("tuba")
   })
@@ -25267,7 +25539,7 @@ var NEAR_HOLDING = Object.freeze([[0.9, 1], [1.1, 1], [0.8, 1], [1.25, 1], [1, 0
 var LIPS_REACH = Object.freeze([0.88, 1.12]);
 var SUPPORTED = Object.freeze([1, 1.5, 2]);
 var HARDER = Object.freeze([1, 0.6, 1.5, 0.4, 2.2]);
-var DIP = Object.freeze({ weak: 0.05, deeper: 4 });
+var DIP = Object.freeze({ weak: 0.05, deeper: 4, multiple: 1 / 24 });
 var SILENT = 2 ** -23;
 var BUZZ = Object.freeze({ depth: 0.6, hold: 0.018, seconds: 0.03 });
 var SLUR_AIDS = Object.freeze({ down: Object.freeze([]), up: Object.freeze([]) });
@@ -25530,6 +25802,7 @@ var NEUTRAL_NOTES = neutral_notes_default.notes;
 var least = (kind) => transition(kind).least;
 var STRINGS_START = Object.freeze({ from: "native/strings-model/starts/violin-c4-pp.actions", type: 0, variant: 0, seed: 1 });
 var BUFFER_SECONDS = least("bowForce");
+var PULL_MOST = 16384;
 var correctionLine = (on) => `e ${on ? 1 : 0} ${least("any")}`;
 var attacksOf = (name) => {
   const dynamic = NEUTRAL_NOTES[name]?.dynamic ?? "mf", onset = physical_strings_articulation_default.instruments?.[name]?.[dynamic] ?? MODEL2.onset;
@@ -25815,6 +26088,7 @@ var got = async (path, as = "json") => {
 };
 var AHEAD = 0.06;
 var AWAKE = 5;
+var PULLED_IDLE = 1;
 var ready = (async () => {
   const packed = await got("strings/manifest.json");
   const [{ default: create }, module] = await Promise.all([import(at("strings-live.js").href), got("strings-live.wasm", "arrayBuffer").then((bytes) => WebAssembly.compile(bytes))]);
@@ -25855,7 +26129,7 @@ var ready = (async () => {
     madeFrames += frames;
     return host.HEAPF32.slice(at2, at2 + frames);
   };
-  return { dial, frames, rate, made };
+  return { dial, frames, rate, made, seconds: () => madeFrames / rate };
 })();
 var port = null;
 var given2 = 0;
@@ -25863,8 +26137,11 @@ var heardAt = -Infinity;
 var askedAt = performance.now();
 var since = null;
 var steps = 0;
+var pulledAt = -Infinity;
+var pulledLately = () => performance.now() - pulledAt < PULLED_IDLE * 1e3;
 async function playing({ data: { n, got: got2 } }) {
   const { frames, rate, made } = await ready;
+  if (pulledLately()) return;
   heardAt = performance.now();
   since = null;
   while (n + given2 - got2 < AHEAD * rate) {
@@ -25875,7 +26152,7 @@ async function playing({ data: { n, got: got2 } }) {
 }
 setInterval(async () => {
   const { frames, rate, made } = await ready, now = performance.now();
-  if (now - heardAt < 100 || now - askedAt > AWAKE * 1e3) {
+  if (now - heardAt < 100 || now - askedAt > AWAKE * 1e3 || pulledLately()) {
     since = null;
     return;
   }
@@ -25899,7 +26176,16 @@ self.onmessage = async ({ data }) => {
       dial.listen((line2) => self.postMessage({ line: line2 }));
       return;
     }
-    const { id, method, path, given: body } = data, answer = await dial.handle(method, path, body ?? {});
+    const { id, method, path, query, given: body } = data;
+    if (method === "GET" && path === "/audio") {
+      const { frames, made, seconds } = await ready, asked = Math.min(Math.max(1, Number(new URLSearchParams(query).get("frames")) || 1024), PULL_MOST);
+      const buffers = Math.max(1, Math.round(asked / frames)), samples = new Float32Array(buffers * frames);
+      for (let k = 0; k < buffers; k++) samples.set(made(), k * frames);
+      pulledAt = performance.now();
+      self.postMessage({ id, status: 200, samples, headers: { "x-seconds": seconds() } }, [samples.buffer]);
+      return;
+    }
+    const answer = await dial.handle(method, path, body ?? {});
     self.postMessage({ id, status: answer.status, json: answer.json, text: answer.text });
   } catch (error) {
     if (data.id !== void 0) self.postMessage({ id: data.id, status: 500, text: error.message });
