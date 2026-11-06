@@ -1001,7 +1001,7 @@ var sources_default = {
     "huron-1989-textures": { kind: "literature", authors: "D. Huron", title: "Characterizing Musical Textures", year: 1989, noDoi: "a conference paper without one: its handle hdl:2027/spo.bbp2372.1989.033 (Michigan Publishing)", in: "Proceedings of the 1989 International Computer Music Conference, Columbus, Ohio, 131-134", note: "texture as a bounded space of onset synchronization and semblant pitch motion (parallel and similar motions against contrary and oblique), monophony, homophony, polyphony and heterophony its quadrants, the works of each measured into their regions (Figure 1: hymns high in synchrony and about a third semblant, Bach's fugues and sinfonias low in both, Chinese, Siamese and Korean heterophony some 0.3 to 0.45 in synchrony and 0.5 to 0.75 semblant), and the space reversed as a composer's production model: the texture space's synchrony and semblance and its named locations' regions (public/shared/texture-space.js, test/texture-space.test.mjs)", saved: "research-downloads/counterpoint/Huron 1989 Characterizing musical textures (ICMC).pdf" },
     "bent-1983": { kind: "literature", authors: "M. Bent", title: '"Resfacta" and "Cantare Super Librum"', year: 1983, doi: "10.1525/jams.1983.36.3.03a00020", in: "Journal of the American Musicological Society 36(3), 371-391", note: "Tinctoris (Liber de arte contrapuncti, 1477, II.20) as Bent reads him: in res facta every part is bound to every other, while singers over the book (cantare super librum) are each bound to the tenor and need not be to one another -- a difference of how the parts are bound, not of writing against improvising: the texture space's binding (public/shared/texture-space.js), a process's parts bound to its first part alone at 0, every part to every other at 1" },
     "brown-1976": { kind: "literature", authors: "H. M. Brown", title: "Embellishing Sixteenth-Century Music", year: 1976, noDoi: "a book without one: ISBN 978-0-19-323175-7 (Oxford University Press, London; Early Music Series 1)", note: "the diminution treatises (Ganassi 1535, Ortiz 1553, Dalla Casa 1584, Bovicelli 1594 and others) as Brown reads them: a composition's notes divided by its performer into quicker passaggi, each leaving a note and arriving at the next, the composition's counterpoint unchanged beneath them" },
-    "huron-1989-denumerability": { kind: "literature", authors: "D. Huron", title: "Voice Denumerability in Polyphonic Music of Homogeneous Timbres", year: 1989, doi: "10.2307/40285438", in: "Music Perception 6(4), 361-382", note: "identification of the voices falls from three to four: the counterpoint space's statistics taking over from its rules (conducting/counterpoint.js)" },
+    "huron-1989-denumerability": { kind: "literature", authors: "D. Huron", title: "Voice Denumerability in Polyphonic Music of Homogeneous Timbres", year: 1989, doi: "10.2307/40285438", in: "Music Perception 6(4), 361-382", note: "identification of the voices falls from three to four: registry/perception/polyphony.json voices-followed, the voices a line's rules are kept against (conducting/counterpoint.js)" },
     "huron-2001": { kind: "literature", authors: "D. Huron", title: "Tone and Voice: A Derivation of the Rules of Voice-Leading from Perceptual Principles", year: 2001, doi: "10.1525/mp.2001.19.1.1", in: "Music Perception 19(1), 1-64", note: "the counterpoint space's rules as perception's (conducting/counterpoint.js)" },
     "ebcioglu-1990": { kind: "literature", authors: "K. Ebcioğlu", title: "An expert system for harmonizing chorales in the style of J.S. Bach", year: 1990, doi: "10.1016/0743-1066(90)90055-A", in: "The Journal of Logic Programming 8(1-2), 145-185", note: "counterpoint as constraint search (conducting/counterpoint.js)" },
     "herremans-sorensen-2013": { kind: "literature", authors: "D. Herremans, K. Sörensen", title: "Composing fifth species counterpoint music with a variable neighborhood search algorithm", year: 2013, doi: "10.1016/j.eswa.2013.05.071", in: "Expert Systems with Applications 40(16), 6427-6437", note: "counterpoint's rules as weighted costs (conducting/counterpoint.js)" },
@@ -1023,7 +1023,10 @@ var sources_default = {
     "biamonte-2014": { kind: "literature", authors: "N. Biamonte", title: "Formal Functions of Metric Dissonance in Rock Music", year: 2014, doi: "10.30535/mto.20.2.1", in: "Music Theory Online 20(2)", note: "grouping and displacement dissonances by their formal function (shared/euclidean.js); the trunk's research-downloads/rhythm/" },
     "temperley-1999": { kind: "literature", authors: "D. Temperley", title: "Syncopation in rock: a perceptual perspective", year: 1999, doi: "10.1017/S0261143000008710", in: "Popular Music 18(1), 19-40", note: "a syncopation as a rotation (shared/euclidean.js)" },
     "longuet-higgins-lee-1984": { kind: "literature", authors: "H. C. Longuet-Higgins, C. S. Lee", title: "The Rhythmic Interpretation of Monophonic Music", year: 1984, doi: "10.2307/40285271", in: "Music Perception 1(4), 424-441", note: "metrical weights (shared/euclidean.js)" },
-    "gillick-et-al-2019": { kind: "literature", authors: "J. Gillick, A. Roberts, J. Engel, D. Eck, D. Bamman", title: "Learning to Groove with Inverse Sequence Transformations", year: 2019, noDoi: "a conference paper without one: https://proceedings.mlr.press/v97/gillick19a.html", in: "Proceedings of the 36th International Conference on Machine Learning, PMLR 97", note: "the Groove MIDI Dataset v1.0.0 (CC BY 4.0), the feels' measured swing and offsets (shared/performance-timing.js MEASURED_TIMING, scripts/measure-drum-timing.mjs, measure-drum-groove.mjs)" }
+    "gillick-et-al-2019": { kind: "literature", authors: "J. Gillick, A. Roberts, J. Engel, D. Eck, D. Bamman", title: "Learning to Groove with Inverse Sequence Transformations", year: 2019, noDoi: "a conference paper without one: https://proceedings.mlr.press/v97/gillick19a.html", in: "Proceedings of the 36th International Conference on Machine Learning, PMLR 97", note: "the Groove MIDI Dataset v1.0.0 (CC BY 4.0), the feels' measured swing and offsets (shared/performance-timing.js MEASURED_TIMING, scripts/measure-drum-timing.mjs, measure-drum-groove.mjs)" },
+    "van-noorden-1975": { kind: "literature", authors: "L. P. A. S. van Noorden", title: "Temporal coherence in the perception of tone sequences", year: 1975, noDoi: "a doctoral thesis without one (Technische Hogeschool Eindhoven): https://pure.tue.nl/ws/files/3389175/152538.pdf", note: "alternating and random sequences of 40-ms pure tones about 1 kHz at 35 dB SL: the fission boundary, below which the tones always hold together as one stream (about one semitone for tone repetition times of 0.1 to 0.4 s, Fig. 2.9; wider at shorter and longer ones), and the temporal coherence boundary, above which they never do, its interval rising with the gap between the end of a tone and the start of the tone after next (2T - D: Fig. 5.11, one curve for tone durations of 40 to 400 ms); between them either, as the listener attends. The measures of registry/perception/streaming.json.", saved: "research-downloads/perception/van-noorden-1975/van Noorden 1975 Temporal coherence in the perception of tone sequences.pdf" },
+    "miller-heise-1950": { kind: "literature", authors: "G. A. Miller, G. A. Heise", title: "The Trill Threshold", year: 1950, doi: "10.1121/1.1906663", in: "The Journal of the Acoustical Society of America 22(5), 637-638", note: "two tones alternating ten times a second, each filling the time to the next: the interval past which a trill is heard as two separate tones, two streams (registry/perception/streaming.json trill-threshold)" },
+    "davis-2006": { kind: "literature", authors: "S. Davis", title: "Implied Polyphony in the Solo String Works of J. S. Bach: A Case for the Perceptual Relevance of Structural Expression", year: 2006, doi: "10.1525/mp.2006.23.5.423", in: "Music Perception 23(5), 423-446", note: "a solo line's implied voices, a compound melody, heard as voices where its leaps and register keep them apart: the figure space's voices (public/shared/performers/figure-space.js)" }
   }
 };
 
@@ -1101,7 +1104,7 @@ var equations_default = {
 var modules_default = {
   schema: "musebots.registry-modules/1",
   about: "The modules whose values are the registry's (registry/README.md): an owned module holds no number about an instrument, a player, the physics or a method -- the registry's test reads it -- and a pending one is still to move, listed in REGISTRY.md.",
-  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js"],
+  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js", "public/shared/performers/melody-rules.js", "public/shared/performers/streams.js", "public/shared/performers/figure-space.js"],
   pending: ["public/shared/performers/vibrato.js", "public/shared/performers/instrument-ranges.js"]
 };
 
@@ -3388,6 +3391,7 @@ var personality_default = {
         quoting: { range: [0, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: from never to always" },
         techniques: { range: [0, 1], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's every phrase, each still the instrument's own" },
         toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
+        figureWidth: { range: [0.15, 0.6], unit: "share of a dimension", kind: "setting", reason: "its taste in figures (figure-space.js drawTaste): how wide its range in each dimension of the figure space, from a cautious player's, near the one figure it favours, to a daring one's, over much of the space, at its daring times a share each range draws its own (ours)" },
         vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
         harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
         tuplets: { range: [0, 1], unit: "share", kind: "setting", reason: `its rhythm on the rhythm engine (line-rhythm.js, where its player is switched to it): how much a division other than the meter space's own two and three weighs against them (meter-space.js METER_SPACE.layers), from none -- only twos and threes -- to as much as a three: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note (the owner, 2 October 2026: "make sure EVERY tuplet ratio is allowed")` },
@@ -3663,6 +3667,207 @@ var texture_default = {
   }
 };
 
+// registry/method/melody.json
+var melody_default = {
+  schema: "musebots.registry-methods/1",
+  about: "The melody's rules, the streaming that judges where a line splits into voices, and the figure space (public/shared/performers/melody-rules.js, streams.js, figure-space.js; docs/FIGURE_SPACE.md): one set of rules for every planner of a line, and every figure a point among dimensions, its named figures locations within them.",
+  methods: {
+    melody: {
+      about: `The melody's rules, said once (public/shared/performers/melody-rules.js; docs/FIGURE_SPACE.md): what a line of pool steps may do, for every planner of one -- a motif's shape, a phrase's contour, a run, a figure, a cadence (line.js, figure-space.js). The owner, 5 November 2026: "where multiple scattered rules have been written that actually accomplish the same result, refactoring those rules into a smaller number will mean that fixing erroneous cases will lead to better generative behaviour more quickly." A leap's least and greatest size and a run's most moves are the line's (line.js LINE, a player's own: personality.js).`,
+      source: "ours",
+      settings: {
+        recoverMost: { value: 2, unit: "pool steps", kind: "setting", reason: "a leap's answer: a step back the other way, of one or two of its voice's pitches (a second, or in a pool of close pitches a third) -- the recovery the lines' motifs, contours and runs had each asked (line.js recovered, shapeCells, simplifyMotif, contour, runContour)" },
+        alikeMost: { value: 2, unit: "notes", kind: "setting", reason: "a note struck at most twice running, and so never three alike (the line's rule since its motifs were first made: line.js), unless a line asks for none struck again at once" }
+      }
+    },
+    streaming: {
+      about: `Auditory streaming (public/shared/performers/streams.js; docs/FIGURE_SPACE.md): where a figure's notes hold together as one line and where they split into voices, a compound melody. The owner, 5 November 2026: "the 'musically correct' way to conceptualize two alternating notes far apart from each other (really, this intuition applies the more the further the notes are from each other and the faster they move/alternate) is as a compound melody"; "there is a threshold past which ornamentation transitions to compound melody". The boundaries it judges between are measured of listeners: registry/perception/streaming.json. A room's reverberation, which lengthens what sounds of each note, is not heard here (research/MODELING_GAPS.md).`,
+      source: "van-noorden-1975",
+      settings: {
+        threshold: { value: 1, unit: "share from the fission boundary to the coherence boundary", kind: "setting", reason: "where a note is judged apart, a voice of its own, as a share from the fission boundary to the temporal coherence boundary (registry/perception/streaming.json): at the coherence boundary, as a listener in general tries to hear the tones as one line (van Noorden 1975, section 4.6), and between the boundaries hears them so but for attending to one string alone. There too Miller and Heise's trill threshold stands at its gap (perception trill-threshold). A legato whole tone so stays a trill up to about 13 notes a second, a semitone past 25", sources: ["miller-heise-1950", "van-noorden-1975"] }
+      }
+    },
+    "figure-space": {
+      about: `The figure space (public/shared/performers/figure-space.js; docs/FIGURE_SPACE.md): every figure that divides a held note, a cadence's approach or a fioritura -- a run, an arc, an arpeggio, a trill, a turn, a mordent, a climb, a zigzag, a ribattuta, a compound melody, and every figure between or beyond them -- a point among dimensions, each a share 0 to 1, each named figure a location of ranges [low, high] within them (the methods figure-<name> below). A figure's path is made from its point, and its notes are the walk nearest that path that keeps the melody's rules (melody-rules.js), a trill only where its point asks for one. The owner, 5 November 2026: "(1) generalization of logic without losing cases ... (2) extensibility to arbitrary and invented ornaments beyond the specific figures listed".`,
+      source: "ours",
+      settings: {
+        third: { value: 2, unit: "pool steps", kind: "setting", reason: "a third: two of its voice's pitches (a skip, the stride of an arpeggio and the width of a wide circling pair)" },
+        beam: { value: 48, unit: "settings", kind: "setting", reason: "how many of its walk's settings are kept at each note, those with the same future kept once (as runContour's beam, line.js)" },
+        jitter: { value: 0.01, unit: "pool steps", kind: "setting", reason: "a walk's ties broken at random by at most this, far less than a step from its path: the figure is its point's, the draw only choosing among walks as near" },
+        skew: { value: 2, unit: "power of its draw", kind: "setting", reason: 'a skewed dimension\'s share drawn squared across its range (`skewed`): most figures circle little, turn as they circle rather than trill, strike few notes again and keep to one voice -- a trill, a turn, a ribattuta or a compound melody now and then, every figure still drawn (ours; the owner, 5 November 2026: figures "that simply alternate between two notes" were to stop)' },
+        skewed: { value: ["circling", "trilling", "repeat", "voices"], unit: "dimensions", kind: "setting", reason: "the dimensions whose draws are skewed toward their least (`skew`): circling, its pairs kept to one side (a trill), notes struck again, and voices" },
+        pair: { value: 2, unit: "moves", kind: "setting", reason: "a circling pair and each step of an excursion: out and back, two moves" },
+        voiceNotes: { value: 2, unit: "notes", kind: "setting", reason: "the fewest notes each voice of a compound figure has: two, so that it goes on as a line (one alone is a note heard apart, not a voice)" }
+      }
+    },
+    "figure-arc": {
+      about: "An arc: out from the held note the other way, then past the next note and back to it, by step (a fioritura, as Chopin's run past the note it lands on: fioritura.js).",
+      source: "ours",
+      settings: {
+        lead: { range: [0, 1], unit: "share", kind: "setting", reason: "its turn below and its arc above in any share" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read: it does not circle" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-arpeggio": {
+      about: "An arpeggio: its path by thirds.",
+      source: "ours",
+      settings: {
+        lead: { range: [0, 1], unit: "share", kind: "setting", reason: "its turn and arc in any share" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read: it does not circle" },
+        stride: { value: 1, unit: "share", kind: "setting", reason: "every move a third" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-trill": {
+      about: "A trill: its spare notes alternating with a neighbour, toward the end (a cadential trill) or throughout.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 1, unit: "share", kind: "setting", reason: "every spare note circling" },
+        trilling: { value: 1, unit: "share", kind: "setting", reason: "every pair to the side of the pair before" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "from the upper note or the lower" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0.5, 1], unit: "share", kind: "setting", reason: "toward its landing" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-turn": {
+      about: "A turn: its spare notes circling the held note on either side in turn, near its start.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { range: [0.5, 1], unit: "share", kind: "setting", reason: "most spare notes circling" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "each pair the other side" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "above first or below" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 0.3], unit: "share", kind: "setting", reason: "near its start" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-mordent": {
+      about: "A mordent: a quick alternation with a neighbour at its start, the rest a walk.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { range: [0.1, 0.4], unit: "share", kind: "setting", reason: "a few spare notes circling" },
+        trilling: { value: 1, unit: "share", kind: "setting", reason: "its pairs, where it has more than one, to one side: a short trill (a Pralltriller)" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "upper or lower" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { value: 0, unit: "share", kind: "setting", reason: "at its start" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-climb": {
+      about: "A climb: up two steps and back one as it goes, a pair at a time (a run turning back as it moves on).",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 1, unit: "share", kind: "setting", reason: "every spare note circling" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 1, unit: "share", kind: "setting", reason: "each pair moving on a step" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "anywhere" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-zigzag": {
+      about: "A zigzag: a wider climb, each pair a third wide -- up three steps and back two as it goes.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 1, unit: "share", kind: "setting", reason: "every spare note circling" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 1, unit: "share", kind: "setting", reason: "each pair moving on" },
+        width: { value: 1, unit: "share", kind: "setting", reason: "each pair a third wide" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "anywhere" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-ribattuta": {
+      about: "A ribattuta: its notes struck again, each twice at most.",
+      source: "ours",
+      settings: {
+        lead: { range: [0, 1], unit: "share", kind: "setting", reason: "any" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read: it does not circle" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 1, unit: "share", kind: "setting", reason: "every spare note struck again" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-compound": {
+      about: "A compound melody: the figure walking among voices far enough apart, at its rate, to be heard as voices (streams.js) -- a broken chord, a saxophone's chord played as a very fast arpeggio -- each voice moving evenly from the held note's chord to the next note's, the held note's voice the one that leaves them least to move.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "up first or down" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 1, unit: "share", kind: "setting", reason: "as many voices as stream apart" }
+      }
+    }
+  }
+};
+
+// registry/perception/streaming.json
+var streaming_default = {
+  schema: "musebots.registry-perception/1",
+  about: "Auditory streaming: when successive tones hold together as one line, when they split into streams (a compound melody's voices), and when they merge into one tone. Read by the streaming judgement (public/shared/performers/streams.js) and the figures it judges (figure-space.js).",
+  measures: {
+    "fission-boundary": { value: 1, unit: "semitones", kind: "literature", source: "van-noorden-1975", where: "section 2.4, Fig. 2.9; section 4.6", conditions: "two pure tones alternating (ABAB), 40 ms each, B at 1 kHz, 35 dB SL, by headphones; two observers, each told to hear the B tones alone; tone repetition times T of 0.1 to 0.4 s", note: "the least interval at which a listener attending to one string can hear the tones apart, two streams: below it they always hold together. Practically independent of T in that range; wider at shorter T (peripheral effects make selecting one string impossible) and at longer T (the string's tones too far apart in time)" },
+    "temporal-coherence-boundary": { value: [[0, 0], [0.115, 3], [0.185, 6], [0.23, 7.5], [0.28, 10], [0.33, 13.5], [0.385, 19], [0.415, 24]], unit: "[s, semitones]", kind: "literature", source: "van-noorden-1975", where: "section 5.5, Fig. 5.11 (its circled means, read to about a semitone and 10 ms); the point at the origin his extrapolation", conditions: "random sequences of pure tones, each interval drawn about a mean, tone durations D of 40 to 400 ms, none overlapping, by headphones; observers trying to hear all the tones as one line", note: "the interval past which a tone can no longer be heard with its neighbours as one line, against the gap from the end of the tone before it to the start of the tone after it (2T - D): one curve for every tone duration, so a legato or overlapping tone's boundary is the narrower; at a gap of none, none (the tones before and after sound with it). Probably so for partly overlapping tones too, which his equipment could not make. Between this and the fission boundary a tone is heard either way, as the listener attends" },
+    "trill-threshold": { range: [2, 3], unit: "semitones", kind: "literature", source: "miller-heise-1950", where: "as van Noorden 1975 reports it, sections 1.3 and 2.5", conditions: "two pure tones alternating ten times a second (T = 0.1 s), each filling the time to the next (a gap of 0.1 s)", note: "the interval past which a trill is heard as two tones, two streams. At its gap, where Fig. 5.11's temporal coherence boundary stands at 2.6 semitones; van Noorden found it the mean of his two boundaries at the same T with tones of 40 ms (a gap of 0.16 s)" },
+    "fusion-repetition-time": { value: 0.08, unit: "s", kind: "literature", source: "van-noorden-1975", where: "section 7.3; section 5.1", conditions: "pure-tone sequences of small intervals (a semitone), random or ascending", note: "below about this tone repetition time a sequence of small intervals merges into one tone, modulated in frequency and amplitude: one line, its tones no longer each heard. So, he expects, the fastest runs (Bach's cello suites: 81 ms) and trills" }
+  }
+};
+
+// registry/perception/polyphony.json
+var polyphony_default = {
+  schema: "musebots.registry-perception/1",
+  about: `Polyphony heard: how many voices a listener follows at once. Read by counterpoint (public/shared/conducting/counterpoint.js), which keeps a line's rules against the voices heard with it. A limit of hearing, not of composing: the owner, 5 November 2026: "listeners' difficulty in DISTINGUISHING three voices does not invalidate COMPOSING many more voices, since sometimes compositions use excesses beyond distinction to generate nuanced differences in texture".`,
+  measures: {
+    "voices-followed": { value: 3, unit: "voices", kind: "literature", source: "huron-1989-denumerability", where: "the abstract and its experiments, as summarized (the full text not saved: research/SOURCES_TO_FETCH.md)", conditions: "musicians judging how many voices sound, and when one enters, in polyphony of homogeneous timbre (Bach)", note: "the voices a listener counts and follows: errors from about one in ten with three voices to about one in two with four. Past it a texture's voices are heard as the texture, not each -- which a composition may want (micropolyphony: counterpoint.js)" }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x = 1, y = b / a;
@@ -3752,13 +3957,17 @@ var FILES = Object.freeze({
   "method/levels.json": levels_default,
   "method/personality.json": personality_default,
   "method/rhythm.json": rhythm_default,
-  "method/texture.json": texture_default
+  "method/texture.json": texture_default,
+  "method/melody.json": melody_default,
+  "perception/streaming.json": streaming_default,
+  "perception/polyphony.json": polyphony_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
 var OBJECTS = within("objects", "nodes");
 var PLAYERS = within("players", "nodes");
 var METHODS = within("method", "methods");
+var PERCEPTION = within("perception", "measures");
 var isLeaf = (v) => Boolean(v) && typeof v === "object" && !Array.isArray(v) && typeof v.kind === "string";
 var tableOf = (of2) => {
   if (of2 === "objects") return OBJECTS;
@@ -3897,6 +4106,12 @@ function constant(name) {
   if (!Object.hasOwn(constants_default.constants, name)) throw new Error(`registry: no constant ${name}`);
   return constants_default.constants[name].value;
 }
+function perceptionEntry(name) {
+  if (!Object.hasOwn(PERCEPTION, name)) throw new Error(`registry: no perception measure ${name}`);
+  const leaf = PERCEPTION[name];
+  return Object.freeze({ ...leaf, name, value: leaf.value ?? leaf.range });
+}
+var perception = (name) => perceptionEntry(name).value;
 function settingEntry(method, name, stack = []) {
   const m = METHODS[method];
   if (!m || !Object.hasOwn(m.settings ?? {}, name)) throw new Error(`registry: method ${method} has no setting ${name}`);
@@ -4387,6 +4602,107 @@ var FILL_PHRASE = Object.freeze({
   extremes: Object.freeze({ dissonance: 0.9, tuplets: 0.5, nesting: 0.3, mostBars: 16 })
 });
 
+// public/shared/style-space.js
+var finite = (value3) => typeof value3 === "number" && Number.isFinite(value3);
+var sameShape = (a, b) => finite(a) ? finite(b) : Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value3, i) => sameShape(value3, b[i]));
+var frozen = (value3) => Array.isArray(value3) ? Object.freeze(value3.map(frozen)) : value3;
+var mixed = (values, weights) => finite(values[0]) ? values.reduce((sum, value3, i) => sum + weights[i] * value3, 0) : Object.freeze(values[0].map((_, k) => mixed(values.map((value3) => value3[k]), weights)));
+var mixtures = /* @__PURE__ */ new WeakMap();
+function styleSpace({ name, dimensions, locations }) {
+  const names = Object.freeze(Object.keys(dimensions)), named = Object.keys(locations);
+  if (!named.length) throw new TypeError(`${name} style space names a location`);
+  for (const key of names) if (locations[key]) throw new TypeError(`${name} style space: "${key}" names both a dimension and a location`);
+  const first = locations[named[0]];
+  for (const [place, location] of Object.entries(locations)) {
+    for (const key of names) if (!(finite(location[key]) || Array.isArray(location[key])) || !sameShape(first[key], location[key])) throw new TypeError(`${name} style space: ${place}'s "${key}" is a number, or a list shaped as ${named[0]}'s`);
+    for (const key of Object.keys(location)) if (!dimensions[key]) throw new TypeError(`${name} style space: ${place} gives "${key}", no dimension of it`);
+  }
+  const shaped = Object.freeze(Object.fromEntries(Object.entries(locations).map(([place, location]) => [place, Object.freeze(Object.fromEntries(names.map((key) => [key, frozen(location[key])])))])));
+  function locate2(location) {
+    if (typeof location === "string") {
+      if (!shaped[location]) throw new TypeError(`A location in ${name} style space is one of ${named.join(", ")}, a blend of them, or a vector`);
+      return shaped[location];
+    }
+    if (!location || typeof location !== "object" || Array.isArray(location)) throw new TypeError(`A location in ${name} style space is a name, a blend of named locations, or a vector`);
+    const weights = {}, set = {};
+    for (const [key, value3] of Object.entries(location)) {
+      if (shaped[key]) {
+        if (!finite(value3) || value3 < 0) throw new TypeError(`A named location's weight is a number, 0 or more ("${key}")`);
+        weights[key] = value3;
+      } else if (dimensions[key]) {
+        if (!sameShape(first[key], value3)) throw new TypeError(`A location's "${key}" is shaped as ${named[0]}'s`);
+        set[key] = frozen(value3);
+      } else throw new TypeError(`"${key}" is neither a named location nor a dimension of ${name} style space`);
+    }
+    const blend = Object.keys(weights), total = blend.reduce((sum, key) => sum + weights[key], 0);
+    if (!total && Object.keys(set).length < names.length) throw new TypeError(`A location in ${name} style space gives named locations to blend, or every dimension`);
+    const base = total ? Object.fromEntries(names.map((key) => [key, mixed(blend.map((place) => shaped[place][key]), blend.map((place) => weights[place] / total))])) : {};
+    const point = Object.freeze({ ...base, ...set });
+    if (total) mixtures.set(point, Object.freeze(blend.filter((place) => weights[place] > 0).map((place) => Object.freeze({ weight: weights[place] / total, location: Object.keys(set).length ? Object.freeze({ ...shaped[place], ...set }) : shaped[place] }))));
+    return point;
+  }
+  function between(a, b, t) {
+    const amount = Math.max(0, Math.min(1, t)), point = Object.freeze(Object.fromEntries(names.map((key) => [key, mixed([a[key], b[key]], [1 - amount, amount])])));
+    mixtures.set(point, Object.freeze([...mixtureOf(a).map((part) => ({ ...part, weight: part.weight * (1 - amount) })), ...mixtureOf(b).map((part) => ({ ...part, weight: part.weight * amount }))].filter((part) => part.weight > 0).map((part) => Object.freeze(part))));
+    return point;
+  }
+  function mixtureOf(point) {
+    return mixtures.get(point) ?? Object.freeze([Object.freeze({ weight: 1, location: point })]);
+  }
+  function drawn(point, draw) {
+    const parts = mixtureOf(point);
+    let from = 0;
+    for (const part of parts) {
+      if (draw < from + part.weight || part === parts.at(-1)) return { location: part.location, draw: Math.max(0, Math.min(1 - 1e-12, (draw - from) / part.weight)) };
+      from += part.weight;
+    }
+  }
+  return Object.freeze({ name, dimensions: Object.freeze({ ...dimensions }), names, locations: shaped, locate: locate2, between, mixtureOf, drawn });
+}
+
+// public/shared/performers/melody-rules.js
+var RECOVER_MOST = setting("melody", "recoverMost");
+var ALIKE_MOST = setting("melody", "alikeMost");
+var RULES = Object.freeze(["widest", "leap", "last", "alike", "run", "trill"]);
+
+// public/shared/performers/streams.js
+var FISSION = perception("fission-boundary");
+var COHERENCE = perception("temporal-coherence-boundary");
+var THRESHOLD = setting("streaming", "threshold");
+
+// public/shared/performers/figure-space.js
+var THIRD = setting("figure-space", "third");
+var BEAM = setting("figure-space", "beam");
+var JITTER = setting("figure-space", "jitter");
+var SKEW = setting("figure-space", "skew");
+var SKEWED = new Set(setting("figure-space", "skewed"));
+var PAIR = setting("figure-space", "pair");
+var VOICE_NOTES = setting("figure-space", "voiceNotes");
+var FIGURE_DIMENSIONS = Object.freeze({
+  lead: "of its excursion beyond the way, the share turning back behind the held note; the rest arcs past the next note",
+  circling: "of its notes to spare, the share spent circling a note in pairs, out and back",
+  trilling: "how often a circling pair keeps to the side of the pair before (0: each the other side, a turn; 1: a trill)",
+  order: "which side it circles first, and which way it cycles among its voices (below a half: up)",
+  progress: "of its circling pairs, the share moving on along the way as they circle (a climb), the rest circling in place",
+  width: "how wide a circling pair goes: 0 a step, 1 a third",
+  placement: "where along its way its circling comes: 0 at its start, 1 at its end",
+  stride: "of its path's moves, the share by thirds (an arpeggio)",
+  repeat: "of its notes to spare, the share struck again (a ribattuta), each note twice at most",
+  voices: "how many voices it walks among: 0 one (a line), 1 as many as its notes, its range and its rate allow (a compound melody)"
+});
+var NAMES = Object.freeze(Object.keys(FIGURE_DIMENSIONS));
+var FIGURE_NAMES = Object.freeze(Object.keys(METHODS).filter((id) => id.startsWith("figure-") && id !== "figure-space").map((id) => id.slice("figure-".length)));
+var asRange = (value3) => Array.isArray(value3) ? [...value3] : [value3, value3];
+var FIGURE_SPACE = styleSpace({
+  name: "figure",
+  dimensions: FIGURE_DIMENSIONS,
+  locations: Object.fromEntries(FIGURE_NAMES.map((name) => [name, Object.fromEntries(NAMES.map((key) => [key, asRange(setting(`figure-${name}`, key))]))]))
+});
+var EVERY = Object.freeze(Object.fromEntries(NAMES.map((key) => [key, Object.freeze([0, 1])])));
+
+// public/shared/fnv1a.js
+var FNV_SPAN = 2 ** 32;
+
 // public/shared/performers/fioritura.js
 var FIORITURA = Object.freeze({
   // The mean note rates an ornament takes, from the least amount to the most (notes a second, authored; slower than six
@@ -4407,6 +4723,7 @@ var FIORITURA = Object.freeze({
   // A place nested as a turn, at amount 1 (fill-phrase.js nest's appetite; its count one whose notes the quickest allows).
   nesting: 0.3
 });
+var ORNAMENT = Object.freeze({ leapSteps: Infinity, leapMost: Infinity, runMost: Infinity });
 
 // public/shared/vocal/rational.js
 var make = (n, d) => {
@@ -4748,6 +5065,10 @@ var LINE = Object.freeze({
   leapSteps: 3,
   leapMost: 5,
   runMost: 4,
+  // The figures it divides a held note into and approaches its cadence by (figure-space.js): its taste, a location in
+  // the figure space (a named figure's, a blend's, or a range in each dimension: its player's, personality.js), or none --
+  // every figure.
+  figures: null,
   // A phrase's span from its floor to its apex (pool steps; a climax phrase's wider), and its widest range (semitones;
   // a climax phrase's a third more).
   span: Object.freeze([5, 8]),
@@ -8798,9 +9119,6 @@ var BOWED_LINE = Object.freeze({
   easeMost: player("violin-family", "line.easeMost")
 });
 
-// public/shared/fnv1a.js
-var FNV_SPAN = 2 ** 32;
-
 // public/shared/performers/vibrato.js
 var own = (id, path) => player(id, `vibrato.${path}`);
 var every = (path) => group("instrument", `vibrato.${path}`, "players");
@@ -9934,6 +10252,8 @@ var reed_literature_default = {
       size: "tenor",
       stiffness: 48e5,
       resistance: 1e3,
+      qr: 0.88,
+      qrOf: "the reed and its player's lip as played, its damping over its resonance (R over the root of K times M: 1.0e3 over the root of 4.8e6 x 0.269) -- of the measured reeds' damping the one taken under a player's lip with its mass (A. Gaillard, V. Koehl & B. Gazengel 2024, Acta Acustica 8, 63, doi:10.1051/aacus/2024050, Table A7: 'measured', 0.88), its mass not accurately estimated: with RKnl's stiffness and resistance at p and mf (Table V) and this mass, 1.45 and 1.09",
       notMeasured: `its massPerArea (0.269), and the hz (672) and dissip (3717) Chabassier & Auvray derive from it: its authors' Table VI "provides some improvement ... though the mass is not accurately estimated because a linear modeling of the inertial effects is employed. This result is presented as an insight" (p. 2763), their reed at mf an oscillator of stiffness and damping, "the effect of mass (inertia) being very small" (abstract); its stiffness K 4.8e6 Pa/m and damping R 1.0e3 Pa s/m its measurements`
     },
     { ref: "[6] Tab V p", instrument: "saxophone", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 64e5, resistance: 1900, note: "their reed at p as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
@@ -10083,6 +10403,7 @@ var least = (kind) => transition(kind).least;
 var TONGUE = Object.freeze({
   shut: 0.03,
   soft: 0.3,
+  contact: Object.freeze({ mass: 5, damping: 333 }),
   touch: least("tongueTouch"),
   release: least("tongueRelease"),
   fall: least("tongueStop"),
@@ -10166,9 +10487,14 @@ function windsDial(env) {
   const ofDial = (k, v, x) => !x || !dialled(k) || current.lips && columnName(k) === "pulsation" ? v : columnName(k) in ADDITIVE ? v + ADDITIVE[columnName(k)] * x : v > 0 ? v * REACH ** x : v;
   const composed = () => state.rules.map((v, k) => current.columns[k][0] === "opening" ? state.fingers[k] ?? v : ofDial(k, v, state.x[k] ?? 0));
   function played(row, { breath = held.breath, tongue = held.tongue } = {}) {
-    const out = [...row], { breath: b, zeta } = current, lips = current.kind === "lips";
+    const out = [...row], { breath: b, zeta, damping, resonance } = current, lips = current.kind === "lips";
     out[b] = row[b] * breath * state.swell * (lips ? tongue : 1);
     if (zeta != null) out[zeta] = row[zeta] * (lips && tongue > TONGUE.shut ? 1 : tongue);
+    if (damping != null && tongue < 1) {
+      const c = Math.min(1, (1 - tongue) / (1 - TONGUE.shut)), mass = 1 + (TONGUE.contact.mass - 1) * c;
+      out[damping] = row[damping] * (1 + (TONGUE.contact.damping - 1) * c) * Math.sqrt(mass);
+      out[resonance] = row[resonance] / Math.sqrt(mass);
+    }
     return out;
   }
   const holdAs = (row, seconds, how) => send(played(row, how), seconds, current.presence != null ? JET_FLOOR * row[current.breath] : void 0);
@@ -10740,6 +11066,9 @@ function windsDial(env) {
         breath: kind === "air" ? at2("flute", "Uj") : at2("reed", "gamma"),
         presence: kind === "air" ? at2("flute", "presence") : null,
         zeta: kind === "air" ? null : at2("reed", "zeta"),
+        // (A reed's damping and resonance, which its player's tongue on it changes: played.)
+        damping: kind === "reed" ? at2("reed", "qfactor") : null,
+        resonance: kind === "reed" ? at2("reed", "pulsation") : null,
         // (A brass body's lips' closing pressure and its bore's entrance -- its characteristic impedance and its air's
         // density -- their aperture's: brass-tongue.js lipsAperture.)
         closing: brass ? at2("reed", "closing_pressure") : null,
