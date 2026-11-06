@@ -9242,6 +9242,22 @@ async function rowSounding(pitch, { notes, rows, columns, shaded, glides, near =
   return nearest;
 }
 
+// native/openwind/alternates.mjs
+function fingeringAmong(alternatives, row, before, columns, holes) {
+  if (!alternatives || !before || before.length !== row.length) return { row, documented: null };
+  const opening = columns.flatMap((c, k) => c[0] === "opening" ? [[k, holes[c[1]]]] : []), [standard] = alternatives;
+  const varied = opening.filter(([, h]) => alternatives.some((a) => (a.open[h] ?? 0) !== (standard.open[h] ?? 0)));
+  if (varied.some(([k, h]) => row[k] !== (standard.open[h] ?? 0))) return { row, documented: null };
+  let best = null;
+  for (const a of alternatives) {
+    const own2 = [...row];
+    for (const [k, h] of varied) own2[k] = a.open[h] ?? 0;
+    const moved = opening.reduce((sum, [k]) => sum + Math.abs(own2[k] - before[k]), 0);
+    if (!best || moved < best.moved) best = { row: own2, documented: a.documented, moved };
+  }
+  return { row: best.row, documented: best.documented };
+}
+
 // native/openwind/dial-reach.json
 var dial_reach_default = {
   about: "How far the live dial (native/openwind/live.mjs) moves a column it multiplies: from 1/factor to factor times its rules' value. Read by live.mjs, and by render/synthesis/workers/openwind_bodies.py ring_of, which lays a flute's jet memory out to hold the longest delay the dial can ask (its jet's delay constant at factor times its rules', its breath at 1/factor, floored at JET_FLOOR) -- one reach, so that the dial and the body cannot part (31 October 2026).",
@@ -10666,12 +10682,14 @@ function windsDial(env) {
   function settleAt(made, pitch, dynamic, charted2, k, found) {
     if (current !== made) throw new Error("another instrument was taken up");
     const before = state.row, from = state.pitch, near = made.notes.reduce((a, m, j) => Math.abs(m - pitch) < Math.abs(made.notes[a] - pitch) ? j : a, 0);
+    const own2 = made.alternates ? fingeringAmong(made.alternates[made.notes[charted2 ? k : near]], found.row, before, made.columns, made.holes) : { row: found.row, documented: null };
     Object.assign(state, {
       pitch,
       dynamic,
       midi: made.notes[charted2 ? k : near],
       note: charted2 ? k : near,
-      rules: [...found.row],
+      rules: [...own2.row],
+      fingered: own2.documented,
       fingers: {},
       lip: found.lip ?? null,
       lipDialled: false,
@@ -10852,6 +10870,7 @@ function windsDial(env) {
         players: windsRanges(model, kind)
       };
       made.shaded = brass ? null : shadedColumns(model, columns, laid.holes);
+      made.alternates = brass ? null : body.alternates ?? null;
       made.glides = brass ? null : env.glides({ model, folder, columns, shaded: made.shaded });
       made.neutral = env.neutral(folder);
       if (made.neutral && made.notes[made.neutral.note] !== made.neutral.midi) made.neutral = null;
@@ -11936,7 +11955,7 @@ function filesOf(m, mute = null) {
   if (!own2) return Promise.reject(new Error(`the ${m.model}'s body with its ${mute} mute is not published here`));
   const folder = mute ? `winds/${m.model}/muted/${mute}` : `winds/${m.model}`, of2 = (file) => `${folder}/${file}`, has = (file) => own2.files.includes(file) ? got(of2(file)) : null;
   if (!fetched.has(folder)) fetched.set(folder, (async () => {
-    const [laid, rules, attacks, vibrato, neutral, rows, glides, impedance] = await Promise.all(["body.json", "rules.json", "attacks.json", "vibrato.json", "neutral.json", "rows.json", "glides.json", "impedance.json"].map(has));
+    const [laid, rules, attacks, vibrato, neutral, rows, glides, impedance, alternates] = await Promise.all(["body.json", "rules.json", "attacks.json", "vibrato.json", "neutral.json", "rows.json", "glides.json", "impedance.json", "alternates.json"].map(has));
     const files = {
       folder,
       laid,
@@ -11947,6 +11966,7 @@ function filesOf(m, mute = null) {
       rows,
       glides,
       impedance,
+      alternates,
       engine: Promise.all([got(of2("body.json"), "text"), got(of2("I.bin"), "arrayBuffer"), got(of2("D.bin"), "arrayBuffer"), got(of2("law.json"), "text"), got(of2("rules.json"), "text")]).then(([header, I, D, law, text]) => ({ header, I: new Uint8Array(I), D: new Uint8Array(D), law, rules: text }))
     };
     files.engine.catch(() => {
@@ -11968,7 +11988,7 @@ var ready = (async () => {
     kinds: Object.fromEntries(instruments.map((m) => [m.model, m.kind])),
     body: async (model, { mute = null } = {}) => {
       const m = by[model], f = await filesOf(m, mute);
-      return { folder: f.folder, name: mute ? m.mutes[mute].name : m.name, rules: f.rules, laid: { ...f.laid, single: f.laid.single || m.single }, attacks: f.attacks, vibrato: f.vibrato };
+      return { folder: f.folder, name: mute ? m.mutes[mute].name : m.name, rules: f.rules, laid: { ...f.laid, single: f.laid.single || m.single }, attacks: f.attacks, vibrato: f.vibrato, alternates: f.alternates };
     },
     // (On the cores found fastest for it here, the first time it is taken up: openwind-stream.js fastestCores.)
     engine: ({ model, folder, onError }) => {
