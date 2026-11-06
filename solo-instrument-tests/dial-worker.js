@@ -1001,7 +1001,7 @@ var sources_default = {
     "huron-1989-textures": { kind: "literature", authors: "D. Huron", title: "Characterizing Musical Textures", year: 1989, noDoi: "a conference paper without one: its handle hdl:2027/spo.bbp2372.1989.033 (Michigan Publishing)", in: "Proceedings of the 1989 International Computer Music Conference, Columbus, Ohio, 131-134", note: "texture as a bounded space of onset synchronization and semblant pitch motion (parallel and similar motions against contrary and oblique), monophony, homophony, polyphony and heterophony its quadrants, the works of each measured into their regions (Figure 1: hymns high in synchrony and about a third semblant, Bach's fugues and sinfonias low in both, Chinese, Siamese and Korean heterophony some 0.3 to 0.45 in synchrony and 0.5 to 0.75 semblant), and the space reversed as a composer's production model: the texture space's synchrony and semblance and its named locations' regions (public/shared/texture-space.js, test/texture-space.test.mjs)", saved: "research-downloads/counterpoint/Huron 1989 Characterizing musical textures (ICMC).pdf" },
     "bent-1983": { kind: "literature", authors: "M. Bent", title: '"Resfacta" and "Cantare Super Librum"', year: 1983, doi: "10.1525/jams.1983.36.3.03a00020", in: "Journal of the American Musicological Society 36(3), 371-391", note: "Tinctoris (Liber de arte contrapuncti, 1477, II.20) as Bent reads him: in res facta every part is bound to every other, while singers over the book (cantare super librum) are each bound to the tenor and need not be to one another -- a difference of how the parts are bound, not of writing against improvising: the texture space's binding (public/shared/texture-space.js), a process's parts bound to its first part alone at 0, every part to every other at 1" },
     "brown-1976": { kind: "literature", authors: "H. M. Brown", title: "Embellishing Sixteenth-Century Music", year: 1976, noDoi: "a book without one: ISBN 978-0-19-323175-7 (Oxford University Press, London; Early Music Series 1)", note: "the diminution treatises (Ganassi 1535, Ortiz 1553, Dalla Casa 1584, Bovicelli 1594 and others) as Brown reads them: a composition's notes divided by its performer into quicker passaggi, each leaving a note and arriving at the next, the composition's counterpoint unchanged beneath them" },
-    "huron-1989-denumerability": { kind: "literature", authors: "D. Huron", title: "Voice Denumerability in Polyphonic Music of Homogeneous Timbres", year: 1989, doi: "10.2307/40285438", in: "Music Perception 6(4), 361-382", note: "identification of the voices falls from three to four: the counterpoint space's statistics taking over from its rules (conducting/counterpoint.js)" },
+    "huron-1989-denumerability": { kind: "literature", authors: "D. Huron", title: "Voice Denumerability in Polyphonic Music of Homogeneous Timbres", year: 1989, doi: "10.2307/40285438", in: "Music Perception 6(4), 361-382", note: "identification of the voices falls from three to four: registry/perception/polyphony.json voices-followed, the voices a line's rules are kept against (conducting/counterpoint.js)" },
     "huron-2001": { kind: "literature", authors: "D. Huron", title: "Tone and Voice: A Derivation of the Rules of Voice-Leading from Perceptual Principles", year: 2001, doi: "10.1525/mp.2001.19.1.1", in: "Music Perception 19(1), 1-64", note: "the counterpoint space's rules as perception's (conducting/counterpoint.js)" },
     "ebcioglu-1990": { kind: "literature", authors: "K. Ebcioğlu", title: "An expert system for harmonizing chorales in the style of J.S. Bach", year: 1990, doi: "10.1016/0743-1066(90)90055-A", in: "The Journal of Logic Programming 8(1-2), 145-185", note: "counterpoint as constraint search (conducting/counterpoint.js)" },
     "herremans-sorensen-2013": { kind: "literature", authors: "D. Herremans, K. Sörensen", title: "Composing fifth species counterpoint music with a variable neighborhood search algorithm", year: 2013, doi: "10.1016/j.eswa.2013.05.071", in: "Expert Systems with Applications 40(16), 6427-6437", note: "counterpoint's rules as weighted costs (conducting/counterpoint.js)" },
@@ -1023,7 +1023,17 @@ var sources_default = {
     "biamonte-2014": { kind: "literature", authors: "N. Biamonte", title: "Formal Functions of Metric Dissonance in Rock Music", year: 2014, doi: "10.30535/mto.20.2.1", in: "Music Theory Online 20(2)", note: "grouping and displacement dissonances by their formal function (shared/euclidean.js); the trunk's research-downloads/rhythm/" },
     "temperley-1999": { kind: "literature", authors: "D. Temperley", title: "Syncopation in rock: a perceptual perspective", year: 1999, doi: "10.1017/S0261143000008710", in: "Popular Music 18(1), 19-40", note: "a syncopation as a rotation (shared/euclidean.js)" },
     "longuet-higgins-lee-1984": { kind: "literature", authors: "H. C. Longuet-Higgins, C. S. Lee", title: "The Rhythmic Interpretation of Monophonic Music", year: 1984, doi: "10.2307/40285271", in: "Music Perception 1(4), 424-441", note: "metrical weights (shared/euclidean.js)" },
-    "gillick-et-al-2019": { kind: "literature", authors: "J. Gillick, A. Roberts, J. Engel, D. Eck, D. Bamman", title: "Learning to Groove with Inverse Sequence Transformations", year: 2019, noDoi: "a conference paper without one: https://proceedings.mlr.press/v97/gillick19a.html", in: "Proceedings of the 36th International Conference on Machine Learning, PMLR 97", note: "the Groove MIDI Dataset v1.0.0 (CC BY 4.0), the feels' measured swing and offsets (shared/performance-timing.js MEASURED_TIMING, scripts/measure-drum-timing.mjs, measure-drum-groove.mjs)" }
+    "gillick-et-al-2019": { kind: "literature", authors: "J. Gillick, A. Roberts, J. Engel, D. Eck, D. Bamman", title: "Learning to Groove with Inverse Sequence Transformations", year: 2019, noDoi: "a conference paper without one: https://proceedings.mlr.press/v97/gillick19a.html", in: "Proceedings of the 36th International Conference on Machine Learning, PMLR 97", note: "the Groove MIDI Dataset v1.0.0 (CC BY 4.0), the feels' measured swing and offsets (shared/performance-timing.js MEASURED_TIMING, scripts/measure-drum-timing.mjs, measure-drum-groove.mjs)" },
+    "van-noorden-1975": { kind: "literature", authors: "L. P. A. S. van Noorden", title: "Temporal coherence in the perception of tone sequences", year: 1975, noDoi: "a doctoral thesis without one (Technische Hogeschool Eindhoven): https://pure.tue.nl/ws/files/3389175/152538.pdf", note: "alternating and random sequences of 40-ms pure tones about 1 kHz at 35 dB SL: the fission boundary, below which the tones always hold together as one stream (about one semitone for tone repetition times of 0.1 to 0.4 s, Fig. 2.9; wider at shorter and longer ones), and the temporal coherence boundary, above which they never do, its interval rising with the gap between the end of a tone and the start of the tone after next (2T - D: Fig. 5.11, one curve for tone durations of 40 to 400 ms); between them either, as the listener attends. The measures of registry/perception/streaming.json.", saved: "research-downloads/perception/van-noorden-1975/van Noorden 1975 Temporal coherence in the perception of tone sequences.pdf" },
+    "miller-heise-1950": { kind: "literature", authors: "G. A. Miller, G. A. Heise", title: "The Trill Threshold", year: 1950, doi: "10.1121/1.1906663", in: "The Journal of the Acoustical Society of America 22(5), 637-638", note: "two tones alternating ten times a second, each filling the time to the next: the interval past which a trill is heard as two separate tones, two streams (registry/perception/streaming.json trill-threshold)" },
+    "davis-2006": { kind: "literature", authors: "S. Davis", title: "Implied Polyphony in the Solo String Works of J. S. Bach: A Case for the Perceptual Relevance of Structural Expression", year: 2006, doi: "10.1525/mp.2006.23.5.423", in: "Music Perception 23(5), 423-446", note: "a solo line's implied voices, a compound melody, heard as voices where its leaps and register keep them apart: the figure space's voices (public/shared/performers/figure-space.js)" },
+    "sethares-1993": { kind: "literature", authors: "W. A. Sethares", title: "Local consonance and the relationship between timbre and scale", year: 1993, doi: "10.1121/1.408175", in: "The Journal of the Acoustical Society of America 94(3), 1218-1228", note: "the dissonance curve fitted to Plomp and Levelt's judgements of two pure tones, summed over partials for complex tones (registry/perception/roughness.json dissonance-curve)" },
+    "plomp-levelt-1965": { kind: "literature", authors: "R. Plomp, W. J. M. Levelt", title: "Tonal Consonance and Critical Bandwidth", year: 1965, doi: "10.1121/1.1909741", in: "The Journal of the Acoustical Society of America 38(4), 548-560", note: "listeners' judgements of the consonance of two simultaneous pure tones by their frequency difference: the data Sethares's dissonance curve is fitted to (registry/perception/roughness.json)" },
+    "london-2012": { kind: "literature", authors: "J. London", title: "Hearing in Time: Psychological Aspects of Musical Meter", year: 2012, doi: "10.1093/acprof:oso/9780199744374.001.0001", in: "Oxford University Press, 2nd ed.", note: "the limits of meter as heard: the shortest beat about 100 ms (registry/perception/timing.json beat-period-least), a measure within a few seconds" },
+    "johnston-1988": { kind: "literature", authors: "J. D. Johnston", title: "Transform coding of audio signals using perceptual noise criteria", year: 1988, doi: "10.1109/49.608", in: "IEEE Journal on Selected Areas in Communications 6(2), 314-323", note: "a perceptual coder's masking threshold: the critical bands' edges (Table II) and the masking offsets by tonality (registry/perception/bands.json)" },
+    "schroeder-atal-hall-1979": { kind: "literature", authors: "M. R. Schroeder, B. S. Atal, J. L. Hall", title: "Optimizing digital speech coders by exploiting masking properties of the human ear", year: 1979, doi: "10.1121/1.383662", in: "The Journal of the Acoustical Society of America 66(6), 1647-1652", note: "the spreading function of masking across critical bands (registry/perception/bands.json spreading-function)" },
+    "zwicker-1961": { kind: "literature", authors: "E. Zwicker", title: "Subdivision of the Audible Frequency Range into Critical Bands (Frequenzgruppen)", year: 1961, doi: "10.1121/1.1908630", in: "The Journal of the Acoustical Society of America 33(2), 248", note: "the critical bands' edges, as Johnston 1988 tabulates them after Scharf 1970 (registry/perception/bands.json critical-band-edges)" },
+    "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" }
   }
 };
 
@@ -1101,7 +1111,7 @@ var equations_default = {
 var modules_default = {
   schema: "musebots.registry-modules/1",
   about: "The modules whose values are the registry's (registry/README.md): an owned module holds no number about an instrument, a player, the physics or a method -- the registry's test reads it -- and a pending one is still to move, listed in REGISTRY.md.",
-  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js"],
+  owned: ["public/shared/performers/contrabass.js", "public/shared/performers/string-bodies.js", "public/shared/performers/bowed-instruments.js", "public/shared/performers/physical-strings.js", "public/shared/performers/sound-power.js", "native/strings-model/engine.mjs", "public/shared/performers/bowed-line.js", "public/shared/performers/bow.js", "native/strings-model/attack_transient.py", "native/strings-model/probe.py", "native/strings-model/schelleng.py", "native/strings-model/noise_profile.py", "native/strings-model/regions.py", "native/strings-model/neutral.py", "native/strings-model/fit_bowing.py", "native/strings-model/fit_player.py", "native/strings-model/fit_loop.py", "native/strings-model/fit_onsets.py", "public/shared/float-wav.js", "public/bots/lib/modules/section-seat.js", "public/shared/performers/string-section.js", "public/shared/performers/personality.js", "public/shared/performers/turbulence.js", "public/shared/performers/melody-rules.js", "public/shared/performers/streams.js", "public/shared/performers/figure-space.js"],
   pending: ["public/shared/performers/vibrato.js", "public/shared/performers/instrument-ranges.js"]
 };
 
@@ -3388,6 +3398,7 @@ var personality_default = {
         quoting: { range: [0, 1], unit: "share", kind: "setting", reason: "how often, where it was given motifs, its motif is one of them rather than its own: from never to always" },
         techniques: { range: [0, 1], unit: "share of its phrases", kind: "setting", reason: "its tone: how often a phrase of its takes an extended technique its instrument sounds (techniques.js: a hum, a growl, a flutter, a harmonic, a multiphonic; a mute as often), from the cleanest tone's none -- the planner's own, a soloist having played none -- to the most extreme's every phrase, each still the instrument's own" },
         toneWidth: { range: [0.1, 1], unit: "share of a parameter's span", kind: "setting", reason: "its tone: how wide its range in each of its tone's parameters (personality.js TONE_RANGES) -- its vibrato's width, a technique's depth, its bow's pressure and contact -- from the cleanest tone's tenth of the span about the ordinary to the most extreme's whole span, at its tone times a share each range draws its own (personality.js drawPersonality: of two extreme characters, one may range over every vibrato and the other keep to one)" },
+        figureWidth: { range: [0.15, 0.6], unit: "share of a dimension", kind: "setting", reason: "its taste in figures (figure-space.js drawTaste): how wide its range in each dimension of the figure space, from a cautious player's, near the one figure it favours, to a daring one's, over much of the space, at its daring times a share each range draws its own (ours)" },
         vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
         harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
         tuplets: { range: [0, 1], unit: "share", kind: "setting", reason: `its rhythm on the rhythm engine (line-rhythm.js, where its player is switched to it): how much a division other than the meter space's own two and three weighs against them (meter-space.js METER_SPACE.layers), from none -- only twos and threes -- to as much as a three: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note (the owner, 2 October 2026: "make sure EVERY tuplet ratio is allowed")` },
@@ -3663,6 +3674,237 @@ var texture_default = {
   }
 };
 
+// registry/method/melody.json
+var melody_default = {
+  schema: "musebots.registry-methods/1",
+  about: "The melody's rules, the streaming that judges where a line splits into voices, and the figure space (public/shared/performers/melody-rules.js, streams.js, figure-space.js; docs/FIGURE_SPACE.md): one set of rules for every planner of a line, and every figure a point among dimensions, its named figures locations within them.",
+  methods: {
+    melody: {
+      about: `The melody's rules, said once (public/shared/performers/melody-rules.js; docs/FIGURE_SPACE.md): what a line of pool steps may do, for every planner of one -- a motif's shape, a phrase's contour, a run, a figure, a cadence (line.js, figure-space.js). The owner, 5 November 2026: "where multiple scattered rules have been written that actually accomplish the same result, refactoring those rules into a smaller number will mean that fixing erroneous cases will lead to better generative behaviour more quickly." A leap's least and greatest size and a run's most moves are the line's (line.js LINE, a player's own: personality.js).`,
+      source: "ours",
+      settings: {
+        recoverMost: { value: 2, unit: "pool steps", kind: "setting", reason: "a leap's answer: a step back the other way, of one or two of its voice's pitches (a second, or in a pool of close pitches a third) -- the recovery the lines' motifs, contours and runs had each asked (line.js recovered, shapeCells, simplifyMotif, contour, runContour)" },
+        alikeMost: { value: 2, unit: "notes", kind: "setting", reason: "a note struck at most twice running, and so never three alike (the line's rule since its motifs were first made: line.js), unless a line asks for none struck again at once" }
+      }
+    },
+    streaming: {
+      about: `Auditory streaming (public/shared/performers/streams.js; docs/FIGURE_SPACE.md): where a figure's notes hold together as one line and where they split into voices, a compound melody. The owner, 5 November 2026: "the 'musically correct' way to conceptualize two alternating notes far apart from each other (really, this intuition applies the more the further the notes are from each other and the faster they move/alternate) is as a compound melody"; "there is a threshold past which ornamentation transitions to compound melody". The boundaries it judges between are measured of listeners: registry/perception/streaming.json. A room's reverberation, which lengthens what sounds of each note, is not heard here (research/MODELING_GAPS.md).`,
+      source: "van-noorden-1975",
+      settings: {
+        threshold: { value: 1, unit: "share from the fission boundary to the coherence boundary", kind: "setting", reason: "where a note is judged apart, a voice of its own, as a share from the fission boundary to the temporal coherence boundary (registry/perception/streaming.json): at the coherence boundary, as a listener in general tries to hear the tones as one line (van Noorden 1975, section 4.6), and between the boundaries hears them so but for attending to one string alone. There too Miller and Heise's trill threshold stands at its gap (perception trill-threshold). A legato whole tone so stays a trill up to about 13 notes a second, a semitone past 25", sources: ["miller-heise-1950", "van-noorden-1975"] }
+      }
+    },
+    "figure-space": {
+      about: `The figure space (public/shared/performers/figure-space.js; docs/FIGURE_SPACE.md): every figure that divides a held note, a cadence's approach or a fioritura -- a run, an arc, an arpeggio, a trill, a turn, a mordent, a climb, a zigzag, a ribattuta, a compound melody, and every figure between or beyond them -- a point among dimensions, each a share 0 to 1, each named figure a location of ranges [low, high] within them (the methods figure-<name> below). A figure's path is made from its point, and its notes are the walk nearest that path that keeps the melody's rules (melody-rules.js), a trill only where its point asks for one. The owner, 5 November 2026: "(1) generalization of logic without losing cases ... (2) extensibility to arbitrary and invented ornaments beyond the specific figures listed".`,
+      source: "ours",
+      settings: {
+        third: { value: 2, unit: "pool steps", kind: "setting", reason: "a third: two of its voice's pitches (a skip, the stride of an arpeggio and the width of a wide circling pair)" },
+        beam: { value: 48, unit: "settings", kind: "setting", reason: "how many of its walk's settings are kept at each note, those with the same future kept once (as runContour's beam, line.js)" },
+        jitter: { value: 0.01, unit: "pool steps", kind: "setting", reason: "a walk's ties broken at random by at most this, far less than a step from its path: the figure is its point's, the draw only choosing among walks as near" },
+        skew: { value: 2, unit: "power of its draw", kind: "setting", reason: 'a skewed dimension\'s share drawn squared across its range (`skewed`): most figures circle little, turn as they circle rather than trill, strike few notes again and keep to one voice -- a trill, a turn, a ribattuta or a compound melody now and then, every figure still drawn (ours; the owner, 5 November 2026: figures "that simply alternate between two notes" were to stop)' },
+        skewed: { value: ["circling", "trilling", "repeat", "voices"], unit: "dimensions", kind: "setting", reason: "the dimensions whose draws are skewed toward their least (`skew`): circling, its pairs kept to one side (a trill), notes struck again, and voices" },
+        pair: { value: 2, unit: "moves", kind: "setting", reason: "a circling pair and each step of an excursion: out and back, two moves" },
+        voiceNotes: { value: 2, unit: "notes", kind: "setting", reason: "the fewest notes each voice of a compound figure has: two, so that it goes on as a line (one alone is a note heard apart, not a voice)" }
+      }
+    },
+    "figure-arc": {
+      about: "An arc: out from the held note the other way, then past the next note and back to it, by step (a fioritura, as Chopin's run past the note it lands on: fioritura.js).",
+      source: "ours",
+      settings: {
+        lead: { range: [0, 1], unit: "share", kind: "setting", reason: "its turn below and its arc above in any share" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read: it does not circle" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-arpeggio": {
+      about: "An arpeggio: its path by thirds.",
+      source: "ours",
+      settings: {
+        lead: { range: [0, 1], unit: "share", kind: "setting", reason: "its turn and arc in any share" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read: it does not circle" },
+        stride: { value: 1, unit: "share", kind: "setting", reason: "every move a third" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-trill": {
+      about: "A trill: its spare notes alternating with a neighbour, toward the end (a cadential trill) or throughout.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 1, unit: "share", kind: "setting", reason: "every spare note circling" },
+        trilling: { value: 1, unit: "share", kind: "setting", reason: "every pair to the side of the pair before" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "from the upper note or the lower" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0.5, 1], unit: "share", kind: "setting", reason: "toward its landing" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-turn": {
+      about: "A turn: its spare notes circling the held note on either side in turn, near its start.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { range: [0.5, 1], unit: "share", kind: "setting", reason: "most spare notes circling" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "each pair the other side" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "above first or below" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 0.3], unit: "share", kind: "setting", reason: "near its start" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-mordent": {
+      about: "A mordent: a quick alternation with a neighbour at its start, the rest a walk.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { range: [0.1, 0.4], unit: "share", kind: "setting", reason: "a few spare notes circling" },
+        trilling: { value: 1, unit: "share", kind: "setting", reason: "its pairs, where it has more than one, to one side: a short trill (a Pralltriller)" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "upper or lower" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { value: 0, unit: "share", kind: "setting", reason: "at its start" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-climb": {
+      about: "A climb: up two steps and back one as it goes, a pair at a time (a run turning back as it moves on).",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 1, unit: "share", kind: "setting", reason: "every spare note circling" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 1, unit: "share", kind: "setting", reason: "each pair moving on a step" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "anywhere" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-zigzag": {
+      about: "A zigzag: a wider climb, each pair a third wide -- up three steps and back two as it goes.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 1, unit: "share", kind: "setting", reason: "every spare note circling" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 1, unit: "share", kind: "setting", reason: "each pair moving on" },
+        width: { value: 1, unit: "share", kind: "setting", reason: "each pair a third wide" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "anywhere" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-ribattuta": {
+      about: "A ribattuta: its notes struck again, each twice at most.",
+      source: "ours",
+      settings: {
+        lead: { range: [0, 1], unit: "share", kind: "setting", reason: "any" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read: it does not circle" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 1, unit: "share", kind: "setting", reason: "every spare note struck again" },
+        voices: { value: 0, unit: "share", kind: "setting", reason: "none" }
+      }
+    },
+    "figure-compound": {
+      about: "A compound melody: the figure walking among voices far enough apart, at its rate, to be heard as voices (streams.js) -- a broken chord, a saxophone's chord played as a very fast arpeggio -- each voice moving evenly from the held note's chord to the next note's, the held note's voice the one that leaves them least to move.",
+      source: "ours",
+      settings: {
+        lead: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        circling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        trilling: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        order: { range: [0, 1], unit: "share", kind: "setting", reason: "up first or down" },
+        progress: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        width: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        placement: { range: [0, 1], unit: "share", kind: "setting", reason: "not read" },
+        stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
+        voices: { value: 1, unit: "share", kind: "setting", reason: "as many voices as stream apart" }
+      }
+    }
+  }
+};
+
+// registry/perception/streaming.json
+var streaming_default = {
+  schema: "musebots.registry-perception/1",
+  about: "Auditory streaming: when successive tones hold together as one line, when they split into streams (a compound melody's voices), and when they merge into one tone. Read by the streaming judgement (public/shared/performers/streams.js) and the figures it judges (figure-space.js).",
+  measures: {
+    "fission-boundary": { value: 1, unit: "semitones", kind: "literature", source: "van-noorden-1975", where: "section 2.4, Fig. 2.9; section 4.6", conditions: "two pure tones alternating (ABAB), 40 ms each, B at 1 kHz, 35 dB SL, by headphones; two observers, each told to hear the B tones alone; tone repetition times T of 0.1 to 0.4 s", note: "the least interval at which a listener attending to one string can hear the tones apart, two streams: below it they always hold together. Practically independent of T in that range; wider at shorter T (peripheral effects make selecting one string impossible) and at longer T (the string's tones too far apart in time)" },
+    "temporal-coherence-boundary": { value: [[0, 0], [0.115, 3], [0.185, 6], [0.23, 7.5], [0.28, 10], [0.33, 13.5], [0.385, 19], [0.415, 24]], unit: "[s, semitones]", kind: "literature", source: "van-noorden-1975", where: "section 5.5, Fig. 5.11 (its circled means, read to about a semitone and 10 ms); the point at the origin his extrapolation", conditions: "random sequences of pure tones, each interval drawn about a mean, tone durations D of 40 to 400 ms, none overlapping, by headphones; observers trying to hear all the tones as one line", note: "the interval past which a tone can no longer be heard with its neighbours as one line, against the gap from the end of the tone before it to the start of the tone after it (2T - D): one curve for every tone duration, so a legato or overlapping tone's boundary is the narrower; at a gap of none, none (the tones before and after sound with it). Probably so for partly overlapping tones too, which his equipment could not make. Between this and the fission boundary a tone is heard either way, as the listener attends" },
+    "trill-threshold": { range: [2, 3], unit: "semitones", kind: "literature", source: "miller-heise-1950", where: "as van Noorden 1975 reports it, sections 1.3 and 2.5", conditions: "two pure tones alternating ten times a second (T = 0.1 s), each filling the time to the next (a gap of 0.1 s)", note: "the interval past which a trill is heard as two tones, two streams. At its gap, where Fig. 5.11's temporal coherence boundary stands at 2.6 semitones; van Noorden found it the mean of his two boundaries at the same T with tones of 40 ms (a gap of 0.16 s)" },
+    "fusion-repetition-time": { value: 0.08, unit: "s", kind: "literature", source: "van-noorden-1975", where: "section 7.3; section 5.1", conditions: "pure-tone sequences of small intervals (a semitone), random or ascending", note: "below about this tone repetition time a sequence of small intervals merges into one tone, modulated in frequency and amplitude: one line, its tones no longer each heard. So, he expects, the fastest runs (Bach's cello suites: 81 ms) and trills" }
+  }
+};
+
+// registry/perception/polyphony.json
+var polyphony_default = {
+  schema: "musebots.registry-perception/1",
+  about: `Polyphony heard: how many voices a listener follows at once. Read by counterpoint (public/shared/conducting/counterpoint.js), which keeps a line's rules against the voices heard with it. A limit of hearing, not of composing: the owner, 5 November 2026: "listeners' difficulty in DISTINGUISHING three voices does not invalidate COMPOSING many more voices, since sometimes compositions use excesses beyond distinction to generate nuanced differences in texture".`,
+  measures: {
+    "voices-followed": { value: 3, unit: "voices", kind: "literature", source: "huron-1989-denumerability", where: "the abstract and its experiments, as summarized (the full text not saved: research/SOURCES_TO_FETCH.md)", conditions: "musicians judging how many voices sound, and when one enters, in polyphony of homogeneous timbre (Bach)", note: "the voices a listener counts and follows: errors from about one in ten with three voices to about one in two with four. Past it a texture's voices are heard as the texture, not each -- which a composition may want (micropolyphony: counterpoint.js)" }
+  }
+};
+
+// registry/perception/roughness.json
+var roughness_default = {
+  schema: "musebots.registry-perception/1",
+  about: "Roughness: how two simultaneous partials beat against each other as heard, by their frequencies. Read by the spectral harmonic system's roughness (public/shared/harmonic-systems/spectral.js) and the harmony's spectral consonance (public/shared/estimation/spectral-consonance.js), each weighting a pair of partials by their amplitudes as it chooses. A measure of sensory roughness, not of musical quality.",
+  measures: {
+    "dissonance-curve": { value: { b1: 3.5, b2: 5.75, dStar: 0.24, s1: 0.0207, s2: 18.96 }, unit: "b1, b2: per unit of s times hertz; dStar: the curve's peak, in units of s times hertz; s1: per hertz; s2: hertz", kind: "literature", source: "sethares-1993", sources: ["plomp-levelt-1965"], where: "the dissonance curve d(x) = exp(-b1 s x) - exp(-b2 s x), s = dStar / (s1 f + s2), for two partials x hertz apart above the lower at f hertz, as harmonic-systems/spectral.js had its parameters from the paper (the full text not saved: research/SOURCES_TO_FETCH.md); spectral-consonance.js had s1 and s2 rounded (0.021, 19)", conditions: "fitted to Plomp and Levelt's (1965) judgements of the consonance of two simultaneous pure tones, by their frequency difference, at several mean frequencies", note: "the roughness of two pure tones: none in unison, rising to its most at about a quarter of a critical band apart and falling away past it, the band widening with frequency. Summed over the partials of two complex tones it is Sethares's extension to timbres, and over instruments' spectra ours" }
+  }
+};
+
+// registry/perception/timing.json
+var timing_default = {
+  schema: "musebots.registry-perception/1",
+  about: "Time as heard: the shortest and longest spans that listeners hear as beats and measures. Read by casting's measures of a part's rhythm (public/shared/casting/measure.js).",
+  measures: {
+    "beat-period-least": { value: 0.1, unit: "s", kind: "literature", source: "london-2012", where: "ch. 2, as casting/measure.js cites it (the book not saved: research/SOURCES_TO_FETCH.md)", conditions: "London's summary of studies of listeners hearing and tapping to isochronous series", note: "the shortest inter-onset interval heard as a series of separate events that can carry a beat, rather than a flutter or a buzz" }
+  }
+};
+
+// registry/perception/bands.json
+var bands_default = {
+  schema: "musebots.registry-perception/1",
+  about: "The ear's critical bands: where they lie, how a sound in one masks sounds in the others, and how loudness grows within one. Read by the palette's masking model (public/shared/palette-fit.js, a perceptual coder's threshold applied between a mix's parts) and the audio analyzer's descriptors (public/shared/estimation/audio-descriptors.js).",
+  measures: {
+    "critical-band-edges": { value: [100, 200, 300, 400, 510, 630, 770, 920, 1080, 1270, 1480, 1720, 2e3, 2320, 2700, 3150, 3700, 4400, 5300, 6400, 7700, 9500, 12e3, 15500], unit: "Hz, the upper edge of each band from the lowest (which begins at 0)", kind: "literature", source: "johnston-1988", sources: ["zwicker-1961"], where: "Table II, after Scharf (1970) and Zwicker (1961), as palette-fit.js and audio-descriptors.js each had them (Zsa's bark~ reports the same); the paper not saved: research/SOURCES_TO_FETCH.md", conditions: "the critical bands as Zwicker (1961) summarized them from several measures (the threshold of complex sounds, masking, loudness summation), for listeners with normal hearing", note: "the 24 bands, a Bark each, within which the ear integrates a sound's power: about 100 Hz wide below 500 Hz, about a fifth of the frequency above" },
+    "spreading-function": { value: { a: 15.81, b: 7.5, c: 0.474, d: 17.5 }, unit: "dB against the masker's band, dz in Bark from masker to maskee: a + b (dz + c) - d sqrt(1 + (dz + c)^2)", kind: "literature", source: "schroeder-atal-hall-1979", where: "the spreading function's coefficients in the form perceptual coders reproduce it (Johnston 1988), not checked against the 1979 paper (research/SOURCES_TO_FETCH.md)", conditions: "fitted to masking patterns: how far a masker's excitation reaches into the bands above and below it, the upward spread the gentler", note: "how much of a sound's power in one band masks the bands around it" },
+    "masking-offset": { value: { toneDb: 14.5, noiseDb: 5.5, pureToneFlatnessDb: -60 }, unit: "dB: a tone masks noise from 14.5 + z dB under it (z the band, in Bark), a noise masks a tone from 5.5 dB under it; a masker's tonality is its spectral flatness against a pure tone's", kind: "literature", source: "johnston-1988", where: "the equations for the spectral flatness measure, the tonality alpha and the offset O_i, as palette-fit.js had them (the paper not saved: research/SOURCES_TO_FETCH.md)", conditions: "a perceptual coder's threshold, from the masking literature of tone-masking-noise and noise-masking-tone", note: "how far under a masker's spread power the threshold it makes lies, by how tonal the masker is" },
+    "loudness-exponent": { value: 0.23, unit: "the power of excitation that specific loudness grows as", kind: "literature", source: "zwicker-fastl-2007", where: "ch. 8 (Loudness), specific loudness against excitation, as palette-fit.js had it (the book not saved: research/SOURCES_TO_FETCH.md)", conditions: "loudness judged by listeners with normal hearing, above threshold, in a band", note: "a band's loudness grows as its power to about 0.23: what a masker's threshold hides is taken off it" }
+  }
+};
+
 // registry/equations.js
 var aperture = (a, b, t) => {
   let x = 1, y = b / a;
@@ -3752,13 +3994,20 @@ var FILES = Object.freeze({
   "method/levels.json": levels_default,
   "method/personality.json": personality_default,
   "method/rhythm.json": rhythm_default,
-  "method/texture.json": texture_default
+  "method/texture.json": texture_default,
+  "method/melody.json": melody_default,
+  "perception/streaming.json": streaming_default,
+  "perception/polyphony.json": polyphony_default,
+  "perception/roughness.json": roughness_default,
+  "perception/timing.json": timing_default,
+  "perception/bands.json": bands_default
 });
 var KINDS = Object.freeze(["literature", "vernacular", "other", "fit", "derived", "borrowed", "unmeasured", "setting"]);
 var within = (folder, key) => Object.freeze(Object.assign({}, ...Object.entries(FILES).filter(([path]) => path.startsWith(`${folder}/`)).map(([, file]) => file[key] ?? {})));
 var OBJECTS = within("objects", "nodes");
 var PLAYERS = within("players", "nodes");
 var METHODS = within("method", "methods");
+var PERCEPTION = within("perception", "measures");
 var isLeaf = (v) => Boolean(v) && typeof v === "object" && !Array.isArray(v) && typeof v.kind === "string";
 var tableOf = (of2) => {
   if (of2 === "objects") return OBJECTS;
@@ -3897,6 +4146,12 @@ function constant(name) {
   if (!Object.hasOwn(constants_default.constants, name)) throw new Error(`registry: no constant ${name}`);
   return constants_default.constants[name].value;
 }
+function perceptionEntry(name) {
+  if (!Object.hasOwn(PERCEPTION, name)) throw new Error(`registry: no perception measure ${name}`);
+  const leaf = PERCEPTION[name];
+  return Object.freeze({ ...leaf, name, value: leaf.value ?? leaf.range });
+}
+var perception = (name) => perceptionEntry(name).value;
 function settingEntry(method, name, stack = []) {
   const m = METHODS[method];
   if (!m || !Object.hasOwn(m.settings ?? {}, name)) throw new Error(`registry: method ${method} has no setting ${name}`);
@@ -4387,6 +4642,107 @@ var FILL_PHRASE = Object.freeze({
   extremes: Object.freeze({ dissonance: 0.9, tuplets: 0.5, nesting: 0.3, mostBars: 16 })
 });
 
+// public/shared/style-space.js
+var finite = (value3) => typeof value3 === "number" && Number.isFinite(value3);
+var sameShape = (a, b) => finite(a) ? finite(b) : Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value3, i) => sameShape(value3, b[i]));
+var frozen = (value3) => Array.isArray(value3) ? Object.freeze(value3.map(frozen)) : value3;
+var mixed = (values, weights) => finite(values[0]) ? values.reduce((sum, value3, i) => sum + weights[i] * value3, 0) : Object.freeze(values[0].map((_, k) => mixed(values.map((value3) => value3[k]), weights)));
+var mixtures = /* @__PURE__ */ new WeakMap();
+function styleSpace({ name, dimensions, locations }) {
+  const names = Object.freeze(Object.keys(dimensions)), named = Object.keys(locations);
+  if (!named.length) throw new TypeError(`${name} style space names a location`);
+  for (const key of names) if (locations[key]) throw new TypeError(`${name} style space: "${key}" names both a dimension and a location`);
+  const first = locations[named[0]];
+  for (const [place, location] of Object.entries(locations)) {
+    for (const key of names) if (!(finite(location[key]) || Array.isArray(location[key])) || !sameShape(first[key], location[key])) throw new TypeError(`${name} style space: ${place}'s "${key}" is a number, or a list shaped as ${named[0]}'s`);
+    for (const key of Object.keys(location)) if (!dimensions[key]) throw new TypeError(`${name} style space: ${place} gives "${key}", no dimension of it`);
+  }
+  const shaped = Object.freeze(Object.fromEntries(Object.entries(locations).map(([place, location]) => [place, Object.freeze(Object.fromEntries(names.map((key) => [key, frozen(location[key])])))])));
+  function locate2(location) {
+    if (typeof location === "string") {
+      if (!shaped[location]) throw new TypeError(`A location in ${name} style space is one of ${named.join(", ")}, a blend of them, or a vector`);
+      return shaped[location];
+    }
+    if (!location || typeof location !== "object" || Array.isArray(location)) throw new TypeError(`A location in ${name} style space is a name, a blend of named locations, or a vector`);
+    const weights = {}, set = {};
+    for (const [key, value3] of Object.entries(location)) {
+      if (shaped[key]) {
+        if (!finite(value3) || value3 < 0) throw new TypeError(`A named location's weight is a number, 0 or more ("${key}")`);
+        weights[key] = value3;
+      } else if (dimensions[key]) {
+        if (!sameShape(first[key], value3)) throw new TypeError(`A location's "${key}" is shaped as ${named[0]}'s`);
+        set[key] = frozen(value3);
+      } else throw new TypeError(`"${key}" is neither a named location nor a dimension of ${name} style space`);
+    }
+    const blend = Object.keys(weights), total = blend.reduce((sum, key) => sum + weights[key], 0);
+    if (!total && Object.keys(set).length < names.length) throw new TypeError(`A location in ${name} style space gives named locations to blend, or every dimension`);
+    const base = total ? Object.fromEntries(names.map((key) => [key, mixed(blend.map((place) => shaped[place][key]), blend.map((place) => weights[place] / total))])) : {};
+    const point = Object.freeze({ ...base, ...set });
+    if (total) mixtures.set(point, Object.freeze(blend.filter((place) => weights[place] > 0).map((place) => Object.freeze({ weight: weights[place] / total, location: Object.keys(set).length ? Object.freeze({ ...shaped[place], ...set }) : shaped[place] }))));
+    return point;
+  }
+  function between(a, b, t) {
+    const amount = Math.max(0, Math.min(1, t)), point = Object.freeze(Object.fromEntries(names.map((key) => [key, mixed([a[key], b[key]], [1 - amount, amount])])));
+    mixtures.set(point, Object.freeze([...mixtureOf(a).map((part) => ({ ...part, weight: part.weight * (1 - amount) })), ...mixtureOf(b).map((part) => ({ ...part, weight: part.weight * amount }))].filter((part) => part.weight > 0).map((part) => Object.freeze(part))));
+    return point;
+  }
+  function mixtureOf(point) {
+    return mixtures.get(point) ?? Object.freeze([Object.freeze({ weight: 1, location: point })]);
+  }
+  function drawn(point, draw) {
+    const parts = mixtureOf(point);
+    let from = 0;
+    for (const part of parts) {
+      if (draw < from + part.weight || part === parts.at(-1)) return { location: part.location, draw: Math.max(0, Math.min(1 - 1e-12, (draw - from) / part.weight)) };
+      from += part.weight;
+    }
+  }
+  return Object.freeze({ name, dimensions: Object.freeze({ ...dimensions }), names, locations: shaped, locate: locate2, between, mixtureOf, drawn });
+}
+
+// public/shared/performers/melody-rules.js
+var RECOVER_MOST = setting("melody", "recoverMost");
+var ALIKE_MOST = setting("melody", "alikeMost");
+var RULES = Object.freeze(["widest", "leap", "last", "alike", "run", "trill"]);
+
+// public/shared/performers/streams.js
+var FISSION = perception("fission-boundary");
+var COHERENCE = perception("temporal-coherence-boundary");
+var THRESHOLD = setting("streaming", "threshold");
+
+// public/shared/performers/figure-space.js
+var THIRD = setting("figure-space", "third");
+var BEAM = setting("figure-space", "beam");
+var JITTER = setting("figure-space", "jitter");
+var SKEW = setting("figure-space", "skew");
+var SKEWED = new Set(setting("figure-space", "skewed"));
+var PAIR = setting("figure-space", "pair");
+var VOICE_NOTES = setting("figure-space", "voiceNotes");
+var FIGURE_DIMENSIONS = Object.freeze({
+  lead: "of its excursion beyond the way, the share turning back behind the held note; the rest arcs past the next note",
+  circling: "of its notes to spare, the share spent circling a note in pairs, out and back",
+  trilling: "how often a circling pair keeps to the side of the pair before (0: each the other side, a turn; 1: a trill)",
+  order: "which side it circles first, and which way it cycles among its voices (below a half: up)",
+  progress: "of its circling pairs, the share moving on along the way as they circle (a climb), the rest circling in place",
+  width: "how wide a circling pair goes: 0 a step, 1 a third",
+  placement: "where along its way its circling comes: 0 at its start, 1 at its end",
+  stride: "of its path's moves, the share by thirds (an arpeggio)",
+  repeat: "of its notes to spare, the share struck again (a ribattuta), each note twice at most",
+  voices: "how many voices it walks among: 0 one (a line), 1 as many as its notes, its range and its rate allow (a compound melody)"
+});
+var NAMES = Object.freeze(Object.keys(FIGURE_DIMENSIONS));
+var FIGURE_NAMES = Object.freeze(Object.keys(METHODS).filter((id) => id.startsWith("figure-") && id !== "figure-space").map((id) => id.slice("figure-".length)));
+var asRange = (value3) => Array.isArray(value3) ? [...value3] : [value3, value3];
+var FIGURE_SPACE = styleSpace({
+  name: "figure",
+  dimensions: FIGURE_DIMENSIONS,
+  locations: Object.fromEntries(FIGURE_NAMES.map((name) => [name, Object.fromEntries(NAMES.map((key) => [key, asRange(setting(`figure-${name}`, key))]))]))
+});
+var EVERY = Object.freeze(Object.fromEntries(NAMES.map((key) => [key, Object.freeze([0, 1])])));
+
+// public/shared/fnv1a.js
+var FNV_SPAN = 2 ** 32;
+
 // public/shared/performers/fioritura.js
 var FIORITURA = Object.freeze({
   // The mean note rates an ornament takes, from the least amount to the most (notes a second, authored; slower than six
@@ -4405,8 +4761,12 @@ var FIORITURA = Object.freeze({
   // Loudness, as shares of the line's velocity: its body, the swell to its turn, a group head's accent.
   velocity: Object.freeze({ body: 0.7, swell: 0.12, head: 0.05 }),
   // A place nested as a turn, at amount 1 (fill-phrase.js nest's appetite; its count one whose notes the quickest allows).
-  nesting: 0.3
+  nesting: 0.3,
+  // The widest move it lands on the next note by (the voice's pitches): a step, its last note a neighbour of the note it
+  // leads to, whatever figure it walks.
+  landing: 1
 });
+var ORNAMENT = Object.freeze({ leapSteps: Infinity, leapMost: Infinity, runMost: Infinity });
 
 // public/shared/vocal/rational.js
 var make = (n, d) => {
@@ -4748,6 +5108,10 @@ var LINE = Object.freeze({
   leapSteps: 3,
   leapMost: 5,
   runMost: 4,
+  // The figures it divides a held note into and approaches its cadence by (figure-space.js): its taste, a location in
+  // the figure space (a named figure's, a blend's, or a range in each dimension: its player's, personality.js), or none --
+  // every figure.
+  figures: null,
   // A phrase's span from its floor to its apex (pool steps; a climax phrase's wider), and its widest range (semitones;
   // a climax phrase's a third more).
   span: Object.freeze([5, 8]),
@@ -5346,47 +5710,6 @@ var CHANGING = Object.freeze(["key", "valve", "lips", "slide", "technique", "mod
 var ANTICIPATION = Object.freeze({ most: 0.3, share: 0.5, tolerance: 0.02, window: 0.045, reach: 0.3, margin: 0.01, step: 0.8, slope: 0.2 });
 var ARRIVAL = Object.freeze({ cents: 50, db: 15, repeat: 20, back: 6, dip: 3, step: 5e-3, frames: 3, before: 0.5, after: 0.6 });
 
-// render/synthesis/src/physical.mjs
-var WIND_MODELS = Object.freeze({
-  flute: Object.freeze({ backend: "openwind", model: "flute" }),
-  oboe: Object.freeze({ backend: "openwind", model: "oboe" }),
-  clarinet: Object.freeze({ backend: "openwind", model: "clarinet" }),
-  bassoon: Object.freeze({ backend: "openwind", model: "bassoon" }),
-  alto: Object.freeze({ backend: "openwind", model: "alto-flute" }),
-  ...Object.fromEntries(["alto-flute", "piccolo", "e-flat-clarinet", "bass-clarinet", "english-horn", "contrabassoon", "soprano-saxophone", "alto-saxophone", "tenor-saxophone", "baritone-saxophone"].map((model) => [model, Object.freeze({ backend: "openwind", model })])),
-  horn: Object.freeze({ backend: "ness", model: "horn" }),
-  trumpet: Object.freeze({ backend: "ness", model: "trumpet" }),
-  trombone: Object.freeze({ backend: "ness", model: "trombone" }),
-  tuba: Object.freeze({ backend: "ness", model: "tuba" })
-});
-var WIND_MODELS_BY_DEFAULT = Object.freeze(Object.keys(WIND_MODELS));
-var OPENWIND_WOODWINDS = Object.freeze(["clarinet", "oboe", "bassoon", "flute", "alto-flute", "piccolo", "e-flat-clarinet", "bass-clarinet", "english-horn", "contrabassoon", "soprano-saxophone", "alto-saxophone", "tenor-saxophone", "baritone-saxophone"]);
-var WOODWIND_TONGUES = Object.freeze({ clarinet: "reed", oboe: "reed", bassoon: "reed", flute: "air", "alto-flute": "air", piccolo: "air", ...Object.fromEntries(["e-flat-clarinet", "bass-clarinet", "english-horn", "contrabassoon", "soprano-saxophone", "alto-saxophone", "tenor-saxophone", "baritone-saxophone"].map((model) => [model, "reed"])) });
-var NESS_WOODWINDS = Object.freeze([
-  "clarinet",
-  "e-flat-clarinet",
-  "bass-clarinet",
-  "soprano-saxophone",
-  "alto-saxophone",
-  "tenor-saxophone",
-  "baritone-saxophone",
-  "oboe",
-  "english-horn",
-  "bassoon",
-  "contrabassoon"
-]);
-var FIXED_PITCH = Object.freeze({ supercollider: Object.freeze(["piano", "membrane"]), openwind: OPENWIND_WOODWINDS, ness: NESS_WOODWINDS });
-var BREATHES_VIBRATO = Object.freeze({ openwind: OPENWIND_WOODWINDS, ness: NESS_WOODWINDS });
-var TECHNIQUES_REALIZED = Object.freeze({
-  openwind: Object.freeze(Object.fromEntries(OPENWIND_WOODWINDS.map((model) => [model, Object.freeze(["hum", "growl", "flutter", "multiphonic"])]))),
-  // (And NESS's brass: the same three in its mouth-pressure tremolo and noise, and a mute in its bore: ness.mjs.)
-  ness: Object.freeze(Object.fromEntries(["trumpet", "trombone", "horn", "tuba"].map((model) => [model, Object.freeze(["hum", "growl", "flutter", "mute"])])))
-});
-var LEVELLED = Object.freeze(["openwind", "ness"]);
-
-// render/synthesis/src/openwind-passages.mjs
-var VIBRATO_SHARE = 4e-3;
-
 // public/shared/performers/brass-tongue.js
 var TONGUE_OPENING = Object.freeze({
   rate: 25e-4,
@@ -5756,11 +6079,105 @@ var vocal_tract_space_default = {
         0.154219,
         0.244691,
         0.262313
+      ],
+      [
+        0.0647221,
+        0.116831,
+        0.131791,
+        0.134429,
+        0.170028,
+        0.232883,
+        0.255677,
+        0.222541,
+        0.190438,
+        0.207016,
+        0.243942,
+        0.273462,
+        0.281292,
+        0.240332,
+        0.173144,
+        0.120988,
+        0.0861204,
+        0.0657658,
+        0.0551528,
+        0.0591545,
+        0.0650127,
+        0.0706812,
+        0.0899619,
+        0.1218,
+        0.137423,
+        0.135421,
+        0.146778,
+        0.180167,
+        0.214991,
+        0.230399,
+        0.208542,
+        0.165832,
+        0.134196,
+        0.105442,
+        0.0715087,
+        0.0538295,
+        0.0467193,
+        0.0177727,
+        -0.0239862,
+        -0.0302858,
+        544556e-8,
+        0.0239911,
+        886739e-8,
+        -398397e-10
+      ],
+      [
+        0.0619994,
+        0.0160428,
+        -957454e-8,
+        -0.0129914,
+        -668884e-8,
+        0.0105721,
+        0.0274847,
+        0.0253235,
+        0.0110076,
+        751433e-8,
+        0.0158644,
+        0.0346992,
+        0.0449363,
+        0.0510072,
+        0.0546589,
+        0.0648549,
+        0.0791229,
+        0.100449,
+        0.122074,
+        0.130562,
+        0.128091,
+        0.099783,
+        0.0514164,
+        766738e-8,
+        -0.0267756,
+        -0.0532168,
+        -0.0777904,
+        -0.0993227,
+        -0.110196,
+        -0.110096,
+        -0.10959,
+        -0.0957877,
+        -0.0613108,
+        -0.0238381,
+        0.0126792,
+        0.0745135,
+        0.143025,
+        0.205528,
+        0.265102,
+        0.297691,
+        0.315926,
+        0.358979,
+        0.410637,
+        0.457626
       ]
     ],
     variances: [
       0.7433,
-      0.1467
+      0.1467,
+      0.05769,
+      0.03828
     ],
     span: [
       [
@@ -5770,52 +6187,128 @@ var vocal_tract_space_default = {
       [
         -0.0299411,
         0.0201988
+      ],
+      [
+        -0.0118394,
+        0.019748
+      ],
+      [
+        -0.011258,
+        0.0161225
       ]
+    ],
+    widest: [
+      844402e-8,
+      888487e-8,
+      9167e-6,
+      996557e-8,
+      0.0129149,
+      0.0171127,
+      0.020498,
+      0.0213797,
+      0.020248,
+      0.0190826,
+      0.0195441,
+      0.0214392,
+      0.0236422,
+      0.0251049,
+      0.0256567,
+      0.0256318,
+      0.0256815,
+      0.025879,
+      0.025731,
+      0.0252817,
+      0.0244887,
+      0.0229314,
+      0.0208979,
+      0.0189823,
+      0.0211703,
+      0.0227921,
+      0.0245666,
+      0.0267262,
+      0.0289886,
+      0.0311277,
+      0.0328589,
+      0.033964,
+      0.0343924,
+      0.0349433,
+      0.0346322,
+      0.0334351,
+      0.0331098,
+      0.0326451,
+      0.0293379,
+      0.0255572,
+      0.0240692,
+      0.0239897,
+      0.0244887,
+      0.0245147
     ],
     locations: {
       i: [
         -0.057338,
-        693801e-8
+        693801e-8,
+        0.019748,
+        -793449e-9
       ],
       ɪ: [
         -0.0429019,
-        0.0108507
+        0.0108507,
+        -747254e-8,
+        -564767e-8
       ],
       e: [
         -0.0332669,
-        327933e-8
+        327933e-8,
+        -557338e-8,
+        11387e-7
       ],
       ε: [
         -0.0171766,
-        9782e-6
+        9782e-6,
+        -0.0112933,
+        -597544e-8
       ],
       æ: [
         358393e-9,
-        0.0112822
+        0.0112822,
+        -0.0118394,
+        0.0161225
       ],
       ʌ: [
         0.0312991,
-        528175e-8
+        528175e-8,
+        109143e-8,
+        -0.011258
       ],
       ɑ: [
         0.0498515,
-        0.0201988
+        0.0201988,
+        0.0120859,
+        0.010728
       ],
       ɔ: [
         0.0478849,
-        509129e-8
+        509129e-8,
+        406051e-8,
+        -0.0103569
       ],
       o: [
         0.0257987,
-        -0.0205054
+        -0.0205054,
+        -520782e-8,
+        286901e-9
       ],
       ʊ: [
         0.0148818,
-        -0.0222576
+        -0.0222576,
+        -510127e-8,
+        173242e-8
       ],
       u: [
         -0.0193911,
-        -0.0299411
+        -0.0299411,
+        950189e-8,
+        402298e-8
       ]
     },
     airway: {
@@ -5841,2809 +6334,4139 @@ var vocal_tract_space_default = {
   },
   normal: {
     peak: 9e6,
-    reach: 1475,
+    lowest: 600,
+    reach: 1675,
     rows: [
       {
         target: 600,
         reached: true,
         coords: [
-          -0.0233555,
-          -0.0283195
+          -0.0331564,
+          -34939e-7,
+          -586505e-8,
+          0.0290304
         ],
         second: {
           frequency: 600,
           peak: 9e6,
-          q: 3.777
+          q: 5.137
         },
         resonances: [
           {
-            frequency: 259.82,
-            q: 0.8417,
-            peak: 469e4
+            frequency: 243.47,
+            q: 0.8972,
+            peak: 4346e3
           },
           {
-            frequency: 568.79,
-            q: 4.675,
-            peak: 6901e3
+            frequency: 578.94,
+            q: 5.946,
+            peak: 7512e3
           }
         ],
-        misfit: 0.0584
+        misfit: 0.0358
       },
       {
         target: 625,
         reached: true,
         coords: [
-          -0.0233929,
-          -0.0273188
+          -0.0271232,
+          -0.0164399,
+          -719731e-8,
+          0.0123754
         ],
         second: {
           frequency: 625,
           peak: 9e6,
-          q: 4.018
+          q: 4.118
         },
         resonances: [
           {
-            frequency: 257.15,
-            q: 0.7994,
-            peak: 4586e3
+            frequency: 263.35,
+            q: 0.8371,
+            peak: 5036e3
           },
           {
-            frequency: 595.34,
-            q: 4.843,
-            peak: 7111e3
+            frequency: 594.64,
+            q: 5.141,
+            peak: 6865e3
           },
           {
-            frequency: 3385.7,
-            q: 4.424,
-            peak: 1885e3
+            frequency: 3237.5,
+            q: 100,
+            peak: 863200
           }
         ],
-        misfit: 0.0481
+        misfit: 0.0483
       },
       {
         target: 650,
         reached: true,
         coords: [
-          -0.023329,
-          -0.0263186
+          -0.0269966,
+          -0.0156958,
+          -566549e-8,
+          0.0132388
         ],
         second: {
           frequency: 650,
           peak: 9e6,
-          q: 4.266
+          q: 4.527
         },
         resonances: [
           {
-            frequency: 254.47,
-            q: 0.7816,
-            peak: 4467e3
+            frequency: 255.65,
+            q: 0.8072,
+            peak: 4687e3
           },
           {
-            frequency: 621.52,
-            q: 5.038,
-            peak: 727e4
-          },
-          {
-            frequency: 3343.3,
-            q: 4.092,
-            peak: 1675e3
-          }
-        ],
-        misfit: 0.047
-      },
-      {
-        target: 675,
-        reached: true,
-        coords: [
-          -0.0232332,
-          -0.0252937
-        ],
-        second: {
-          frequency: 675,
-          peak: 9e6,
-          q: 4.501
-        },
-        resonances: [
-          {
-            frequency: 251.8,
-            q: 0.7686,
-            peak: 4368e3
-          },
-          {
-            frequency: 647.8,
-            q: 5.229,
-            peak: 7424e3
-          },
-          {
-            frequency: 3324.7,
-            q: 3.935,
-            peak: 1593e3
-          }
-        ],
-        misfit: 0.0458
-      },
-      {
-        target: 700,
-        reached: true,
-        coords: [
-          -0.0231156,
-          -0.0242457
-        ],
-        second: {
-          frequency: 700,
-          peak: 9e6,
-          q: 4.721
-        },
-        resonances: [
-          {
-            frequency: 249.22,
-            q: 0.7605,
-            peak: 4288e3
-          },
-          {
-            frequency: 674.06,
-            q: 5.418,
-            peak: 7575e3
-          },
-          {
-            frequency: 3303.8,
-            q: 3.754,
-            peak: 1504e3
-          }
-        ],
-        misfit: 0.0448
-      },
-      {
-        target: 725,
-        reached: true,
-        coords: [
-          -0.0229694,
-          -0.0231784
-        ],
-        second: {
-          frequency: 725,
-          peak: 9e6,
-          q: 4.931
-        },
-        resonances: [
-          {
-            frequency: 246.8,
-            q: 0.7561,
-            peak: 4223e3
-          },
-          {
-            frequency: 700.26,
-            q: 5.604,
-            peak: 7716e3
-          },
-          {
-            frequency: 3287.7,
-            q: 3.599,
-            peak: 1439e3
-          }
-        ],
-        misfit: 0.044
-      },
-      {
-        target: 750,
-        reached: true,
-        coords: [
-          -0.0227902,
-          -0.0220929
-        ],
-        second: {
-          frequency: 750,
-          peak: 9e6,
-          q: 5.139
-        },
-        resonances: [
-          {
-            frequency: 244.56,
-            q: 0.7549,
-            peak: 4171e3
-          },
-          {
-            frequency: 726.42,
-            q: 5.786,
-            peak: 784e4
-          },
-          {
-            frequency: 3273.8,
-            q: 3.455,
-            peak: 1385e3
-          }
-        ],
-        misfit: 0.0432
-      },
-      {
-        target: 775,
-        reached: true,
-        coords: [
-          -0.0225774,
-          -0.0209887
-        ],
-        second: {
-          frequency: 775,
-          peak: 9e6,
-          q: 5.353
-        },
-        resonances: [
-          {
-            frequency: 242.51,
-            q: 0.7562,
-            peak: 4129e3
-          },
-          {
-            frequency: 752.54,
-            q: 5.967,
-            peak: 7946e3
-          },
-          {
-            frequency: 3258.6,
-            q: 3.294,
-            peak: 1328e3
-          }
-        ],
-        misfit: 0.0426
-      },
-      {
-        target: 800,
-        reached: true,
-        coords: [
-          -0.0223347,
-          -0.0198652
-        ],
-        second: {
-          frequency: 800,
-          peak: 9e6,
-          q: 5.565
-        },
-        resonances: [
-          {
-            frequency: 240.66,
-            q: 0.7595,
-            peak: 4097e3
-          },
-          {
-            frequency: 778.63,
-            q: 6.147,
-            peak: 8034e3
+            frequency: 622.55,
+            q: 5.395,
+            peak: 7223e3
           },
           {
             frequency: 3243.4,
-            q: 3.13,
-            peak: 1275e3
+            q: 4.145,
+            peak: 715600
           }
         ],
-        misfit: 0.0421
-      },
-      {
-        target: 825,
-        reached: true,
-        coords: [
-          -0.022071,
-          -0.0187215
-        ],
-        second: {
-          frequency: 825,
-          peak: 9e6,
-          q: 5.773
-        },
-        resonances: [
-          {
-            frequency: 239.01,
-            q: 0.7642,
-            peak: 4072e3
-          },
-          {
-            frequency: 804.67,
-            q: 6.325,
-            peak: 8109e3
-          },
-          {
-            frequency: 3231.4,
-            q: 2.98,
-            peak: 1235e3
-          }
-        ],
-        misfit: 0.0417
-      },
-      {
-        target: 850,
-        reached: true,
-        coords: [
-          -0.0218012,
-          -0.0175549
-        ],
-        second: {
-          frequency: 850,
-          peak: 9e6,
-          q: 5.981
-        },
-        resonances: [
-          {
-            frequency: 237.53,
-            q: 0.77,
-            peak: 4053e3
-          },
-          {
-            frequency: 830.64,
-            q: 6.505,
-            peak: 8181e3
-          },
-          {
-            frequency: 3220.4,
-            q: 2.833,
-            peak: 1202e3
-          }
-        ],
-        misfit: 0.0414
-      },
-      {
-        target: 875,
-        reached: true,
-        coords: [
-          -0.0215461,
-          -0.0163577
-        ],
-        second: {
-          frequency: 875,
-          peak: 9e6,
-          q: 6.149
-        },
-        resonances: [
-          {
-            frequency: 236.38,
-            q: 0.7844,
-            peak: 4024e3
-          },
-          {
-            frequency: 856.65,
-            q: 6.735,
-            peak: 8247e3
-          },
-          {
-            frequency: 3201.2,
-            q: 0.468,
-            peak: 201500
-          }
-        ],
-        misfit: 0.0493
-      },
-      {
-        target: 900,
-        reached: true,
-        coords: [
-          -0.0212952,
-          -0.0151222
-        ],
-        second: {
-          frequency: 900,
-          peak: 9e6,
-          q: 6.305
-        },
-        resonances: [
-          {
-            frequency: 235.24,
-            q: 0.8006,
-            peak: 3993e3
-          },
-          {
-            frequency: 882.87,
-            q: 6.956,
-            peak: 8321e3
-          },
-          {
-            frequency: 2585.7,
-            q: 19.13,
-            peak: 556e3
-          }
-        ],
-        misfit: 0.0496
-      },
-      {
-        target: 925,
-        reached: true,
-        coords: [
-          -0.0209479,
-          -0.0138914
-        ],
-        second: {
-          frequency: 925,
-          peak: 9e6,
-          q: 6.524
-        },
-        resonances: [
-          {
-            frequency: 234.2,
-            q: 0.8092,
-            peak: 3986e3
-          },
-          {
-            frequency: 908.82,
-            q: 7.132,
-            peak: 834e4
-          },
-          {
-            frequency: 2570.6,
-            q: 20.13,
-            peak: 657200
-          }
-        ],
-        misfit: 0.0494
-      },
-      {
-        target: 950,
-        reached: true,
-        coords: [
-          -0.0206688,
-          -0.0126228
-        ],
-        second: {
-          frequency: 950,
-          peak: 9e6,
-          q: 6.682
-        },
-        resonances: [
-          {
-            frequency: 233.29,
-            q: 0.8181,
-            peak: 3982e3
-          },
-          {
-            frequency: 934.72,
-            q: 7.318,
-            peak: 8408e3
-          },
-          {
-            frequency: 2556,
-            q: 20.65,
-            peak: 767400
-          }
-        ],
-        misfit: 0.0494
-      },
-      {
-        target: 975,
-        reached: true,
-        coords: [
-          -0.0203488,
-          -0.011317
-        ],
-        second: {
-          frequency: 975,
-          peak: 9e6,
-          q: 6.848
-        },
-        resonances: [
-          {
-            frequency: 232.46,
-            q: 0.8275,
-            peak: 3979e3
-          },
-          {
-            frequency: 960.95,
-            q: 7.502,
-            peak: 8453e3
-          },
-          {
-            frequency: 2542,
-            q: 20.95,
-            peak: 891600
-          }
-        ],
-        misfit: 0.0495
-      },
-      {
-        target: 1e3,
-        reached: true,
-        coords: [
-          -0.0200161,
-          -0.0100087
-        ],
-        second: {
-          frequency: 1e3,
-          peak: 9e6,
-          q: 7.026
-        },
-        resonances: [
-          {
-            frequency: 231.74,
-            q: 0.8371,
-            peak: 3978e3
-          },
-          {
-            frequency: 986.74,
-            q: 7.679,
-            peak: 8485e3
-          },
-          {
-            frequency: 2528.3,
-            q: 20.87,
-            peak: 1022e3
-          }
-        ],
-        misfit: 0.0495
-      },
-      {
-        target: 1025,
-        reached: true,
-        coords: [
-          -0.0196959,
-          -864322e-8
-        ],
-        second: {
-          frequency: 1025,
-          peak: 9e6,
-          q: 7.163
-        },
-        resonances: [
-          {
-            frequency: 231.08,
-            q: 0.8472,
-            peak: 3979e3
-          },
-          {
-            frequency: 1013,
-            q: 7.861,
-            peak: 8534e3
-          },
-          {
-            frequency: 2514.1,
-            q: 20.83,
-            peak: 1173e3
-          }
-        ],
-        misfit: 0.0497
-      },
-      {
-        target: 1050,
-        reached: true,
-        coords: [
-          -0.0193474,
-          -728144e-8
-        ],
-        second: {
-          frequency: 1050,
-          peak: 9e6,
-          q: 7.316
-        },
-        resonances: [
-          {
-            frequency: 230.5,
-            q: 0.8572,
-            peak: 3981e3
-          },
-          {
-            frequency: 1038.7,
-            q: 8.032,
-            peak: 8561e3
-          },
-          {
-            frequency: 2500.4,
-            q: 20.56,
-            peak: 1334e3
-          }
-        ],
-        misfit: 0.0499
-      },
-      {
-        target: 1075,
-        reached: true,
-        coords: [
-          -0.0189744,
-          -586352e-8
-        ],
-        second: {
-          frequency: 1075,
-          peak: 9e6,
-          q: 7.482
-        },
-        resonances: [
-          {
-            frequency: 229.97,
-            q: 0.8677,
-            peak: 3984e3
-          },
-          {
-            frequency: 1065,
-            q: 8.2,
-            peak: 8581e3
-          },
-          {
-            frequency: 2486,
-            q: 20.17,
-            peak: 1514e3
-          }
-        ],
-        misfit: 0.0501
-      },
-      {
-        target: 1100,
-        reached: true,
-        coords: [
-          -0.0186708,
-          -442523e-8
-        ],
-        second: {
-          frequency: 1100,
-          peak: 9e6,
-          q: 7.538
-        },
-        resonances: [
-          {
-            frequency: 229.5,
-            q: 0.878,
-            peak: 3988e3
-          },
-          {
-            frequency: 1090.9,
-            q: 8.373,
-            peak: 8654e3
-          },
-          {
-            frequency: 2471.6,
-            q: 19.74,
-            peak: 1712e3
-          }
-        ],
-        misfit: 0.0504
-      },
-      {
-        target: 1125,
-        reached: true,
-        coords: [
-          -0.0182108,
-          -296989e-8
-        ],
-        second: {
-          frequency: 1125,
-          peak: 9e6,
-          q: 7.748
-        },
-        resonances: [
-          {
-            frequency: 229.07,
-            q: 0.8887,
-            peak: 3993e3
-          },
-          {
-            frequency: 1116.9,
-            q: 8.513,
-            peak: 8621e3
-          },
-          {
-            frequency: 2456.7,
-            q: 19.17,
-            peak: 1923e3
-          }
-        ],
-        misfit: 0.0506
-      },
-      {
-        target: 1150,
-        reached: true,
-        coords: [
-          -0.0178234,
-          -145031e-8
-        ],
-        second: {
-          frequency: 1150,
-          peak: 9e6,
-          q: 7.854
-        },
-        resonances: [
-          {
-            frequency: 228.68,
-            q: 0.8994,
-            peak: 4e6
-          },
-          {
-            frequency: 1143.3,
-            q: 8.663,
-            peak: 8655e3
-          },
-          {
-            frequency: 2441.1,
-            q: 18.58,
-            peak: 2157e3
-          }
-        ],
-        misfit: 0.0509
-      },
-      {
-        target: 1175,
-        reached: true,
-        coords: [
-          -0.017463,
-          8251e-8
-        ],
-        second: {
-          frequency: 1175,
-          peak: 9e6,
-          q: 7.888
-        },
-        resonances: [
-          {
-            frequency: 228.04,
-            q: 0.8409,
-            peak: 4071e3
-          },
-          {
-            frequency: 1169.1,
-            q: 8.219,
-            peak: 881e4
-          },
-          {
-            frequency: 2425.8,
-            q: 13.48,
-            peak: 2688e3
-          },
-          {
-            frequency: 3465.2,
-            q: 28.46,
-            peak: 2111e4
-          }
-        ],
-        misfit: 0.0283
-      },
-      {
-        target: 1200,
-        reached: true,
-        coords: [
-          -0.0169357,
-          163891e-8
-        ],
-        second: {
-          frequency: 1200,
-          peak: 9e6,
-          q: 8.073
-        },
-        resonances: [
-          {
-            frequency: 227.71,
-            q: 0.8517,
-            peak: 4078e3
-          },
-          {
-            frequency: 1195.2,
-            q: 8.303,
-            peak: 8769e3
-          },
-          {
-            frequency: 2409.1,
-            q: 13.28,
-            peak: 2957e3
-          },
-          {
-            frequency: 3422.6,
-            q: 29.05,
-            peak: 2083e4
-          }
-        ],
-        misfit: 0.0282
-      },
-      {
-        target: 1225,
-        reached: true,
-        coords: [
-          -0.0164298,
-          326434e-8
-        ],
-        second: {
-          frequency: 1225,
-          peak: 9e6,
-          q: 8.185
-        },
-        resonances: [
-          {
-            frequency: 227.39,
-            q: 0.8628,
-            peak: 4086e3
-          },
-          {
-            frequency: 1221.7,
-            q: 8.388,
-            peak: 8769e3
-          },
-          {
-            frequency: 2391.3,
-            q: 13.06,
-            peak: 3243e3
-          },
-          {
-            frequency: 3379.5,
-            q: 29.46,
-            peak: 2038e4
-          }
-        ],
-        misfit: 0.0281
-      },
-      {
-        target: 1250,
-        reached: true,
-        coords: [
-          -0.0159344,
-          493344e-8
-        ],
-        second: {
-          frequency: 1250,
-          peak: 9e6,
-          q: 8.233
-        },
-        resonances: [
-          {
-            frequency: 227.1,
-            q: 0.8743,
-            peak: 4095e3
-          },
-          {
-            frequency: 1248.1,
-            q: 8.472,
-            peak: 8802e3
-          },
-          {
-            frequency: 2372.5,
-            q: 12.81,
-            peak: 3536e3
-          },
-          {
-            frequency: 3336.9,
-            q: 29.7,
-            peak: 1977e4
-          }
-        ],
-        misfit: 0.0281
-      },
-      {
-        target: 1275,
-        reached: true,
-        coords: [
-          -0.0154249,
-          663085e-8
-        ],
-        second: {
-          frequency: 1275,
-          peak: 9e6,
-          q: 8.249
-        },
-        resonances: [
-          {
-            frequency: 226.83,
-            q: 0.8863,
-            peak: 4104e3
-          },
-          {
-            frequency: 1274.1,
-            q: 8.548,
-            peak: 8851e3
-          },
-          {
-            frequency: 2352.8,
-            q: 12.55,
-            peak: 3826e3
-          },
-          {
-            frequency: 3295,
-            q: 29.8,
-            peak: 1897e4
-          }
-        ],
-        misfit: 0.0281
-      },
-      {
-        target: 1300,
-        reached: true,
-        coords: [
-          -0.0147622,
-          835533e-8
-        ],
-        second: {
-          frequency: 1300,
-          peak: 9e6,
-          q: 8.367
-        },
-        resonances: [
-          {
-            frequency: 226.57,
-            q: 0.8997,
-            peak: 4114e3
-          },
-          {
-            frequency: 1300.3,
-            q: 8.588,
-            peak: 882e4
-          },
-          {
-            frequency: 2331.6,
-            q: 12.27,
-            peak: 4103e3
-          },
-          {
-            frequency: 3254.3,
-            q: 29.79,
-            peak: 18e6
-          }
-        ],
-        misfit: 0.0281
-      },
-      {
-        target: 1325,
-        reached: true,
-        coords: [
-          -0.0140229,
-          0.0101463
-        ],
-        second: {
-          frequency: 1325,
-          peak: 9e6,
-          q: 8.472
-        },
-        resonances: [
-          {
-            frequency: 226.31,
-            q: 0.9144,
-            peak: 4124e3
-          },
-          {
-            frequency: 1327,
-            q: 8.611,
-            peak: 8781e3
-          },
-          {
-            frequency: 2308.7,
-            q: 11.95,
-            peak: 4361e3
-          },
-          {
-            frequency: 3213.9,
-            q: 29.58,
-            peak: 1685e4
-          }
-        ],
-        misfit: 0.0282
-      },
-      {
-        target: 1350,
-        reached: true,
-        coords: [
-          -0.0132203,
-          0.0120006
-        ],
-        second: {
-          frequency: 1350,
-          peak: 9e6,
-          q: 8.532
-        },
-        resonances: [
-          {
-            frequency: 226.06,
-            q: 0.9305,
-            peak: 4136e3
-          },
-          {
-            frequency: 1353.8,
-            q: 8.624,
-            peak: 8754e3
-          },
-          {
-            frequency: 2283.8,
-            q: 11.6,
-            peak: 4583e3
-          },
-          {
-            frequency: 3174.5,
-            q: 29.36,
-            peak: 156e5
-          }
-        ],
-        misfit: 0.0284
-      },
-      {
-        target: 1375,
-        reached: true,
-        coords: [
-          -0.012334,
-          0.0139109
-        ],
-        second: {
-          frequency: 1375,
-          peak: 9e6,
-          q: 8.559
-        },
-        resonances: [
-          {
-            frequency: 225.81,
-            q: 0.9485,
-            peak: 4148e3
-          },
-          {
-            frequency: 1380.8,
-            q: 8.623,
-            peak: 8732e3
-          },
-          {
-            frequency: 2256.9,
-            q: 11.21,
-            peak: 475e4
-          },
-          {
-            frequency: 3136.5,
-            q: 29.15,
-            peak: 143e5
-          }
-        ],
-        misfit: 0.0286
-      },
-      {
-        target: 1400,
-        reached: true,
-        coords: [
-          -0.0113412,
-          0.0158709
-        ],
-        second: {
-          frequency: 1400,
-          peak: 9e6,
-          q: 8.568
-        },
-        resonances: [
-          {
-            frequency: 225.57,
-            q: 0.9686,
-            peak: 4162e3
-          },
-          {
-            frequency: 1407.8,
-            q: 8.606,
-            peak: 871e4
-          },
-          {
-            frequency: 2227.8,
-            q: 10.78,
-            peak: 4844e3
-          },
-          {
-            frequency: 3100.2,
-            q: 28.91,
-            peak: 1297e4
-          }
-        ],
-        misfit: 0.029
-      },
-      {
-        target: 1425,
-        reached: true,
-        coords: [
-          -0.0102188,
-          0.0178735
-        ],
-        second: {
-          frequency: 1425,
-          peak: 9e6,
-          q: 8.561
-        },
-        resonances: [
-          {
-            frequency: 225.33,
-            q: 0.9912,
-            peak: 4178e3
-          },
-          {
-            frequency: 1435,
-            q: 8.571,
-            peak: 8682e3
-          },
-          {
-            frequency: 2196.4,
-            q: 10.29,
-            peak: 4849e3
-          },
-          {
-            frequency: 3066.2,
-            q: 28.77,
-            peak: 1169e4
-          }
-        ],
-        misfit: 0.0295
-      },
-      {
-        target: 1450,
-        reached: true,
-        coords: [
-          -894671e-8,
-          0.0199074
-        ],
-        second: {
-          frequency: 1450,
-          peak: 9e6,
-          q: 8.542
-        },
-        resonances: [
-          {
-            frequency: 225.09,
-            q: 1.017,
-            peak: 4195e3
-          },
-          {
-            frequency: 1462.3,
-            q: 8.519,
-            peak: 8644e3
-          },
-          {
-            frequency: 2162.5,
-            q: 9.746,
-            peak: 4758e3
-          },
-          {
-            frequency: 3034.7,
-            q: 28.76,
-            peak: 1049e4
-          }
-        ],
-        misfit: 0.0302
-      },
-      {
-        target: 1475,
-        reached: true,
-        coords: [
-          -804447e-8,
-          0.0201988
-        ],
-        second: {
-          frequency: 1458.3,
-          peak: 8462e3,
-          q: 8.286
-        },
-        resonances: [
-          {
-            frequency: 224.99,
-            q: 1.026,
-            peak: 42e5
-          },
-          {
-            frequency: 1471.7,
-            q: 8.309,
-            peak: 8118e3
-          },
-          {
-            frequency: 2155.7,
-            q: 9.65,
-            peak: 4765e3
-          },
-          {
-            frequency: 3032.5,
-            q: 28.93,
-            peak: 1044e4
-          }
-        ],
-        misfit: 0.0304
-      },
-      {
-        target: 1500,
-        reached: false,
-        coords: [
-          -727542e-8,
-          0.0201988
-        ],
-        second: {
-          frequency: 1462.6,
-          peak: 7987e3,
-          q: 8.151
-        },
-        resonances: [
-          {
-            frequency: 224.92,
-            q: 1.031,
-            peak: 4201e3
-          },
-          {
-            frequency: 1477.8,
-            q: 8.095,
-            peak: 7584e3
-          },
-          {
-            frequency: 2153.8,
-            q: 9.641,
-            peak: 4798e3
-          },
-          {
-            frequency: 3034.9,
-            q: 29.1,
-            peak: 1055e4
-          }
-        ],
-        misfit: 0.0305
-      },
-      {
-        target: 1525,
-        reached: false,
-        coords: [
-          -658425e-8,
-          0.0201988
-        ],
-        second: {
-          frequency: 1466.2,
-          peak: 7565e3,
-          q: 7.982
-        },
-        resonances: [
-          {
-            frequency: 224.85,
-            q: 1.036,
-            peak: 4202e3
-          },
-          {
-            frequency: 1483.2,
-            q: 7.906,
-            peak: 7129e3
-          },
-          {
-            frequency: 2152.2,
-            q: 9.639,
-            peak: 483e4
-          },
-          {
-            frequency: 3037.1,
-            q: 29.25,
-            peak: 1065e4
-          }
-        ],
-        misfit: 0.0306
-      },
-      {
-        target: 1550,
-        reached: false,
-        coords: [
-          -594771e-8,
-          0.0201988
-        ],
-        second: {
-          frequency: 1469.5,
-          peak: 7184e3,
-          q: 7.808
-        },
-        resonances: [
-          {
-            frequency: 224.79,
-            q: 1.041,
-            peak: 4203e3
-          },
-          {
-            frequency: 1488.2,
-            q: 7.735,
-            peak: 6732e3
-          },
-          {
-            frequency: 2150.8,
-            q: 9.644,
-            peak: 4862e3
-          },
-          {
-            frequency: 3039.2,
-            q: 29.39,
-            peak: 1074e4
-          }
-        ],
-        misfit: 0.0307
-      },
-      {
-        target: 1575,
-        reached: false,
-        coords: [
-          -518859e-8,
-          0.0201988
-        ],
-        second: {
-          frequency: 1473.5,
-          peak: 6746e3,
-          q: 7.585
-        },
-        resonances: [
-          {
-            frequency: 224.71,
-            q: 1.046,
-            peak: 4205e3
-          },
-          {
-            frequency: 1494.3,
-            q: 7.535,
-            peak: 6283e3
-          },
-          {
-            frequency: 2149.2,
-            q: 9.657,
-            peak: 4902e3
-          },
-          {
-            frequency: 3041.9,
-            q: 29.57,
-            peak: 1084e4
-          }
-        ],
-        misfit: 0.0308
-      }
-    ]
-  },
-  bend: {
-    peak: 3464e4,
-    reach: 1350,
-    rows: [
-      {
-        target: 450,
-        reached: true,
-        coords: [
-          -0.0429852,
-          -0.0269954
-        ],
-        second: {
-          frequency: 450,
-          peak: 3464e4,
-          q: 5.072
-        },
-        resonances: [
-          {
-            frequency: 267.33,
-            q: 1.168,
-            peak: 5831e3
-          },
-          {
-            frequency: 434.7,
-            q: 5.7,
-            peak: 3103e4
-          }
-        ],
-        misfit: 0.0878
-      },
-      {
-        target: 475,
-        reached: true,
-        coords: [
-          -0.0429511,
-          -0.026228
-        ],
-        second: {
-          frequency: 475,
-          peak: 3464e4,
-          q: 5.445
-        },
-        resonances: [
-          {
-            frequency: 268.86,
-            q: 1.078,
-            peak: 5536e3
-          },
-          {
-            frequency: 459.97,
-            q: 5.964,
-            peak: 3095e4
-          }
-        ],
-        misfit: 0.0867
-      },
-      {
-        target: 500,
-        reached: true,
-        coords: [
-          -0.042864,
-          -0.0254552
-        ],
-        second: {
-          frequency: 500,
-          peak: 3464e4,
-          q: 5.801
-        },
-        resonances: [
-          {
-            frequency: 268.6,
-            q: 1,
-            peak: 5257e3
-          },
-          {
-            frequency: 485.45,
-            q: 6.25,
-            peak: 3101e4
-          }
-        ],
-        misfit: 0.085
-      },
-      {
-        target: 525,
-        reached: true,
-        coords: [
-          -0.042725,
-          -0.0246785
-        ],
-        second: {
-          frequency: 525,
-          peak: 3464e4,
-          q: 6.15
-        },
-        resonances: [
-          {
-            frequency: 267.15,
-            q: 0.937,
-            peak: 501e4
-          },
-          {
-            frequency: 511.02,
-            q: 6.556,
-            peak: 3116e4
-          }
-        ],
-        misfit: 0.0829
-      },
-      {
-        target: 550,
-        reached: true,
-        coords: [
-          -0.0425631,
-          -0.0238867
-        ],
-        second: {
-          frequency: 550,
-          peak: 3464e4,
-          q: 6.467
-        },
-        resonances: [
-          {
-            frequency: 209.87,
-            q: 0.3,
-            peak: 3351e3
-          },
-          {
-            frequency: 536.51,
-            q: 6.894,
-            peak: 3068e4
-          }
-        ],
-        misfit: 0.121
-      },
-      {
-        target: 575,
-        reached: true,
-        coords: [
-          -0.0423725,
-          -0.0230765
-        ],
-        second: {
-          frequency: 575,
-          peak: 3464e4,
-          q: 6.786
-        },
-        resonances: [
-          {
-            frequency: 207.2,
-            q: 0.3,
-            peak: 3344e3
-          },
-          {
-            frequency: 562.65,
-            q: 7.405,
-            peak: 3131e4
-          }
-        ],
-        misfit: 0.115
-      },
-      {
-        target: 600,
-        reached: true,
-        coords: [
-          -0.0420721,
-          -0.0222889
-        ],
-        second: {
-          frequency: 600,
-          peak: 3464e4,
-          q: 7.15
-        },
-        resonances: [
-          {
-            frequency: 210.26,
-            q: 0.3,
-            peak: 3319e3
-          },
-          {
-            frequency: 588.42,
-            q: 7.931,
-            peak: 3169e4
-          }
-        ],
-        misfit: 0.109
-      },
-      {
-        target: 625,
-        reached: true,
-        coords: [
-          -0.0418797,
-          -0.0214325
-        ],
-        second: {
-          frequency: 625,
-          peak: 3464e4,
-          q: 7.398
-        },
-        resonances: [
-          {
-            frequency: 212.15,
-            q: 0.3,
-            peak: 3284e3
-          },
-          {
-            frequency: 614.29,
-            q: 8.455,
-            peak: 3235e4
-          }
-        ],
-        misfit: 0.104
-      },
-      {
-        target: 650,
-        reached: true,
-        coords: [
-          -0.0415397,
-          -0.0206127
-        ],
-        second: {
-          frequency: 650,
-          peak: 3464e4,
-          q: 7.78
-        },
-        resonances: [
-          {
-            frequency: 212.96,
-            q: 0.3,
-            peak: 3247e3
-          },
-          {
-            frequency: 639.68,
-            q: 8.906,
-            peak: 3258e4
-          }
-        ],
-        misfit: 0.1
+        misfit: 0.0422
       },
       {
         target: 675,
         reached: true,
         coords: [
-          -0.0412244,
-          -0.0197485
+          -0.0266617,
+          -0.0151458,
+          -476091e-8,
+          0.0132253
         ],
         second: {
           frequency: 675,
-          peak: 3464e4,
-          q: 8.105
+          peak: 9e6,
+          q: 4.84
         },
         resonances: [
           {
-            frequency: 212.99,
-            q: 0.3,
-            peak: 3209e3
+            frequency: 248.9,
+            q: 0.8195,
+            peak: 4495e3
           },
           {
-            frequency: 665.3,
-            q: 9.341,
-            peak: 3287e4
+            frequency: 649.25,
+            q: 5.213,
+            peak: 7251e3
           },
           {
-            frequency: 3354.6,
-            q: 100,
-            peak: 53660
+            frequency: 3244.8,
+            q: 4.154,
+            peak: 13450
           }
         ],
-        misfit: 0.0969
+        misfit: 0.0429
       },
       {
         target: 700,
         reached: true,
         coords: [
-          -0.0409506,
-          -0.0188467
+          -0.0289142,
+          -627801e-8,
+          -535865e-8,
+          0.0218921
         ],
         second: {
           frequency: 700,
-          peak: 3464e4,
-          q: 8.38
+          peak: 9e6,
+          q: 5.765
         },
         resonances: [
           {
-            frequency: 212.39,
-            q: 0.3,
-            peak: 3171e3
+            frequency: 239.63,
+            q: 0.8419,
+            peak: 4212e3
           },
           {
-            frequency: 690.83,
-            q: 9.762,
-            peak: 3325e4
+            frequency: 680.28,
+            q: 6.434,
+            peak: 7901e3
           },
           {
-            frequency: 3337.5,
-            q: 100,
-            peak: 54310
+            frequency: 3174.2,
+            q: 3.939,
+            peak: 327600
           }
         ],
-        misfit: 0.094
+        misfit: 0.0336
       },
       {
         target: 725,
         reached: true,
         coords: [
-          -0.0406771,
-          -0.0179237
+          -0.0281711,
+          -43389e-7,
+          -754385e-8,
+          0.0212551
         ],
         second: {
           frequency: 725,
-          peak: 3464e4,
-          q: 8.644
+          peak: 9e6,
+          q: 6.054
         },
         resonances: [
           {
-            frequency: 245.15,
-            q: 0.7435,
-            peak: 4095e3
+            frequency: 240.98,
+            q: 0.8587,
+            peak: 4365e3
           },
           {
-            frequency: 715.98,
-            q: 9.073,
-            peak: 3304e4
+            frequency: 706.1,
+            q: 6.779,
+            peak: 7973e3
           },
           {
-            frequency: 3320,
-            q: 3.665,
-            peak: 2099e3
+            frequency: 3182.7,
+            q: 4.024,
+            peak: 327600
           }
         ],
-        misfit: 0.054
+        misfit: 0.0336
       },
       {
         target: 750,
         reached: true,
         coords: [
-          -0.0403774,
-          -0.0169843
+          -0.027759,
+          -334873e-8,
+          -676073e-8,
+          0.0214488
         ],
         second: {
           frequency: 750,
-          peak: 3464e4,
-          q: 8.905
+          peak: 9e6,
+          q: 6.358
         },
         resonances: [
           {
-            frequency: 242.93,
-            q: 0.7449,
-            peak: 4054e3
+            frequency: 237.62,
+            q: 0.8635,
+            peak: 425e4
           },
           {
-            frequency: 741.35,
-            q: 9.376,
-            peak: 3323e4
+            frequency: 732.52,
+            q: 7.031,
+            peak: 8126e3
           },
           {
-            frequency: 3302.7,
-            q: 3.511,
-            peak: 1992e3
+            frequency: 3192,
+            q: 3.932,
+            peak: 327700
           }
         ],
-        misfit: 0.0529
+        misfit: 0.0322
       },
       {
         target: 775,
         reached: true,
         coords: [
-          -0.0400409,
-          -0.016028
+          -0.0272998,
+          -235247e-8,
+          -600972e-8,
+          0.0215755
         ],
         second: {
           frequency: 775,
-          peak: 3464e4,
-          q: 9.181
+          peak: 9e6,
+          q: 6.661
         },
         resonances: [
           {
-            frequency: 240.94,
-            q: 0.7482,
-            peak: 4024e3
+            frequency: 234.72,
+            q: 0.8704,
+            peak: 4157e3
           },
           {
-            frequency: 766.74,
-            q: 9.667,
-            peak: 3333e4
+            frequency: 758.77,
+            q: 7.277,
+            peak: 8243e3
           },
           {
-            frequency: 3290.3,
-            q: 3.384,
-            peak: 1917e3
+            frequency: 3188.9,
+            q: 3.698,
+            peak: 313600
           }
         ],
-        misfit: 0.0519
+        misfit: 0.0311
       },
       {
         target: 800,
         reached: true,
         coords: [
-          -0.0396684,
-          -0.0150534
+          -0.026802,
+          -118486e-8,
+          -541608e-8,
+          0.0217323
         ],
         second: {
           frequency: 800,
-          peak: 3464e4,
-          q: 9.489
+          peak: 9e6,
+          q: 6.973
         },
         resonances: [
           {
-            frequency: 239.18,
-            q: 0.7529,
-            peak: 4001e3
+            frequency: 232.3,
+            q: 0.8801,
+            peak: 4087e3
           },
           {
-            frequency: 792.13,
-            q: 9.948,
-            peak: 3334e4
+            frequency: 784.93,
+            q: 7.535,
+            peak: 8331e3
           },
           {
-            frequency: 3279.5,
-            q: 3.26,
-            peak: 1852e3
+            frequency: 3180.4,
+            q: 3.405,
+            peak: 295200
           }
         ],
-        misfit: 0.051
+        misfit: 0.0301
       },
       {
         target: 825,
         reached: true,
         coords: [
-          -0.0392754,
-          -0.0140587
+          -0.0262974,
+          -442715e-12,
+          -471675e-8,
+          0.0218965
         ],
         second: {
           frequency: 825,
-          peak: 3464e4,
-          q: 9.831
+          peak: 9e6,
+          q: 7.277
         },
         resonances: [
           {
-            frequency: 237.61,
-            q: 0.7587,
-            peak: 3984e3
+            frequency: 230,
+            q: 0.8903,
+            peak: 4018e3
           },
           {
-            frequency: 817.42,
-            q: 10.22,
-            peak: 3331e4
+            frequency: 810.98,
+            q: 7.784,
+            peak: 84e5
           },
           {
-            frequency: 3269.1,
-            q: 3.13,
-            peak: 1791e3
+            frequency: 3166.9,
+            q: 3.081,
+            peak: 279700
           }
         ],
-        misfit: 0.0503
+        misfit: 0.0292
       },
       {
         target: 850,
         reached: true,
         coords: [
-          -0.0389013,
-          -0.0130362
+          -0.0257738,
+          134969e-8,
+          -416487e-8,
+          0.0220691
         ],
         second: {
           frequency: 850,
-          peak: 3464e4,
-          q: 10.17
+          peak: 9e6,
+          q: 7.595
         },
         resonances: [
           {
-            frequency: 236.23,
-            q: 0.7653,
-            peak: 3972e3
+            frequency: 228.1,
+            q: 0.902,
+            peak: 3967e3
           },
           {
-            frequency: 842.54,
-            q: 10.49,
-            peak: 3332e4
+            frequency: 836.9,
+            q: 8.046,
+            peak: 8465e3
           },
           {
-            frequency: 3257.1,
-            q: 2.983,
-            peak: 1725e3
-          }
-        ],
-        misfit: 0.0497
-      },
-      {
-        target: 875,
-        reached: true,
-        coords: [
-          -0.038606,
-          -0.0119617
-        ],
-        second: {
-          frequency: 875,
-          peak: 3464e4,
-          q: 10.32
-        },
-        resonances: [
-          {
-            frequency: 234.99,
-            q: 0.7727,
-            peak: 3964e3
-          },
-          {
-            frequency: 867.66,
-            q: 10.79,
-            peak: 3356e4
-          },
-          {
-            frequency: 3246.7,
-            q: 2.837,
-            peak: 1672e3
-          }
-        ],
-        misfit: 0.0492
-      },
-      {
-        target: 900,
-        reached: true,
-        coords: [
-          -0.038343,
-          -0.0108196
-        ],
-        second: {
-          frequency: 900,
-          peak: 3464e4,
-          q: 10.42
-        },
-        resonances: [
-          {
-            frequency: 234.21,
-            q: 0.8032,
-            peak: 3912e3
-          },
-          {
-            frequency: 892.75,
-            q: 11.16,
-            peak: 3364e4
-          },
-          {
-            frequency: 2604,
-            q: 18.98,
-            peak: 584100
-          }
-        ],
-        misfit: 0.0615
-      },
-      {
-        target: 925,
-        reached: true,
-        coords: [
-          -0.037828,
-          -972743e-8
-        ],
-        second: {
-          frequency: 925,
-          peak: 3464e4,
-          q: 10.9
-        },
-        resonances: [
-          {
-            frequency: 233.28,
-            q: 0.8114,
-            peak: 3911e3
-          },
-          {
-            frequency: 917.95,
-            q: 11.39,
-            peak: 333e5
-          },
-          {
-            frequency: 2587,
-            q: 21.3,
-            peak: 715300
-          }
-        ],
-        misfit: 0.061
-      },
-      {
-        target: 950,
-        reached: true,
-        coords: [
-          -0.0375369,
-          -855833e-8
-        ],
-        second: {
-          frequency: 950,
-          peak: 3464e4,
-          q: 11.03
-        },
-        resonances: [
-          {
-            frequency: 232.44,
-            q: 0.8201,
-            peak: 391e4
-          },
-          {
-            frequency: 942.82,
-            q: 11.68,
-            peak: 3357e4
-          },
-          {
-            frequency: 2573.8,
-            q: 22.19,
-            peak: 846500
-          }
-        ],
-        misfit: 0.0607
-      },
-      {
-        target: 975,
-        reached: true,
-        coords: [
-          -0.0371406,
-          -732554e-8
-        ],
-        second: {
-          frequency: 975,
-          peak: 3464e4,
-          q: 11.28
-        },
-        resonances: [
-          {
-            frequency: 231.67,
-            q: 0.8291,
-            peak: 3912e3
-          },
-          {
-            frequency: 968.65,
-            q: 11.94,
-            peak: 3361e4
-          },
-          {
-            frequency: 2559.6,
-            q: 22.49,
-            peak: 995600
-          }
-        ],
-        misfit: 0.0604
-      },
-      {
-        target: 1e3,
-        reached: true,
-        coords: [
-          -0.0367285,
-          -61144e-7
-        ],
-        second: {
-          frequency: 1e3,
-          peak: 3464e4,
-          q: 11.53
-        },
-        resonances: [
-          {
-            frequency: 231.03,
-            q: 0.8378,
-            peak: 3915e3
-          },
-          {
-            frequency: 993.27,
-            q: 12.18,
-            peak: 3357e4
-          },
-          {
-            frequency: 2546.2,
-            q: 22.85,
-            peak: 1165e3
-          }
-        ],
-        misfit: 0.0601
-      },
-      {
-        target: 1025,
-        reached: true,
-        coords: [
-          -0.0363681,
-          -477382e-8
-        ],
-        second: {
-          frequency: 1025,
-          peak: 3464e4,
-          q: 11.68
-        },
-        resonances: [
-          {
-            frequency: 230.43,
-            q: 0.8471,
-            peak: 392e4
-          },
-          {
-            frequency: 1019.1,
-            q: 12.46,
-            peak: 3376e4
-          },
-          {
-            frequency: 2532.4,
-            q: 22.53,
-            peak: 1355e3
-          }
-        ],
-        misfit: 0.0598
-      },
-      {
-        target: 1050,
-        reached: true,
-        coords: [
-          -0.0359463,
-          -346943e-8
-        ],
-        second: {
-          frequency: 1050,
-          peak: 3464e4,
-          q: 11.91
-        },
-        resonances: [
-          {
-            frequency: 229.93,
-            q: 0.8557,
-            peak: 3926e3
-          },
-          {
-            frequency: 1043.7,
-            q: 12.69,
-            peak: 3376e4
-          },
-          {
-            frequency: 2518.1,
-            q: 22.22,
-            peak: 1563e3
-          }
-        ],
-        misfit: 0.0596
-      },
-      {
-        target: 1075,
-        reached: true,
-        coords: [
-          -0.035463,
-          -203829e-8
-        ],
-        second: {
-          frequency: 1075,
-          peak: 3464e4,
-          q: 12.14
-        },
-        resonances: [
-          {
-            frequency: 229.46,
-            q: 0.8645,
-            peak: 3933e3
-          },
-          {
-            frequency: 1069.6,
-            q: 12.91,
-            peak: 3369e4
-          },
-          {
-            frequency: 2502.9,
-            q: 21.68,
-            peak: 1811e3
-          }
-        ],
-        misfit: 0.0593
-      },
-      {
-        target: 1100,
-        reached: true,
-        coords: [
-          -0.0351972,
-          -546067e-9
-        ],
-        second: {
-          frequency: 1100,
-          peak: 3464e4,
-          q: 12.15
-        },
-        resonances: [
-          {
-            frequency: 229.05,
-            q: 0.8729,
-            peak: 3941e3
-          },
-          {
-            frequency: 1094.4,
-            q: 13.2,
-            peak: 3424e4
-          },
-          {
-            frequency: 2487.5,
-            q: 20.9,
-            peak: 2077e3
-          }
-        ],
-        misfit: 0.059
-      },
-      {
-        target: 1125,
-        reached: true,
-        coords: [
-          -0.0345067,
-          940814e-9
-        ],
-        second: {
-          frequency: 1125,
-          peak: 3464e4,
-          q: 12.55
-        },
-        resonances: [
-          {
-            frequency: 228.31,
-            q: 0.8011,
-            peak: 4031e3
-          },
-          {
-            frequency: 1121,
-            q: 12.87,
-            peak: 3417e4
-          },
-          {
-            frequency: 2471.1,
-            q: 13.79,
-            peak: 2719e3
-          },
-          {
-            frequency: 3481.9,
-            q: 29.75,
-            peak: 2698e4
-          }
-        ],
-        misfit: 0.0299
-      },
-      {
-        target: 1150,
-        reached: true,
-        coords: [
-          -0.0340316,
-          263908e-8
-        ],
-        second: {
-          frequency: 1150,
-          peak: 3464e4,
-          q: 12.64
-        },
-        resonances: [
-          {
-            frequency: 227.97,
-            q: 0.8113,
-            peak: 404e4
-          },
-          {
-            frequency: 1146.9,
-            q: 13.09,
-            peak: 3439e4
-          },
-          {
-            frequency: 2452.2,
-            q: 13.72,
-            peak: 3062e3
-          },
-          {
-            frequency: 3424.1,
-            q: 30.24,
-            peak: 2543e4
-          }
-        ],
-        misfit: 0.0296
-      },
-      {
-        target: 1175,
-        reached: true,
-        coords: [
-          -0.0336356,
-          440877e-8
-        ],
-        second: {
-          frequency: 1175,
-          peak: 3464e4,
-          q: 12.59
-        },
-        resonances: [
-          {
-            frequency: 227.68,
-            q: 0.8217,
-            peak: 405e4
-          },
-          {
-            frequency: 1171.6,
-            q: 13.33,
-            peak: 3492e4
-          },
-          {
-            frequency: 2432.1,
-            q: 13.63,
-            peak: 3413e3
-          },
-          {
-            frequency: 3368,
-            q: 30.39,
-            peak: 2356e4
-          }
-        ],
-        misfit: 0.0293
-      },
-      {
-        target: 1200,
-        reached: true,
-        coords: [
-          -0.0327985,
-          619915e-8
-        ],
-        second: {
-          frequency: 1200,
-          peak: 3464e4,
-          q: 13.04
-        },
-        resonances: [
-          {
-            frequency: 227.44,
-            q: 0.8326,
-            peak: 4062e3
-          },
-          {
-            frequency: 1196.6,
-            q: 13.42,
-            peak: 3438e4
-          },
-          {
-            frequency: 2409.4,
-            q: 13.47,
-            peak: 376e4
-          },
-          {
-            frequency: 3313.9,
-            q: 30.24,
-            peak: 2142e4
-          }
-        ],
-        misfit: 0.0291
-      },
-      {
-        target: 1225,
-        reached: true,
-        coords: [
-          -0.0319809,
-          828117e-8
-        ],
-        second: {
-          frequency: 1225,
-          peak: 3464e4,
-          q: 13.24
-        },
-        resonances: [
-          {
-            frequency: 227.19,
-            q: 0.8451,
-            peak: 4075e3
-          },
-          {
-            frequency: 1222.5,
-            q: 13.57,
-            peak: 3427e4
-          },
-          {
-            frequency: 2382.5,
-            q: 13.26,
-            peak: 4112e3
-          },
-          {
-            frequency: 3256.6,
-            q: 29.73,
-            peak: 1887e4
-          }
-        ],
-        misfit: 0.0287
-      },
-      {
-        target: 1250,
-        reached: true,
-        coords: [
-          -0.0311473,
-          0.0106675
-        ],
-        second: {
-          frequency: 1250,
-          peak: 3464e4,
-          q: 13.28
-        },
-        resonances: [
-          {
-            frequency: 226.96,
-            q: 0.86,
-            peak: 4091e3
-          },
-          {
-            frequency: 1248.2,
-            q: 13.77,
-            peak: 3459e4
-          },
-          {
-            frequency: 2350.8,
-            q: 13,
-            peak: 441e4
-          },
-          {
-            frequency: 3197.6,
-            q: 28.99,
-            peak: 1595e4
-          }
-        ],
-        misfit: 0.0284
-      },
-      {
-        target: 1275,
-        reached: true,
-        coords: [
-          -0.0301341,
-          0.013408
-        ],
-        second: {
-          frequency: 1275,
-          peak: 3464e4,
-          q: 13.17
-        },
-        resonances: [
-          {
-            frequency: 226.74,
-            q: 0.8782,
-            peak: 4109e3
-          },
-          {
-            frequency: 1273.2,
-            q: 14.02,
-            peak: 351e5
-          },
-          {
-            frequency: 2312.7,
-            q: 12.66,
-            peak: 4568e3
-          },
-          {
-            frequency: 3137.9,
-            q: 27.95,
-            peak: 1282e4
-          }
-        ],
-        misfit: 0.0282
-      },
-      {
-        target: 1300,
-        reached: true,
-        coords: [
-          -0.0285334,
-          0.0164368
-        ],
-        second: {
-          frequency: 1300,
-          peak: 3464e4,
-          q: 13.53
-        },
-        resonances: [
-          {
-            frequency: 226.52,
-            q: 0.9011,
-            peak: 4131e3
-          },
-          {
-            frequency: 1298,
-            q: 14.19,
-            peak: 3485e4
-          },
-          {
-            frequency: 2268.1,
-            q: 12.17,
-            peak: 4491e3
-          },
-          {
-            frequency: 3080.3,
-            q: 26.88,
-            peak: 9914e3
-          }
-        ],
-        misfit: 0.0281
-      },
-      {
-        target: 1325,
-        reached: true,
-        coords: [
-          -0.026208,
-          0.0201988
-        ],
-        second: {
-          frequency: 1324.8,
-          peak: 3457e4,
-          q: 14.02
-        },
-        resonances: [
-          {
-            frequency: 226.26,
-            q: 0.9343,
-            peak: 4159e3
-          },
-          {
-            frequency: 1323.2,
-            q: 14.41,
-            peak: 3447e4
-          },
-          {
-            frequency: 2211.8,
-            q: 11.41,
-            peak: 4031e3
-          },
-          {
-            frequency: 3019.6,
-            q: 25.97,
-            peak: 7159e3
-          }
-        ],
-        misfit: 0.0283
-      },
-      {
-        target: 1350,
-        reached: true,
-        coords: [
-          -0.0250617,
-          0.0201988
-        ],
-        second: {
-          frequency: 1333.9,
-          peak: 3188e4,
-          q: 13.67
-        },
-        resonances: [
-          {
-            frequency: 226.21,
-            q: 0.938,
-            peak: 4163e3
-          },
-          {
-            frequency: 1333.7,
-            q: 13.98,
-            peak: 3173e4
-          },
-          {
-            frequency: 2207.7,
-            q: 11.25,
-            peak: 4109e3
-          },
-          {
-            frequency: 3017.6,
-            q: 26.1,
-            peak: 7386e3
-          }
-        ],
-        misfit: 0.0284
-      },
-      {
-        target: 1375,
-        reached: false,
-        coords: [
-          -0.023544,
-          0.0201988
-        ],
-        second: {
-          frequency: 1348.1,
-          peak: 2859e4,
-          q: 13.21
-        },
-        resonances: [
-          {
-            frequency: 226.14,
-            q: 0.9433,
-            peak: 4167e3
-          },
-          {
-            frequency: 1347.2,
-            q: 13.42,
-            peak: 2837e4
-          },
-          {
-            frequency: 2202.3,
-            q: 11.04,
-            peak: 42e5
-          },
-          {
-            frequency: 3015.6,
-            q: 26.27,
-            peak: 7686e3
-          }
-        ],
-        misfit: 0.0284
-      },
-      {
-        target: 1400,
-        reached: false,
-        coords: [
-          -0.0228835,
-          0.0201988
-        ],
-        second: {
-          frequency: 1353,
-          peak: 2731e4,
-          q: 12.99
-        },
-        resonances: [
-          {
-            frequency: 226.11,
-            q: 0.9457,
-            peak: 4169e3
-          },
-          {
-            frequency: 1352.9,
-            q: 13.18,
-            peak: 2701e4
-          },
-          {
-            frequency: 2200.1,
-            q: 10.95,
-            peak: 4236e3
-          },
-          {
-            frequency: 3015,
-            q: 26.35,
-            peak: 7815e3
+            frequency: 3153.5,
+            q: 2.822,
+            peak: 275100
           }
         ],
         misfit: 0.0285
       },
       {
-        target: 1425,
-        reached: false,
+        target: 875,
+        reached: true,
         coords: [
-          -0.0210284,
-          0.0201988
+          -0.0252454,
+          234676e-8,
+          -343044e-8,
+          0.0218987
         ],
         second: {
-          frequency: 1368.8,
-          peak: 2365e4,
-          q: 12.29
+          frequency: 875,
+          peak: 9e6,
+          q: 7.792
         },
         resonances: [
           {
-            frequency: 226.01,
-            q: 0.9531,
-            peak: 4174e3
+            frequency: 226.42,
+            q: 0.9094,
+            peak: 3916e3
           },
           {
-            frequency: 1368.7,
-            q: 12.5,
-            peak: 2348e4
+            frequency: 862.68,
+            q: 8.26,
+            peak: 8548e3
           },
           {
-            frequency: 2193.9,
-            q: 10.71,
-            peak: 4326e3
-          },
-          {
-            frequency: 3013.9,
-            q: 26.59,
-            peak: 8176e3
+            frequency: 3139,
+            q: 2.619,
+            peak: 289600
           }
         ],
-        misfit: 0.0286
+        misfit: 0.0279
       },
       {
-        target: 1450,
-        reached: false,
+        target: 900,
+        reached: true,
         coords: [
-          -0.0205776,
-          0.0201988
+          -0.0246923,
+          361122e-8,
+          -293886e-8,
+          0.0217665
         ],
         second: {
-          frequency: 1372.1,
-          peak: 2297e4,
-          q: 12.21
+          frequency: 900,
+          peak: 9e6,
+          q: 7.969
         },
         resonances: [
           {
-            frequency: 225.98,
-            q: 0.955,
-            peak: 4175e3
+            frequency: 225.11,
+            q: 0.9189,
+            peak: 3884e3
           },
           {
-            frequency: 1372.4,
-            q: 12.34,
-            peak: 2268e4
+            frequency: 888.82,
+            q: 8.505,
+            peak: 8642e3
           },
           {
-            frequency: 2192.4,
-            q: 10.65,
-            peak: 4345e3
-          },
-          {
-            frequency: 3013.8,
-            q: 26.65,
-            peak: 8263e3
+            frequency: 3121.3,
+            q: 2.471,
+            peak: 309700
           }
         ],
-        misfit: 0.0287
+        misfit: 0.0274
       },
       {
-        target: 1475,
-        reached: false,
+        target: 925,
+        reached: true,
         coords: [
-          -0.0200735,
-          0.0201988
+          -0.0239755,
+          477213e-8,
+          -246738e-8,
+          0.0216162
         ],
         second: {
-          frequency: 1375.7,
-          peak: 2212e4,
-          q: 12.04
+          frequency: 925,
+          peak: 9e6,
+          q: 8.29
         },
         resonances: [
           {
-            frequency: 225.95,
-            q: 0.9572,
-            peak: 4176e3
+            frequency: 224.03,
+            q: 0.9358,
+            peak: 3846e3
           },
           {
-            frequency: 1376.6,
-            q: 12.16,
-            peak: 2182e4
+            frequency: 914.48,
+            q: 8.738,
+            peak: 8617e3
           },
           {
-            frequency: 2190.8,
-            q: 10.59,
-            peak: 4366e3
-          },
-          {
-            frequency: 3013.8,
-            q: 26.73,
-            peak: 8359e3
+            frequency: 3104.8,
+            q: 100,
+            peak: 289100
           }
         ],
-        misfit: 0.0287
+        misfit: 0.0279
       },
       {
-        target: 1500,
-        reached: false,
+        target: 950,
+        reached: true,
         coords: [
-          -0.0180959,
-          0.0201988
+          -0.0233586,
+          615575e-8,
+          -208792e-8,
+          0.0214708
         ],
         second: {
-          frequency: 1391.4,
-          peak: 1891e4,
-          q: 11.33
+          frequency: 950,
+          peak: 9e6,
+          q: 8.48
         },
         resonances: [
           {
-            frequency: 225.82,
-            q: 0.9663,
-            peak: 4181e3
+            frequency: 223,
+            q: 0.9268,
+            peak: 3839e3
           },
           {
-            frequency: 1392.7,
-            q: 11.46,
-            peak: 187e5
+            frequency: 940.08,
+            q: 8.839,
+            peak: 8704e3
           },
           {
-            frequency: 2184.5,
-            q: 10.36,
-            peak: 444e4
+            frequency: 2409.6,
+            q: 17.76,
+            peak: 283600
           },
           {
-            frequency: 3014.3,
-            q: 27.02,
-            peak: 8733e3
+            frequency: 3467.9,
+            q: 32.25,
+            peak: 6153e3
+          }
+        ],
+        misfit: 0.0254
+      },
+      {
+        target: 975,
+        reached: true,
+        coords: [
+          -0.0199342,
+          -0.0148528,
+          447442e-8,
+          -549426e-8
+        ],
+        second: {
+          frequency: 975,
+          peak: 9e6,
+          q: 6.782
+        },
+        resonances: [
+          {
+            frequency: 228.25,
+            q: 0.8518,
+            peak: 3768e3
+          },
+          {
+            frequency: 962.58,
+            q: 7.479,
+            peak: 8478e3
+          },
+          {
+            frequency: 2601,
+            q: 16.13,
+            peak: 1341e3
+          }
+        ],
+        misfit: 0.0601
+      },
+      {
+        target: 1e3,
+        reached: true,
+        coords: [
+          -0.0196865,
+          -0.0137655,
+          5183e-6,
+          -591624e-8
+        ],
+        second: {
+          frequency: 1e3,
+          peak: 9e6,
+          q: 6.953
+        },
+        resonances: [
+          {
+            frequency: 226.8,
+            q: 0.8674,
+            peak: 3735e3
+          },
+          {
+            frequency: 988.69,
+            q: 7.662,
+            peak: 8507e3
+          },
+          {
+            frequency: 2591.9,
+            q: 16.87,
+            peak: 1638e3
+          }
+        ],
+        misfit: 0.0616
+      },
+      {
+        target: 1025,
+        reached: true,
+        coords: [
+          -0.0194893,
+          -0.012608,
+          588455e-8,
+          -637068e-8
+        ],
+        second: {
+          frequency: 1025,
+          peak: 9e6,
+          q: 7.065
+        },
+        resonances: [
+          {
+            frequency: 225.49,
+            q: 0.8838,
+            peak: 3704e3
+          },
+          {
+            frequency: 1015.3,
+            q: 7.851,
+            peak: 855e4
+          },
+          {
+            frequency: 2583.7,
+            q: 17.36,
+            peak: 1988e3
+          }
+        ],
+        misfit: 0.0636
+      },
+      {
+        target: 1050,
+        reached: true,
+        coords: [
+          -0.0186867,
+          -42292e-7,
+          -670709e-8,
+          30955e-7
+        ],
+        second: {
+          frequency: 1050,
+          peak: 9e6,
+          q: 7.714
+        },
+        resonances: [
+          {
+            frequency: 239.24,
+            q: 0.8745,
+            peak: 4447e3
+          },
+          {
+            frequency: 1038.1,
+            q: 8.547,
+            peak: 8547e3
+          },
+          {
+            frequency: 2473.7,
+            q: 26.04,
+            peak: 715400
+          }
+        ],
+        misfit: 0.0457
+      },
+      {
+        target: 1075,
+        reached: true,
+        coords: [
+          -0.0194654,
+          -483162e-8,
+          483483e-8,
+          251126e-8
+        ],
+        second: {
+          frequency: 1075,
+          peak: 9e6,
+          q: 7.597
+        },
+        resonances: [
+          {
+            frequency: 222.31,
+            q: 0.8962,
+            peak: 3702e3
+          },
+          {
+            frequency: 1066.3,
+            q: 8.212,
+            peak: 8643e3
+          },
+          {
+            frequency: 2464.1,
+            q: 19.57,
+            peak: 1854e3
+          }
+        ],
+        misfit: 0.0457
+      },
+      {
+        target: 1100,
+        reached: true,
+        coords: [
+          -0.0175377,
+          583305e-8,
+          -639854e-8,
+          0.011789
+        ],
+        second: {
+          frequency: 1100,
+          peak: 9e6,
+          q: 8.99
+        },
+        resonances: [
+          {
+            frequency: 230.9,
+            q: 0.9329,
+            peak: 4332e3
+          },
+          {
+            frequency: 1092.4,
+            q: 9.508,
+            peak: 8837e3
+          },
+          {
+            frequency: 2383.8,
+            q: 14.02,
+            peak: 685500
+          },
+          {
+            frequency: 3390.3,
+            q: 33.91,
+            peak: 1083e4
+          }
+        ],
+        misfit: 0.0297
+      },
+      {
+        target: 1125,
+        reached: true,
+        coords: [
+          -0.018985,
+          636207e-8,
+          399937e-8,
+          0.011755
+        ],
+        second: {
+          frequency: 1125,
+          peak: 9e6,
+          q: 8.475
+        },
+        resonances: [
+          {
+            frequency: 218.52,
+            q: 0.9067,
+            peak: 3684e3
+          },
+          {
+            frequency: 1118.6,
+            q: 8.621,
+            peak: 8795e3
+          },
+          {
+            frequency: 2333.4,
+            q: 12.89,
+            peak: 1479e3
+          },
+          {
+            frequency: 3292.3,
+            q: 29.44,
+            peak: 9045e3
+          }
+        ],
+        misfit: 0.0235
+      },
+      {
+        target: 1150,
+        reached: true,
+        coords: [
+          -0.0170396,
+          -502266e-8,
+          -598975e-8,
+          -631892e-8
+        ],
+        second: {
+          frequency: 1150,
+          peak: 9e6,
+          q: 7.778
+        },
+        resonances: [
+          {
+            frequency: 242.61,
+            q: 0.8907,
+            peak: 4519e3
+          },
+          {
+            frequency: 1142.5,
+            q: 8.893,
+            peak: 8561e3
+          },
+          {
+            frequency: 2499.3,
+            q: 18.95,
+            peak: 1848e3
+          }
+        ],
+        misfit: 0.0658
+      },
+      {
+        target: 1175,
+        reached: true,
+        coords: [
+          -0.0167466,
+          -409171e-8,
+          -586757e-8,
+          -699564e-8
+        ],
+        second: {
+          frequency: 1175,
+          peak: 9e6,
+          q: 7.796
+        },
+        resonances: [
+          {
+            frequency: 242.36,
+            q: 0.9027,
+            peak: 4522e3
+          },
+          {
+            frequency: 1168.6,
+            q: 9.064,
+            peak: 8619e3
+          },
+          {
+            frequency: 2493.1,
+            q: 18.57,
+            peak: 2135e3
+          }
+        ],
+        misfit: 0.0684
+      },
+      {
+        target: 1200,
+        reached: true,
+        coords: [
+          -0.0183579,
+          -533168e-8,
+          395783e-8,
+          -0.0147958
+        ],
+        second: {
+          frequency: 1200,
+          peak: 9e6,
+          q: 7.473
+        },
+        resonances: [
+          {
+            frequency: 229.27,
+            q: 0.9868,
+            peak: 3826e3
+          },
+          {
+            frequency: 1201.8,
+            q: 9.193,
+            peak: 8399e3
+          },
+          {
+            frequency: 2585.4,
+            q: 16.9,
+            peak: 539e4
+          }
+        ],
+        misfit: 0.106
+      },
+      {
+        target: 1225,
+        reached: true,
+        coords: [
+          -0.0170351,
+          544587e-8,
+          452706e-8,
+          246891e-8
+        ],
+        second: {
+          frequency: 1225,
+          peak: 9e6,
+          q: 8.159
+        },
+        resonances: [
+          {
+            frequency: 220.67,
+            q: 0.8825,
+            peak: 38e5
+          },
+          {
+            frequency: 1222.6,
+            q: 8.276,
+            peak: 8786e3
+          },
+          {
+            frequency: 2353,
+            q: 13.19,
+            peak: 3794e3
+          },
+          {
+            frequency: 3293.5,
+            q: 28.63,
+            peak: 1585e4
+          }
+        ],
+        misfit: 0.0249
+      },
+      {
+        target: 1250,
+        reached: true,
+        coords: [
+          -0.0164177,
+          -404668e-8,
+          -59366e-7,
+          -0.0161309
+        ],
+        second: {
+          frequency: 1250,
+          peak: 9e6,
+          q: 7.808
+        },
+        resonances: [
+          {
+            frequency: 247.69,
+            q: 0.9729,
+            peak: 4614e3
+          },
+          {
+            frequency: 1252.5,
+            q: 9.825,
+            peak: 839e4
+          },
+          {
+            frequency: 2548.8,
+            q: 15.99,
+            peak: 3942e3
+          }
+        ],
+        misfit: 0.11
+      },
+      {
+        target: 1275,
+        reached: true,
+        coords: [
+          -0.0184178,
+          533354e-8,
+          0.0144666,
+          -574995e-8
+        ],
+        second: {
+          frequency: 1275,
+          peak: 9e6,
+          q: 7.739
+        },
+        resonances: [
+          {
+            frequency: 213.24,
+            q: 0.9188,
+            peak: 3477e3
+          },
+          {
+            frequency: 1280.7,
+            q: 8.031,
+            peak: 873e4
+          },
+          {
+            frequency: 2425.3,
+            q: 16.7,
+            peak: 1279e4
+          },
+          {
+            frequency: 3307,
+            q: 25.87,
+            peak: 2705e4
+          }
+        ],
+        misfit: 0.0253
+      },
+      {
+        target: 1300,
+        reached: true,
+        coords: [
+          -0.016665,
+          497989e-8,
+          464763e-8,
+          -627633e-8
+        ],
+        second: {
+          frequency: 1300,
+          peak: 9e6,
+          q: 7.812
+        },
+        resonances: [
+          {
+            frequency: 223.38,
+            q: 0.8693,
+            peak: 3914e3
+          },
+          {
+            frequency: 1303.8,
+            q: 8.077,
+            peak: 8725e3
+          },
+          {
+            frequency: 2417.2,
+            q: 14.4,
+            peak: 7994e3
+          },
+          {
+            frequency: 3358.4,
+            q: 27.41,
+            peak: 2965e4
+          }
+        ],
+        misfit: 0.0284
+      },
+      {
+        target: 1325,
+        reached: true,
+        coords: [
+          -0.016248,
+          625862e-8,
+          416222e-8,
+          -709742e-8
+        ],
+        second: {
+          frequency: 1325,
+          peak: 9e6,
+          q: 7.823
+        },
+        resonances: [
+          {
+            frequency: 224.11,
+            q: 0.8746,
+            peak: 3958e3
+          },
+          {
+            frequency: 1331.2,
+            q: 8.067,
+            peak: 866e4
+          },
+          {
+            frequency: 2410.5,
+            q: 14.36,
+            peak: 8979e3
+          },
+          {
+            frequency: 3335.4,
+            q: 27.68,
+            peak: 3125e4
           }
         ],
         misfit: 0.0289
       },
       {
-        target: 1525,
-        reached: false,
+        target: 1350,
+        reached: true,
         coords: [
-          -0.0177528,
-          0.0201988
+          -0.0159192,
+          789593e-8,
+          438125e-8,
+          -767705e-8
         ],
         second: {
-          frequency: 1393.8,
-          peak: 1848e4,
-          q: 11.29
+          frequency: 1350,
+          peak: 9e6,
+          q: 7.779
         },
         resonances: [
           {
-            frequency: 225.8,
-            q: 0.968,
-            peak: 4181e3
+            frequency: 223.86,
+            q: 0.8835,
+            peak: 3961e3
           },
           {
-            frequency: 1395.5,
-            q: 11.34,
-            peak: 182e5
+            frequency: 1359.1,
+            q: 8.016,
+            peak: 8594e3
           },
           {
-            frequency: 2183.4,
-            q: 10.33,
-            peak: 4452e3
+            frequency: 2398.2,
+            q: 14.44,
+            peak: 105e5
           },
           {
-            frequency: 3014.5,
-            q: 27.08,
-            peak: 8797e3
+            frequency: 3296.8,
+            q: 27.84,
+            peak: 3181e4
           }
         ],
-        misfit: 0.029
+        misfit: 0.0288
+      },
+      {
+        target: 1375,
+        reached: true,
+        coords: [
+          -0.0167769,
+          603872e-8,
+          333782e-8,
+          -0.0151851
+        ],
+        second: {
+          frequency: 1375,
+          peak: 9e6,
+          q: 7.375
+        },
+        resonances: [
+          {
+            frequency: 228.21,
+            q: 0.8734,
+            peak: 4107e3
+          },
+          {
+            frequency: 1392.8,
+            q: 8.003,
+            peak: 8259e3
+          },
+          {
+            frequency: 2511.6,
+            q: 15.39,
+            peak: 1397e4
+          },
+          {
+            frequency: 3489.2,
+            q: 24.72,
+            peak: 6183e4
+          }
+        ],
+        misfit: 0.0359
+      },
+      {
+        target: 1400,
+        reached: true,
+        coords: [
+          -365341e-8,
+          0.0249834,
+          -578597e-8,
+          0.0120606
+        ],
+        second: {
+          frequency: 1400,
+          peak: 9e6,
+          q: 11.87
+        },
+        resonances: [
+          {
+            frequency: 225.86,
+            q: 1.24,
+            peak: 4518e3
+          },
+          {
+            frequency: 1403.2,
+            q: 12.13,
+            peak: 8889e3
+          },
+          {
+            frequency: 2094.2,
+            q: 7.728,
+            peak: 632200
+          },
+          {
+            frequency: 3016.9,
+            q: 34.41,
+            peak: 5691e3
+          }
+        ],
+        misfit: 0.0332
+      },
+      {
+        target: 1425,
+        reached: true,
+        coords: [
+          -261727e-8,
+          0.0252089,
+          -623364e-8,
+          0.0111266
+        ],
+        second: {
+          frequency: 1425,
+          peak: 9e6,
+          q: 11.86
+        },
+        resonances: [
+          {
+            frequency: 226.61,
+            q: 1.267,
+            peak: 4621e3
+          },
+          {
+            frequency: 1429.2,
+            q: 12.15,
+            peak: 8895e3
+          },
+          {
+            frequency: 2074.9,
+            q: 7.321,
+            peak: 656e3
+          },
+          {
+            frequency: 3009.4,
+            q: 35.03,
+            peak: 6098e3
+          }
+        ],
+        misfit: 0.0343
+      },
+      {
+        target: 1450,
+        reached: true,
+        coords: [
+          -145021e-8,
+          0.0258486,
+          -640551e-8,
+          0.0104583
+        ],
+        second: {
+          frequency: 1450,
+          peak: 9e6,
+          q: 11.86
+        },
+        resonances: [
+          {
+            frequency: 226.89,
+            q: 1.3,
+            peak: 47e5
+          },
+          {
+            frequency: 1455.2,
+            q: 12.16,
+            peak: 8897e3
+          },
+          {
+            frequency: 2046.7,
+            q: 6.865,
+            peak: 663500
+          },
+          {
+            frequency: 2998.7,
+            q: 35.62,
+            peak: 6314e3
+          }
+        ],
+        misfit: 0.0351
+      },
+      {
+        target: 1475,
+        reached: true,
+        coords: [
+          -176358e-9,
+          0.0268415,
+          -62586e-7,
+          996441e-8
+        ],
+        second: {
+          frequency: 1475,
+          peak: 9e6,
+          q: 11.82
+        },
+        resonances: [
+          {
+            frequency: 226.73,
+            q: 1.334,
+            peak: 4749e3
+          },
+          {
+            frequency: 1481.4,
+            q: 12.14,
+            peak: 8889e3
+          },
+          {
+            frequency: 2009.1,
+            q: 6.385,
+            peak: 667e3
+          },
+          {
+            frequency: 2985.6,
+            q: 36.36,
+            peak: 6353e3
+          }
+        ],
+        misfit: 0.0356
+      },
+      {
+        target: 1500,
+        reached: true,
+        coords: [
+          194634e-8,
+          0.027541,
+          -745143e-8,
+          0.0104778
+        ],
+        second: {
+          frequency: 1500,
+          peak: 9e6,
+          q: 12.44
+        },
+        resonances: [
+          {
+            frequency: 227.2,
+            q: 1.444,
+            peak: 4992e3
+          },
+          {
+            frequency: 1507.3,
+            q: 12.45,
+            peak: 885e4
+          },
+          {
+            frequency: 2983.3,
+            q: 38.69,
+            peak: 6609e3
+          }
+        ],
+        misfit: 0.0386
+      },
+      {
+        target: 1525,
+        reached: true,
+        coords: [
+          324466e-8,
+          0.0282729,
+          -739602e-8,
+          0.0100251
+        ],
+        second: {
+          frequency: 1525,
+          peak: 9e6,
+          q: 12.4
+        },
+        resonances: [
+          {
+            frequency: 227,
+            q: 1.492,
+            peak: 5081e3
+          },
+          {
+            frequency: 1533.6,
+            q: 12.28,
+            peak: 8818e3
+          },
+          {
+            frequency: 2975.9,
+            q: 39.55,
+            peak: 6738e3
+          }
+        ],
+        misfit: 0.0392
       },
       {
         target: 1550,
-        reached: false,
+        reached: true,
         coords: [
-          -0.0174295,
-          0.0201988
+          388911e-8,
+          0.0282274,
+          -753671e-8,
+          878784e-8
         ],
         second: {
-          frequency: 1396,
-          peak: 1805e4,
-          q: 11.21
+          frequency: 1550,
+          peak: 9e6,
+          q: 12.09
         },
         resonances: [
           {
-            frequency: 225.77,
-            q: 0.9696,
-            peak: 4182e3
+            frequency: 227.48,
+            q: 1.518,
+            peak: 5192e3
           },
           {
-            frequency: 1398.1,
-            q: 11.23,
-            peak: 1774e4
+            frequency: 1560.6,
+            q: 11.75,
+            peak: 8752e3
           },
           {
-            frequency: 2182.4,
-            q: 10.29,
-            peak: 4462e3
-          },
-          {
-            frequency: 3014.8,
-            q: 27.13,
-            peak: 8857e3
+            frequency: 2973,
+            q: 39.96,
+            peak: 7275e3
           }
         ],
-        misfit: 0.029
+        misfit: 0.0405
       },
       {
         target: 1575,
-        reached: false,
+        reached: true,
         coords: [
-          -0.0169087,
-          0.0201988
+          431725e-8,
+          0.0286921,
+          -689198e-8,
+          727304e-8
         ],
         second: {
-          frequency: 1399.5,
-          peak: 1732e4,
-          q: 11.03
+          frequency: 1575,
+          peak: 9e6,
+          q: 11.43
         },
         resonances: [
           {
-            frequency: 225.74,
-            q: 0.9722,
-            peak: 4183e3
+            frequency: 227.47,
+            q: 1.513,
+            peak: 518e4
           },
           {
-            frequency: 1402.3,
-            q: 11.05,
-            peak: 1703e4
+            frequency: 1589.1,
+            q: 10.72,
+            peak: 864e4
           },
           {
-            frequency: 2180.8,
-            q: 10.24,
-            peak: 4479e3
+            frequency: 2964,
+            q: 39.68,
+            peak: 7544e3
+          }
+        ],
+        misfit: 0.0415
+      },
+      {
+        target: 1600,
+        reached: true,
+        coords: [
+          548361e-8,
+          0.0287901,
+          -669318e-8,
+          710941e-8
+        ],
+        second: {
+          frequency: 1594.8,
+          peak: 85e5,
+          q: 10.97
+        },
+        resonances: [
+          {
+            frequency: 227.1,
+            q: 1.535,
+            peak: 5197e3
           },
           {
-            frequency: 3015.2,
-            q: 27.21,
-            peak: 8953e3
+            frequency: 1612.1,
+            q: 9.98,
+            peak: 8057e3
+          },
+          {
+            frequency: 2967.3,
+            q: 40.1,
+            peak: 7679e3
+          }
+        ],
+        misfit: 0.0417
+      },
+      {
+        target: 1625,
+        reached: true,
+        coords: [
+          643626e-8,
+          0.028735,
+          -635557e-8,
+          654897e-8
+        ],
+        second: {
+          frequency: 1616.2,
+          peak: 7892e3,
+          q: 9.997
+        },
+        resonances: [
+          {
+            frequency: 226.87,
+            q: 1.539,
+            peak: 5189e3
+          },
+          {
+            frequency: 1639.5,
+            q: 8.909,
+            peak: 7413e3
+          },
+          {
+            frequency: 2971,
+            q: 40.27,
+            peak: 7928e3
+          }
+        ],
+        misfit: 0.0421
+      },
+      {
+        target: 1650,
+        reached: true,
+        coords: [
+          464694e-8,
+          0.027309,
+          -613923e-8,
+          221366e-8
+        ],
+        second: {
+          frequency: 1638.8,
+          peak: 7648e3,
+          q: 8.334
+        },
+        resonances: [
+          {
+            frequency: 229.07,
+            q: 1.447,
+            peak: 5203e3
+          },
+          {
+            frequency: 1661.8,
+            q: 9.522,
+            peak: 6981e3
+          },
+          {
+            frequency: 1913.2,
+            q: 7.146,
+            peak: 2376e3
+          },
+          {
+            frequency: 2969.6,
+            q: 38.73,
+            peak: 1002e4
+          }
+        ],
+        misfit: 0.0404
+      },
+      {
+        target: 1675,
+        reached: true,
+        coords: [
+          473458e-8,
+          0.0280996,
+          -521492e-8,
+          -442318e-9
+        ],
+        second: {
+          frequency: 1673.9,
+          peak: 7738e3,
+          q: 6.398
+        },
+        resonances: [
+          {
+            frequency: 229.21,
+            q: 1.437,
+            peak: 5193e3
+          },
+          {
+            frequency: 1702.3,
+            q: 8.751,
+            peak: 662e4
+          },
+          {
+            frequency: 1921.6,
+            q: 8.239,
+            peak: 3904e3
+          },
+          {
+            frequency: 2957.2,
+            q: 38.37,
+            peak: 1081e4
+          }
+        ],
+        misfit: 0.0409
+      },
+      {
+        target: 1700,
+        reached: false,
+        coords: [
+          0.0107383,
+          0.0288895,
+          -573089e-8,
+          748232e-8
+        ],
+        second: {
+          frequency: 1679,
+          peak: 638e4,
+          q: 7.778
+        },
+        resonances: [
+          {
+            frequency: 224.99,
+            q: 1.621,
+            peak: 5205e3
+          },
+          {
+            frequency: 1717.4,
+            q: 7.743,
+            peak: 614e4
+          },
+          {
+            frequency: 2994.9,
+            q: 41.52,
+            peak: 7851e3
+          }
+        ],
+        misfit: 0.0399
+      },
+      {
+        target: 1725,
+        reached: false,
+        coords: [
+          0.0115727,
+          0.0287835,
+          -545308e-8,
+          6901e-6
+        ],
+        second: {
+          frequency: 1708.2,
+          peak: 6114e3,
+          q: 6.562
+        },
+        resonances: [
+          {
+            frequency: 224.84,
+            q: 1.627,
+            peak: 5206e3
+          },
+          {
+            frequency: 1750.8,
+            q: 7.466,
+            peak: 6055e3
+          },
+          {
+            frequency: 3000.8,
+            q: 41.63,
+            peak: 809e4
+          }
+        ],
+        misfit: 0.0397
+      },
+      {
+        target: 1750,
+        reached: false,
+        coords: [
+          0.0116335,
+          0.0287401,
+          -516956e-8,
+          570187e-8
+        ],
+        second: {
+          frequency: 1736.5,
+          peak: 61e5,
+          q: 5.679
+        },
+        resonances: [
+          {
+            frequency: 225.1,
+            q: 1.615,
+            peak: 5207e3
+          },
+          {
+            frequency: 1779.8,
+            q: 7.247,
+            peak: 6229e3
+          },
+          {
+            frequency: 3000.8,
+            q: 41.52,
+            peak: 8484e3
+          }
+        ],
+        misfit: 0.04
+      },
+      {
+        target: 1775,
+        reached: false,
+        coords: [
+          0.010058,
+          0.0284016,
+          -487434e-8,
+          250869e-8
+        ],
+        second: {
+          frequency: 1774.5,
+          peak: 6217e3,
+          q: 4.508
+        },
+        resonances: [
+          {
+            frequency: 226.51,
+            q: 1.552,
+            peak: 521e4
+          },
+          {
+            frequency: 1822.6,
+            q: 6.496,
+            peak: 6677e3
+          },
+          {
+            frequency: 2991.9,
+            q: 40.97,
+            peak: 975e4
+          }
+        ],
+        misfit: 0.0425
+      },
+      {
+        target: 1800,
+        reached: false,
+        coords: [
+          0.0101908,
+          0.0284664,
+          -482124e-8,
+          248627e-8
+        ],
+        second: {
+          frequency: 1801.3,
+          peak: 6277e3,
+          q: 4.628
+        },
+        resonances: [
+          {
+            frequency: 226.44,
+            q: 1.555,
+            peak: 521e4
+          },
+          {
+            frequency: 1825.9,
+            q: 6.595,
+            peak: 6759e3
+          },
+          {
+            frequency: 2992.2,
+            q: 41,
+            peak: 9733e3
+          }
+        ],
+        misfit: 0.0424
+      },
+      {
+        target: 1825,
+        reached: false,
+        coords: [
+          0.0150728,
+          0.028772,
+          -449722e-8,
+          616035e-8
+        ],
+        second: {
+          frequency: 1853,
+          peak: 6889e3,
+          q: 7.889
+        },
+        resonances: [
+          {
+            frequency: 223.64,
+            q: 1.685,
+            peak: 5207e3
+          },
+          {
+            frequency: 1847.3,
+            q: 9.35,
+            peak: 7027e3
+          },
+          {
+            frequency: 3026.3,
+            q: 42.81,
+            peak: 8448e3
+          }
+        ],
+        misfit: 0.0388
+      },
+      {
+        target: 1850,
+        reached: false,
+        coords: [
+          0.0154533,
+          0.0287059,
+          -442595e-8,
+          614146e-8
+        ],
+        second: {
+          frequency: 1863,
+          peak: 7025e3,
+          q: 8.313
+        },
+        resonances: [
+          {
+            frequency: 223.51,
+            q: 1.691,
+            peak: 5206e3
+          },
+          {
+            frequency: 1856,
+            q: 9.694,
+            peak: 7166e3
+          },
+          {
+            frequency: 3030.1,
+            q: 42.74,
+            peak: 8468e3
+          }
+        ],
+        misfit: 0.0388
+      },
+      {
+        target: 1875,
+        reached: true,
+        coords: [
+          0.0167308,
+          0.028425,
+          -421997e-8,
+          613576e-8
+        ],
+        second: {
+          frequency: 1888.8,
+          peak: 7633e3,
+          q: 10.2
+        },
+        resonances: [
+          {
+            frequency: 223.1,
+            q: 1.712,
+            peak: 5204e3
+          },
+          {
+            frequency: 1883.2,
+            q: 11,
+            peak: 7657e3
+          },
+          {
+            frequency: 3043.8,
+            q: 42.65,
+            peak: 8545e3
+          }
+        ],
+        misfit: 0.0385
+      },
+      {
+        target: 1900,
+        reached: true,
+        coords: [
+          0.0179434,
+          0.0287202,
+          -376885e-8,
+          599384e-8
+        ],
+        second: {
+          frequency: 1907,
+          peak: 8748e3,
+          q: 12.61
+        },
+        resonances: [
+          {
+            frequency: 222.51,
+            q: 1.742,
+            peak: 5205e3
+          },
+          {
+            frequency: 1902.7,
+            q: 12.99,
+            peak: 8726e3
+          },
+          {
+            frequency: 3052.1,
+            q: 43.13,
+            peak: 8487e3
+          }
+        ],
+        misfit: 0.038
+      },
+      {
+        target: 1925,
+        reached: true,
+        coords: [
+          0.0185508,
+          0.028386,
+          -355601e-8,
+          572274e-8
+        ],
+        second: {
+          frequency: 1925,
+          peak: 9e6,
+          q: 13.2
+        },
+        resonances: [
+          {
+            frequency: 222.42,
+            q: 1.736,
+            peak: 5172e3
+          },
+          {
+            frequency: 1922.5,
+            q: 13.77,
+            peak: 9041e3
+          },
+          {
+            frequency: 3061.5,
+            q: 43.34,
+            peak: 8673e3
+          }
+        ],
+        misfit: 0.0378
+      },
+      {
+        target: 1950,
+        reached: true,
+        coords: [
+          0.0195711,
+          0.0276036,
+          -326846e-8,
+          588201e-8
+        ],
+        second: {
+          frequency: 1950,
+          peak: 9e6,
+          q: 14.38
+        },
+        resonances: [
+          {
+            frequency: 222.17,
+            q: 1.715,
+            peak: 5078e3
+          },
+          {
+            frequency: 1948.9,
+            q: 14.42,
+            peak: 8907e3
+          },
+          {
+            frequency: 3079.1,
+            q: 42.76,
+            peak: 8735e3
+          }
+        ],
+        misfit: 0.0372
+      },
+      {
+        target: 1975,
+        reached: true,
+        coords: [
+          0.020217,
+          0.0274053,
+          -209421e-8,
+          58875e-7
+        ],
+        second: {
+          frequency: 1975,
+          peak: 9e6,
+          q: 14.87
+        },
+        resonances: [
+          {
+            frequency: 221.59,
+            q: 1.645,
+            peak: 4831e3
+          },
+          {
+            frequency: 1973.1,
+            q: 14.71,
+            peak: 8852e3
+          },
+          {
+            frequency: 3089.9,
+            q: 41.85,
+            peak: 8447e3
+          }
+        ],
+        misfit: 0.0359
+      }
+    ]
+  },
+  bend: {
+    peak: 3464e4,
+    lowest: 500,
+    reach: 1725,
+    rows: [
+      {
+        target: 450,
+        reached: false,
+        coords: [
+          -0.0308084,
+          -0.0299517,
+          51767e-7,
+          820878e-8
+        ],
+        second: {
+          frequency: 475.32,
+          peak: 1373e4,
+          q: 4.03
+        },
+        resonances: [
+          {
+            frequency: 254.41,
+            q: 1.036,
+            peak: 4874e3
+          },
+          {
+            frequency: 453.46,
+            q: 4.687,
+            peak: 1118e4
+          }
+        ],
+        misfit: 0.0613
+      },
+      {
+        target: 475,
+        reached: false,
+        coords: [
+          -0.0420738,
+          -0.0221631,
+          45506e-7,
+          0.0129164
+        ],
+        second: {
+          frequency: 492.38,
+          peak: 2405e4,
+          q: 5.691
+        },
+        resonances: [
+          {
+            frequency: 251.99,
+            q: 0.9596,
+            peak: 4552e3
+          },
+          {
+            frequency: 478.89,
+            q: 6.118,
+            peak: 215e5
+          }
+        ],
+        misfit: 0.0601
+      },
+      {
+        target: 500,
+        reached: true,
+        coords: [
+          -0.0464019,
+          -0.0190705,
+          44392e-7,
+          0.0135227
+        ],
+        second: {
+          frequency: 505.26,
+          peak: 3082e4,
+          q: 6.515
+        },
+        resonances: [
+          {
+            frequency: 192.51,
+            q: 0.3,
+            peak: 3057e3
+          },
+          {
+            frequency: 494.4,
+            q: 6.956,
+            peak: 2784e4
+          }
+        ],
+        misfit: 0.0994
+      },
+      {
+        target: 525,
+        reached: true,
+        coords: [
+          -0.0481273,
+          -0.0173777,
+          46838e-7,
+          0.01362
+        ],
+        second: {
+          frequency: 525,
+          peak: 3464e4,
+          q: 7.201
+        },
+        resonances: [
+          {
+            frequency: 191.67,
+            q: 0.3,
+            peak: 3025e3
+          },
+          {
+            frequency: 515.95,
+            q: 7.763,
+            peak: 3208e4
+          }
+        ],
+        misfit: 0.0929
+      },
+      {
+        target: 550,
+        reached: true,
+        coords: [
+          -0.0479097,
+          -0.0162497,
+          45566e-7,
+          0.0135692
+        ],
+        second: {
+          frequency: 550,
+          peak: 3464e4,
+          q: 7.528
+        },
+        resonances: [
+          {
+            frequency: 194.87,
+            q: 0.3,
+            peak: 3004e3
+          },
+          {
+            frequency: 541.61,
+            q: 8.334,
+            peak: 3266e4
+          }
+        ],
+        misfit: 0.0875
+      },
+      {
+        target: 575,
+        reached: true,
+        coords: [
+          -0.0477488,
+          -0.0154783,
+          508072e-8,
+          0.0136281
+        ],
+        second: {
+          frequency: 575,
+          peak: 3464e4,
+          q: 7.889
+        },
+        resonances: [
+          {
+            frequency: 195.89,
+            q: 0.3,
+            peak: 2942e3
+          },
+          {
+            frequency: 567.49,
+            q: 8.935,
+            peak: 3327e4
+          }
+        ],
+        misfit: 0.0818
+      },
+      {
+        target: 600,
+        reached: true,
+        coords: [
+          -0.0474936,
+          -0.0137658,
+          457624e-8,
+          0.0138558
+        ],
+        second: {
+          frequency: 600,
+          peak: 3464e4,
+          q: 8.299
+        },
+        resonances: [
+          {
+            frequency: 197.08,
+            q: 0.3,
+            peak: 2927e3
+          },
+          {
+            frequency: 592.72,
+            q: 9.382,
+            peak: 3338e4
+          }
+        ],
+        misfit: 0.078
+      },
+      {
+        target: 625,
+        reached: true,
+        coords: [
+          -0.0464607,
+          -0.013989,
+          400914e-8,
+          0.0121281
+        ],
+        second: {
+          frequency: 625,
+          peak: 3464e4,
+          q: 8.409
+        },
+        resonances: [
+          {
+            frequency: 198.82,
+            q: 0.3,
+            peak: 294e4
+          },
+          {
+            frequency: 617.86,
+            q: 9.686,
+            peak: 338e5
+          }
+        ],
+        misfit: 0.0773
+      },
+      {
+        target: 650,
+        reached: true,
+        coords: [
+          -0.045724,
+          -0.0146649,
+          509756e-8,
+          0.0112163
+        ],
+        second: {
+          frequency: 650,
+          peak: 3464e4,
+          q: 8.814
+        },
+        resonances: [
+          {
+            frequency: 238.33,
+            q: 0.7442,
+            peak: 371e4
+          },
+          {
+            frequency: 640.83,
+            q: 9.024,
+            peak: 3312e4
+          },
+          {
+            frequency: 3299.6,
+            q: 99.57,
+            peak: 1045e3
+          }
+        ],
+        misfit: 0.0482
+      },
+      {
+        target: 675,
+        reached: true,
+        coords: [
+          -0.0445328,
+          -419752e-8,
+          -613427e-8,
+          0.0118026
+        ],
+        second: {
+          frequency: 675,
+          peak: 3464e4,
+          q: 8.827
+        },
+        resonances: [
+          {
+            frequency: 251.48,
+            q: 0.7897,
+            peak: 4492e3
+          },
+          {
+            frequency: 666.48,
+            q: 9.229,
+            peak: 3271e4
+          }
+        ],
+        misfit: 0.0481
+      },
+      {
+        target: 700,
+        reached: true,
+        coords: [
+          -0.0443273,
+          -382016e-8,
+          -500595e-8,
+          0.0118722
+        ],
+        second: {
+          frequency: 700,
+          peak: 3464e4,
+          q: 9.19
+        },
+        resonances: [
+          {
+            frequency: 246.27,
+            q: 0.7791,
+            peak: 4339e3
+          },
+          {
+            frequency: 692.43,
+            q: 9.604,
+            peak: 3315e4
+          },
+          {
+            frequency: 3285.1,
+            q: 3.99,
+            peak: 829900
+          }
+        ],
+        misfit: 0.0424
+      },
+      {
+        target: 725,
+        reached: true,
+        coords: [
+          -0.0441378,
+          -335162e-8,
+          -389925e-8,
+          0.0119336
+        ],
+        second: {
+          frequency: 725,
+          peak: 3464e4,
+          q: 9.498
+        },
+        resonances: [
+          {
+            frequency: 241.75,
+            q: 0.7811,
+            peak: 42e5
+          },
+          {
+            frequency: 718.02,
+            q: 9.985,
+            peak: 3348e4
+          },
+          {
+            frequency: 3288.5,
+            q: 3.921,
+            peak: 826200
+          }
+        ],
+        misfit: 0.04
+      },
+      {
+        target: 750,
+        reached: true,
+        coords: [
+          -0.0438948,
+          -277718e-8,
+          -291749e-8,
+          0.0119587
+        ],
+        second: {
+          frequency: 750,
+          peak: 3464e4,
+          q: 9.815
+        },
+        resonances: [
+          {
+            frequency: 237.97,
+            q: 0.7868,
+            peak: 4093e3
+          },
+          {
+            frequency: 743.49,
+            q: 10.35,
+            peak: 3372e4
+          },
+          {
+            frequency: 3284.4,
+            q: 3.764,
+            peak: 801600
+          }
+        ],
+        misfit: 0.0381
+      },
+      {
+        target: 775,
+        reached: true,
+        coords: [
+          -0.0413324,
+          -0.0149797,
+          312377e-8,
+          350374e-8
+        ],
+        second: {
+          frequency: 775,
+          peak: 3464e4,
+          q: 9.568
+        },
+        resonances: [
+          {
+            frequency: 232.53,
+            q: 0.7732,
+            peak: 3797e3
+          },
+          {
+            frequency: 767.95,
+            q: 10.05,
+            peak: 3361e4
+          },
+          {
+            frequency: 3283.4,
+            q: 3.316,
+            peak: 157e4
+          }
+        ],
+        misfit: 0.0453
+      },
+      {
+        target: 800,
+        reached: true,
+        coords: [
+          -0.0441609,
+          -446482e-8,
+          364179e-8,
+          0.0123234
+        ],
+        second: {
+          frequency: 800,
+          peak: 3464e4,
+          q: 10.65
+        },
+        resonances: [
+          {
+            frequency: 224.88,
+            q: 0.8321,
+            peak: 3651e3
+          },
+          {
+            frequency: 794.68,
+            q: 11.14,
+            peak: 3388e4
+          },
+          {
+            frequency: 3255.8,
+            q: 0.3,
+            peak: 74560
+          }
+        ],
+        misfit: 0.0379
+      },
+      {
+        target: 825,
+        reached: true,
+        coords: [
+          -0.0434394,
+          -37789e-7,
+          355036e-8,
+          0.0117415
+        ],
+        second: {
+          frequency: 825,
+          peak: 3464e4,
+          q: 11.01
+        },
+        resonances: [
+          {
+            frequency: 224.63,
+            q: 0.8343,
+            peak: 3649e3
+          },
+          {
+            frequency: 819.7,
+            q: 11.32,
+            peak: 3369e4
+          },
+          {
+            frequency: 3246.5,
+            q: 100,
+            peak: 1481e3
+          }
+        ],
+        misfit: 0.0373
+      },
+      {
+        target: 850,
+        reached: true,
+        coords: [
+          -0.0430928,
+          -283559e-8,
+          428289e-8,
+          0.0117028
+        ],
+        second: {
+          frequency: 850,
+          peak: 3464e4,
+          q: 11.34
+        },
+        resonances: [
+          {
+            frequency: 222.84,
+            q: 0.8477,
+            peak: 3611e3
+          },
+          {
+            frequency: 844.74,
+            q: 11.63,
+            peak: 3366e4
+          },
+          {
+            frequency: 2532.2,
+            q: 28.9,
+            peak: 345600
+          }
+        ],
+        misfit: 0.0367
+      },
+      {
+        target: 875,
+        reached: true,
+        coords: [
+          -0.0426727,
+          -893089e-9,
+          387665e-8,
+          0.0116618
+        ],
+        second: {
+          frequency: 875,
+          peak: 3464e4,
+          q: 11.53
+        },
+        resonances: [
+          {
+            frequency: 222.54,
+            q: 0.8545,
+            peak: 363e4
+          },
+          {
+            frequency: 869.73,
+            q: 11.95,
+            peak: 3391e4
+          },
+          {
+            frequency: 2512.3,
+            q: 29.21,
+            peak: 415300
+          }
+        ],
+        misfit: 0.0357
+      },
+      {
+        target: 900,
+        reached: true,
+        coords: [
+          -0.0424282,
+          428214e-9,
+          446186e-8,
+          0.0115576
+        ],
+        second: {
+          frequency: 900,
+          peak: 3464e4,
+          q: 11.67
+        },
+        resonances: [
+          {
+            frequency: 221.19,
+            q: 0.866,
+            peak: 3604e3
+          },
+          {
+            frequency: 895.47,
+            q: 12.3,
+            peak: 3433e4
+          },
+          {
+            frequency: 2497.4,
+            q: 26.2,
+            peak: 498300
+          }
+        ],
+        misfit: 0.0349
+      },
+      {
+        target: 925,
+        reached: true,
+        coords: [
+          -0.0424637,
+          366668e-8,
+          602517e-8,
+          0.012891
+        ],
+        second: {
+          frequency: 925,
+          peak: 3464e4,
+          q: 12.37
+        },
+        resonances: [
+          {
+            frequency: 218.34,
+            q: 0.8895,
+            peak: 3526e3
+          },
+          {
+            frequency: 920.96,
+            q: 12.71,
+            peak: 3393e4
+          },
+          {
+            frequency: 2460.2,
+            q: 23.06,
+            peak: 582300
+          }
+        ],
+        misfit: 0.0317
+      },
+      {
+        target: 950,
+        reached: true,
+        coords: [
+          -0.0419494,
+          557147e-8,
+          601038e-8,
+          0.0126445
+        ],
+        second: {
+          frequency: 950,
+          peak: 3464e4,
+          q: 12.53
+        },
+        resonances: [
+          {
+            frequency: 217.83,
+            q: 0.8667,
+            peak: 3554e3
+          },
+          {
+            frequency: 945.97,
+            q: 12.9,
+            peak: 3437e4
+          },
+          {
+            frequency: 2441.3,
+            q: 14.81,
+            peak: 8e5
+          },
+          {
+            frequency: 3448,
+            q: 28.13,
+            peak: 776e4
+          }
+        ],
+        misfit: 0.0256
+      },
+      {
+        target: 975,
+        reached: true,
+        coords: [
+          -0.0412201,
+          703075e-8,
+          616191e-8,
+          0.0122099
+        ],
+        second: {
+          frequency: 975,
+          peak: 3464e4,
+          q: 12.75
+        },
+        resonances: [
+          {
+            frequency: 217.42,
+            q: 0.8743,
+            peak: 3556e3
+          },
+          {
+            frequency: 971.87,
+            q: 13.13,
+            peak: 3438e4
+          },
+          {
+            frequency: 2421,
+            q: 14.63,
+            peak: 919900
+          },
+          {
+            frequency: 3399.6,
+            q: 28.13,
+            peak: 729e4
+          }
+        ],
+        misfit: 0.0252
+      },
+      {
+        target: 1e3,
+        reached: true,
+        coords: [
+          -0.0404603,
+          882522e-8,
+          629511e-8,
+          0.0119066
+        ],
+        second: {
+          frequency: 1e3,
+          peak: 3464e4,
+          q: 13.05
+        },
+        resonances: [
+          {
+            frequency: 217.06,
+            q: 0.8831,
+            peak: 3558e3
+          },
+          {
+            frequency: 996.29,
+            q: 13.35,
+            peak: 343e5
+          },
+          {
+            frequency: 2397.6,
+            q: 14.44,
+            peak: 1029e3
+          },
+          {
+            frequency: 3350.3,
+            q: 27.84,
+            peak: 6589e3
+          }
+        ],
+        misfit: 0.0249
+      },
+      {
+        target: 1025,
+        reached: true,
+        coords: [
+          -0.039493,
+          0.0112325,
+          594196e-8,
+          0.0114538
+        ],
+        second: {
+          frequency: 1025,
+          peak: 3464e4,
+          q: 13.2
+        },
+        resonances: [
+          {
+            frequency: 217.24,
+            q: 0.8922,
+            peak: 3584e3
+          },
+          {
+            frequency: 1022.3,
+            q: 13.64,
+            peak: 3451e4
+          },
+          {
+            frequency: 2370.7,
+            q: 14.2,
+            peak: 1121e3
+          },
+          {
+            frequency: 3296.9,
+            q: 27.36,
+            peak: 5737e3
+          }
+        ],
+        misfit: 0.0246
+      },
+      {
+        target: 1050,
+        reached: true,
+        coords: [
+          -0.0385955,
+          0.0129078,
+          620022e-8,
+          0.0109712
+        ],
+        second: {
+          frequency: 1050,
+          peak: 3464e4,
+          q: 13.44
+        },
+        resonances: [
+          {
+            frequency: 216.9,
+            q: 0.9005,
+            peak: 3583e3
+          },
+          {
+            frequency: 1046.6,
+            q: 13.83,
+            peak: 3448e4
+          },
+          {
+            frequency: 2344.9,
+            q: 13.93,
+            peak: 1248e3
+          },
+          {
+            frequency: 3253.5,
+            q: 26.77,
+            peak: 5189e3
+          }
+        ],
+        misfit: 0.0243
+      },
+      {
+        target: 1075,
+        reached: true,
+        coords: [
+          -0.037874,
+          0.0137016,
+          72672e-7,
+          0.0103261
+        ],
+        second: {
+          frequency: 1075,
+          peak: 3464e4,
+          q: 13.6
+        },
+        resonances: [
+          {
+            frequency: 215.88,
+            q: 0.9074,
+            peak: 3549e3
+          },
+          {
+            frequency: 1072.6,
+            q: 13.89,
+            peak: 3435e4
+          },
+          {
+            frequency: 2319.7,
+            q: 13.66,
+            peak: 148e4
+          },
+          {
+            frequency: 3218.4,
+            q: 26.13,
+            peak: 4988e3
+          }
+        ],
+        misfit: 0.0237
+      },
+      {
+        target: 1100,
+        reached: true,
+        coords: [
+          -0.032848,
+          -405142e-8,
+          -641316e-8,
+          -587858e-8
+        ],
+        second: {
+          frequency: 1100,
+          peak: 3464e4,
+          q: 11.81
+        },
+        resonances: [
+          {
+            frequency: 244.67,
+            q: 0.8573,
+            peak: 4442e3
+          },
+          {
+            frequency: 1092.7,
+            q: 13.11,
+            peak: 3393e4
+          },
+          {
+            frequency: 2544.9,
+            q: 21.41,
+            peak: 1793e3
+          }
+        ],
+        misfit: 0.0804
+      },
+      {
+        target: 1125,
+        reached: true,
+        coords: [
+          -0.0321964,
+          665927e-8,
+          -62433e-7,
+          225134e-8
+        ],
+        second: {
+          frequency: 1125,
+          peak: 3464e4,
+          q: 13.47
+        },
+        resonances: [
+          {
+            frequency: 236.92,
+            q: 0.8515,
+            peak: 4503e3
+          },
+          {
+            frequency: 1121.2,
+            q: 13.93,
+            peak: 3429e4
+          },
+          {
+            frequency: 2446.5,
+            q: 13.84,
+            peak: 1845e3
+          },
+          {
+            frequency: 3376.7,
+            q: 33.07,
+            peak: 1942e4
+          }
+        ],
+        misfit: 0.0331
+      },
+      {
+        target: 1150,
+        reached: true,
+        coords: [
+          -0.031759,
+          78593e-7,
+          -565373e-8,
+          199029e-8
+        ],
+        second: {
+          frequency: 1150,
+          peak: 3464e4,
+          q: 13.51
+        },
+        resonances: [
+          {
+            frequency: 235.66,
+            q: 0.8585,
+            peak: 4465e3
+          },
+          {
+            frequency: 1147.2,
+            q: 14.1,
+            peak: 3453e4
+          },
+          {
+            frequency: 2428,
+            q: 13.61,
+            peak: 2112e3
+          },
+          {
+            frequency: 3331.5,
+            q: 32.65,
+            peak: 1837e4
+          }
+        ],
+        misfit: 0.0327
+      },
+      {
+        target: 1175,
+        reached: true,
+        coords: [
+          -0.0312051,
+          943119e-8,
+          -555428e-8,
+          178333e-8
+        ],
+        second: {
+          frequency: 1175,
+          peak: 3464e4,
+          q: 13.36
+        },
+        resonances: [
+          {
+            frequency: 235.23,
+            q: 0.8715,
+            peak: 4476e3
+          },
+          {
+            frequency: 1171.8,
+            q: 14.41,
+            peak: 3515e4
+          },
+          {
+            frequency: 2408.5,
+            q: 13.39,
+            peak: 2324e3
+          },
+          {
+            frequency: 3284.3,
+            q: 32.26,
+            peak: 1698e4
+          }
+        ],
+        misfit: 0.0326
+      },
+      {
+        target: 1200,
+        reached: true,
+        coords: [
+          -0.0294564,
+          0.0141265,
+          -571872e-8,
+          311952e-8
+        ],
+        second: {
+          frequency: 1200,
+          peak: 3464e4,
+          q: 14.49
+        },
+        resonances: [
+          {
+            frequency: 234.07,
+            q: 0.9204,
+            peak: 4515e3
+          },
+          {
+            frequency: 1197,
+            q: 15.09,
+            peak: 3459e4
+          },
+          {
+            frequency: 2357.8,
+            q: 12.91,
+            peak: 2103e3
+          },
+          {
+            frequency: 3182.2,
+            q: 30.96,
+            peak: 1126e4
+          }
+        ],
+        misfit: 0.0327
+      },
+      {
+        target: 1225,
+        reached: true,
+        coords: [
+          -0.028629,
+          0.0156702,
+          -490112e-8,
+          279465e-8
+        ],
+        second: {
+          frequency: 1225,
+          peak: 3464e4,
+          q: 14.81
+        },
+        resonances: [
+          {
+            frequency: 232.68,
+            q: 0.9286,
+            peak: 4463e3
+          },
+          {
+            frequency: 1222.9,
+            q: 15.14,
+            peak: 3442e4
+          },
+          {
+            frequency: 2329.4,
+            q: 12.54,
+            peak: 2319e3
+          },
+          {
+            frequency: 3140.3,
+            q: 29.9,
+            peak: 1007e4
+          }
+        ],
+        misfit: 0.032
+      },
+      {
+        target: 1250,
+        reached: true,
+        coords: [
+          -0.0309677,
+          0.0164791,
+          396759e-8,
+          259708e-8
+        ],
+        second: {
+          frequency: 1250,
+          peak: 3464e4,
+          q: 13.51
+        },
+        resonances: [
+          {
+            frequency: 220.77,
+            q: 0.8996,
+            peak: 3839e3
+          },
+          {
+            frequency: 1248.7,
+            q: 13.95,
+            peak: 346e5
+          },
+          {
+            frequency: 2251.3,
+            q: 12.44,
+            peak: 3826e3
+          },
+          {
+            frequency: 3089.9,
+            q: 25.62,
+            peak: 726e4
+          }
+        ],
+        misfit: 0.025
+      },
+      {
+        target: 1275,
+        reached: true,
+        coords: [
+          -0.0294935,
+          482859e-8,
+          -633005e-8,
+          -622446e-8
+        ],
+        second: {
+          frequency: 1275,
+          peak: 3464e4,
+          q: 12.89
+        },
+        resonances: [
+          {
+            frequency: 241.09,
+            q: 0.8338,
+            peak: 4668e3
+          },
+          {
+            frequency: 1272.5,
+            q: 13.84,
+            peak: 3508e4
+          },
+          {
+            frequency: 2451.6,
+            q: 13.33,
+            peak: 4896e3
+          },
+          {
+            frequency: 3410.6,
+            q: 31.16,
+            peak: 4161e4
+          }
+        ],
+        misfit: 0.0367
+      },
+      {
+        target: 1300,
+        reached: true,
+        coords: [
+          -0.0291544,
+          5412e-6,
+          -58916e-7,
+          -690149e-8
+        ],
+        second: {
+          frequency: 1300,
+          peak: 3464e4,
+          q: 13.04
+        },
+        resonances: [
+          {
+            frequency: 240.41,
+            q: 0.8365,
+            peak: 4646e3
+          },
+          {
+            frequency: 1297.2,
+            q: 13.78,
+            peak: 3481e4
+          },
+          {
+            frequency: 2444.8,
+            q: 13.32,
+            peak: 5665e3
+          },
+          {
+            frequency: 3389.1,
+            q: 30.98,
+            peak: 4321e4
+          }
+        ],
+        misfit: 0.0367
+      },
+      {
+        target: 1325,
+        reached: true,
+        coords: [
+          -0.0321908,
+          591949e-8,
+          396758e-8,
+          -608657e-8
+        ],
+        second: {
+          frequency: 1325,
+          peak: 3464e4,
+          q: 12.66
+        },
+        resonances: [
+          {
+            frequency: 223.59,
+            q: 0.837,
+            peak: 3917e3
+          },
+          {
+            frequency: 1323.4,
+            q: 12.95,
+            peak: 3431e4
+          },
+          {
+            frequency: 2410.5,
+            q: 14.19,
+            peak: 102e5
+          },
+          {
+            frequency: 3293.9,
+            q: 28.12,
+            peak: 361e5
           }
         ],
         misfit: 0.0291
+      },
+      {
+        target: 1350,
+        reached: true,
+        coords: [
+          -0.0318111,
+          735787e-8,
+          453395e-8,
+          -649593e-8
+        ],
+        second: {
+          frequency: 1350,
+          peak: 3464e4,
+          q: 12.64
+        },
+        resonances: [
+          {
+            frequency: 222.88,
+            q: 0.8448,
+            peak: 39e5
+          },
+          {
+            frequency: 1349.3,
+            q: 12.85,
+            peak: 3413e4
+          },
+          {
+            frequency: 2391,
+            q: 14.28,
+            peak: 1207e4
+          },
+          {
+            frequency: 3248,
+            q: 27.77,
+            peak: 3442e4
+          }
+        ],
+        misfit: 0.0285
+      },
+      {
+        target: 1375,
+        reached: true,
+        coords: [
+          -0.0314771,
+          915843e-8,
+          55259e-7,
+          -676287e-8
+        ],
+        second: {
+          frequency: 1375,
+          peak: 3464e4,
+          q: 12.54
+        },
+        resonances: [
+          {
+            frequency: 221.61,
+            q: 0.8554,
+            peak: 3861e3
+          },
+          {
+            frequency: 1375.4,
+            q: 12.69,
+            peak: 3404e4
+          },
+          {
+            frequency: 2361.6,
+            q: 14.41,
+            peak: 145e5
+          },
+          {
+            frequency: 3191.2,
+            q: 27.11,
+            peak: 3068e4
+          }
+        ],
+        misfit: 0.0275
+      },
+      {
+        target: 1400,
+        reached: true,
+        coords: [
+          -0.0310773,
+          0.0109184,
+          640855e-8,
+          -725615e-8
+        ],
+        second: {
+          frequency: 1400,
+          peak: 3464e4,
+          q: 12.36
+        },
+        resonances: [
+          {
+            frequency: 220.61,
+            q: 0.8651,
+            peak: 3831e3
+          },
+          {
+            frequency: 1401.7,
+            q: 12.48,
+            peak: 3398e4
+          },
+          {
+            frequency: 2331.6,
+            q: 14.57,
+            peak: 1747e4
+          },
+          {
+            frequency: 3141.4,
+            q: 26.37,
+            peak: 2731e4
+          }
+        ],
+        misfit: 0.0268
+      },
+      {
+        target: 1425,
+        reached: true,
+        coords: [
+          -0.0304105,
+          0.0125791,
+          654966e-8,
+          -800047e-8
+        ],
+        second: {
+          frequency: 1425,
+          peak: 3464e4,
+          q: 12.16
+        },
+        resonances: [
+          {
+            frequency: 220.6,
+            q: 0.8716,
+            peak: 3842e3
+          },
+          {
+            frequency: 1427.9,
+            q: 12.25,
+            peak: 3389e4
+          },
+          {
+            frequency: 2305.1,
+            q: 14.63,
+            peak: 2043e4
+          },
+          {
+            frequency: 3101.2,
+            q: 25.8,
+            peak: 2493e4
+          }
+        ],
+        misfit: 0.0267
+      },
+      {
+        target: 1450,
+        reached: true,
+        coords: [
+          -0.0299733,
+          0.013786,
+          693505e-8,
+          -906808e-8
+        ],
+        second: {
+          frequency: 1450,
+          peak: 3464e4,
+          q: 11.91
+        },
+        resonances: [
+          {
+            frequency: 220.4,
+            q: 0.877,
+            peak: 3842e3
+          },
+          {
+            frequency: 1454.3,
+            q: 11.95,
+            peak: 3372e4
+          },
+          {
+            frequency: 2287.1,
+            q: 14.86,
+            peak: 2487e4
+          },
+          {
+            frequency: 3072.4,
+            q: 25.29,
+            peak: 2419e4
+          }
+        ],
+        misfit: 0.027
+      },
+      {
+        target: 1475,
+        reached: true,
+        coords: [
+          -0.0294941,
+          0.0149967,
+          727414e-8,
+          -0.0102691
+        ],
+        second: {
+          frequency: 1475,
+          peak: 3464e4,
+          q: 11.63
+        },
+        resonances: [
+          {
+            frequency: 220.28,
+            q: 0.8825,
+            peak: 3846e3
+          },
+          {
+            frequency: 1481.3,
+            q: 11.58,
+            peak: 3341e4
+          },
+          {
+            frequency: 2269,
+            q: 15.15,
+            peak: 3068e4
+          },
+          {
+            frequency: 3044.8,
+            q: 24.82,
+            peak: 235e5
+          }
+        ],
+        misfit: 0.0278
+      },
+      {
+        target: 1500,
+        reached: true,
+        coords: [
+          -0.0171847,
+          0.024886,
+          -570217e-8,
+          -627394e-8
+        ],
+        second: {
+          frequency: 1500,
+          peak: 3464e4,
+          q: 14.33
+        },
+        resonances: [
+          {
+            frequency: 236.27,
+            q: 1.088,
+            peak: 4985e3
+          },
+          {
+            frequency: 1503.3,
+            q: 14.68,
+            peak: 3439e4
+          },
+          {
+            frequency: 2131.9,
+            q: 9.24,
+            peak: 5128e3
+          },
+          {
+            frequency: 2905,
+            q: 29.14,
+            peak: 1058e4
+          }
+        ],
+        misfit: 0.0395
+      },
+      {
+        target: 1525,
+        reached: true,
+        coords: [
+          -0.0164604,
+          0.0252637,
+          -571968e-8,
+          -738354e-8
+        ],
+        second: {
+          frequency: 1525,
+          peak: 3464e4,
+          q: 14.07
+        },
+        resonances: [
+          {
+            frequency: 236.69,
+            q: 1.101,
+            peak: 5039e3
+          },
+          {
+            frequency: 1529.4,
+            q: 14.3,
+            peak: 3421e4
+          },
+          {
+            frequency: 2118.7,
+            q: 9.096,
+            peak: 5823e3
+          },
+          {
+            frequency: 2893.6,
+            q: 29.38,
+            peak: 1127e4
+          }
+        ],
+        misfit: 0.0407
+      },
+      {
+        target: 1550,
+        reached: true,
+        coords: [
+          -0.0159913,
+          0.025675,
+          -520493e-8,
+          -870073e-8
+        ],
+        second: {
+          frequency: 1550,
+          peak: 3464e4,
+          q: 13.6
+        },
+        resonances: [
+          {
+            frequency: 236.39,
+            q: 1.099,
+            peak: 5022e3
+          },
+          {
+            frequency: 1556.2,
+            q: 13.62,
+            peak: 3387e4
+          },
+          {
+            frequency: 2103.4,
+            q: 9.089,
+            peak: 7115e3
+          },
+          {
+            frequency: 2882.5,
+            q: 29.26,
+            peak: 117e5
+          }
+        ],
+        misfit: 0.0415
+      },
+      {
+        target: 1575,
+        reached: true,
+        coords: [
+          -0.0146205,
+          0.0263672,
+          -602388e-8,
+          -946398e-8
+        ],
+        second: {
+          frequency: 1575,
+          peak: 3464e4,
+          q: 13.61
+        },
+        resonances: [
+          {
+            frequency: 237.72,
+            q: 1.145,
+            peak: 5208e3
+          },
+          {
+            frequency: 1582.5,
+            q: 13.56,
+            peak: 3367e4
+          },
+          {
+            frequency: 2085.5,
+            q: 8.729,
+            peak: 7082e3
+          },
+          {
+            frequency: 2867.4,
+            q: 30.45,
+            peak: 1269e4
+          }
+        ],
+        misfit: 0.044
+      },
+      {
+        target: 1600,
+        reached: true,
+        coords: [
+          -0.0138011,
+          0.0264282,
+          -58524e-7,
+          -0.0100913
+        ],
+        second: {
+          frequency: 1593.8,
+          peak: 3241e4,
+          q: 13.08
+        },
+        resonances: [
+          {
+            frequency: 237.62,
+            q: 1.15,
+            peak: 5216e3
+          },
+          {
+            frequency: 1602.9,
+            q: 12.8,
+            peak: 3104e4
+          },
+          {
+            frequency: 2079.3,
+            q: 8.753,
+            peak: 8018e3
+          },
+          {
+            frequency: 2866.2,
+            q: 30.74,
+            peak: 1357e4
+          }
+        ],
+        misfit: 0.045
+      },
+      {
+        target: 1625,
+        reached: true,
+        coords: [
+          -0.0304157,
+          0.0152192,
+          411774e-8,
+          -0.0241647
+        ],
+        second: {
+          frequency: 1625,
+          peak: 3464e4,
+          q: 7.731
+        },
+        resonances: [
+          {
+            frequency: 228.37,
+            q: 0.838,
+            peak: 4222e3
+          },
+          {
+            frequency: 1663,
+            q: 10.02,
+            peak: 2379e4
+          },
+          {
+            frequency: 2606.8,
+            q: 18.9,
+            peak: 166e6
+          },
+          {
+            frequency: 3152.4,
+            q: 29.45,
+            peak: 3658e5
+          }
+        ],
+        misfit: 0.0305
+      },
+      {
+        target: 1650,
+        reached: true,
+        coords: [
+          -0.0280391,
+          0.0165221,
+          -97275e-10,
+          -0.022729
+        ],
+        second: {
+          frequency: 1650,
+          peak: 3464e4,
+          q: 9.029
+        },
+        resonances: [
+          {
+            frequency: 234.57,
+            q: 0.8695,
+            peak: 4539e3
+          },
+          {
+            frequency: 1682.8,
+            q: 10.2,
+            peak: 2647e4
+          },
+          {
+            frequency: 2503.5,
+            q: 17.93,
+            peak: 1324e5
+          },
+          {
+            frequency: 3078.5,
+            q: 28.06,
+            peak: 1981e5
+          }
+        ],
+        misfit: 0.036
+      },
+      {
+        target: 1675,
+        reached: true,
+        coords: [
+          -0.0260696,
+          0.017634,
+          -298834e-8,
+          -0.02299
+        ],
+        second: {
+          frequency: 1675,
+          peak: 3464e4,
+          q: 9.203
+        },
+        resonances: [
+          {
+            frequency: 240.15,
+            q: 0.9088,
+            peak: 4867e3
+          },
+          {
+            frequency: 1708.4,
+            q: 10.2,
+            peak: 2632e4
+          },
+          {
+            frequency: 2472.6,
+            q: 17.29,
+            peak: 1182e5
+          },
+          {
+            frequency: 3052.1,
+            q: 29.01,
+            peak: 1887e5
+          }
+        ],
+        misfit: 0.0408
+      },
+      {
+        target: 1700,
+        reached: true,
+        coords: [
+          -0.0218056,
+          0.0219146,
+          -292444e-8,
+          -0.0243388
+        ],
+        second: {
+          frequency: 1700,
+          peak: 3464e4,
+          q: 7.512
+        },
+        resonances: [
+          {
+            frequency: 240.07,
+            q: 0.9748,
+            peak: 5e6
+          },
+          {
+            frequency: 1746.9,
+            q: 8.93,
+            peak: 2218e4
+          },
+          {
+            frequency: 2350.4,
+            q: 19.71,
+            peak: 1919e5
+          },
+          {
+            frequency: 2894.8,
+            q: 26.24,
+            peak: 8825e4
+          }
+        ],
+        misfit: 0.0426
+      },
+      {
+        target: 1725,
+        reached: true,
+        coords: [
+          -0.0184572,
+          0.0246739,
+          -337478e-8,
+          -0.0227565
+        ],
+        second: {
+          frequency: 1710.4,
+          peak: 3544e4,
+          q: 7.817
+        },
+        resonances: [
+          {
+            frequency: 239.69,
+            q: 1.047,
+            peak: 5112e3
+          },
+          {
+            frequency: 1758.7,
+            q: 8.713,
+            peak: 2461e4
+          },
+          {
+            frequency: 2200.8,
+            q: 17.62,
+            peak: 1265e5
+          },
+          {
+            frequency: 2840,
+            q: 27.18,
+            peak: 3937e4
+          }
+        ],
+        misfit: 0.0473
+      },
+      {
+        target: 1750,
+        reached: false,
+        coords: [
+          -0.0181458,
+          0.0248267,
+          -328933e-8,
+          -0.0229542
+        ],
+        second: {
+          frequency: 1711.3,
+          peak: 3472e4,
+          q: 7.521
+        },
+        resonances: [
+          {
+            frequency: 239.58,
+            q: 1.05,
+            peak: 5111e3
+          },
+          {
+            frequency: 1761,
+            q: 8.592,
+            peak: 2361e4
+          },
+          {
+            frequency: 2201.3,
+            q: 17.9,
+            peak: 1313e5
+          },
+          {
+            frequency: 2838.5,
+            q: 27.22,
+            peak: 3956e4
+          }
+        ],
+        misfit: 0.0471
+      },
+      {
+        target: 1775,
+        reached: false,
+        coords: [
+          -0.0190221,
+          0.0243692,
+          -261263e-8,
+          -0.0244744
+        ],
+        second: {
+          frequency: 1709.9,
+          peak: 3556e4,
+          q: 6.359
+        },
+        resonances: [
+          {
+            frequency: 239.14,
+            q: 1.022,
+            peak: 5036e3
+          },
+          {
+            frequency: 1762.9,
+            q: 8.347,
+            peak: 2153e4
+          },
+          {
+            frequency: 2245,
+            q: 20.23,
+            peak: 1954e5
+          },
+          {
+            frequency: 2842.4,
+            q: 26.48,
+            peak: 4846e4
+          }
+        ],
+        misfit: 0.044
+      },
+      {
+        target: 1800,
+        reached: false,
+        coords: [
+          -0.020957,
+          0.0223493,
+          -373819e-8,
+          -0.0227837
+        ],
+        second: {
+          frequency: 1701.6,
+          peak: 3449e4,
+          q: 8.446
+        },
+        resonances: [
+          {
+            frequency: 240.82,
+            q: 1.001,
+            peak: 5086e3
+          },
+          {
+            frequency: 1744.3,
+            q: 9.112,
+            peak: 2449e4
+          },
+          {
+            frequency: 2294.3,
+            q: 17.8,
+            peak: 1332e5
+          },
+          {
+            frequency: 2885.5,
+            q: 26.68,
+            peak: 6509e4
+          }
+        ],
+        misfit: 0.0455
+      },
+      {
+        target: 1825,
+        reached: false,
+        coords: [
+          -0.0198813,
+          0.0242137,
+          -254407e-8,
+          -0.0243861
+        ],
+        second: {
+          frequency: 1710.7,
+          peak: 3886e4,
+          q: 7.064
+        },
+        resonances: [
+          {
+            frequency: 239.06,
+            q: 1.012,
+            peak: 5014e3
+          },
+          {
+            frequency: 1761.7,
+            q: 8.587,
+            peak: 2447e4
+          },
+          {
+            frequency: 2233.2,
+            q: 20.1,
+            peak: 1997e5
+          },
+          {
+            frequency: 2839.6,
+            q: 26.31,
+            peak: 4516e4
+          }
+        ],
+        misfit: 0.044
+      },
+      {
+        target: 1850,
+        reached: false,
+        coords: [
+          -0.0197818,
+          0.0242057,
+          -254993e-8,
+          -0.0244169
+        ],
+        second: {
+          frequency: 1710.4,
+          peak: 3827e4,
+          q: 6.988
+        },
+        resonances: [
+          {
+            frequency: 239.08,
+            q: 1.013,
+            peak: 5016e3
+          },
+          {
+            frequency: 1761.7,
+            q: 8.548,
+            peak: 2392e4
+          },
+          {
+            frequency: 2237,
+            q: 20.16,
+            peak: 2001e5
+          },
+          {
+            frequency: 2840.6,
+            q: 26.31,
+            peak: 4611e4
+          }
+        ],
+        misfit: 0.0439
+      },
+      {
+        target: 1875,
+        reached: false,
+        coords: [
+          -0.0197634,
+          0.0242321,
+          -254767e-8,
+          -0.0244119
+        ],
+        second: {
+          frequency: 1710.5,
+          peak: 3836e4,
+          q: 6.988
+        },
+        resonances: [
+          {
+            frequency: 239.07,
+            q: 1.014,
+            peak: 5017e3
+          },
+          {
+            frequency: 1761.8,
+            q: 8.549,
+            peak: 2399e4
+          },
+          {
+            frequency: 2235.4,
+            q: 20.14,
+            peak: 1998e5
+          },
+          {
+            frequency: 2840,
+            q: 26.32,
+            peak: 4572e4
+          }
+        ],
+        misfit: 0.044
+      },
+      {
+        target: 1900,
+        reached: false,
+        coords: [
+          -0.019011,
+          0.0244419,
+          -275192e-8,
+          -0.0241779
+        ],
+        second: {
+          frequency: 1710.9,
+          peak: 36e6,
+          q: 6.844
+        },
+        resonances: [
+          {
+            frequency: 239.25,
+            q: 1.026,
+            peak: 5049e3
+          },
+          {
+            frequency: 1763,
+            q: 8.438,
+            peak: 225e5
+          },
+          {
+            frequency: 2233.5,
+            q: 19.74,
+            peak: 182e6
+          },
+          {
+            frequency: 2840.6,
+            q: 26.59,
+            peak: 4585e4
+          }
+        ],
+        misfit: 0.0446
+      },
+      {
+        target: 1925,
+        reached: false,
+        coords: [
+          -0.0189948,
+          0.0244454,
+          -275466e-8,
+          -0.0241759
+        ],
+        second: {
+          frequency: 1710.9,
+          peak: 3595e4,
+          q: 6.834
+        },
+        resonances: [
+          {
+            frequency: 239.25,
+            q: 1.026,
+            peak: 505e4
+          },
+          {
+            frequency: 1763,
+            q: 8.434,
+            peak: 2246e4
+          },
+          {
+            frequency: 2233.6,
+            q: 19.74,
+            peak: 1818e5
+          },
+          {
+            frequency: 2840.6,
+            q: 26.59,
+            peak: 4588e4
+          }
+        ],
+        misfit: 0.0446
+      },
+      {
+        target: 1950,
+        reached: false,
+        coords: [
+          -0.0292048,
+          0.0175781,
+          -253844e-8,
+          -0.0237617
+        ],
+        second: {
+          frequency: 1699.9,
+          peak: 4766e4,
+          q: 9.775
+        },
+        resonances: [
+          {
+            frequency: 239.47,
+            q: 0.8852,
+            peak: 4813e3
+          },
+          {
+            frequency: 1732.2,
+            q: 10.97,
+            peak: 3601e4
+          },
+          {
+            frequency: 2474.3,
+            q: 18.69,
+            peak: 1929e5
+          },
+          {
+            frequency: 3003.5,
+            q: 27.34,
+            peak: 1957e5
+          }
+        ],
+        misfit: 0.0392
+      },
+      {
+        target: 1975,
+        reached: false,
+        coords: [
+          -0.0230345,
+          0.0227728,
+          -167768e-8,
+          -0.0249253
+        ],
+        second: {
+          frequency: 1704.8,
+          peak: 4593e4,
+          q: 7.636
+        },
+        resonances: [
+          {
+            frequency: 238.08,
+            q: 0.9582,
+            peak: 4868e3
+          },
+          {
+            frequency: 1752.3,
+            q: 9.024,
+            peak: 2904e4
+          },
+          {
+            frequency: 2271.1,
+            q: 21.58,
+            peak: 273e6
+          },
+          {
+            frequency: 2853.5,
+            q: 25.26,
+            peak: 5285e4
+          }
+        ],
+        misfit: 0.0409
       }
     ]
   }
@@ -8700,18 +10523,6 @@ var VocalTract = class _VocalTract {
   }
 };
 
-// public/shared/performers/turbulence.js
-function turbulenceEntry(model) {
-  let entry2;
-  try {
-    entry2 = playerEntry(model, "flow.turbulence");
-  } catch {
-    return null;
-  }
-  return { value: entry2.value, unit: entry2.unit, kind: entry2.kind, what: "its flow's turbulent fluctuation, a share of the flow per root hertz" };
-}
-var turbulenceOf = (model) => turbulenceEntry(model)?.value ?? null;
-
 // public/shared/performers/player-noise.js
 var NOISED = (path) => player("instrument", `noise.${path}`);
 var ACTION_PROFILE = Object.freeze({
@@ -8729,6 +10540,18 @@ function windsNoiseLine(what, temperature, seed2) {
   const { sd } = WINDS_NOISE.kinds[what], { beta, low, high, tremor } = WINDS_NOISE.profile;
   return { ...seed2 == null ? {} : { seed: seed2 }, what, sd, temperature, beta, low, high, tremor: { ...tremor } };
 }
+
+// public/shared/performers/turbulence.js
+function turbulenceEntry(model) {
+  let entry2;
+  try {
+    entry2 = playerEntry(model, "flow.turbulence");
+  } catch {
+    return null;
+  }
+  return { value: entry2.value, unit: entry2.unit, kind: entry2.kind, what: "its flow's turbulent fluctuation, a share of the flow per root hertz" };
+}
+var turbulenceOf = (model) => turbulenceEntry(model)?.value ?? null;
 
 // public/shared/performers/bow.js
 var PLANNER = (name) => setting("bow-planner", name);
@@ -8797,9 +10620,6 @@ var BOWED_LINE = Object.freeze({
   fastestShare: player("violin-family", "line.fastestShare"),
   easeMost: player("violin-family", "line.easeMost")
 });
-
-// public/shared/fnv1a.js
-var FNV_SPAN = 2 ** 32;
 
 // public/shared/performers/vibrato.js
 var own = (id, path) => player(id, `vibrato.${path}`);
@@ -8892,6 +10712,82 @@ var FAMILY = {
   tuba: "brass",
   ...Object.fromEntries(GIVEN_BOWED.map((i) => [i.name, "strings"]))
 };
+
+// render/synthesis/src/physical.mjs
+var WIND_MODELS = Object.freeze({
+  flute: Object.freeze({ backend: "openwind", model: "flute" }),
+  oboe: Object.freeze({ backend: "openwind", model: "oboe" }),
+  clarinet: Object.freeze({ backend: "openwind", model: "clarinet" }),
+  bassoon: Object.freeze({ backend: "openwind", model: "bassoon" }),
+  alto: Object.freeze({ backend: "openwind", model: "alto-flute" }),
+  ...Object.fromEntries(["alto-flute", "piccolo", "e-flat-clarinet", "bass-clarinet", "english-horn", "contrabassoon", "soprano-saxophone", "alto-saxophone", "tenor-saxophone", "baritone-saxophone"].map((model) => [model, Object.freeze({ backend: "openwind", model })])),
+  horn: Object.freeze({ backend: "ness", model: "horn" }),
+  trumpet: Object.freeze({ backend: "ness", model: "trumpet" }),
+  trombone: Object.freeze({ backend: "ness", model: "trombone" }),
+  tuba: Object.freeze({ backend: "ness", model: "tuba" })
+});
+var WIND_MODELS_BY_DEFAULT = Object.freeze(Object.keys(WIND_MODELS));
+var OPENWIND_WOODWINDS = Object.freeze(["clarinet", "oboe", "bassoon", "flute", "alto-flute", "piccolo", "e-flat-clarinet", "bass-clarinet", "english-horn", "contrabassoon", "soprano-saxophone", "alto-saxophone", "tenor-saxophone", "baritone-saxophone"]);
+var WOODWIND_TONGUES = Object.freeze({ clarinet: "reed", oboe: "reed", bassoon: "reed", flute: "air", "alto-flute": "air", piccolo: "air", ...Object.fromEntries(["e-flat-clarinet", "bass-clarinet", "english-horn", "contrabassoon", "soprano-saxophone", "alto-saxophone", "tenor-saxophone", "baritone-saxophone"].map((model) => [model, "reed"])) });
+var NESS_WOODWINDS = Object.freeze([
+  "clarinet",
+  "e-flat-clarinet",
+  "bass-clarinet",
+  "soprano-saxophone",
+  "alto-saxophone",
+  "tenor-saxophone",
+  "baritone-saxophone",
+  "oboe",
+  "english-horn",
+  "bassoon",
+  "contrabassoon"
+]);
+var FIXED_PITCH = Object.freeze({ supercollider: Object.freeze(["piano", "membrane"]), openwind: OPENWIND_WOODWINDS, ness: NESS_WOODWINDS });
+var BREATHES_VIBRATO = Object.freeze({ openwind: OPENWIND_WOODWINDS, ness: NESS_WOODWINDS });
+var TECHNIQUES_REALIZED = Object.freeze({
+  openwind: Object.freeze(Object.fromEntries(OPENWIND_WOODWINDS.map((model) => [model, Object.freeze(["hum", "growl", "flutter", "multiphonic"])]))),
+  // (And NESS's brass: the same three in its mouth-pressure tremolo and noise, and a mute in its bore: ness.mjs.)
+  ness: Object.freeze(Object.fromEntries(["trumpet", "trombone", "horn", "tuba"].map((model) => [model, Object.freeze(["hum", "growl", "flutter", "mute"])])))
+});
+var LEVELLED = Object.freeze(["openwind", "ness"]);
+
+// render/synthesis/src/openwind-passages.mjs
+var VIBRATO_SHARE = 4e-3;
+
+// native/openwind/standing.mjs
+var tractMeasured = (model) => {
+  try {
+    VocalTract.normal(model, 440);
+    return true;
+  } catch {
+    return false;
+  }
+};
+function playersTract(model, hz, raised = null) {
+  if (!tractMeasured(model)) return [];
+  return (raised ? VocalTract.bent(model, hz * raised) : VocalTract.normal(model, hz)).resonances;
+}
+var turbulenceLevel = (model) => turbulenceOf(model) ?? 0;
+var NOISE_TEMPERATURES = Object.freeze({ player: 1, breath: 1, lips: 1 });
+function noiseLines(kind, temperatures = NOISE_TEMPERATURES, seeded = false) {
+  return windsNoiseKinds(kind).map((what, k) => windsNoiseLine(what, temperatures.player * temperatures[what], seeded && k === 0 ? DEFAULT_SEED : void 0));
+}
+var vibratoOf = (model) => {
+  const own2 = WIND_VIBRATO[model] ?? WIND_VIBRATO[{ "alto-flute": "alto" }[model]] ?? { rate: 5, width: 0 };
+  return { ...own2, reach: WIND_VIBRATO_REACH[model] ?? null };
+};
+var breathVibrato = (column, { width, rate }, seconds = 0) => ({ columns: [column], depths: [VIBRATO_SHARE * width / 2], cents: [false], rate, seconds });
+if (globalThis.process?.argv?.[1] && decodeURIComponent(new URL(import.meta.url).pathname) === globalThis.process.argv[1]) {
+  const [model, kind, pairs = "[]"] = process.argv.slice(2);
+  console.log(JSON.stringify({
+    turbulence: turbulenceLevel(model),
+    noise: noiseLines(kind, NOISE_TEMPERATURES, true),
+    vibrato: vibratoOf(model),
+    share: VIBRATO_SHARE,
+    tractSeconds: transition("tract").least,
+    tracts: JSON.parse(pairs).map(([hz, raised]) => playersTract(model, hz, raised))
+  }));
+}
 
 // render/synthesis/geometry/brass-mutes.json
 var brass_mutes_default = {
@@ -10008,7 +11904,7 @@ var breath_literature_default = {
 var reed_literature_default = {
   schema: "musebots.reed-literature/1",
   source: `J. Chabassier & R. Auvray 2022, "Control parameters for reed wind instruments or organ pipes with reed induced flow", Proceedings of the 25th International Conference on Digital Audio Effects (DAFx20in22), Vienna, Table 1: the clarinet-like reeds' dimensioned values found in the literature; the values they set in italic (guessed, not found in the reference) left out (null)`,
-  use: "tools/fit_reed.py: each single reed's parameter's prior spread, the standard deviation of its logarithm over these reeds -- how far published reeds stand from one another (tools/measured_registry.py exciter_spreads); workers/openwind_worker.py: the saxophones' reed, the middle of its kind's measured stiffness, resistance and mass per area (saxophone_reed). Rows after Chabassier & Auvray's: [6]'s and [8]'s, added from their papers, each with its size and, where measured, its stiffness and resistance per area",
+  use: "tools/fit_reed.py: each single reed's parameter's prior spread, the standard deviation of its logarithm over these reeds -- how far published reeds stand from one another (tools/measured_registry.py exciter_spreads); workers/woodwind_reeds.py: each kind's damping as its player's lip leaves it, the geometric mean of its reeds' `qr` measured under a player's lip (LIP_QR); workers/openwind_worker.py: the saxophones' reed, the middle of its kind's measured stiffness, resistance and mass per area (saxophone_reed). Rows after Chabassier & Auvray's: [6]'s and [8]'s, added from their papers, each with its size and, where measured, its stiffness and resistance per area",
   references: {
     "[1]": 'S. Bilbao 2008, "Direct simulation for wind instrument synthesis", DAFx-08, 145-152',
     "[2]": 'V. Chatziioannou & M. van Walstijn 2012, "Estimation of clarinet reed parameters by inverse modelling", Acta Acustica united with Acustica 98(4), 629-639',
@@ -10018,6 +11914,7 @@ var reed_literature_default = {
     "[7]": 'V. Chatziioannou, S. Schmutzhard, M. Pamies-Vila & A. Hofmann 2019, "Investigating clarinet articulation using a physical model and an artificial blowing machine", Acta Acustica united with Acustica 105(4), 682-694',
     "[8]": `D. Tonetti & E. A. Piana 2025, "Imaging based saxophone reed modelling", Forum Acusticum / EuroNoise 2025, Malaga, 2871-2876, doi:10.61782/fa.2025.0442 (checked on Crossref; CC BY 3.0; research-downloads/winds/saxophone-reed/tonetti-piana-2025-sax-reed-imaging.pdf): a synthetic tenor reed (Legere 3) on its mouthpiece, its tip filmed at 10 kHz under a sine sweep, a foam lip loaded 0 to 1000 g; their Table 1, a one-degree oscillator fitted to each load's transfer function`,
     "[9]": `A. Gaillard, V. Koehl & B. Gazengel 2024, "Theoretical and experimental studies about single cane reeds: a review", Acta Acustica 8, 63, doi:10.1051/aacus/2024050 (checked on Crossref; research-downloads/winds/saxophone-reed/aacus240040.pdf): Table A7, the reed + lip's equivalent parameters published (clarinet: damping rates 453 to 2900 /s, damping factors 0.03 to 0.24; the tenor saxophone, [6]'s); Table A4, Nederveen's measured stiffness by saxophone size (soprano 1e7, alto 8.33e6, tenor 3.33e6 N/m3)`,
+    "[11]": `V. Chatziioannou 2010, "Forward and inverse modelling of single-reed woodwind instruments with application to digital sound synthesis", PhD thesis, Queen's University Belfast (research-downloads/winds/from-owner-2026-11-05/chatziioannou-2010-thesis-single-reed-inverse-modelling.pdf): its Table 6.1, a clarinet reed's parameters estimated from a real player's blowing (its chapter 6, "a real player-clarinet system"), two of its takes, beating smoothly and strongly -- its reed m y'' + m g y' + Ka y, g its damping (1/s), Sr its area for its flow, ym its opening; its resonance the root of Ka over m`,
     "[10]": `D. Tonetti & E. A. Piana 2026, "Saxophone acoustical modeling and vibrato 'a la machoire' sound synthesis", JASA 159, 141-156, doi:10.1121/10.0041870 (checked on Crossref; research-downloads/winds/from-owner-2026-10-25/141_1_10.0041870.pdf): [8]'s reed against [6]'s, whose in-vivo damping is some eight times its foam lip's and its resonance half -- the lip's material, they say, sets the damping; a saxophonist's vibrato matched at a blowing pressure of 2.3 kPa`
   },
   reeds: [
@@ -10050,7 +11947,9 @@ var reed_literature_default = {
     { ref: "[8] Tab. 1 500 g", instrument: "saxophone", massPerArea: 0.1524, section: null, opening: null, width: null, dissip: 1238, hz: 1579, size: "tenor", stiffness: 15e6, resistance: 188.7, derived: "their kr 1.5e+07 Pa/m, wr 9.92e+03 rad/s, xi 0.0624 at a foam lip loaded 500 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
     { ref: "[8] Tab. 1 750 g", instrument: "saxophone", massPerArea: 0.1646, section: null, opening: null, width: null, dissip: 1304, hz: 1655, size: "tenor", stiffness: 178e5, resistance: 214.6, derived: "their kr 1.78e+07 Pa/m, wr 1.04e+04 rad/s, xi 0.0627 at a foam lip loaded 750 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
     { ref: "[8] Tab. 1 1000 g", instrument: "saxophone", massPerArea: 0.1555, section: null, opening: null, width: null, dissip: 1727, hz: 1783, size: "tenor", stiffness: 195e5, resistance: 268.5, derived: "their kr 1.95e+07 Pa/m, wr 1.12e+04 rad/s, xi 0.0771 at a foam lip loaded 1000 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
-    { ref: "[7] initial", instrument: "clarinet", massPerArea: 0.033, section: 986e-7, opening: 246e-6, width: 0.012, dissip: 3e3, hz: 3709 }
+    { ref: "[7] initial", instrument: "clarinet", massPerArea: 0.033, section: 986e-7, opening: 246e-6, width: 0.012, dissip: 3e3, hz: 3709 },
+    { ref: "[11] Tab. 6.1 smooth", instrument: "clarinet", massPerArea: 0.0357, section: 23714e-8, opening: 32204e-8, width: null, dissip: 8626, hz: 2775, stiffness: 10853e3, qr: 0.495, qrOf: "the reed and its player's lip as played, its damping over its resonance (g over the root of Ka over m), beating smoothly" },
+    { ref: "[11] Tab. 6.1 strong", instrument: "clarinet", massPerArea: 0.0508, section: 10012e-8, opening: 33625e-8, width: null, dissip: 6969, hz: 1825, stiffness: 6681200, qr: 0.608, qrOf: "the reed and its player's lip as played, its damping over its resonance (g over the root of Ka over m), beating strongly" }
   ]
 };
 
@@ -10257,7 +12156,7 @@ function windsDial(env) {
     hum: { on: false, interval: TECHNIQUE.hum.interval, level: TECHNIQUE.hum.level },
     growl: { on: false, interval: TECHNIQUE.growl.interval, level: TECHNIQUE.growl.level, rough: TECHNIQUE.growl.rough },
     swell: 1,
-    noise: { player: 1, breath: 1, lips: 1 }
+    noise: { ...NOISE_TEMPERATURES }
   };
   const held = { breath: 0, tongue: 1 };
   const lungs = new Lungs();
@@ -10492,7 +12391,7 @@ function windsDial(env) {
       const way = lipsDirection(current.lips, state.lip, 1, state.valves), got2 = on && width > 0 ? pressed(width / 2) : null, depth = v && got2 ? got2.depth : 0;
       current.heard = got2 && 2 * got2.heard;
       current.stream.vibrato({ columns: way.columns, depths: way.slopes.map((s) => s * depth), cents: way.columns.map(() => true), rate, seconds });
-    } else current.stream.vibrato({ columns: [current.breath], depths: [VIBRATO_SHARE * v], cents: [false], rate, seconds });
+    } else current.stream.vibrato(breathVibrato(current.breath, { width: 2 * v, rate }, seconds));
   }
   const voiced = (kind) => windTechniqueAt({ kind, ...state[kind] }, state.pitch)[kind];
   const hummed = (kind) => voiced(kind).hz;
@@ -10520,10 +12419,6 @@ function windsDial(env) {
     const { low = state.midi, high = state.midi, share = 0 } = state.between ?? {}, a = at2(low), b = at2(high);
     return a == null || b == null ? null : a + (b - a) * share;
   }
-  const vibratoOf = (model) => {
-    const own2 = WIND_VIBRATO[model] ?? WIND_VIBRATO[{ "alto-flute": "alto" }[model]] ?? { rate: 5, width: 0 };
-    return { ...own2, reach: WIND_VIBRATO_REACH[model] ?? null };
-  };
   async function rowsOf(made, dynamic) {
     const rows = [];
     for (const [k, midi] of made.notes.entries()) rows.push(made.lips ? lipsRow(made.lips, made.lips.notes[k].lip, made.lips.notes[k].pressures[dynamic], made.lips.notes[k].valves) : await env.rulesRow(made.stream, made.model, midi, dynamic));
@@ -10703,16 +12598,11 @@ function windsDial(env) {
     if (made.lips) sway();
     if (state.hum.on || state.growl.on || state.flutter.on) techniques();
   }
-  const tractMeasured = (of2) => {
-    try {
-      VocalTract.normal(of2, 440);
-      return true;
-    } catch {
-      return false;
-    }
+  const raisedAt = (pitch) => {
+    const k = current.raised ? current.notes.indexOf(Math.round(pitch)) : -1;
+    return k < 0 ? null : current.raised[k];
   };
-  const normalTract = (of2, hz) => tractMeasured(of2) ? VocalTract.normal(of2, hz).resonances : [];
-  const followed = (of2, pitch) => tract(normalTract(of2, 440 * 2 ** ((pitch - 69) / 12)));
+  const followed = (of2, pitch) => tract(playersTract(of2, 440 * 2 ** ((pitch - 69) / 12), raisedAt(pitch)));
   function tract(resonances) {
     state.tract = new VocalTract(resonances);
     current.stream.tract(state.tract.resonances, least("tract"));
@@ -10725,7 +12615,7 @@ function windsDial(env) {
   const NOISE_MOST = 5;
   function noise(temperatures, seeded = false) {
     state.noise = { ...state.noise, ...temperatures };
-    windsNoiseKinds(current.kind).forEach((what, k) => current.stream.noise(windsNoiseLine(what, state.noise.player * state.noise[what], seeded && k === 0 ? DEFAULT_SEED : void 0)));
+    noiseLines(current.kind, state.noise, seeded).forEach((line2) => current.stream.noise(line2));
   }
   let wanted = null, loading = null, failed = null, loader = null;
   const step = (said) => {
@@ -10808,7 +12698,7 @@ function windsDial(env) {
       if (made.lips?.slide) slideTo(made.lips.notes[k].out);
       state.tractFollows = tractMeasured(model);
       followed(model, middle2);
-      turbulence(turbulenceOf(model) ?? 0);
+      turbulence(turbulenceLevel(model));
       noise({}, true);
       sway(0);
     });
@@ -10846,6 +12736,8 @@ function windsDial(env) {
         // (Where each charted note stops speaking at each of its rules' velocities, a reed's: speaksAt.)
         speaks: !brass && rules.notes.some((n) => n.values?.some((x) => x.speaks != null)) ? rules.notes.map((n) => n.values.map((x) => x.speaks ?? null)) : null,
         velocities: rules.velocities ?? null,
+        // (The tract its fitted player raises at each charted note, where it raises one: standing.mjs playersTract.)
+        raised: !brass && rules.notes.some((n) => n.values?.some((x) => x.tract?.raised)) ? rules.notes.map((n) => n.values.find((x) => x.tract?.raised)?.tract.raised ?? null) : null,
         attacks: brass ? body.attacks : null,
         vibrato: brass ? body.vibrato : null,
         heard: null,
@@ -11853,6 +13745,7 @@ function threadCores(module, memory, thread, said) {
 }
 var THREAD_STATES = Object.freeze({ SLOT, IDLE, ASKED, RUNNING, END, CLAIMED });
 var PRUNE = 1.3;
+var HEADROOM = 0.5;
 function fastestCores(engine2, files, { single = false, most = 1, row, frames = 4800, rate = RATE, rounds = 3 } = {}) {
   const times = {};
   const timed = (k, warm) => {
@@ -11876,11 +13769,12 @@ function fastestCores(engine2, files, { single = false, most = 1, row, frames = 
     for (const k in times) paces[k] = median2(times[k]);
     if (round === 0) asked = Object.keys(times).map(Number);
     const best2 = Math.min(...asked.map((k) => paces[k]));
-    asked = asked.filter((k) => paces[k] <= PRUNE * best2);
+    asked = asked.filter((k) => paces[k] <= PRUNE * best2 || paces[k] <= HEADROOM);
     if (asked.length === 1) break;
   }
   const best = Math.min(...asked.map((k) => paces[k]));
-  return { threads: asked.sort((a, b) => a - b).find((k) => paces[k] <= 1.03 * best), paces };
+  asked.sort((a, b) => a - b);
+  return { threads: asked.find((k) => paces[k] <= HEADROOM) ?? asked.find((k) => paces[k] <= 1.03 * best), paces };
 }
 function liveStream(engine2, files, { single = false, threads = 1, most = null, onError = () => {
 } } = {}) {
@@ -11942,7 +13836,7 @@ var got = async (path, as = "json") => {
 };
 var say = (text) => self.postMessage({ said: text });
 var threaded = Boolean(self.crossOriginIsolated) && typeof SharedArrayBuffer !== "undefined";
-var CORES = threaded ? Math.max(1, Math.min(16, (navigator.hardwareConcurrency || 1) - 1)) : 1;
+var CORES = threaded ? Math.max(1, Math.min(16, (navigator.hardwareConcurrency || 1) - 2)) : 1;
 var engine = got(threaded ? "openwind-threads.wasm" : "openwind.wasm", "arrayBuffer").then((bytes) => openwindEngine(bytes, {
   said: say,
   thread: threaded ? () => new Worker(at("openwind-thread.js"), { type: "module" }) : null
