@@ -13349,6 +13349,18 @@ function windsDial(env) {
         refused2.push({ path, error: error.message });
       }
     };
+    if ((s.mute ?? null) !== (current.mute ?? null) && BRASS_MUTES[current.model]) {
+      try {
+        muteTo(s.mute ?? null);
+        if (muting && !state.blowing && current.frames >= quiet) {
+          muting.made ??= await readied(muting.mute);
+          if (muting?.made) changedOver();
+        }
+        made++;
+      } catch (error) {
+        refused2.push({ path: "/mute", error: error.message });
+      }
+    }
     await run("/pitch", s.charted && Number.isInteger(s.note) ? { pitch: s.pitch, dynamic: s.dynamic, charted: true, note: s.note } : { pitch: s.pitch, dynamic: s.dynamic });
     if (s.lip != null) await run("/lip", { lip: s.lip });
     if (s.slide != null) await run("/slide", { out: s.slide });
@@ -13374,7 +13386,6 @@ function windsDial(env) {
         refused2.push({ path: "/soloist", error: error.message });
       }
     }
-    if ((s.mute ?? null) !== (current.mute ?? null) && BRASS_MUTES[current.model]) await run("/mute", { mute: s.mute ?? null });
     return { status: 200, json: { ...playing(), rules: state.rules, loaded: { made, refused: refused2 }, player: playerShown() } };
   }
   async function handle(method, path, query, given2 = {}) {

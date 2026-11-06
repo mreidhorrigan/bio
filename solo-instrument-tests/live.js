@@ -5364,6 +5364,10 @@ async function recall(k) {
     ["end", k.endSeconds]
   ]) if (Number.isFinite(v)) setters[id](v, true);
   if (k.alternating != null) $("alternate").checked = k.alternating;
+  if (k.direction === 1 || k.direction === -1) {
+    direction = k.direction;
+    way();
+  }
   if (k.attack) {
     forceCurve.set(k.attack.force);
     speedCurve.set(k.attack.speed);
