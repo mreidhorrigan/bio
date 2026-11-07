@@ -41,6 +41,7 @@ var sources_default = {
     "fletcher-1964": { kind: "literature", authors: "H. Fletcher", title: "Normal Vibration Frequencies of a Stiff Piano String", year: 1964, doi: "10.1121/1.1918933", in: "JASA 36(1), 203-209" },
     "schelleng-1973": { kind: "literature", authors: "J. C. Schelleng", title: "The bowed string and the player", year: 1973, doi: "10.1121/1.1913322", in: "JASA 53(1), 26-41" },
     "schoonderwaldt-2009": { kind: "literature", authors: "E. Schoonderwaldt", title: "The player and the bowed string: Coordination of bowing parameters in violin and viola performance", year: 2009, doi: "10.1121/1.3203209", in: "JASA 126(5), 2709-2720" },
+    "schoonderwaldt-altenmuller-2014": { kind: "literature", authors: "E. Schoonderwaldt, E. Altenmüller", title: "Coordination in fast repetitive violin-bowing patterns", year: 2014, doi: "10.1371/journal.pone.0106615", in: "PLoS ONE 9(9), e106615" },
     "schoonderwaldt-guettler-askenfelt-2003": { kind: "literature", authors: "E. Schoonderwaldt, K. Guettler, A. Askenfelt", title: "Effect of the width of the bow hair on the violin string spectrum", year: 2003, in: "Proceedings of the Stockholm Music Acoustics Conference (SMAC 03), Stockholm", saved: "research-downloads/strings/bow-hair/schoonderwaldt-guettler-askenfelt-2003-smac-bow-width.pdf", noDoi: "conference proceedings: none found at Crossref (29 October 2026)" },
     "guettler-askenfelt-1997": { kind: "literature", authors: "K. Guettler, A. Askenfelt", title: "Acceptance limits for the duration of pre-Helmholtz transients in bowed string attacks", year: 1997, doi: "10.1121/1.418520", in: "JASA 101(5), 2903-2913" },
     "iso-16-1975": { kind: "literature", authors: "International Organization for Standardization", title: "ISO 16:1975 Acoustics -- Standard tuning frequency (Standard musical pitch)", year: 1975, standard: "ISO 16:1975" },
@@ -123,7 +124,8 @@ var sources_default = {
     "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" },
     "cellofun-extensions": { kind: "vernacular", who: `cellofun.eu, a cellist's technique encyclopaedia: "Extensions On The Cello" and "Simple Extensions in the Neck Region"`, url: "https://cellofun.eu/?p=1661", accessed: "2026-11-06" },
     "gale-triangulation": { kind: "vernacular", who: `T. B. Gale, Triangulation of Fingering Systems for the Double Bass (A Complete Method), Vol. 1, its publisher's page: "Closed Hand (Simandl 1-2-4), Open Hand (extension fingering 1-2-3-4), and Thumb Positions"`, url: "https://www.sheetmusicplus.com/en/product/triangulation-of-fingering-systems-for-the-double-bass-a-complete-method-vol-1-22576307.html", accessed: "2026-11-06" },
-    "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" }
+    "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" },
+    "furneaux-1999": { kind: "literature", authors: "S. Furneaux, M. F. Land", title: "The effects of skill on the eye-hand span during musical sight-reading", year: 1999, doi: "10.1098/rspb.1999.0943", in: "Proceedings of the Royal Society of London B 266(1436), 2435-2440" }
   }
 };
 
@@ -1529,6 +1531,10 @@ var bowed_default2 = {
         },
         lifted: { value: 0.03, unit: "s", kind: "unmeasured", reason: "ours: a stroke ended with its bow stopped on the string lifted this long before the next stroke at the latest", searched: [{ where: "web search", query: "bowed note release bow lift off string timing measured violin players decay after bow", date: "2026-10-29", found: "spiccato's tails (Guettler & Askenfelt); a violin offset detector's envelopes (ISMIR 2015); no player's release measured" }] },
         slur: { value: 0.012, unit: "s", kind: "unmeasured", reason: "ours: a slur's finger change", searched: [{ where: "web search", query: "string players damping pizzicato with finger decay time measured; legato finger change transition time violin ms", date: "2026-10-29", found: "plucked cello strings' damping measured and modelled (Mansour & Scavone), not a finger's; sample libraries' legato transitions (100-333 ms), not players'; no finger's damping nor finger change measured" }] },
+        crossing: {
+          share: { value: 0.207, unit: "share of the note it crosses to", kind: "literature", source: "schoonderwaldt-altenmuller-2014", at: "Results, the string crossing's width", note: "a slur across strings rolled from one string to the next over this, the bow on both at once, the one it leaves lifted as the one it takes is set down: the bow on both strings over the middle 0.32 of its inclination's peak-to-peak swing (median over the players' repeated crossings, 80% within 0.18 to 0.54, the bow hair's and strings' compliance), the inclination near sinusoidal and one crossing a note, 2 asin(0.32) / pi of a note; the crossing's duration affected by tempo", measuredOn: ["violin"] },
+          seconds: { value: [0.028, 0.053], unit: "s", kind: "literature", source: "schoonderwaldt-altenmuller-2014", at: "Methods (3.9 to 7.5 notes/s); Results", note: "that share at the note rates measured, 7.5 to 3.9 notes a second (its 80% at the fastest 15 to 48 ms): a crossing held within them, unmeasured beyond", measuredOn: ["violin"] }
+        },
         loure: {
           within: { value: 0.1, unit: "semitones", kind: "unmeasured", reason: "ours: a pitch slurred to again within this of the one before is loure, one bow, each note marked by the bow slowed on the string", searched: [{ where: "web search", query: "portato loure bowing measured bow velocity force violin motion capture", date: "2026-10-29", found: "bow velocity's profile from rectangular to sinusoidal as strokes quicken (Schoonderwaldt); no portato or loure measured" }] },
           seconds: { value: 0.08, unit: "s", kind: "unmeasured", reason: "ours: its slowing over this round the note's time (the bow's following at least)", searched: [{ where: "web search", query: "portato loure bowing measured bow velocity force violin motion capture", date: "2026-10-29", found: "bow velocity's profile from rectangular to sinusoidal as strokes quicken (Schoonderwaldt); no portato or loure measured" }] },
@@ -1826,7 +1832,9 @@ var bowed_default2 = {
           least: { value: 0.05, unit: "semitones", kind: "unmeasured", reason: "ours: a slide narrower than this (5 cents) none, taken as near the least change of pitch heard", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }, { where: "web search", query: "frequency difference limen pure tone 1 kHz percent cents just noticeable difference pitch musicians Wier Jesteadt Green 1977", date: "2026-10-29", found: "Wier, Jesteadt & Green 1977 (JASA 61, 178-184) measured pure tones' frequency difference limens by frequency and level, their values not reached in what was read; no slide's least width measured" }] }
         },
         hand: {
-          shift: { value: 0.3, unit: "s, the hand moved from one position to another", kind: "literature", source: "visentin-2015", at: "Table 2", note: "six highly trained violinists' durations of shift, first to third position and third to fifth, on one string and two: averages of 294 to 404 ms for four of them at 60 to 100 beats a minute, another's about 450 ms; begun notes before its arrival where the tempo asks it. The least of them taken. Measured on violinists alone: a cello's or bass's longer shifts unmeasured", measuredOn: ["violin"] }
+          shift: { value: 0.3, unit: "s, the hand moved from one position to another", kind: "literature", source: "visentin-2015", at: "Table 2", note: "six highly trained violinists' durations of shift, first to third position and third to fifth, on one string and two: averages of 294 to 404 ms for four of them at 60 to 100 beats a minute, another's about 450 ms; begun notes before its arrival where the tempo asks it. The least of them taken. Measured on violinists alone: a cello's or bass's longer shifts unmeasured", measuredOn: ["violin"] },
+          least: { value: 0.5, unit: "semitones above its open string, the nearest its nut a finger stops it", kind: "unmeasured", reason: "ours: a quarter tone -- a low first finger, a semitone over its open string, stops it at the nut as players are taught (1L), a quarter tone pressed back from there; nearer, the finger's own width stops the string further from the nut than asked, and a player takes the note on the string below (the model's finger, physical-strings.js MODEL.leastFinger, is its own limit, not a player's)", searched: [{ where: "web search", query: "quarter tone above open string violin first finger close to the nut playable", date: "2026-11-07", found: "none measured: a low first finger a semitone over the open string, at the nut, taught (violinlounge.com, how to play a low first finger); fingers press over a width, stopping the string some way back from the nut (fiddlerman.com forum, notes placement problem)" }] },
+          foresee: { value: 1, unit: "s, how far ahead of the note it plays its hand plans its notes", kind: "literature", source: "furneaux-1999", at: "abstract; Results", note: "the eye-hand span in time while sight-reading, about 1 s for professional and amateur pianists alike (0.7 s at fast tempos, 1.3 s at slow); four notes ahead for professionals, two for amateurs. Measured on pianists: a string player's unmeasured", measuredOn: ["piano"] }
         }
       }
     },
@@ -4606,6 +4614,7 @@ var MARGIN_GRAINS = LINE_SETTING("marginGrains");
 var BISECTIONS = LINE_SETTING("bisections");
 var REPAIRS_PER_NOTE = LINE_SETTING("repairsPerNote");
 var REPAIRS_MORE = LINE_SETTING("repairsMore");
+var SAME_PITCH = setting("strings-seat", "samePitch");
 var bowed = (instrument, lengthCm) => {
   const { strings, range, register } = instrumentRange(instrument);
   return Object.freeze({ strings, reach: range[1] - strings.at(-1), lengthCm, register, range });
@@ -4709,18 +4718,18 @@ var physical_strings_calibration_default = {
         ]
       },
       levels: {
-        ppp: -59.52,
-        pp: -58.03,
-        p: -53.01,
-        mp: -50.43,
-        mf: -47.36,
-        f: -43.23,
-        ff: -37.09,
-        fff: -31.34
+        ppp: -61.1,
+        pp: -54.76,
+        p: -50.61,
+        mp: -43.81,
+        mf: -39.07,
+        f: -32.42,
+        ff: -27.19,
+        fff: -23.48
       },
       recordedMf: -46.91,
-      gainDb: 0.45,
-      stemGainDb: 4.58,
+      gainDb: -7.84,
+      stemGainDb: -3.71,
       contacts: {
         ppp: 0.2,
         pp: 0.2,
@@ -5021,6 +5030,1853 @@ var physical_strings_calibration_default = {
               level: -59.15,
               contact: 0.2
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.23784,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.16818
+                  ],
+                  pp: [
+                    0.4,
+                    0.33636,
+                    0.28284,
+                    0.28284,
+                    0.28284,
+                    0.23784,
+                    0.23784,
+                    0.2,
+                    0.2,
+                    0.23784
+                  ],
+                  p: [
+                    0.23784,
+                    0.67272,
+                    0.56569,
+                    0.67272,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.47568,
+                    0.33636,
+                    0.33636
+                  ],
+                  mp: [
+                    1.13137,
+                    1.13137,
+                    1.13137,
+                    1.13137,
+                    0.67272,
+                    0.67272,
+                    1.34543,
+                    0.67272,
+                    0.67272,
+                    0.8
+                  ],
+                  mf: [
+                    1.90273,
+                    1.90273,
+                    1.34543,
+                    1.90273,
+                    1.90273,
+                    1.6,
+                    1.90273,
+                    2.69087,
+                    1.6,
+                    1.6
+                  ],
+                  f: [
+                    3.80546,
+                    3.2,
+                    3.80546,
+                    4.52548,
+                    4.52548,
+                    2.69087,
+                    3.80546,
+                    4.52548,
+                    2.26274,
+                    3.2
+                  ],
+                  ff: [
+                    12.79997,
+                    10.76345,
+                    9.05095,
+                    10.76345,
+                    3.2,
+                    10.76345,
+                    4.52548,
+                    5.38173,
+                    5.38173,
+                    10.76345
+                  ],
+                  fff: [
+                    15.22182,
+                    2.69087,
+                    12.79997,
+                    4.52548,
+                    12.79997,
+                    4.52548,
+                    3.80546,
+                    3.80546,
+                    9.05095,
+                    12.79997
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.033378,
+                    0.031756,
+                    0.029127,
+                    0.027207,
+                    0.024744,
+                    0.023741,
+                    0.022177,
+                    0.020717,
+                    0.019352,
+                    0.018077
+                  ],
+                  pp: [
+                    0.066559,
+                    0.063143,
+                    0.059901,
+                    0.056827,
+                    0.053149,
+                    0.051143,
+                    0.048519,
+                    0.046028,
+                    0.043665,
+                    0.041424
+                  ],
+                  p: [
+                    0.12116,
+                    0.147589,
+                    0.120214,
+                    0.113601,
+                    0.107352,
+                    0.101447,
+                    0.095867,
+                    0.090592,
+                    0.085609,
+                    0.080901
+                  ],
+                  mp: [
+                    0.23173,
+                    0.223377,
+                    0.215326,
+                    0.207563,
+                    0.200081,
+                    0.192869,
+                    0.164407,
+                    0.179215,
+                    0.172755,
+                    0.166528
+                  ],
+                  mf: [
+                    0.528919,
+                    0.50094,
+                    0.474443,
+                    0.449347,
+                    0.425578,
+                    0.40307,
+                    0.348313,
+                    0.361557,
+                    0.342431,
+                    0.324318
+                  ],
+                  f: [
+                    0.965974,
+                    0.660553,
+                    0.754048,
+                    0.921948,
+                    0.986585,
+                    0.977753,
+                    0.784708,
+                    0.696208,
+                    0.78577,
+                    0.730552
+                  ],
+                  ff: [
+                    2.279161,
+                    1.961396,
+                    1.825786,
+                    2.454158,
+                    0.94662,
+                    2.441195,
+                    1.43243,
+                    0.743299,
+                    1.429886,
+                    2.045329
+                  ],
+                  fff: [
+                    2.672717,
+                    0.801438,
+                    3.293881,
+                    0.788466,
+                    3.262132,
+                    1.203437,
+                    0.747193,
+                    0.76315,
+                    2.811325,
+                    3.4216
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.14142,
+                    0.16818,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.14142
+                  ],
+                  pp: [
+                    0.28284,
+                    0.23784,
+                    0.23784,
+                    0.23784,
+                    0.2,
+                    0.23784,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.14142
+                  ],
+                  p: [
+                    0.4,
+                    0.33636,
+                    0.33636,
+                    0.23784,
+                    0.28284,
+                    0.28284,
+                    0.23784,
+                    0.23784,
+                    0.23784,
+                    0.2
+                  ],
+                  mp: [
+                    0.95137,
+                    0.8,
+                    0.8,
+                    0.8,
+                    0.56569,
+                    0.56569,
+                    0.56569,
+                    0.4,
+                    0.4,
+                    0.2
+                  ],
+                  mf: [
+                    1.6,
+                    1.34543,
+                    1.34543,
+                    1.13137,
+                    1.13137,
+                    0.8,
+                    1.13137,
+                    1.13137,
+                    1.6,
+                    1.13137
+                  ],
+                  f: [
+                    1.90273,
+                    2.69087,
+                    2.69087,
+                    1.90273,
+                    2.26274,
+                    1.90273,
+                    2.26274,
+                    3.2,
+                    1.6,
+                    2.26274
+                  ],
+                  ff: [
+                    9.05095,
+                    3.2,
+                    5.38173,
+                    3.2,
+                    10.76345,
+                    4.52548,
+                    6.39999,
+                    3.2,
+                    3.2,
+                    4.52548
+                  ],
+                  fff: [
+                    15.22182,
+                    15.22182,
+                    15.22182,
+                    4.52548,
+                    10.76345,
+                    5.38173,
+                    5.38173,
+                    12.79997,
+                    6.39999,
+                    9.05095
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.017213,
+                    0.016168,
+                    0.015184,
+                    0.014261,
+                    0.013394,
+                    0.01258,
+                    0.011814,
+                    0.011097,
+                    0.010422,
+                    9787e-6
+                  ],
+                  pp: [
+                    0.035375,
+                    0.033495,
+                    0.031714,
+                    0.030029,
+                    0.028432,
+                    0.026922,
+                    0.02549,
+                    0.024135,
+                    0.022853,
+                    0.021637
+                  ],
+                  p: [
+                    0.078904,
+                    0.074004,
+                    0.069408,
+                    0.065098,
+                    0.061055,
+                    0.057263,
+                    0.053708,
+                    0.050371,
+                    0.047243,
+                    0.044307
+                  ],
+                  mp: [
+                    0.152138,
+                    0.14392,
+                    0.136149,
+                    0.128795,
+                    0.121838,
+                    0.115259,
+                    0.102271,
+                    0.103145,
+                    0.097573,
+                    0.096096
+                  ],
+                  mf: [
+                    0.329246,
+                    0.306203,
+                    0.284774,
+                    0.264843,
+                    0.246308,
+                    0.229072,
+                    0.19238,
+                    0.19813,
+                    0.184264,
+                    0.171368
+                  ],
+                  f: [
+                    0.700254,
+                    0.652047,
+                    0.607157,
+                    0.56536,
+                    0.526438,
+                    0.490199,
+                    0.415026,
+                    0.425028,
+                    0.416453,
+                    0.368521
+                  ],
+                  ff: [
+                    1.897448,
+                    0.68661,
+                    1.109097,
+                    0.807851,
+                    1.618221,
+                    1.109548,
+                    0.80134,
+                    0.727141,
+                    0.888634,
+                    0.896901
+                  ],
+                  fff: [
+                    2.9515,
+                    3.17496,
+                    3.385564,
+                    1.195446,
+                    1.699389,
+                    1.759901,
+                    0.867359,
+                    2.114109,
+                    1.238338,
+                    1.648385
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.11892
+                  ],
+                  pp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.14142,
+                    0.2,
+                    0.11892,
+                    0.14142,
+                    0.11892
+                  ],
+                  p: [
+                    0.2,
+                    0.16818,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.16818,
+                    0.16818,
+                    0.14142
+                  ],
+                  mp: [
+                    0.28284,
+                    0.28284,
+                    0.28284,
+                    0.28284,
+                    0.23784,
+                    0.28284,
+                    0.28284,
+                    0.28284,
+                    0.23784,
+                    0.2
+                  ],
+                  mf: [
+                    0.56569,
+                    0.47568,
+                    0.67272,
+                    0.47568,
+                    0.47568,
+                    0.47568,
+                    0.28284,
+                    0.4,
+                    0.4,
+                    0.67272
+                  ],
+                  f: [
+                    1.34543,
+                    1.34543,
+                    0.95137,
+                    1.34543,
+                    1.13137,
+                    0.95137,
+                    1.34543,
+                    0.67272,
+                    1.34543,
+                    1.13137
+                  ],
+                  ff: [
+                    3.2,
+                    2.26274,
+                    2.26274,
+                    1.90273,
+                    2.26274,
+                    1.90273,
+                    2.26274,
+                    2.69087,
+                    2.26274,
+                    2.26274
+                  ],
+                  fff: [
+                    3.2,
+                    3.80546,
+                    4.52548,
+                    4.52548,
+                    2.69087,
+                    3.2,
+                    5.38173,
+                    7.61091,
+                    3.80546,
+                    6.39999
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.025396,
+                    0.020377,
+                    0.013853,
+                    0.014557,
+                    0.01021,
+                    7415e-6,
+                    8896e-6,
+                    0.017514,
+                    0.014247,
+                    0.016741
+                  ],
+                  pp: [
+                    0.027263,
+                    0.026741,
+                    0.026229,
+                    0.025728,
+                    0.025234,
+                    0.024751,
+                    0.024278,
+                    0.023813,
+                    0.023357,
+                    0.02291
+                  ],
+                  p: [
+                    0.059783,
+                    0.058332,
+                    0.056913,
+                    0.055532,
+                    0.054184,
+                    0.052868,
+                    0.051584,
+                    0.050331,
+                    0.049109,
+                    0.047916
+                  ],
+                  mp: [
+                    0.121385,
+                    0.11852,
+                    0.115721,
+                    0.112989,
+                    0.110321,
+                    0.107716,
+                    0.105174,
+                    0.102689,
+                    0.100266,
+                    0.097899
+                  ],
+                  mf: [
+                    0.24826,
+                    0.243697,
+                    0.239217,
+                    0.234818,
+                    0.220468,
+                    0.226264,
+                    0.222105,
+                    0.218023,
+                    0.214014,
+                    0.21008
+                  ],
+                  f: [
+                    0.49604,
+                    0.488969,
+                    0.481999,
+                    0.47513,
+                    0.468357,
+                    0.461683,
+                    0.455104,
+                    0.461569,
+                    0.442221,
+                    0.435918
+                  ],
+                  ff: [
+                    1.052999,
+                    1.043945,
+                    1.034969,
+                    1.02607,
+                    1.017248,
+                    1.008501,
+                    0.99983,
+                    0.991233,
+                    0.98271,
+                    0.97426
+                  ],
+                  fff: [
+                    1.657252,
+                    1.772572,
+                    1.833534,
+                    1.840329,
+                    1.27902,
+                    1.883018,
+                    2.062553,
+                    2.520338,
+                    1.325793,
+                    2.610408
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.11892
+                  ],
+                  pp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.16818,
+                    0.14142,
+                    0.11892,
+                    0.11892
+                  ],
+                  p: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.14142,
+                    0.16818,
+                    0.14142,
+                    0.14142,
+                    0.2,
+                    0.16818,
+                    0.16818,
+                    0.14142,
+                    0.16818,
+                    0.2,
+                    0.16818,
+                    0.23784,
+                    0.2,
+                    0.16818,
+                    0.14142
+                  ],
+                  mp: [
+                    0.14142,
+                    0.14142,
+                    0.16818,
+                    0.11892,
+                    0.14142,
+                    0.16818,
+                    0.16818,
+                    0.2,
+                    0.16818,
+                    0.2,
+                    0.16818,
+                    0.28284,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.33636,
+                    0.28284,
+                    0.33636,
+                    0.2,
+                    0.23784,
+                    0.4
+                  ],
+                  mf: [
+                    0.8,
+                    0.33636,
+                    0.2,
+                    0.11892,
+                    0.2,
+                    0.33636,
+                    0.28284,
+                    0.28284,
+                    0.28284,
+                    0.33636,
+                    0.33636,
+                    0.67272,
+                    0.47568,
+                    0.23784,
+                    0.47568,
+                    0.2,
+                    0.8,
+                    0.47568,
+                    0.8,
+                    0.28284,
+                    0.47568,
+                    0.67272
+                  ],
+                  f: [
+                    1.13137,
+                    1.34543,
+                    1.34543,
+                    1.13137,
+                    0.56569,
+                    1.34543,
+                    0.8,
+                    0.95137,
+                    0.8,
+                    0.95137,
+                    0.95137,
+                    1.34543,
+                    1.13137,
+                    1.13137,
+                    1.34543,
+                    0.33636,
+                    1.13137,
+                    0.95137,
+                    1.34543,
+                    0.56569,
+                    1.6,
+                    3.2
+                  ],
+                  ff: [
+                    1.90273,
+                    1.90273,
+                    2.69087,
+                    1.34543,
+                    1.6,
+                    1.90273,
+                    1.90273,
+                    1.90273,
+                    1.90273,
+                    1.90273,
+                    2.26274,
+                    1.6,
+                    1.90273,
+                    1.90273,
+                    1.90273,
+                    0.8,
+                    1.90273,
+                    1.34543,
+                    1.90273,
+                    1.34543,
+                    3.2,
+                    5.38173
+                  ],
+                  fff: [
+                    3.80546,
+                    4.52548,
+                    5.38173,
+                    2.69087,
+                    4.52548,
+                    3.80546,
+                    7.61091,
+                    5.38173,
+                    7.61091,
+                    5.38173,
+                    4.52548,
+                    7.61091,
+                    6.39999,
+                    4.52548,
+                    4.52548,
+                    1.13137,
+                    4.52548,
+                    1.90273,
+                    2.26274,
+                    2.26274,
+                    5.38173,
+                    12.79997
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.023468,
+                    0.05,
+                    0.039145,
+                    0.05,
+                    0.06,
+                    0.03024,
+                    0.0118,
+                    0.017968,
+                    6343e-6,
+                    5443e-6,
+                    4791e-6,
+                    73e-4,
+                    4184e-6,
+                    9981e-6,
+                    9992e-6,
+                    2538e-6,
+                    0.010661,
+                    2609e-6,
+                    414e-5,
+                    0.05,
+                    0.032744,
+                    0.054772
+                  ],
+                  pp: [
+                    0.049457,
+                    0.049522,
+                    0.034956,
+                    0.049652,
+                    0.06,
+                    0.026096,
+                    0.012704,
+                    0.012379,
+                    0.012396,
+                    0.012413,
+                    0.012431,
+                    0.019032,
+                    0.012464,
+                    0.011076,
+                    0.010775,
+                    5609e-6,
+                    0.023692,
+                    756e-5,
+                    0.012567,
+                    0.06,
+                    0.036911,
+                    0.057606
+                  ],
+                  p: [
+                    0.029644,
+                    0.03277,
+                    0.037359,
+                    0.032131,
+                    0.039091,
+                    0.03213,
+                    0.032128,
+                    0.03213,
+                    0.032129,
+                    0.032129,
+                    0.032128,
+                    0.044761,
+                    0.032128,
+                    0.027374,
+                    0.029607,
+                    0.014464,
+                    0.048315,
+                    0.019329,
+                    0.032126,
+                    0.1,
+                    0.047328,
+                    0.109532
+                  ],
+                  mp: [
+                    0.061287,
+                    0.0615,
+                    0.070895,
+                    0.063252,
+                    0.058553,
+                    0.06236,
+                    0.062577,
+                    0.062796,
+                    0.063013,
+                    0.063232,
+                    0.063452,
+                    0.094102,
+                    0.063894,
+                    0.054057,
+                    0.06434,
+                    0.028587,
+                    0.09951,
+                    0.043224,
+                    0.062774,
+                    0.1,
+                    0.087316,
+                    0.227037
+                  ],
+                  mf: [
+                    0.150949,
+                    0.140252,
+                    0.142603,
+                    0.063252,
+                    0.12019,
+                    0.131553,
+                    0.132612,
+                    0.133679,
+                    0.134756,
+                    0.135843,
+                    0.136936,
+                    0.200955,
+                    0.13915,
+                    0.118548,
+                    0.1414,
+                    0.063954,
+                    0.21217,
+                    0.084884,
+                    0.146011,
+                    0.152254,
+                    0.188883,
+                    0.493393
+                  ],
+                  f: [
+                    0.271974,
+                    0.274252,
+                    0.309279,
+                    0.293117,
+                    0.249596,
+                    0.33218,
+                    0.285931,
+                    0.288327,
+                    0.290742,
+                    0.293176,
+                    0.295632,
+                    0.455048,
+                    0.300606,
+                    0.303124,
+                    0.305662,
+                    0.142709,
+                    0.400844,
+                    0.188236,
+                    0.316032,
+                    0.266966,
+                    0.439122,
+                    1.144954
+                  ],
+                  ff: [
+                    0.546555,
+                    0.558877,
+                    0.678255,
+                    0.397117,
+                    0.496257,
+                    0.610997,
+                    0.681805,
+                    0.638851,
+                    0.653252,
+                    0.667978,
+                    0.683035,
+                    0.59536,
+                    0.713094,
+                    0.727318,
+                    0.697915,
+                    0.309644,
+                    0.890813,
+                    0.391808,
+                    0.705388,
+                    0.520133,
+                    1.061423,
+                    1.921429
+                  ],
+                  fff: [
+                    1.082247,
+                    1.114294,
+                    1.259849,
+                    0.835299,
+                    1.092427,
+                    1.21007,
+                    1.497886,
+                    1.316417,
+                    1.366824,
+                    1.4073,
+                    1.46857,
+                    2.210409,
+                    1.581025,
+                    1.386092,
+                    1.418511,
+                    0.615293,
+                    1.888944,
+                    0.759183,
+                    0.850713,
+                    1.021853,
+                    1.967427,
+                    4.605402
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 11.0611,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "mf",
+                round: 2,
+                from: "mf"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "mf",
+                round: 4,
+                from: "mp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 16.4567,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 20.5033,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "p",
+                round: 0,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "mp",
+                round: 0,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              }
+            ]
           }
         },
         {
@@ -5201,6 +7057,1895 @@ var physical_strings_calibration_default = {
               level: -55.33,
               contact: 0.2
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.23784,
+                    0.16818,
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.16818
+                  ],
+                  pp: [
+                    0.28284,
+                    0.33636,
+                    0.28284,
+                    0.14142,
+                    0.23784,
+                    0.28284,
+                    0.33636,
+                    0.2,
+                    0.23784,
+                    0.2
+                  ],
+                  p: [
+                    0.8,
+                    0.47568,
+                    0.56569,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.33636,
+                    0.28284,
+                    0.28284,
+                    0.28284
+                  ],
+                  mp: [
+                    1.13137,
+                    0.95137,
+                    0.95137,
+                    0.95137,
+                    0.8,
+                    0.67272,
+                    0.8,
+                    0.67272,
+                    0.67272,
+                    0.56569
+                  ],
+                  mf: [
+                    1.90273,
+                    1.6,
+                    1.34543,
+                    1.34543,
+                    1.90273,
+                    1.6,
+                    1.34543,
+                    1.6,
+                    1.90273,
+                    1.34543
+                  ],
+                  f: [
+                    3.80546,
+                    3.2,
+                    3.2,
+                    1.90273,
+                    2.69087,
+                    2.69087,
+                    1.90273,
+                    3.2,
+                    2.69087,
+                    2.69087
+                  ],
+                  ff: [
+                    10.76345,
+                    10.76345,
+                    3.80546,
+                    3.80546,
+                    6.39999,
+                    3.80546,
+                    5.38173,
+                    7.61091,
+                    5.38173,
+                    6.39999
+                  ],
+                  fff: [
+                    12.79997,
+                    15.22182,
+                    12.79997,
+                    4.52548,
+                    12.79997,
+                    2.26274,
+                    15.22182,
+                    9.05095,
+                    12.79997,
+                    9.05095
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.016894,
+                    0.015662,
+                    0.014521,
+                    0.013464,
+                    0.012483,
+                    0.011575,
+                    0.01073,
+                    9949e-6,
+                    9224e-6,
+                    8552e-6
+                  ],
+                  pp: [
+                    0.034063,
+                    0.031907,
+                    0.029887,
+                    0.027996,
+                    0.026224,
+                    0.024565,
+                    0.023009,
+                    0.021552,
+                    0.020188,
+                    0.018912
+                  ],
+                  p: [
+                    0.063787,
+                    0.060513,
+                    0.057407,
+                    0.05446,
+                    0.051665,
+                    0.049014,
+                    0.046497,
+                    0.044111,
+                    0.041846,
+                    0.039699
+                  ],
+                  mp: [
+                    0.132403,
+                    0.12345,
+                    0.115103,
+                    0.10732,
+                    0.100063,
+                    0.093299,
+                    0.08699,
+                    0.081109,
+                    0.075625,
+                    0.070511
+                  ],
+                  mf: [
+                    0.267783,
+                    0.250691,
+                    0.23469,
+                    0.21971,
+                    0.205686,
+                    0.192559,
+                    0.180268,
+                    0.168761,
+                    0.15799,
+                    0.147906
+                  ],
+                  f: [
+                    0.589942,
+                    0.520584,
+                    0.49072,
+                    0.508165,
+                    0.436032,
+                    0.41102,
+                    0.387442,
+                    0.344491,
+                    0.346199,
+                    0.324515
+                  ],
+                  ff: [
+                    1.252001,
+                    1.265364,
+                    0.666629,
+                    0.582006,
+                    0.866295,
+                    1.011286,
+                    0.772213,
+                    0.719436,
+                    0.735711,
+                    0.604482
+                  ],
+                  fff: [
+                    1.518848,
+                    1.759661,
+                    1.790182,
+                    0.589226,
+                    1.470524,
+                    0.671661,
+                    1.930911,
+                    1.357512,
+                    1.939357,
+                    0.901239
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.16818,
+                    0.16818,
+                    0.2,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.2
+                  ],
+                  pp: [
+                    0.23784,
+                    0.28284,
+                    0.33636,
+                    0.23784,
+                    0.23784,
+                    0.23784,
+                    0.2,
+                    0.2,
+                    0.23784,
+                    0.16818
+                  ],
+                  p: [
+                    0.56569,
+                    0.4,
+                    0.47568,
+                    0.47568,
+                    0.33636,
+                    0.28284,
+                    0.33636,
+                    0.28284,
+                    0.33636,
+                    0.33636
+                  ],
+                  mp: [
+                    1.13137,
+                    0.8,
+                    0.67272,
+                    0.8,
+                    0.67272,
+                    0.47568,
+                    0.56569,
+                    0.47568,
+                    0.8,
+                    0.67272
+                  ],
+                  mf: [
+                    1.6,
+                    1.34543,
+                    1.90273,
+                    1.6,
+                    1.34543,
+                    1.13137,
+                    1.34543,
+                    1.6,
+                    1.6,
+                    1.13137
+                  ],
+                  f: [
+                    1.90273,
+                    2.26274,
+                    2.69087,
+                    2.69087,
+                    2.26274,
+                    1.90273,
+                    2.69087,
+                    3.80546,
+                    2.69087,
+                    3.2
+                  ],
+                  ff: [
+                    4.52548,
+                    10.76345,
+                    4.52548,
+                    2.69087,
+                    4.52548,
+                    4.52548,
+                    9.05095,
+                    3.80546,
+                    6.39999,
+                    7.61091
+                  ],
+                  fff: [
+                    15.22182,
+                    12.79997,
+                    3.80546,
+                    15.22182,
+                    15.22182,
+                    4.52548,
+                    4.52548,
+                    12.79997,
+                    12.79997,
+                    3.80546
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.015843,
+                    0.014716,
+                    0.013669,
+                    0.012696,
+                    0.011793,
+                    0.010066,
+                    0.010174,
+                    9451e-6,
+                    0.01122,
+                    0.013501
+                  ],
+                  pp: [
+                    0.03161,
+                    0.030495,
+                    0.02942,
+                    0.028382,
+                    0.027381,
+                    0.024224,
+                    0.025484,
+                    0.024586,
+                    0.023831,
+                    0.022881
+                  ],
+                  p: [
+                    0.059717,
+                    0.058478,
+                    0.057264,
+                    0.056077,
+                    0.054915,
+                    0.04943,
+                    0.052659,
+                    0.051566,
+                    0.051918,
+                    0.049449
+                  ],
+                  mp: [
+                    0.1146,
+                    0.112129,
+                    0.10971,
+                    0.107345,
+                    0.10503,
+                    0.095113,
+                    0.100549,
+                    0.098381,
+                    0.10055,
+                    0.094183
+                  ],
+                  mf: [
+                    0.244834,
+                    0.237162,
+                    0.229731,
+                    0.222533,
+                    0.215561,
+                    0.192222,
+                    0.202264,
+                    0.195926,
+                    0.199733,
+                    0.183841
+                  ],
+                  f: [
+                    0.478672,
+                    0.468898,
+                    0.459324,
+                    0.449946,
+                    0.440759,
+                    0.411746,
+                    0.422944,
+                    0.414309,
+                    0.450365,
+                    0.397562
+                  ],
+                  ff: [
+                    0.718832,
+                    1.443476,
+                    0.715348,
+                    0.446151,
+                    0.974121,
+                    0.669268,
+                    1.282406,
+                    0.531702,
+                    0.973283,
+                    0.984848
+                  ],
+                  fff: [
+                    2.371162,
+                    1.731046,
+                    0.592428,
+                    1.389706,
+                    2.055156,
+                    0.67163,
+                    0.587547,
+                    1.787985,
+                    1.87225,
+                    0.583913
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892
+                  ],
+                  pp: [
+                    0.11892,
+                    0.14142,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.14142,
+                    0.14142,
+                    0.14142,
+                    0.11892
+                  ],
+                  p: [
+                    0.16818,
+                    0.2,
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.16818,
+                    0.16818,
+                    0.16818
+                  ],
+                  mp: [
+                    0.28284,
+                    0.28284,
+                    0.33636,
+                    0.4,
+                    0.28284,
+                    0.28284,
+                    0.28284,
+                    0.23784,
+                    0.23784,
+                    0.2
+                  ],
+                  mf: [
+                    0.56569,
+                    0.67272,
+                    0.56569,
+                    0.8,
+                    0.56569,
+                    0.56569,
+                    0.67272,
+                    0.47568,
+                    0.56569,
+                    0.67272
+                  ],
+                  f: [
+                    1.6,
+                    1.34543,
+                    1.34543,
+                    1.6,
+                    1.6,
+                    1.6,
+                    1.34543,
+                    1.90273,
+                    1.13137,
+                    1.6
+                  ],
+                  ff: [
+                    1.90273,
+                    2.69087,
+                    1.90273,
+                    3.2,
+                    3.80546,
+                    1.90273,
+                    3.2,
+                    3.80546,
+                    2.69087,
+                    3.80546
+                  ],
+                  fff: [
+                    3.80546,
+                    6.39999,
+                    3.80546,
+                    9.05095,
+                    7.61091,
+                    5.38173,
+                    9.05095,
+                    6.39999,
+                    5.38173,
+                    15.22182
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.013857,
+                    0.013159,
+                    0.01224,
+                    0.014713,
+                    0.01059,
+                    985e-5,
+                    9161e-6,
+                    8521e-6,
+                    7926e-6,
+                    0.017418
+                  ],
+                  pp: [
+                    0.026829,
+                    0.026343,
+                    0.025837,
+                    0.031763,
+                    0.024882,
+                    0.023915,
+                    0.023962,
+                    0.023515,
+                    0.023076,
+                    0.022646
+                  ],
+                  p: [
+                    0.052033,
+                    0.051724,
+                    0.051415,
+                    0.066913,
+                    0.050804,
+                    0.050502,
+                    0.050201,
+                    0.049903,
+                    0.049605,
+                    0.049311
+                  ],
+                  mp: [
+                    0.102112,
+                    0.10207,
+                    0.102028,
+                    0.137089,
+                    0.101946,
+                    0.101905,
+                    0.101863,
+                    0.101823,
+                    0.10178,
+                    0.10174
+                  ],
+                  mf: [
+                    0.20488,
+                    0.224489,
+                    0.20706,
+                    0.283767,
+                    0.209265,
+                    0.210376,
+                    0.211493,
+                    0.212616,
+                    0.213744,
+                    0.214878
+                  ],
+                  f: [
+                    0.4489,
+                    0.515814,
+                    0.449614,
+                    0.590573,
+                    0.450326,
+                    0.450684,
+                    0.451041,
+                    0.451398,
+                    0.451756,
+                    0.452114
+                  ],
+                  ff: [
+                    0.907578,
+                    1.083564,
+                    0.891967,
+                    1.232161,
+                    0.937866,
+                    0.909164,
+                    0.953388,
+                    0.961245,
+                    0.969165,
+                    0.977152
+                  ],
+                  fff: [
+                    2.021632,
+                    2.186368,
+                    1.521578,
+                    2.917525,
+                    2.246237,
+                    2.041464,
+                    2.012915,
+                    1.397753,
+                    1.914121,
+                    3.32123
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.16818
+                  ],
+                  pp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.2
+                  ],
+                  p: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.16818,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.16818,
+                    0.14142,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.23784
+                  ],
+                  mp: [
+                    0.16818,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.14142,
+                    0.14142,
+                    0.14142,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.16818,
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.28284,
+                    0.2,
+                    0.11892,
+                    0.11892,
+                    0.23784
+                  ],
+                  mf: [
+                    0.8,
+                    0.2,
+                    0.33636,
+                    0.16818,
+                    0.67272,
+                    1.13137,
+                    0.33636,
+                    0.23784,
+                    0.33636,
+                    0.28284,
+                    0.33636,
+                    0.4,
+                    0.4,
+                    0.33636,
+                    0.33636,
+                    0.33636,
+                    0.33636,
+                    0.4,
+                    0.28284,
+                    0.2,
+                    0.2,
+                    0.11892
+                  ],
+                  f: [
+                    1.6,
+                    0.67272,
+                    1.6,
+                    2.26274,
+                    1.34543,
+                    1.6,
+                    1.34543,
+                    0.67272,
+                    0.95137,
+                    0.8,
+                    0.95137,
+                    1.13137,
+                    1.34543,
+                    0.8,
+                    0.95137,
+                    0.8,
+                    0.8,
+                    0.95137,
+                    0.8,
+                    0.67272,
+                    0.47568,
+                    0.56569
+                  ],
+                  ff: [
+                    3.2,
+                    2.26274,
+                    1.90273,
+                    2.69087,
+                    2.69087,
+                    3.80546,
+                    1.6,
+                    1.34543,
+                    1.6,
+                    1.6,
+                    1.90273,
+                    1.90273,
+                    2.26274,
+                    1.6,
+                    1.6,
+                    1.13137,
+                    1.34543,
+                    1.34543,
+                    1.13137,
+                    1.34543,
+                    0.95137,
+                    0.95137
+                  ],
+                  fff: [
+                    5.38173,
+                    3.80546,
+                    4.52548,
+                    6.39999,
+                    6.39999,
+                    9.05095,
+                    1.90273,
+                    3.80546,
+                    3.80546,
+                    5.38173,
+                    3.80546,
+                    3.80546,
+                    5.38173,
+                    4.52548,
+                    3.80546,
+                    2.69087,
+                    3.2,
+                    2.26274,
+                    1.6,
+                    3.2,
+                    1.90273,
+                    3.2
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.075715,
+                    0.073844,
+                    0.055932,
+                    8574e-6,
+                    0.02341,
+                    0.054772,
+                    0.040946,
+                    0.039573,
+                    0.021601,
+                    0.021171,
+                    0.02075,
+                    0.021296,
+                    7862e-6,
+                    7773e-6,
+                    0.030941,
+                    0.011323,
+                    0.030325,
+                    0.018025,
+                    0.016034,
+                    0.08409,
+                    0.05,
+                    0.057326
+                  ],
+                  pp: [
+                    0.064401,
+                    0.073844,
+                    0.055932,
+                    0.07746,
+                    0.022759,
+                    0.054007,
+                    0.022176,
+                    0.043868,
+                    0.020748,
+                    0.022469,
+                    0.018723,
+                    0.015309,
+                    0.019985,
+                    0.014763,
+                    0.024949,
+                    0.015908,
+                    0.02539,
+                    0.019945,
+                    0.011509,
+                    0.088011,
+                    0.06,
+                    0.06
+                  ],
+                  p: [
+                    0.060919,
+                    0.073844,
+                    0.055932,
+                    0.07,
+                    0.084666,
+                    0.049208,
+                    0.047151,
+                    0.047467,
+                    0.043292,
+                    0.041482,
+                    0.039748,
+                    0.041283,
+                    0.041289,
+                    0.037018,
+                    0.033508,
+                    0.033661,
+                    0.030766,
+                    0.029479,
+                    0.019827,
+                    0.090026,
+                    0.040834,
+                    0.07548
+                  ],
+                  mp: [
+                    0.106339,
+                    0.103428,
+                    0.101479,
+                    0.106257,
+                    0.096842,
+                    0.109064,
+                    0.092416,
+                    0.070851,
+                    0.088192,
+                    0.086153,
+                    0.084163,
+                    0.082216,
+                    0.083787,
+                    0.085022,
+                    0.076646,
+                    0.074874,
+                    0.073143,
+                    0.071451,
+                    0.049818,
+                    0.108071,
+                    0.0575,
+                    0.091957
+                  ],
+                  mf: [
+                    0.310484,
+                    0.229897,
+                    0.244682,
+                    0.214907,
+                    0.265302,
+                    0.422846,
+                    0.23603,
+                    0.157394,
+                    0.199332,
+                    0.217956,
+                    0.209553,
+                    0.201473,
+                    0.204531,
+                    0.186237,
+                    0.179058,
+                    0.172155,
+                    0.165518,
+                    0.159137,
+                    0.108847,
+                    0.185936,
+                    0.126398,
+                    0.135978
+                  ],
+                  f: [
+                    0.593405,
+                    0.41715,
+                    0.564072,
+                    0.862413,
+                    0.529809,
+                    0.562965,
+                    0.495338,
+                    0.336888,
+                    0.434008,
+                    0.452985,
+                    0.439012,
+                    0.425469,
+                    0.523298,
+                    0.399625,
+                    0.3873,
+                    0.375353,
+                    0.363775,
+                    0.352554,
+                    0.241407,
+                    0.417237,
+                    0.276153,
+                    0.311025
+                  ],
+                  ff: [
+                    1.120512,
+                    0.980483,
+                    0.964329,
+                    1.026284,
+                    0.932815,
+                    1.459192,
+                    0.902331,
+                    0.634476,
+                    0.798831,
+                    0.858462,
+                    0.844318,
+                    0.875128,
+                    1.146962,
+                    0.803269,
+                    0.790035,
+                    0.777019,
+                    0.764217,
+                    0.751626,
+                    0.501383,
+                    0.881142,
+                    0.618057,
+                    0.703302
+                  ],
+                  fff: [
+                    2.011675,
+                    1.875747,
+                    2.153299,
+                    1.859703,
+                    1.95428,
+                    3.036101,
+                    1.068853,
+                    1.630652,
+                    1.777293,
+                    1.812389,
+                    1.804622,
+                    1.796886,
+                    2.315038,
+                    1.92528,
+                    1.223896,
+                    2.224621,
+                    1.758709,
+                    1.751172,
+                    1.041215,
+                    1.818247,
+                    1.338516,
+                    1.721343
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 4,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 4,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 4,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "pp",
+                round: 4,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 12.41,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 12.41,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 13.7589,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 17.8056,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 17.8056,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 19.1544,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 20.5033,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 21.8522,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 24.55,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 24.55,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              }
+            ]
           }
         },
         {
@@ -5381,6 +9126,2056 @@ var physical_strings_calibration_default = {
               level: -54,
               contact: 0.165
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.33636,
+                    0.23784,
+                    0.23784,
+                    0.23784,
+                    0.28284,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                  ],
+                  pp: [
+                    0.56569,
+                    0.4,
+                    0.33636,
+                    0.47568,
+                    0.4,
+                    0.28284,
+                    0.23784,
+                    0.23784,
+                    0.28284,
+                    0.28284
+                  ],
+                  p: [
+                    0.8,
+                    0.8,
+                    0.8,
+                    0.8,
+                    0.56569,
+                    0.4,
+                    0.28284,
+                    0.23784,
+                    0.33636,
+                    0.47568
+                  ],
+                  mp: [
+                    1.34543,
+                    1.34543,
+                    1.34543,
+                    1.6,
+                    0.95137,
+                    0.8,
+                    1.34543,
+                    1.13137,
+                    0.56569,
+                    1.34543
+                  ],
+                  mf: [
+                    3.80546,
+                    2.69087,
+                    3.2,
+                    1.90273,
+                    2.69087,
+                    1.13137,
+                    1.90273,
+                    1.6,
+                    1.6,
+                    1.90273
+                  ],
+                  f: [
+                    6.39999,
+                    3.80546,
+                    3.80546,
+                    6.39999,
+                    1.6,
+                    1.6,
+                    4.52548,
+                    3.80546,
+                    1.6,
+                    3.2
+                  ],
+                  ff: [
+                    12.79997,
+                    15.22182,
+                    3.80546,
+                    7.61091,
+                    3.80546,
+                    4.52548,
+                    4.52548,
+                    5.38173,
+                    6.39999,
+                    10.76345
+                  ],
+                  fff: [
+                    9.05095,
+                    4.52548,
+                    10.76345,
+                    12.79997,
+                    9.05095,
+                    7.61091,
+                    4.52548,
+                    4.52548,
+                    10.76345,
+                    4.52548
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.018704,
+                    0.017105,
+                    0.015642,
+                    0.014306,
+                    0.013082,
+                    0.010753,
+                    0.010941,
+                    0.010006,
+                    9151e-6,
+                    0.010955
+                  ],
+                  pp: [
+                    0.041652,
+                    0.037544,
+                    0.033843,
+                    0.030505,
+                    0.027499,
+                    0.02232,
+                    0.022343,
+                    0.02014,
+                    0.018154,
+                    0.023243
+                  ],
+                  p: [
+                    0.067471,
+                    0.063148,
+                    0.059101,
+                    0.055313,
+                    0.051768,
+                    0.045122,
+                    0.045346,
+                    0.042439,
+                    0.03972,
+                    0.047395
+                  ],
+                  mp: [
+                    0.158749,
+                    0.142744,
+                    0.128356,
+                    0.115414,
+                    0.10378,
+                    0.084429,
+                    0.08391,
+                    0.075452,
+                    0.067845,
+                    0.086442
+                  ],
+                  mf: [
+                    0.332787,
+                    0.280184,
+                    0.254757,
+                    0.231637,
+                    0.210616,
+                    0.191503,
+                    0.174124,
+                    0.158322,
+                    0.143954,
+                    0.182064
+                  ],
+                  f: [
+                    0.882449,
+                    0.511271,
+                    0.528266,
+                    0.487149,
+                    0.370835,
+                    0.378299,
+                    0.403585,
+                    0.3608,
+                    0.317526,
+                    0.378169
+                  ],
+                  ff: [
+                    1.426571,
+                    1.126559,
+                    0.462782,
+                    0.717599,
+                    0.527942,
+                    0.505875,
+                    0.435671,
+                    0.465301,
+                    0.919092,
+                    0.948126
+                  ],
+                  fff: [
+                    0.950834,
+                    0.592656,
+                    0.935594,
+                    1.238623,
+                    1.202811,
+                    1.27035,
+                    0.447214,
+                    0.5,
+                    1.452456,
+                    0.447214
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.16818,
+                    0.16818,
+                    0.2,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.14142,
+                    0.16818,
+                    0.16818,
+                    0.16818
+                  ],
+                  pp: [
+                    0.28284,
+                    0.23784,
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.23784,
+                    0.2,
+                    0.2,
+                    0.23784,
+                    0.2
+                  ],
+                  p: [
+                    0.47568,
+                    0.4,
+                    0.47568,
+                    0.28284,
+                    0.33636,
+                    0.33636,
+                    0.28284,
+                    0.28284,
+                    0.33636,
+                    0.33636
+                  ],
+                  mp: [
+                    0.8,
+                    0.67272,
+                    0.95137,
+                    0.8,
+                    0.67272,
+                    1.13137,
+                    0.56569,
+                    0.47568,
+                    0.67272,
+                    0.67272
+                  ],
+                  mf: [
+                    1.34543,
+                    1.34543,
+                    1.34543,
+                    1.13137,
+                    1.90273,
+                    1.90273,
+                    1.90273,
+                    1.6,
+                    1.6,
+                    1.34543
+                  ],
+                  f: [
+                    2.26274,
+                    2.26274,
+                    4.52548,
+                    1.90273,
+                    3.2,
+                    3.80546,
+                    3.2,
+                    3.2,
+                    2.26274,
+                    3.80546
+                  ],
+                  ff: [
+                    5.38173,
+                    6.39999,
+                    4.52548,
+                    9.05095,
+                    5.38173,
+                    3.80546,
+                    2.69087,
+                    7.61091,
+                    4.52548,
+                    7.61091
+                  ],
+                  fff: [
+                    12.79997,
+                    12.79997,
+                    12.79997,
+                    9.05095,
+                    12.79997,
+                    5.38173,
+                    15.22182,
+                    12.79997,
+                    12.79997,
+                    6.39999
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.015475,
+                    0.015307,
+                    0.01514,
+                    0.014973,
+                    0.016618,
+                    0.014648,
+                    0.014488,
+                    0.014329,
+                    0.014172,
+                    0.014018
+                  ],
+                  pp: [
+                    0.032753,
+                    0.032503,
+                    0.032255,
+                    0.03201,
+                    0.035927,
+                    0.031522,
+                    0.031283,
+                    0.031043,
+                    0.030807,
+                    0.030571
+                  ],
+                  p: [
+                    0.064866,
+                    0.064895,
+                    0.064924,
+                    0.064952,
+                    0.077173,
+                    0.065008,
+                    0.065036,
+                    0.065065,
+                    0.065094,
+                    0.065121
+                  ],
+                  mp: [
+                    0.124515,
+                    0.124265,
+                    0.124016,
+                    0.123769,
+                    0.144237,
+                    0.123272,
+                    0.123026,
+                    0.12278,
+                    0.122533,
+                    0.122288
+                  ],
+                  mf: [
+                    0.247562,
+                    0.248006,
+                    0.248454,
+                    0.248901,
+                    0.29165,
+                    0.249797,
+                    0.250248,
+                    0.250697,
+                    0.251149,
+                    0.251599
+                  ],
+                  f: [
+                    0.482504,
+                    0.524607,
+                    0.528443,
+                    0.497748,
+                    0.624767,
+                    0.540123,
+                    0.526173,
+                    0.548052,
+                    0.55206,
+                    0.556097
+                  ],
+                  ff: [
+                    0.830897,
+                    1.055444,
+                    0.885994,
+                    1.101644,
+                    1.20801,
+                    0.630585,
+                    0.448541,
+                    1.040251,
+                    1.027108,
+                    1.109229
+                  ],
+                  fff: [
+                    2.040825,
+                    2.065424,
+                    2.09032,
+                    1.312849,
+                    2.459115,
+                    0.704478,
+                    2.601242,
+                    2.183438,
+                    2.54146,
+                    1.032389
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.16818,
+                    0.11892,
+                    0.11892,
+                    0.11892
+                  ],
+                  pp: [
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.16818,
+                    0.16818,
+                    0.2,
+                    0.2,
+                    0.14142,
+                    0.14142,
+                    0.14142
+                  ],
+                  p: [
+                    0.14142,
+                    0.16818,
+                    0.16818,
+                    0.2,
+                    0.2,
+                    0.23784,
+                    0.23784,
+                    0.2,
+                    0.2,
+                    0.16818
+                  ],
+                  mp: [
+                    0.16818,
+                    0.23784,
+                    0.28284,
+                    0.33636,
+                    0.28284,
+                    0.56569,
+                    0.28284,
+                    0.33636,
+                    0.28284,
+                    0.23784
+                  ],
+                  mf: [
+                    0.4,
+                    0.67272,
+                    0.67272,
+                    0.67272,
+                    0.67272,
+                    1.13137,
+                    0.56569,
+                    0.47568,
+                    0.67272,
+                    0.67272
+                  ],
+                  f: [
+                    1.34543,
+                    1.34543,
+                    1.34543,
+                    1.6,
+                    1.34543,
+                    1.90273,
+                    1.34543,
+                    1.13137,
+                    1.34543,
+                    1.90273
+                  ],
+                  ff: [
+                    1.90273,
+                    3.2,
+                    2.26274,
+                    1.90273,
+                    1.90273,
+                    3.80546,
+                    2.26274,
+                    2.26274,
+                    1.90273,
+                    4.52548
+                  ],
+                  fff: [
+                    3.80546,
+                    5.38173,
+                    5.38173,
+                    4.52548,
+                    5.38173,
+                    12.79997,
+                    7.61091,
+                    6.39999,
+                    6.39999,
+                    9.05095
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.016064,
+                    0.015602,
+                    8026e-6,
+                    825e-5,
+                    848e-5,
+                    0.013476,
+                    8936e-6,
+                    9211e-6,
+                    9468e-6,
+                    9732e-6
+                  ],
+                  pp: [
+                    0.021316,
+                    0.021133,
+                    0.020952,
+                    0.020772,
+                    0.020594,
+                    0.028043,
+                    0.019819,
+                    0.020068,
+                    0.019897,
+                    0.019726
+                  ],
+                  p: [
+                    0.04342,
+                    0.0434,
+                    0.043381,
+                    0.043361,
+                    0.043342,
+                    0.060891,
+                    0.042035,
+                    0.043282,
+                    0.043263,
+                    0.043243
+                  ],
+                  mp: [
+                    0.084318,
+                    0.084798,
+                    0.085285,
+                    0.085771,
+                    0.086262,
+                    0.129131,
+                    0.083923,
+                    0.08775,
+                    0.08825,
+                    0.088755
+                  ],
+                  mf: [
+                    0.173688,
+                    0.174983,
+                    0.176289,
+                    0.177606,
+                    0.178931,
+                    0.276904,
+                    0.17774,
+                    0.182965,
+                    0.184332,
+                    0.185708
+                  ],
+                  f: [
+                    0.352294,
+                    0.356771,
+                    0.361304,
+                    0.365894,
+                    0.370544,
+                    0.556997,
+                    0.370879,
+                    0.384848,
+                    0.389737,
+                    0.394689
+                  ],
+                  ff: [
+                    0.748409,
+                    0.694997,
+                    0.709962,
+                    0.725249,
+                    0.740864,
+                    1.131804,
+                    0.742782,
+                    0.789758,
+                    0.806764,
+                    0.824134
+                  ],
+                  fff: [
+                    0.836798,
+                    1.354002,
+                    1.822286,
+                    1.728065,
+                    1.562707,
+                    2.384875,
+                    1.789405,
+                    2.080357,
+                    2.017499,
+                    1.598167
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011,
+                    24.55,
+                    25.8989,
+                    27.2478,
+                    28.5967
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.23784,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.23784,
+                    0.11892
+                  ],
+                  pp: [
+                    0.23784,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.2,
+                    0.11892,
+                    0.23784,
+                    0.11892
+                  ],
+                  p: [
+                    0.16818,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.16818,
+                    0.14142,
+                    0.16818,
+                    0.33636,
+                    0.16818,
+                    0.23784,
+                    0.11892
+                  ],
+                  mp: [
+                    0.14142,
+                    0.11892,
+                    0.14142,
+                    0.11892,
+                    0.11892,
+                    0.14142,
+                    0.2,
+                    0.16818,
+                    0.23784,
+                    0.16818,
+                    0.11892,
+                    0.16818,
+                    0.2,
+                    0.14142,
+                    0.2,
+                    0.23784,
+                    0.23784,
+                    0.28284,
+                    0.33636,
+                    0.2,
+                    0.33636,
+                    0.14142
+                  ],
+                  mf: [
+                    0.47568,
+                    0.11892,
+                    0.4,
+                    0.2,
+                    0.33636,
+                    0.4,
+                    0.8,
+                    0.23784,
+                    0.95137,
+                    0.33636,
+                    0.16818,
+                    0.28284,
+                    0.4,
+                    0.23784,
+                    0.56569,
+                    0.4,
+                    0.56569,
+                    0.8,
+                    1.13137,
+                    0.33636,
+                    0.56569,
+                    0.28284
+                  ],
+                  f: [
+                    1.34543,
+                    0.28284,
+                    0.95137,
+                    1.13137,
+                    1.34543,
+                    1.13137,
+                    1.90273,
+                    0.67272,
+                    2.69087,
+                    0.8,
+                    0.28284,
+                    0.67272,
+                    1.13137,
+                    0.56569,
+                    1.34543,
+                    0.8,
+                    1.13137,
+                    1.34543,
+                    2.26274,
+                    1.34543,
+                    1.13137,
+                    0.8
+                  ],
+                  ff: [
+                    2.69087,
+                    1.6,
+                    2.26274,
+                    2.26274,
+                    1.90273,
+                    2.26274,
+                    3.2,
+                    1.90273,
+                    5.38173,
+                    1.90273,
+                    0.56569,
+                    2.26274,
+                    2.69087,
+                    1.34543,
+                    4.52548,
+                    1.13137,
+                    1.90273,
+                    2.69087,
+                    7.61091,
+                    1.6,
+                    4.52548,
+                    1.90273
+                  ],
+                  fff: [
+                    3.2,
+                    3.2,
+                    5.38173,
+                    5.38173,
+                    3.2,
+                    2.69087,
+                    3.2,
+                    2.69087,
+                    1.90273,
+                    3.2,
+                    1.34543,
+                    3.2,
+                    3.2,
+                    3.2,
+                    5.38173,
+                    4.52548,
+                    4.52548,
+                    6.39999,
+                    15.22182,
+                    5.38173,
+                    3.80546,
+                    4.52548
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.06,
+                    0.128705,
+                    0.066359,
+                    0.070711,
+                    0.05,
+                    0.05,
+                    0.036899,
+                    0.05,
+                    0.05,
+                    0.03268,
+                    0.036969,
+                    0.022001,
+                    0.033207,
+                    3517e-6,
+                    0.040797,
+                    0.015975,
+                    0.03337,
+                    0.023619,
+                    0.026205,
+                    0.014381,
+                    0.134164,
+                    0.093814
+                  ],
+                  pp: [
+                    0.06,
+                    0.128705,
+                    0.066359,
+                    0.07746,
+                    0.06,
+                    0.034815,
+                    0.033281,
+                    0.06,
+                    0.050583,
+                    0.027205,
+                    0.037669,
+                    0.019389,
+                    0.021871,
+                    0.041602,
+                    0.035918,
+                    0.017632,
+                    0.033325,
+                    0.027117,
+                    0.056602,
+                    0.013714,
+                    0.134164,
+                    0.093814
+                  ],
+                  p: [
+                    0.068173,
+                    0.128705,
+                    0.066359,
+                    0.090357,
+                    0.066952,
+                    0.052893,
+                    0.083832,
+                    0.052831,
+                    0.114892,
+                    0.038731,
+                    0.041887,
+                    0.045535,
+                    0.047156,
+                    0.026112,
+                    0.049383,
+                    0.04975,
+                    0.050647,
+                    0.065939,
+                    0.119567,
+                    0.048444,
+                    0.134164,
+                    0.1
+                  ],
+                  mp: [
+                    0.120213,
+                    0.085448,
+                    0.112877,
+                    0.092953,
+                    0.094027,
+                    0.095114,
+                    0.16448,
+                    0.087535,
+                    0.222418,
+                    0.08482,
+                    0.034232,
+                    0.101907,
+                    0.103085,
+                    0.056823,
+                    0.122521,
+                    0.106702,
+                    0.107935,
+                    0.138453,
+                    0.213024,
+                    0.095634,
+                    0.202219,
+                    0.114321
+                  ],
+                  mf: [
+                    0.295097,
+                    0.171851,
+                    0.255522,
+                    0.191134,
+                    0.207737,
+                    0.211161,
+                    0.347814,
+                    0.190227,
+                    0.493634,
+                    0.190173,
+                    0.079481,
+                    0.232935,
+                    0.236775,
+                    0.130765,
+                    0.290463,
+                    0.241674,
+                    0.252782,
+                    0.336093,
+                    0.468704,
+                    0.233179,
+                    0.301673,
+                    0.281979
+                  ],
+                  f: [
+                    0.522171,
+                    0.213624,
+                    0.51624,
+                    0.519599,
+                    0.522978,
+                    0.526379,
+                    0.796211,
+                    0.417921,
+                    1.098462,
+                    0.413154,
+                    0.174651,
+                    0.505209,
+                    0.543669,
+                    0.276456,
+                    0.630739,
+                    0.513607,
+                    0.565286,
+                    0.678178,
+                    1.082305,
+                    0.565235,
+                    0.580136,
+                    0.583909
+                  ],
+                  ff: [
+                    0.950257,
+                    0.749624,
+                    1.236551,
+                    0.794247,
+                    0.824706,
+                    1.119941,
+                    1.598438,
+                    0.895388,
+                    2.298881,
+                    0.903788,
+                    0.376169,
+                    1.156024,
+                    1.260206,
+                    0.601677,
+                    1.497828,
+                    1.151828,
+                    1.353655,
+                    1.582696,
+                    3.48092,
+                    1.080762,
+                    1.454035,
+                    1.480272
+                  ],
+                  fff: [
+                    1.324974,
+                    1.577722,
+                    2.033664,
+                    2.122535,
+                    1.204554,
+                    1.223758,
+                    1.226504,
+                    1.186853,
+                    0.852686,
+                    1.548253,
+                    0.753969,
+                    1.760648,
+                    1.795943,
+                    1.266987,
+                    1.771886,
+                    2.764405,
+                    3.039661,
+                    3.691538,
+                    6.323651,
+                    2.984923,
+                    2.805013,
+                    2.835067
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 0,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "pp",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "mf",
+                round: 2,
+                from: "mf"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 12.41,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 13.7589,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 13.7589,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 16.4567,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 16.4567,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 16.4567,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 3,
+                stop: 16.4567,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 17.8056,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 19.1544,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 20.5033,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 21.8522,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 21.8522,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 3,
+                stop: 25.8989,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "ppp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "p",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 27.2478,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "ppp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 28.5967,
+                dynamic: "p",
+                round: 0,
+                from: "p"
+              }
+            ]
           }
         }
       ],
@@ -5429,6 +11224,16 @@ var physical_strings_calibration_default = {
         },
         method: "calibrate-strings-model.mjs --release: TU Berlin's Violin_modern single tones at pp and ff, each one's fall from its knee (3 dB under its held level, from 6 to 26 dB under, dB/s), their median; the model's notes at 8 of their pitches on its first variant, its bow left on the string the rest bisected so that their median falls as theirs",
         date: "2026-10-18"
+      },
+      attackFrom: {
+        ppp: 1,
+        pp: 1,
+        p: 1,
+        mp: 1,
+        mf: 1,
+        f: 1,
+        ff: 1,
+        fff: 1
       }
     },
     viola: {
@@ -5483,18 +11288,18 @@ var physical_strings_calibration_default = {
         ]
       },
       levels: {
-        ppp: -58.37,
-        pp: -56.98,
-        p: -53.01,
-        mp: -49.96,
-        mf: -47.33,
-        f: -43.57,
-        ff: -41,
-        fff: -39.22
+        ppp: -54.98,
+        pp: -51.15,
+        p: -48.04,
+        mp: -44.45,
+        mf: -40.02,
+        f: -37.47,
+        ff: -31.68,
+        fff: -27.59
       },
       recordedMf: -54.57,
-      gainDb: -7.24,
-      stemGainDb: 1.83,
+      gainDb: -14.55,
+      stemGainDb: -5.48,
       contacts: {
         ppp: 0.2,
         pp: 0.2,
@@ -5795,6 +11600,1582 @@ var physical_strings_calibration_default = {
               level: -58.37,
               contact: 0.2
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.24,
+                    0.40363,
+                    0.33941,
+                    0.28541,
+                    0.24,
+                    0.33941,
+                    0.33941,
+                    0.28541,
+                    0.28541,
+                    0.16971
+                  ],
+                  pp: [
+                    0.80726,
+                    0.67882,
+                    0.48,
+                    0.57082,
+                    0.80726,
+                    0.57082,
+                    0.48,
+                    0.33941,
+                    0.48,
+                    0.48
+                  ],
+                  p: [
+                    0.80726,
+                    0.96,
+                    0.96,
+                    1.14164,
+                    0.96,
+                    0.80726,
+                    1.14164,
+                    0.96,
+                    0.80726,
+                    0.48
+                  ],
+                  mp: [
+                    1.61452,
+                    1.61452,
+                    1.35765,
+                    1.92,
+                    1.92,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.14164
+                  ],
+                  mf: [
+                    2.28328,
+                    2.71529,
+                    3.22904,
+                    1.92,
+                    2.28328,
+                    1.35765,
+                    2.71529,
+                    1.92,
+                    1.35765,
+                    1.92
+                  ],
+                  f: [
+                    3.84,
+                    3.22904,
+                    4.56656,
+                    1.92,
+                    3.84,
+                    3.84,
+                    5.43059,
+                    4.56656,
+                    2.71529,
+                    2.28328
+                  ],
+                  ff: [
+                    6.4581,
+                    7.68002,
+                    7.68002,
+                    5.43059,
+                    5.43059,
+                    4.56656,
+                    7.68002,
+                    7.68002,
+                    5.43059,
+                    3.22904
+                  ],
+                  fff: [
+                    12.91619,
+                    9.13313,
+                    9.13313,
+                    3.22904,
+                    10.86118,
+                    9.13313,
+                    7.68002,
+                    12.91619,
+                    7.68002,
+                    3.22904
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.04785,
+                    0.047185,
+                    0.046527,
+                    0.045879,
+                    0.047409,
+                    0.04461,
+                    0.04399,
+                    0.043377,
+                    0.042773,
+                    0.043863
+                  ],
+                  pp: [
+                    0.079971,
+                    0.079055,
+                    0.078148,
+                    0.077251,
+                    0.076366,
+                    0.075491,
+                    0.074625,
+                    0.073769,
+                    0.072923,
+                    0.072087
+                  ],
+                  p: [
+                    0.143721,
+                    0.139679,
+                    0.114089,
+                    0.13193,
+                    0.128218,
+                    0.12461,
+                    0.121105,
+                    0.117698,
+                    0.114386,
+                    0.111169
+                  ],
+                  mp: [
+                    0.23507,
+                    0.22578,
+                    0.216858,
+                    0.208287,
+                    0.200055,
+                    0.19215,
+                    0.184557,
+                    0.177262,
+                    0.170257,
+                    0.163529
+                  ],
+                  mf: [
+                    0.383313,
+                    0.369491,
+                    0.356167,
+                    0.343325,
+                    0.330945,
+                    0.319012,
+                    0.307509,
+                    0.296421,
+                    0.285732,
+                    0.275428
+                  ],
+                  f: [
+                    0.631562,
+                    0.375433,
+                    0.600407,
+                    0.287319,
+                    0.58971,
+                    0.461253,
+                    0.542635,
+                    0.529081,
+                    0.515867,
+                    0.39819
+                  ],
+                  ff: [
+                    1.034985,
+                    1.056297,
+                    1.087572,
+                    0.719995,
+                    0.948079,
+                    0.890277,
+                    0.832811,
+                    1.075285,
+                    0.951681,
+                    0.474482
+                  ],
+                  fff: [
+                    1.601824,
+                    1.416794,
+                    1.371779,
+                    0.497641,
+                    1.973368,
+                    0.789031,
+                    0.777818,
+                    1.764897,
+                    1.296824,
+                    0.551429
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.16971,
+                    0.24,
+                    0.24,
+                    0.24,
+                    0.20182,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.24,
+                    0.20182
+                  ],
+                  pp: [
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.33941,
+                    0.28541,
+                    0.40363,
+                    0.24,
+                    0.33941,
+                    0.33941,
+                    0.28541
+                  ],
+                  p: [
+                    0.48,
+                    0.48,
+                    0.80726,
+                    0.80726,
+                    0.48,
+                    0.80726,
+                    0.28541,
+                    0.40363,
+                    0.48,
+                    0.57082
+                  ],
+                  mp: [
+                    0.96,
+                    1.35765,
+                    1.14164,
+                    1.14164,
+                    1.14164,
+                    1.14164,
+                    0.67882,
+                    0.96,
+                    0.48,
+                    0.57082
+                  ],
+                  mf: [
+                    2.28328,
+                    2.28328,
+                    1.61452,
+                    1.61452,
+                    1.14164,
+                    1.61452,
+                    1.35765,
+                    1.14164,
+                    1.14164,
+                    1.35765
+                  ],
+                  f: [
+                    3.22904,
+                    3.84,
+                    3.22904,
+                    1.92,
+                    2.28328,
+                    2.71529,
+                    1.92,
+                    1.92,
+                    1.92,
+                    2.28328
+                  ],
+                  ff: [
+                    7.68002,
+                    5.43059,
+                    4.56656,
+                    3.84,
+                    3.84,
+                    3.84,
+                    2.71529,
+                    1.92,
+                    1.92,
+                    3.84
+                  ],
+                  fff: [
+                    12.91619,
+                    9.13313,
+                    4.56656,
+                    5.43059,
+                    3.84,
+                    5.43059,
+                    3.84,
+                    4.56656,
+                    4.56656,
+                    6.4581
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.041303,
+                    0.042374,
+                    0.038622,
+                    0.037346,
+                    0.036113,
+                    0.034921,
+                    0.033769,
+                    0.032654,
+                    0.031576,
+                    0.030534
+                  ],
+                  pp: [
+                    0.073873,
+                    0.070851,
+                    0.067951,
+                    0.065171,
+                    0.062503,
+                    0.059946,
+                    0.057494,
+                    0.05514,
+                    0.052885,
+                    0.050721
+                  ],
+                  p: [
+                    0.104363,
+                    0.10138,
+                    0.098482,
+                    0.095667,
+                    0.092932,
+                    0.090276,
+                    0.087695,
+                    0.085189,
+                    0.082753,
+                    0.080389
+                  ],
+                  mp: [
+                    0.167953,
+                    0.164156,
+                    0.158075,
+                    0.152218,
+                    0.146579,
+                    0.141149,
+                    0.135919,
+                    0.130882,
+                    0.126035,
+                    0.121363
+                  ],
+                  mf: [
+                    0.309698,
+                    0.294255,
+                    0.279583,
+                    0.265643,
+                    0.252397,
+                    0.239812,
+                    0.227854,
+                    0.216492,
+                    0.205698,
+                    0.195441
+                  ],
+                  f: [
+                    0.541888,
+                    0.512099,
+                    0.483945,
+                    0.457339,
+                    0.432196,
+                    0.408438,
+                    0.385983,
+                    0.364762,
+                    0.344711,
+                    0.325759
+                  ],
+                  ff: [
+                    0.884974,
+                    0.82745,
+                    0.804352,
+                    0.737237,
+                    0.67572,
+                    0.61934,
+                    0.567663,
+                    0.520296,
+                    0.476881,
+                    0.525176
+                  ],
+                  fff: [
+                    1.574511,
+                    1.432896,
+                    0.808369,
+                    1.080667,
+                    0.69766,
+                    0.888017,
+                    0.885404,
+                    0.861483,
+                    0.914104,
+                    0.703516
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.1427,
+                    0.20182,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.20182,
+                    0.16971
+                  ],
+                  pp: [
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.20182,
+                    0.20182,
+                    0.20182,
+                    0.20182,
+                    0.20182
+                  ],
+                  p: [
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.20182,
+                    0.24,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.24,
+                    0.24
+                  ],
+                  mp: [
+                    0.1427,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.40363,
+                    0.33941,
+                    0.33941,
+                    0.40363
+                  ],
+                  mf: [
+                    0.16971,
+                    0.33941,
+                    0.40363,
+                    0.40363,
+                    0.48,
+                    0.57082,
+                    0.57082,
+                    0.57082,
+                    0.48,
+                    0.48
+                  ],
+                  f: [
+                    0.40363,
+                    0.57082,
+                    0.80726,
+                    0.67882,
+                    0.80726,
+                    0.80726,
+                    1.14164,
+                    0.96,
+                    0.96,
+                    1.14164
+                  ],
+                  ff: [
+                    1.35765,
+                    0.96,
+                    1.14164,
+                    1.35765,
+                    1.61452,
+                    1.14164,
+                    1.35765,
+                    1.92,
+                    1.61452,
+                    1.35765
+                  ],
+                  fff: [
+                    1.61452,
+                    1.92,
+                    1.61452,
+                    1.92,
+                    1.61452,
+                    1.92,
+                    1.61452,
+                    1.92,
+                    1.92,
+                    3.22904
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.070711,
+                    0.045322,
+                    0.041751,
+                    0.02593,
+                    0.026888,
+                    0.029872,
+                    0.033188,
+                    0.036874,
+                    0.040967,
+                    0.045516
+                  ],
+                  pp: [
+                    0.060141,
+                    0.049842,
+                    0.033392,
+                    0.037382,
+                    0.041849,
+                    0.046848,
+                    0.052447,
+                    0.058713,
+                    0.065729,
+                    0.073582
+                  ],
+                  p: [
+                    0.064692,
+                    0.067984,
+                    0.071442,
+                    0.075078,
+                    0.078897,
+                    0.082912,
+                    0.087129,
+                    0.091563,
+                    0.096221,
+                    0.101118
+                  ],
+                  mp: [
+                    0.09657,
+                    0.102244,
+                    0.108252,
+                    0.114611,
+                    0.121345,
+                    0.128474,
+                    0.136022,
+                    0.144013,
+                    0.152474,
+                    0.161432
+                  ],
+                  mf: [
+                    0.159142,
+                    0.1682,
+                    0.177774,
+                    0.187892,
+                    0.198587,
+                    0.20989,
+                    0.221835,
+                    0.234462,
+                    0.247807,
+                    0.261912
+                  ],
+                  f: [
+                    0.244454,
+                    0.258762,
+                    0.273907,
+                    0.28994,
+                    0.306909,
+                    0.324871,
+                    0.343886,
+                    0.364013,
+                    0.38532,
+                    0.407873
+                  ],
+                  ff: [
+                    0.391627,
+                    0.414467,
+                    0.438639,
+                    0.46422,
+                    0.491294,
+                    0.519944,
+                    0.550267,
+                    0.582359,
+                    0.616322,
+                    0.652267
+                  ],
+                  fff: [
+                    0.647789,
+                    0.681826,
+                    0.717651,
+                    0.74154,
+                    0.795046,
+                    0.836817,
+                    0.880786,
+                    0.927065,
+                    0.975775,
+                    1.027045
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.28541,
+                    0.16971,
+                    0.16971
+                  ],
+                  pp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.20182,
+                    0.24,
+                    0.33941,
+                    0.16971,
+                    0.20182
+                  ],
+                  p: [
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.40363,
+                    0.20182,
+                    0.28541
+                  ],
+                  mp: [
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.20182,
+                    0.24,
+                    0.20182,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.33941,
+                    0.33941,
+                    0.33941,
+                    0.80726,
+                    0.24,
+                    0.48
+                  ],
+                  mf: [
+                    0.57082,
+                    0.16971,
+                    0.33941,
+                    0.28541,
+                    0.48,
+                    0.33941,
+                    0.40363,
+                    0.40363,
+                    0.33941,
+                    0.48,
+                    0.48,
+                    0.40363,
+                    0.57082,
+                    0.48,
+                    0.48,
+                    1.14164,
+                    0.67882,
+                    0.67882
+                  ],
+                  f: [
+                    0.57082,
+                    0.67882,
+                    0.96,
+                    0.96,
+                    0.80726,
+                    0.57082,
+                    1.61452,
+                    0.96,
+                    0.96,
+                    0.67882,
+                    0.67882,
+                    0.67882,
+                    1.14164,
+                    1.14164,
+                    0.67882,
+                    1.61452,
+                    0.57082,
+                    0.96
+                  ],
+                  ff: [
+                    1.35765,
+                    1.61452,
+                    1.61452,
+                    1.35765,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.14164,
+                    1.14164,
+                    1.14164,
+                    1.14164,
+                    0.96,
+                    1.35765,
+                    1.35765,
+                    0.96,
+                    1.92,
+                    0.96,
+                    1.35765
+                  ],
+                  fff: [
+                    2.28328,
+                    1.61452,
+                    1.92,
+                    1.92,
+                    2.28328,
+                    1.92,
+                    2.28328,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.92,
+                    1.92,
+                    1.35765,
+                    5.43059,
+                    1.35765,
+                    1.61452
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.061169,
+                    0.05932,
+                    0.05,
+                    0.044701,
+                    0.015699,
+                    0.032833,
+                    0.036299,
+                    0.018624,
+                    0.019717,
+                    0.020874,
+                    0.022096,
+                    0.023393,
+                    0.024764,
+                    0.026217,
+                    0.026192,
+                    0.051852,
+                    0.031102,
+                    0.032927
+                  ],
+                  pp: [
+                    0.06228,
+                    0.06,
+                    0.04161,
+                    0.032039,
+                    0.052894,
+                    0.032708,
+                    0.029127,
+                    0.03084,
+                    0.032654,
+                    0.034574,
+                    0.036608,
+                    0.038761,
+                    0.041039,
+                    0.043453,
+                    0.044797,
+                    0.081558,
+                    0.05158,
+                    0.054613
+                  ],
+                  p: [
+                    0.054986,
+                    0.055723,
+                    0.070375,
+                    0.057228,
+                    0.057997,
+                    0.058775,
+                    0.059563,
+                    0.060362,
+                    0.061172,
+                    0.061993,
+                    0.062823,
+                    0.063666,
+                    0.064521,
+                    0.065386,
+                    0.062196,
+                    0.129872,
+                    0.068054,
+                    0.068967
+                  ],
+                  mp: [
+                    0.082002,
+                    0.12163,
+                    0.084545,
+                    0.085847,
+                    0.087168,
+                    0.08851,
+                    0.089873,
+                    0.091255,
+                    0.09266,
+                    0.094086,
+                    0.095533,
+                    0.097004,
+                    0.098497,
+                    0.100012,
+                    0.090033,
+                    0.194512,
+                    0.104703,
+                    0.106314
+                  ],
+                  mf: [
+                    0.172322,
+                    0.134427,
+                    0.136103,
+                    0.137802,
+                    0.139521,
+                    0.14126,
+                    0.143023,
+                    0.144808,
+                    0.146613,
+                    0.148444,
+                    0.150295,
+                    0.15217,
+                    0.154069,
+                    0.15599,
+                    0.135907,
+                    0.30764,
+                    0.159992,
+                    0.163921
+                  ],
+                  f: [
+                    0.217219,
+                    0.218828,
+                    0.220449,
+                    0.222082,
+                    0.223729,
+                    0.225385,
+                    0.262031,
+                    0.228737,
+                    0.230432,
+                    0.23214,
+                    0.23386,
+                    0.235591,
+                    0.237338,
+                    0.239096,
+                    0.198612,
+                    0.493689,
+                    0.231007,
+                    0.246261
+                  ],
+                  ff: [
+                    0.346767,
+                    0.358171,
+                    0.357693,
+                    0.357215,
+                    0.356738,
+                    0.356262,
+                    0.355786,
+                    0.355311,
+                    0.354836,
+                    0.354361,
+                    0.353887,
+                    0.353414,
+                    0.352943,
+                    0.352471,
+                    0.282676,
+                    0.778939,
+                    0.322766,
+                    0.369934
+                  ],
+                  fff: [
+                    0.531168,
+                    0.53213,
+                    0.533096,
+                    0.534063,
+                    0.535031,
+                    0.536001,
+                    0.536973,
+                    0.537948,
+                    0.538924,
+                    0.539901,
+                    0.54088,
+                    0.541861,
+                    0.542843,
+                    0.543829,
+                    0.429217,
+                    1.237281,
+                    0.489303,
+                    0.547785
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 11.0611,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 20.5033,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              }
+            ]
           }
         },
         {
@@ -5975,6 +13356,1659 @@ var physical_strings_calibration_default = {
               level: -55.28,
               contact: 0.165
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.20182,
+                    0.16971,
+                    0.28541,
+                    0.24,
+                    0.24,
+                    0.24,
+                    0.28541,
+                    0.20182,
+                    0.20182,
+                    0.20182
+                  ],
+                  pp: [
+                    0.24,
+                    0.33941,
+                    0.57082,
+                    0.33941,
+                    0.33941,
+                    0.28541,
+                    0.33941,
+                    0.20182,
+                    0.33941,
+                    0.24
+                  ],
+                  p: [
+                    0.48,
+                    0.67882,
+                    0.96,
+                    0.48,
+                    0.80726,
+                    0.67882,
+                    0.48,
+                    0.48,
+                    0.40363,
+                    0.40363
+                  ],
+                  mp: [
+                    0.96,
+                    0.96,
+                    0.96,
+                    0.80726,
+                    0.80726,
+                    0.80726,
+                    0.80726,
+                    0.67882,
+                    0.80726,
+                    0.80726
+                  ],
+                  mf: [
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.92,
+                    1.14164,
+                    1.14164,
+                    1.35765
+                  ],
+                  f: [
+                    2.28328,
+                    3.22904,
+                    2.71529,
+                    1.92,
+                    1.92,
+                    1.61452,
+                    1.61452,
+                    1.35765,
+                    1.92,
+                    1.92
+                  ],
+                  ff: [
+                    4.56656,
+                    5.43059,
+                    4.56656,
+                    3.84,
+                    3.84,
+                    4.56656,
+                    3.84,
+                    1.61452,
+                    2.71529,
+                    3.22904
+                  ],
+                  fff: [
+                    10.86118,
+                    6.4581,
+                    2.28328,
+                    9.13313,
+                    7.68002,
+                    3.84,
+                    6.4581,
+                    4.56656,
+                    4.56656,
+                    7.68002
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.034473,
+                    0.033022,
+                    0.031631,
+                    0.030298,
+                    0.029022,
+                    0.0278,
+                    0.026629,
+                    0.025507,
+                    0.024433,
+                    0.023402
+                  ],
+                  pp: [
+                    0.054811,
+                    0.05317,
+                    0.051577,
+                    0.050032,
+                    0.048534,
+                    0.04708,
+                    0.04567,
+                    0.044303,
+                    0.042976,
+                    0.041689
+                  ],
+                  p: [
+                    0.093622,
+                    0.089551,
+                    0.085659,
+                    0.081936,
+                    0.078374,
+                    0.074966,
+                    0.071708,
+                    0.06859,
+                    0.06561,
+                    0.062757
+                  ],
+                  mp: [
+                    0.148231,
+                    0.141128,
+                    0.134366,
+                    0.127927,
+                    0.121798,
+                    0.115962,
+                    0.110406,
+                    0.105116,
+                    0.10008,
+                    0.095284
+                  ],
+                  mf: [
+                    0.263099,
+                    0.247353,
+                    0.23255,
+                    0.218632,
+                    0.205547,
+                    0.193247,
+                    0.181682,
+                    0.170808,
+                    0.160585,
+                    0.150976
+                  ],
+                  f: [
+                    0.446877,
+                    0.41877,
+                    0.392431,
+                    0.367749,
+                    0.344619,
+                    0.322945,
+                    0.302632,
+                    0.294284,
+                    0.265761,
+                    0.249046
+                  ],
+                  ff: [
+                    0.580307,
+                    0.668074,
+                    0.69501,
+                    0.623382,
+                    0.56936,
+                    0.501516,
+                    0.464143,
+                    0.40347,
+                    0.447668,
+                    0.324591
+                  ],
+                  fff: [
+                    1.674206,
+                    0.912362,
+                    0.514149,
+                    1.253015,
+                    1.159945,
+                    0.678486,
+                    0.966166,
+                    0.603026,
+                    0.774675,
+                    0.75742
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.1427,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.24,
+                    0.20182
+                  ],
+                  pp: [
+                    0.20182,
+                    0.20182,
+                    0.24,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.24
+                  ],
+                  p: [
+                    0.28541,
+                    0.33941,
+                    0.28541,
+                    0.33941,
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.33941,
+                    0.48,
+                    0.40363
+                  ],
+                  mp: [
+                    0.48,
+                    0.57082,
+                    0.40363,
+                    0.80726,
+                    0.57082,
+                    0.67882,
+                    0.80726,
+                    0.67882,
+                    0.67882,
+                    0.96
+                  ],
+                  mf: [
+                    1.14164,
+                    0.96,
+                    1.14164,
+                    0.96,
+                    1.14164,
+                    0.96,
+                    1.35765,
+                    1.14164,
+                    1.61452,
+                    1.92
+                  ],
+                  f: [
+                    1.92,
+                    2.71529,
+                    1.92,
+                    1.14164,
+                    2.28328,
+                    1.92,
+                    1.92,
+                    1.14164,
+                    1.92,
+                    1.92
+                  ],
+                  ff: [
+                    2.71529,
+                    3.84,
+                    3.22904,
+                    2.71529,
+                    3.22904,
+                    3.22904,
+                    3.84,
+                    2.28328,
+                    1.92,
+                    3.84
+                  ],
+                  fff: [
+                    6.4581,
+                    6.4581,
+                    6.4581,
+                    5.43059,
+                    5.43059,
+                    4.56656,
+                    5.43059,
+                    2.71529,
+                    5.43059,
+                    6.4581
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.058143,
+                    0.041661,
+                    0.044514,
+                    0.047563,
+                    0.050821,
+                    0.054302,
+                    0.05802,
+                    0.061995,
+                    0.066242,
+                    0.070779
+                  ],
+                  pp: [
+                    0.092629,
+                    0.083212,
+                    0.086398,
+                    0.089706,
+                    0.093142,
+                    0.096709,
+                    0.100412,
+                    0.104259,
+                    0.108251,
+                    0.112397
+                  ],
+                  p: [
+                    0.12088,
+                    0.126534,
+                    0.132455,
+                    0.13865,
+                    0.145137,
+                    0.151926,
+                    0.159034,
+                    0.166473,
+                    0.174262,
+                    0.182415
+                  ],
+                  mp: [
+                    0.19379,
+                    0.20201,
+                    0.210577,
+                    0.219509,
+                    0.228818,
+                    0.238524,
+                    0.248639,
+                    0.259184,
+                    0.270178,
+                    0.281637
+                  ],
+                  mf: [
+                    0.326926,
+                    0.336336,
+                    0.346015,
+                    0.355973,
+                    0.366219,
+                    0.376759,
+                    0.387602,
+                    0.398758,
+                    0.410234,
+                    0.422042
+                  ],
+                  f: [
+                    0.698958,
+                    0.689091,
+                    0.679363,
+                    0.669773,
+                    0.660318,
+                    0.650996,
+                    0.641806,
+                    0.675406,
+                    0.623812,
+                    0.615006
+                  ],
+                  ff: [
+                    1.252689,
+                    1.023769,
+                    1.015674,
+                    0.920375,
+                    1.064825,
+                    1.078872,
+                    1.106584,
+                    1.107527,
+                    1.107171,
+                    1.136942
+                  ],
+                  fff: [
+                    1.977708,
+                    2.039542,
+                    1.916632,
+                    2.014701,
+                    2.236884,
+                    1.773968,
+                    1.718718,
+                    1.028811,
+                    2.530021,
+                    2.609122
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.28541,
+                    0.33941,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427
+                  ],
+                  pp: [
+                    0.28541,
+                    0.33941,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.16971
+                  ],
+                  p: [
+                    0.16971,
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.20182
+                  ],
+                  mp: [
+                    0.20182,
+                    0.28541,
+                    0.28541,
+                    0.1427,
+                    0.20182,
+                    0.1427,
+                    0.16971,
+                    0.20182,
+                    0.20182,
+                    0.24
+                  ],
+                  mf: [
+                    0.67882,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.40363,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.33941,
+                    0.28541
+                  ],
+                  f: [
+                    0.67882,
+                    0.57082,
+                    0.57082,
+                    0.80726,
+                    0.67882,
+                    0.67882,
+                    0.57082,
+                    0.40363,
+                    0.67882,
+                    0.40363
+                  ],
+                  ff: [
+                    1.14164,
+                    0.96,
+                    1.61452,
+                    1.14164,
+                    1.35765,
+                    0.96,
+                    0.80726,
+                    0.96,
+                    0.96,
+                    0.80726
+                  ],
+                  fff: [
+                    1.92,
+                    1.92,
+                    1.35765,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.61452
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.074361,
+                    0.103346,
+                    0.088011,
+                    0.05932,
+                    0.045876,
+                    0.08409,
+                    0.070711,
+                    0.036284,
+                    0.054772,
+                    0.037292
+                  ],
+                  pp: [
+                    0.074361,
+                    0.103346,
+                    0.088011,
+                    0.057275,
+                    0.045876,
+                    0.088011,
+                    0.07746,
+                    0.049641,
+                    0.055833,
+                    0.057675
+                  ],
+                  p: [
+                    0.069805,
+                    0.11016,
+                    0.059573,
+                    0.075195,
+                    0.063075,
+                    0.080297,
+                    0.069383,
+                    0.07277,
+                    0.076324,
+                    0.08005
+                  ],
+                  mp: [
+                    0.113897,
+                    0.12506,
+                    0.11311,
+                    0.112716,
+                    0.112326,
+                    0.111936,
+                    0.111548,
+                    0.111162,
+                    0.110776,
+                    0.110392
+                  ],
+                  mf: [
+                    0.198632,
+                    0.195715,
+                    0.192841,
+                    0.19001,
+                    0.187219,
+                    0.18447,
+                    0.18176,
+                    0.179092,
+                    0.176461,
+                    0.17387
+                  ],
+                  f: [
+                    0.297089,
+                    0.292789,
+                    0.28855,
+                    0.284373,
+                    0.280257,
+                    0.276201,
+                    0.272203,
+                    0.268262,
+                    0.264378,
+                    0.260552
+                  ],
+                  ff: [
+                    0.491779,
+                    0.48376,
+                    0.475872,
+                    0.468112,
+                    0.460479,
+                    0.452972,
+                    0.445584,
+                    0.388521,
+                    0.431171,
+                    0.424142
+                  ],
+                  fff: [
+                    0.769849,
+                    0.756764,
+                    0.743902,
+                    0.731259,
+                    0.718831,
+                    0.706615,
+                    0.694605,
+                    0.660589,
+                    0.671195,
+                    0.659787
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427
+                  ],
+                  pp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.1427
+                  ],
+                  p: [
+                    0.20182,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.20182,
+                    0.16971,
+                    0.16971,
+                    0.20182,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.24,
+                    0.24,
+                    0.20182,
+                    0.16971,
+                    0.16971
+                  ],
+                  mp: [
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.24,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.20182,
+                    0.16971
+                  ],
+                  mf: [
+                    0.24,
+                    0.20182,
+                    0.48,
+                    0.20182,
+                    0.24,
+                    0.33941,
+                    0.33941,
+                    0.28541,
+                    0.40363,
+                    0.33941,
+                    0.40363,
+                    0.48,
+                    0.33941,
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.24
+                  ],
+                  f: [
+                    0.40363,
+                    0.48,
+                    0.48,
+                    0.67882,
+                    0.48,
+                    0.48,
+                    0.57082,
+                    0.33941,
+                    0.24,
+                    0.57082,
+                    0.67882,
+                    0.57082,
+                    0.48,
+                    0.57082,
+                    0.67882,
+                    0.80726,
+                    0.67882,
+                    0.33941
+                  ],
+                  ff: [
+                    0.67882,
+                    0.96,
+                    0.96,
+                    0.96,
+                    0.80726,
+                    0.80726,
+                    0.96,
+                    0.80726,
+                    0.48,
+                    0.96,
+                    0.96,
+                    1.35765,
+                    0.80726,
+                    1.35765,
+                    1.14164,
+                    1.14164,
+                    0.96,
+                    0.57082
+                  ],
+                  fff: [
+                    1.14164,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.14164,
+                    1.14164,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.61452,
+                    1.92,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.14164
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.018746,
+                    0.06,
+                    0.070711,
+                    0.045307,
+                    0.030138,
+                    0.022705,
+                    0.020672,
+                    0.032901,
+                    0.022673,
+                    0.019497,
+                    0.016957,
+                    0.020725,
+                    0.020107,
+                    0.021894,
+                    0.023841,
+                    0.027311,
+                    0.023506,
+                    0.028509
+                  ],
+                  pp: [
+                    0.07746,
+                    0.06,
+                    0.066509,
+                    0.054759,
+                    0.028883,
+                    0.033033,
+                    0.027422,
+                    0.028226,
+                    0.029056,
+                    0.029909,
+                    0.030786,
+                    0.03169,
+                    0.03262,
+                    0.033579,
+                    0.034563,
+                    0.035577,
+                    0.036623,
+                    0.029875
+                  ],
+                  p: [
+                    0.047591,
+                    0.069163,
+                    0.060059,
+                    0.043521,
+                    0.044433,
+                    0.045364,
+                    0.046315,
+                    0.047285,
+                    0.048275,
+                    0.049285,
+                    0.050318,
+                    0.051372,
+                    0.052447,
+                    0.053547,
+                    0.054669,
+                    0.055813,
+                    0.056983,
+                    0.05151
+                  ],
+                  mp: [
+                    0.062631,
+                    0.067307,
+                    0.068316,
+                    0.069341,
+                    0.070381,
+                    0.071436,
+                    0.072508,
+                    0.073594,
+                    0.074697,
+                    0.075818,
+                    0.076953,
+                    0.078108,
+                    0.079278,
+                    0.080468,
+                    0.081675,
+                    0.082899,
+                    0.084142,
+                    0.07368
+                  ],
+                  mf: [
+                    0.099535,
+                    0.111088,
+                    0.11226,
+                    0.113443,
+                    0.114638,
+                    0.118343,
+                    0.11707,
+                    0.118303,
+                    0.11955,
+                    0.12081,
+                    0.122084,
+                    0.123371,
+                    0.124671,
+                    0.125987,
+                    0.127314,
+                    0.128656,
+                    0.130013,
+                    0.109189
+                  ],
+                  f: [
+                    0.15093,
+                    0.162662,
+                    0.16519,
+                    0.167757,
+                    0.170362,
+                    0.173009,
+                    0.175697,
+                    0.178426,
+                    0.181198,
+                    0.184013,
+                    0.186872,
+                    0.189774,
+                    0.192724,
+                    0.195717,
+                    0.2027,
+                    0.201847,
+                    0.204982,
+                    0.161176
+                  ],
+                  ff: [
+                    0.219306,
+                    0.263073,
+                    0.26598,
+                    0.268918,
+                    0.271891,
+                    0.274896,
+                    0.277932,
+                    0.281004,
+                    0.284109,
+                    0.287249,
+                    0.28041,
+                    0.293633,
+                    0.296877,
+                    0.318752,
+                    0.325232,
+                    0.306827,
+                    0.310218,
+                    0.227989
+                  ],
+                  fff: [
+                    0.35587,
+                    0.395973,
+                    0.403154,
+                    0.410464,
+                    0.417907,
+                    0.425485,
+                    0.4332,
+                    0.441056,
+                    0.449054,
+                    0.457197,
+                    0.465487,
+                    0.473929,
+                    0.482521,
+                    0.491273,
+                    0.52242,
+                    0.50925,
+                    0.476023,
+                    0.37049
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 11.0611,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 4,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 2,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 2.9678,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 7.0144,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 7.0144,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 8.3633,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 8.3633,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 11.0611,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 11.0611,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 2,
+                stop: 12.41,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 15.1078,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              }
+            ]
           }
         },
         {
@@ -6155,9 +15189,1609 @@ var physical_strings_calibration_default = {
               level: -56.11,
               contact: 0.165
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.20182,
+                    0.24,
+                    0.33941,
+                    0.24,
+                    0.33941,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.24
+                  ],
+                  pp: [
+                    0.33941,
+                    0.48,
+                    0.40363,
+                    0.48,
+                    0.48,
+                    0.48,
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.48
+                  ],
+                  p: [
+                    0.67882,
+                    0.57082,
+                    0.67882,
+                    0.67882,
+                    0.96,
+                    0.67882,
+                    0.57082,
+                    0.80726,
+                    0.67882,
+                    0.67882
+                  ],
+                  mp: [
+                    1.61452,
+                    1.35765,
+                    0.96,
+                    1.14164,
+                    1.14164,
+                    0.96,
+                    0.96,
+                    0.80726,
+                    0.80726,
+                    0.96
+                  ],
+                  mf: [
+                    1.92,
+                    1.92,
+                    1.92,
+                    1.92,
+                    1.92,
+                    1.92,
+                    1.92,
+                    1.14164,
+                    1.61452,
+                    1.61452
+                  ],
+                  f: [
+                    3.84,
+                    4.56656,
+                    3.84,
+                    1.92,
+                    2.71529,
+                    3.22904,
+                    2.71529,
+                    3.22904,
+                    1.92,
+                    1.92
+                  ],
+                  ff: [
+                    9.13313,
+                    4.56656,
+                    9.13313,
+                    2.71529,
+                    7.68002,
+                    4.56656,
+                    5.43059,
+                    3.84,
+                    3.22904,
+                    4.56656
+                  ],
+                  fff: [
+                    4.56656,
+                    10.86118,
+                    10.86118,
+                    4.56656,
+                    12.91619,
+                    3.84,
+                    6.4581,
+                    4.56656,
+                    4.56656,
+                    3.22904
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.039369,
+                    0.038523,
+                    0.037697,
+                    0.036889,
+                    0.036098,
+                    0.035323,
+                    0.034566,
+                    0.033824,
+                    0.033098,
+                    0.032389
+                  ],
+                  pp: [
+                    0.07551,
+                    0.064972,
+                    0.063253,
+                    0.061578,
+                    0.059947,
+                    0.058362,
+                    0.056816,
+                    0.055313,
+                    0.053848,
+                    0.052423
+                  ],
+                  p: [
+                    0.120382,
+                    0.115131,
+                    0.110109,
+                    0.105307,
+                    0.100712,
+                    0.09632,
+                    0.092119,
+                    0.088101,
+                    0.084258,
+                    0.080584
+                  ],
+                  mp: [
+                    0.173268,
+                    0.167142,
+                    0.161233,
+                    0.15553,
+                    0.150032,
+                    0.144728,
+                    0.13961,
+                    0.134674,
+                    0.129913,
+                    0.125318
+                  ],
+                  mf: [
+                    0.288571,
+                    0.278225,
+                    0.268251,
+                    0.258633,
+                    0.24936,
+                    0.240422,
+                    0.231803,
+                    0.223492,
+                    0.215478,
+                    0.207753
+                  ],
+                  f: [
+                    0.537105,
+                    0.542806,
+                    0.510959,
+                    0.24481,
+                    0.452763,
+                    0.363482,
+                    0.401195,
+                    0.377657,
+                    0.355501,
+                    0.334644
+                  ],
+                  ff: [
+                    1.150004,
+                    0.611933,
+                    0.850546,
+                    0.351784,
+                    0.909268,
+                    0.548761,
+                    0.67227,
+                    0.672873,
+                    0.674856,
+                    0.626384
+                  ],
+                  fff: [
+                    0.857361,
+                    1.367099,
+                    1.540769,
+                    0.699001,
+                    1.885633,
+                    0.5,
+                    0.85291,
+                    0.546113,
+                    0.782761,
+                    0.683407
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.20182,
+                    0.16971,
+                    0.24,
+                    0.24,
+                    0.20182,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.24,
+                    0.24
+                  ],
+                  pp: [
+                    0.24,
+                    0.24,
+                    0.40363,
+                    0.28541,
+                    0.28541,
+                    0.67882,
+                    0.24,
+                    0.33941,
+                    0.40363,
+                    0.33941
+                  ],
+                  p: [
+                    0.57082,
+                    0.40363,
+                    0.67882,
+                    0.57082,
+                    0.48,
+                    0.67882,
+                    0.40363,
+                    0.40363,
+                    0.57082,
+                    0.80726
+                  ],
+                  mp: [
+                    0.80726,
+                    0.96,
+                    0.80726,
+                    0.80726,
+                    1.14164,
+                    0.67882,
+                    0.67882,
+                    0.96,
+                    0.96,
+                    0.96
+                  ],
+                  mf: [
+                    1.35765,
+                    1.92,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.14164,
+                    1.35765,
+                    1.14164
+                  ],
+                  f: [
+                    1.92,
+                    1.61452,
+                    2.71529,
+                    1.92,
+                    2.28328,
+                    1.92,
+                    1.61452,
+                    2.28328,
+                    1.92,
+                    2.71529
+                  ],
+                  ff: [
+                    5.43059,
+                    3.84,
+                    3.84,
+                    3.84,
+                    3.84,
+                    4.56656,
+                    2.71529,
+                    2.28328,
+                    2.71529,
+                    4.56656
+                  ],
+                  fff: [
+                    10.86118,
+                    7.68002,
+                    4.56656,
+                    5.43059,
+                    3.84,
+                    5.43059,
+                    3.84,
+                    3.22904,
+                    4.56656,
+                    4.56656
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.029146,
+                    0.029878,
+                    0.030629,
+                    0.031397,
+                    0.032185,
+                    0.032994,
+                    0.033822,
+                    0.03467,
+                    0.035541,
+                    0.036433
+                  ],
+                  pp: [
+                    0.049619,
+                    0.050659,
+                    0.051721,
+                    0.052806,
+                    0.053913,
+                    0.055043,
+                    0.056197,
+                    0.057376,
+                    0.058578,
+                    0.059807
+                  ],
+                  p: [
+                    0.076324,
+                    0.078411,
+                    0.080556,
+                    0.082758,
+                    0.085021,
+                    0.087345,
+                    0.089734,
+                    0.092188,
+                    0.09471,
+                    0.097299
+                  ],
+                  mp: [
+                    0.120128,
+                    0.122284,
+                    0.124478,
+                    0.126712,
+                    0.128985,
+                    0.1313,
+                    0.133656,
+                    0.136055,
+                    0.138496,
+                    0.140982
+                  ],
+                  mf: [
+                    0.178593,
+                    0.183999,
+                    0.189568,
+                    0.195307,
+                    0.201218,
+                    0.207308,
+                    0.213583,
+                    0.220046,
+                    0.226707,
+                    0.23357
+                  ],
+                  f: [
+                    0.351651,
+                    0.359382,
+                    0.343897,
+                    0.375362,
+                    0.383614,
+                    0.392047,
+                    0.400668,
+                    0.409479,
+                    0.418482,
+                    0.427683
+                  ],
+                  ff: [
+                    0.795235,
+                    0.610316,
+                    0.599299,
+                    0.693311,
+                    0.662328,
+                    0.632729,
+                    0.604453,
+                    0.577079,
+                    0.632578,
+                    0.662996
+                  ],
+                  fff: [
+                    1.319041,
+                    1.238725,
+                    0.691232,
+                    1.060859,
+                    1.004726,
+                    0.883972,
+                    0.888283,
+                    0.824773,
+                    0.85614,
+                    0.721063
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.16971,
+                    0.16971
+                  ],
+                  pp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.16971
+                  ],
+                  p: [
+                    0.1427,
+                    0.16971,
+                    0.16971,
+                    0.20182,
+                    0.20182,
+                    0.24,
+                    0.16971,
+                    0.24,
+                    0.20182,
+                    0.20182
+                  ],
+                  mp: [
+                    0.1427,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.24,
+                    0.28541,
+                    0.20182,
+                    0.28541,
+                    0.24,
+                    0.24
+                  ],
+                  mf: [
+                    0.48,
+                    0.33941,
+                    0.57082,
+                    0.33941,
+                    0.57082,
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.40363,
+                    0.33941
+                  ],
+                  f: [
+                    0.57082,
+                    0.57082,
+                    0.80726,
+                    0.67882,
+                    0.48,
+                    0.67882,
+                    0.96,
+                    0.67882,
+                    0.57082,
+                    0.96
+                  ],
+                  ff: [
+                    1.14164,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    0.96,
+                    0.96,
+                    1.35765,
+                    1.14164,
+                    0.80726,
+                    1.61452
+                  ],
+                  fff: [
+                    2.28328,
+                    1.92,
+                    2.28328,
+                    1.92,
+                    1.61452,
+                    2.28328,
+                    1.35765,
+                    1.61452,
+                    1.61452,
+                    2.28328
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.060279,
+                    0.05,
+                    0.041847,
+                    0.031103,
+                    0.022448,
+                    0.017144,
+                    0.021583,
+                    0.025303,
+                    0.03074,
+                    0.037345
+                  ],
+                  pp: [
+                    0.067746,
+                    0.057183,
+                    0.0342,
+                    0.035759,
+                    0.037387,
+                    0.039089,
+                    0.04087,
+                    0.04273,
+                    0.044676,
+                    0.046711
+                  ],
+                  p: [
+                    0.08657,
+                    0.065154,
+                    0.065223,
+                    0.065291,
+                    0.06536,
+                    0.065429,
+                    0.065498,
+                    0.065567,
+                    0.065636,
+                    0.065705
+                  ],
+                  mp: [
+                    0.119028,
+                    0.116585,
+                    0.114192,
+                    0.11185,
+                    0.109554,
+                    0.107306,
+                    0.105103,
+                    0.102946,
+                    0.100832,
+                    0.098764
+                  ],
+                  mf: [
+                    0.195122,
+                    0.190273,
+                    0.185542,
+                    0.180931,
+                    0.176434,
+                    0.172049,
+                    0.167772,
+                    0.163603,
+                    0.159535,
+                    0.155569
+                  ],
+                  f: [
+                    0.281077,
+                    0.279411,
+                    0.277752,
+                    0.276104,
+                    0.274467,
+                    0.272838,
+                    0.27122,
+                    0.269611,
+                    0.268012,
+                    0.266422
+                  ],
+                  ff: [
+                    0.458221,
+                    0.453475,
+                    0.448778,
+                    0.444129,
+                    0.439529,
+                    0.434977,
+                    0.430473,
+                    0.426013,
+                    0.421601,
+                    0.417233
+                  ],
+                  fff: [
+                    0.835061,
+                    0.822727,
+                    0.810574,
+                    0.798601,
+                    0.786806,
+                    0.775183,
+                    0.583345,
+                    0.702244,
+                    0.741339,
+                    0.730388
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.24,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.20182,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.1427,
+                    0.16971,
+                    0.20182,
+                    0.16971,
+                    0.16971
+                  ],
+                  pp: [
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.20182,
+                    0.20182,
+                    0.20182,
+                    0.24,
+                    0.16971,
+                    0.16971
+                  ],
+                  p: [
+                    0.16971,
+                    0.16971,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.1427,
+                    0.20182,
+                    0.16971,
+                    0.20182,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.20182,
+                    0.28541,
+                    0.24,
+                    0.16971,
+                    0.20182
+                  ],
+                  mp: [
+                    0.16971,
+                    0.20182,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.16971,
+                    0.24,
+                    0.20182,
+                    0.24,
+                    0.24,
+                    0.24,
+                    0.28541,
+                    0.28541,
+                    0.33941,
+                    0.33941,
+                    0.20182,
+                    0.28541
+                  ],
+                  mf: [
+                    0.16971,
+                    0.20182,
+                    0.28541,
+                    0.28541,
+                    0.1427,
+                    0.33941,
+                    0.20182,
+                    0.28541,
+                    0.28541,
+                    0.28541,
+                    0.40363,
+                    0.33941,
+                    0.40363,
+                    0.40363,
+                    0.57082,
+                    0.67882,
+                    0.33941,
+                    0.48
+                  ],
+                  f: [
+                    0.67882,
+                    0.48,
+                    0.67882,
+                    0.67882,
+                    0.57082,
+                    0.67882,
+                    0.96,
+                    0.80726,
+                    0.48,
+                    0.48,
+                    0.67882,
+                    0.48,
+                    0.80726,
+                    0.96,
+                    0.80726,
+                    0.96,
+                    0.48,
+                    0.80726
+                  ],
+                  ff: [
+                    1.35765,
+                    1.35765,
+                    0.96,
+                    1.35765,
+                    1.14164,
+                    0.96,
+                    1.35765,
+                    0.96,
+                    0.80726,
+                    0.96,
+                    0.80726,
+                    0.67882,
+                    1.14164,
+                    1.14164,
+                    1.14164,
+                    1.35765,
+                    0.80726,
+                    0.80726
+                  ],
+                  fff: [
+                    1.14164,
+                    1.61452,
+                    1.61452,
+                    1.61452,
+                    1.92,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.35765,
+                    1.61452,
+                    1.35765,
+                    1.35765,
+                    1.61452,
+                    1.92,
+                    1.35765,
+                    1.61452,
+                    1.14164,
+                    1.14164
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.050701,
+                    0.05932,
+                    0.05,
+                    0.040549,
+                    0.017819,
+                    0.033384,
+                    0.037346,
+                    0.015526,
+                    0.017679,
+                    0.017286,
+                    0.017011,
+                    0.017538,
+                    0.018081,
+                    0.01864,
+                    0.019994,
+                    0.01981,
+                    0.020423,
+                    0.019677
+                  ],
+                  pp: [
+                    0.048615,
+                    0.06,
+                    0.040693,
+                    0.032687,
+                    0.056137,
+                    0.030627,
+                    0.027268,
+                    0.021779,
+                    0.031303,
+                    0.02679,
+                    0.025399,
+                    0.026735,
+                    0.02814,
+                    0.029621,
+                    0.032682,
+                    0.032818,
+                    0.034543,
+                    0.032504
+                  ],
+                  p: [
+                    0.045229,
+                    0.05293,
+                    0.053956,
+                    0.051865,
+                    0.051342,
+                    0.050821,
+                    0.050308,
+                    0.0498,
+                    0.049296,
+                    0.048798,
+                    0.048305,
+                    0.047817,
+                    0.047334,
+                    0.046856,
+                    0.049066,
+                    0.045913,
+                    0.045448,
+                    0.040981
+                  ],
+                  mp: [
+                    0.062193,
+                    0.102364,
+                    0.065604,
+                    0.06662,
+                    0.06765,
+                    0.068697,
+                    0.06976,
+                    0.07084,
+                    0.071937,
+                    0.07305,
+                    0.07418,
+                    0.075329,
+                    0.076494,
+                    0.077677,
+                    0.080419,
+                    0.080101,
+                    0.081341,
+                    0.068144
+                  ],
+                  mf: [
+                    0.103187,
+                    0.110053,
+                    0.110919,
+                    0.111791,
+                    0.11267,
+                    0.113556,
+                    0.114451,
+                    0.11535,
+                    0.116258,
+                    0.117172,
+                    0.118094,
+                    0.119022,
+                    0.119958,
+                    0.120901,
+                    0.1424,
+                    0.122811,
+                    0.123778,
+                    0.101461
+                  ],
+                  f: [
+                    0.146889,
+                    0.22262,
+                    0.16913,
+                    0.169665,
+                    0.170199,
+                    0.170738,
+                    0.19211,
+                    0.171818,
+                    0.17236,
+                    0.189213,
+                    0.173452,
+                    0.183814,
+                    0.174549,
+                    0.175099,
+                    0.213187,
+                    0.176208,
+                    0.176764,
+                    0.148869
+                  ],
+                  ff: [
+                    0.230143,
+                    0.280552,
+                    0.278578,
+                    0.276618,
+                    0.274673,
+                    0.27274,
+                    0.270822,
+                    0.268917,
+                    0.267025,
+                    0.289442,
+                    0.263281,
+                    0.271594,
+                    0.259589,
+                    0.257764,
+                    0.322203,
+                    0.255992,
+                    0.252361,
+                    0.198002
+                  ],
+                  fff: [
+                    0.36243,
+                    0.473954,
+                    0.468516,
+                    0.463141,
+                    0.457829,
+                    0.452577,
+                    0.447384,
+                    0.442253,
+                    0.437179,
+                    0.452199,
+                    0.427206,
+                    0.422304,
+                    0.41746,
+                    0.41267,
+                    0.483163,
+                    0.437211,
+                    0.398631,
+                    0.289118
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 0,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 2,
+                stop: 8.3633,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 0,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              }
+            ]
           }
         }
-      ]
+      ],
+      attackFrom: {
+        ppp: 1,
+        pp: 1,
+        p: 1,
+        mp: 1,
+        mf: 1,
+        f: 1,
+        ff: 1,
+        fff: 1
+      }
     },
     cello: {
       forces: {
@@ -6211,18 +16845,18 @@ var physical_strings_calibration_default = {
         ]
       },
       levels: {
-        ppp: -56.65,
-        pp: -54.16,
-        p: -50.74,
-        mp: -50.08,
-        mf: -45.42,
-        f: -39.38,
-        ff: -36.96,
-        fff: -31.41
+        ppp: -49.59,
+        pp: -45.11,
+        p: -41.46,
+        mp: -37.07,
+        mf: -31.92,
+        f: -27.91,
+        ff: -24.67,
+        fff: -21.43
       },
       recordedMf: -56.59,
-      gainDb: -11.17,
-      stemGainDb: -12.32,
+      gainDb: -24.67,
+      stemGainDb: -25.82,
       contacts: {
         ppp: 0.2,
         pp: 0.2,
@@ -6523,6 +17157,1694 @@ var physical_strings_calibration_default = {
               level: -54.31,
               contact: 0.165
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.28,
+                    1.28,
+                    0.9051,
+                    1.81019,
+                    0.76109,
+                    1.07635,
+                    0.76109,
+                    1.07635,
+                    1.52219,
+                    1.07635
+                  ],
+                  pp: [
+                    2.15269,
+                    1.81019,
+                    1.81019,
+                    1.52219,
+                    1.52219,
+                    1.52219,
+                    1.28,
+                    1.28,
+                    1.52219,
+                    1.81019
+                  ],
+                  p: [
+                    2.56,
+                    2.56,
+                    2.15269,
+                    2.56,
+                    2.56,
+                    1.81019,
+                    2.56,
+                    2.15269,
+                    2.15269,
+                    1.81019
+                  ],
+                  mp: [
+                    3.04437,
+                    3.04437,
+                    1.81019,
+                    3.62039,
+                    2.15269,
+                    3.04437,
+                    1.81019,
+                    2.56,
+                    1.81019,
+                    1.28
+                  ],
+                  mf: [
+                    8.61078,
+                    5.12,
+                    5.12,
+                    3.04437,
+                    10.24,
+                    3.62039,
+                    3.04437,
+                    3.04437,
+                    1.81019,
+                    2.56
+                  ],
+                  f: [
+                    10.24,
+                    6.08874,
+                    6.08874,
+                    4.30539,
+                    14.48155,
+                    6.08874,
+                    6.08874,
+                    4.30539,
+                    4.30539,
+                    3.62039
+                  ],
+                  ff: [
+                    17.22156,
+                    14.48155,
+                    7.24077,
+                    12.17748,
+                    17.22156,
+                    6.08874,
+                    5.12,
+                    5.12,
+                    3.62039,
+                    3.62039
+                  ],
+                  fff: [
+                    17.22156,
+                    17.22156,
+                    14.48155,
+                    12.17748,
+                    17.22156,
+                    20.48,
+                    5.12,
+                    6.08874,
+                    3.62039,
+                    3.62039
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.029849,
+                    0.027331,
+                    0.025026,
+                    0.022913,
+                    0.02098,
+                    0.01921,
+                    0.017589,
+                    0.017531,
+                    0.024161,
+                    0.013501
+                  ],
+                  pp: [
+                    0.053639,
+                    0.049857,
+                    0.04385,
+                    0.039724,
+                    0.03594,
+                    0.032515,
+                    0.029418,
+                    0.030057,
+                    0.024081,
+                    0.033735
+                  ],
+                  p: [
+                    0.069955,
+                    0.070883,
+                    0.064098,
+                    0.061356,
+                    0.058732,
+                    0.05622,
+                    0.053627,
+                    0.051512,
+                    0.04931,
+                    0.047201
+                  ],
+                  mp: [
+                    0.154264,
+                    0.146754,
+                    0.113265,
+                    0.115346,
+                    0.104693,
+                    0.095023,
+                    0.086245,
+                    0.085769,
+                    0.127886,
+                    0.064488
+                  ],
+                  mf: [
+                    0.245398,
+                    0.268007,
+                    0.208863,
+                    0.200007,
+                    0.176743,
+                    0.159145,
+                    0.141815,
+                    0.168751,
+                    0.145213,
+                    0.14993
+                  ],
+                  f: [
+                    0.387446,
+                    0.217693,
+                    0.305651,
+                    0.3,
+                    0.34641,
+                    0.272708,
+                    0.211382,
+                    0.172717,
+                    0.218216,
+                    0.207818
+                  ],
+                  ff: [
+                    0.663914,
+                    0.707141,
+                    0.287922,
+                    0.34641,
+                    0.378807,
+                    0.272708,
+                    0.282843,
+                    0.257297,
+                    0.27139,
+                    0.251005
+                  ],
+                  fff: [
+                    0.544896,
+                    0.612993,
+                    0.700418,
+                    0.34641,
+                    0.395877,
+                    0.625905,
+                    0.282843,
+                    0.264575,
+                    0.27139,
+                    0.251005
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.53817,
+                    0.64,
+                    0.53817,
+                    0.53817,
+                    0.53817,
+                    0.45255,
+                    0.76109,
+                    0.53817,
+                    0.64,
+                    0.64
+                  ],
+                  pp: [
+                    0.76109,
+                    0.64,
+                    0.9051,
+                    0.9051,
+                    0.9051,
+                    0.76109,
+                    1.07635,
+                    0.9051,
+                    0.9051,
+                    0.76109
+                  ],
+                  p: [
+                    1.28,
+                    1.28,
+                    1.81019,
+                    1.81019,
+                    1.52219,
+                    1.07635,
+                    1.28,
+                    1.28,
+                    1.28,
+                    1.52219
+                  ],
+                  mp: [
+                    2.15269,
+                    2.15269,
+                    1.81019,
+                    2.56,
+                    1.81019,
+                    2.15269,
+                    2.56,
+                    2.56,
+                    1.81019,
+                    1.81019
+                  ],
+                  mf: [
+                    4.30539,
+                    4.30539,
+                    3.62039,
+                    2.56,
+                    2.15269,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    4.30539,
+                    2.56
+                  ],
+                  f: [
+                    7.24077,
+                    7.24077,
+                    6.08874,
+                    7.24077,
+                    6.08874,
+                    3.04437,
+                    7.24077,
+                    4.30539,
+                    6.08874,
+                    7.24077
+                  ],
+                  ff: [
+                    12.17748,
+                    12.17748,
+                    14.48155,
+                    10.24,
+                    7.24077,
+                    8.61078,
+                    7.24077,
+                    6.08874,
+                    10.24,
+                    7.24077
+                  ],
+                  fff: [
+                    17.22156,
+                    12.17748,
+                    20.48,
+                    17.22156,
+                    12.17748,
+                    20.48,
+                    8.61078,
+                    4.30539,
+                    17.22156,
+                    17.22156
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.034036,
+                    0.03277,
+                    0.031552,
+                    0.032266,
+                    0.029248,
+                    0.028162,
+                    0.026842,
+                    0.026105,
+                    0.025133,
+                    0.025007
+                  ],
+                  pp: [
+                    0.057845,
+                    0.05564,
+                    0.053831,
+                    0.051483,
+                    0.04952,
+                    0.047635,
+                    0.04582,
+                    0.044075,
+                    0.042396,
+                    0.043082
+                  ],
+                  p: [
+                    0.095962,
+                    0.092106,
+                    0.088718,
+                    0.084854,
+                    0.080274,
+                    0.078173,
+                    0.069475,
+                    0.072018,
+                    0.069123,
+                    0.073793
+                  ],
+                  mp: [
+                    0.145475,
+                    0.141049,
+                    0.170139,
+                    0.132595,
+                    0.128561,
+                    0.12465,
+                    0.105223,
+                    0.117179,
+                    0.113614,
+                    0.124035
+                  ],
+                  mf: [
+                    0.26456,
+                    0.255332,
+                    0.256887,
+                    0.23783,
+                    0.229533,
+                    0.221528,
+                    0.209761,
+                    0.175853,
+                    0.199147,
+                    0.211214
+                  ],
+                  f: [
+                    0.406154,
+                    0.460997,
+                    0.487498,
+                    0.398624,
+                    0.370676,
+                    0.29756,
+                    0.320526,
+                    0.298054,
+                    0.323484,
+                    0.319045
+                  ],
+                  ff: [
+                    0.661499,
+                    0.830833,
+                    0.889561,
+                    0.693124,
+                    0.569827,
+                    0.602119,
+                    0.413651,
+                    0.402881,
+                    0.547823,
+                    0.375697
+                  ],
+                  fff: [
+                    1.275626,
+                    0.652544,
+                    1.322125,
+                    1.075438,
+                    0.954666,
+                    1.108318,
+                    0.482255,
+                    0.432267,
+                    1.036976,
+                    1.006273
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.26909,
+                    0.38055,
+                    0.45255,
+                    0.53817,
+                    0.38055,
+                    0.53817,
+                    0.26909,
+                    0.53817,
+                    0.53817,
+                    0.64
+                  ],
+                  pp: [
+                    0.45255,
+                    0.76109,
+                    0.76109,
+                    0.64,
+                    0.76109,
+                    0.76109,
+                    0.9051,
+                    0.64,
+                    0.9051,
+                    0.76109
+                  ],
+                  p: [
+                    1.28,
+                    1.07635,
+                    1.52219,
+                    1.28,
+                    1.28,
+                    1.28,
+                    1.81019,
+                    1.81019,
+                    1.28,
+                    1.28
+                  ],
+                  mp: [
+                    1.52219,
+                    1.81019,
+                    1.52219,
+                    2.56,
+                    2.15269,
+                    1.81019,
+                    2.15269,
+                    1.52219,
+                    2.56,
+                    1.81019
+                  ],
+                  mf: [
+                    3.04437,
+                    2.56,
+                    4.30539,
+                    2.56,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    2.56,
+                    3.62039,
+                    3.04437
+                  ],
+                  f: [
+                    5.12,
+                    5.12,
+                    4.30539,
+                    5.12,
+                    5.12,
+                    4.30539,
+                    3.04437,
+                    5.12,
+                    6.08874,
+                    6.08874
+                  ],
+                  ff: [
+                    7.24077,
+                    7.24077,
+                    6.08874,
+                    6.08874,
+                    7.24077,
+                    12.17748,
+                    14.48155,
+                    7.24077,
+                    6.08874,
+                    5.12
+                  ],
+                  fff: [
+                    17.22156,
+                    10.24,
+                    10.24,
+                    7.24077,
+                    12.17748,
+                    12.17748,
+                    20.48,
+                    14.48155,
+                    8.61078,
+                    14.48155
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.0392,
+                    0.04038,
+                    0.041595,
+                    0.042846,
+                    0.044136,
+                    0.045464,
+                    0.055441,
+                    0.04824,
+                    0.049692,
+                    0.050015
+                  ],
+                  pp: [
+                    0.070479,
+                    0.071707,
+                    0.072959,
+                    0.074234,
+                    0.075528,
+                    0.076847,
+                    0.086341,
+                    0.084181,
+                    0.080939,
+                    0.082351
+                  ],
+                  p: [
+                    0.111445,
+                    0.114177,
+                    0.116975,
+                    0.119842,
+                    0.12278,
+                    0.125788,
+                    0.141804,
+                    0.137348,
+                    0.131816,
+                    0.133109
+                  ],
+                  mp: [
+                    0.18157,
+                    0.186141,
+                    0.190826,
+                    0.19563,
+                    0.200555,
+                    0.205605,
+                    0.238021,
+                    0.228851,
+                    0.21519,
+                    0.215216
+                  ],
+                  mf: [
+                    0.314357,
+                    0.320676,
+                    0.328795,
+                    0.336262,
+                    0.343896,
+                    0.351706,
+                    0.389636,
+                    0.406568,
+                    0.360861,
+                    0.377868
+                  ],
+                  f: [
+                    0.571164,
+                    0.586113,
+                    0.5215,
+                    0.617194,
+                    0.633347,
+                    0.561823,
+                    0.658487,
+                    0.625485,
+                    0.57835,
+                    0.700949
+                  ],
+                  ff: [
+                    0.846777,
+                    0.909391,
+                    0.856688,
+                    0.799621,
+                    1.126405,
+                    1.209688,
+                    1.46463,
+                    1.302542,
+                    0.946203,
+                    0.671997
+                  ],
+                  fff: [
+                    1.634213,
+                    1.209343,
+                    1.545536,
+                    1.015013,
+                    1.097638,
+                    1.495397,
+                    2.160587,
+                    2.143189,
+                    1.503315,
+                    1.499854
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.22627,
+                    0.22627,
+                    0.22627,
+                    0.32,
+                    0.22627,
+                    0.22627,
+                    0.22627,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.26909,
+                    0.45255,
+                    0.22627,
+                    0.32,
+                    0.26909,
+                    0.22627,
+                    0.32,
+                    0.22627
+                  ],
+                  pp: [
+                    0.32,
+                    0.26909,
+                    0.32,
+                    0.32,
+                    0.26909,
+                    0.26909,
+                    0.26909,
+                    0.26909,
+                    0.45255,
+                    0.26909,
+                    0.26909,
+                    0.45255,
+                    0.38055,
+                    0.38055,
+                    0.32,
+                    0.26909,
+                    0.45255,
+                    0.26909
+                  ],
+                  p: [
+                    0.53817,
+                    0.45255,
+                    0.53817,
+                    0.64,
+                    0.38055,
+                    0.45255,
+                    0.45255,
+                    0.53817,
+                    0.64,
+                    0.45255,
+                    0.53817,
+                    0.64,
+                    0.38055,
+                    0.38055,
+                    0.38055,
+                    0.38055,
+                    0.9051,
+                    0.26909
+                  ],
+                  mp: [
+                    0.9051,
+                    1.07635,
+                    0.76109,
+                    1.28,
+                    0.76109,
+                    0.64,
+                    1.07635,
+                    1.07635,
+                    0.76109,
+                    0.64,
+                    0.9051,
+                    0.9051,
+                    0.9051,
+                    0.9051,
+                    0.76109,
+                    0.53817,
+                    1.52219,
+                    0.38055
+                  ],
+                  mf: [
+                    3.04437,
+                    2.56,
+                    2.56,
+                    2.15269,
+                    2.15269,
+                    1.07635,
+                    1.81019,
+                    2.15269,
+                    1.52219,
+                    1.28,
+                    1.81019,
+                    1.81019,
+                    1.28,
+                    1.52219,
+                    1.28,
+                    0.9051,
+                    3.04437,
+                    0.9051
+                  ],
+                  f: [
+                    5.12,
+                    4.30539,
+                    4.30539,
+                    3.04437,
+                    2.56,
+                    3.04437,
+                    2.56,
+                    2.15269,
+                    2.15269,
+                    2.15269,
+                    2.56,
+                    2.15269,
+                    2.15269,
+                    2.56,
+                    1.81019,
+                    2.56,
+                    3.62039,
+                    1.81019
+                  ],
+                  ff: [
+                    6.08874,
+                    7.24077,
+                    5.12,
+                    5.12,
+                    4.30539,
+                    5.12,
+                    5.12,
+                    5.12,
+                    3.04437,
+                    2.56,
+                    4.30539,
+                    3.04437,
+                    3.04437,
+                    4.30539,
+                    2.56,
+                    5.12,
+                    5.12,
+                    2.15269
+                  ],
+                  fff: [
+                    6.08874,
+                    12.17748,
+                    10.24,
+                    8.61078,
+                    6.08874,
+                    7.24077,
+                    7.24077,
+                    7.24077,
+                    5.12,
+                    4.30539,
+                    5.12,
+                    5.12,
+                    6.08874,
+                    3.62039,
+                    6.08874,
+                    7.24077,
+                    6.08874,
+                    4.30539
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.040862,
+                    0.038945,
+                    0.037118,
+                    0.035377,
+                    0.033717,
+                    0.032135,
+                    0.030707,
+                    0.033054,
+                    0.027821,
+                    0.02243,
+                    0.029973,
+                    0.024087,
+                    0.022957,
+                    0.02188,
+                    0.020854,
+                    0.019875,
+                    0.045809,
+                    0.015237
+                  ],
+                  pp: [
+                    0.069923,
+                    0.066636,
+                    0.063505,
+                    0.060519,
+                    0.057674,
+                    0.054963,
+                    0.053275,
+                    0.059648,
+                    0.047572,
+                    0.038673,
+                    0.050967,
+                    0.041173,
+                    0.039239,
+                    0.037394,
+                    0.035637,
+                    0.033962,
+                    0.078883,
+                    0.02571
+                  ],
+                  p: [
+                    0.098348,
+                    0.113959,
+                    0.106592,
+                    0.101422,
+                    0.096505,
+                    0.091824,
+                    0.096404,
+                    0.10015,
+                    0.079101,
+                    0.064398,
+                    0.085625,
+                    0.068141,
+                    0.064837,
+                    0.061692,
+                    0.0587,
+                    0.055854,
+                    0.132136,
+                    0.041114
+                  ],
+                  mp: [
+                    0.173181,
+                    0.214709,
+                    0.158996,
+                    0.152347,
+                    0.145975,
+                    0.13987,
+                    0.146637,
+                    0.151337,
+                    0.123044,
+                    0.099597,
+                    0.138736,
+                    0.108242,
+                    0.103714,
+                    0.099377,
+                    0.09522,
+                    0.091237,
+                    0.216896,
+                    0.067288
+                  ],
+                  mf: [
+                    0.303539,
+                    0.283745,
+                    0.274967,
+                    0.261706,
+                    0.245645,
+                    0.237073,
+                    0.255565,
+                    0.272034,
+                    0.2044,
+                    0.157857,
+                    0.211888,
+                    0.17623,
+                    0.167731,
+                    0.159642,
+                    0.151943,
+                    0.144614,
+                    0.374418,
+                    0.11023
+                  ],
+                  f: [
+                    0.507644,
+                    0.486957,
+                    0.460157,
+                    0.438107,
+                    0.417113,
+                    0.397127,
+                    0.410643,
+                    0.485745,
+                    0.342727,
+                    0.26349,
+                    0.397745,
+                    0.294974,
+                    0.281607,
+                    0.268112,
+                    0.255265,
+                    0.243033,
+                    0.610441,
+                    0.17252
+                  ],
+                  ff: [
+                    0.842596,
+                    0.80284,
+                    0.715721,
+                    0.723311,
+                    0.666572,
+                    0.661715,
+                    0.712685,
+                    0.801367,
+                    0.572404,
+                    0.42903,
+                    0.678474,
+                    0.485226,
+                    0.471783,
+                    0.449524,
+                    0.428316,
+                    0.451312,
+                    0.91429,
+                    0.283444
+                  ],
+                  fff: [
+                    0.91918,
+                    1.46758,
+                    1.386291,
+                    1.202239,
+                    0.957392,
+                    0.986176,
+                    1.178378,
+                    1.271586,
+                    0.984852,
+                    0.731904,
+                    1.104197,
+                    0.823094,
+                    0.755855,
+                    0.700459,
+                    0.69966,
+                    0.75611,
+                    1.169544,
+                    0.481768
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "f",
+                round: 0,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "f",
+                round: 1,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 4,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "mf",
+                round: 2,
+                from: "mf"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 11.0611,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 0,
+                stop: 11.0611,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 11.0611,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 11.0611,
+                dynamic: "fff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 2.9678,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 8.3633,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 2,
+                stop: 11.0611,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 16.4567,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 20.5033,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 21.8522,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              }
+            ]
           }
         },
         {
@@ -6703,6 +19025,1757 @@ var physical_strings_calibration_default = {
               level: -53.08,
               contact: 0.2
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.9051,
+                    0.45255,
+                    0.53817,
+                    0.53817,
+                    0.45255,
+                    0.53817,
+                    0.45255,
+                    0.45255,
+                    0.45255,
+                    0.32
+                  ],
+                  pp: [
+                    0.9051,
+                    0.38055,
+                    0.76109,
+                    0.9051,
+                    0.76109,
+                    0.76109,
+                    0.64,
+                    0.53817,
+                    0.53817,
+                    0.76109
+                  ],
+                  p: [
+                    2.15269,
+                    1.28,
+                    2.15269,
+                    1.28,
+                    1.52219,
+                    1.28,
+                    0.9051,
+                    1.07635,
+                    0.53817,
+                    0.76109
+                  ],
+                  mp: [
+                    3.62039,
+                    2.56,
+                    3.04437,
+                    3.04437,
+                    2.56,
+                    2.56,
+                    1.28,
+                    0.53817,
+                    1.81019,
+                    0.53817
+                  ],
+                  mf: [
+                    3.62039,
+                    3.04437,
+                    2.56,
+                    4.30539,
+                    3.62039,
+                    3.04437,
+                    3.62039,
+                    2.56,
+                    3.04437,
+                    3.04437
+                  ],
+                  f: [
+                    3.62039,
+                    7.24077,
+                    5.12,
+                    7.24077,
+                    7.24077,
+                    7.24077,
+                    4.30539,
+                    3.62039,
+                    2.56,
+                    1.52219
+                  ],
+                  ff: [
+                    10.24,
+                    8.61078,
+                    14.48155,
+                    12.17748,
+                    4.30539,
+                    8.61078,
+                    7.24077,
+                    5.12,
+                    3.04437,
+                    1.52219
+                  ],
+                  fff: [
+                    14.48155,
+                    10.24,
+                    14.48155,
+                    20.48,
+                    4.30539,
+                    12.17748,
+                    7.24077,
+                    10.24,
+                    5.12,
+                    3.62039
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.031844,
+                    0.023801,
+                    0.022646,
+                    0.022584,
+                    0.0205,
+                    0.019505,
+                    0.018557,
+                    0.017657,
+                    0.0168,
+                    0.015983
+                  ],
+                  pp: [
+                    0.049658,
+                    0.046215,
+                    0.043008,
+                    0.04079,
+                    0.03725,
+                    0.034667,
+                    0.032263,
+                    0.030025,
+                    0.027941,
+                    0.026005
+                  ],
+                  p: [
+                    0.077643,
+                    0.073121,
+                    0.068864,
+                    0.066121,
+                    0.061076,
+                    0.05752,
+                    0.054169,
+                    0.051015,
+                    0.048045,
+                    0.045247
+                  ],
+                  mp: [
+                    0.12094,
+                    0.115028,
+                    0.109405,
+                    0.104665,
+                    0.098971,
+                    0.099199,
+                    0.089533,
+                    0.080214,
+                    0.080994,
+                    0.077034
+                  ],
+                  mf: [
+                    0.250377,
+                    0.223349,
+                    0.199239,
+                    0.187146,
+                    0.158545,
+                    0.141431,
+                    0.145493,
+                    0.112545,
+                    0.148838,
+                    0.11205
+                  ],
+                  f: [
+                    0.336378,
+                    0.44073,
+                    0.297938,
+                    0.35844,
+                    0.311271,
+                    0.255653,
+                    0.236587,
+                    0.20626,
+                    0.231072,
+                    0.194292
+                  ],
+                  ff: [
+                    0.4,
+                    0.446192,
+                    0.606001,
+                    0.556038,
+                    0.361698,
+                    0.450863,
+                    0.417134,
+                    0.35438,
+                    0.26727,
+                    0.194292
+                  ],
+                  fff: [
+                    0.625624,
+                    0.611921,
+                    0.568673,
+                    0.939554,
+                    0.361698,
+                    0.561815,
+                    0.459775,
+                    0.739324,
+                    0.377736,
+                    0.296066
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.38055,
+                    0.38055,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.26909,
+                    0.26909
+                  ],
+                  pp: [
+                    0.64,
+                    0.76109,
+                    0.76109,
+                    0.38055,
+                    0.53817,
+                    0.45255,
+                    0.45255,
+                    0.45255,
+                    0.45255,
+                    0.45255
+                  ],
+                  p: [
+                    0.9051,
+                    1.07635,
+                    1.28,
+                    0.76109,
+                    1.07635,
+                    0.76109,
+                    0.9051,
+                    0.76109,
+                    0.64,
+                    0.64
+                  ],
+                  mp: [
+                    1.52219,
+                    1.52219,
+                    1.52219,
+                    1.52219,
+                    1.07635,
+                    1.81019,
+                    1.28,
+                    0.53817,
+                    0.9051,
+                    1.28
+                  ],
+                  mf: [
+                    3.04437,
+                    2.56,
+                    2.56,
+                    3.04437,
+                    2.56,
+                    3.04437,
+                    2.15269,
+                    2.15269,
+                    2.15269,
+                    2.15269
+                  ],
+                  f: [
+                    4.30539,
+                    3.62039,
+                    3.62039,
+                    5.12,
+                    4.30539,
+                    3.62039,
+                    4.30539,
+                    3.04437,
+                    3.04437,
+                    3.04437
+                  ],
+                  ff: [
+                    7.24077,
+                    10.24,
+                    6.08874,
+                    6.08874,
+                    6.08874,
+                    7.24077,
+                    6.08874,
+                    4.30539,
+                    5.12,
+                    5.12
+                  ],
+                  fff: [
+                    14.48155,
+                    12.17748,
+                    14.48155,
+                    6.08874,
+                    10.24,
+                    7.24077,
+                    14.48155,
+                    10.24,
+                    8.61078,
+                    7.24077
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.024039,
+                    0.023052,
+                    0.022108,
+                    0.021201,
+                    0.020333,
+                    0.019498,
+                    0.01908,
+                    0.017932,
+                    0.015908,
+                    0.016492
+                  ],
+                  pp: [
+                    0.043789,
+                    0.041518,
+                    0.039364,
+                    0.03732,
+                    0.035385,
+                    0.033548,
+                    0.031806,
+                    0.030156,
+                    0.026531,
+                    0.027109
+                  ],
+                  p: [
+                    0.070266,
+                    0.066837,
+                    0.063578,
+                    0.060475,
+                    0.057525,
+                    0.05472,
+                    0.053303,
+                    0.049509,
+                    0.042045,
+                    0.044797
+                  ],
+                  mp: [
+                    0.109599,
+                    0.103527,
+                    0.097791,
+                    0.092373,
+                    0.087254,
+                    0.110068,
+                    0.077854,
+                    0.07354,
+                    0.065625,
+                    0.065617
+                  ],
+                  mf: [
+                    0.189464,
+                    0.17917,
+                    0.169436,
+                    0.16023,
+                    0.151524,
+                    0.143293,
+                    0.138035,
+                    0.128145,
+                    0.114088,
+                    0.114598
+                  ],
+                  f: [
+                    0.323258,
+                    0.30614,
+                    0.289929,
+                    0.28155,
+                    0.260037,
+                    0.246268,
+                    0.286362,
+                    0.220876,
+                    0.179022,
+                    0.198103
+                  ],
+                  ff: [
+                    0.613199,
+                    0.579718,
+                    0.520741,
+                    0.389466,
+                    0.489847,
+                    0.440075,
+                    0.467074,
+                    0.361195,
+                    0.339644,
+                    0.369943
+                  ],
+                  fff: [
+                    1.033571,
+                    0.897913,
+                    0.844428,
+                    0.521645,
+                    0.768187,
+                    0.560618,
+                    0.787162,
+                    0.759556,
+                    0.495164,
+                    0.500667
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.19027,
+                    0.32,
+                    0.26909,
+                    0.26909,
+                    0.26909,
+                    0.22627,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.22627
+                  ],
+                  pp: [
+                    0.38055,
+                    0.45255,
+                    0.45255,
+                    0.32,
+                    0.38055,
+                    0.38055,
+                    0.38055,
+                    0.26909,
+                    0.32,
+                    0.32
+                  ],
+                  p: [
+                    0.76109,
+                    0.9051,
+                    0.64,
+                    0.38055,
+                    0.38055,
+                    0.53817,
+                    0.53817,
+                    0.45255,
+                    0.38055,
+                    0.45255
+                  ],
+                  mp: [
+                    1.28,
+                    1.52219,
+                    1.28,
+                    0.76109,
+                    0.9051,
+                    0.9051,
+                    0.9051,
+                    0.64,
+                    0.9051,
+                    0.9051
+                  ],
+                  mf: [
+                    1.81019,
+                    2.56,
+                    1.81019,
+                    1.52219,
+                    1.28,
+                    1.81019,
+                    1.52219,
+                    1.28,
+                    1.52219,
+                    1.52219
+                  ],
+                  f: [
+                    3.04437,
+                    3.62039,
+                    3.04437,
+                    2.15269,
+                    3.62039,
+                    3.04437,
+                    2.15269,
+                    2.56,
+                    3.04437,
+                    2.56
+                  ],
+                  ff: [
+                    6.08874,
+                    7.24077,
+                    4.30539,
+                    4.30539,
+                    6.08874,
+                    3.04437,
+                    4.30539,
+                    3.62039,
+                    3.62039,
+                    3.62039
+                  ],
+                  fff: [
+                    12.17748,
+                    12.17748,
+                    12.17748,
+                    4.30539,
+                    5.12,
+                    7.24077,
+                    4.30539,
+                    7.24077,
+                    7.24077,
+                    8.61078
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.037446,
+                    0.037347,
+                    0.034563,
+                    0.027141,
+                    0.031901,
+                    0.030649,
+                    0.029446,
+                    0.028289,
+                    0.027178,
+                    0.026113
+                  ],
+                  pp: [
+                    0.068618,
+                    0.067616,
+                    0.062764,
+                    0.052369,
+                    0.057409,
+                    0.054906,
+                    0.052512,
+                    0.050222,
+                    0.048033,
+                    0.045938
+                  ],
+                  p: [
+                    0.112532,
+                    0.114694,
+                    0.103154,
+                    0.083724,
+                    0.094561,
+                    0.090536,
+                    0.086682,
+                    0.082992,
+                    0.079459,
+                    0.076076
+                  ],
+                  mp: [
+                    0.18489,
+                    0.208362,
+                    0.168407,
+                    0.135605,
+                    0.153392,
+                    0.146395,
+                    0.139718,
+                    0.133343,
+                    0.127261,
+                    0.121456
+                  ],
+                  mf: [
+                    0.311582,
+                    0.354163,
+                    0.285072,
+                    0.211516,
+                    0.255409,
+                    0.249475,
+                    0.238626,
+                    0.222317,
+                    0.218322,
+                    0.208828
+                  ],
+                  f: [
+                    0.543468,
+                    0.624138,
+                    0.491657,
+                    0.347468,
+                    0.444785,
+                    0.423054,
+                    0.333402,
+                    0.367198,
+                    0.364022,
+                    0.346235
+                  ],
+                  ff: [
+                    0.958982,
+                    1.069411,
+                    0.631392,
+                    0.59772,
+                    0.762324,
+                    0.697676,
+                    0.665681,
+                    0.635155,
+                    0.630547,
+                    0.598351
+                  ],
+                  fff: [
+                    1.738233,
+                    1.87527,
+                    1.556507,
+                    0.748872,
+                    0.807706,
+                    0.775516,
+                    0.550649,
+                    1.181028,
+                    1.117587,
+                    1.126307
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.32,
+                    0.26909,
+                    0.26909,
+                    0.22627,
+                    0.22627,
+                    0.19027,
+                    0.19027,
+                    0.22627,
+                    0.26909,
+                    0.19027,
+                    0.22627,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027
+                  ],
+                  pp: [
+                    0.22627,
+                    0.19027,
+                    0.19027,
+                    0.22627,
+                    0.19027,
+                    0.22627,
+                    0.19027,
+                    0.32,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.26909,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.22627
+                  ],
+                  p: [
+                    0.22627,
+                    0.32,
+                    0.19027,
+                    0.26909,
+                    0.19027,
+                    0.22627,
+                    0.26909,
+                    0.19027,
+                    0.32,
+                    0.26909,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.32
+                  ],
+                  mp: [
+                    0.64,
+                    0.64,
+                    0.64,
+                    0.45255,
+                    0.32,
+                    0.38055,
+                    0.32,
+                    0.32,
+                    0.45255,
+                    0.32,
+                    0.53817,
+                    0.45255,
+                    0.38055,
+                    0.45255,
+                    0.53817,
+                    0.45255,
+                    0.45255,
+                    0.64
+                  ],
+                  mf: [
+                    0.9051,
+                    1.07635,
+                    1.07635,
+                    0.9051,
+                    0.76109,
+                    0.76109,
+                    0.76109,
+                    0.53817,
+                    0.76109,
+                    0.53817,
+                    0.76109,
+                    0.9051,
+                    0.76109,
+                    0.76109,
+                    0.9051,
+                    0.76109,
+                    0.38055,
+                    0.9051
+                  ],
+                  f: [
+                    1.52219,
+                    1.81019,
+                    1.81019,
+                    1.52219,
+                    1.52219,
+                    1.81019,
+                    1.52219,
+                    1.07635,
+                    1.52219,
+                    1.07635,
+                    1.52219,
+                    1.28,
+                    1.28,
+                    1.28,
+                    1.28,
+                    1.28,
+                    1.52219,
+                    1.81019
+                  ],
+                  ff: [
+                    2.56,
+                    3.04437,
+                    2.56,
+                    2.56,
+                    2.56,
+                    2.56,
+                    2.56,
+                    2.15269,
+                    2.15269,
+                    1.81019,
+                    2.56,
+                    2.15269,
+                    2.56,
+                    2.56,
+                    1.81019,
+                    2.56,
+                    2.15269,
+                    2.15269
+                  ],
+                  fff: [
+                    3.62039,
+                    3.62039,
+                    5.12,
+                    3.04437,
+                    4.30539,
+                    4.30539,
+                    4.30539,
+                    2.56,
+                    4.30539,
+                    2.56,
+                    3.62039,
+                    4.30539,
+                    4.30539,
+                    3.62039,
+                    3.62039,
+                    3.62039,
+                    5.12,
+                    3.04437
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.054772,
+                    0.05,
+                    0.05,
+                    0.057326,
+                    0.070711,
+                    0.074009,
+                    0.054772,
+                    0.033822,
+                    0.05,
+                    0.024828,
+                    0.027203,
+                    0.028156,
+                    0.021443,
+                    0.020957,
+                    0.027822,
+                    0.023757,
+                    0.028738,
+                    0.028094
+                  ],
+                  pp: [
+                    0.035531,
+                    0.0554,
+                    0.056134,
+                    0.054944,
+                    0.070316,
+                    0.072817,
+                    0.055978,
+                    0.054913,
+                    0.048573,
+                    0.033369,
+                    0.053001,
+                    0.040679,
+                    0.041894,
+                    0.043143,
+                    0.04443,
+                    0.045757,
+                    0.047123,
+                    0.048528
+                  ],
+                  p: [
+                    0.073232,
+                    0.097188,
+                    0.089985,
+                    0.077211,
+                    0.077207,
+                    0.077201,
+                    0.077196,
+                    0.058686,
+                    0.077186,
+                    0.062784,
+                    0.077176,
+                    0.077171,
+                    0.077167,
+                    0.077161,
+                    0.077156,
+                    0.077152,
+                    0.077146,
+                    0.077142
+                  ],
+                  mp: [
+                    0.156623,
+                    0.135708,
+                    0.119576,
+                    0.119908,
+                    0.12024,
+                    0.120572,
+                    0.120907,
+                    0.091316,
+                    0.121578,
+                    0.097511,
+                    0.15441,
+                    0.12259,
+                    0.12293,
+                    0.123272,
+                    0.123613,
+                    0.123956,
+                    0.124298,
+                    0.124643
+                  ],
+                  mf: [
+                    0.203193,
+                    0.203465,
+                    0.203738,
+                    0.204011,
+                    0.204284,
+                    0.204559,
+                    0.204833,
+                    0.146627,
+                    0.205381,
+                    0.163214,
+                    0.205933,
+                    0.206209,
+                    0.206485,
+                    0.206762,
+                    0.207038,
+                    0.207316,
+                    0.207595,
+                    0.207872
+                  ],
+                  f: [
+                    0.357222,
+                    0.354011,
+                    0.350829,
+                    0.347676,
+                    0.34455,
+                    0.341453,
+                    0.338383,
+                    0.236576,
+                    0.332839,
+                    0.260791,
+                    0.326379,
+                    0.323445,
+                    0.320537,
+                    0.317657,
+                    0.321106,
+                    0.267614,
+                    0.309166,
+                    0.306388
+                  ],
+                  ff: [
+                    0.513722,
+                    0.60857,
+                    0.584549,
+                    0.594969,
+                    0.588283,
+                    0.495713,
+                    0.575135,
+                    0.386816,
+                    0.56228,
+                    0.409609,
+                    0.549713,
+                    0.543535,
+                    0.537426,
+                    0.531388,
+                    0.506997,
+                    0.466396,
+                    0.513672,
+                    0.507899
+                  ],
+                  fff: [
+                    0.944481,
+                    0.951385,
+                    0.958338,
+                    0.744781,
+                    0.9724,
+                    0.979507,
+                    0.986667,
+                    0.615644,
+                    1.001144,
+                    0.678241,
+                    1.015835,
+                    1.016147,
+                    0.96868,
+                    0.829743,
+                    0.905106,
+                    0.779009,
+                    1.138059,
+                    0.927739
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 0,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "mp",
+                round: 2,
+                from: "mp"
+              },
+              {
+                string: 0,
+                stop: 9.7122,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 11.0611,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "f",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 2,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 9.7122,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 2,
+                stop: 1.6189,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 2,
+                stop: 5.6656,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 2,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 2,
+                stop: 9.7122,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 2,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 1.6189,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 9.7122,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 11.0611,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 13.7589,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 19.1544,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 19.1544,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 20.5033,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 21.8522,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              }
+            ]
           }
         },
         {
@@ -6883,6 +20956,1631 @@ var physical_strings_calibration_default = {
               level: -51.32,
               contact: 0.2
             }
+          },
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "4e325424f929bf4c",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.64,
+                    0.45255,
+                    0.53817,
+                    0.53817,
+                    0.38055,
+                    0.38055,
+                    0.53817,
+                    0.38055,
+                    0.45255,
+                    0.32
+                  ],
+                  pp: [
+                    1.07635,
+                    0.76109,
+                    0.64,
+                    0.76109,
+                    0.76109,
+                    0.9051,
+                    0.76109,
+                    0.64,
+                    0.64,
+                    0.53817
+                  ],
+                  p: [
+                    1.81019,
+                    1.52219,
+                    1.07635,
+                    1.52219,
+                    1.28,
+                    1.52219,
+                    0.76109,
+                    1.07635,
+                    0.64,
+                    0.64
+                  ],
+                  mp: [
+                    3.62039,
+                    2.56,
+                    1.81019,
+                    3.04437,
+                    2.15269,
+                    2.56,
+                    2.15269,
+                    1.81019,
+                    2.15269,
+                    1.81019
+                  ],
+                  mf: [
+                    6.08874,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    3.62039,
+                    3.04437,
+                    2.56,
+                    2.56,
+                    2.56
+                  ],
+                  f: [
+                    5.12,
+                    7.24077,
+                    6.08874,
+                    5.12,
+                    6.08874,
+                    4.30539,
+                    3.04437,
+                    3.62039,
+                    3.62039,
+                    5.12
+                  ],
+                  ff: [
+                    5.12,
+                    8.61078,
+                    20.48,
+                    17.22156,
+                    7.24077,
+                    12.17748,
+                    7.24077,
+                    7.24077,
+                    7.24077,
+                    5.12
+                  ],
+                  fff: [
+                    4.30539,
+                    14.48155,
+                    10.24,
+                    12.17748,
+                    17.22156,
+                    8.61078,
+                    8.61078,
+                    8.61078,
+                    6.08874,
+                    5.12
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.030505,
+                    0.028294,
+                    0.026244,
+                    0.024342,
+                    0.022579,
+                    0.020943,
+                    0.019203,
+                    0.018018,
+                    0.016714,
+                    0.015503
+                  ],
+                  pp: [
+                    0.051597,
+                    0.047957,
+                    0.044577,
+                    0.041433,
+                    0.03851,
+                    0.035795,
+                    0.033232,
+                    0.030924,
+                    0.028743,
+                    0.026716
+                  ],
+                  p: [
+                    0.083701,
+                    0.077934,
+                    0.072565,
+                    0.067565,
+                    0.06291,
+                    0.058576,
+                    0.054397,
+                    0.050781,
+                    0.047283,
+                    0.044025
+                  ],
+                  mp: [
+                    0.147183,
+                    0.126267,
+                    0.117474,
+                    0.109295,
+                    0.101684,
+                    0.094604,
+                    0.085727,
+                    0.081888,
+                    0.076186,
+                    0.070881
+                  ],
+                  mf: [
+                    0.220232,
+                    0.240615,
+                    0.213925,
+                    0.190196,
+                    0.169098,
+                    0.165434,
+                    0.127986,
+                    0.118839,
+                    0.140941,
+                    0.122023
+                  ],
+                  f: [
+                    0.330519,
+                    0.48192,
+                    0.3909,
+                    0.323221,
+                    0.293527,
+                    0.224409,
+                    0.227665,
+                    0.190997,
+                    0.185284,
+                    0.272709
+                  ],
+                  ff: [
+                    0.32956,
+                    0.518204,
+                    0.806144,
+                    0.757096,
+                    0.396398,
+                    0.549982,
+                    0.395604,
+                    0.391412,
+                    0.341489,
+                    0.35112
+                  ],
+                  fff: [
+                    0.29907,
+                    0.753821,
+                    0.718945,
+                    0.561913,
+                    1.073045,
+                    0.5,
+                    0.422949,
+                    0.614989,
+                    0.496885,
+                    0.35112
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.32,
+                    0.38055,
+                    0.38055,
+                    0.32,
+                    0.32,
+                    0.26909,
+                    0.32,
+                    0.26909,
+                    0.32,
+                    0.45255
+                  ],
+                  pp: [
+                    0.45255,
+                    0.53817,
+                    0.53817,
+                    0.76109,
+                    0.64,
+                    0.45255,
+                    0.64,
+                    0.45255,
+                    0.53817,
+                    0.45255
+                  ],
+                  p: [
+                    0.76109,
+                    0.9051,
+                    1.07635,
+                    0.76109,
+                    0.64,
+                    1.28,
+                    0.76109,
+                    0.76109,
+                    0.76109,
+                    0.64
+                  ],
+                  mp: [
+                    1.52219,
+                    1.52219,
+                    1.52219,
+                    1.28,
+                    1.52219,
+                    1.28,
+                    1.52219,
+                    1.52219,
+                    1.07635,
+                    1.28
+                  ],
+                  mf: [
+                    2.56,
+                    3.04437,
+                    2.56,
+                    2.15269,
+                    1.52219,
+                    2.56,
+                    1.07635,
+                    2.15269,
+                    2.56,
+                    2.56
+                  ],
+                  f: [
+                    3.62039,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    4.30539,
+                    5.12,
+                    3.62039,
+                    3.04437,
+                    3.62039
+                  ],
+                  ff: [
+                    7.24077,
+                    5.12,
+                    5.12,
+                    7.24077,
+                    4.30539,
+                    7.24077,
+                    7.24077,
+                    5.12,
+                    6.08874,
+                    4.30539
+                  ],
+                  fff: [
+                    10.24,
+                    12.17748,
+                    7.24077,
+                    10.24,
+                    8.61078,
+                    10.24,
+                    10.24,
+                    10.24,
+                    10.24,
+                    12.17748
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.021288,
+                    0.021189,
+                    0.021092,
+                    0.020996,
+                    0.020899,
+                    0.020803,
+                    0.020706,
+                    0.020611,
+                    0.020518,
+                    0.020422
+                  ],
+                  pp: [
+                    0.037418,
+                    0.037013,
+                    0.036614,
+                    0.036218,
+                    0.035827,
+                    0.03544,
+                    0.035058,
+                    0.034678,
+                    0.034305,
+                    0.033936
+                  ],
+                  p: [
+                    0.060787,
+                    0.059765,
+                    0.05876,
+                    0.057773,
+                    0.056801,
+                    0.074418,
+                    0.054909,
+                    0.053985,
+                    0.053077,
+                    0.052185
+                  ],
+                  mp: [
+                    0.100107,
+                    0.098603,
+                    0.097124,
+                    0.095665,
+                    0.094228,
+                    0.092814,
+                    0.091419,
+                    0.090047,
+                    0.088694,
+                    0.087363
+                  ],
+                  mf: [
+                    0.166284,
+                    0.163982,
+                    0.161711,
+                    0.159473,
+                    0.157265,
+                    0.155088,
+                    0.152941,
+                    0.150824,
+                    0.148735,
+                    0.146675
+                  ],
+                  f: [
+                    0.281013,
+                    0.277654,
+                    0.274334,
+                    0.271053,
+                    0.234906,
+                    0.264611,
+                    0.261447,
+                    0.258321,
+                    0.255231,
+                    0.252181
+                  ],
+                  ff: [
+                    0.493833,
+                    0.46551,
+                    0.495568,
+                    0.496633,
+                    0.447559,
+                    0.464918,
+                    0.462672,
+                    0.451876,
+                    0.441332,
+                    0.431034
+                  ],
+                  fff: [
+                    0.676647,
+                    0.817633,
+                    0.777905,
+                    0.774797,
+                    0.701563,
+                    0.672775,
+                    0.688496,
+                    0.840784,
+                    0.889234,
+                    0.729914
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.19027,
+                    0.26909,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.26909
+                  ],
+                  pp: [
+                    0.45255,
+                    0.32,
+                    0.45255,
+                    0.38055,
+                    0.32,
+                    0.38055,
+                    0.45255,
+                    0.45255,
+                    0.38055,
+                    0.38055
+                  ],
+                  p: [
+                    0.76109,
+                    0.9051,
+                    0.9051,
+                    0.9051,
+                    0.76109,
+                    0.76109,
+                    0.76109,
+                    0.53817,
+                    0.64,
+                    0.64
+                  ],
+                  mp: [
+                    1.52219,
+                    1.07635,
+                    1.07635,
+                    1.28,
+                    1.07635,
+                    1.07635,
+                    1.28,
+                    1.52219,
+                    1.07635,
+                    1.07635
+                  ],
+                  mf: [
+                    3.04437,
+                    1.81019,
+                    2.56,
+                    2.56,
+                    1.81019,
+                    2.15269,
+                    2.56,
+                    1.52219,
+                    2.15269,
+                    1.81019
+                  ],
+                  f: [
+                    4.30539,
+                    4.30539,
+                    4.30539,
+                    3.62039,
+                    3.62039,
+                    3.62039,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    3.04437
+                  ],
+                  ff: [
+                    7.24077,
+                    6.08874,
+                    6.08874,
+                    6.08874,
+                    7.24077,
+                    5.12,
+                    5.12,
+                    5.12,
+                    6.08874,
+                    5.12
+                  ],
+                  fff: [
+                    12.17748,
+                    12.17748,
+                    12.17748,
+                    7.24077,
+                    10.24,
+                    8.61078,
+                    8.61078,
+                    10.24,
+                    8.61078,
+                    7.24077
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.033094,
+                    0.032205,
+                    0.031342,
+                    0.0305,
+                    0.029681,
+                    0.028886,
+                    0.028109,
+                    0.027356,
+                    0.026621,
+                    0.025907
+                  ],
+                  pp: [
+                    0.056466,
+                    0.055092,
+                    0.053753,
+                    0.052444,
+                    0.051168,
+                    0.049923,
+                    0.048709,
+                    0.047523,
+                    0.046369,
+                    0.04524
+                  ],
+                  p: [
+                    0.089141,
+                    0.0872,
+                    0.085302,
+                    0.083444,
+                    0.081627,
+                    0.07985,
+                    0.078111,
+                    0.07641,
+                    0.074745,
+                    0.073119
+                  ],
+                  mp: [
+                    0.147339,
+                    0.143689,
+                    0.140129,
+                    0.136657,
+                    0.133271,
+                    0.129969,
+                    0.126751,
+                    0.12361,
+                    0.120546,
+                    0.117561
+                  ],
+                  mf: [
+                    0.250774,
+                    0.242852,
+                    0.235179,
+                    0.227749,
+                    0.220552,
+                    0.213585,
+                    0.206837,
+                    0.200302,
+                    0.193974,
+                    0.187846
+                  ],
+                  f: [
+                    0.434256,
+                    0.419275,
+                    0.404811,
+                    0.390844,
+                    0.377361,
+                    0.364343,
+                    0.351773,
+                    0.339637,
+                    0.32792,
+                    0.316608
+                  ],
+                  ff: [
+                    0.714472,
+                    0.693794,
+                    0.673714,
+                    0.654216,
+                    0.635281,
+                    0.616897,
+                    0.60964,
+                    0.581705,
+                    0.564869,
+                    0.54852
+                  ],
+                  fff: [
+                    1.254506,
+                    1.201757,
+                    1.192243,
+                    0.806302,
+                    1.06855,
+                    1.012026,
+                    0.969473,
+                    1.017625,
+                    0.889658,
+                    0.991471
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    1.6189,
+                    2.9678,
+                    4.3167,
+                    5.6656,
+                    7.0144,
+                    8.3633,
+                    9.7122,
+                    11.0611,
+                    12.41,
+                    13.7589,
+                    15.1078,
+                    16.4567,
+                    17.8056,
+                    19.1544,
+                    20.5033,
+                    21.8522,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.19027,
+                    0.32,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.32,
+                    0.19027,
+                    0.22627,
+                    0.22627,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.22627,
+                    0.22627,
+                    0.22627
+                  ],
+                  pp: [
+                    0.32,
+                    0.19027,
+                    0.22627,
+                    0.38055,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.19027,
+                    0.38055,
+                    0.26909,
+                    0.22627,
+                    0.32,
+                    0.26909,
+                    0.32,
+                    0.32,
+                    0.32,
+                    0.26909,
+                    0.32
+                  ],
+                  p: [
+                    0.22627,
+                    0.19027,
+                    0.26909,
+                    0.22627,
+                    0.22627,
+                    0.26909,
+                    0.22627,
+                    0.26909,
+                    0.45255,
+                    0.38055,
+                    0.38055,
+                    0.45255,
+                    0.38055,
+                    0.45255,
+                    0.45255,
+                    0.45255,
+                    0.38055,
+                    0.38055
+                  ],
+                  mp: [
+                    0.53817,
+                    0.38055,
+                    0.53817,
+                    0.53817,
+                    0.45255,
+                    0.45255,
+                    0.45255,
+                    0.64,
+                    0.9051,
+                    0.64,
+                    0.76109,
+                    0.64,
+                    0.45255,
+                    0.76109,
+                    0.76109,
+                    0.53817,
+                    0.76109,
+                    0.76109
+                  ],
+                  mf: [
+                    1.28,
+                    1.07635,
+                    1.07635,
+                    1.07635,
+                    0.76109,
+                    0.9051,
+                    1.28,
+                    1.28,
+                    1.28,
+                    1.07635,
+                    1.28,
+                    1.28,
+                    0.9051,
+                    1.52219,
+                    1.28,
+                    1.07635,
+                    0.53817,
+                    2.15269
+                  ],
+                  f: [
+                    2.15269,
+                    1.81019,
+                    2.56,
+                    3.04437,
+                    2.15269,
+                    2.56,
+                    2.15269,
+                    2.15269,
+                    2.15269,
+                    2.15269,
+                    3.04437,
+                    2.15269,
+                    1.28,
+                    2.15269,
+                    2.15269,
+                    2.15269,
+                    1.81019,
+                    2.56
+                  ],
+                  ff: [
+                    4.30539,
+                    3.62039,
+                    3.04437,
+                    3.04437,
+                    3.04437,
+                    3.62039,
+                    3.62039,
+                    3.62039,
+                    3.62039,
+                    2.56,
+                    3.04437,
+                    2.56,
+                    2.15269,
+                    3.04437,
+                    3.62039,
+                    2.56,
+                    2.56,
+                    6.08874
+                  ],
+                  fff: [
+                    4.30539,
+                    6.08874,
+                    4.30539,
+                    4.30539,
+                    3.62039,
+                    4.30539,
+                    6.08874,
+                    4.30539,
+                    4.30539,
+                    3.04437,
+                    4.30539,
+                    6.08874,
+                    3.04437,
+                    7.24077,
+                    3.04437,
+                    4.30539,
+                    3.04437,
+                    4.30539
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.05,
+                    0.046867,
+                    0.074009,
+                    0.053918,
+                    0.054772,
+                    0.049426,
+                    0.05,
+                    0.056353,
+                    0.041282,
+                    0.022778,
+                    0.031426,
+                    0.025537,
+                    0.020948,
+                    0.033651,
+                    0.030313,
+                    0.027402,
+                    0.033986,
+                    0.039997
+                  ],
+                  pp: [
+                    0.043986,
+                    0.050573,
+                    0.070956,
+                    0.049944,
+                    0.053469,
+                    0.05031,
+                    0.051235,
+                    0.050628,
+                    0.074562,
+                    0.050283,
+                    0.053158,
+                    0.051996,
+                    0.039981,
+                    0.05709,
+                    0.05468,
+                    0.050183,
+                    0.056544,
+                    0.06419
+                  ],
+                  p: [
+                    0.070681,
+                    0.081591,
+                    0.082218,
+                    0.08285,
+                    0.083487,
+                    0.084129,
+                    0.084776,
+                    0.085428,
+                    0.098036,
+                    0.086745,
+                    0.087412,
+                    0.088085,
+                    0.066636,
+                    0.095558,
+                    0.090132,
+                    0.082392,
+                    0.091522,
+                    0.102467
+                  ],
+                  mp: [
+                    0.151606,
+                    0.134691,
+                    0.122315,
+                    0.12426,
+                    0.133097,
+                    0.128243,
+                    0.130282,
+                    0.136846,
+                    0.159876,
+                    0.136597,
+                    0.141568,
+                    0.140975,
+                    0.104637,
+                    0.158609,
+                    0.147806,
+                    0.130525,
+                    0.152544,
+                    0.174423
+                  ],
+                  mf: [
+                    0.197218,
+                    0.19993,
+                    0.202679,
+                    0.205465,
+                    0.20829,
+                    0.211153,
+                    0.214056,
+                    0.229501,
+                    0.250059,
+                    0.223006,
+                    0.242326,
+                    0.22918,
+                    0.170026,
+                    0.264319,
+                    0.238762,
+                    0.211676,
+                    0.215357,
+                    0.341647
+                  ],
+                  f: [
+                    0.355619,
+                    0.355786,
+                    0.355953,
+                    0.35612,
+                    0.356287,
+                    0.356454,
+                    0.356621,
+                    0.388505,
+                    0.430962,
+                    0.357124,
+                    0.394556,
+                    0.357459,
+                    0.259921,
+                    0.413325,
+                    0.357962,
+                    0.283748,
+                    0.305233,
+                    0.535339
+                  ],
+                  ff: [
+                    0.594358,
+                    0.617151,
+                    0.613694,
+                    0.610258,
+                    0.594844,
+                    0.603439,
+                    0.60006,
+                    0.667344,
+                    0.742821,
+                    0.590034,
+                    0.680833,
+                    0.583442,
+                    0.410161,
+                    0.618039,
+                    0.556353,
+                    0.481395,
+                    0.484562,
+                    1.037267
+                  ],
+                  fff: [
+                    0.931213,
+                    0.934291,
+                    1.023776,
+                    0.940477,
+                    0.933656,
+                    0.946705,
+                    0.949834,
+                    1.056137,
+                    1.204054,
+                    0.959285,
+                    1.0777,
+                    0.965637,
+                    0.647909,
+                    1.100966,
+                    0.712035,
+                    0.74135,
+                    0.841338,
+                    1.096207
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "f",
+                round: 1,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 4.3167,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 7.0144,
+                dynamic: "fff",
+                round: 0,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 11.0611,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 1.6189,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 8.3633,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 2.9678,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 5.6656,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 2.9678,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 4.3167,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 5.6656,
+                dynamic: "pp",
+                round: 1,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 7.0144,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "ppp",
+                round: 0,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 8.3633,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              }
+            ]
           }
         }
       ],
@@ -6931,6 +22629,16 @@ var physical_strings_calibration_default = {
         },
         method: "calibrate-strings-model.mjs --release: TU Berlin's Cello_modern single tones at pp and ff, each one's fall from its knee (3 dB under its held level, from 6 to 26 dB under, dB/s), their median; the model's notes at 8 of their pitches on its first variant, its bow left on the string the rest bisected so that their median falls as theirs",
         date: "2026-10-18"
+      },
+      attackFrom: {
+        ppp: 1,
+        pp: 1,
+        p: 1,
+        mp: 1,
+        mf: 1,
+        f: 1,
+        ff: 1,
+        fff: 1
       }
     },
     contrabass: {
@@ -6985,18 +22693,18 @@ var physical_strings_calibration_default = {
         ]
       },
       levels: {
-        ppp: -63.77,
-        pp: -62.18,
-        p: -70.24,
-        mp: -66.5,
-        mf: -61.98,
-        f: -59.07,
-        ff: -55.23,
-        fff: -47.11
+        ppp: -36.07,
+        pp: -32.16,
+        p: -28.12,
+        mp: -24.88,
+        mf: -20.93,
+        f: -16.4,
+        ff: -12.45,
+        fff: -11.1
       },
       recordedMf: -55.37,
-      gainDb: 6.61,
-      stemGainDb: 23.84,
+      gainDb: -34.44,
+      stemGainDb: -17.21,
       contacts: {
         ppp: 0.2,
         pp: 0.2,
@@ -7122,6 +22830,1655 @@ var physical_strings_calibration_default = {
       balance: {
         method: "scripts/strings-balance.mjs --write contrabass: its held notes at mf, f, ff, fff on chairs 0 and 1, each instrument at its sound power's measured pitch, played as the band plays them; its mean offset from its sound power's level 13.8 dB against the others' 3.9 dB (violin, viola, cello)",
         date: "2026-10-18"
+      },
+      variants: [
+        {
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "ae353ac94f81a693",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.50365,
+                    3.0073
+                  ],
+                  pp: [
+                    2.12648,
+                    4.25296
+                  ],
+                  p: [
+                    3.0073,
+                    7.1526
+                  ],
+                  mp: [
+                    3.0073,
+                    7.1526
+                  ],
+                  mf: [
+                    12.0292,
+                    8.50593
+                  ],
+                  f: [
+                    34.02371,
+                    14.30521
+                  ],
+                  ff: [
+                    34.02371,
+                    28.61041
+                  ],
+                  fff: [
+                    40.46124,
+                    57.22083
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.040366,
+                    0.039532
+                  ],
+                  pp: [
+                    0.061215,
+                    0.061215
+                  ],
+                  p: [
+                    0.093363,
+                    0.102235
+                  ],
+                  mp: [
+                    0.093363,
+                    0.100135
+                  ],
+                  mf: [
+                    0.244949,
+                    0.162709
+                  ],
+                  f: [
+                    0.356507,
+                    0.318527
+                  ],
+                  ff: [
+                    0.669087,
+                    0.491238
+                  ],
+                  fff: [
+                    0.613362,
+                    0.812585
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.50365,
+                    1.06324
+                  ],
+                  pp: [
+                    1.26441,
+                    1.06324
+                  ],
+                  p: [
+                    6.0146,
+                    1.06324
+                  ],
+                  mp: [
+                    5.05765,
+                    5.05765
+                  ],
+                  mf: [
+                    7.1526,
+                    7.1526
+                  ],
+                  f: [
+                    12.0292,
+                    10.11531
+                  ],
+                  ff: [
+                    20.23062,
+                    12.0292
+                  ],
+                  fff: [
+                    24.05839,
+                    24.05839
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.029815,
+                    0.02431
+                  ],
+                  pp: [
+                    0.044898,
+                    0.023888
+                  ],
+                  p: [
+                    0.105649,
+                    0.039395
+                  ],
+                  mp: [
+                    0.102621,
+                    0.085547
+                  ],
+                  mf: [
+                    0.1572,
+                    0.129391
+                  ],
+                  f: [
+                    0.242125,
+                    0.207782
+                  ],
+                  ff: [
+                    0.4005,
+                    0.231924
+                  ],
+                  fff: [
+                    0.477197,
+                    0.388269
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.26441,
+                    1.26441
+                  ],
+                  pp: [
+                    1.50365,
+                    1.78815
+                  ],
+                  p: [
+                    1.78815,
+                    3.0073
+                  ],
+                  mp: [
+                    3.5763,
+                    4.25296
+                  ],
+                  mf: [
+                    5.05765,
+                    5.05765
+                  ],
+                  f: [
+                    8.50593,
+                    12.0292
+                  ],
+                  ff: [
+                    12.0292,
+                    17.01185
+                  ],
+                  fff: [
+                    14.30521,
+                    24.05839
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.028151,
+                    0.028151
+                  ],
+                  pp: [
+                    0.044585,
+                    0.044585
+                  ],
+                  p: [
+                    0.06779,
+                    0.06779
+                  ],
+                  mp: [
+                    0.101167,
+                    0.101167
+                  ],
+                  mf: [
+                    0.158787,
+                    0.158787
+                  ],
+                  f: [
+                    0.266707,
+                    0.266707
+                  ],
+                  ff: [
+                    0.419613,
+                    0.419613
+                  ],
+                  fff: [
+                    0.631409,
+                    0.527248
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.06324,
+                    0.89408
+                  ],
+                  pp: [
+                    1.06324,
+                    0.89408
+                  ],
+                  p: [
+                    1.26441,
+                    1.06324
+                  ],
+                  mp: [
+                    1.26441,
+                    1.26441
+                  ],
+                  mf: [
+                    2.52883,
+                    1.78815
+                  ],
+                  f: [
+                    5.05765,
+                    3.5763
+                  ],
+                  ff: [
+                    8.50593,
+                    1.78815
+                  ],
+                  fff: [
+                    17.01185,
+                    3.5763
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.029556,
+                    0.011151
+                  ],
+                  pp: [
+                    0.033887,
+                    0.020058
+                  ],
+                  p: [
+                    0.055153,
+                    0.031051
+                  ],
+                  mp: [
+                    0.089564,
+                    0.046922
+                  ],
+                  mf: [
+                    0.13611,
+                    0.08092
+                  ],
+                  f: [
+                    0.218049,
+                    0.139868
+                  ],
+                  ff: [
+                    0.344202,
+                    0.214774
+                  ],
+                  fff: [
+                    0.837828,
+                    0.5
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "p",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "mp",
+                round: 3,
+                from: "p"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "mf",
+                round: 1,
+                from: "mf"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "ppp",
+                round: 2,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "fff",
+                round: 0,
+                from: "fff"
+              }
+            ]
+          }
+        },
+        {
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "ae353ac94f81a693",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.50365,
+                    1.06324
+                  ],
+                  pp: [
+                    1.50365,
+                    1.50365
+                  ],
+                  p: [
+                    1.78815,
+                    2.52883
+                  ],
+                  mp: [
+                    10.11531,
+                    3.0073
+                  ],
+                  mf: [
+                    7.1526,
+                    7.1526
+                  ],
+                  f: [
+                    24.05839,
+                    8.50593
+                  ],
+                  ff: [
+                    17.01185,
+                    17.01185
+                  ],
+                  fff: [
+                    24.05839,
+                    34.02371
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.063374,
+                    0.018555
+                  ],
+                  pp: [
+                    0.063374,
+                    0.037572
+                  ],
+                  p: [
+                    0.068173,
+                    0.048695
+                  ],
+                  mp: [
+                    0.217007,
+                    0.072041
+                  ],
+                  mf: [
+                    0.164741,
+                    0.205051
+                  ],
+                  f: [
+                    0.449207,
+                    0.220534
+                  ],
+                  ff: [
+                    0.398333,
+                    0.404519
+                  ],
+                  fff: [
+                    0.513883,
+                    0.731248
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.50365,
+                    1.78815
+                  ],
+                  pp: [
+                    2.52883,
+                    2.12648
+                  ],
+                  p: [
+                    4.25296,
+                    4.25296
+                  ],
+                  mp: [
+                    4.25296,
+                    5.05765
+                  ],
+                  mf: [
+                    5.05765,
+                    7.1526
+                  ],
+                  f: [
+                    5.05765,
+                    6.0146
+                  ],
+                  ff: [
+                    6.0146,
+                    12.0292
+                  ],
+                  fff: [
+                    7.1526,
+                    8.50593
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.047933,
+                    0.047933
+                  ],
+                  pp: [
+                    0.085317,
+                    0.085317
+                  ],
+                  p: [
+                    0.127867,
+                    0.127867
+                  ],
+                  mp: [
+                    0.135026,
+                    0.15568
+                  ],
+                  mf: [
+                    0.163974,
+                    0.237108
+                  ],
+                  f: [
+                    0.173205,
+                    0.204939
+                  ],
+                  ff: [
+                    0.2,
+                    0.399102
+                  ],
+                  fff: [
+                    0.202809,
+                    0.264575
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.89408,
+                    0.89408
+                  ],
+                  pp: [
+                    1.06324,
+                    1.26441
+                  ],
+                  p: [
+                    1.78815,
+                    2.12648
+                  ],
+                  mp: [
+                    2.52883,
+                    2.52883
+                  ],
+                  mf: [
+                    3.5763,
+                    4.25296
+                  ],
+                  f: [
+                    5.05765,
+                    6.0146
+                  ],
+                  ff: [
+                    10.11531,
+                    7.1526
+                  ],
+                  fff: [
+                    12.0292,
+                    12.0292
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.029254,
+                    0.029254
+                  ],
+                  pp: [
+                    0.049018,
+                    0.049018
+                  ],
+                  p: [
+                    0.080082,
+                    0.080082
+                  ],
+                  mp: [
+                    0.118132,
+                    0.118132
+                  ],
+                  mf: [
+                    0.187004,
+                    0.187004
+                  ],
+                  f: [
+                    0.249883,
+                    0.261022
+                  ],
+                  ff: [
+                    0.462969,
+                    0.34641
+                  ],
+                  fff: [
+                    0.580896,
+                    0.582466
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.89408,
+                    0.89408
+                  ],
+                  pp: [
+                    0.89408,
+                    0.89408
+                  ],
+                  p: [
+                    0.89408,
+                    0.89408
+                  ],
+                  mp: [
+                    1.50365,
+                    1.06324
+                  ],
+                  mf: [
+                    3.0073,
+                    1.50365
+                  ],
+                  f: [
+                    3.5763,
+                    2.12648
+                  ],
+                  ff: [
+                    7.1526,
+                    3.0073
+                  ],
+                  fff: [
+                    12.0292,
+                    3.5763
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.054772,
+                    0.041279
+                  ],
+                  pp: [
+                    0.047331,
+                    0.041991
+                  ],
+                  p: [
+                    0.053062,
+                    0.041462
+                  ],
+                  mp: [
+                    0.094697,
+                    0.063899
+                  ],
+                  mf: [
+                    0.158939,
+                    0.11226
+                  ],
+                  f: [
+                    0.250282,
+                    0.286667
+                  ],
+                  ff: [
+                    0.46176,
+                    0.184033
+                  ],
+                  fff: [
+                    0.671941,
+                    0.359105
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "p",
+                round: 2,
+                from: "p"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "mp",
+                round: 3,
+                from: "mp"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "f",
+                round: 1,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "f",
+                round: 1,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 2,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              },
+              {
+                string: 2,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 1,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "ppp",
+                round: 1,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "pp",
+                round: 2,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "fff",
+                round: 3,
+                from: "fff"
+              }
+            ]
+          }
+        },
+        {
+          law: {
+            method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+            round: 4,
+            engine: "ae353ac94f81a693",
+            classifier: "3047fa79a3d1",
+            contact: 0.1,
+            strings: [
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    0.89408,
+                    1.26441
+                  ],
+                  pp: [
+                    0.89408,
+                    2.12648
+                  ],
+                  p: [
+                    5.05765,
+                    2.52883
+                  ],
+                  mp: [
+                    10.11531,
+                    3.5763
+                  ],
+                  mf: [
+                    10.11531,
+                    4.25296
+                  ],
+                  f: [
+                    20.23062,
+                    7.1526
+                  ],
+                  ff: [
+                    24.05839,
+                    14.30521
+                  ],
+                  fff: [
+                    34.02371,
+                    20.23062
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.039288,
+                    0.03373
+                  ],
+                  pp: [
+                    0.04222,
+                    0.053353
+                  ],
+                  p: [
+                    0.1,
+                    0.050601
+                  ],
+                  mp: [
+                    0.162875,
+                    0.077811
+                  ],
+                  mf: [
+                    0.162875,
+                    0.120693
+                  ],
+                  f: [
+                    0.445645,
+                    0.210074
+                  ],
+                  ff: [
+                    0.416179,
+                    0.299818
+                  ],
+                  fff: [
+                    0.693399,
+                    0.453659
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.26441,
+                    1.50365
+                  ],
+                  pp: [
+                    1.78815,
+                    1.78815
+                  ],
+                  p: [
+                    5.05765,
+                    4.25296
+                  ],
+                  mp: [
+                    6.0146,
+                    3.5763
+                  ],
+                  mf: [
+                    10.11531,
+                    7.1526
+                  ],
+                  f: [
+                    10.11531,
+                    10.11531
+                  ],
+                  ff: [
+                    8.50593,
+                    12.0292
+                  ],
+                  fff: [
+                    8.50593,
+                    14.30521
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.04178,
+                    0.040076
+                  ],
+                  pp: [
+                    0.062628,
+                    0.062628
+                  ],
+                  p: [
+                    0.146934,
+                    0.100621
+                  ],
+                  mp: [
+                    0.201262,
+                    0.108912
+                  ],
+                  mf: [
+                    0.331412,
+                    0.221318
+                  ],
+                  f: [
+                    0.360097,
+                    0.298793
+                  ],
+                  ff: [
+                    0.310984,
+                    0.40132
+                  ],
+                  fff: [
+                    0.310984,
+                    0.447214
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    12.41
+                  ],
+                  pp: [
+                    0.27,
+                    12.41
+                  ],
+                  p: [
+                    0.27,
+                    12.41
+                  ],
+                  mp: [
+                    0.27,
+                    12.41
+                  ],
+                  mf: [
+                    0.27,
+                    12.41
+                  ],
+                  f: [
+                    0.27,
+                    12.41
+                  ],
+                  ff: [
+                    0.27,
+                    12.41
+                  ],
+                  fff: [
+                    0.27,
+                    12.41
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.06324,
+                    1.06324
+                  ],
+                  pp: [
+                    1.26441,
+                    1.26441
+                  ],
+                  p: [
+                    1.50365,
+                    1.78815
+                  ],
+                  mp: [
+                    3.0073,
+                    3.0073
+                  ],
+                  mf: [
+                    5.05765,
+                    5.05765
+                  ],
+                  f: [
+                    7.1526,
+                    8.50593
+                  ],
+                  ff: [
+                    14.30521,
+                    8.50593
+                  ],
+                  fff: [
+                    20.23062,
+                    12.0292
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.028484,
+                    0.028484
+                  ],
+                  pp: [
+                    0.046,
+                    0.046
+                  ],
+                  p: [
+                    0.073614,
+                    0.073614
+                  ],
+                  mp: [
+                    0.11074,
+                    0.11074
+                  ],
+                  mf: [
+                    0.187845,
+                    0.187845
+                  ],
+                  f: [
+                    0.277485,
+                    0.277485
+                  ],
+                  ff: [
+                    0.549733,
+                    0.356269
+                  ],
+                  fff: [
+                    0.805201,
+                    0.445539
+                  ]
+                }
+              },
+              {
+                stops: {
+                  ppp: [
+                    0.27,
+                    23.2011
+                  ],
+                  pp: [
+                    0.27,
+                    23.2011
+                  ],
+                  p: [
+                    0.27,
+                    23.2011
+                  ],
+                  mp: [
+                    0.27,
+                    23.2011
+                  ],
+                  mf: [
+                    0.27,
+                    23.2011
+                  ],
+                  f: [
+                    0.27,
+                    23.2011
+                  ],
+                  ff: [
+                    0.27,
+                    23.2011
+                  ],
+                  fff: [
+                    0.27,
+                    23.2011
+                  ]
+                },
+                force: {
+                  ppp: [
+                    1.50365,
+                    0.89408
+                  ],
+                  pp: [
+                    1.50365,
+                    0.89408
+                  ],
+                  p: [
+                    1.06324,
+                    1.06324
+                  ],
+                  mp: [
+                    1.78815,
+                    1.50365
+                  ],
+                  mf: [
+                    3.5763,
+                    1.06324
+                  ],
+                  f: [
+                    3.5763,
+                    4.25296
+                  ],
+                  ff: [
+                    8.50593,
+                    5.05765
+                  ],
+                  fff: [
+                    14.30521,
+                    4.25296
+                  ]
+                },
+                speed: {
+                  ppp: [
+                    0.06069,
+                    0.039464
+                  ],
+                  pp: [
+                    0.059461,
+                    0.033824
+                  ],
+                  p: [
+                    0.074724,
+                    0.066492
+                  ],
+                  mp: [
+                    0.134023,
+                    0.134023
+                  ],
+                  mf: [
+                    0.228291,
+                    0.228953
+                  ],
+                  f: [
+                    0.292125,
+                    0.342319
+                  ],
+                  ff: [
+                    0.532039,
+                    0.524942
+                  ],
+                  fff: [
+                    0.857003,
+                    0.366284
+                  ]
+                }
+              }
+            ],
+            kept: [
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "p",
+                round: 0,
+                from: "p"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "mp",
+                round: 2,
+                from: "mp"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "mf",
+                round: 2,
+                from: "mp"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 0,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 0.27,
+                dynamic: "fff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "f",
+                round: 3,
+                from: "f"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "ff",
+                round: 2,
+                from: "ff"
+              },
+              {
+                string: 1,
+                stop: 12.41,
+                dynamic: "fff",
+                round: 1,
+                from: "fff"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "ppp",
+                round: 3,
+                from: "ppp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "pp",
+                round: 3,
+                from: "pp"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "mf",
+                round: 3,
+                from: "mf"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "ff",
+                round: 3,
+                from: "ff"
+              },
+              {
+                string: 3,
+                stop: 23.2011,
+                dynamic: "fff",
+                round: 2,
+                from: "fff"
+              }
+            ]
+          }
+        }
+      ],
+      attackFrom: {
+        ppp: 1,
+        pp: 1,
+        p: 1,
+        mp: 1,
+        mf: 1,
+        f: 1,
+        ff: 1,
+        fff: 1
       }
     },
     violello: {
@@ -8209,38 +25566,38 @@ var physical_strings_calibration_default = {
     method: "each instrument's recorded pizzicati (vsco2-ce, iowa-mis: each pitch's loudest layer, its named string where the bank names one); the model's notes plucked at 0.08, 0.12, 0.17, 0.25 of the string from the bridge, the position whose attack's brightness (centroid of twelve harmonics over 40 ms) is nearest the recordings' (median); then each string's losses (0.25, 0.35, 0.5, 0.7, 1, 1.4, 2, 2.8, 4, 5.6, 8 times its modes' own) whose decay at 0.3 and 1 s after the peak is nearest (median of the sum of the two differences); the pull at the loudest recorded dynamic setting the pluck's peak over the model's bowed level as far as the recorded peak is over the recorded bowed level (median), the other dynamics' pulls in proportion to the model's bowed levels, never less than a softer one's",
     instruments: {
       violin: {
-        position: 0.12,
+        position: 0.25,
         losses: [
+          4,
+          2,
           2.8,
-          0.25,
-          0.5,
-          0.25
+          2
         ],
         pull: {
-          pp: 0.044,
-          p: 0.11,
-          mp: 0.148,
-          mf: 0.3,
-          f: 0.489,
-          ff: 0.548
+          pp: 0.038,
+          p: 0.062,
+          mp: 0.136,
+          mf: 0.234,
+          f: 0.504,
+          ff: 0.919
         },
         notes: 13
       },
       viola: {
-        position: 0.25,
+        position: 0.17,
         losses: [
-          5.6,
-          2.8,
-          2,
-          0.25
+          4,
+          4,
+          4,
+          2
         ],
         pull: {
-          pp: 0.042,
-          p: 0.081,
-          mp: 0.154,
-          mf: 0.373,
-          f: 0.607,
-          ff: 0.607
+          pp: 0.035,
+          p: 0.05,
+          mp: 0.076,
+          mf: 0.126,
+          f: 0.169,
+          ff: 0.33
         },
         notes: 43
       },
@@ -8248,35 +25605,35 @@ var physical_strings_calibration_default = {
         position: 0.17,
         losses: [
           2.8,
-          4,
+          5.6,
           2.8,
-          0.5
+          1.4
         ],
         pull: {
-          pp: 0.089,
-          p: 0.159,
-          mp: 0.232,
-          mf: 0.724,
-          f: 0.857,
-          ff: 0.986
+          pp: 0.167,
+          p: 0.254,
+          mp: 0.422,
+          mf: 0.763,
+          f: 1.211,
+          ff: 1.758
         },
         notes: 45
       },
       contrabass: {
-        position: 0.17,
+        position: 0.25,
         losses: [
+          2,
           1.4,
-          8,
-          2.8,
-          1
+          4,
+          2
         ],
         pull: {
-          pp: 0.034,
-          p: 0.092,
-          mp: 0.116,
-          mf: 0.258,
-          f: 0.369,
-          ff: 0.376
+          pp: 0.111,
+          p: 0.177,
+          mp: 0.257,
+          mf: 0.405,
+          f: 0.682,
+          ff: 1.075
         },
         notes: 14
       }
@@ -16791,6 +34148,10 @@ var MODEL2 = Object.freeze({
   step: COMPILER("step"),
   slur: PLAYED("slur"),
   joined: COMPILER("joined"),
+  // A slur across strings rolled from one to the next over `share` of the note it crosses to, within `seconds`: the bow
+  // on both at once, the string it leaves lifted as the one it takes is set down (Schoonderwaldt & Altenmüller 2014: the
+  // middle 0.32 of the bow's inclination swing).
+  crossing: Object.freeze({ share: PLAYED("crossing.share"), seconds: Object.freeze(PLAYED("crossing.seconds")) }),
   // A pitch slurred to again (within `within` semitones of the one before) is louré: one bow, each note marked by the
   // bow slowed on the string -- to `speed` of its own and lightened to `force` of its weight, over `seconds` round the
   // note's time (the model's, and its slowing's own at least: `follow`), never lifted nor reversed -- as a player marks
@@ -25998,37 +43359,44 @@ var VOICED = Object.freeze({ db: 15, periods: 6, seconds: 0.06, clear: 2.5 });
 var STRINGS_ANTICIPATION = Object.freeze({ tries: 4, shortest: 0.2 });
 
 // render/node/string-body-corrections.json
-var string_body_corrections_default = { method: "Each Artifastring body variant's response (its constants/body_*.h impulse, 44.1 kHz), smoothed over a third of an octave, brought to its instrument's target radiation envelope (TARGETS) by one minimum-phase FIR for all its variants (against their mean response: each variant's own difference kept; its real cepstrum folded, 1024 taps), the correction held within [-12, +30] dB and its level set so that a bowed tone (a sawtooth at its instrument's middle) is as loud through it as without it: scripts/design-string-bodies.mjs.", sampleRate: 44100, taps: 1024, targets: { violin: [[80, -36], [150, -20], [275, -2], [500, 0], [1e3, -2], [2e3, 1], [2700, 3], [4e3, 0], [5500, -6], [8e3, -16], [12e3, -28], [2e4, -44]], viola: [[60, -36], [120, -20], [225, -2], [420, 0], [850, -2], [1700, 1], [2200, 3], [3400, 0], [5e3, -7], [8e3, -18], [12e3, -30], [2e4, -46]], cello: [[35, -36], [60, -18], [100, -2], [200, 0], [500, -2], [1e3, 1], [1400, 3], [2400, 0], [3800, -8], [6500, -20], [11e3, -33], [2e4, -48]] }, sources: ["doi:10.1121/1.2956478", "doi:10.1088/0034-4885/77/11/115901", "Cook and Trueman, ICMC 1998 (a violin's radiation resonances)"], instruments: { violin: { header: "body_violin_1.h", sha256: "652cf586eddfb526e4d316dbbd14f062d0787b3648d0e6c9c2ca1e64f6dd9db1", variants: [[3.631621, 1.170935, -2.586018, -1.943616, -0.1046551, 0.1761559, -0.5561035, -0.722536, 0.03828009, 0.5477939, 0.5073545, 0.275877, 0.2554495, 0.2837684, 0.20167, 0.02343549, -0.1351852, -0.1969614, -0.1821615, -0.1519513, -0.1547149, -0.1221026, -0.07542384, -0.01851653, 0.03592775, 0.05720975, 0.03450434, -734047e-9, -0.01991231, -4807225e-9, 0.02459216, 0.03110033, 0.02480435, -0.02556314, -0.06956774, -0.05310945, -0.01532024, -4507069e-9, -0.01901796, -0.0355942, -0.03626109, -0.01880799, 3384363e-9, 0.015723, 3827894e-9, -2282454e-11, 5543887e-9, -400321e-8, -0.02410425, -0.0362586, -0.03110134, -0.01393021, 3138994e-9, 0.01001646, 9562349e-9, 68172e-7, 907255e-8, 1787937e-9, -0.01611627, -0.02866628, -0.03079371, -0.01948259, -1314924e-9, 4207226e-9, -7501402e-9, -0.01311625, -940133e-8, 9696975e-11, 7494197e-9, 7127338e-9, 252416e-8, 2295384e-10, 4584965e-10, 5090206e-9, 8101127e-9, 6612608e-9, 4553041e-9, -5769051e-9, -0.01446132, -0.01435778, -9610796e-9, -5771331e-9, -6806611e-9, -7384152e-9, -0.01075722, -0.01668318, -0.01782941, -9710939e-9, -2084809e-9, -3363395e-10, -354702e-8, -5009056e-9, 1474817e-9, 0.01699253, 0.03005623, 0.0245652, 7254565e-9, -4396699e-9, -4575822e-10, 5821827e-9, 4299299e-9, -3157932e-9, -6298396e-9, 1384483e-9, 0.01000717, 9055973e-9, 4697593e-9, 0.0102438, 0.02299298, 0.02995787, 0.02655697, 0.02319827, 0.02446767, 0.02638775, 0.0256976, 0.02069628, 0.01414092, 9242693e-9, 6445399e-9, 6257187e-9, 7505434e-9, 9506333e-9, 0.01547604, 0.02030337, 0.01814211, 0.01486078, 0.01083606, 9837137e-9, 0.01350998, 0.01513868, 0.01238744, 9566813e-9, 7913684e-9, 8684963e-9, 0.01013466, 9193875e-9, 8482011e-9, 8410022e-9, 5091879e-9, 1045736e-9, -4277155e-10, -2643847e-12, -4445483e-11, -3623411e-9, -7955207e-9, -6504802e-9, -2213479e-9, -1249464e-9, -411775e-8, -7074118e-9, -6470165e-9, -2532607e-9, 1709726e-9, 1369449e-9, -6100086e-9, -0.01289677, -0.0132961, -9799843e-9, -7084648e-9, -7305657e-9, -9675285e-9, -0.01340452, -0.01627639, -0.01787581, -0.01832644, -0.01497705, -9928804e-9, -7857762e-9, -0.01032317, -0.01284739, -9737945e-9, -4088815e-9, -3391827e-9, -6631114e-9, -6494747e-9, -1515462e-9, 3728138e-9, 4744693e-9, 8277225e-10, -155696e-8, -315312e-9, 6920451e-11, -310149e-8, -8582439e-9, -9072388e-9, -4872238e-9, -2687504e-9, -3126363e-9, -4592468e-9, -4926582e-9, -1078681e-9, 2242621e-9, 2282738e-9, 2526884e-9, 2635293e-9, 282244e-8, 2799003e-9, 145532e-8, -88727e-8, -2144571e-9, -3397722e-9, -6159721e-9, -7920413e-9, -4795492e-9, 1822888e-9, 4699378e-9, 3489108e-9, 2544141e-10, -1436222e-9, 3247756e-10, 2033515e-9, 20056e-7, 1505256e-9, 6116285e-10, -1039658e-9, -1475689e-9, 2050377e-10, 3487646e-9, 4955394e-9, 3273543e-9, 1123497e-9, 3298424e-10, -298297e-10, 4255413e-10, 2218308e-9, 2952903e-9, 1505052e-9, -1109275e-9, -2041612e-9, -5848698e-10, 209953e-8, 4542355e-9, 5195063e-9, 4991502e-9, 4771451e-9, 3910201e-9, 2768917e-9, 231686e-8, 2368375e-9, 2474722e-9, 1766354e-9, 1707042e-9, 1280897e-9, 8719921e-10, 2218053e-9, 3103751e-9, 2593789e-9, 9500366e-10, -7612438e-11, 2571149e-9, 6165049e-9, 6283401e-9, 3928899e-9, 3163391e-9, 5434506e-9, 8197006e-9, 8254558e-9, 6397763e-9, 5585559e-9, 5112269e-9, 3463443e-9, 2299759e-9, 1865921e-9, 1563062e-9, 1123478e-9, 8799253e-10, 6630016e-10, 1727601e-10, -1832596e-10, -1312152e-9, -2461652e-9, -1155313e-9, 2253128e-11, -6414105e-10, -1508088e-9, -1395194e-9, -1319201e-9, -1594526e-9, -2540326e-9, -2683635e-9, -2543385e-9, -3724081e-9, -6382323e-9, -7643726e-9, -70956e-7, -6058661e-9, -5681358e-9, -5336517e-9, -5112685e-9, -4947442e-9, -4562254e-9, -4697395e-9, -5673966e-9, -6429078e-9, -6325104e-9, -6286372e-9, -6747536e-9, -6227455e-9, -5404006e-9, -4451771e-9, -3481564e-9, -4063174e-9, -5971361e-9, -6488487e-9, -5045344e-9, -3537024e-9, -2834814e-9, -2976431e-9, -3348142e-9, -2232982e-9, -122642e-8, -1361578e-9, -6073848e-10, 1489492e-9, 3012597e-9, 2356452e-9, 1361108e-9, 1116211e-9, 7647194e-10, 2069011e-10, -9608071e-10, -1658849e-9, -1379244e-9, -8345918e-10, -7563282e-10, -3302461e-10, 6683399e-10, 2527162e-9, 3727654e-9, 3434543e-9, 2871005e-9, 2456338e-9, 2245788e-9, 2658227e-9, 2542431e-9, 190558e-8, 2159456e-9, 2953331e-9, 3013416e-9, 281662e-8, 2774781e-9, 243335e-8, 2273462e-9, 3280415e-9, 3803616e-9, 289396e-8, 235697e-8, 3696575e-9, 4444276e-9, 2849576e-9, 629083e-9, -104839e-8, -4299111e-10, 9208358e-10, 2723548e-10, -5458277e-10, 7385233e-11, 1154346e-9, 1526991e-9, 9341644e-10, 5822776e-10, 1175412e-9, 2166647e-9, 2751043e-9, 2158758e-9, 7141045e-10, -3969066e-10, 6454112e-11, 1634712e-9, 2090514e-9, 2630044e-10, -9943309e-10, 1248387e-9, 4011021e-9, 3436069e-9, 5623681e-10, -1031535e-9, 2841884e-12, 1960555e-9, 3213166e-9, 3737734e-9, 3781748e-9, 379717e-8, 39546e-7, 3653141e-9, 2257327e-9, 8077319e-10, 6771739e-10, 1538816e-9, 2082186e-9, 1697405e-9, 1223553e-9, 1449681e-9, 2136479e-9, 2053618e-9, 135209e-8, 5222704e-10, -2621765e-10, -1029709e-9, -6582275e-10, 7075769e-10, 1097748e-9, 3461423e-10, -7088121e-10, -1234117e-9, -9705463e-10, -1079275e-9, -2098329e-9, -321648e-8, -3637187e-9, -3524055e-9, -2301075e-9, -1189108e-9, -8574053e-10, -1055518e-9, -1733359e-9, -2399374e-9, -1737491e-9, -1227466e-10, 4744373e-10, -77672e-8, -1699671e-9, -1915676e-9, -2850486e-9, -3856809e-9, -4031289e-9, -3264871e-9, -25822e-7, -2728131e-9, -2570463e-9, -1867058e-9, -1035357e-9, -8865858e-10, -1786971e-9, -2642442e-9, -3164445e-9, -3914095e-9, -4344959e-9, -3547843e-9, -2569258e-9, -2751461e-9, -3620862e-9, -3091254e-9, -1396416e-9, -2377596e-10, -36854e-9, -5751797e-10, -1145146e-9, -1097649e-9, -9285455e-10, -8714881e-10, -7909153e-10, -106828e-8, -107333e-8, -7569313e-10, -7928135e-10, -8508104e-10, -1984974e-10, 8690441e-10, 1671956e-9, 146128e-8, 84563e-8, 1295202e-9, 2414636e-9, 2442938e-9, 1510219e-9, 5524985e-10, 6336581e-10, 1490602e-9, 1823242e-9, 1402163e-9, 1116884e-9, 142191e-8, 1944147e-9, 2188286e-9, 2092964e-9, 2079239e-9, 2162611e-9, 1760827e-9, 6505197e-10, -2372651e-10, -1882716e-10, 9216414e-10, 2015541e-9, 2340525e-9, 1899758e-9, 12992e-7, 1158651e-9, 1366552e-9, 128807e-8, 9606935e-10, 9404089e-10, 8967132e-10, 6057032e-10, 448101e-9, 755559e-9, 1415024e-9, 1832051e-9, 1185767e-9, 169407e-9, -4402909e-10, 1268958e-10, 8298367e-10, 3693543e-10, 1895569e-10, 8195932e-10, 1296596e-9, 1355755e-9, 1108258e-9, 1003587e-9, 1251031e-9, 1038362e-9, 6728909e-10, 3755553e-10, 2671451e-10, 4634122e-10, 6085225e-10, 2738438e-11, -8920675e-10, -9691969e-10, -4561088e-10, 4771858e-11, 3075998e-10, 3319881e-10, 4903013e-10, 7981889e-10, 698041e-9, 2644741e-10, -2793244e-10, -3555679e-10, -4948277e-10, -1109905e-9, -1681265e-9, -1751949e-9, -1484296e-9, -807815e-9, -4540102e-10, -1017788e-9, -1737383e-9, -1340599e-9, -5801833e-10, -3533947e-10, -5194832e-10, -7858142e-10, -8452039e-10, -4434174e-10, -5131369e-10, -1251145e-9, -1334157e-9, -7453533e-10, -3523071e-10, -7294877e-10, -1300391e-9, -1054769e-9, -4407218e-10, -269556e-9, -823229e-9, -1385445e-9, -1337725e-9, -1043121e-9, -1230025e-9, -1572711e-9, -1169492e-9, -4841754e-10, -7152278e-10, -1366771e-9, -1537883e-9, -1086648e-9, -37748e-8, 1177084e-10, 189573e-9, -1481814e-10, -3048386e-10, 2198021e-10, 7446566e-10, 4123379e-10, -6670629e-10, -1405755e-9, -1244684e-9, -5584474e-10, 9843821e-11, 2130224e-10, 3097143e-10, 7562597e-10, 1499853e-9, 1689494e-9, 1007711e-9, 7626647e-10, 1241922e-9, 1450023e-9, 1025664e-9, 2587542e-10, -1322463e-10, 2539641e-10, 9952036e-10, 1184658e-9, 8329679e-10, 7192061e-10, 1093782e-9, 150007e-8, 1510612e-9, 1212292e-9, 1047006e-9, 1380477e-9, 1572628e-9, 123414e-8, 7269049e-10, 543479e-9, 621341e-9, 6321302e-10, 4160495e-10, 3793237e-10, 5533934e-10, 6383926e-10, 7951369e-10, 1092291e-9, 1294772e-9, 1164468e-9, 4590962e-10, -1329695e-10, 1662923e-10, 5759676e-10, -5384497e-11, -9137698e-10, -723914e-9, -1016918e-10, 7337099e-11, 8699591e-11, 372614e-9, 6905171e-10, 1022975e-9, 808721e-9, 3837739e-10, 3218496e-10, 2127172e-10, -6817118e-10, -1562002e-9, -1529853e-9, -1065588e-9, -9902287e-10, -1233087e-9, -1083586e-9, -599704e-9, -135333e-9, 2962095e-10, 3089794e-10, 3234728e-11, 1137585e-10, -8491228e-11, -641588e-9, -8609227e-10, -8983586e-10, -9588531e-10, -1025544e-9, -9501092e-10, -957458e-9, -8730012e-10, -9713641e-10, -1019606e-9, -6910638e-10, -3615707e-10, -6774691e-10, -1161643e-9, -1192155e-9, -8642794e-10, -5460681e-10, -7130249e-10, -1030986e-9, -1040475e-9, -798259e-9, -4746494e-10, -4227793e-10, -5143516e-10, -4365865e-10, -3249598e-10, -3948193e-10, -5370942e-10, -4566714e-10, 59417e-10, 1985661e-10, -8922551e-11, -5720383e-10, -7256805e-10, -381618e-9, 6337879e-11, 1471699e-10, 108917e-9, 316145e-9, 7717095e-10, 9510209e-10, 568432e-9, 266392e-9, 2899004e-10, 3237198e-10, 8172132e-11, -1738313e-10, -1912509e-10, -5710086e-11, 9362737e-12, 5432422e-11, 340232e-9, 4823394e-10, 2958902e-10, 4076324e-10, 9617349e-10, 114027e-8, 5714045e-10, 768092e-10, 2107724e-11, 3330196e-10, 4509294e-10, 1993475e-10, 180817e-10, 3479104e-10, 5255191e-10, 3353545e-11, -277326e-9, -39464e-9, 1602267e-11, -1038e-7, -2245485e-10, -1722947e-10, 1765168e-10, 2535747e-10, 1126174e-10, 1245285e-10, 4688728e-10, 6676869e-10, 5948628e-10, 4033125e-10, 2941028e-10, 2550166e-10, 2056835e-10, 1288436e-10, 129351e-9, 1381404e-10, 1586519e-11, -1251402e-11, 3238272e-10, 4046372e-10, 1005523e-10, -1802327e-10, -3101733e-10, -1629614e-10, 4554765e-11, 4914749e-11, 1295478e-10, 2712254e-10, 1743452e-10, 3281557e-10, 5682524e-10, 5468932e-10, 3127278e-10, -389769e-11, -3703905e-11, 7991284e-11, -1556399e-10, -4984949e-10, -5100447e-10, -2399241e-10, 1290499e-11, -2252834e-11, -1923803e-10, -2201418e-11, 5043112e-10, 8616749e-10, 5032913e-10, -2262371e-10, -467804e-9, -2558006e-10, 1284178e-10, 2942347e-10, -5248234e-11, -2804908e-10, -103606e-9, 1439972e-10, 366431e-9, 1566657e-10, -8637676e-11, 4910007e-11, 3586973e-10, 2650413e-10, 9404314e-11, 2598276e-10, 5378645e-10, 3378648e-10, -1562884e-10, -3943076e-10, -2947761e-10, 2349413e-11, 1071094e-10, -2784282e-10, -3645404e-10, 2448916e-10, 5208665e-10, 2087408e-10, -1594137e-10, -2059224e-10, -1055532e-11, 7574311e-11, -1192267e-10, -4170874e-10, -3539969e-10, 2161064e-10, 4680587e-10, 1187611e-10, -1806141e-10, 1142715e-10, 676813e-9, 9048218e-10, 5602886e-10, 2080581e-10, 3180757e-10, 6192624e-10, 6032947e-10, 1188509e-10, -4084032e-10, -2607692e-10, 1461545e-11, -9484317e-11, -2202156e-10, -6262814e-11, 3673156e-11, 2120843e-11, 104158e-9, 2532773e-10, 2093666e-10, -8009771e-11, -2598656e-10, -1951118e-10, -1236462e-10, -1519509e-10, -2217358e-10, -1975398e-10, -2097021e-10, -3184983e-10, -1904246e-10, -9356216e-12, 9875029e-12, -2272197e-10, -3804444e-10, -209371e-9, -2250232e-12, -1164908e-10, -4586309e-10, -5222708e-10, -2621726e-10, -6721269e-11, -1510746e-10, -3041348e-10, -2167517e-10, -2312431e-10, -3326556e-10, -3986795e-10, -4140786e-10, -3545651e-10, -254207e-9, -2606967e-10, -2487945e-10, -5771719e-11, 5804913e-11, -4334851e-11, -306482e-9, -4900455e-10, -4977388e-10, -4342209e-10, -4244095e-10, -5561424e-10, -6477407e-10, -4761308e-10, -1660849e-10, -158906e-10, -8874277e-11, -2227391e-10, -2582665e-10, -1615951e-10, -1061572e-10, -175292e-9, -2709732e-10, -2251282e-10, -1754569e-10, -1341255e-10, -1678041e-10, -1778486e-10, -6579065e-11, 7639542e-11, 2010899e-10, 2618711e-10, 2489507e-10, 137393e-9, 9096013e-12, 3786875e-11, 2484878e-10, 389107e-9, 2675116e-10, 8167169e-12, -8252151e-11, 6076616e-11, 2298873e-10, 2400077e-10, 199773e-9, 1597476e-10, 165006e-9, 2338181e-10, 3337122e-10, 4192565e-10, 3036817e-10, 1173681e-10, 1525974e-10, 2059133e-10, 1876125e-10, 1750098e-10, 2027081e-10, 2289889e-10, 1967797e-10, 1599621e-10, 2379348e-10, 3009274e-10, 2700523e-10, 1535151e-10, 2459683e-11, 5443564e-11, 1667913e-10, 1730911e-10, 8899147e-11, 1955627e-11, 302358e-10, 7177624e-11, 7902941e-11, 4213388e-11, -1291801e-11, 1180912e-11, 1158983e-10, 1535537e-10, 1453809e-10, 1439893e-10, 9714964e-11, 6279861e-11, 6617353e-11, 4206631e-11, -401357e-10, -9984434e-11, -8561045e-11, -6233648e-11, -8218059e-11, -5832408e-11, 2144797e-11, 3559672e-11, -1474777e-11, -2512697e-11, 6219808e-13, 3354407e-11, 1701614e-11, -4377586e-11, -9147307e-11, -6994955e-11, -1399078e-11, -1834377e-11, -4590942e-11, -5814402e-11, -4578304e-11, -2665e-8, -1967788e-11, -2364789e-11, -3254061e-11, -9756144e-12, 1388758e-11, 2261886e-11, 289004e-10, 1135767e-11, -2306857e-11, -2376184e-11, -7825109e-12, -156596e-10, -4620735e-11, -4591316e-11, -1408609e-11, 3002203e-12, -948528e-11, -221822e-10, -1648771e-11, 4396653e-12, 6735927e-12, -1690878e-11, -2347588e-11, -9868813e-12, -3009142e-12, -710261e-11, -2139554e-11, -2552834e-11, -135064e-10, 1325846e-12, 6042779e-12, 238712e-11, -5622589e-12, -1207889e-11, -9789054e-12, -7086718e-14, 2388108e-12, -2972028e-12, -5480785e-12, -3791238e-12, -2527508e-12, -3334829e-12, -2709887e-12, -4219316e-13, -5901154e-14, -1467174e-12, -6756933e-13, 1576547e-12, 2148523e-12, 8615135e-13, -4199461e-13, -1441584e-13, 8645467e-13, 8092221e-13, 2244488e-13, -2020588e-13, -5933684e-14, 7546032e-14, 4615883e-14, -1780855e-14, -4353092e-14, -10268e-12], [3.631621, 1.170935, -2.586018, -1.943616, -0.1046551, 0.1761559, -0.5561035, -0.722536, 0.03828009, 0.5477939, 0.5073545, 0.275877, 0.2554495, 0.2837684, 0.20167, 0.02343549, -0.1351852, -0.1969614, -0.1821615, -0.1519513, -0.1547149, -0.1221026, -0.07542384, -0.01851653, 0.03592775, 0.05720975, 0.03450434, -734047e-9, -0.01991231, -4807225e-9, 0.02459216, 0.03110033, 0.02480435, -0.02556314, -0.06956774, -0.05310945, -0.01532024, -4507069e-9, -0.01901796, -0.0355942, -0.03626109, -0.01880799, 3384363e-9, 0.015723, 3827894e-9, -2282454e-11, 5543887e-9, -400321e-8, -0.02410425, -0.0362586, -0.03110134, -0.01393021, 3138994e-9, 0.01001646, 9562349e-9, 68172e-7, 907255e-8, 1787937e-9, -0.01611627, -0.02866628, -0.03079371, -0.01948259, -1314924e-9, 4207226e-9, -7501402e-9, -0.01311625, -940133e-8, 9696975e-11, 7494197e-9, 7127338e-9, 252416e-8, 2295384e-10, 4584965e-10, 5090206e-9, 8101127e-9, 6612608e-9, 4553041e-9, -5769051e-9, -0.01446132, -0.01435778, -9610796e-9, -5771331e-9, -6806611e-9, -7384152e-9, -0.01075722, -0.01668318, -0.01782941, -9710939e-9, -2084809e-9, -3363395e-10, -354702e-8, -5009056e-9, 1474817e-9, 0.01699253, 0.03005623, 0.0245652, 7254565e-9, -4396699e-9, -4575822e-10, 5821827e-9, 4299299e-9, -3157932e-9, -6298396e-9, 1384483e-9, 0.01000717, 9055973e-9, 4697593e-9, 0.0102438, 0.02299298, 0.02995787, 0.02655697, 0.02319827, 0.02446767, 0.02638775, 0.0256976, 0.02069628, 0.01414092, 9242693e-9, 6445399e-9, 6257187e-9, 7505434e-9, 9506333e-9, 0.01547604, 0.02030337, 0.01814211, 0.01486078, 0.01083606, 9837137e-9, 0.01350998, 0.01513868, 0.01238744, 9566813e-9, 7913684e-9, 8684963e-9, 0.01013466, 9193875e-9, 8482011e-9, 8410022e-9, 5091879e-9, 1045736e-9, -4277155e-10, -2643847e-12, -4445483e-11, -3623411e-9, -7955207e-9, -6504802e-9, -2213479e-9, -1249464e-9, -411775e-8, -7074118e-9, -6470165e-9, -2532607e-9, 1709726e-9, 1369449e-9, -6100086e-9, -0.01289677, -0.0132961, -9799843e-9, -7084648e-9, -7305657e-9, -9675285e-9, -0.01340452, -0.01627639, -0.01787581, -0.01832644, -0.01497705, -9928804e-9, -7857762e-9, -0.01032317, -0.01284739, -9737945e-9, -4088815e-9, -3391827e-9, -6631114e-9, -6494747e-9, -1515462e-9, 3728138e-9, 4744693e-9, 8277225e-10, -155696e-8, -315312e-9, 6920451e-11, -310149e-8, -8582439e-9, -9072388e-9, -4872238e-9, -2687504e-9, -3126363e-9, -4592468e-9, -4926582e-9, -1078681e-9, 2242621e-9, 2282738e-9, 2526884e-9, 2635293e-9, 282244e-8, 2799003e-9, 145532e-8, -88727e-8, -2144571e-9, -3397722e-9, -6159721e-9, -7920413e-9, -4795492e-9, 1822888e-9, 4699378e-9, 3489108e-9, 2544141e-10, -1436222e-9, 3247756e-10, 2033515e-9, 20056e-7, 1505256e-9, 6116285e-10, -1039658e-9, -1475689e-9, 2050377e-10, 3487646e-9, 4955394e-9, 3273543e-9, 1123497e-9, 3298424e-10, -298297e-10, 4255413e-10, 2218308e-9, 2952903e-9, 1505052e-9, -1109275e-9, -2041612e-9, -5848698e-10, 209953e-8, 4542355e-9, 5195063e-9, 4991502e-9, 4771451e-9, 3910201e-9, 2768917e-9, 231686e-8, 2368375e-9, 2474722e-9, 1766354e-9, 1707042e-9, 1280897e-9, 8719921e-10, 2218053e-9, 3103751e-9, 2593789e-9, 9500366e-10, -7612438e-11, 2571149e-9, 6165049e-9, 6283401e-9, 3928899e-9, 3163391e-9, 5434506e-9, 8197006e-9, 8254558e-9, 6397763e-9, 5585559e-9, 5112269e-9, 3463443e-9, 2299759e-9, 1865921e-9, 1563062e-9, 1123478e-9, 8799253e-10, 6630016e-10, 1727601e-10, -1832596e-10, -1312152e-9, -2461652e-9, -1155313e-9, 2253128e-11, -6414105e-10, -1508088e-9, -1395194e-9, -1319201e-9, -1594526e-9, -2540326e-9, -2683635e-9, -2543385e-9, -3724081e-9, -6382323e-9, -7643726e-9, -70956e-7, -6058661e-9, -5681358e-9, -5336517e-9, -5112685e-9, -4947442e-9, -4562254e-9, -4697395e-9, -5673966e-9, -6429078e-9, -6325104e-9, -6286372e-9, -6747536e-9, -6227455e-9, -5404006e-9, -4451771e-9, -3481564e-9, -4063174e-9, -5971361e-9, -6488487e-9, -5045344e-9, -3537024e-9, -2834814e-9, -2976431e-9, -3348142e-9, -2232982e-9, -122642e-8, -1361578e-9, -6073848e-10, 1489492e-9, 3012597e-9, 2356452e-9, 1361108e-9, 1116211e-9, 7647194e-10, 2069011e-10, -9608071e-10, -1658849e-9, -1379244e-9, -8345918e-10, -7563282e-10, -3302461e-10, 6683399e-10, 2527162e-9, 3727654e-9, 3434543e-9, 2871005e-9, 2456338e-9, 2245788e-9, 2658227e-9, 2542431e-9, 190558e-8, 2159456e-9, 2953331e-9, 3013416e-9, 281662e-8, 2774781e-9, 243335e-8, 2273462e-9, 3280415e-9, 3803616e-9, 289396e-8, 235697e-8, 3696575e-9, 4444276e-9, 2849576e-9, 629083e-9, -104839e-8, -4299111e-10, 9208358e-10, 2723548e-10, -5458277e-10, 7385233e-11, 1154346e-9, 1526991e-9, 9341644e-10, 5822776e-10, 1175412e-9, 2166647e-9, 2751043e-9, 2158758e-9, 7141045e-10, -3969066e-10, 6454112e-11, 1634712e-9, 2090514e-9, 2630044e-10, -9943309e-10, 1248387e-9, 4011021e-9, 3436069e-9, 5623681e-10, -1031535e-9, 2841884e-12, 1960555e-9, 3213166e-9, 3737734e-9, 3781748e-9, 379717e-8, 39546e-7, 3653141e-9, 2257327e-9, 8077319e-10, 6771739e-10, 1538816e-9, 2082186e-9, 1697405e-9, 1223553e-9, 1449681e-9, 2136479e-9, 2053618e-9, 135209e-8, 5222704e-10, -2621765e-10, -1029709e-9, -6582275e-10, 7075769e-10, 1097748e-9, 3461423e-10, -7088121e-10, -1234117e-9, -9705463e-10, -1079275e-9, -2098329e-9, -321648e-8, -3637187e-9, -3524055e-9, -2301075e-9, -1189108e-9, -8574053e-10, -1055518e-9, -1733359e-9, -2399374e-9, -1737491e-9, -1227466e-10, 4744373e-10, -77672e-8, -1699671e-9, -1915676e-9, -2850486e-9, -3856809e-9, -4031289e-9, -3264871e-9, -25822e-7, -2728131e-9, -2570463e-9, -1867058e-9, -1035357e-9, -8865858e-10, -1786971e-9, -2642442e-9, -3164445e-9, -3914095e-9, -4344959e-9, -3547843e-9, -2569258e-9, -2751461e-9, -3620862e-9, -3091254e-9, -1396416e-9, -2377596e-10, -36854e-9, -5751797e-10, -1145146e-9, -1097649e-9, -9285455e-10, -8714881e-10, -7909153e-10, -106828e-8, -107333e-8, -7569313e-10, -7928135e-10, -8508104e-10, -1984974e-10, 8690441e-10, 1671956e-9, 146128e-8, 84563e-8, 1295202e-9, 2414636e-9, 2442938e-9, 1510219e-9, 5524985e-10, 6336581e-10, 1490602e-9, 1823242e-9, 1402163e-9, 1116884e-9, 142191e-8, 1944147e-9, 2188286e-9, 2092964e-9, 2079239e-9, 2162611e-9, 1760827e-9, 6505197e-10, -2372651e-10, -1882716e-10, 9216414e-10, 2015541e-9, 2340525e-9, 1899758e-9, 12992e-7, 1158651e-9, 1366552e-9, 128807e-8, 9606935e-10, 9404089e-10, 8967132e-10, 6057032e-10, 448101e-9, 755559e-9, 1415024e-9, 1832051e-9, 1185767e-9, 169407e-9, -4402909e-10, 1268958e-10, 8298367e-10, 3693543e-10, 1895569e-10, 8195932e-10, 1296596e-9, 1355755e-9, 1108258e-9, 1003587e-9, 1251031e-9, 1038362e-9, 6728909e-10, 3755553e-10, 2671451e-10, 4634122e-10, 6085225e-10, 2738438e-11, -8920675e-10, -9691969e-10, -4561088e-10, 4771858e-11, 3075998e-10, 3319881e-10, 4903013e-10, 7981889e-10, 698041e-9, 2644741e-10, -2793244e-10, -3555679e-10, -4948277e-10, -1109905e-9, -1681265e-9, -1751949e-9, -1484296e-9, -807815e-9, -4540102e-10, -1017788e-9, -1737383e-9, -1340599e-9, -5801833e-10, -3533947e-10, -5194832e-10, -7858142e-10, -8452039e-10, -4434174e-10, -5131369e-10, -1251145e-9, -1334157e-9, -7453533e-10, -3523071e-10, -7294877e-10, -1300391e-9, -1054769e-9, -4407218e-10, -269556e-9, -823229e-9, -1385445e-9, -1337725e-9, -1043121e-9, -1230025e-9, -1572711e-9, -1169492e-9, -4841754e-10, -7152278e-10, -1366771e-9, -1537883e-9, -1086648e-9, -37748e-8, 1177084e-10, 189573e-9, -1481814e-10, -3048386e-10, 2198021e-10, 7446566e-10, 4123379e-10, -6670629e-10, -1405755e-9, -1244684e-9, -5584474e-10, 9843821e-11, 2130224e-10, 3097143e-10, 7562597e-10, 1499853e-9, 1689494e-9, 1007711e-9, 7626647e-10, 1241922e-9, 1450023e-9, 1025664e-9, 2587542e-10, -1322463e-10, 2539641e-10, 9952036e-10, 1184658e-9, 8329679e-10, 7192061e-10, 1093782e-9, 150007e-8, 1510612e-9, 1212292e-9, 1047006e-9, 1380477e-9, 1572628e-9, 123414e-8, 7269049e-10, 543479e-9, 621341e-9, 6321302e-10, 4160495e-10, 3793237e-10, 5533934e-10, 6383926e-10, 7951369e-10, 1092291e-9, 1294772e-9, 1164468e-9, 4590962e-10, -1329695e-10, 1662923e-10, 5759676e-10, -5384497e-11, -9137698e-10, -723914e-9, -1016918e-10, 7337099e-11, 8699591e-11, 372614e-9, 6905171e-10, 1022975e-9, 808721e-9, 3837739e-10, 3218496e-10, 2127172e-10, -6817118e-10, -1562002e-9, -1529853e-9, -1065588e-9, -9902287e-10, -1233087e-9, -1083586e-9, -599704e-9, -135333e-9, 2962095e-10, 3089794e-10, 3234728e-11, 1137585e-10, -8491228e-11, -641588e-9, -8609227e-10, -8983586e-10, -9588531e-10, -1025544e-9, -9501092e-10, -957458e-9, -8730012e-10, -9713641e-10, -1019606e-9, -6910638e-10, -3615707e-10, -6774691e-10, -1161643e-9, -1192155e-9, -8642794e-10, -5460681e-10, -7130249e-10, -1030986e-9, -1040475e-9, -798259e-9, -4746494e-10, -4227793e-10, -5143516e-10, -4365865e-10, -3249598e-10, -3948193e-10, -5370942e-10, -4566714e-10, 59417e-10, 1985661e-10, -8922551e-11, -5720383e-10, -7256805e-10, -381618e-9, 6337879e-11, 1471699e-10, 108917e-9, 316145e-9, 7717095e-10, 9510209e-10, 568432e-9, 266392e-9, 2899004e-10, 3237198e-10, 8172132e-11, -1738313e-10, -1912509e-10, -5710086e-11, 9362737e-12, 5432422e-11, 340232e-9, 4823394e-10, 2958902e-10, 4076324e-10, 9617349e-10, 114027e-8, 5714045e-10, 768092e-10, 2107724e-11, 3330196e-10, 4509294e-10, 1993475e-10, 180817e-10, 3479104e-10, 5255191e-10, 3353545e-11, -277326e-9, -39464e-9, 1602267e-11, -1038e-7, -2245485e-10, -1722947e-10, 1765168e-10, 2535747e-10, 1126174e-10, 1245285e-10, 4688728e-10, 6676869e-10, 5948628e-10, 4033125e-10, 2941028e-10, 2550166e-10, 2056835e-10, 1288436e-10, 129351e-9, 1381404e-10, 1586519e-11, -1251402e-11, 3238272e-10, 4046372e-10, 1005523e-10, -1802327e-10, -3101733e-10, -1629614e-10, 4554765e-11, 4914749e-11, 1295478e-10, 2712254e-10, 1743452e-10, 3281557e-10, 5682524e-10, 5468932e-10, 3127278e-10, -389769e-11, -3703905e-11, 7991284e-11, -1556399e-10, -4984949e-10, -5100447e-10, -2399241e-10, 1290499e-11, -2252834e-11, -1923803e-10, -2201418e-11, 5043112e-10, 8616749e-10, 5032913e-10, -2262371e-10, -467804e-9, -2558006e-10, 1284178e-10, 2942347e-10, -5248234e-11, -2804908e-10, -103606e-9, 1439972e-10, 366431e-9, 1566657e-10, -8637676e-11, 4910007e-11, 3586973e-10, 2650413e-10, 9404314e-11, 2598276e-10, 5378645e-10, 3378648e-10, -1562884e-10, -3943076e-10, -2947761e-10, 2349413e-11, 1071094e-10, -2784282e-10, -3645404e-10, 2448916e-10, 5208665e-10, 2087408e-10, -1594137e-10, -2059224e-10, -1055532e-11, 7574311e-11, -1192267e-10, -4170874e-10, -3539969e-10, 2161064e-10, 4680587e-10, 1187611e-10, -1806141e-10, 1142715e-10, 676813e-9, 9048218e-10, 5602886e-10, 2080581e-10, 3180757e-10, 6192624e-10, 6032947e-10, 1188509e-10, -4084032e-10, -2607692e-10, 1461545e-11, -9484317e-11, -2202156e-10, -6262814e-11, 3673156e-11, 2120843e-11, 104158e-9, 2532773e-10, 2093666e-10, -8009771e-11, -2598656e-10, -1951118e-10, -1236462e-10, -1519509e-10, -2217358e-10, -1975398e-10, -2097021e-10, -3184983e-10, -1904246e-10, -9356216e-12, 9875029e-12, -2272197e-10, -3804444e-10, -209371e-9, -2250232e-12, -1164908e-10, -4586309e-10, -5222708e-10, -2621726e-10, -6721269e-11, -1510746e-10, -3041348e-10, -2167517e-10, -2312431e-10, -3326556e-10, -3986795e-10, -4140786e-10, -3545651e-10, -254207e-9, -2606967e-10, -2487945e-10, -5771719e-11, 5804913e-11, -4334851e-11, -306482e-9, -4900455e-10, -4977388e-10, -4342209e-10, -4244095e-10, -5561424e-10, -6477407e-10, -4761308e-10, -1660849e-10, -158906e-10, -8874277e-11, -2227391e-10, -2582665e-10, -1615951e-10, -1061572e-10, -175292e-9, -2709732e-10, -2251282e-10, -1754569e-10, -1341255e-10, -1678041e-10, -1778486e-10, -6579065e-11, 7639542e-11, 2010899e-10, 2618711e-10, 2489507e-10, 137393e-9, 9096013e-12, 3786875e-11, 2484878e-10, 389107e-9, 2675116e-10, 8167169e-12, -8252151e-11, 6076616e-11, 2298873e-10, 2400077e-10, 199773e-9, 1597476e-10, 165006e-9, 2338181e-10, 3337122e-10, 4192565e-10, 3036817e-10, 1173681e-10, 1525974e-10, 2059133e-10, 1876125e-10, 1750098e-10, 2027081e-10, 2289889e-10, 1967797e-10, 1599621e-10, 2379348e-10, 3009274e-10, 2700523e-10, 1535151e-10, 2459683e-11, 5443564e-11, 1667913e-10, 1730911e-10, 8899147e-11, 1955627e-11, 302358e-10, 7177624e-11, 7902941e-11, 4213388e-11, -1291801e-11, 1180912e-11, 1158983e-10, 1535537e-10, 1453809e-10, 1439893e-10, 9714964e-11, 6279861e-11, 6617353e-11, 4206631e-11, -401357e-10, -9984434e-11, -8561045e-11, -6233648e-11, -8218059e-11, -5832408e-11, 2144797e-11, 3559672e-11, -1474777e-11, -2512697e-11, 6219808e-13, 3354407e-11, 1701614e-11, -4377586e-11, -9147307e-11, -6994955e-11, -1399078e-11, -1834377e-11, -4590942e-11, -5814402e-11, -4578304e-11, -2665e-8, -1967788e-11, -2364789e-11, -3254061e-11, -9756144e-12, 1388758e-11, 2261886e-11, 289004e-10, 1135767e-11, -2306857e-11, -2376184e-11, -7825109e-12, -156596e-10, -4620735e-11, -4591316e-11, -1408609e-11, 3002203e-12, -948528e-11, -221822e-10, -1648771e-11, 4396653e-12, 6735927e-12, -1690878e-11, -2347588e-11, -9868813e-12, -3009142e-12, -710261e-11, -2139554e-11, -2552834e-11, -135064e-10, 1325846e-12, 6042779e-12, 238712e-11, -5622589e-12, -1207889e-11, -9789054e-12, -7086718e-14, 2388108e-12, -2972028e-12, -5480785e-12, -3791238e-12, -2527508e-12, -3334829e-12, -2709887e-12, -4219316e-13, -5901154e-14, -1467174e-12, -6756933e-13, 1576547e-12, 2148523e-12, 8615135e-13, -4199461e-13, -1441584e-13, 8645467e-13, 8092221e-13, 2244488e-13, -2020588e-13, -5933684e-14, 7546032e-14, 4615883e-14, -1780855e-14, -4353092e-14, -10268e-12], [3.631621, 1.170935, -2.586018, -1.943616, -0.1046551, 0.1761559, -0.5561035, -0.722536, 0.03828009, 0.5477939, 0.5073545, 0.275877, 0.2554495, 0.2837684, 0.20167, 0.02343549, -0.1351852, -0.1969614, -0.1821615, -0.1519513, -0.1547149, -0.1221026, -0.07542384, -0.01851653, 0.03592775, 0.05720975, 0.03450434, -734047e-9, -0.01991231, -4807225e-9, 0.02459216, 0.03110033, 0.02480435, -0.02556314, -0.06956774, -0.05310945, -0.01532024, -4507069e-9, -0.01901796, -0.0355942, -0.03626109, -0.01880799, 3384363e-9, 0.015723, 3827894e-9, -2282454e-11, 5543887e-9, -400321e-8, -0.02410425, -0.0362586, -0.03110134, -0.01393021, 3138994e-9, 0.01001646, 9562349e-9, 68172e-7, 907255e-8, 1787937e-9, -0.01611627, -0.02866628, -0.03079371, -0.01948259, -1314924e-9, 4207226e-9, -7501402e-9, -0.01311625, -940133e-8, 9696975e-11, 7494197e-9, 7127338e-9, 252416e-8, 2295384e-10, 4584965e-10, 5090206e-9, 8101127e-9, 6612608e-9, 4553041e-9, -5769051e-9, -0.01446132, -0.01435778, -9610796e-9, -5771331e-9, -6806611e-9, -7384152e-9, -0.01075722, -0.01668318, -0.01782941, -9710939e-9, -2084809e-9, -3363395e-10, -354702e-8, -5009056e-9, 1474817e-9, 0.01699253, 0.03005623, 0.0245652, 7254565e-9, -4396699e-9, -4575822e-10, 5821827e-9, 4299299e-9, -3157932e-9, -6298396e-9, 1384483e-9, 0.01000717, 9055973e-9, 4697593e-9, 0.0102438, 0.02299298, 0.02995787, 0.02655697, 0.02319827, 0.02446767, 0.02638775, 0.0256976, 0.02069628, 0.01414092, 9242693e-9, 6445399e-9, 6257187e-9, 7505434e-9, 9506333e-9, 0.01547604, 0.02030337, 0.01814211, 0.01486078, 0.01083606, 9837137e-9, 0.01350998, 0.01513868, 0.01238744, 9566813e-9, 7913684e-9, 8684963e-9, 0.01013466, 9193875e-9, 8482011e-9, 8410022e-9, 5091879e-9, 1045736e-9, -4277155e-10, -2643847e-12, -4445483e-11, -3623411e-9, -7955207e-9, -6504802e-9, -2213479e-9, -1249464e-9, -411775e-8, -7074118e-9, -6470165e-9, -2532607e-9, 1709726e-9, 1369449e-9, -6100086e-9, -0.01289677, -0.0132961, -9799843e-9, -7084648e-9, -7305657e-9, -9675285e-9, -0.01340452, -0.01627639, -0.01787581, -0.01832644, -0.01497705, -9928804e-9, -7857762e-9, -0.01032317, -0.01284739, -9737945e-9, -4088815e-9, -3391827e-9, -6631114e-9, -6494747e-9, -1515462e-9, 3728138e-9, 4744693e-9, 8277225e-10, -155696e-8, -315312e-9, 6920451e-11, -310149e-8, -8582439e-9, -9072388e-9, -4872238e-9, -2687504e-9, -3126363e-9, -4592468e-9, -4926582e-9, -1078681e-9, 2242621e-9, 2282738e-9, 2526884e-9, 2635293e-9, 282244e-8, 2799003e-9, 145532e-8, -88727e-8, -2144571e-9, -3397722e-9, -6159721e-9, -7920413e-9, -4795492e-9, 1822888e-9, 4699378e-9, 3489108e-9, 2544141e-10, -1436222e-9, 3247756e-10, 2033515e-9, 20056e-7, 1505256e-9, 6116285e-10, -1039658e-9, -1475689e-9, 2050377e-10, 3487646e-9, 4955394e-9, 3273543e-9, 1123497e-9, 3298424e-10, -298297e-10, 4255413e-10, 2218308e-9, 2952903e-9, 1505052e-9, -1109275e-9, -2041612e-9, -5848698e-10, 209953e-8, 4542355e-9, 5195063e-9, 4991502e-9, 4771451e-9, 3910201e-9, 2768917e-9, 231686e-8, 2368375e-9, 2474722e-9, 1766354e-9, 1707042e-9, 1280897e-9, 8719921e-10, 2218053e-9, 3103751e-9, 2593789e-9, 9500366e-10, -7612438e-11, 2571149e-9, 6165049e-9, 6283401e-9, 3928899e-9, 3163391e-9, 5434506e-9, 8197006e-9, 8254558e-9, 6397763e-9, 5585559e-9, 5112269e-9, 3463443e-9, 2299759e-9, 1865921e-9, 1563062e-9, 1123478e-9, 8799253e-10, 6630016e-10, 1727601e-10, -1832596e-10, -1312152e-9, -2461652e-9, -1155313e-9, 2253128e-11, -6414105e-10, -1508088e-9, -1395194e-9, -1319201e-9, -1594526e-9, -2540326e-9, -2683635e-9, -2543385e-9, -3724081e-9, -6382323e-9, -7643726e-9, -70956e-7, -6058661e-9, -5681358e-9, -5336517e-9, -5112685e-9, -4947442e-9, -4562254e-9, -4697395e-9, -5673966e-9, -6429078e-9, -6325104e-9, -6286372e-9, -6747536e-9, -6227455e-9, -5404006e-9, -4451771e-9, -3481564e-9, -4063174e-9, -5971361e-9, -6488487e-9, -5045344e-9, -3537024e-9, -2834814e-9, -2976431e-9, -3348142e-9, -2232982e-9, -122642e-8, -1361578e-9, -6073848e-10, 1489492e-9, 3012597e-9, 2356452e-9, 1361108e-9, 1116211e-9, 7647194e-10, 2069011e-10, -9608071e-10, -1658849e-9, -1379244e-9, -8345918e-10, -7563282e-10, -3302461e-10, 6683399e-10, 2527162e-9, 3727654e-9, 3434543e-9, 2871005e-9, 2456338e-9, 2245788e-9, 2658227e-9, 2542431e-9, 190558e-8, 2159456e-9, 2953331e-9, 3013416e-9, 281662e-8, 2774781e-9, 243335e-8, 2273462e-9, 3280415e-9, 3803616e-9, 289396e-8, 235697e-8, 3696575e-9, 4444276e-9, 2849576e-9, 629083e-9, -104839e-8, -4299111e-10, 9208358e-10, 2723548e-10, -5458277e-10, 7385233e-11, 1154346e-9, 1526991e-9, 9341644e-10, 5822776e-10, 1175412e-9, 2166647e-9, 2751043e-9, 2158758e-9, 7141045e-10, -3969066e-10, 6454112e-11, 1634712e-9, 2090514e-9, 2630044e-10, -9943309e-10, 1248387e-9, 4011021e-9, 3436069e-9, 5623681e-10, -1031535e-9, 2841884e-12, 1960555e-9, 3213166e-9, 3737734e-9, 3781748e-9, 379717e-8, 39546e-7, 3653141e-9, 2257327e-9, 8077319e-10, 6771739e-10, 1538816e-9, 2082186e-9, 1697405e-9, 1223553e-9, 1449681e-9, 2136479e-9, 2053618e-9, 135209e-8, 5222704e-10, -2621765e-10, -1029709e-9, -6582275e-10, 7075769e-10, 1097748e-9, 3461423e-10, -7088121e-10, -1234117e-9, -9705463e-10, -1079275e-9, -2098329e-9, -321648e-8, -3637187e-9, -3524055e-9, -2301075e-9, -1189108e-9, -8574053e-10, -1055518e-9, -1733359e-9, -2399374e-9, -1737491e-9, -1227466e-10, 4744373e-10, -77672e-8, -1699671e-9, -1915676e-9, -2850486e-9, -3856809e-9, -4031289e-9, -3264871e-9, -25822e-7, -2728131e-9, -2570463e-9, -1867058e-9, -1035357e-9, -8865858e-10, -1786971e-9, -2642442e-9, -3164445e-9, -3914095e-9, -4344959e-9, -3547843e-9, -2569258e-9, -2751461e-9, -3620862e-9, -3091254e-9, -1396416e-9, -2377596e-10, -36854e-9, -5751797e-10, -1145146e-9, -1097649e-9, -9285455e-10, -8714881e-10, -7909153e-10, -106828e-8, -107333e-8, -7569313e-10, -7928135e-10, -8508104e-10, -1984974e-10, 8690441e-10, 1671956e-9, 146128e-8, 84563e-8, 1295202e-9, 2414636e-9, 2442938e-9, 1510219e-9, 5524985e-10, 6336581e-10, 1490602e-9, 1823242e-9, 1402163e-9, 1116884e-9, 142191e-8, 1944147e-9, 2188286e-9, 2092964e-9, 2079239e-9, 2162611e-9, 1760827e-9, 6505197e-10, -2372651e-10, -1882716e-10, 9216414e-10, 2015541e-9, 2340525e-9, 1899758e-9, 12992e-7, 1158651e-9, 1366552e-9, 128807e-8, 9606935e-10, 9404089e-10, 8967132e-10, 6057032e-10, 448101e-9, 755559e-9, 1415024e-9, 1832051e-9, 1185767e-9, 169407e-9, -4402909e-10, 1268958e-10, 8298367e-10, 3693543e-10, 1895569e-10, 8195932e-10, 1296596e-9, 1355755e-9, 1108258e-9, 1003587e-9, 1251031e-9, 1038362e-9, 6728909e-10, 3755553e-10, 2671451e-10, 4634122e-10, 6085225e-10, 2738438e-11, -8920675e-10, -9691969e-10, -4561088e-10, 4771858e-11, 3075998e-10, 3319881e-10, 4903013e-10, 7981889e-10, 698041e-9, 2644741e-10, -2793244e-10, -3555679e-10, -4948277e-10, -1109905e-9, -1681265e-9, -1751949e-9, -1484296e-9, -807815e-9, -4540102e-10, -1017788e-9, -1737383e-9, -1340599e-9, -5801833e-10, -3533947e-10, -5194832e-10, -7858142e-10, -8452039e-10, -4434174e-10, -5131369e-10, -1251145e-9, -1334157e-9, -7453533e-10, -3523071e-10, -7294877e-10, -1300391e-9, -1054769e-9, -4407218e-10, -269556e-9, -823229e-9, -1385445e-9, -1337725e-9, -1043121e-9, -1230025e-9, -1572711e-9, -1169492e-9, -4841754e-10, -7152278e-10, -1366771e-9, -1537883e-9, -1086648e-9, -37748e-8, 1177084e-10, 189573e-9, -1481814e-10, -3048386e-10, 2198021e-10, 7446566e-10, 4123379e-10, -6670629e-10, -1405755e-9, -1244684e-9, -5584474e-10, 9843821e-11, 2130224e-10, 3097143e-10, 7562597e-10, 1499853e-9, 1689494e-9, 1007711e-9, 7626647e-10, 1241922e-9, 1450023e-9, 1025664e-9, 2587542e-10, -1322463e-10, 2539641e-10, 9952036e-10, 1184658e-9, 8329679e-10, 7192061e-10, 1093782e-9, 150007e-8, 1510612e-9, 1212292e-9, 1047006e-9, 1380477e-9, 1572628e-9, 123414e-8, 7269049e-10, 543479e-9, 621341e-9, 6321302e-10, 4160495e-10, 3793237e-10, 5533934e-10, 6383926e-10, 7951369e-10, 1092291e-9, 1294772e-9, 1164468e-9, 4590962e-10, -1329695e-10, 1662923e-10, 5759676e-10, -5384497e-11, -9137698e-10, -723914e-9, -1016918e-10, 7337099e-11, 8699591e-11, 372614e-9, 6905171e-10, 1022975e-9, 808721e-9, 3837739e-10, 3218496e-10, 2127172e-10, -6817118e-10, -1562002e-9, -1529853e-9, -1065588e-9, -9902287e-10, -1233087e-9, -1083586e-9, -599704e-9, -135333e-9, 2962095e-10, 3089794e-10, 3234728e-11, 1137585e-10, -8491228e-11, -641588e-9, -8609227e-10, -8983586e-10, -9588531e-10, -1025544e-9, -9501092e-10, -957458e-9, -8730012e-10, -9713641e-10, -1019606e-9, -6910638e-10, -3615707e-10, -6774691e-10, -1161643e-9, -1192155e-9, -8642794e-10, -5460681e-10, -7130249e-10, -1030986e-9, -1040475e-9, -798259e-9, -4746494e-10, -4227793e-10, -5143516e-10, -4365865e-10, -3249598e-10, -3948193e-10, -5370942e-10, -4566714e-10, 59417e-10, 1985661e-10, -8922551e-11, -5720383e-10, -7256805e-10, -381618e-9, 6337879e-11, 1471699e-10, 108917e-9, 316145e-9, 7717095e-10, 9510209e-10, 568432e-9, 266392e-9, 2899004e-10, 3237198e-10, 8172132e-11, -1738313e-10, -1912509e-10, -5710086e-11, 9362737e-12, 5432422e-11, 340232e-9, 4823394e-10, 2958902e-10, 4076324e-10, 9617349e-10, 114027e-8, 5714045e-10, 768092e-10, 2107724e-11, 3330196e-10, 4509294e-10, 1993475e-10, 180817e-10, 3479104e-10, 5255191e-10, 3353545e-11, -277326e-9, -39464e-9, 1602267e-11, -1038e-7, -2245485e-10, -1722947e-10, 1765168e-10, 2535747e-10, 1126174e-10, 1245285e-10, 4688728e-10, 6676869e-10, 5948628e-10, 4033125e-10, 2941028e-10, 2550166e-10, 2056835e-10, 1288436e-10, 129351e-9, 1381404e-10, 1586519e-11, -1251402e-11, 3238272e-10, 4046372e-10, 1005523e-10, -1802327e-10, -3101733e-10, -1629614e-10, 4554765e-11, 4914749e-11, 1295478e-10, 2712254e-10, 1743452e-10, 3281557e-10, 5682524e-10, 5468932e-10, 3127278e-10, -389769e-11, -3703905e-11, 7991284e-11, -1556399e-10, -4984949e-10, -5100447e-10, -2399241e-10, 1290499e-11, -2252834e-11, -1923803e-10, -2201418e-11, 5043112e-10, 8616749e-10, 5032913e-10, -2262371e-10, -467804e-9, -2558006e-10, 1284178e-10, 2942347e-10, -5248234e-11, -2804908e-10, -103606e-9, 1439972e-10, 366431e-9, 1566657e-10, -8637676e-11, 4910007e-11, 3586973e-10, 2650413e-10, 9404314e-11, 2598276e-10, 5378645e-10, 3378648e-10, -1562884e-10, -3943076e-10, -2947761e-10, 2349413e-11, 1071094e-10, -2784282e-10, -3645404e-10, 2448916e-10, 5208665e-10, 2087408e-10, -1594137e-10, -2059224e-10, -1055532e-11, 7574311e-11, -1192267e-10, -4170874e-10, -3539969e-10, 2161064e-10, 4680587e-10, 1187611e-10, -1806141e-10, 1142715e-10, 676813e-9, 9048218e-10, 5602886e-10, 2080581e-10, 3180757e-10, 6192624e-10, 6032947e-10, 1188509e-10, -4084032e-10, -2607692e-10, 1461545e-11, -9484317e-11, -2202156e-10, -6262814e-11, 3673156e-11, 2120843e-11, 104158e-9, 2532773e-10, 2093666e-10, -8009771e-11, -2598656e-10, -1951118e-10, -1236462e-10, -1519509e-10, -2217358e-10, -1975398e-10, -2097021e-10, -3184983e-10, -1904246e-10, -9356216e-12, 9875029e-12, -2272197e-10, -3804444e-10, -209371e-9, -2250232e-12, -1164908e-10, -4586309e-10, -5222708e-10, -2621726e-10, -6721269e-11, -1510746e-10, -3041348e-10, -2167517e-10, -2312431e-10, -3326556e-10, -3986795e-10, -4140786e-10, -3545651e-10, -254207e-9, -2606967e-10, -2487945e-10, -5771719e-11, 5804913e-11, -4334851e-11, -306482e-9, -4900455e-10, -4977388e-10, -4342209e-10, -4244095e-10, -5561424e-10, -6477407e-10, -4761308e-10, -1660849e-10, -158906e-10, -8874277e-11, -2227391e-10, -2582665e-10, -1615951e-10, -1061572e-10, -175292e-9, -2709732e-10, -2251282e-10, -1754569e-10, -1341255e-10, -1678041e-10, -1778486e-10, -6579065e-11, 7639542e-11, 2010899e-10, 2618711e-10, 2489507e-10, 137393e-9, 9096013e-12, 3786875e-11, 2484878e-10, 389107e-9, 2675116e-10, 8167169e-12, -8252151e-11, 6076616e-11, 2298873e-10, 2400077e-10, 199773e-9, 1597476e-10, 165006e-9, 2338181e-10, 3337122e-10, 4192565e-10, 3036817e-10, 1173681e-10, 1525974e-10, 2059133e-10, 1876125e-10, 1750098e-10, 2027081e-10, 2289889e-10, 1967797e-10, 1599621e-10, 2379348e-10, 3009274e-10, 2700523e-10, 1535151e-10, 2459683e-11, 5443564e-11, 1667913e-10, 1730911e-10, 8899147e-11, 1955627e-11, 302358e-10, 7177624e-11, 7902941e-11, 4213388e-11, -1291801e-11, 1180912e-11, 1158983e-10, 1535537e-10, 1453809e-10, 1439893e-10, 9714964e-11, 6279861e-11, 6617353e-11, 4206631e-11, -401357e-10, -9984434e-11, -8561045e-11, -6233648e-11, -8218059e-11, -5832408e-11, 2144797e-11, 3559672e-11, -1474777e-11, -2512697e-11, 6219808e-13, 3354407e-11, 1701614e-11, -4377586e-11, -9147307e-11, -6994955e-11, -1399078e-11, -1834377e-11, -4590942e-11, -5814402e-11, -4578304e-11, -2665e-8, -1967788e-11, -2364789e-11, -3254061e-11, -9756144e-12, 1388758e-11, 2261886e-11, 289004e-10, 1135767e-11, -2306857e-11, -2376184e-11, -7825109e-12, -156596e-10, -4620735e-11, -4591316e-11, -1408609e-11, 3002203e-12, -948528e-11, -221822e-10, -1648771e-11, 4396653e-12, 6735927e-12, -1690878e-11, -2347588e-11, -9868813e-12, -3009142e-12, -710261e-11, -2139554e-11, -2552834e-11, -135064e-10, 1325846e-12, 6042779e-12, 238712e-11, -5622589e-12, -1207889e-11, -9789054e-12, -7086718e-14, 2388108e-12, -2972028e-12, -5480785e-12, -3791238e-12, -2527508e-12, -3334829e-12, -2709887e-12, -4219316e-13, -5901154e-14, -1467174e-12, -6756933e-13, 1576547e-12, 2148523e-12, 8615135e-13, -4199461e-13, -1441584e-13, 8645467e-13, 8092221e-13, 2244488e-13, -2020588e-13, -5933684e-14, 7546032e-14, 4615883e-14, -1780855e-14, -4353092e-14, -10268e-12], [3.631621, 1.170935, -2.586018, -1.943616, -0.1046551, 0.1761559, -0.5561035, -0.722536, 0.03828009, 0.5477939, 0.5073545, 0.275877, 0.2554495, 0.2837684, 0.20167, 0.02343549, -0.1351852, -0.1969614, -0.1821615, -0.1519513, -0.1547149, -0.1221026, -0.07542384, -0.01851653, 0.03592775, 0.05720975, 0.03450434, -734047e-9, -0.01991231, -4807225e-9, 0.02459216, 0.03110033, 0.02480435, -0.02556314, -0.06956774, -0.05310945, -0.01532024, -4507069e-9, -0.01901796, -0.0355942, -0.03626109, -0.01880799, 3384363e-9, 0.015723, 3827894e-9, -2282454e-11, 5543887e-9, -400321e-8, -0.02410425, -0.0362586, -0.03110134, -0.01393021, 3138994e-9, 0.01001646, 9562349e-9, 68172e-7, 907255e-8, 1787937e-9, -0.01611627, -0.02866628, -0.03079371, -0.01948259, -1314924e-9, 4207226e-9, -7501402e-9, -0.01311625, -940133e-8, 9696975e-11, 7494197e-9, 7127338e-9, 252416e-8, 2295384e-10, 4584965e-10, 5090206e-9, 8101127e-9, 6612608e-9, 4553041e-9, -5769051e-9, -0.01446132, -0.01435778, -9610796e-9, -5771331e-9, -6806611e-9, -7384152e-9, -0.01075722, -0.01668318, -0.01782941, -9710939e-9, -2084809e-9, -3363395e-10, -354702e-8, -5009056e-9, 1474817e-9, 0.01699253, 0.03005623, 0.0245652, 7254565e-9, -4396699e-9, -4575822e-10, 5821827e-9, 4299299e-9, -3157932e-9, -6298396e-9, 1384483e-9, 0.01000717, 9055973e-9, 4697593e-9, 0.0102438, 0.02299298, 0.02995787, 0.02655697, 0.02319827, 0.02446767, 0.02638775, 0.0256976, 0.02069628, 0.01414092, 9242693e-9, 6445399e-9, 6257187e-9, 7505434e-9, 9506333e-9, 0.01547604, 0.02030337, 0.01814211, 0.01486078, 0.01083606, 9837137e-9, 0.01350998, 0.01513868, 0.01238744, 9566813e-9, 7913684e-9, 8684963e-9, 0.01013466, 9193875e-9, 8482011e-9, 8410022e-9, 5091879e-9, 1045736e-9, -4277155e-10, -2643847e-12, -4445483e-11, -3623411e-9, -7955207e-9, -6504802e-9, -2213479e-9, -1249464e-9, -411775e-8, -7074118e-9, -6470165e-9, -2532607e-9, 1709726e-9, 1369449e-9, -6100086e-9, -0.01289677, -0.0132961, -9799843e-9, -7084648e-9, -7305657e-9, -9675285e-9, -0.01340452, -0.01627639, -0.01787581, -0.01832644, -0.01497705, -9928804e-9, -7857762e-9, -0.01032317, -0.01284739, -9737945e-9, -4088815e-9, -3391827e-9, -6631114e-9, -6494747e-9, -1515462e-9, 3728138e-9, 4744693e-9, 8277225e-10, -155696e-8, -315312e-9, 6920451e-11, -310149e-8, -8582439e-9, -9072388e-9, -4872238e-9, -2687504e-9, -3126363e-9, -4592468e-9, -4926582e-9, -1078681e-9, 2242621e-9, 2282738e-9, 2526884e-9, 2635293e-9, 282244e-8, 2799003e-9, 145532e-8, -88727e-8, -2144571e-9, -3397722e-9, -6159721e-9, -7920413e-9, -4795492e-9, 1822888e-9, 4699378e-9, 3489108e-9, 2544141e-10, -1436222e-9, 3247756e-10, 2033515e-9, 20056e-7, 1505256e-9, 6116285e-10, -1039658e-9, -1475689e-9, 2050377e-10, 3487646e-9, 4955394e-9, 3273543e-9, 1123497e-9, 3298424e-10, -298297e-10, 4255413e-10, 2218308e-9, 2952903e-9, 1505052e-9, -1109275e-9, -2041612e-9, -5848698e-10, 209953e-8, 4542355e-9, 5195063e-9, 4991502e-9, 4771451e-9, 3910201e-9, 2768917e-9, 231686e-8, 2368375e-9, 2474722e-9, 1766354e-9, 1707042e-9, 1280897e-9, 8719921e-10, 2218053e-9, 3103751e-9, 2593789e-9, 9500366e-10, -7612438e-11, 2571149e-9, 6165049e-9, 6283401e-9, 3928899e-9, 3163391e-9, 5434506e-9, 8197006e-9, 8254558e-9, 6397763e-9, 5585559e-9, 5112269e-9, 3463443e-9, 2299759e-9, 1865921e-9, 1563062e-9, 1123478e-9, 8799253e-10, 6630016e-10, 1727601e-10, -1832596e-10, -1312152e-9, -2461652e-9, -1155313e-9, 2253128e-11, -6414105e-10, -1508088e-9, -1395194e-9, -1319201e-9, -1594526e-9, -2540326e-9, -2683635e-9, -2543385e-9, -3724081e-9, -6382323e-9, -7643726e-9, -70956e-7, -6058661e-9, -5681358e-9, -5336517e-9, -5112685e-9, -4947442e-9, -4562254e-9, -4697395e-9, -5673966e-9, -6429078e-9, -6325104e-9, -6286372e-9, -6747536e-9, -6227455e-9, -5404006e-9, -4451771e-9, -3481564e-9, -4063174e-9, -5971361e-9, -6488487e-9, -5045344e-9, -3537024e-9, -2834814e-9, -2976431e-9, -3348142e-9, -2232982e-9, -122642e-8, -1361578e-9, -6073848e-10, 1489492e-9, 3012597e-9, 2356452e-9, 1361108e-9, 1116211e-9, 7647194e-10, 2069011e-10, -9608071e-10, -1658849e-9, -1379244e-9, -8345918e-10, -7563282e-10, -3302461e-10, 6683399e-10, 2527162e-9, 3727654e-9, 3434543e-9, 2871005e-9, 2456338e-9, 2245788e-9, 2658227e-9, 2542431e-9, 190558e-8, 2159456e-9, 2953331e-9, 3013416e-9, 281662e-8, 2774781e-9, 243335e-8, 2273462e-9, 3280415e-9, 3803616e-9, 289396e-8, 235697e-8, 3696575e-9, 4444276e-9, 2849576e-9, 629083e-9, -104839e-8, -4299111e-10, 9208358e-10, 2723548e-10, -5458277e-10, 7385233e-11, 1154346e-9, 1526991e-9, 9341644e-10, 5822776e-10, 1175412e-9, 2166647e-9, 2751043e-9, 2158758e-9, 7141045e-10, -3969066e-10, 6454112e-11, 1634712e-9, 2090514e-9, 2630044e-10, -9943309e-10, 1248387e-9, 4011021e-9, 3436069e-9, 5623681e-10, -1031535e-9, 2841884e-12, 1960555e-9, 3213166e-9, 3737734e-9, 3781748e-9, 379717e-8, 39546e-7, 3653141e-9, 2257327e-9, 8077319e-10, 6771739e-10, 1538816e-9, 2082186e-9, 1697405e-9, 1223553e-9, 1449681e-9, 2136479e-9, 2053618e-9, 135209e-8, 5222704e-10, -2621765e-10, -1029709e-9, -6582275e-10, 7075769e-10, 1097748e-9, 3461423e-10, -7088121e-10, -1234117e-9, -9705463e-10, -1079275e-9, -2098329e-9, -321648e-8, -3637187e-9, -3524055e-9, -2301075e-9, -1189108e-9, -8574053e-10, -1055518e-9, -1733359e-9, -2399374e-9, -1737491e-9, -1227466e-10, 4744373e-10, -77672e-8, -1699671e-9, -1915676e-9, -2850486e-9, -3856809e-9, -4031289e-9, -3264871e-9, -25822e-7, -2728131e-9, -2570463e-9, -1867058e-9, -1035357e-9, -8865858e-10, -1786971e-9, -2642442e-9, -3164445e-9, -3914095e-9, -4344959e-9, -3547843e-9, -2569258e-9, -2751461e-9, -3620862e-9, -3091254e-9, -1396416e-9, -2377596e-10, -36854e-9, -5751797e-10, -1145146e-9, -1097649e-9, -9285455e-10, -8714881e-10, -7909153e-10, -106828e-8, -107333e-8, -7569313e-10, -7928135e-10, -8508104e-10, -1984974e-10, 8690441e-10, 1671956e-9, 146128e-8, 84563e-8, 1295202e-9, 2414636e-9, 2442938e-9, 1510219e-9, 5524985e-10, 6336581e-10, 1490602e-9, 1823242e-9, 1402163e-9, 1116884e-9, 142191e-8, 1944147e-9, 2188286e-9, 2092964e-9, 2079239e-9, 2162611e-9, 1760827e-9, 6505197e-10, -2372651e-10, -1882716e-10, 9216414e-10, 2015541e-9, 2340525e-9, 1899758e-9, 12992e-7, 1158651e-9, 1366552e-9, 128807e-8, 9606935e-10, 9404089e-10, 8967132e-10, 6057032e-10, 448101e-9, 755559e-9, 1415024e-9, 1832051e-9, 1185767e-9, 169407e-9, -4402909e-10, 1268958e-10, 8298367e-10, 3693543e-10, 1895569e-10, 8195932e-10, 1296596e-9, 1355755e-9, 1108258e-9, 1003587e-9, 1251031e-9, 1038362e-9, 6728909e-10, 3755553e-10, 2671451e-10, 4634122e-10, 6085225e-10, 2738438e-11, -8920675e-10, -9691969e-10, -4561088e-10, 4771858e-11, 3075998e-10, 3319881e-10, 4903013e-10, 7981889e-10, 698041e-9, 2644741e-10, -2793244e-10, -3555679e-10, -4948277e-10, -1109905e-9, -1681265e-9, -1751949e-9, -1484296e-9, -807815e-9, -4540102e-10, -1017788e-9, -1737383e-9, -1340599e-9, -5801833e-10, -3533947e-10, -5194832e-10, -7858142e-10, -8452039e-10, -4434174e-10, -5131369e-10, -1251145e-9, -1334157e-9, -7453533e-10, -3523071e-10, -7294877e-10, -1300391e-9, -1054769e-9, -4407218e-10, -269556e-9, -823229e-9, -1385445e-9, -1337725e-9, -1043121e-9, -1230025e-9, -1572711e-9, -1169492e-9, -4841754e-10, -7152278e-10, -1366771e-9, -1537883e-9, -1086648e-9, -37748e-8, 1177084e-10, 189573e-9, -1481814e-10, -3048386e-10, 2198021e-10, 7446566e-10, 4123379e-10, -6670629e-10, -1405755e-9, -1244684e-9, -5584474e-10, 9843821e-11, 2130224e-10, 3097143e-10, 7562597e-10, 1499853e-9, 1689494e-9, 1007711e-9, 7626647e-10, 1241922e-9, 1450023e-9, 1025664e-9, 2587542e-10, -1322463e-10, 2539641e-10, 9952036e-10, 1184658e-9, 8329679e-10, 7192061e-10, 1093782e-9, 150007e-8, 1510612e-9, 1212292e-9, 1047006e-9, 1380477e-9, 1572628e-9, 123414e-8, 7269049e-10, 543479e-9, 621341e-9, 6321302e-10, 4160495e-10, 3793237e-10, 5533934e-10, 6383926e-10, 7951369e-10, 1092291e-9, 1294772e-9, 1164468e-9, 4590962e-10, -1329695e-10, 1662923e-10, 5759676e-10, -5384497e-11, -9137698e-10, -723914e-9, -1016918e-10, 7337099e-11, 8699591e-11, 372614e-9, 6905171e-10, 1022975e-9, 808721e-9, 3837739e-10, 3218496e-10, 2127172e-10, -6817118e-10, -1562002e-9, -1529853e-9, -1065588e-9, -9902287e-10, -1233087e-9, -1083586e-9, -599704e-9, -135333e-9, 2962095e-10, 3089794e-10, 3234728e-11, 1137585e-10, -8491228e-11, -641588e-9, -8609227e-10, -8983586e-10, -9588531e-10, -1025544e-9, -9501092e-10, -957458e-9, -8730012e-10, -9713641e-10, -1019606e-9, -6910638e-10, -3615707e-10, -6774691e-10, -1161643e-9, -1192155e-9, -8642794e-10, -5460681e-10, -7130249e-10, -1030986e-9, -1040475e-9, -798259e-9, -4746494e-10, -4227793e-10, -5143516e-10, -4365865e-10, -3249598e-10, -3948193e-10, -5370942e-10, -4566714e-10, 59417e-10, 1985661e-10, -8922551e-11, -5720383e-10, -7256805e-10, -381618e-9, 6337879e-11, 1471699e-10, 108917e-9, 316145e-9, 7717095e-10, 9510209e-10, 568432e-9, 266392e-9, 2899004e-10, 3237198e-10, 8172132e-11, -1738313e-10, -1912509e-10, -5710086e-11, 9362737e-12, 5432422e-11, 340232e-9, 4823394e-10, 2958902e-10, 4076324e-10, 9617349e-10, 114027e-8, 5714045e-10, 768092e-10, 2107724e-11, 3330196e-10, 4509294e-10, 1993475e-10, 180817e-10, 3479104e-10, 5255191e-10, 3353545e-11, -277326e-9, -39464e-9, 1602267e-11, -1038e-7, -2245485e-10, -1722947e-10, 1765168e-10, 2535747e-10, 1126174e-10, 1245285e-10, 4688728e-10, 6676869e-10, 5948628e-10, 4033125e-10, 2941028e-10, 2550166e-10, 2056835e-10, 1288436e-10, 129351e-9, 1381404e-10, 1586519e-11, -1251402e-11, 3238272e-10, 4046372e-10, 1005523e-10, -1802327e-10, -3101733e-10, -1629614e-10, 4554765e-11, 4914749e-11, 1295478e-10, 2712254e-10, 1743452e-10, 3281557e-10, 5682524e-10, 5468932e-10, 3127278e-10, -389769e-11, -3703905e-11, 7991284e-11, -1556399e-10, -4984949e-10, -5100447e-10, -2399241e-10, 1290499e-11, -2252834e-11, -1923803e-10, -2201418e-11, 5043112e-10, 8616749e-10, 5032913e-10, -2262371e-10, -467804e-9, -2558006e-10, 1284178e-10, 2942347e-10, -5248234e-11, -2804908e-10, -103606e-9, 1439972e-10, 366431e-9, 1566657e-10, -8637676e-11, 4910007e-11, 3586973e-10, 2650413e-10, 9404314e-11, 2598276e-10, 5378645e-10, 3378648e-10, -1562884e-10, -3943076e-10, -2947761e-10, 2349413e-11, 1071094e-10, -2784282e-10, -3645404e-10, 2448916e-10, 5208665e-10, 2087408e-10, -1594137e-10, -2059224e-10, -1055532e-11, 7574311e-11, -1192267e-10, -4170874e-10, -3539969e-10, 2161064e-10, 4680587e-10, 1187611e-10, -1806141e-10, 1142715e-10, 676813e-9, 9048218e-10, 5602886e-10, 2080581e-10, 3180757e-10, 6192624e-10, 6032947e-10, 1188509e-10, -4084032e-10, -2607692e-10, 1461545e-11, -9484317e-11, -2202156e-10, -6262814e-11, 3673156e-11, 2120843e-11, 104158e-9, 2532773e-10, 2093666e-10, -8009771e-11, -2598656e-10, -1951118e-10, -1236462e-10, -1519509e-10, -2217358e-10, -1975398e-10, -2097021e-10, -3184983e-10, -1904246e-10, -9356216e-12, 9875029e-12, -2272197e-10, -3804444e-10, -209371e-9, -2250232e-12, -1164908e-10, -4586309e-10, -5222708e-10, -2621726e-10, -6721269e-11, -1510746e-10, -3041348e-10, -2167517e-10, -2312431e-10, -3326556e-10, -3986795e-10, -4140786e-10, -3545651e-10, -254207e-9, -2606967e-10, -2487945e-10, -5771719e-11, 5804913e-11, -4334851e-11, -306482e-9, -4900455e-10, -4977388e-10, -4342209e-10, -4244095e-10, -5561424e-10, -6477407e-10, -4761308e-10, -1660849e-10, -158906e-10, -8874277e-11, -2227391e-10, -2582665e-10, -1615951e-10, -1061572e-10, -175292e-9, -2709732e-10, -2251282e-10, -1754569e-10, -1341255e-10, -1678041e-10, -1778486e-10, -6579065e-11, 7639542e-11, 2010899e-10, 2618711e-10, 2489507e-10, 137393e-9, 9096013e-12, 3786875e-11, 2484878e-10, 389107e-9, 2675116e-10, 8167169e-12, -8252151e-11, 6076616e-11, 2298873e-10, 2400077e-10, 199773e-9, 1597476e-10, 165006e-9, 2338181e-10, 3337122e-10, 4192565e-10, 3036817e-10, 1173681e-10, 1525974e-10, 2059133e-10, 1876125e-10, 1750098e-10, 2027081e-10, 2289889e-10, 1967797e-10, 1599621e-10, 2379348e-10, 3009274e-10, 2700523e-10, 1535151e-10, 2459683e-11, 5443564e-11, 1667913e-10, 1730911e-10, 8899147e-11, 1955627e-11, 302358e-10, 7177624e-11, 7902941e-11, 4213388e-11, -1291801e-11, 1180912e-11, 1158983e-10, 1535537e-10, 1453809e-10, 1439893e-10, 9714964e-11, 6279861e-11, 6617353e-11, 4206631e-11, -401357e-10, -9984434e-11, -8561045e-11, -6233648e-11, -8218059e-11, -5832408e-11, 2144797e-11, 3559672e-11, -1474777e-11, -2512697e-11, 6219808e-13, 3354407e-11, 1701614e-11, -4377586e-11, -9147307e-11, -6994955e-11, -1399078e-11, -1834377e-11, -4590942e-11, -5814402e-11, -4578304e-11, -2665e-8, -1967788e-11, -2364789e-11, -3254061e-11, -9756144e-12, 1388758e-11, 2261886e-11, 289004e-10, 1135767e-11, -2306857e-11, -2376184e-11, -7825109e-12, -156596e-10, -4620735e-11, -4591316e-11, -1408609e-11, 3002203e-12, -948528e-11, -221822e-10, -1648771e-11, 4396653e-12, 6735927e-12, -1690878e-11, -2347588e-11, -9868813e-12, -3009142e-12, -710261e-11, -2139554e-11, -2552834e-11, -135064e-10, 1325846e-12, 6042779e-12, 238712e-11, -5622589e-12, -1207889e-11, -9789054e-12, -7086718e-14, 2388108e-12, -2972028e-12, -5480785e-12, -3791238e-12, -2527508e-12, -3334829e-12, -2709887e-12, -4219316e-13, -5901154e-14, -1467174e-12, -6756933e-13, 1576547e-12, 2148523e-12, 8615135e-13, -4199461e-13, -1441584e-13, 8645467e-13, 8092221e-13, 2244488e-13, -2020588e-13, -5933684e-14, 7546032e-14, 4615883e-14, -1780855e-14, -4353092e-14, -10268e-12], [3.631621, 1.170935, -2.586018, -1.943616, -0.1046551, 0.1761559, -0.5561035, -0.722536, 0.03828009, 0.5477939, 0.5073545, 0.275877, 0.2554495, 0.2837684, 0.20167, 0.02343549, -0.1351852, -0.1969614, -0.1821615, -0.1519513, -0.1547149, -0.1221026, -0.07542384, -0.01851653, 0.03592775, 0.05720975, 0.03450434, -734047e-9, -0.01991231, -4807225e-9, 0.02459216, 0.03110033, 0.02480435, -0.02556314, -0.06956774, -0.05310945, -0.01532024, -4507069e-9, -0.01901796, -0.0355942, -0.03626109, -0.01880799, 3384363e-9, 0.015723, 3827894e-9, -2282454e-11, 5543887e-9, -400321e-8, -0.02410425, -0.0362586, -0.03110134, -0.01393021, 3138994e-9, 0.01001646, 9562349e-9, 68172e-7, 907255e-8, 1787937e-9, -0.01611627, -0.02866628, -0.03079371, -0.01948259, -1314924e-9, 4207226e-9, -7501402e-9, -0.01311625, -940133e-8, 9696975e-11, 7494197e-9, 7127338e-9, 252416e-8, 2295384e-10, 4584965e-10, 5090206e-9, 8101127e-9, 6612608e-9, 4553041e-9, -5769051e-9, -0.01446132, -0.01435778, -9610796e-9, -5771331e-9, -6806611e-9, -7384152e-9, -0.01075722, -0.01668318, -0.01782941, -9710939e-9, -2084809e-9, -3363395e-10, -354702e-8, -5009056e-9, 1474817e-9, 0.01699253, 0.03005623, 0.0245652, 7254565e-9, -4396699e-9, -4575822e-10, 5821827e-9, 4299299e-9, -3157932e-9, -6298396e-9, 1384483e-9, 0.01000717, 9055973e-9, 4697593e-9, 0.0102438, 0.02299298, 0.02995787, 0.02655697, 0.02319827, 0.02446767, 0.02638775, 0.0256976, 0.02069628, 0.01414092, 9242693e-9, 6445399e-9, 6257187e-9, 7505434e-9, 9506333e-9, 0.01547604, 0.02030337, 0.01814211, 0.01486078, 0.01083606, 9837137e-9, 0.01350998, 0.01513868, 0.01238744, 9566813e-9, 7913684e-9, 8684963e-9, 0.01013466, 9193875e-9, 8482011e-9, 8410022e-9, 5091879e-9, 1045736e-9, -4277155e-10, -2643847e-12, -4445483e-11, -3623411e-9, -7955207e-9, -6504802e-9, -2213479e-9, -1249464e-9, -411775e-8, -7074118e-9, -6470165e-9, -2532607e-9, 1709726e-9, 1369449e-9, -6100086e-9, -0.01289677, -0.0132961, -9799843e-9, -7084648e-9, -7305657e-9, -9675285e-9, -0.01340452, -0.01627639, -0.01787581, -0.01832644, -0.01497705, -9928804e-9, -7857762e-9, -0.01032317, -0.01284739, -9737945e-9, -4088815e-9, -3391827e-9, -6631114e-9, -6494747e-9, -1515462e-9, 3728138e-9, 4744693e-9, 8277225e-10, -155696e-8, -315312e-9, 6920451e-11, -310149e-8, -8582439e-9, -9072388e-9, -4872238e-9, -2687504e-9, -3126363e-9, -4592468e-9, -4926582e-9, -1078681e-9, 2242621e-9, 2282738e-9, 2526884e-9, 2635293e-9, 282244e-8, 2799003e-9, 145532e-8, -88727e-8, -2144571e-9, -3397722e-9, -6159721e-9, -7920413e-9, -4795492e-9, 1822888e-9, 4699378e-9, 3489108e-9, 2544141e-10, -1436222e-9, 3247756e-10, 2033515e-9, 20056e-7, 1505256e-9, 6116285e-10, -1039658e-9, -1475689e-9, 2050377e-10, 3487646e-9, 4955394e-9, 3273543e-9, 1123497e-9, 3298424e-10, -298297e-10, 4255413e-10, 2218308e-9, 2952903e-9, 1505052e-9, -1109275e-9, -2041612e-9, -5848698e-10, 209953e-8, 4542355e-9, 5195063e-9, 4991502e-9, 4771451e-9, 3910201e-9, 2768917e-9, 231686e-8, 2368375e-9, 2474722e-9, 1766354e-9, 1707042e-9, 1280897e-9, 8719921e-10, 2218053e-9, 3103751e-9, 2593789e-9, 9500366e-10, -7612438e-11, 2571149e-9, 6165049e-9, 6283401e-9, 3928899e-9, 3163391e-9, 5434506e-9, 8197006e-9, 8254558e-9, 6397763e-9, 5585559e-9, 5112269e-9, 3463443e-9, 2299759e-9, 1865921e-9, 1563062e-9, 1123478e-9, 8799253e-10, 6630016e-10, 1727601e-10, -1832596e-10, -1312152e-9, -2461652e-9, -1155313e-9, 2253128e-11, -6414105e-10, -1508088e-9, -1395194e-9, -1319201e-9, -1594526e-9, -2540326e-9, -2683635e-9, -2543385e-9, -3724081e-9, -6382323e-9, -7643726e-9, -70956e-7, -6058661e-9, -5681358e-9, -5336517e-9, -5112685e-9, -4947442e-9, -4562254e-9, -4697395e-9, -5673966e-9, -6429078e-9, -6325104e-9, -6286372e-9, -6747536e-9, -6227455e-9, -5404006e-9, -4451771e-9, -3481564e-9, -4063174e-9, -5971361e-9, -6488487e-9, -5045344e-9, -3537024e-9, -2834814e-9, -2976431e-9, -3348142e-9, -2232982e-9, -122642e-8, -1361578e-9, -6073848e-10, 1489492e-9, 3012597e-9, 2356452e-9, 1361108e-9, 1116211e-9, 7647194e-10, 2069011e-10, -9608071e-10, -1658849e-9, -1379244e-9, -8345918e-10, -7563282e-10, -3302461e-10, 6683399e-10, 2527162e-9, 3727654e-9, 3434543e-9, 2871005e-9, 2456338e-9, 2245788e-9, 2658227e-9, 2542431e-9, 190558e-8, 2159456e-9, 2953331e-9, 3013416e-9, 281662e-8, 2774781e-9, 243335e-8, 2273462e-9, 3280415e-9, 3803616e-9, 289396e-8, 235697e-8, 3696575e-9, 4444276e-9, 2849576e-9, 629083e-9, -104839e-8, -4299111e-10, 9208358e-10, 2723548e-10, -5458277e-10, 7385233e-11, 1154346e-9, 1526991e-9, 9341644e-10, 5822776e-10, 1175412e-9, 2166647e-9, 2751043e-9, 2158758e-9, 7141045e-10, -3969066e-10, 6454112e-11, 1634712e-9, 2090514e-9, 2630044e-10, -9943309e-10, 1248387e-9, 4011021e-9, 3436069e-9, 5623681e-10, -1031535e-9, 2841884e-12, 1960555e-9, 3213166e-9, 3737734e-9, 3781748e-9, 379717e-8, 39546e-7, 3653141e-9, 2257327e-9, 8077319e-10, 6771739e-10, 1538816e-9, 2082186e-9, 1697405e-9, 1223553e-9, 1449681e-9, 2136479e-9, 2053618e-9, 135209e-8, 5222704e-10, -2621765e-10, -1029709e-9, -6582275e-10, 7075769e-10, 1097748e-9, 3461423e-10, -7088121e-10, -1234117e-9, -9705463e-10, -1079275e-9, -2098329e-9, -321648e-8, -3637187e-9, -3524055e-9, -2301075e-9, -1189108e-9, -8574053e-10, -1055518e-9, -1733359e-9, -2399374e-9, -1737491e-9, -1227466e-10, 4744373e-10, -77672e-8, -1699671e-9, -1915676e-9, -2850486e-9, -3856809e-9, -4031289e-9, -3264871e-9, -25822e-7, -2728131e-9, -2570463e-9, -1867058e-9, -1035357e-9, -8865858e-10, -1786971e-9, -2642442e-9, -3164445e-9, -3914095e-9, -4344959e-9, -3547843e-9, -2569258e-9, -2751461e-9, -3620862e-9, -3091254e-9, -1396416e-9, -2377596e-10, -36854e-9, -5751797e-10, -1145146e-9, -1097649e-9, -9285455e-10, -8714881e-10, -7909153e-10, -106828e-8, -107333e-8, -7569313e-10, -7928135e-10, -8508104e-10, -1984974e-10, 8690441e-10, 1671956e-9, 146128e-8, 84563e-8, 1295202e-9, 2414636e-9, 2442938e-9, 1510219e-9, 5524985e-10, 6336581e-10, 1490602e-9, 1823242e-9, 1402163e-9, 1116884e-9, 142191e-8, 1944147e-9, 2188286e-9, 2092964e-9, 2079239e-9, 2162611e-9, 1760827e-9, 6505197e-10, -2372651e-10, -1882716e-10, 9216414e-10, 2015541e-9, 2340525e-9, 1899758e-9, 12992e-7, 1158651e-9, 1366552e-9, 128807e-8, 9606935e-10, 9404089e-10, 8967132e-10, 6057032e-10, 448101e-9, 755559e-9, 1415024e-9, 1832051e-9, 1185767e-9, 169407e-9, -4402909e-10, 1268958e-10, 8298367e-10, 3693543e-10, 1895569e-10, 8195932e-10, 1296596e-9, 1355755e-9, 1108258e-9, 1003587e-9, 1251031e-9, 1038362e-9, 6728909e-10, 3755553e-10, 2671451e-10, 4634122e-10, 6085225e-10, 2738438e-11, -8920675e-10, -9691969e-10, -4561088e-10, 4771858e-11, 3075998e-10, 3319881e-10, 4903013e-10, 7981889e-10, 698041e-9, 2644741e-10, -2793244e-10, -3555679e-10, -4948277e-10, -1109905e-9, -1681265e-9, -1751949e-9, -1484296e-9, -807815e-9, -4540102e-10, -1017788e-9, -1737383e-9, -1340599e-9, -5801833e-10, -3533947e-10, -5194832e-10, -7858142e-10, -8452039e-10, -4434174e-10, -5131369e-10, -1251145e-9, -1334157e-9, -7453533e-10, -3523071e-10, -7294877e-10, -1300391e-9, -1054769e-9, -4407218e-10, -269556e-9, -823229e-9, -1385445e-9, -1337725e-9, -1043121e-9, -1230025e-9, -1572711e-9, -1169492e-9, -4841754e-10, -7152278e-10, -1366771e-9, -1537883e-9, -1086648e-9, -37748e-8, 1177084e-10, 189573e-9, -1481814e-10, -3048386e-10, 2198021e-10, 7446566e-10, 4123379e-10, -6670629e-10, -1405755e-9, -1244684e-9, -5584474e-10, 9843821e-11, 2130224e-10, 3097143e-10, 7562597e-10, 1499853e-9, 1689494e-9, 1007711e-9, 7626647e-10, 1241922e-9, 1450023e-9, 1025664e-9, 2587542e-10, -1322463e-10, 2539641e-10, 9952036e-10, 1184658e-9, 8329679e-10, 7192061e-10, 1093782e-9, 150007e-8, 1510612e-9, 1212292e-9, 1047006e-9, 1380477e-9, 1572628e-9, 123414e-8, 7269049e-10, 543479e-9, 621341e-9, 6321302e-10, 4160495e-10, 3793237e-10, 5533934e-10, 6383926e-10, 7951369e-10, 1092291e-9, 1294772e-9, 1164468e-9, 4590962e-10, -1329695e-10, 1662923e-10, 5759676e-10, -5384497e-11, -9137698e-10, -723914e-9, -1016918e-10, 7337099e-11, 8699591e-11, 372614e-9, 6905171e-10, 1022975e-9, 808721e-9, 3837739e-10, 3218496e-10, 2127172e-10, -6817118e-10, -1562002e-9, -1529853e-9, -1065588e-9, -9902287e-10, -1233087e-9, -1083586e-9, -599704e-9, -135333e-9, 2962095e-10, 3089794e-10, 3234728e-11, 1137585e-10, -8491228e-11, -641588e-9, -8609227e-10, -8983586e-10, -9588531e-10, -1025544e-9, -9501092e-10, -957458e-9, -8730012e-10, -9713641e-10, -1019606e-9, -6910638e-10, -3615707e-10, -6774691e-10, -1161643e-9, -1192155e-9, -8642794e-10, -5460681e-10, -7130249e-10, -1030986e-9, -1040475e-9, -798259e-9, -4746494e-10, -4227793e-10, -5143516e-10, -4365865e-10, -3249598e-10, -3948193e-10, -5370942e-10, -4566714e-10, 59417e-10, 1985661e-10, -8922551e-11, -5720383e-10, -7256805e-10, -381618e-9, 6337879e-11, 1471699e-10, 108917e-9, 316145e-9, 7717095e-10, 9510209e-10, 568432e-9, 266392e-9, 2899004e-10, 3237198e-10, 8172132e-11, -1738313e-10, -1912509e-10, -5710086e-11, 9362737e-12, 5432422e-11, 340232e-9, 4823394e-10, 2958902e-10, 4076324e-10, 9617349e-10, 114027e-8, 5714045e-10, 768092e-10, 2107724e-11, 3330196e-10, 4509294e-10, 1993475e-10, 180817e-10, 3479104e-10, 5255191e-10, 3353545e-11, -277326e-9, -39464e-9, 1602267e-11, -1038e-7, -2245485e-10, -1722947e-10, 1765168e-10, 2535747e-10, 1126174e-10, 1245285e-10, 4688728e-10, 6676869e-10, 5948628e-10, 4033125e-10, 2941028e-10, 2550166e-10, 2056835e-10, 1288436e-10, 129351e-9, 1381404e-10, 1586519e-11, -1251402e-11, 3238272e-10, 4046372e-10, 1005523e-10, -1802327e-10, -3101733e-10, -1629614e-10, 4554765e-11, 4914749e-11, 1295478e-10, 2712254e-10, 1743452e-10, 3281557e-10, 5682524e-10, 5468932e-10, 3127278e-10, -389769e-11, -3703905e-11, 7991284e-11, -1556399e-10, -4984949e-10, -5100447e-10, -2399241e-10, 1290499e-11, -2252834e-11, -1923803e-10, -2201418e-11, 5043112e-10, 8616749e-10, 5032913e-10, -2262371e-10, -467804e-9, -2558006e-10, 1284178e-10, 2942347e-10, -5248234e-11, -2804908e-10, -103606e-9, 1439972e-10, 366431e-9, 1566657e-10, -8637676e-11, 4910007e-11, 3586973e-10, 2650413e-10, 9404314e-11, 2598276e-10, 5378645e-10, 3378648e-10, -1562884e-10, -3943076e-10, -2947761e-10, 2349413e-11, 1071094e-10, -2784282e-10, -3645404e-10, 2448916e-10, 5208665e-10, 2087408e-10, -1594137e-10, -2059224e-10, -1055532e-11, 7574311e-11, -1192267e-10, -4170874e-10, -3539969e-10, 2161064e-10, 4680587e-10, 1187611e-10, -1806141e-10, 1142715e-10, 676813e-9, 9048218e-10, 5602886e-10, 2080581e-10, 3180757e-10, 6192624e-10, 6032947e-10, 1188509e-10, -4084032e-10, -2607692e-10, 1461545e-11, -9484317e-11, -2202156e-10, -6262814e-11, 3673156e-11, 2120843e-11, 104158e-9, 2532773e-10, 2093666e-10, -8009771e-11, -2598656e-10, -1951118e-10, -1236462e-10, -1519509e-10, -2217358e-10, -1975398e-10, -2097021e-10, -3184983e-10, -1904246e-10, -9356216e-12, 9875029e-12, -2272197e-10, -3804444e-10, -209371e-9, -2250232e-12, -1164908e-10, -4586309e-10, -5222708e-10, -2621726e-10, -6721269e-11, -1510746e-10, -3041348e-10, -2167517e-10, -2312431e-10, -3326556e-10, -3986795e-10, -4140786e-10, -3545651e-10, -254207e-9, -2606967e-10, -2487945e-10, -5771719e-11, 5804913e-11, -4334851e-11, -306482e-9, -4900455e-10, -4977388e-10, -4342209e-10, -4244095e-10, -5561424e-10, -6477407e-10, -4761308e-10, -1660849e-10, -158906e-10, -8874277e-11, -2227391e-10, -2582665e-10, -1615951e-10, -1061572e-10, -175292e-9, -2709732e-10, -2251282e-10, -1754569e-10, -1341255e-10, -1678041e-10, -1778486e-10, -6579065e-11, 7639542e-11, 2010899e-10, 2618711e-10, 2489507e-10, 137393e-9, 9096013e-12, 3786875e-11, 2484878e-10, 389107e-9, 2675116e-10, 8167169e-12, -8252151e-11, 6076616e-11, 2298873e-10, 2400077e-10, 199773e-9, 1597476e-10, 165006e-9, 2338181e-10, 3337122e-10, 4192565e-10, 3036817e-10, 1173681e-10, 1525974e-10, 2059133e-10, 1876125e-10, 1750098e-10, 2027081e-10, 2289889e-10, 1967797e-10, 1599621e-10, 2379348e-10, 3009274e-10, 2700523e-10, 1535151e-10, 2459683e-11, 5443564e-11, 1667913e-10, 1730911e-10, 8899147e-11, 1955627e-11, 302358e-10, 7177624e-11, 7902941e-11, 4213388e-11, -1291801e-11, 1180912e-11, 1158983e-10, 1535537e-10, 1453809e-10, 1439893e-10, 9714964e-11, 6279861e-11, 6617353e-11, 4206631e-11, -401357e-10, -9984434e-11, -8561045e-11, -6233648e-11, -8218059e-11, -5832408e-11, 2144797e-11, 3559672e-11, -1474777e-11, -2512697e-11, 6219808e-13, 3354407e-11, 1701614e-11, -4377586e-11, -9147307e-11, -6994955e-11, -1399078e-11, -1834377e-11, -4590942e-11, -5814402e-11, -4578304e-11, -2665e-8, -1967788e-11, -2364789e-11, -3254061e-11, -9756144e-12, 1388758e-11, 2261886e-11, 289004e-10, 1135767e-11, -2306857e-11, -2376184e-11, -7825109e-12, -156596e-10, -4620735e-11, -4591316e-11, -1408609e-11, 3002203e-12, -948528e-11, -221822e-10, -1648771e-11, 4396653e-12, 6735927e-12, -1690878e-11, -2347588e-11, -9868813e-12, -3009142e-12, -710261e-11, -2139554e-11, -2552834e-11, -135064e-10, 1325846e-12, 6042779e-12, 238712e-11, -5622589e-12, -1207889e-11, -9789054e-12, -7086718e-14, 2388108e-12, -2972028e-12, -5480785e-12, -3791238e-12, -2527508e-12, -3334829e-12, -2709887e-12, -4219316e-13, -5901154e-14, -1467174e-12, -6756933e-13, 1576547e-12, 2148523e-12, 8615135e-13, -4199461e-13, -1441584e-13, 8645467e-13, 8092221e-13, 2244488e-13, -2020588e-13, -5933684e-14, 7546032e-14, 4615883e-14, -1780855e-14, -4353092e-14, -10268e-12]], before: [{ "250": -9, "500": 0.4, "1000": -1.2, "2000": -10.2, "3000": -20.4, "4000": -19.9, "8000": -35 }, { "250": -5.9, "500": 1.1, "1000": -5.7, "2000": -11, "3000": -16.2, "4000": -22.8, "8000": -37.8 }, { "250": -8, "500": 0, "1000": -7.7, "2000": -10.7, "3000": -23.9, "4000": -22.8, "8000": -37.8 }, { "250": -9.8, "500": 0.3, "1000": -6.1, "2000": -17.8, "3000": -20.8, "4000": -22.7, "8000": -40.5 }, { "250": -9.4, "500": 0.3, "1000": -6.6, "2000": -10.4, "3000": -18.1, "4000": -20.7, "8000": -40 }], after: [{ "250": -5.2, "500": 0.1, "1000": 2.4, "2000": 2.9, "3000": 1.8, "4000": 2.1, "8000": -12.6 }, { "250": -2.1, "500": 0.8, "1000": -2.1, "2000": 2.2, "3000": 6.1, "4000": -0.8, "8000": -15.4 }, { "250": -4.2, "500": -0.3, "1000": -4.1, "2000": 2.5, "3000": -1.7, "4000": -0.9, "8000": -15.4 }, { "250": -6.1, "500": 0, "1000": -2.5, "2000": -4.6, "3000": 1.4, "4000": -0.8, "8000": -18.1 }, { "250": -5.6, "500": 0.1, "1000": -3, "2000": 2.8, "3000": 4.1, "4000": 1.2, "8000": -17.6 }] }, viola: { header: "body_viola_1.h", sha256: "71cfbd19983d13fdfb0a5f9115d3c35467d00272dbd1e2068899ab1868e28410", variants: [[3.606489, 0.3993909, -2.912334, -1.240176, 0.4330441, 0.4191093, -0.3446689, -0.5157768, 0.3634575, 0.4663383, -0.2300055, -0.4119098, 0.06886515, 0.3418121, 0.1734583, -0.04492934, 0.03468843, 0.2429951, 0.1578957, -0.07832763, -0.1450111, -0.05587046, -0.02916577, -0.03451809, -0.0415249, -6806283e-9, 0.07090489, 0.04454405, -0.03626846, -0.06072838, -0.05090793, -7662827e-9, 0.04190174, 0.01431445, -0.01599215, -8351142e-9, 7218866e-9, 0.03721107, 0.05931449, 0.01727606, -0.05681987, -0.07463722, -0.03402724, 430246e-8, -0.01517777, -0.07478689, -0.09911653, -0.05766734, -0.02286271, -0.01156945, 8046281e-9, -130036e-9, -0.02225205, -0.01619948, -3574501e-9, 0.01903431, 0.05884806, 0.06047128, 0.01878585, -0.02621737, -0.05048891, -0.04139532, -0.03383915, -0.04868257, -0.04330001, -9669176e-9, -8703783e-11, -0.01111449, -0.0260556, -0.0346981, -0.01979712, -7539363e-9, -3015532e-9, 5377959e-9, 591183e-8, 5786945e-10, 5510975e-9, -4345087e-9, -0.02148246, -0.01280264, 7451084e-10, 2090493e-9, 6382628e-9, 0.01580047, 0.01931626, 9127971e-9, -4954188e-9, -0.0111389, -5025543e-9, 3403982e-9, -3032889e-9, -8330556e-9, -6669063e-9, -7561111e-9, -174144e-8, 8382947e-9, 6694356e-9, 2458493e-9, 3625979e-9, 2405523e-10, 3154324e-9, 0.01046066, 2424423e-10, -0.01263519, -0.01894333, -0.01011639, 3426374e-10, -1364143e-9, -4945136e-9, 4175933e-10, 0.01138844, 9568788e-9, -3035385e-9, -2439231e-9, 0.01171699, 0.02120383, 0.02227795, 0.01737819, 0.01373919, 9375725e-9, -3586836e-9, -0.01390279, -900785e-8, 345554e-8, 0.0117637, 0.01408715, 5153073e-9, -7839797e-9, -9730632e-9, -351136e-8, 5142203e-10, 2221416e-10, 1077462e-9, 7975694e-9, 0.01664515, 0.0182653, 8969391e-9, -3070392e-9, -4877547e-9, 3390592e-9, 9538518e-9, 6074903e-9, 3474726e-9, 7959503e-9, 0.01297075, 0.01143268, 2135267e-9, -360951e-8, 16104e-7, 547769e-8, 2139773e-9, 8124479e-9, 0.0155735, 0.01450022, 9745065e-9, 765603e-8, 7139696e-9, 7746775e-9, 8729221e-9, 0.01160406, 0.01039983, 4824593e-10, -5417944e-9, 6361138e-11, 5956557e-9, 1862878e-9, -8168025e-9, -942145e-8, 1371164e-9, 9785629e-9, 6107841e-9, -294881e-8, -5932578e-10, 0.01426445, 0.0157942, 5838254e-9, 206328e-8, 6841544e-9, 0.01035161, 4463465e-9, -3804589e-9, -3920865e-9, 1585185e-9, 5262604e-12, -4881532e-9, -5055754e-9, 2420967e-10, 2420831e-9, -2673079e-9, -7489875e-9, -4330141e-9, 1303947e-9, 2275769e-9, 8784631e-10, -1626495e-10, 6140301e-10, 2596786e-9, -2000384e-9, -0.01078909, -0.01206552, -7934831e-9, -5944361e-9, -4157347e-9, -2186699e-9, 358991e-9, 1006671e-10, -5357566e-9, -8559726e-9, -3192486e-9, 6595387e-9, 8906175e-9, 1697469e-9, -5890792e-9, -6386191e-9, 1035195e-9, 5080751e-9, -5515856e-11, -4205026e-9, -206001e-8, -1667752e-9, -2904776e-9, -4062264e-9, -2550798e-9, 5124569e-10, 3626139e-10, -2965359e-9, -4690157e-9, -2114066e-9, -2327837e-9, -8678885e-9, -0.01040187, -226122e-8, 5117554e-9, 2329934e-9, -5291232e-9, -4488697e-9, 1302061e-9, 5038919e-9, 1180488e-9, -7231687e-9, -6973071e-9, 1744256e-10, -1185059e-10, -4225046e-9, -3169177e-9, 119304e-8, 5194806e-9, 1994265e-9, -3753677e-9, -1719976e-9, 2044099e-9, 1290187e-10, -6910479e-10, 1974325e-9, 540216e-8, 4746132e-9, -2235817e-9, -6142714e-9, -3980305e-9, -2705357e-9, -2485461e-9, -746671e-9, 2606801e-9, 3486895e-9, -1309334e-10, -3712334e-9, -1704136e-9, 3505436e-9, 340673e-8, -1334541e-9, -2648347e-9, 7847241e-10, 252721e-8, -2494425e-9, -8755981e-9, -5165397e-9, 5295735e-9, 3957769e-9, -5745947e-9, -7794117e-9, -1447659e-9, 4507797e-9, 2770852e-9, -1292997e-9, 1536944e-9, 3900662e-9, 1717339e-10, -3268273e-9, -1400796e-9, 3156075e-9, 2504625e-9, -1819577e-9, -2384722e-9, -8690866e-12, 1931159e-9, 1919502e-9, 4134345e-10, 1206865e-9, 1491621e-9, -1058741e-9, -1340759e-9, 3663288e-10, 455753e-9, 6161259e-10, 1075918e-9, 2715962e-9, 5825152e-9, 4886604e-9, 2312718e-9, 1828241e-9, 9114228e-10, 1083646e-9, 1248667e-9, 6644103e-10, 1039342e-9, 250273e-8, 2944338e-9, 2574805e-10, -3110193e-9, -2261709e-9, 3712749e-9, 4805162e-9, 7165084e-10, -1491636e-9, -1145544e-9, 907714e-9, 3253301e-9, 3527182e-9, 1218305e-9, -304749e-9, 4734911e-10, -2025739e-10, -2603391e-9, -1518944e-9, 2595451e-9, 5996485e-9, 4509127e-9, -1091365e-9, -4161143e-9, -2816306e-9, -4280414e-10, 1226545e-9, 1734249e-9, 9616315e-10, 2639036e-9, 3592715e-9, -6621235e-10, -3727627e-9, -3239213e-9, -3365656e-10, 161952e-8, -3022691e-10, -3036875e-9, -2426475e-9, 3152145e-10, 1185826e-9, 3222082e-10, -1317068e-9, -253936e-8, -1993947e-9, -1765125e-10, 1413054e-9, 9897233e-10, 392901e-9, 3439044e-10, 1662686e-10, -1709439e-9, -3517833e-9, -2858753e-9, -4751195e-10, 1458025e-9, 1101406e-9, -1435736e-9, -2173269e-9, -137284e-9, 1479553e-9, 5887105e-10, -8598588e-10, -1475983e-9, 2834251e-10, 3486522e-9, 3286105e-9, -4688496e-10, -3009964e-9, -1863043e-9, -1587774e-9, -3540513e-9, -3756996e-9, -182793e-8, 4374015e-11, -3984737e-10, -2802262e-9, -300649e-8, 4657034e-10, 3226305e-9, 1868176e-9, -1052188e-9, -1822606e-9, 8145663e-11, 1274644e-9, 3850134e-11, -3530414e-10, -1405395e-10, -159111e-8, -2799659e-9, -3014928e-9, -3373157e-9, -2595302e-9, -5640808e-10, -4009729e-10, -130581e-8, -1866217e-9, -1396652e-9, -4245427e-10, -7251134e-10, -2293679e-9, -3274754e-9, -2980847e-9, -1489218e-9, -3806021e-10, -6245074e-10, -9522687e-10, -1374258e-9, -2134164e-9, -1858232e-9, -1764228e-9, -1431192e-9, -9011081e-10, -2743269e-10, 1493544e-10, -1251881e-9, -2939669e-9, -1100486e-9, 1132252e-9, 2942591e-10, -1105976e-9, -9666481e-10, 114802e-8, 204322e-8, 728146e-9, 301694e-9, 5515447e-10, 1020104e-9, 1806569e-9, 823123e-9, -1053341e-9, -8537287e-10, -1598955e-11, -7516474e-10, -1965342e-9, -2687861e-9, -1764831e-9, 1972005e-10, 1163749e-9, 2674795e-10, -207563e-9, 1616043e-9, 2117412e-9, 1157066e-9, 6068095e-10, 9571896e-10, 1970815e-9, 2995297e-9, 1825609e-9, 6758854e-10, 4171355e-11, 4195684e-10, 1680579e-9, 2207457e-9, 8296758e-10, -9117266e-10, -1178203e-9, 3818679e-10, 2212528e-9, 2038285e-9, 369457e-9, 4600941e-10, 2650904e-9, 2656344e-9, -1014502e-10, -6966513e-10, 20661e-7, 4046601e-9, 3012117e-9, 474581e-9, -1542615e-10, 2137446e-9, 3681546e-9, 2242838e-9, 1859222e-10, -4247815e-11, 1112995e-9, 1257661e-9, 9686286e-10, 1369967e-9, 1378974e-9, 8896419e-10, 6063183e-10, 5699031e-10, 114889e-8, 256516e-8, 2271057e-9, 9133931e-10, -1998165e-10, -387411e-9, 385502e-9, 1519305e-10, -1036859e-10, -287915e-9, -6655443e-10, -1050703e-10, 6839881e-10, 6309654e-10, 524742e-9, 8379285e-10, 34769e-8, -6281131e-11, 6301372e-10, 8593165e-10, 100615e-8, 1080378e-9, 1041448e-9, 1195478e-9, 1717546e-9, 1293118e-9, 4156113e-10, 9062929e-10, 1541244e-9, 5131408e-10, -4492382e-10, -1118317e-11, 8832647e-10, 1075441e-9, 2161531e-10, -6001543e-10, 3772493e-10, 4217069e-10, -7774766e-10, -8198894e-10, 3638077e-10, 600801e-9, 2124017e-10, -9094181e-10, -1219355e-9, -233543e-9, -4695602e-10, -1348118e-9, -958531e-9, 3648639e-11, 6979902e-10, -5693046e-11, -9529824e-10, -1998823e-10, 1022053e-9, 3007193e-10, -111023e-8, -1245395e-9, -6453974e-10, -3477316e-10, -4995931e-10, -4015557e-10, -1807526e-11, -6739361e-11, -609985e-9, -5055485e-10, 2906149e-10, 2619453e-10, 2321916e-10, 1172461e-9, 1469019e-9, 5437759e-10, -1046503e-9, -1671517e-9, -129408e-8, -8275072e-10, -1383032e-9, -1506375e-9, -1440929e-9, -138161e-8, -6092274e-10, 108448e-9, 4136892e-11, -2975007e-10, 154259e-9, 1281196e-9, 1220623e-9, 5700172e-10, 4129754e-12, 3754928e-10, 1066399e-9, 2050404e-10, -9423828e-11, 4622574e-10, 6561031e-10, 7024245e-10, -2804518e-10, -1360218e-9, -7177815e-10, 2544244e-10, 4854546e-10, -3811969e-10, -1411302e-9, -1288334e-9, 2307514e-10, 7698961e-10, -3820246e-10, -1126856e-9, -4786312e-10, 3670359e-10, 2383056e-10, -1028954e-9, -1368816e-9, -8493194e-10, -8504675e-10, -1288191e-9, -154043e-8, -1752508e-9, -1506673e-9, -5723125e-10, 1218369e-10, 229706e-9, -2354018e-10, -1074261e-9, -5823645e-10, -8184093e-11, -1074025e-9, -1488547e-9, -6453865e-11, 9452055e-10, 3593054e-10, -1724167e-9, -2966537e-9, -1464838e-9, -2288518e-10, -1217074e-9, -2052569e-9, -1382615e-9, -3201048e-10, -6115972e-10, -2076098e-9, -2515072e-9, -7477299e-10, 8167533e-10, -633979e-9, -1991856e-9, -1146275e-9, -2244996e-10, -185631e-9, -5692323e-10, -691135e-9, -2004375e-10, 482664e-9, 4450268e-10, 8063326e-11, -4222531e-10, -728654e-9, -3507312e-10, 9995172e-11, -2771105e-10, -7012131e-10, 3852021e-11, 1458204e-9, 171692e-8, 4136393e-10, -6766562e-10, 2669446e-10, 1150865e-9, 1075627e-9, -377487e-11, -4141535e-10, 4138962e-10, 149429e-8, 1251986e-9, -1272212e-11, -3252854e-10, 2382271e-10, 7084596e-10, 5784347e-10, 3245871e-10, 1199494e-9, 2219531e-9, 1054032e-9, -4403553e-10, 1013022e-10, 1596437e-9, 1716485e-9, 653706e-9, 2500328e-10, 1403298e-9, 2109003e-9, 1151784e-9, 3552045e-11, 5615161e-10, 1721942e-9, 13006e-7, 9716417e-11, -213077e-9, 6591929e-12, 3991807e-10, 4769072e-10, 6684971e-11, 2414503e-10, 3811053e-10, -2431222e-10, -4022019e-10, 3513411e-10, 1012074e-9, 3993339e-10, -5700592e-10, -1656157e-10, 2636654e-10, 682891e-10, -3308692e-10, -2390075e-10, 5455515e-11, -2820998e-10, -8287124e-10, -8062035e-10, -5243095e-10, -2346365e-10, -3722331e-10, -2918067e-10, 4575415e-10, 5292742e-10, 1325702e-11, 543188e-9, 9193859e-10, 7795003e-10, 4180184e-10, -1892357e-10, -5397533e-10, -4776352e-10, -6623174e-10, -1246183e-9, -1499198e-9, -399096e-9, 3713443e-10, -2571734e-10, -783336e-9, -6375527e-10, -2444509e-10, -4248801e-10, -104934e-8, -138386e-8, -849347e-9, 3567137e-10, 3646985e-10, -2900776e-10, -3311324e-10, -1713135e-10, 4564134e-10, 6420762e-10, 2103741e-11, -4746162e-10, -1469364e-10, 1734749e-10, 3311828e-10, 5316458e-10, 413775e-9, -9642236e-12, -3933857e-10, -6584576e-10, -110719e-9, 6402555e-10, 1018546e-9, 9009517e-10, 4387203e-10, -2068415e-10, -3315811e-10, 6378612e-11, 6542356e-11, -1112755e-10, -3296506e-10, -4211034e-10, -1878815e-10, 1522201e-10, 1459563e-10, -5086083e-11, -8096583e-11, 3004992e-11, 1675669e-10, -2646264e-11, -3399762e-10, -6284326e-12, 9452081e-10, 11803e-7, 7076206e-10, 408825e-9, 6900217e-11, 6160467e-11, 392608e-9, 4045163e-10, -8356211e-11, -1164429e-10, 4520171e-10, 7902956e-10, 7369134e-10, 2775122e-10, 173028e-9, 4670817e-10, 8364761e-11, -5082328e-10, 1398813e-10, 6495313e-10, 4657391e-10, -2685874e-10, -7536841e-10, -2300525e-10, 1004413e-10, -1148034e-10, 91858e-9, 4186654e-10, 6021165e-10, 7067678e-10, 6114624e-10, 5562095e-10, 5323925e-10, 9641708e-11, -116595e-9, -1867672e-10, -3996206e-10, -129775e-9, 4069168e-10, 6917344e-10, 404235e-9, 4221413e-10, 5872013e-10, 3051077e-10, -2170859e-10, -3772081e-10, -3179609e-10, 254852e-9, 9585461e-11, -6348339e-10, -5281726e-10, -1617578e-10, -12745e-8, -1236605e-10, -4324253e-10, -3108831e-10, -1630652e-11, -9885702e-11, -1283821e-10, -1226016e-10, -1535702e-11, 307455e-10, -3838081e-10, -2234694e-10, 1523828e-10, 2537853e-10, 1453991e-10, -1072353e-10, 2022032e-11, 2646381e-10, 2828076e-10, 126226e-9, -1619267e-10, -386469e-9, -1525231e-10, -1607736e-10, -4662057e-10, -376373e-9, -3617472e-10, -220621e-9, -1182703e-10, -2289815e-10, -1490827e-10, -115021e-9, -3115422e-10, -3731843e-10, -307764e-9, -7800008e-11, -1118072e-10, -3132321e-10, -2320509e-10, -1667091e-10, -2940258e-10, -261414e-9, -3244711e-11, 9449145e-11, -2368371e-10, -4410383e-10, -105514e-9, 2784339e-10, 2245789e-10, -1432244e-10, -1361296e-10, 2288561e-10, 2857129e-10, 2626374e-11, -568546e-10, 2146986e-10, 3614885e-10, 2266566e-10, -1348093e-10, -1998117e-10, -2914735e-11, 9942263e-11, 6898227e-11, -4543129e-11, -7192135e-11, -1232039e-10, -9861403e-11, 1107707e-11, 5197608e-11, 1181357e-10, 8446118e-11, 4293691e-11, 6525803e-11, 6442871e-11, 1645774e-11, 1924123e-10, 3629524e-10, 9665702e-11, -2957828e-10, -3098076e-10, -7586227e-11, -2296949e-11, -1200773e-10, -1665698e-10, -2448737e-11, 1522135e-10, 2469594e-11, -9622488e-11, 4030416e-11, 1682007e-10, 109291e-10, -2064209e-10, -1925413e-10, -1237257e-11, 6000573e-11, 3042771e-11, -9841861e-11, -9508021e-11, -3594781e-11, -2405091e-12, -2212782e-11, -3408883e-11, -8486875e-12, -1581938e-11, 1260002e-11, -3168406e-11, -1069737e-10, -5234367e-11, 5166963e-11, 7238796e-11, 4557044e-12, -473539e-10, -2184912e-11, 4755563e-12, 2259081e-11, 7483229e-11, 4774893e-11, -2333714e-11, -2847295e-11, -7078598e-11, -5076258e-11, -301516e-10, -4135808e-11, -3029514e-11, -1823664e-11, -2062281e-11, -1355872e-11, 3850514e-13, 2791646e-12, -9303357e-12, -3807346e-11, -1659103e-11, -2777422e-12, -5469851e-12, 153773e-10, -1493705e-13, 1642519e-11, 3693503e-11, 2569825e-11, 2769403e-11, 3388366e-11, 2353285e-11, 2684132e-11, 2601142e-11, -405487e-12, -2894594e-13, 1505048e-11, 1850349e-11, 2420874e-11, 2100374e-11, 1306778e-11, 1386569e-11, 1031358e-11, 5336312e-12, 9195955e-12, 1104063e-11, 1075991e-11, 1715377e-11, 1668625e-11, 7737456e-12, 6130975e-12, 5664549e-12, -1490778e-12, -3773136e-12, -6203114e-12, -2843177e-12, 2219884e-12, -1736007e-12, 1438266e-12, 531501e-11, -7303074e-13, -5848373e-12, -18713e-10, 3239312e-12, 3507297e-12, 5386796e-13, -2227959e-13, 1555207e-12, 2876574e-12, 1941369e-12, 5124339e-13, -2491674e-13, 1469773e-13, 1142594e-13, -5484329e-15, -6070588e-14, 1579038e-14, 2143644e-14], [3.606489, 0.3993909, -2.912334, -1.240176, 0.4330441, 0.4191093, -0.3446689, -0.5157768, 0.3634575, 0.4663383, -0.2300055, -0.4119098, 0.06886515, 0.3418121, 0.1734583, -0.04492934, 0.03468843, 0.2429951, 0.1578957, -0.07832763, -0.1450111, -0.05587046, -0.02916577, -0.03451809, -0.0415249, -6806283e-9, 0.07090489, 0.04454405, -0.03626846, -0.06072838, -0.05090793, -7662827e-9, 0.04190174, 0.01431445, -0.01599215, -8351142e-9, 7218866e-9, 0.03721107, 0.05931449, 0.01727606, -0.05681987, -0.07463722, -0.03402724, 430246e-8, -0.01517777, -0.07478689, -0.09911653, -0.05766734, -0.02286271, -0.01156945, 8046281e-9, -130036e-9, -0.02225205, -0.01619948, -3574501e-9, 0.01903431, 0.05884806, 0.06047128, 0.01878585, -0.02621737, -0.05048891, -0.04139532, -0.03383915, -0.04868257, -0.04330001, -9669176e-9, -8703783e-11, -0.01111449, -0.0260556, -0.0346981, -0.01979712, -7539363e-9, -3015532e-9, 5377959e-9, 591183e-8, 5786945e-10, 5510975e-9, -4345087e-9, -0.02148246, -0.01280264, 7451084e-10, 2090493e-9, 6382628e-9, 0.01580047, 0.01931626, 9127971e-9, -4954188e-9, -0.0111389, -5025543e-9, 3403982e-9, -3032889e-9, -8330556e-9, -6669063e-9, -7561111e-9, -174144e-8, 8382947e-9, 6694356e-9, 2458493e-9, 3625979e-9, 2405523e-10, 3154324e-9, 0.01046066, 2424423e-10, -0.01263519, -0.01894333, -0.01011639, 3426374e-10, -1364143e-9, -4945136e-9, 4175933e-10, 0.01138844, 9568788e-9, -3035385e-9, -2439231e-9, 0.01171699, 0.02120383, 0.02227795, 0.01737819, 0.01373919, 9375725e-9, -3586836e-9, -0.01390279, -900785e-8, 345554e-8, 0.0117637, 0.01408715, 5153073e-9, -7839797e-9, -9730632e-9, -351136e-8, 5142203e-10, 2221416e-10, 1077462e-9, 7975694e-9, 0.01664515, 0.0182653, 8969391e-9, -3070392e-9, -4877547e-9, 3390592e-9, 9538518e-9, 6074903e-9, 3474726e-9, 7959503e-9, 0.01297075, 0.01143268, 2135267e-9, -360951e-8, 16104e-7, 547769e-8, 2139773e-9, 8124479e-9, 0.0155735, 0.01450022, 9745065e-9, 765603e-8, 7139696e-9, 7746775e-9, 8729221e-9, 0.01160406, 0.01039983, 4824593e-10, -5417944e-9, 6361138e-11, 5956557e-9, 1862878e-9, -8168025e-9, -942145e-8, 1371164e-9, 9785629e-9, 6107841e-9, -294881e-8, -5932578e-10, 0.01426445, 0.0157942, 5838254e-9, 206328e-8, 6841544e-9, 0.01035161, 4463465e-9, -3804589e-9, -3920865e-9, 1585185e-9, 5262604e-12, -4881532e-9, -5055754e-9, 2420967e-10, 2420831e-9, -2673079e-9, -7489875e-9, -4330141e-9, 1303947e-9, 2275769e-9, 8784631e-10, -1626495e-10, 6140301e-10, 2596786e-9, -2000384e-9, -0.01078909, -0.01206552, -7934831e-9, -5944361e-9, -4157347e-9, -2186699e-9, 358991e-9, 1006671e-10, -5357566e-9, -8559726e-9, -3192486e-9, 6595387e-9, 8906175e-9, 1697469e-9, -5890792e-9, -6386191e-9, 1035195e-9, 5080751e-9, -5515856e-11, -4205026e-9, -206001e-8, -1667752e-9, -2904776e-9, -4062264e-9, -2550798e-9, 5124569e-10, 3626139e-10, -2965359e-9, -4690157e-9, -2114066e-9, -2327837e-9, -8678885e-9, -0.01040187, -226122e-8, 5117554e-9, 2329934e-9, -5291232e-9, -4488697e-9, 1302061e-9, 5038919e-9, 1180488e-9, -7231687e-9, -6973071e-9, 1744256e-10, -1185059e-10, -4225046e-9, -3169177e-9, 119304e-8, 5194806e-9, 1994265e-9, -3753677e-9, -1719976e-9, 2044099e-9, 1290187e-10, -6910479e-10, 1974325e-9, 540216e-8, 4746132e-9, -2235817e-9, -6142714e-9, -3980305e-9, -2705357e-9, -2485461e-9, -746671e-9, 2606801e-9, 3486895e-9, -1309334e-10, -3712334e-9, -1704136e-9, 3505436e-9, 340673e-8, -1334541e-9, -2648347e-9, 7847241e-10, 252721e-8, -2494425e-9, -8755981e-9, -5165397e-9, 5295735e-9, 3957769e-9, -5745947e-9, -7794117e-9, -1447659e-9, 4507797e-9, 2770852e-9, -1292997e-9, 1536944e-9, 3900662e-9, 1717339e-10, -3268273e-9, -1400796e-9, 3156075e-9, 2504625e-9, -1819577e-9, -2384722e-9, -8690866e-12, 1931159e-9, 1919502e-9, 4134345e-10, 1206865e-9, 1491621e-9, -1058741e-9, -1340759e-9, 3663288e-10, 455753e-9, 6161259e-10, 1075918e-9, 2715962e-9, 5825152e-9, 4886604e-9, 2312718e-9, 1828241e-9, 9114228e-10, 1083646e-9, 1248667e-9, 6644103e-10, 1039342e-9, 250273e-8, 2944338e-9, 2574805e-10, -3110193e-9, -2261709e-9, 3712749e-9, 4805162e-9, 7165084e-10, -1491636e-9, -1145544e-9, 907714e-9, 3253301e-9, 3527182e-9, 1218305e-9, -304749e-9, 4734911e-10, -2025739e-10, -2603391e-9, -1518944e-9, 2595451e-9, 5996485e-9, 4509127e-9, -1091365e-9, -4161143e-9, -2816306e-9, -4280414e-10, 1226545e-9, 1734249e-9, 9616315e-10, 2639036e-9, 3592715e-9, -6621235e-10, -3727627e-9, -3239213e-9, -3365656e-10, 161952e-8, -3022691e-10, -3036875e-9, -2426475e-9, 3152145e-10, 1185826e-9, 3222082e-10, -1317068e-9, -253936e-8, -1993947e-9, -1765125e-10, 1413054e-9, 9897233e-10, 392901e-9, 3439044e-10, 1662686e-10, -1709439e-9, -3517833e-9, -2858753e-9, -4751195e-10, 1458025e-9, 1101406e-9, -1435736e-9, -2173269e-9, -137284e-9, 1479553e-9, 5887105e-10, -8598588e-10, -1475983e-9, 2834251e-10, 3486522e-9, 3286105e-9, -4688496e-10, -3009964e-9, -1863043e-9, -1587774e-9, -3540513e-9, -3756996e-9, -182793e-8, 4374015e-11, -3984737e-10, -2802262e-9, -300649e-8, 4657034e-10, 3226305e-9, 1868176e-9, -1052188e-9, -1822606e-9, 8145663e-11, 1274644e-9, 3850134e-11, -3530414e-10, -1405395e-10, -159111e-8, -2799659e-9, -3014928e-9, -3373157e-9, -2595302e-9, -5640808e-10, -4009729e-10, -130581e-8, -1866217e-9, -1396652e-9, -4245427e-10, -7251134e-10, -2293679e-9, -3274754e-9, -2980847e-9, -1489218e-9, -3806021e-10, -6245074e-10, -9522687e-10, -1374258e-9, -2134164e-9, -1858232e-9, -1764228e-9, -1431192e-9, -9011081e-10, -2743269e-10, 1493544e-10, -1251881e-9, -2939669e-9, -1100486e-9, 1132252e-9, 2942591e-10, -1105976e-9, -9666481e-10, 114802e-8, 204322e-8, 728146e-9, 301694e-9, 5515447e-10, 1020104e-9, 1806569e-9, 823123e-9, -1053341e-9, -8537287e-10, -1598955e-11, -7516474e-10, -1965342e-9, -2687861e-9, -1764831e-9, 1972005e-10, 1163749e-9, 2674795e-10, -207563e-9, 1616043e-9, 2117412e-9, 1157066e-9, 6068095e-10, 9571896e-10, 1970815e-9, 2995297e-9, 1825609e-9, 6758854e-10, 4171355e-11, 4195684e-10, 1680579e-9, 2207457e-9, 8296758e-10, -9117266e-10, -1178203e-9, 3818679e-10, 2212528e-9, 2038285e-9, 369457e-9, 4600941e-10, 2650904e-9, 2656344e-9, -1014502e-10, -6966513e-10, 20661e-7, 4046601e-9, 3012117e-9, 474581e-9, -1542615e-10, 2137446e-9, 3681546e-9, 2242838e-9, 1859222e-10, -4247815e-11, 1112995e-9, 1257661e-9, 9686286e-10, 1369967e-9, 1378974e-9, 8896419e-10, 6063183e-10, 5699031e-10, 114889e-8, 256516e-8, 2271057e-9, 9133931e-10, -1998165e-10, -387411e-9, 385502e-9, 1519305e-10, -1036859e-10, -287915e-9, -6655443e-10, -1050703e-10, 6839881e-10, 6309654e-10, 524742e-9, 8379285e-10, 34769e-8, -6281131e-11, 6301372e-10, 8593165e-10, 100615e-8, 1080378e-9, 1041448e-9, 1195478e-9, 1717546e-9, 1293118e-9, 4156113e-10, 9062929e-10, 1541244e-9, 5131408e-10, -4492382e-10, -1118317e-11, 8832647e-10, 1075441e-9, 2161531e-10, -6001543e-10, 3772493e-10, 4217069e-10, -7774766e-10, -8198894e-10, 3638077e-10, 600801e-9, 2124017e-10, -9094181e-10, -1219355e-9, -233543e-9, -4695602e-10, -1348118e-9, -958531e-9, 3648639e-11, 6979902e-10, -5693046e-11, -9529824e-10, -1998823e-10, 1022053e-9, 3007193e-10, -111023e-8, -1245395e-9, -6453974e-10, -3477316e-10, -4995931e-10, -4015557e-10, -1807526e-11, -6739361e-11, -609985e-9, -5055485e-10, 2906149e-10, 2619453e-10, 2321916e-10, 1172461e-9, 1469019e-9, 5437759e-10, -1046503e-9, -1671517e-9, -129408e-8, -8275072e-10, -1383032e-9, -1506375e-9, -1440929e-9, -138161e-8, -6092274e-10, 108448e-9, 4136892e-11, -2975007e-10, 154259e-9, 1281196e-9, 1220623e-9, 5700172e-10, 4129754e-12, 3754928e-10, 1066399e-9, 2050404e-10, -9423828e-11, 4622574e-10, 6561031e-10, 7024245e-10, -2804518e-10, -1360218e-9, -7177815e-10, 2544244e-10, 4854546e-10, -3811969e-10, -1411302e-9, -1288334e-9, 2307514e-10, 7698961e-10, -3820246e-10, -1126856e-9, -4786312e-10, 3670359e-10, 2383056e-10, -1028954e-9, -1368816e-9, -8493194e-10, -8504675e-10, -1288191e-9, -154043e-8, -1752508e-9, -1506673e-9, -5723125e-10, 1218369e-10, 229706e-9, -2354018e-10, -1074261e-9, -5823645e-10, -8184093e-11, -1074025e-9, -1488547e-9, -6453865e-11, 9452055e-10, 3593054e-10, -1724167e-9, -2966537e-9, -1464838e-9, -2288518e-10, -1217074e-9, -2052569e-9, -1382615e-9, -3201048e-10, -6115972e-10, -2076098e-9, -2515072e-9, -7477299e-10, 8167533e-10, -633979e-9, -1991856e-9, -1146275e-9, -2244996e-10, -185631e-9, -5692323e-10, -691135e-9, -2004375e-10, 482664e-9, 4450268e-10, 8063326e-11, -4222531e-10, -728654e-9, -3507312e-10, 9995172e-11, -2771105e-10, -7012131e-10, 3852021e-11, 1458204e-9, 171692e-8, 4136393e-10, -6766562e-10, 2669446e-10, 1150865e-9, 1075627e-9, -377487e-11, -4141535e-10, 4138962e-10, 149429e-8, 1251986e-9, -1272212e-11, -3252854e-10, 2382271e-10, 7084596e-10, 5784347e-10, 3245871e-10, 1199494e-9, 2219531e-9, 1054032e-9, -4403553e-10, 1013022e-10, 1596437e-9, 1716485e-9, 653706e-9, 2500328e-10, 1403298e-9, 2109003e-9, 1151784e-9, 3552045e-11, 5615161e-10, 1721942e-9, 13006e-7, 9716417e-11, -213077e-9, 6591929e-12, 3991807e-10, 4769072e-10, 6684971e-11, 2414503e-10, 3811053e-10, -2431222e-10, -4022019e-10, 3513411e-10, 1012074e-9, 3993339e-10, -5700592e-10, -1656157e-10, 2636654e-10, 682891e-10, -3308692e-10, -2390075e-10, 5455515e-11, -2820998e-10, -8287124e-10, -8062035e-10, -5243095e-10, -2346365e-10, -3722331e-10, -2918067e-10, 4575415e-10, 5292742e-10, 1325702e-11, 543188e-9, 9193859e-10, 7795003e-10, 4180184e-10, -1892357e-10, -5397533e-10, -4776352e-10, -6623174e-10, -1246183e-9, -1499198e-9, -399096e-9, 3713443e-10, -2571734e-10, -783336e-9, -6375527e-10, -2444509e-10, -4248801e-10, -104934e-8, -138386e-8, -849347e-9, 3567137e-10, 3646985e-10, -2900776e-10, -3311324e-10, -1713135e-10, 4564134e-10, 6420762e-10, 2103741e-11, -4746162e-10, -1469364e-10, 1734749e-10, 3311828e-10, 5316458e-10, 413775e-9, -9642236e-12, -3933857e-10, -6584576e-10, -110719e-9, 6402555e-10, 1018546e-9, 9009517e-10, 4387203e-10, -2068415e-10, -3315811e-10, 6378612e-11, 6542356e-11, -1112755e-10, -3296506e-10, -4211034e-10, -1878815e-10, 1522201e-10, 1459563e-10, -5086083e-11, -8096583e-11, 3004992e-11, 1675669e-10, -2646264e-11, -3399762e-10, -6284326e-12, 9452081e-10, 11803e-7, 7076206e-10, 408825e-9, 6900217e-11, 6160467e-11, 392608e-9, 4045163e-10, -8356211e-11, -1164429e-10, 4520171e-10, 7902956e-10, 7369134e-10, 2775122e-10, 173028e-9, 4670817e-10, 8364761e-11, -5082328e-10, 1398813e-10, 6495313e-10, 4657391e-10, -2685874e-10, -7536841e-10, -2300525e-10, 1004413e-10, -1148034e-10, 91858e-9, 4186654e-10, 6021165e-10, 7067678e-10, 6114624e-10, 5562095e-10, 5323925e-10, 9641708e-11, -116595e-9, -1867672e-10, -3996206e-10, -129775e-9, 4069168e-10, 6917344e-10, 404235e-9, 4221413e-10, 5872013e-10, 3051077e-10, -2170859e-10, -3772081e-10, -3179609e-10, 254852e-9, 9585461e-11, -6348339e-10, -5281726e-10, -1617578e-10, -12745e-8, -1236605e-10, -4324253e-10, -3108831e-10, -1630652e-11, -9885702e-11, -1283821e-10, -1226016e-10, -1535702e-11, 307455e-10, -3838081e-10, -2234694e-10, 1523828e-10, 2537853e-10, 1453991e-10, -1072353e-10, 2022032e-11, 2646381e-10, 2828076e-10, 126226e-9, -1619267e-10, -386469e-9, -1525231e-10, -1607736e-10, -4662057e-10, -376373e-9, -3617472e-10, -220621e-9, -1182703e-10, -2289815e-10, -1490827e-10, -115021e-9, -3115422e-10, -3731843e-10, -307764e-9, -7800008e-11, -1118072e-10, -3132321e-10, -2320509e-10, -1667091e-10, -2940258e-10, -261414e-9, -3244711e-11, 9449145e-11, -2368371e-10, -4410383e-10, -105514e-9, 2784339e-10, 2245789e-10, -1432244e-10, -1361296e-10, 2288561e-10, 2857129e-10, 2626374e-11, -568546e-10, 2146986e-10, 3614885e-10, 2266566e-10, -1348093e-10, -1998117e-10, -2914735e-11, 9942263e-11, 6898227e-11, -4543129e-11, -7192135e-11, -1232039e-10, -9861403e-11, 1107707e-11, 5197608e-11, 1181357e-10, 8446118e-11, 4293691e-11, 6525803e-11, 6442871e-11, 1645774e-11, 1924123e-10, 3629524e-10, 9665702e-11, -2957828e-10, -3098076e-10, -7586227e-11, -2296949e-11, -1200773e-10, -1665698e-10, -2448737e-11, 1522135e-10, 2469594e-11, -9622488e-11, 4030416e-11, 1682007e-10, 109291e-10, -2064209e-10, -1925413e-10, -1237257e-11, 6000573e-11, 3042771e-11, -9841861e-11, -9508021e-11, -3594781e-11, -2405091e-12, -2212782e-11, -3408883e-11, -8486875e-12, -1581938e-11, 1260002e-11, -3168406e-11, -1069737e-10, -5234367e-11, 5166963e-11, 7238796e-11, 4557044e-12, -473539e-10, -2184912e-11, 4755563e-12, 2259081e-11, 7483229e-11, 4774893e-11, -2333714e-11, -2847295e-11, -7078598e-11, -5076258e-11, -301516e-10, -4135808e-11, -3029514e-11, -1823664e-11, -2062281e-11, -1355872e-11, 3850514e-13, 2791646e-12, -9303357e-12, -3807346e-11, -1659103e-11, -2777422e-12, -5469851e-12, 153773e-10, -1493705e-13, 1642519e-11, 3693503e-11, 2569825e-11, 2769403e-11, 3388366e-11, 2353285e-11, 2684132e-11, 2601142e-11, -405487e-12, -2894594e-13, 1505048e-11, 1850349e-11, 2420874e-11, 2100374e-11, 1306778e-11, 1386569e-11, 1031358e-11, 5336312e-12, 9195955e-12, 1104063e-11, 1075991e-11, 1715377e-11, 1668625e-11, 7737456e-12, 6130975e-12, 5664549e-12, -1490778e-12, -3773136e-12, -6203114e-12, -2843177e-12, 2219884e-12, -1736007e-12, 1438266e-12, 531501e-11, -7303074e-13, -5848373e-12, -18713e-10, 3239312e-12, 3507297e-12, 5386796e-13, -2227959e-13, 1555207e-12, 2876574e-12, 1941369e-12, 5124339e-13, -2491674e-13, 1469773e-13, 1142594e-13, -5484329e-15, -6070588e-14, 1579038e-14, 2143644e-14]], before: [{ "250": -5.9, "500": -3.2, "1000": -1.7, "2000": -7.6, "3000": -10.9, "4000": -16.1, "8000": -35.8 }, { "250": -3.5, "500": 6, "1000": 4.6, "2000": -2.9, "3000": -9.4, "4000": -9.7, "8000": -31.7 }], after: [{ "250": -2.7, "500": -4.9, "1000": -4.2, "2000": 0.1, "3000": 0.3, "4000": -6, "8000": -19.8 }, { "250": -0.3, "500": 4.3, "1000": 2, "2000": 4.8, "3000": 1.8, "4000": 0.4, "8000": -15.8 }] }, cello: { header: "body_cello_1.h", sha256: "1518ed989f23537d69a4d2ecc7fbe4811443ba44a8b1cf1a46957153bd13a940", variants: [[3.048954, 1.725713, -1.123831, -1.734628, -1.204471, -0.7023109, -0.4009341, -0.118423, 0.3369759, 0.6038327, 0.5511203, 0.2756762, 0.01811907, -0.2070718, -0.3400186, -0.3581843, -0.2822765, -0.1338182, 0.03529445, 0.2094667, 0.3333593, 0.341882, 0.2179108, 0.04813783, -0.09608534, -0.1629791, -0.1676502, -0.1391319, -0.06769206, 0.02976196, 0.1206954, 0.1685516, 0.1574466, 0.105876, 0.05028485, -0.01301542, -0.06241076, -0.08627488, -0.1116697, -0.1247493, -0.1047541, -0.06377968, -0.02168594, 0.01361188, 0.02763412, 0.02352851, 9622732e-9, -7516243e-10, -212259e-8, -4918337e-9, -0.01537816, -0.02790534, -0.02913667, -0.02087894, -7868785e-9, 9134058e-9, 0.02775687, 0.03333519, 0.02043298, 3789961e-9, -4238146e-9, -8946112e-9, -0.01747307, -0.02563693, -0.03331405, -0.03530764, -0.03023271, -0.0208683, -6437058e-9, 0.01412553, 0.026585, 0.0226612, 0.01075271, -189586e-8, -0.01278542, -0.02387648, -0.03260502, -0.03684003, -0.02911292, -0.01789598, -0.01008657, -3210727e-9, 6009352e-9, 0.01259465, 0.01604012, 0.01566493, 7123568e-9, -8519285e-9, -0.0209686, -0.02466962, -0.01903364, -8565913e-9, 2769229e-9, 0.01060822, 0.01292948, 6401359e-9, -6507103e-9, -0.01934408, -0.02540733, -0.02285848, -0.0108483, -1364763e-9, -1714282e-9, -567308e-8, -5702832e-9, -2919379e-9, -2850563e-9, -2087292e-9, -2565379e-9, -4584654e-9, -3999372e-9, -1058665e-9, 2140665e-9, 4519841e-9, 1594255e-9, -2982126e-9, -6755702e-9, -7876697e-9, -9806766e-9, -0.01359957, -0.01166577, -7291777e-10, 0.01114069, 0.01526003, 0.01031468, 1881807e-9, -5753202e-9, -9936509e-9, -9140848e-9, -7028057e-9, -5386877e-9, -3505434e-9, -1686707e-9, 6479566e-10, 6537913e-10, -2833594e-10, -2549317e-9, -5080558e-9, -6446512e-9, -637083e-8, -6213637e-9, -7118179e-9, -956645e-8, -0.0101148, -438513e-8, 4652242e-9, 0.01203308, 0.01533297, 0.01363478, 0.01056916, 5808184e-9, 3715261e-10, -7035438e-9, -0.01505594, -0.01934933, -0.01939997, -0.01566598, -7138343e-9, 2621172e-9, 6555304e-9, 4388587e-9, 1631492e-10, -1420714e-9, -4817805e-10, -9380792e-10, -4448882e-9, -6697997e-9, -5942609e-9, -215681e-8, 1382225e-9, 7074923e-10, -1694287e-9, -4273571e-9, -6818023e-9, -7807024e-9, -9333732e-9, -0.01269128, -0.01569643, -0.01460352, -7544289e-9, 3657649e-9, 0.01094915, 9586662e-9, 4447129e-9, 1028951e-9, -1463366e-9, -4649782e-9, -8519871e-9, -0.01155963, -0.01075413, -8659768e-9, -7073583e-9, -4271184e-9, -9508796e-10, 4291579e-10, 1286572e-9, 219408e-8, 2613042e-9, 9660086e-10, -2381702e-9, -4925217e-9, -411567e-8, -1190033e-9, -1418691e-10, -3494604e-9, -7983117e-9, -9351612e-9, -6621232e-9, -2829327e-9, -1008942e-9, -3815087e-9, -8238808e-9, -0.011142, -0.01072384, -8684973e-9, -6370033e-9, -4972716e-9, -3750724e-9, -1811162e-9, -9103065e-10, -1925494e-9, -2923126e-9, -3014896e-9, -1473118e-9, 3699673e-11, -1360889e-9, -6682471e-9, -0.01320244, -0.01562883, -0.01172634, -4838488e-9, -1852133e-10, 2327573e-10, -1105567e-9, -2329109e-9, -3384026e-9, -4230201e-9, -6404636e-9, -9828758e-9, -0.01099416, -7993715e-9, -3138474e-9, -8265797e-10, -1180383e-9, -1213767e-9, -4768255e-10, 117123e-9, -1178172e-9, -4873541e-9, -8224176e-9, -8335605e-9, -5419925e-9, -1423982e-9, 1993515e-9, 2899091e-9, 14317e-7, -860303e-9, -2506277e-9, -3468569e-9, -3848957e-9, -4769081e-9, -6552002e-9, -7021538e-9, -5534444e-9, -2355637e-9, 1305756e-9, 2861946e-9, 1514175e-9, -1552315e-9, -413658e-8, -441538e-8, -3220889e-9, -1728806e-9, -4259634e-10, 4337982e-10, 1903733e-9, 3664474e-9, 4637163e-9, 4209499e-9, 3072471e-9, 2682515e-9, 3462835e-9, 3479961e-9, 2339554e-9, 1603664e-9, 1970008e-9, 2977779e-9, 4367664e-9, 5242457e-9, 4232084e-9, 1794516e-9, -1046615e-9, -240178e-8, -1107189e-9, 1812078e-9, 4525041e-9, 6045314e-9, 6124199e-9, 5961883e-9, 5625412e-9, 5027784e-9, 4649366e-9, 4455993e-9, 569633e-8, 7387691e-9, 7834424e-9, 6775835e-9, 5857781e-9, 5970011e-9, 6576064e-9, 6591072e-9, 5106901e-9, 315503e-8, 2494988e-9, 2678963e-9, 3420074e-9, 5197235e-9, 6056876e-9, 5256419e-9, 4766432e-9, 5583617e-9, 6509773e-9, 6703742e-9, 6185625e-9, 5488442e-9, 5272872e-9, 431248e-8, 2580464e-9, 1764573e-9, 2544527e-9, 4421563e-9, 6417086e-9, 7899528e-9, 9048182e-9, 9736742e-9, 9972348e-9, 9524734e-9, 8803436e-9, 820061e-8, 778438e-8, 708221e-8, 623142e-8, 5542124e-9, 5570113e-9, 6387652e-9, 7834032e-9, 8602498e-9, 7945529e-9, 6718691e-9, 5025614e-9, 3073777e-9, 2295131e-9, 2521529e-9, 3508381e-9, 4608583e-9, 4866195e-9, 5153423e-9, 5767745e-9, 6632293e-9, 7419362e-9, 7876283e-9, 7497753e-9, 5990626e-9, 4128854e-9, 3075171e-9, 3044838e-9, 4037963e-9, 5617686e-9, 6719704e-9, 6773619e-9, 6196641e-9, 5487036e-9, 53846e-7, 6003634e-9, 6370697e-9, 5859072e-9, 4915868e-9, 408152e-8, 3218692e-9, 252264e-8, 2008066e-9, 1416925e-9, 1569249e-9, 2957746e-9, 4198848e-9, 4563611e-9, 3914138e-9, 2895193e-9, 2432791e-9, 2504135e-9, 1724338e-9, 4340984e-10, -4319743e-10, -1429669e-10, 1644697e-9, 3992334e-9, 5566447e-9, 5270607e-9, 3441852e-9, 1547729e-9, 5407737e-10, 1244541e-10, -1020434e-10, 1026993e-10, 9764777e-10, 2638294e-9, 4236965e-9, 4928773e-9, 4294208e-9, 2469909e-9, 7238273e-10, 357929e-9, 5482272e-10, 1489866e-10, -6625426e-10, -9087925e-10, 2747062e-10, 2017818e-9, 2693209e-9, 1762879e-9, 3083228e-10, -3654816e-10, -5805964e-10, -1042983e-9, -1732609e-9, -215477e-8, -188974e-8, -8577872e-10, 7171213e-10, 2365336e-9, 3478521e-9, 3516365e-9, 2632459e-9, 1723594e-9, 9078392e-10, -1697829e-13, -1073667e-9, -1882413e-9, -177493e-8, -5565515e-10, 1475927e-9, 2730301e-9, 2754282e-9, 2312583e-9, 1991976e-9, 1071884e-9, -3199627e-10, -1356908e-9, -1471782e-9, -9428388e-10, -5425084e-10, -2923287e-10, 5041769e-10, 1460262e-9, 201139e-8, 1701306e-9, 116804e-8, 1026233e-9, 5973477e-10, -2599069e-10, -1110337e-9, -1413015e-9, -115443e-8, -2229702e-10, 8901719e-10, 1669311e-9, 229737e-8, 252945e-8, 2471576e-9, 2114056e-9, 1470067e-9, 6593511e-10, 9834225e-11, -5894911e-13, -5403273e-11, -1571565e-10, 1587778e-10, 686399e-9, 1264437e-9, 1444277e-9, 1355911e-9, 1176757e-9, 7588151e-10, -5479943e-11, -3920762e-10, -2966194e-10, 1963224e-10, 7354404e-10, 1110231e-9, 1171087e-9, 1373535e-9, 1548388e-9, 1266918e-9, 5575519e-10, -2263237e-10, -3728009e-10, -3898909e-10, -8723402e-10, -1590344e-9, -2042339e-9, -1816004e-9, -1507324e-9, -1553227e-9, -1482303e-9, -1191127e-9, -1032588e-9, -8075956e-10, -3484374e-10, 188541e-9, 3870415e-10, -9414141e-11, -8116525e-10, -1394734e-9, -1477422e-9, -1640103e-9, -1890959e-9, -2105417e-9, -1984629e-9, -159742e-8, -1282565e-9, -1295968e-9, -1111316e-9, -5473337e-10, -5797752e-11, -6128985e-11, -5045781e-10, -1517897e-9, -2230374e-9, -2181424e-9, -168073e-8, -9445865e-10, -6392596e-10, -8329644e-10, -1119993e-9, -115354e-8, -9966523e-10, -1237648e-9, -1960423e-9, -3114768e-9, -3750573e-9, -3716528e-9, -3491753e-9, -3067186e-9, -2219368e-9, -8140933e-10, 2505056e-10, 2541592e-10, -5523835e-10, -1703935e-9, -2703922e-9, -3038335e-9, -2853087e-9, -2275042e-9, -1756793e-9, -1322707e-9, -1262998e-9, -1441869e-9, -1580114e-9, -1681856e-9, -1751858e-9, -1708437e-9, -1715133e-9, -1947452e-9, -2177787e-9, -1996123e-9, -155062e-8, -1113245e-9, -1246752e-9, -1737904e-9, -2028347e-9, -2133168e-9, -2251186e-9, -2494199e-9, -302465e-8, -3259329e-9, -32563e-7, -2984287e-9, -2650534e-9, -2106909e-9, -1187475e-9, -4287843e-10, -2851672e-11, -161192e-9, -8769464e-10, -1785982e-9, -2224806e-9, -2271954e-9, -22829e-7, -1891303e-9, -1461964e-9, -11762e-7, -1203088e-9, -1597842e-9, -2141154e-9, -2680779e-9, -3020257e-9, -3190553e-9, -2953749e-9, -2465398e-9, -1970205e-9, -1352915e-9, -6089032e-10, -3644935e-10, -7912496e-10, -1461958e-9, -1932653e-9, -2138955e-9, -2257014e-9, -2266776e-9, -2011111e-9, -1775181e-9, -1873743e-9, -2037727e-9, -2192734e-9, -2242531e-9, -2326818e-9, -2472282e-9, -275947e-8, -2898494e-9, -2585972e-9, -2177421e-9, -1745947e-9, -1278583e-9, -102913e-8, -1203385e-9, -1700036e-9, -217757e-8, -2377859e-9, -2211981e-9, -1592395e-9, -8675158e-10, -3012278e-10, -2224827e-11, -4118816e-11, -6131941e-10, -1360091e-9, -1937683e-9, -2225351e-9, -2209146e-9, -161209e-8, -8574543e-10, -2793857e-10, 2007492e-10, 441285e-9, 4427997e-10, 4262736e-10, -2013328e-10, -1107643e-9, -1582162e-9, -1594168e-9, -1155424e-9, -4617463e-10, -1558404e-10, -932779e-10, 2147985e-10, 9089378e-10, 1383287e-9, 1091601e-9, 4959121e-10, 1868077e-10, 1369172e-10, 5441616e-11, -9868273e-11, 7888168e-11, 6337861e-10, 1505675e-9, 2228899e-9, 2058267e-9, 9410177e-10, -2220181e-10, -54408e-8, -2488614e-11, 7648804e-10, 1011348e-9, 5861041e-10, 3750321e-10, 4526576e-10, 661563e-9, 4925223e-10, -2118346e-11, -3574317e-10, -1655332e-10, 3003507e-10, 6819896e-10, 7899155e-10, 4843887e-10, 2884274e-10, 3410224e-10, 3405204e-10, 2341931e-10, -4041571e-11, -6501307e-11, 2752212e-10, 6217965e-10, 6696154e-10, 455541e-9, 4756003e-10, 6801605e-10, 823313e-9, 8447577e-10, 8189067e-10, 9526481e-10, 1092294e-9, 8948329e-10, 4045862e-10, -4114101e-11, -1414564e-10, 5591447e-11, 1603097e-10, -8672454e-11, -4709679e-10, -7705626e-10, -8908686e-10, -6536554e-10, -2209626e-10, -839993e-10, -3983301e-10, -7293236e-10, -5997517e-10, -299924e-10, 4222845e-10, 4319459e-10, 3508463e-10, 4716029e-10, 5739192e-10, 3728964e-10, -942583e-10, -421901e-9, -4769289e-10, -387053e-9, -2064465e-10, -4376465e-11, -1609164e-10, -2686236e-10, -2004835e-10, 8378757e-11, 258514e-9, 1810508e-11, -3943526e-10, -6380694e-10, -8085605e-10, -1111079e-9, -1319221e-9, -1324289e-9, -1169728e-9, -6595329e-10, -1078541e-10, 2471459e-10, 2208207e-10, -2180624e-10, -7186978e-10, -7630302e-10, -6314529e-10, -7193988e-10, -7431034e-10, -4427634e-10, 91465e-9, 5150937e-10, 6697381e-10, 4210893e-10, 9196142e-11, -125561e-9, -422486e-9, -7346188e-10, -1044932e-9, -1192919e-9, -1090256e-9, -730753e-9, -513314e-9, -5381389e-10, -3950882e-10, -1314411e-10, 6974443e-11, 2063402e-11, -3969724e-10, -9418726e-10, -1320635e-9, -1282873e-9, -1071056e-9, -8628696e-10, -732888e-9, -6779433e-10, -736202e-9, -6887935e-10, -4010011e-10, -2557701e-10, -2541171e-10, -4649644e-10, -5676626e-10, -3649069e-10, -9538024e-11, -7751633e-11, -1050109e-10, -1062571e-10, -6000662e-12, 299459e-9, 5631197e-10, 5988837e-10, 7206015e-10, 9416808e-10, 8088239e-10, 591603e-9, 4002346e-10, 294699e-9, 1383009e-10, -7260804e-11, -2063859e-10, -1052746e-10, 6634783e-11, 1680882e-10, 321891e-9, 5182276e-10, 413816e-9, 1096825e-10, -9883167e-11, -228904e-9, -3971528e-10, -4948189e-10, -4930248e-10, -2536202e-10, 1245297e-11, 1962213e-10, 4185182e-10, 607325e-9, 715155e-9, 5961333e-10, 3196225e-10, -348765e-10, -1029784e-10, 1061475e-10, 2272033e-10, 1981484e-10, 231019e-9, 2847304e-10, 3364369e-10, 3348756e-10, 1371923e-10, -1204704e-10, -3134741e-10, -3520995e-10, -2510264e-10, -3824782e-13, 3951529e-10, 6438299e-10, 6005928e-10, 2169354e-10, -2365748e-10, -6013866e-10, -7600925e-10, -6717729e-10, -5421577e-10, -3547481e-10, -8600583e-11, 1263486e-10, 2980356e-10, 4995547e-10, 5536246e-10, 3727107e-10, 2208832e-10, 7718068e-11, -4258533e-11, -8301678e-11, 4065435e-12, 3115789e-11, -3595668e-11, -7091969e-12, 167847e-9, 2547356e-10, 1091159e-10, -1989029e-10, -3703373e-10, -2762442e-10, -5638967e-11, 7768732e-11, 2400163e-10, 3870187e-10, 4687389e-10, 4212698e-10, 3385722e-10, 2368513e-10, 1518333e-10, 166186e-10, -8923359e-11, -1470166e-10, -1798609e-10, -1693116e-10, -1339751e-10, -5290947e-11, 7739384e-11, 1321612e-10, 6977285e-11, -7945261e-11, -1985987e-10, -2140285e-10, -1414295e-10, -926572e-10, -890705e-10, -8014403e-11, -1161774e-10, -2389723e-10, -4094283e-10, -4010817e-10, -1940632e-10, 3994415e-11, 199319e-9, 1394385e-10, -4917337e-12, -866291e-10, -1201534e-10, -1123568e-10, -1047742e-10, -1107913e-10, -5221474e-11, 6745418e-11, 184106e-9, 233286e-9, 2230432e-10, 1743011e-10, 1302548e-10, 7454119e-11, -3960255e-11, -1088808e-10, -9902022e-11, 1601348e-13, 1195135e-10, 1784583e-10, 2299192e-10, 2518301e-10, 1928236e-10, 1348331e-10, 1056238e-10, 8626621e-11, 7222622e-11, 4352517e-11, 7218313e-12, -1072597e-11, -5077039e-12, 6591301e-11, 1589609e-10, 1986804e-10, 2046206e-10, 2079003e-10, 2180405e-10, 2397704e-10, 2509453e-10, 2227356e-10, 1897156e-10, 1283029e-10, 832318e-10, 6209568e-11, 4760712e-11, 5794172e-11, 9268032e-11, 1341425e-10, 1463711e-10, 1280901e-10, 1272655e-10, 1148431e-10, 8534868e-11, 4282165e-11, 9680935e-12, 1201107e-11, 9128025e-12, -3971073e-12, -5030768e-12, 3288983e-11, 7971116e-11, 9871995e-11, 1055893e-10, 1143821e-10, 1101498e-10, 8551993e-11, 5833568e-11, 344902e-10, 1506828e-11, 8846357e-12, 1821335e-11, 4481597e-11, 7062001e-11, 7956015e-11, 7852194e-11, 7680924e-11, 7808454e-11, 7022019e-11, 4980647e-11, 2501856e-11, 5463457e-12, -2342332e-12, 4483746e-12, 2178913e-11, 3350746e-11, 36315e-9, 4180154e-11, 4909539e-11, 5068709e-11, 4135359e-11, 2950828e-11, 2051955e-11, 1461312e-11, 1254852e-11, 132816e-10, 110145e-10, 8639906e-12, 8823551e-12, 1269003e-11, 1715572e-11, 161947e-10, 1170509e-11, 7456166e-12, 5394453e-12, 4575334e-12, 4104027e-12, 2670634e-12, 2310673e-12, 2617367e-12, 2378986e-12, 1786653e-12, 1163293e-12, 8568806e-13, 5709498e-13, 3068265e-13, 1353042e-13, 5785833e-14, 1756967e-14], [3.048954, 1.725713, -1.123831, -1.734628, -1.204471, -0.7023109, -0.4009341, -0.118423, 0.3369759, 0.6038327, 0.5511203, 0.2756762, 0.01811907, -0.2070718, -0.3400186, -0.3581843, -0.2822765, -0.1338182, 0.03529445, 0.2094667, 0.3333593, 0.341882, 0.2179108, 0.04813783, -0.09608534, -0.1629791, -0.1676502, -0.1391319, -0.06769206, 0.02976196, 0.1206954, 0.1685516, 0.1574466, 0.105876, 0.05028485, -0.01301542, -0.06241076, -0.08627488, -0.1116697, -0.1247493, -0.1047541, -0.06377968, -0.02168594, 0.01361188, 0.02763412, 0.02352851, 9622732e-9, -7516243e-10, -212259e-8, -4918337e-9, -0.01537816, -0.02790534, -0.02913667, -0.02087894, -7868785e-9, 9134058e-9, 0.02775687, 0.03333519, 0.02043298, 3789961e-9, -4238146e-9, -8946112e-9, -0.01747307, -0.02563693, -0.03331405, -0.03530764, -0.03023271, -0.0208683, -6437058e-9, 0.01412553, 0.026585, 0.0226612, 0.01075271, -189586e-8, -0.01278542, -0.02387648, -0.03260502, -0.03684003, -0.02911292, -0.01789598, -0.01008657, -3210727e-9, 6009352e-9, 0.01259465, 0.01604012, 0.01566493, 7123568e-9, -8519285e-9, -0.0209686, -0.02466962, -0.01903364, -8565913e-9, 2769229e-9, 0.01060822, 0.01292948, 6401359e-9, -6507103e-9, -0.01934408, -0.02540733, -0.02285848, -0.0108483, -1364763e-9, -1714282e-9, -567308e-8, -5702832e-9, -2919379e-9, -2850563e-9, -2087292e-9, -2565379e-9, -4584654e-9, -3999372e-9, -1058665e-9, 2140665e-9, 4519841e-9, 1594255e-9, -2982126e-9, -6755702e-9, -7876697e-9, -9806766e-9, -0.01359957, -0.01166577, -7291777e-10, 0.01114069, 0.01526003, 0.01031468, 1881807e-9, -5753202e-9, -9936509e-9, -9140848e-9, -7028057e-9, -5386877e-9, -3505434e-9, -1686707e-9, 6479566e-10, 6537913e-10, -2833594e-10, -2549317e-9, -5080558e-9, -6446512e-9, -637083e-8, -6213637e-9, -7118179e-9, -956645e-8, -0.0101148, -438513e-8, 4652242e-9, 0.01203308, 0.01533297, 0.01363478, 0.01056916, 5808184e-9, 3715261e-10, -7035438e-9, -0.01505594, -0.01934933, -0.01939997, -0.01566598, -7138343e-9, 2621172e-9, 6555304e-9, 4388587e-9, 1631492e-10, -1420714e-9, -4817805e-10, -9380792e-10, -4448882e-9, -6697997e-9, -5942609e-9, -215681e-8, 1382225e-9, 7074923e-10, -1694287e-9, -4273571e-9, -6818023e-9, -7807024e-9, -9333732e-9, -0.01269128, -0.01569643, -0.01460352, -7544289e-9, 3657649e-9, 0.01094915, 9586662e-9, 4447129e-9, 1028951e-9, -1463366e-9, -4649782e-9, -8519871e-9, -0.01155963, -0.01075413, -8659768e-9, -7073583e-9, -4271184e-9, -9508796e-10, 4291579e-10, 1286572e-9, 219408e-8, 2613042e-9, 9660086e-10, -2381702e-9, -4925217e-9, -411567e-8, -1190033e-9, -1418691e-10, -3494604e-9, -7983117e-9, -9351612e-9, -6621232e-9, -2829327e-9, -1008942e-9, -3815087e-9, -8238808e-9, -0.011142, -0.01072384, -8684973e-9, -6370033e-9, -4972716e-9, -3750724e-9, -1811162e-9, -9103065e-10, -1925494e-9, -2923126e-9, -3014896e-9, -1473118e-9, 3699673e-11, -1360889e-9, -6682471e-9, -0.01320244, -0.01562883, -0.01172634, -4838488e-9, -1852133e-10, 2327573e-10, -1105567e-9, -2329109e-9, -3384026e-9, -4230201e-9, -6404636e-9, -9828758e-9, -0.01099416, -7993715e-9, -3138474e-9, -8265797e-10, -1180383e-9, -1213767e-9, -4768255e-10, 117123e-9, -1178172e-9, -4873541e-9, -8224176e-9, -8335605e-9, -5419925e-9, -1423982e-9, 1993515e-9, 2899091e-9, 14317e-7, -860303e-9, -2506277e-9, -3468569e-9, -3848957e-9, -4769081e-9, -6552002e-9, -7021538e-9, -5534444e-9, -2355637e-9, 1305756e-9, 2861946e-9, 1514175e-9, -1552315e-9, -413658e-8, -441538e-8, -3220889e-9, -1728806e-9, -4259634e-10, 4337982e-10, 1903733e-9, 3664474e-9, 4637163e-9, 4209499e-9, 3072471e-9, 2682515e-9, 3462835e-9, 3479961e-9, 2339554e-9, 1603664e-9, 1970008e-9, 2977779e-9, 4367664e-9, 5242457e-9, 4232084e-9, 1794516e-9, -1046615e-9, -240178e-8, -1107189e-9, 1812078e-9, 4525041e-9, 6045314e-9, 6124199e-9, 5961883e-9, 5625412e-9, 5027784e-9, 4649366e-9, 4455993e-9, 569633e-8, 7387691e-9, 7834424e-9, 6775835e-9, 5857781e-9, 5970011e-9, 6576064e-9, 6591072e-9, 5106901e-9, 315503e-8, 2494988e-9, 2678963e-9, 3420074e-9, 5197235e-9, 6056876e-9, 5256419e-9, 4766432e-9, 5583617e-9, 6509773e-9, 6703742e-9, 6185625e-9, 5488442e-9, 5272872e-9, 431248e-8, 2580464e-9, 1764573e-9, 2544527e-9, 4421563e-9, 6417086e-9, 7899528e-9, 9048182e-9, 9736742e-9, 9972348e-9, 9524734e-9, 8803436e-9, 820061e-8, 778438e-8, 708221e-8, 623142e-8, 5542124e-9, 5570113e-9, 6387652e-9, 7834032e-9, 8602498e-9, 7945529e-9, 6718691e-9, 5025614e-9, 3073777e-9, 2295131e-9, 2521529e-9, 3508381e-9, 4608583e-9, 4866195e-9, 5153423e-9, 5767745e-9, 6632293e-9, 7419362e-9, 7876283e-9, 7497753e-9, 5990626e-9, 4128854e-9, 3075171e-9, 3044838e-9, 4037963e-9, 5617686e-9, 6719704e-9, 6773619e-9, 6196641e-9, 5487036e-9, 53846e-7, 6003634e-9, 6370697e-9, 5859072e-9, 4915868e-9, 408152e-8, 3218692e-9, 252264e-8, 2008066e-9, 1416925e-9, 1569249e-9, 2957746e-9, 4198848e-9, 4563611e-9, 3914138e-9, 2895193e-9, 2432791e-9, 2504135e-9, 1724338e-9, 4340984e-10, -4319743e-10, -1429669e-10, 1644697e-9, 3992334e-9, 5566447e-9, 5270607e-9, 3441852e-9, 1547729e-9, 5407737e-10, 1244541e-10, -1020434e-10, 1026993e-10, 9764777e-10, 2638294e-9, 4236965e-9, 4928773e-9, 4294208e-9, 2469909e-9, 7238273e-10, 357929e-9, 5482272e-10, 1489866e-10, -6625426e-10, -9087925e-10, 2747062e-10, 2017818e-9, 2693209e-9, 1762879e-9, 3083228e-10, -3654816e-10, -5805964e-10, -1042983e-9, -1732609e-9, -215477e-8, -188974e-8, -8577872e-10, 7171213e-10, 2365336e-9, 3478521e-9, 3516365e-9, 2632459e-9, 1723594e-9, 9078392e-10, -1697829e-13, -1073667e-9, -1882413e-9, -177493e-8, -5565515e-10, 1475927e-9, 2730301e-9, 2754282e-9, 2312583e-9, 1991976e-9, 1071884e-9, -3199627e-10, -1356908e-9, -1471782e-9, -9428388e-10, -5425084e-10, -2923287e-10, 5041769e-10, 1460262e-9, 201139e-8, 1701306e-9, 116804e-8, 1026233e-9, 5973477e-10, -2599069e-10, -1110337e-9, -1413015e-9, -115443e-8, -2229702e-10, 8901719e-10, 1669311e-9, 229737e-8, 252945e-8, 2471576e-9, 2114056e-9, 1470067e-9, 6593511e-10, 9834225e-11, -5894911e-13, -5403273e-11, -1571565e-10, 1587778e-10, 686399e-9, 1264437e-9, 1444277e-9, 1355911e-9, 1176757e-9, 7588151e-10, -5479943e-11, -3920762e-10, -2966194e-10, 1963224e-10, 7354404e-10, 1110231e-9, 1171087e-9, 1373535e-9, 1548388e-9, 1266918e-9, 5575519e-10, -2263237e-10, -3728009e-10, -3898909e-10, -8723402e-10, -1590344e-9, -2042339e-9, -1816004e-9, -1507324e-9, -1553227e-9, -1482303e-9, -1191127e-9, -1032588e-9, -8075956e-10, -3484374e-10, 188541e-9, 3870415e-10, -9414141e-11, -8116525e-10, -1394734e-9, -1477422e-9, -1640103e-9, -1890959e-9, -2105417e-9, -1984629e-9, -159742e-8, -1282565e-9, -1295968e-9, -1111316e-9, -5473337e-10, -5797752e-11, -6128985e-11, -5045781e-10, -1517897e-9, -2230374e-9, -2181424e-9, -168073e-8, -9445865e-10, -6392596e-10, -8329644e-10, -1119993e-9, -115354e-8, -9966523e-10, -1237648e-9, -1960423e-9, -3114768e-9, -3750573e-9, -3716528e-9, -3491753e-9, -3067186e-9, -2219368e-9, -8140933e-10, 2505056e-10, 2541592e-10, -5523835e-10, -1703935e-9, -2703922e-9, -3038335e-9, -2853087e-9, -2275042e-9, -1756793e-9, -1322707e-9, -1262998e-9, -1441869e-9, -1580114e-9, -1681856e-9, -1751858e-9, -1708437e-9, -1715133e-9, -1947452e-9, -2177787e-9, -1996123e-9, -155062e-8, -1113245e-9, -1246752e-9, -1737904e-9, -2028347e-9, -2133168e-9, -2251186e-9, -2494199e-9, -302465e-8, -3259329e-9, -32563e-7, -2984287e-9, -2650534e-9, -2106909e-9, -1187475e-9, -4287843e-10, -2851672e-11, -161192e-9, -8769464e-10, -1785982e-9, -2224806e-9, -2271954e-9, -22829e-7, -1891303e-9, -1461964e-9, -11762e-7, -1203088e-9, -1597842e-9, -2141154e-9, -2680779e-9, -3020257e-9, -3190553e-9, -2953749e-9, -2465398e-9, -1970205e-9, -1352915e-9, -6089032e-10, -3644935e-10, -7912496e-10, -1461958e-9, -1932653e-9, -2138955e-9, -2257014e-9, -2266776e-9, -2011111e-9, -1775181e-9, -1873743e-9, -2037727e-9, -2192734e-9, -2242531e-9, -2326818e-9, -2472282e-9, -275947e-8, -2898494e-9, -2585972e-9, -2177421e-9, -1745947e-9, -1278583e-9, -102913e-8, -1203385e-9, -1700036e-9, -217757e-8, -2377859e-9, -2211981e-9, -1592395e-9, -8675158e-10, -3012278e-10, -2224827e-11, -4118816e-11, -6131941e-10, -1360091e-9, -1937683e-9, -2225351e-9, -2209146e-9, -161209e-8, -8574543e-10, -2793857e-10, 2007492e-10, 441285e-9, 4427997e-10, 4262736e-10, -2013328e-10, -1107643e-9, -1582162e-9, -1594168e-9, -1155424e-9, -4617463e-10, -1558404e-10, -932779e-10, 2147985e-10, 9089378e-10, 1383287e-9, 1091601e-9, 4959121e-10, 1868077e-10, 1369172e-10, 5441616e-11, -9868273e-11, 7888168e-11, 6337861e-10, 1505675e-9, 2228899e-9, 2058267e-9, 9410177e-10, -2220181e-10, -54408e-8, -2488614e-11, 7648804e-10, 1011348e-9, 5861041e-10, 3750321e-10, 4526576e-10, 661563e-9, 4925223e-10, -2118346e-11, -3574317e-10, -1655332e-10, 3003507e-10, 6819896e-10, 7899155e-10, 4843887e-10, 2884274e-10, 3410224e-10, 3405204e-10, 2341931e-10, -4041571e-11, -6501307e-11, 2752212e-10, 6217965e-10, 6696154e-10, 455541e-9, 4756003e-10, 6801605e-10, 823313e-9, 8447577e-10, 8189067e-10, 9526481e-10, 1092294e-9, 8948329e-10, 4045862e-10, -4114101e-11, -1414564e-10, 5591447e-11, 1603097e-10, -8672454e-11, -4709679e-10, -7705626e-10, -8908686e-10, -6536554e-10, -2209626e-10, -839993e-10, -3983301e-10, -7293236e-10, -5997517e-10, -299924e-10, 4222845e-10, 4319459e-10, 3508463e-10, 4716029e-10, 5739192e-10, 3728964e-10, -942583e-10, -421901e-9, -4769289e-10, -387053e-9, -2064465e-10, -4376465e-11, -1609164e-10, -2686236e-10, -2004835e-10, 8378757e-11, 258514e-9, 1810508e-11, -3943526e-10, -6380694e-10, -8085605e-10, -1111079e-9, -1319221e-9, -1324289e-9, -1169728e-9, -6595329e-10, -1078541e-10, 2471459e-10, 2208207e-10, -2180624e-10, -7186978e-10, -7630302e-10, -6314529e-10, -7193988e-10, -7431034e-10, -4427634e-10, 91465e-9, 5150937e-10, 6697381e-10, 4210893e-10, 9196142e-11, -125561e-9, -422486e-9, -7346188e-10, -1044932e-9, -1192919e-9, -1090256e-9, -730753e-9, -513314e-9, -5381389e-10, -3950882e-10, -1314411e-10, 6974443e-11, 2063402e-11, -3969724e-10, -9418726e-10, -1320635e-9, -1282873e-9, -1071056e-9, -8628696e-10, -732888e-9, -6779433e-10, -736202e-9, -6887935e-10, -4010011e-10, -2557701e-10, -2541171e-10, -4649644e-10, -5676626e-10, -3649069e-10, -9538024e-11, -7751633e-11, -1050109e-10, -1062571e-10, -6000662e-12, 299459e-9, 5631197e-10, 5988837e-10, 7206015e-10, 9416808e-10, 8088239e-10, 591603e-9, 4002346e-10, 294699e-9, 1383009e-10, -7260804e-11, -2063859e-10, -1052746e-10, 6634783e-11, 1680882e-10, 321891e-9, 5182276e-10, 413816e-9, 1096825e-10, -9883167e-11, -228904e-9, -3971528e-10, -4948189e-10, -4930248e-10, -2536202e-10, 1245297e-11, 1962213e-10, 4185182e-10, 607325e-9, 715155e-9, 5961333e-10, 3196225e-10, -348765e-10, -1029784e-10, 1061475e-10, 2272033e-10, 1981484e-10, 231019e-9, 2847304e-10, 3364369e-10, 3348756e-10, 1371923e-10, -1204704e-10, -3134741e-10, -3520995e-10, -2510264e-10, -3824782e-13, 3951529e-10, 6438299e-10, 6005928e-10, 2169354e-10, -2365748e-10, -6013866e-10, -7600925e-10, -6717729e-10, -5421577e-10, -3547481e-10, -8600583e-11, 1263486e-10, 2980356e-10, 4995547e-10, 5536246e-10, 3727107e-10, 2208832e-10, 7718068e-11, -4258533e-11, -8301678e-11, 4065435e-12, 3115789e-11, -3595668e-11, -7091969e-12, 167847e-9, 2547356e-10, 1091159e-10, -1989029e-10, -3703373e-10, -2762442e-10, -5638967e-11, 7768732e-11, 2400163e-10, 3870187e-10, 4687389e-10, 4212698e-10, 3385722e-10, 2368513e-10, 1518333e-10, 166186e-10, -8923359e-11, -1470166e-10, -1798609e-10, -1693116e-10, -1339751e-10, -5290947e-11, 7739384e-11, 1321612e-10, 6977285e-11, -7945261e-11, -1985987e-10, -2140285e-10, -1414295e-10, -926572e-10, -890705e-10, -8014403e-11, -1161774e-10, -2389723e-10, -4094283e-10, -4010817e-10, -1940632e-10, 3994415e-11, 199319e-9, 1394385e-10, -4917337e-12, -866291e-10, -1201534e-10, -1123568e-10, -1047742e-10, -1107913e-10, -5221474e-11, 6745418e-11, 184106e-9, 233286e-9, 2230432e-10, 1743011e-10, 1302548e-10, 7454119e-11, -3960255e-11, -1088808e-10, -9902022e-11, 1601348e-13, 1195135e-10, 1784583e-10, 2299192e-10, 2518301e-10, 1928236e-10, 1348331e-10, 1056238e-10, 8626621e-11, 7222622e-11, 4352517e-11, 7218313e-12, -1072597e-11, -5077039e-12, 6591301e-11, 1589609e-10, 1986804e-10, 2046206e-10, 2079003e-10, 2180405e-10, 2397704e-10, 2509453e-10, 2227356e-10, 1897156e-10, 1283029e-10, 832318e-10, 6209568e-11, 4760712e-11, 5794172e-11, 9268032e-11, 1341425e-10, 1463711e-10, 1280901e-10, 1272655e-10, 1148431e-10, 8534868e-11, 4282165e-11, 9680935e-12, 1201107e-11, 9128025e-12, -3971073e-12, -5030768e-12, 3288983e-11, 7971116e-11, 9871995e-11, 1055893e-10, 1143821e-10, 1101498e-10, 8551993e-11, 5833568e-11, 344902e-10, 1506828e-11, 8846357e-12, 1821335e-11, 4481597e-11, 7062001e-11, 7956015e-11, 7852194e-11, 7680924e-11, 7808454e-11, 7022019e-11, 4980647e-11, 2501856e-11, 5463457e-12, -2342332e-12, 4483746e-12, 2178913e-11, 3350746e-11, 36315e-9, 4180154e-11, 4909539e-11, 5068709e-11, 4135359e-11, 2950828e-11, 2051955e-11, 1461312e-11, 1254852e-11, 132816e-10, 110145e-10, 8639906e-12, 8823551e-12, 1269003e-11, 1715572e-11, 161947e-10, 1170509e-11, 7456166e-12, 5394453e-12, 4575334e-12, 4104027e-12, 2670634e-12, 2310673e-12, 2617367e-12, 2378986e-12, 1786653e-12, 1163293e-12, 8568806e-13, 5709498e-13, 3068265e-13, 1353042e-13, 5785833e-14, 1756967e-14], [3.048954, 1.725713, -1.123831, -1.734628, -1.204471, -0.7023109, -0.4009341, -0.118423, 0.3369759, 0.6038327, 0.5511203, 0.2756762, 0.01811907, -0.2070718, -0.3400186, -0.3581843, -0.2822765, -0.1338182, 0.03529445, 0.2094667, 0.3333593, 0.341882, 0.2179108, 0.04813783, -0.09608534, -0.1629791, -0.1676502, -0.1391319, -0.06769206, 0.02976196, 0.1206954, 0.1685516, 0.1574466, 0.105876, 0.05028485, -0.01301542, -0.06241076, -0.08627488, -0.1116697, -0.1247493, -0.1047541, -0.06377968, -0.02168594, 0.01361188, 0.02763412, 0.02352851, 9622732e-9, -7516243e-10, -212259e-8, -4918337e-9, -0.01537816, -0.02790534, -0.02913667, -0.02087894, -7868785e-9, 9134058e-9, 0.02775687, 0.03333519, 0.02043298, 3789961e-9, -4238146e-9, -8946112e-9, -0.01747307, -0.02563693, -0.03331405, -0.03530764, -0.03023271, -0.0208683, -6437058e-9, 0.01412553, 0.026585, 0.0226612, 0.01075271, -189586e-8, -0.01278542, -0.02387648, -0.03260502, -0.03684003, -0.02911292, -0.01789598, -0.01008657, -3210727e-9, 6009352e-9, 0.01259465, 0.01604012, 0.01566493, 7123568e-9, -8519285e-9, -0.0209686, -0.02466962, -0.01903364, -8565913e-9, 2769229e-9, 0.01060822, 0.01292948, 6401359e-9, -6507103e-9, -0.01934408, -0.02540733, -0.02285848, -0.0108483, -1364763e-9, -1714282e-9, -567308e-8, -5702832e-9, -2919379e-9, -2850563e-9, -2087292e-9, -2565379e-9, -4584654e-9, -3999372e-9, -1058665e-9, 2140665e-9, 4519841e-9, 1594255e-9, -2982126e-9, -6755702e-9, -7876697e-9, -9806766e-9, -0.01359957, -0.01166577, -7291777e-10, 0.01114069, 0.01526003, 0.01031468, 1881807e-9, -5753202e-9, -9936509e-9, -9140848e-9, -7028057e-9, -5386877e-9, -3505434e-9, -1686707e-9, 6479566e-10, 6537913e-10, -2833594e-10, -2549317e-9, -5080558e-9, -6446512e-9, -637083e-8, -6213637e-9, -7118179e-9, -956645e-8, -0.0101148, -438513e-8, 4652242e-9, 0.01203308, 0.01533297, 0.01363478, 0.01056916, 5808184e-9, 3715261e-10, -7035438e-9, -0.01505594, -0.01934933, -0.01939997, -0.01566598, -7138343e-9, 2621172e-9, 6555304e-9, 4388587e-9, 1631492e-10, -1420714e-9, -4817805e-10, -9380792e-10, -4448882e-9, -6697997e-9, -5942609e-9, -215681e-8, 1382225e-9, 7074923e-10, -1694287e-9, -4273571e-9, -6818023e-9, -7807024e-9, -9333732e-9, -0.01269128, -0.01569643, -0.01460352, -7544289e-9, 3657649e-9, 0.01094915, 9586662e-9, 4447129e-9, 1028951e-9, -1463366e-9, -4649782e-9, -8519871e-9, -0.01155963, -0.01075413, -8659768e-9, -7073583e-9, -4271184e-9, -9508796e-10, 4291579e-10, 1286572e-9, 219408e-8, 2613042e-9, 9660086e-10, -2381702e-9, -4925217e-9, -411567e-8, -1190033e-9, -1418691e-10, -3494604e-9, -7983117e-9, -9351612e-9, -6621232e-9, -2829327e-9, -1008942e-9, -3815087e-9, -8238808e-9, -0.011142, -0.01072384, -8684973e-9, -6370033e-9, -4972716e-9, -3750724e-9, -1811162e-9, -9103065e-10, -1925494e-9, -2923126e-9, -3014896e-9, -1473118e-9, 3699673e-11, -1360889e-9, -6682471e-9, -0.01320244, -0.01562883, -0.01172634, -4838488e-9, -1852133e-10, 2327573e-10, -1105567e-9, -2329109e-9, -3384026e-9, -4230201e-9, -6404636e-9, -9828758e-9, -0.01099416, -7993715e-9, -3138474e-9, -8265797e-10, -1180383e-9, -1213767e-9, -4768255e-10, 117123e-9, -1178172e-9, -4873541e-9, -8224176e-9, -8335605e-9, -5419925e-9, -1423982e-9, 1993515e-9, 2899091e-9, 14317e-7, -860303e-9, -2506277e-9, -3468569e-9, -3848957e-9, -4769081e-9, -6552002e-9, -7021538e-9, -5534444e-9, -2355637e-9, 1305756e-9, 2861946e-9, 1514175e-9, -1552315e-9, -413658e-8, -441538e-8, -3220889e-9, -1728806e-9, -4259634e-10, 4337982e-10, 1903733e-9, 3664474e-9, 4637163e-9, 4209499e-9, 3072471e-9, 2682515e-9, 3462835e-9, 3479961e-9, 2339554e-9, 1603664e-9, 1970008e-9, 2977779e-9, 4367664e-9, 5242457e-9, 4232084e-9, 1794516e-9, -1046615e-9, -240178e-8, -1107189e-9, 1812078e-9, 4525041e-9, 6045314e-9, 6124199e-9, 5961883e-9, 5625412e-9, 5027784e-9, 4649366e-9, 4455993e-9, 569633e-8, 7387691e-9, 7834424e-9, 6775835e-9, 5857781e-9, 5970011e-9, 6576064e-9, 6591072e-9, 5106901e-9, 315503e-8, 2494988e-9, 2678963e-9, 3420074e-9, 5197235e-9, 6056876e-9, 5256419e-9, 4766432e-9, 5583617e-9, 6509773e-9, 6703742e-9, 6185625e-9, 5488442e-9, 5272872e-9, 431248e-8, 2580464e-9, 1764573e-9, 2544527e-9, 4421563e-9, 6417086e-9, 7899528e-9, 9048182e-9, 9736742e-9, 9972348e-9, 9524734e-9, 8803436e-9, 820061e-8, 778438e-8, 708221e-8, 623142e-8, 5542124e-9, 5570113e-9, 6387652e-9, 7834032e-9, 8602498e-9, 7945529e-9, 6718691e-9, 5025614e-9, 3073777e-9, 2295131e-9, 2521529e-9, 3508381e-9, 4608583e-9, 4866195e-9, 5153423e-9, 5767745e-9, 6632293e-9, 7419362e-9, 7876283e-9, 7497753e-9, 5990626e-9, 4128854e-9, 3075171e-9, 3044838e-9, 4037963e-9, 5617686e-9, 6719704e-9, 6773619e-9, 6196641e-9, 5487036e-9, 53846e-7, 6003634e-9, 6370697e-9, 5859072e-9, 4915868e-9, 408152e-8, 3218692e-9, 252264e-8, 2008066e-9, 1416925e-9, 1569249e-9, 2957746e-9, 4198848e-9, 4563611e-9, 3914138e-9, 2895193e-9, 2432791e-9, 2504135e-9, 1724338e-9, 4340984e-10, -4319743e-10, -1429669e-10, 1644697e-9, 3992334e-9, 5566447e-9, 5270607e-9, 3441852e-9, 1547729e-9, 5407737e-10, 1244541e-10, -1020434e-10, 1026993e-10, 9764777e-10, 2638294e-9, 4236965e-9, 4928773e-9, 4294208e-9, 2469909e-9, 7238273e-10, 357929e-9, 5482272e-10, 1489866e-10, -6625426e-10, -9087925e-10, 2747062e-10, 2017818e-9, 2693209e-9, 1762879e-9, 3083228e-10, -3654816e-10, -5805964e-10, -1042983e-9, -1732609e-9, -215477e-8, -188974e-8, -8577872e-10, 7171213e-10, 2365336e-9, 3478521e-9, 3516365e-9, 2632459e-9, 1723594e-9, 9078392e-10, -1697829e-13, -1073667e-9, -1882413e-9, -177493e-8, -5565515e-10, 1475927e-9, 2730301e-9, 2754282e-9, 2312583e-9, 1991976e-9, 1071884e-9, -3199627e-10, -1356908e-9, -1471782e-9, -9428388e-10, -5425084e-10, -2923287e-10, 5041769e-10, 1460262e-9, 201139e-8, 1701306e-9, 116804e-8, 1026233e-9, 5973477e-10, -2599069e-10, -1110337e-9, -1413015e-9, -115443e-8, -2229702e-10, 8901719e-10, 1669311e-9, 229737e-8, 252945e-8, 2471576e-9, 2114056e-9, 1470067e-9, 6593511e-10, 9834225e-11, -5894911e-13, -5403273e-11, -1571565e-10, 1587778e-10, 686399e-9, 1264437e-9, 1444277e-9, 1355911e-9, 1176757e-9, 7588151e-10, -5479943e-11, -3920762e-10, -2966194e-10, 1963224e-10, 7354404e-10, 1110231e-9, 1171087e-9, 1373535e-9, 1548388e-9, 1266918e-9, 5575519e-10, -2263237e-10, -3728009e-10, -3898909e-10, -8723402e-10, -1590344e-9, -2042339e-9, -1816004e-9, -1507324e-9, -1553227e-9, -1482303e-9, -1191127e-9, -1032588e-9, -8075956e-10, -3484374e-10, 188541e-9, 3870415e-10, -9414141e-11, -8116525e-10, -1394734e-9, -1477422e-9, -1640103e-9, -1890959e-9, -2105417e-9, -1984629e-9, -159742e-8, -1282565e-9, -1295968e-9, -1111316e-9, -5473337e-10, -5797752e-11, -6128985e-11, -5045781e-10, -1517897e-9, -2230374e-9, -2181424e-9, -168073e-8, -9445865e-10, -6392596e-10, -8329644e-10, -1119993e-9, -115354e-8, -9966523e-10, -1237648e-9, -1960423e-9, -3114768e-9, -3750573e-9, -3716528e-9, -3491753e-9, -3067186e-9, -2219368e-9, -8140933e-10, 2505056e-10, 2541592e-10, -5523835e-10, -1703935e-9, -2703922e-9, -3038335e-9, -2853087e-9, -2275042e-9, -1756793e-9, -1322707e-9, -1262998e-9, -1441869e-9, -1580114e-9, -1681856e-9, -1751858e-9, -1708437e-9, -1715133e-9, -1947452e-9, -2177787e-9, -1996123e-9, -155062e-8, -1113245e-9, -1246752e-9, -1737904e-9, -2028347e-9, -2133168e-9, -2251186e-9, -2494199e-9, -302465e-8, -3259329e-9, -32563e-7, -2984287e-9, -2650534e-9, -2106909e-9, -1187475e-9, -4287843e-10, -2851672e-11, -161192e-9, -8769464e-10, -1785982e-9, -2224806e-9, -2271954e-9, -22829e-7, -1891303e-9, -1461964e-9, -11762e-7, -1203088e-9, -1597842e-9, -2141154e-9, -2680779e-9, -3020257e-9, -3190553e-9, -2953749e-9, -2465398e-9, -1970205e-9, -1352915e-9, -6089032e-10, -3644935e-10, -7912496e-10, -1461958e-9, -1932653e-9, -2138955e-9, -2257014e-9, -2266776e-9, -2011111e-9, -1775181e-9, -1873743e-9, -2037727e-9, -2192734e-9, -2242531e-9, -2326818e-9, -2472282e-9, -275947e-8, -2898494e-9, -2585972e-9, -2177421e-9, -1745947e-9, -1278583e-9, -102913e-8, -1203385e-9, -1700036e-9, -217757e-8, -2377859e-9, -2211981e-9, -1592395e-9, -8675158e-10, -3012278e-10, -2224827e-11, -4118816e-11, -6131941e-10, -1360091e-9, -1937683e-9, -2225351e-9, -2209146e-9, -161209e-8, -8574543e-10, -2793857e-10, 2007492e-10, 441285e-9, 4427997e-10, 4262736e-10, -2013328e-10, -1107643e-9, -1582162e-9, -1594168e-9, -1155424e-9, -4617463e-10, -1558404e-10, -932779e-10, 2147985e-10, 9089378e-10, 1383287e-9, 1091601e-9, 4959121e-10, 1868077e-10, 1369172e-10, 5441616e-11, -9868273e-11, 7888168e-11, 6337861e-10, 1505675e-9, 2228899e-9, 2058267e-9, 9410177e-10, -2220181e-10, -54408e-8, -2488614e-11, 7648804e-10, 1011348e-9, 5861041e-10, 3750321e-10, 4526576e-10, 661563e-9, 4925223e-10, -2118346e-11, -3574317e-10, -1655332e-10, 3003507e-10, 6819896e-10, 7899155e-10, 4843887e-10, 2884274e-10, 3410224e-10, 3405204e-10, 2341931e-10, -4041571e-11, -6501307e-11, 2752212e-10, 6217965e-10, 6696154e-10, 455541e-9, 4756003e-10, 6801605e-10, 823313e-9, 8447577e-10, 8189067e-10, 9526481e-10, 1092294e-9, 8948329e-10, 4045862e-10, -4114101e-11, -1414564e-10, 5591447e-11, 1603097e-10, -8672454e-11, -4709679e-10, -7705626e-10, -8908686e-10, -6536554e-10, -2209626e-10, -839993e-10, -3983301e-10, -7293236e-10, -5997517e-10, -299924e-10, 4222845e-10, 4319459e-10, 3508463e-10, 4716029e-10, 5739192e-10, 3728964e-10, -942583e-10, -421901e-9, -4769289e-10, -387053e-9, -2064465e-10, -4376465e-11, -1609164e-10, -2686236e-10, -2004835e-10, 8378757e-11, 258514e-9, 1810508e-11, -3943526e-10, -6380694e-10, -8085605e-10, -1111079e-9, -1319221e-9, -1324289e-9, -1169728e-9, -6595329e-10, -1078541e-10, 2471459e-10, 2208207e-10, -2180624e-10, -7186978e-10, -7630302e-10, -6314529e-10, -7193988e-10, -7431034e-10, -4427634e-10, 91465e-9, 5150937e-10, 6697381e-10, 4210893e-10, 9196142e-11, -125561e-9, -422486e-9, -7346188e-10, -1044932e-9, -1192919e-9, -1090256e-9, -730753e-9, -513314e-9, -5381389e-10, -3950882e-10, -1314411e-10, 6974443e-11, 2063402e-11, -3969724e-10, -9418726e-10, -1320635e-9, -1282873e-9, -1071056e-9, -8628696e-10, -732888e-9, -6779433e-10, -736202e-9, -6887935e-10, -4010011e-10, -2557701e-10, -2541171e-10, -4649644e-10, -5676626e-10, -3649069e-10, -9538024e-11, -7751633e-11, -1050109e-10, -1062571e-10, -6000662e-12, 299459e-9, 5631197e-10, 5988837e-10, 7206015e-10, 9416808e-10, 8088239e-10, 591603e-9, 4002346e-10, 294699e-9, 1383009e-10, -7260804e-11, -2063859e-10, -1052746e-10, 6634783e-11, 1680882e-10, 321891e-9, 5182276e-10, 413816e-9, 1096825e-10, -9883167e-11, -228904e-9, -3971528e-10, -4948189e-10, -4930248e-10, -2536202e-10, 1245297e-11, 1962213e-10, 4185182e-10, 607325e-9, 715155e-9, 5961333e-10, 3196225e-10, -348765e-10, -1029784e-10, 1061475e-10, 2272033e-10, 1981484e-10, 231019e-9, 2847304e-10, 3364369e-10, 3348756e-10, 1371923e-10, -1204704e-10, -3134741e-10, -3520995e-10, -2510264e-10, -3824782e-13, 3951529e-10, 6438299e-10, 6005928e-10, 2169354e-10, -2365748e-10, -6013866e-10, -7600925e-10, -6717729e-10, -5421577e-10, -3547481e-10, -8600583e-11, 1263486e-10, 2980356e-10, 4995547e-10, 5536246e-10, 3727107e-10, 2208832e-10, 7718068e-11, -4258533e-11, -8301678e-11, 4065435e-12, 3115789e-11, -3595668e-11, -7091969e-12, 167847e-9, 2547356e-10, 1091159e-10, -1989029e-10, -3703373e-10, -2762442e-10, -5638967e-11, 7768732e-11, 2400163e-10, 3870187e-10, 4687389e-10, 4212698e-10, 3385722e-10, 2368513e-10, 1518333e-10, 166186e-10, -8923359e-11, -1470166e-10, -1798609e-10, -1693116e-10, -1339751e-10, -5290947e-11, 7739384e-11, 1321612e-10, 6977285e-11, -7945261e-11, -1985987e-10, -2140285e-10, -1414295e-10, -926572e-10, -890705e-10, -8014403e-11, -1161774e-10, -2389723e-10, -4094283e-10, -4010817e-10, -1940632e-10, 3994415e-11, 199319e-9, 1394385e-10, -4917337e-12, -866291e-10, -1201534e-10, -1123568e-10, -1047742e-10, -1107913e-10, -5221474e-11, 6745418e-11, 184106e-9, 233286e-9, 2230432e-10, 1743011e-10, 1302548e-10, 7454119e-11, -3960255e-11, -1088808e-10, -9902022e-11, 1601348e-13, 1195135e-10, 1784583e-10, 2299192e-10, 2518301e-10, 1928236e-10, 1348331e-10, 1056238e-10, 8626621e-11, 7222622e-11, 4352517e-11, 7218313e-12, -1072597e-11, -5077039e-12, 6591301e-11, 1589609e-10, 1986804e-10, 2046206e-10, 2079003e-10, 2180405e-10, 2397704e-10, 2509453e-10, 2227356e-10, 1897156e-10, 1283029e-10, 832318e-10, 6209568e-11, 4760712e-11, 5794172e-11, 9268032e-11, 1341425e-10, 1463711e-10, 1280901e-10, 1272655e-10, 1148431e-10, 8534868e-11, 4282165e-11, 9680935e-12, 1201107e-11, 9128025e-12, -3971073e-12, -5030768e-12, 3288983e-11, 7971116e-11, 9871995e-11, 1055893e-10, 1143821e-10, 1101498e-10, 8551993e-11, 5833568e-11, 344902e-10, 1506828e-11, 8846357e-12, 1821335e-11, 4481597e-11, 7062001e-11, 7956015e-11, 7852194e-11, 7680924e-11, 7808454e-11, 7022019e-11, 4980647e-11, 2501856e-11, 5463457e-12, -2342332e-12, 4483746e-12, 2178913e-11, 3350746e-11, 36315e-9, 4180154e-11, 4909539e-11, 5068709e-11, 4135359e-11, 2950828e-11, 2051955e-11, 1461312e-11, 1254852e-11, 132816e-10, 110145e-10, 8639906e-12, 8823551e-12, 1269003e-11, 1715572e-11, 161947e-10, 1170509e-11, 7456166e-12, 5394453e-12, 4575334e-12, 4104027e-12, 2670634e-12, 2310673e-12, 2617367e-12, 2378986e-12, 1786653e-12, 1163293e-12, 8568806e-13, 5709498e-13, 3068265e-13, 1353042e-13, 5785833e-14, 1756967e-14]], before: [{ "250": -12.1, "500": -1.3, "1000": -6.6, "2000": -13.8, "3000": -20.3, "4000": -33.6, "8000": -43.3 }, { "250": -6.5, "500": -4.4, "1000": -3.6, "2000": -11, "3000": -16, "4000": -30.8, "8000": -44.5 }, { "250": -6.2, "500": -5, "1000": -8.3, "2000": -10.7, "3000": -26.1, "4000": -38.4, "8000": -46 }], after: [{ "250": -4, "500": 0.6, "1000": 1, "2000": -0.6, "3000": -3, "4000": -8.1, "8000": -23.5 }, { "250": 1.6, "500": -2.4, "1000": 4, "2000": 2.2, "3000": 1.3, "4000": -5.3, "8000": -24.7 }, { "250": 2, "500": -3.1, "1000": -0.8, "2000": 2.5, "3000": -8.8, "4000": -12.9, "8000": -26.1 }] } } };
+var string_body_corrections_default = { method: "Each Artifastring body variant's response (its constants/body_*.h impulse, 44.1 kHz; an instrument with strings of its own, the bodies it is played with, another's stretched: engine.mjs), smoothed over a third of an octave, brought to its instrument's target radiation envelope (TARGETS: its recordings' where fitted, native/strings-model/body_fit.py; else authored) by one correction for all its variants (against their mean response: each variant's own difference kept), 1024 taps (a body stretched, that many times as many): minimum phase (its real cepstrum folded) under where Artifastring's bodies stop ringing as bodies do (8000 Hz, a body stretched that much lower), over it ringing as a body's reverberant field (doi:10.1088/0034-4885/77/11/115901), each variant its own draw of noise falling as its bodies do under it, the two parts' powers summing to it (public/shared/grains/minimum-phase.js ringing); the correction held within [-12, +50] dB about its plateau under its instrument's lowest air mode, within ±50 over it, and its level set so that a bowed tone (a sawtooth at its instrument's middle) is as loud through it as without it: scripts/design-string-bodies.mjs.", sampleRate: 44100, taps: 1024, targets: { violin: [[200, -25.7], [252, -8.6], [317.5, -1.6], [400, -2.7], [504, 5.5], [635, -1.4], [800.1, 1.4], [1008, -2.4], [1270, -2.7], [1600.1, -1.5], [2016, 2.9], [2540, 3.1], [3200.2, 2.2], [4032, 0.3], [5080, -2.6], [6400.4, -1.6], [8064, -4.7], [10160, -1.5], [12800.8, -2.2], [16128, -0.9], [20320, 0.1]], viola: [[126, -32], [158.8, -21.4], [200, -7.4], [252, -4], [317.5, -0.9], [400, 2.6], [504, -0.7], [635, 0], [800.1, 0], [1008, -2.5], [1270, -3], [1600.1, -0.6], [2016, 1.1], [2540, 1.3], [3200.2, 0.5], [4032, -3.1], [5080, -5], [6400.4, -6.8], [8064, -9], [10160, -6.7], [12800.8, -6.1], [16128, -2.8], [20320, 1.5]], cello: [[63, -27.7], [79.4, -12.7], [100, -0.6], [126, -3.6], [158.8, 5.6], [200, 0.5], [252, -0.5], [317.5, 0.8], [400, 0.3], [504, -0.6], [635, -0.3], [800.1, 0.4], [1008, 1.8], [1270, -0.8], [1600.1, -0.2], [2016, 4.7], [2540, 2], [3200.2, -0.3], [4032, -3], [5080, -6], [6400.4, -6.7], [8064, -1.9], [10160, -1.4], [12800.8, -4.6], [16128, -3.1], [20320, -5.9]], contrabass: [[39.7, -16.8], [50, -11.2], [63, -1.1], [79.4, 5.8], [100, 12.7], [126, 9.7], [158.8, 8.2], [200, 8], [252, 1.5], [317.5, 1], [400, 3], [504, 1.7], [635, -3.5], [800.1, -1.7], [1008, 0.9], [1270, -0.1], [1600.1, -2.4], [2016, -2.5], [2540, -3.7], [3200.2, -6.7], [4032, -4.4], [5080, -2], [6400.4, -2.1], [8064, -4.2], [10160, -5.9], [12800.8, -7.7]] }, fitted: ["violin", "viola", "cello", "contrabass"], sources: ["Weinzierl et al. 2017, A Database of Anechoic Microphone Array Measurements of Musical Instruments, TU Berlin, doi:10.14279/depositonce-5861.2: its single notes (et), pp and ff", "doi:10.1121/1.2956478", "doi:10.1088/0034-4885/77/11/115901", "Cook and Trueman, ICMC 1998 (a violin's radiation resonances)"], instruments: { violin: { header: "body_violin_1.h", sha256: "652cf586eddfb526e4d316dbbd14f062d0787b3648d0e6c9c2ca1e64f6dd9db1", plateau: 528, variants: [[1.898733, 3.273212, -0.4827156, -2.949526, -8.07892, 7.93345, -0.2070433, -3.769308, 3.9584, -0.5910747, -4.60404, 6.728665, -8.220593, 14.36424, -12.95922, 5.315437, 2.68499, -9.471376, 7.547658, 5.145403, -14.66219, 8.506335, -1.666386, 4.542748, -5.168827, -2.237085, 5.115903, -1.778838, 0.5131911, 0.03386114, -1.079338, -1.228661, 0.7096385, 8.290298, -15.92612, 15.39679, -10.4838, 2.452569, 1.384075, 7.193253, -12.64372, 0.1401769, 12.05638, -8.059103, 1.837054, -4.725667, 9.39296, -10.39452, 6.787106, -0.1943382, -1.40445, -3.345218, 3.682108, 1.139168, -0.4156702, -4.959436, 5.031705, 2.479516, -10.65822, 11.84842, -4.843707, -0.3134961, -5.581989, 13.48713, -11.24668, 6.158731, -9.000719, 12.09064, -6.414938, 1.057229, -4.971288, 8.569631, -1.471534, -7.266257, 5.779228, 0.09764576, -0.4802152, 1.495048, -10.06011, 13.74878, -2.364046, -8.611144, 5.118906, 0.9986366, -0.582314, 3.770995, -12.09252, 13.48449, -8.24206, 6.34765, -7.87546, 7.958147, -8.017782, 9.622849, -10.1074, 9.405611, -8.262442, 4.576927, -0.2317808, 1.219342, -4.176501, 1.581685, 1.206634, 3.953825, -10.47439, 9.527358, -3.701476, -2.725288, 8.656479, -9.613082, 3.929022, 1.864748, -1.882749, -2.433613, 6.541791, -4.416888, -4.858425, 11.97318, -9.164344, 1.88088, 1.552436, -0.2487666, -3.254134, 8.499473, -16.02961, 21.44923, -16.91291, 6.117704, -2.294349, 5.814488, -5.23374, 0.5302671, -0.541602, 2.68727, -0.1121649, -1.293572, -2.903333, 3.03224, 4.188263, -7.485167, 2.302512, 4.539767, -8.053877, 5.409856, 2.733403, -7.063077, 3.463898, -3.983641, 12.6381, -13.90161, 4.038512, 0.3652375, 2.528478, 1.380304, -8.897732, 6.389361, 1.589622, -3.792296, 3.763195, -8.609365, 13.31304, -11.05233, 5.182408, -2.089658, 0.1547104, 3.710267, -6.161607, 4.5775, -2.434534, 0.08691133, 5.365557, -10.33074, 8.629933, -3.561509, 2.817408, -4.75882, 2.814914, 1.684548, -5.010764, 7.752759, -6.658652, -1.323268, 8.070998, -5.84419, -1.293133, 6.257295, -5.981655, 1.317247, 1.90776, 0.654258, -4.739766, 3.783189, 0.2385666, 0.2031134, -4.851649, 5.577511, -0.8374121, -1.585052, -2.472695, 8.25788, -9.993849, 8.155978, -6.418413, 4.324463, 0.2873297, -3.940347, 0.2937658, 9.070981, -13.37862, 7.689787, -1.453291, 0.6900928, 3.360806, -12.53361, 14.43701, -9.034241, 9.056498, -11.65482, 5.333998, 4.140872, -4.527797, -1.107279, 3.100041, -0.7671996, 0.1664423, -3.812564, 7.226975, -7.264945, 7.851864, -8.44342, 0.3738641, 12.99841, -13.12726, -3.290201, 15.36485, -10.49855, 0.9857687, 1.587467, -1.151396, 0.2638478, 3.704612, -4.577461, -2.870749, 8.730502, -4.91233, -1.701849, 4.407759, -4.737382, 5.026639, -5.82323, 6.105601, -3.783616, 0.7615224, -1.593601, 5.487129, -6.842189, 4.317299, -1.254327, -0.9743825, 2.850122, -3.052422, 1.949595, -1.501764, 0.5710024, 1.052899, 0.6305711, -4.932438, 5.406287, -1.778223, -0.02723171, -0.4029287, -0.409558, 1.452892, -2.332079, 5.500323, -7.109372, 2.622279, 2.039917, -1.965558, 1.828557, -2.675805, 0.2474677, 2.342722, -0.5020249, -0.8645166, -2.044117, 3.054217, 0.7438383, -3.350044, 2.817951, -3.819621, 6.352056, -6.936278, 6.100686, -4.425573, -0.436339, 5.399469, -3.832796, -1.470866, 2.27765, 0.2492446, -0.5834815, -1.052555, 3.366785, -5.951465, 4.93668, -0.06238702, -2.214905, 1.109887, -2.420154, 4.221954, -0.8947842, -2.524738, -0.959193, 5.227625, -2.900691, 0.6633741, -4.934009, 7.946359, -4.300461, 1.181869, -2.024671, 1.933366, -0.2323453, -0.2104664, -0.1276042, -0.3488554, 1.764064, -2.438194, 0.01783931, 3.69852, -4.53241, 3.174916, -1.922903, -0.2185037, 2.628972, -2.402639, 0.6804459, -0.4802092, 0.8502181, 0.1122319, -0.6026779, -1.104579, 2.927774, -2.990882, 2.237854, -0.4106215, -3.46369, 6.113879, -3.527437, -1.501121, 3.680123, -3.735022, 4.923803, -5.735882, 4.09115, -3.154079, 4.738485, -3.696642, -2.649233, 8.099465, -7.951759, 5.307098, -2.652243, -0.7717462, 3.372662, -3.094469, 1.793257, -1.809905, 2.084791, -0.265318, -2.433282, 2.030254, 1.655184, -4.667967, 5.319026, -4.965494, 4.313035, -2.931405, 1.773224, -3.249107, 6.403241, -5.99356, 1.662635, 0.5265363, 0.2952963, 1.639179, -6.730952, 9.083215, -6.895242, 3.817751, -1.378451, -1.33836, 2.763601, -1.031934, -1.570857, 2.250866, -1.947373, 2.639613, -4.269559, 5.206736, -3.737313, 0.5507197, 0.8358313, 0.7980123, -1.812997, 0.01348691, 1.141903, 0.5550947, -2.23346, 3.016193, -4.811185, 5.181424, -1.579458, -2.455592, 3.91662, -4.295139, 4.781988, -5.765636, 6.899968, -5.545397, 0.9047056, 3.638688, -5.215034, 3.424421, -0.09090311, -1.621716, 1.677396, -2.265571, 1.693965, 1.579281, -3.993204, 3.331766, -1.954399, 1.144622, -0.3940487, 0.2639331, -0.6867123, -0.1964513, 2.573092, -4.34731, 4.488979, -4.177874, 4.766677, -5.81618, 4.897766, -1.320598, -1.02811, -0.8713808, 2.853333, -0.2625114, -2.596279, 0.2194778, 2.911838, -1.554121, -0.3427539, -0.09641877, -1.128121, 4.337845, -5.13325, 3.629909, -2.535097, 1.025595, 1.732655, -3.407728, 2.240616, 0.7562184, -2.762003, 1.39973, 1.745898, -2.528439, 0.5536587, 1.129099, -1.628179, 2.321074, -2.965462, 2.413222, -1.513759, 1.443643, -1.277631, 0.4777835, -0.04405571, 0.03687477, -0.2212119, 2.105205, -5.372638, 6.030839, -2.972751, 0.677733, -0.8156794, 0.1944134, 0.9249148, 0.2810636, -1.744761, 1.151874, -0.9609996, 1.466312, 0.4609562, -2.87968, 1.827879, -0.6058752, 3.111144, -4.147815, -0.2944906, 3.340751, -0.1617426, -3.003086, 2.668342, -3.571371, 5.565911, -3.930517, 1.347344, -2.098669, 2.671042, -0.9234103, 1.393769, -3.791058, 2.119393, 2.217302, -2.51268, -0.06060319, 0.1787223, 0.7487811, 0.6042732, -1.895873, 0.06887255, 3.366673, -5.260816, 4.320054, -1.252465, -2.088772, 3.967621, -4.045028, 2.791029, -0.3764628, -2.677406, 4.758449, -4.88209, 3.916193, -2.76083, 1.053862, 0.5923078, -0.4923694, -0.7339838, 1.070542, -1.507477, 3.703261, -5.23939, 3.27917, 0.1350392, -1.777176, 1.623223, -0.5993935, -0.7082227, 1.100958, -1.401096, 3.509641, -5.06198, 2.604177, 1.558141, -3.379937, 2.866225, -1.803896, 1.239653, -1.521463, 1.272392, 0.8320935, -3.00701, 2.991693, -1.58259, -0.1100028, 2.064362, -2.360232, -0.398514, 2.5812, -0.5776757, -3.472886, 5.881795, -5.622695, 3.182754, -0.6545943, 0.08253865, -0.05264871, -0.3592559, -1.14769, 3.175084, -1.341087, -2.14198, 2.523956, -1.810303, 2.477477, -1.790101, -0.0386084, -0.6365003, 1.802608, -0.1458734, -0.8719104, -0.7671942, 0.8031853, 1.28391, -1.322709, -0.2686818, 0.4282869, 0.156789, -0.07973804, 0.6693161, -2.709576, 3.964844, -1.995479, -1.881286, 3.778565, -2.630066, 1.202161, -0.747361, -0.1310325, 0.5931472, 1.189551, -2.755263, 1.590071, -0.4558748, 1.236586, -0.9101078, -1.470893, 2.801948, -2.3417, 1.775226, -0.7008258, -1.566195, 3.458184, -3.923198, 3.867471, -3.884368, 3.259641, -1.656593, 0.6095569, -1.326752, 1.857478, -0.4495543, -0.6506916, -0.1394349, 0.6174084, -0.4185777, 1.323648, -1.364514, -1.33297, 3.243295, -2.740971, 3.043739, -3.467536, 0.9501773, 1.16046, 0.7684436, -2.88227, 1.93304, -0.2776636, -0.7367387, 1.628373, -1.344192, -9901211e-9, 0.2360009, 0.9903304, -2.125565, 2.422553, -1.896508, 1.06188, -0.9902672, 1.320934, -0.3064067, -1.534482, 1.643386, 0.040288, -1.454064, 2.321004, -2.968011, 2.01638, 0.5146228, -1.874806, 1.254747, -0.5535674, -0.3186213, 2.453761, -3.761313, 2.218223, 0.07290294, -0.6409473, 0.2410961, -0.491051, 1.282907, -1.380363, 0.3977627, 0.5633803, -0.8338267, 1.158988, -1.525581, 0.8950333, 0.1636041, -0.2035217, -0.1704371, 0.1006336, -1.030427, 3.471065, -4.609511, 2.634399, 0.4262992, -2.18412, 2.243529, -0.7785824, -1.447111, 2.65406, -2.31437, 1.772367, -1.362859, 0.3034143, 0.587743, -0.1917355, -0.6023163, 1.106987, -1.396495, 0.4494072, 1.08724, -0.3807866, -1.662437, 1.242101, 1.083309, -1.846007, 0.9557127, -0.453611, 0.343407, 0.2695037, -0.960832, 1.239532, -1.320729, 0.8461821, 0.06532574, 0.36507, -2.540458, 3.799122, -2.422601, 0.4664198, -0.1676625, -0.0377822, 2.097802, -3.59623, 2.034673, -0.06358108, -0.01161927, 0.7152467, -2.953679, 3.418144, -1.839598, 1.379108, -1.515617, -0.02385719, 1.313522, -0.4601518, -0.2826468, -0.05333675, -0.4734567, 1.6407, -1.87552, 1.442711, -0.4570591, -1.231975, 1.886664, -0.6638082, -0.3946237, 0.2868218, -0.1871404, 0.04907073, 0.7035225, -1.022423, 0.6681761, -0.5217828, -0.1522857, 1.605204, -2.035331, 1.630947, -2.013266, 2.229884, -1.655875, 1.943101, -2.164869, 0.1162826, 1.501749, 0.5984555, -3.091952, 1.995214, 0.1282303, 0.05422572, -1.001336, 0.8696536, -0.6765495, 1.035713, -0.6399302, -0.964384, 1.869499, -0.9863843, 0.4534648, -1.745885, 2.932551, -2.521941, 1.291859, 0.1711811, -1.274835, 1.094947, -0.3053488, -0.05946234, 0.4577026, -0.8261392, 0.3128938, 0.5273882, -0.6676759, 0.1181209, 1.067618, -2.508256, 2.660059, -1.143904, -0.07507127, 0.1013283, -0.2472529, 0.7543888, -0.5805076, 0.01399468, 0.0577405, 0.2183687, -0.5909234, 1.007388, -0.9065085, -0.03125935, 1.231135, -1.931601, 1.61771, -0.5357077, -0.07031802, -0.1510725, 0.04304862, 0.267693, 0.5551628, -1.513907, 0.6083168, 0.9439051, -0.963178, 0.4717787, -0.9715306, 1.105534, 0.2330885, -1.3769, 0.9357395, -0.05447722, 0.1036089, -0.3863154, -0.5043386, 1.919313, -1.898412, 0.7265384, -0.322402, 0.3737228, 0.4897131, -1.355582, 1.01867, -0.3925901, 0.3813573, -0.5735267, 0.7548475, -1.164662, 1.547411, -1.434348, 0.7942797, -0.03548767, -0.3863344, 0.6238614, -1.19895, 1.726656, -1.342883, 0.2902344, 0.6300744, -1.206218, 1.277474, -0.7519701, 0.3037019, -0.3937649, 0.4198398, 0.03862993, -0.5947176, 0.9578692, -1.054185, 0.7902423, -0.4373657, 0.2272065, 0.1278062, -0.5512012, 0.4597575, 4289877e-9, -0.1662564, 0.07083982, -0.07727566, -3333698e-9, 0.3330708, -0.6332001, 0.6616429, -0.3062148, -0.3122655, 0.6294761, -0.3306296, -0.1219924, 0.2129816, 9890505e-10, -0.09448133, -0.1531737, 0.3312133, 0.02976814, -0.4564769, 0.2710688, -0.02182264, 0.4125254, -0.6265217, -0.07579696, 0.7011612, -0.5227083, 0.3480963, -0.5016379, 0.3591366, -0.02868791, -0.01440269, 0.09310032, -0.3861016, 0.3224521, 0.1283446, -0.205027, -0.2122005, 0.4979789, -0.5461435, 0.6300924, -0.4740439, -0.0880227, 0.4313256, -0.2828253, 0.2080406, -0.3306373, 0.1917617, 0.09107571, -0.05180405, -0.158108, 0.1976035, -0.2426233, 0.4153375, -0.3534818, 0.01573537, 0.06365961, 0.2027457, -0.3132515, 0.1850386, -0.1231867, 0.06046358, 0.1067106, -0.09453456, -0.1051508, 0.07635545, 0.1552635, -0.1773407, 0.05344024, -0.09162447, 0.1412559, 0.01747239, -0.1928878, 0.2338245, -0.2519785, 0.2038258, 5406529e-9, -0.1256534, -0.03263738, 0.1712413, -0.06963179, -0.02806353, -7564816e-9, -0.01753624, 0.09486286, -0.04225819, -0.05628276, 0.04273421, 328263e-8, 2618075e-9, 1949401e-9, -0.03336752, 0.04129115, -0.0345037, 0.03540861, -0.01744209, -0.02660057, 0.0512993, -0.03484634, 0.01405599, -0.01232736, 6087079e-9, 0.01219954, -0.0216893, 0.02665105, -0.04021479, 0.03937568, -7905398e-9, -0.01966245, 0.01210284, 0.01175168, -0.02322794, 0.02108044, -0.01634554, 0.0130711, -8991771e-9, 5261916e-9, -5840046e-9, 7732063e-9, -6644227e-9, 4544251e-9, -2076999e-9, -148113e-8, 3048224e-9, -1765374e-9, 6511169e-10, -2878554e-10, -2829901e-10, 4978753e-10, -1744444e-10, -2780848e-11, 2020504e-11], [2.178383, 1.291087, 5.612019, -13.869, 5.342039, -4.713009, 7.44673, -2.079814, -3.391849, -0.1492279, 7.033925, -6.504502, -4.65696, 19.37694, -19.30855, 10.58451, -3.815304, -3.537715, 10.17647, -8.485572, 1.996134, -6.525857, 15.11079, -11.83375, 2.328055, -0.441256, 1.765419, -0.1452772, -1.351146, 0.7998453, 1.455619, -2.631819, -2.450529, 8.675086, -6.980981, 5.125898, -11.30862, 11.7907, 0.9952199, -8.652716, 0.5321681, 8.969981, -10.26591, 9.634105, -9.821685, 8.507832, -7.733112, 5.340889, 1.259613, -3.244919, -3.982234, 9.008138, -6.124518, 0.816213, 3.282429, -0.8593258, -10.21029, 17.94404, -12.51772, 2.48997, 3.612546, -8.154018, 11.40177, -11.61892, 11.06948, -10.97718, 10.19674, -7.832465, 2.953716, 1.464193, 0.2456206, -7.379808, 13.46822, -11.6085, 1.659279, 4.83417, -0.7979177, -1.57562, -3.932208, 2.572696, 7.255601, -5.963136, -5.603068, 5.499165, 5.65576, -9.313459, 6.166314, -7.407952, 8.917832, -4.502743, -0.2732166, 3.213916, -7.458691, 7.470436, -0.3029432, -2.92646, 1.217255, -8.409759, 19.10632, -11.15971, -8.299615, 11.09291, 0.12847, -3.032643, -0.178461, -0.6315356, -1.705219, 8.145466, -6.632871, -0.4213074, 0.2408745, 6.335048, -9.438458, 8.531353, -8.103704, 6.622936, -0.7374952, -5.912505, 8.965147, -7.216235, -0.7097457, 10.30819, -11.43284, 5.416869, -2.691831, 4.416511, -6.247912, 7.247968, -3.535317, -5.381356, 9.588886, -6.094062, 3.648859, -3.601852, 0.20301, 4.3668, -3.751557, -0.8008809, 3.550036, -3.389946, 1.857971, 1.359274, -4.620184, 6.472438, -11.05746, 16.36148, -12.31583, 0.8178913, 5.151317, -3.705418, 1.178284, 1.488223, -3.774477, 2.316192, 1.040187, -1.391816, -0.5114645, 0.8017969, -0.2171662, 0.2481638, 1.458181, -5.015213, 6.461993, -5.848154, 4.597694, -1.744254, -0.9864677, 0.5179985, 1.422852, -2.321837, 0.526363, 5.113694, -10.84295, 11.88496, -11.22366, 12.0677, -9.487253, 2.195783, 1.539578, -0.5964745, 2.702206, -5.0579, 0.5362041, 3.756343, -0.8680669, -1.459378, -2.397623, 5.971142, -4.121669, 1.052832, -2.861167, 5.859548, -1.419436, -6.300356, 6.136092, -0.778759, -0.7952645, 1.441145, -5.344714, 5.658326, 1.22423, -6.469698, 5.224832, -3.358248, 2.250923, 0.9772424, -2.059623, -1.248027, 2.169763, 0.4037284, 0.973021, -6.976546, 9.144999, -3.421214, -2.647316, 1.021647, 3.877841, -3.12442, -1.142354, 0.6536106, 3.984138, -5.800866, 5.097642, -5.795316, 4.488342, 1.170179, -4.430593, 3.047246, -3.193988, 4.237997, -0.4695199, -3.760279, 0.9319871, 4.695973, -4.460739, -0.5238981, 4.333354, -6.401949, 8.721842, -9.574637, 7.210663, -3.538637, 0.9075217, 0.01421088, -0.2994139, 2.759084, -6.613088, 7.621701, -6.620086, 5.979236, -2.434165, -3.607608, 5.632847, -3.22473, 1.601895, -1.566704, 0.1641096, 4.282175, -8.604318, 7.826869, -4.417572, 5.360921, -8.254323, 5.484532, 1.102074, -3.284493, -0.05149808, 2.078869, 0.5143173, -2.213703, -0.4721228, 2.637554, -2.669686, 4.313622, -4.649628, -0.2623775, 5.118645, -6.336306, 7.908252, -10.26077, 9.251361, -5.068559, 1.598539, 0.4113862, -3.722464, 6.934275, -4.479503, -1.825154, 2.399196, 4.200014, -8.757514, 6.739691, -5.057888, 9.292106, -13.13967, 8.765848, -0.6570312, -3.225323, 3.597931, -3.979028, 4.694904, -5.882172, 6.249046, -4.222663, 2.795987, -5.356142, 8.289247, -5.52887, -1.126279, 2.466729, 3.734179, -8.015948, 4.774587, -0.3240108, 0.3537657, -2.425249, 3.026492, -2.685219, 2.875813, -2.566462, 0.3766264, 1.97757, -1.712682, -0.9159554, 3.134917, -3.760907, 3.797782, -2.833649, -0.1695541, 2.22176, -0.313059, -2.101097, 1.99752, -2.711214, 5.419495, -5.35421, 0.5935283, 4.45255, -4.526521, -0.1301664, 2.983792, -0.05661555, -3.034395, 0.515199, 3.287629, -1.967863, -2.084099, 3.531596, -2.821308, 2.45502, -2.289583, 2.351812, -2.964991, 3.246606, -3.071205, 1.973222, 1.505301, -4.945523, 4.13878, -0.2186089, -2.64411, 2.063918, 1.551378, -3.571491, 0.9812529, 1.503455, -0.4238464, -0.8333731, 1.377769, -3.249019, 4.81715, -4.478235, 2.839561, 0.03600261, -2.010768, 1.046845, 0.320465, -1.225424, 3.747415, -4.937828, 1.578323, 1.843619, -1.028764, -0.4362152, -1.309018, 3.071992, -0.8228979, -2.243836, 2.153543, -1.845231, 2.840501, 9642962e-9, -6.35916, 7.432877, -0.9338873, -4.698345, 3.88671, -0.5923525, -0.9113385, 1.829509, -2.538374, 1.143985, 0.6364687, 0.09967365, -2.423697, 4.45831, -5.585091, 5.60033, -6.031138, 8.418579, -10.261, 7.084824, -0.01985109, -3.468092, 0.7011625, 1.161466, 1.742, -3.881386, 1.912554, 1.288103, -2.979048, 1.890882, 0.7326657, -1.775597, 1.767289, -2.448658, 1.594426, 1.434692, -3.474778, 3.509216, -3.005567, 2.168302, -0.6522026, -0.06459028, -2.1146, 5.057906, -4.286458, 1.537251, -2.491575, 6.315303, -7.733553, 5.825487, -3.811975, 3.534944, -3.836621, 3.156662, -1.980529, 1.597336, -2.242493, 2.800166, -1.756039, -0.1809875, 0.2639145, 1.489783, -2.51151, 2.562528, -2.686479, 2.016774, 0.08966002, -1.905086, 0.5522436, 3.975116, -5.772853, 0.6970921, 4.719104, -2.91681, -1.847041, 1.930403, 0.8066835, -0.7576312, -0.9937363, 1.438433, -2.160992, 3.45858, -2.474462, 0.6950736, -0.5538175, -1.138292, 5.127119, -5.810119, 1.673964, 2.261677, -2.836595, 2.400399, -3.952007, 5.218662, -2.18106, -2.209664, 2.196731, 0.9052972, -2.093561, 1.194613, -1.304098, 3.187331, -5.075982, 5.389273, -2.69269, -2.773411, 5.617342, -1.412898, -4.206357, 4.2522, -1.792708, 2.005407, -3.55197, 3.900251, -2.865721, 0.9457805, 0.8999178, -2.144736, 2.475032, -0.2021754, -4.016293, 5.325177, -1.793701, -1.850213, 1.459926, 1.37595, -3.626046, 4.41158, -3.473119, 1.720955, -1.697708, 3.256801, -3.046532, 0.6249267, 0.1515847, 2.497645, -4.716089, 2.782565, 0.700842, -1.588988, 0.9078672, -0.8509343, 0.441148, 0.5057998, -0.2243579, -1.910355, 5.169111, -7.418941, 5.75294, -1.417981, -0.8187668, 7378246e-9, 1.033423, -1.381527, 1.159304, 0.2025049, -1.772658, 1.997747, -1.496771, 1.515018, -1.354787, -0.3235548, 2.076492, -1.483408, -0.1258875, 0.5272253, -0.8220285, 0.7313885, 1.753662, -4.076019, 3.265008, -2.084279, 2.082695, -0.7795949, -0.7267116, -0.1998596, 0.2495318, 2.984183, -3.751178, -1.574191, 6.650912, -5.927579, 2.176707, 0.8859318, -2.536591, 1.886159, 0.2910057, -0.6136083, -1.106933, 1.436011, 0.1710822, -1.215817, 1.397331, -2.504115, 4.396197, -4.567327, 2.007666, 0.8271433, -1.676874, 1.063872, 0.3708678, -2.115167, 2.515826, -1.605049, 0.6368745, 1.474024, -4.447165, 4.608886, -1.982865, 1.074365, -2.601781, 3.03782, -1.41312, -0.0596145, 0.6800689, -1.540645, 2.154191, -1.1046, -0.240801, -0.479449, 1.66937, -0.1868904, -2.2554, 1.975181, -0.6963533, 1.734761, -2.351357, -0.2727478, 1.766554, 0.7358346, -1.872784, -1.336865, 3.238488, 0.04686398, -4.317702, 4.592544, -1.366986, -1.034818, -0.4027416, 3.271489, -2.807584, -0.8980527, 3.903552, -4.152807, 1.587293, 1.838396, -1.58922, -2.500803, 3.975769, -1.016894, -0.4408628, -1.485806, 1.975164, 0.2656148, -1.143804, -0.393258, 0.86234, 0.6049232, -1.332283, 1.369417, -2.691245, 3.595414, -2.056876, 0.5812097, -0.7459426, 0.170224, 0.8364304, 0.6253759, -2.57659, 1.336606, 0.4074497, 1.311074, -3.654172, 2.641536, -0.510366, 0.2863046, -0.4687513, 0.01757765, -0.7345428, 2.596817, -3.4243, 2.650515, -1.169234, -0.8810699, 3.362889, -4.330941, 2.289775, 0.05363922, 0.8421949, -3.242183, 3.590358, -2.457389, 0.8173527, 2.193493, -3.521039, -0.6941569, 5.816836, -5.367609, 2.374411, -2.068867, 2.476842, -1.29145, 0.8673074, -1.584146, 0.9884754, 0.08961101, 0.7582603, -2.097848, 1.382786, 0.1371596, 0.1224107, -1.644776, 2.597538, -3.079667, 3.355171, -2.479625, 0.8756738, -0.01833027, -0.3589441, 1.150498, -2.353413, 3.870137, -4.618692, 3.113379, -0.74084, -0.2441327, 0.533098, -0.8647481, -0.05433476, 1.662509, -1.517624, -0.133906, 1.019277, -0.9812074, 1.122265, -0.8664902, -0.3207095, 0.6803767, 0.6493675, -1.520881, 0.9043748, -0.6475797, 1.216205, -1.023509, 0.3579177, -0.7962664, 1.490308, -0.5665764, -1.047407, 0.9809483, 0.3978217, -1.006938, 1.101878, -1.978217, 2.185426, 0.1564188, -3.245379, 3.695401, -1.177782, -1.386139, 1.587867, -0.0168453, -1.724219, 3.297321, -3.850169, 1.845357, 0.9422529, -0.9842333, -0.7302441, 0.824431, 0.1346785, 0.1853576, -1.62983, 2.929796, -2.795053, 0.5382763, 1.682085, -1.416219, 0.2027942, -0.4735572, 1.605538, -1.985831, 1.05031, 0.683641, -1.347417, -0.07821261, 1.778394, -2.053862, 1.640643, -1.321672, 0.6437708, 0.3650569, -0.6555413, -0.1257872, 0.6079815, 0.2417863, -0.9883281, 0.4225544, -0.2166989, 1.491045, -2.178728, 0.9798633, 0.06860688, 0.6038596, -1.356304, 0.5140294, 0.7168319, -0.4518168, -0.9606857, 1.584646, -0.417342, -1.163163, 1.425033, -1.195786, 1.63395, -1.062637, -1.200292, 1.681633, 1.505414, -4.575492, 3.663791, -0.1968917, -1.518629, 0.06408688, 1.34414, -1540001e-9, -2.161658, 2.675968, -1.874851, 0.2825516, 1.352368, -0.9476205, -1.015251, 1.264738, 0.2330082, -0.5360769, -0.2906777, 8186165e-9, 0.8438101, -0.5147824, -0.126363, -0.3190666, 1.012342, -0.8881092, 0.1722886, 0.7282175, -1.048314, -0.09395854, 1.50484, -1.067886, -0.554927, 1.064348, -0.4364914, 0.04804785, 0.04438244, -0.1297744, -0.02609894, -0.1349576, 0.9186932, -1.08518, 0.4014002, -0.3942065, 1.091498, -1.140855, 0.7525769, -0.7438246, 0.5882407, 0.07719154, -0.4648987, 0.2183856, 0.1898225, -0.63518, 0.9483583, -0.3146257, -0.9881101, 1.297227, -0.5338924, 0.2170099, -0.3880658, 0.1080653, 0.3912433, -0.533441, 0.2063336, 0.5254761, -0.8851082, 0.07889604, 1.120578, -1.351333, 0.4298163, 0.6988785, -0.8487524, -0.1805266, 1.078479, -0.7215672, -0.2769179, 0.5302568, 0.2846013, -0.9977922, 0.6633825, -0.1221656, 0.3190078, -0.4684776, -0.07675141, 0.4485356, -0.1429731, -0.1621555, -5972877e-9, 0.3545606, -0.4475684, 0.317735, -0.3193305, 0.4322092, -0.3368499, -4518006e-9, 0.4044859, -0.4993695, -0.02522863, 0.6887103, -0.7316241, 0.342769, -0.02514295, -0.2917896, 0.4841688, -0.1264269, -0.3454227, 0.05320242, 0.6669182, -0.6784253, 0.059484, 0.139349, 0.1080096, -0.158028, 0.2430792, -0.5137278, 0.2171567, 0.5690779, -0.7228692, 0.2111192, 0.03196454, 0.02376317, 0.1272212, -0.2281618, -0.07684556, 0.3773935, -0.320537, 0.1892248, -0.1377307, -1042596e-9, 0.09192103, 0.06645704, -0.240355, 0.2007877, -0.0526524, -0.05468896, 0.02759408, 0.09556502, -0.0839943, -0.07388003, 0.07945497, 0.100605, -0.1799302, 0.09102164, -0.03846574, 0.08148114, -0.0678906, -0.0402476, 0.1005102, -0.05850572, -3931387e-9, 0.02447264, 0.02601412, -0.1397527, 0.2130307, -0.1492239, 5118596e-9, 0.08465372, -0.1016716, 0.1230474, -0.1445301, 0.1095899, -0.05058936, 0.01256253, 0.03293301, -0.0738351, 0.04136507, 0.03462291, -0.0518133, 9605979e-9, 0.02572097, -0.05391612, 0.07774188, -0.0462841, -0.02007121, 0.02241497, 0.03939288, -0.06620759, 0.03181239, 1919166e-9, 2163887e-9, -0.02313721, 0.01937283, 0.01212728, -0.01666632, -0.0278803, 0.06025671, -0.04382561, 0.02413648, -0.0288196, 0.02872174, -0.01703871, 0.01739238, -0.02511548, 0.02045081, -8113112e-9, 6225759e-10, 614142e-9, 2145243e-9, -3335779e-9, -1501208e-9, 5672166e-9, -3386694e-9, 3757389e-10, -4335821e-10, -4769325e-11, 1766111e-9, -2089138e-9, 118538e-8, -684582e-9, 7376998e-10, -6675376e-10, 2917876e-10, -2372176e-11], [1.685349, 4.472015, -2.240938, -6.249717, 7.607496, -15.60488, 15.65255, -9.233457, 13.66317, -18.13133, 6.469588, 7.81659, -13.05211, 17.77137, -12.91697, -1.630282, 10.20661, -4.870852, -4.274913, 5.693726, -3.532303, 0.8965389, 0.7360345, 1.69947, -6.966252, 4.841533, 1.665595, 1.292085, -11.24301, 14.46606, -11.48281, 10.96569, -13.37645, 14.25147, -10.07155, 3.104747, -3.276053, 10.70181, -11.1212, 2.735617, -0.05457601, 4.131403, -3.215874, -1.080344, -1.762674, 10.59342, -15.88452, 10.82659, 0.7350795, -5.878067, 1.737872, -0.6882152, 4.495312, -4.488693, 3.572634, -4.410781, 0.2903111, 5.016711, -1.482659, -4.41411, 5.495267, -8.367917, 12.44488, -9.252153, 3.055882, -1.41614, -1.555155, 8.411602, -8.365112, -0.2860384, 5.670237, -5.199023, 6.161779, -7.551273, 4.307035, 1.750414, -6.488949, 9.102434, -8.219462, 0.4238869, 11.87811, -17.16489, 9.493848, 1.026791, -3.735425, 0.3868947, 3.098243, -3.067926, -2.391744, 7.95116, -2.880078, -11.61267, 17.85907, -6.779742, -6.117838, 4.715911, 4.692985, -7.923106, 6.131355, -7.30547, 9.040308, -5.901736, 1.585059, 0.3979241, -3.603701, 8.199405, -10.22102, 10.34235, -7.81546, -0.1700439, 6.370046, -2.094446, -4.692418, 4.566963, -2.635543, 4.356346, -4.539886, -0.1516564, 6.077781, -8.606412, 5.548409, 0.1866895, -1.481971, -2.424233, 4.311604, -2.782851, 3.91948, -6.761838, 5.96636, -4.448367, 6.366766, -7.737013, 6.302331, -6.999882, 10.04027, -7.298842, -1.980447, 7.383632, -6.803586, 8.870685, -11.8534, 7.50845, -1.258433, 0.240591, 1.165222, -4.246104, 0.3313977, 7.307363, -6.139123, -2.281211, 5.559184, -1.50572, -0.9843059, -3.120369, 8.266938, -7.850475, 4.993052, -5.909797, 6.264442, 0.2833549, -6.816879, 5.251567, -3.015988, 4.811769, -0.3932177, -10.70171, 13.03545, -6.177491, 3.679734, -4.159462, -1.008223, 4.172988, 2.475357, -8.568184, 5.195348, 1.020724, -3.896158, 4.834349, -3.966866, 0.361367, 3.550319, -5.329963, 5.42291, -4.463645, 2.38507, -0.5615901, -0.5714166, 2.77336, -3.695384, -1.941164, 8.696525, -5.054252, -4.89472, 6.610542, -0.2679313, -2.984601, 2.952719, -5.865811, 8.397255, -3.981616, -4.009034, 6.425797, -1.088967, -3.991867, 2.030711, 2.266815, -1.654065, -2.847786, 6.080923, -4.784581, 0.9567321, -1.135026, 5.214045, -5.034329, 0.5132191, 0.04798586, 2.89129, -1.29708, -4.528334, 8.061692, -8.494635, 7.416582, -3.270393, -1.750803, 2.543467, -0.1375732, -0.6661966, -1.654612, 4.503477, -4.020823, 2.019064, -4.669082, 9.561569, -7.92973, 2.136396, -1.652671, 4.364687, -1.543083, -3.212038, 1.028641, 3.963876, -3.099074, 0.5006766, -3.665902, 7.721363, -3.847243, -5.030231, 8.682576, -4.526866, -0.9129084, 3.43299, -4.941669, 6.707153, -6.988142, 5.716468, -4.383451, 3.024798, -1.385149, 0.2831061, 1.088469, -3.173447, 3.618308, -2.886348, 4.663973, -5.814651, 1.110123, 3.058155, 0.7066493, -4.903988, 2.471818, -1.150179, 5.305519, -6.988321, 4.673043, -4.356962, 3.659611, 0.3250024, -0.4576157, -4.343078, 3.957841, 1.552209, -1.466123, -2.660139, 0.8417637, 2.770855, 1.611913, -8.072504, 5.610605, 1.803632, -4.065574, 0.2068426, 4.301583, -5.607534, 3.80617, -1.792962, 0.5666059, 1.058697, -2.363665, 2.581202, -4.340623, 8.257368, -10.64522, 10.15491, -9.316864, 7.495456, -1.910777, -4.510134, 5.762596, -2.857077, 1.995538, -4.314279, 4.825336, -2.670307, 3.873927, -8.980586, 8.976824, -1.346719, -4.469267, 3.869178, -1.803059, -0.2641211, 3.504239, -3.066084, -3.046142, 6.784237, -3.699837, 0.153795, -0.8131811, 2.0667, -0.8449127, 0.0904975, -2.714802, 6.169737, -6.576332, 5.099426, -4.50754, 2.608206, 2.774723, -6.645914, 4.634427, -0.5776731, -1.396017, 1.937885, 0.08394523, -5.596373, 7.868773, -1.644002, -5.212037, 3.665851, 1.487101, -1.174814, -2.39789, 1.612877, 2.040698, -1.366815, -2.119257, 1.445094, 1.37104, -0.06150351, -2.802928, 2.515437, -1.92222, 2.907706, -0.9955706, -3.741594, 4.517356, 0.3319535, -5.681097, 7.695073, -5.583029, 2.045833, -1.745088, 3.501967, -2.925233, 2.4335, -4.5191, 3.981445, 0.7090843, -2.503358, -0.2595322, 0.2485427, 5.057761, -9.152745, 8.578965, -6.305978, 3.798841, -2.028957, 4.074176, -6.883855, 3.877356, 1.907743, -3.546733, 3.070831, -3.671775, 2.116907, 0.9074983, 0.7565118, -4.696596, 2.172128, 5.398958, -9.234896, 7.830513, -5.456602, 3.784496, -2.80889, 3.179269, -4.759525, 5.732205, -4.954694, 4.313448, -5.02034, 4.104123, -0.8475486, -0.7620031, 0.06262166, 0.5841401, -2.72816, 6.451745, -6.490715, 2.580277, -1.158239, 3.076629, -3.875728, 3.925341, -4.950566, 3.256483, 1.609743, -2.522241, -1.888553, 3.856035, -2.243895, 3.905371, -7.820747, 6.276207, -0.5310993, -1.755908, 0.8062881, -1.871684, 3.568133, -2.465299, 1.291701, -1.905074, 0.7421892, 2.089938, -2.673525, 2.58536, -4.662437, 4.297647, 1.505782, -4.928491, 0.2986285, 4.288276, -1.617315, -1.773803, 0.1895012, 0.4975471, 2.389413, -2.644783, 0.1416503, -1.101308, 3.815058, -2.359857, -0.9452867, 1.05212, 0.05832889, 0.8233375, -1.290666, -0.7282566, 1.855878, 0.9032311, -4.295655, 3.62875, -0.02171817, -2.345181, 3.180366, -4.011705, 3.513107, -0.6192237, -2.430554, 3.687375, -3.39433, 2.274866, -1.145288, 0.7098845, -0.6121673, 0.3810853, 0.262158, -1.221042, 0.7936096, 1.504481, -2.405393, 0.8209806, 0.289412, -0.5026216, 1.335272, -0.9714356, -2.172531, 5.259205, -5.131255, 2.932227, -1.380633, 0.426502, 0.9044043, -1.043714, -1.255545, 3.529257, -2.776687, 0.07942101, 1.362687, -1.279701, 1.500492, -1.970155, 2.265305, -2.849405, 2.494137, -0.3360476, -1.278202, 1.691399, -3.420978, 5.774755, -5.443313, 3.232012, -1.761723, -0.1655387, 3.307177, -3.981879, 0.7197101, 2.416578, -2.991517, 2.974805, -3.529971, 3.476813, -2.266523, 0.510791, 1.127104, -1.916917, 1.178564, 0.4468852, -1.321137, 1.20556, -1.754486, 3.096558, -2.667153, -0.5032023, 3.108486, -2.075361, -0.5982595, 0.8537997, 0.4988749, 0.4436752, -2.375606, 0.6903275, 2.691938, -1.834336, -2.211328, 2.858246, 0.7229818, -2.8402, 1.298388, -0.4765583, 2.856124, -4.895505, 3.941223, -1.716607, -1.06814, 4.348345, -4.59484, 0.9552999, 0.7162888, 1.714198, -2.918573, 1.051191, 0.07740552, -0.2966472, 2.218889, -3.780614, 2.681635, -2.353813, 4.107874, -3.054392, -1.455534, 3.647073, -2.529353, 2.421636, -3.44288, 3.037755, -2.328613, 2.351104, -1.053752, -1.658667, 3.558814, -3.75483, 1.663013, 2.417176, -4.958948, 3.995019, -2.389909, 2.135648, -1.464133, -0.5223743, 1.806186, -1.164395, 0.5250927, -1.40952, 2.192574, -1.771784, 1.602841, -1.849886, 1.618779, -2.207127, 3.554502, -2.353288, -0.6724939, 0.4708996, 2.700926, -3.405661, 0.4466124, 1.973135, -1.134327, -0.63062, 0.2434568, 0.6371, 0.5849863, -1.350876, -0.3039752, 0.3162071, 2.592429, -2.540423, -1.713379, 3.141714, -0.06329497, -0.9312297, -1.553117, 2.164103, -0.1870198, -0.3918431, -1.038677, 2.250398, -2.038099, -0.0498356, 2.547397, -1.544365, -3.072299, 5.410434, -3.049611, 0.7700798, -0.7516457, -0.2257117, 2.021029, -1.070346, -1.781899, 2.708916, -1.164366, -0.7099029, 1.455621, -1.130226, 1.105637, -2.478862, 3.729176, -2.411662, -0.3760393, 1.26772, -0.3238957, 0.05142117, -0.3851114, 0.0118102, 0.4420659, -0.06757886, -0.7149871, 1.068705, -0.7683274, 0.5545982, -1.044575, 1.770466, -2.264308, 2.573653, -2.397121, 1.435144, -0.4581767, 0.3863104, -0.5260941, -0.3100103, 1.43698, -1.149692, -0.7563797, 2.293094, -1.21299, -1.436929, 1.765473, 0.8118322, -2.06506, 0.05094653, 1.840059, -1.25339, 0.4412657, -1.150051, 1.642869, -0.9712238, 1.064949, -2.403341, 2.467718, -0.6218388, -0.5226433, 0.4301242, -1.290095, 2.250604, -0.2605335, -2.847967, 2.30612, 0.9922291, -2.228038, 1.079709, -0.3578236, 0.01495104, 0.7346155, -0.4195329, -1.054732, 1.431438, -0.675553, 0.7606046, -1.421187, 1.178502, -0.3086016, -0.6945604, 2.248724, -3.833263, 4.120605, -2.936964, 1.291509, -0.4524667, 0.6026307, 0.3028391, -3.350858, 5.180079, -3.398466, 1.780178, -3.11404, 3.55197, -0.5898012, -1.663238, 0.2281048, 1.671188, -1.010109, -0.5104674, 0.5921564, 0.5764174, -1.799292, 1.61438, 0.3877119, -1.763573, 0.4068478, 1.637025, -1.584733, 0.1417497, 1.045791, -1.88367, 1.760089, -0.3013476, -0.2434301, -1.118868, 1.491769, 0.2445661, -1.204196, 0.1544347, 0.9019697, -1.050907, 1.335459, -1.633777, 0.4574313, 1.796484, -2.395622, 0.1493749, 2.599906, -3.075979, 1.561081, -0.2646824, -0.06736949, 0.3135749, -0.7292115, 1.003931, -1.353231, 1.735998, -1.634512, 1.422111, -1.679931, 1.633673, -0.7283535, 0.1657712, -0.6446282, 1.077096, -0.6810259, -0.07927518, 0.5109909, -0.2851054, -0.07633365, -0.1334584, 0.1679634, 0.8585991, -1.683183, 1.006305, 9165009e-9, 0.02818798, -0.443939, 0.1864812, 0.331627, -0.06944939, -1.04056, 2.232882, -3.091236, 3.180263, -1.954397, 0.7355017, -1.370505, 2.619123, -2.519525, 1.822594, -1.237869, 0.1974417, 0.3973222, 0.6029504, -1.73366, 1.067884, 0.7808297, -1.562926, -0.01814926, 2.387424, -2.365716, -0.02688907, 1.107142, 0.2943384, -1.465731, 1.311737, -1.23273, 1.189595, -0.1914861, -0.7075503, 0.04556402, 1.210252, -1.553516, 1.262818, -0.8889853, 0.3852646, -0.2117621, 0.3862207, 0.0337619, -0.5277264, -0.3771881, 1.544929, -1.00708, 2867078e-9, -0.2501059, 0.5486585, 4600935e-9, -0.2179516, -0.1537149, 0.3503016, -0.6164296, 0.7993277, 0.06626167, -1.173188, 0.8123681, 0.2105047, 0.08814492, -1.220305, 1.338384, -0.4185421, -0.3736877, 0.6891886, -0.7414291, 0.4122902, 0.5786726, -1.803983, 2.123172, -1.447845, 0.9898729, -1.004583, 0.7659049, -0.3973452, 0.158493, 0.2425661, -0.1249063, -1.254987, 2.236566, -1.161318, -0.2748474, 0.08242831, 0.5530349, -0.2059026, -0.1088268, -0.6026502, 1.489044, -1.530295, 0.9432091, -0.4808442, 0.2063377, 0.3697378, -0.9475851, 0.6068815, 0.3508765, -0.6387509, 0.1943942, 0.01006973, 0.0966797, -0.02988753, -0.05186433, 0.1298096, -0.5475289, 0.7975784, -0.3443348, 0.0351247, -0.3856532, 0.4087374, 0.1430378, -0.1760448, -0.2494355, -0.03379814, 0.7289408, -0.5513957, -0.2884435, 0.650445, -0.4143431, 0.05732058, 0.2781683, -0.3886932, 0.1524798, -0.02575088, 0.242393, -0.2161847, -0.3559757, 0.7326749, -0.3600759, -0.09877848, -0.04681048, 0.3836639, -0.3237465, 0.05460205, 0.03735204, -0.04043042, 0.1911237, -0.3487919, 0.2669124, -0.102923, 0.1579388, -0.3493936, 0.3193587, 0.04848112, -0.3875002, 0.2722597, 0.1268482, -0.2505539, 0.03528449, 0.07802763, -0.0562884, 0.2659835, -0.5236996, 0.3009839, 0.1522243, -0.1406149, -0.2359319, 0.3461038, -0.1135559, -0.07670837, 0.04670132, 0.1081231, -0.1995766, 0.1048964, 0.05133563, -0.09300089, 0.1133097, -0.2322611, 0.2754158, -0.1178215, -9441091e-9, -0.05764646, 0.1247568, -0.0538442, -0.02433986, 0.03464464, -0.03711768, 0.0301303, 4808537e-9, -0.02276574, 0.01469221, -5829671e-9, -0.02365652, 0.07203706, -0.08087188, 0.03841016, 9401141e-9, -0.03174661, 9760028e-9, 0.0430557, -0.05605804, 9663717e-9, 0.02626845, -0.02935905, 0.03631728, -0.0318956, -3403356e-10, 0.01202537, 5497336e-9, -3435383e-9, -0.01120247, 6512288e-9, -5024321e-9, 0.01470019, -2351924e-9, -0.02241942, 0.0242981, -0.01472205, 0.01485209, -0.01281834, 2058611e-9, 431113e-8, -3128746e-9, 147347e-8, -930792e-9, 5130991e-10, -3545496e-10, 585986e-10, 1130023e-10, 974343e-10, -1232726e-10, 1805363e-11], [2.019866, 2.334767, 2.617223, -8.967688, -0.1500065, 1.889262, -3.598671, 13.80461, -19.66452, 15.62269, -10.08212, 2.864534, 7.738708, -10.28718, 7.397674, -2.709028, 0.02699851, -2.180539, 8.659328, -16.81928, 17.38783, -7.849119, -4.204548, 6.469976, 0.8047795, -5.912985, 1.000552, 3.342955, 4.321708, -14.08384, 14.74625, -14.85708, 17.82978, -11.86942, -0.2310485, 4.168526, -2.517743, 1.42671, 3.670108, -8.300437, 3.18187, 1.13993, 7.793845, -17.34455, 12.29479, -2.812262, 0.816921, 2.593026, -12.48611, 15.14655, -6.998176, -0.1324209, 4.256143, -9.413558, 9.797978, -3.442949, -0.2078058, -1.2123, 2.829642, -3.477256, 2.01827, 4.708477, -12.51038, 11.19815, -2.811976, 0.7604898, -4.214855, -1.032934, 11.79286, -12.13375, 5.683698, -6.22208, 10.43813, -8.779631, 4.454056, -4.232367, 8.316261, -11.91006, 9.751638, -3.53028, 1.468793, -5.231192, 7.67351, -4.257736, -3.866724, 10.59925, -8.496961, 2.402413, -4.30474, 9.734036, -7.228352, 2.03049, -2.073403, 1.796732, 2.462852, -6.449191, 9.559742, -9.638435, 2.439602, 4.84016, -1.729453, -5.822658, 5.832707, -0.3642897, -0.6225693, -3.326519, 4.874945, -3.86357, 5.35079, -4.306594, -4.030741, 8.058344, -0.39823, -3.868393, -3.640608, 10.17917, -9.22983, 8.658058, -9.586772, 7.083834, -3.135963, 2.577777, -4.635833, 5.300339, -4.025142, 4.181321, -4.790748, 1.715948, 1.038382, 3.19178, -8.856291, 7.27332, -1.719522, -0.4508359, -1.010415, 2.101241, -0.6250392, -0.1007433, -3.465058, 5.995947, -2.838639, 0.4343012, -1.478498, -0.05009217, 0.5342464, 6.242805, -10.85449, 5.042448, 1.173802, -0.4882476, -0.5510706, 0.8783595, -5.142088, 5.330034, 4.162695, -8.474154, 1.959463, -3.384271, 14.664, -13.78347, 0.3645859, 5.133145, -2.54177, 2.877566, -0.6499336, -9.763588, 15.67245, -7.800329, -3.628077, 6.964704, -6.240051, 8.629424, -10.28411, 5.828106, 1.186184, -6.61697, 10.66941, -11.39057, 7.504027, -4.456586, 5.56125, -6.765537, 6.023981, -4.381, 1.367003, 0.9738266, -0.6351658, -0.08561789, 1.381182, -4.339035, 3.45308, 3.154304, -7.396014, 4.67682, -0.3882414, 0.1283535, -1.411196, -0.7161156, 3.300861, -0.5357813, -4.416921, 5.342724, -2.168905, -3.244303, 8.276859, -8.675938, 4.935819, -2.308441, 3.477119, -7.479499, 9.856336, -4.354097, -5.333627, 5.543773, 4.745988, -9.662757, 3.283348, 2.873741, -2.32131, 0.6256539, -0.8863721, 0.4599172, 0.8566014, -0.1667418, -1.737128, 0.5382797, 2.840659, -2.20298, -2.146373, 3.898943, -2.177044, 0.04663915, 1.719313, -1.681081, -0.5096352, 1.146589, 0.2292376, 1.307494, -4.774126, 2.559404, 4.859605, -6.7008, -0.0561429, 4.713384, -0.1455964, -6.384113, 5.600249, -0.9124212, 2.132592, -7.681745, 7.528792, -1.688768, -1.612298, 1.269704, -1.1447, 1.572534, -0.5295677, -2.427495, 4.860523, -3.532654, -8534899e-9, 0.9034055, 2.348049, -6.578713, 8.144875, -6.019841, 1.704381, 2.247395, -3.92048, 4.467665, -5.629346, 5.636973, -3.987733, 4.136336, -6.971623, 9.808317, -9.68631, 4.16278, 4.084667, -8.244294, 8.554685, -10.52498, 11.588, -5.197888, -5.010441, 8.665919, -3.458956, -3.284888, 4.79972, -1.900581, 0.4227962, -3.202398, 5.807704, -4.559051, 2.712478, -1.977021, -0.9007475, 2.778323, 0.9482852, -2.199887, -4.79945, 8.068134, -1.649121, -1.997457, -1.423331, 0.8411136, 5.504304, -8.102399, 5.107363, -1.722737, -1.204702, 3.174764, -0.8114564, -3.27383, 2.726776, -0.3566953, 2.673451, -6.058328, 3.821252, 0.5291636, 0.5490477, -5.472209, 6.244744, -1.529197, -1.872812, 0.03669476, 3.494466, -4.387657, 2.323312, 0.8208742, -3.224223, 3.97425, -3.726878, 3.643584, -3.007991, 0.1238123, 4.288992, -6.59903, 4.943074, -2.205129, 1.16673, -0.3720545, -0.7045947, -0.2984851, 2.278677, -1.597711, -0.3266025, -0.3330544, 2.72733, -3.62329, 2.515722, -0.05582918, -3.405006, 5.611368, -4.089644, 0.8878196, 0.1452046, 0.3575006, 0.07395043, 0.4597732, -4.664778, 8.781823, -6.449038, -0.8884276, 5.060908, -2.270928, -3.118746, 4.856333, -1.048473, -3.568455, 3.253163, 0.201269, -1.643448, 1.501884, -0.7652381, -3.011106, 7.568469, -6.980388, 2.382651, 0.409386, 0.1211702, -1.570271, 1.926268, -1.174826, 0.716528, -0.218795, -0.9072205, -0.3951991, 4.63248, -4.746968, -1.356815, 4.961932, -2.888424, 2.655627, -5.830726, 6.084397, -3.06203, 0.91495, 0.4250588, -1.209313, -0.8582505, 4.375744, -5.022399, 3.091685, -2.146641, 1.775949, 0.6093963, -3.681014, 4.43563, -3.214013, 2.353369, -3.116763, 4.317281, -3.247245, -0.2680484, 2.039861, 0.9373489, -5.418221, 5.166698, 0.990463, -6.959514, 7.621414, -6.302459, 7.339769, -6.765627, 1.186542, 2.701646, -0.3058305, -2.264378, 0.9435651, 0.562629, -0.9542379, 2.048648, -2.138956, -0.9886027, 4.568666, -4.198883, -0.08858064, 4.059715, -4.595415, 1.770797, 2.206493, -3.994198, 2.186143, 0.453405, -1.845651, 3.349324, -4.151334, 1.292575, 2.660998, -2.473893, -1.195858, 3.945419, -3.309099, -0.07360762, 3.067311, -3.736822, 2.71764, -0.1810311, -2.271856, 1.163519, 1.56458, -0.6863172, -1.883938, 0.8006865, 2.83365, -4.914391, 4.198797, -0.6887449, -3.254672, 3.361505, -0.9548057, 0.9568083, -1.642261, -0.9135833, 3.174762, -0.4667964, -4.351249, 5.685963, -2.768517, -0.05687496, -0.2314272, 1.037109, -0.144215, 0.0446888, -0.8967192, 0.1215403, 0.4911398, 0.7077161, -0.3893652, -1.798208, 2.289368, -1.030494, 0.01845682, 0.2880111, 0.5897074, -1.702455, 0.6293521, 2.338851, -4.910263, 6.381121, -6.675372, 5.178254, -1.976734, -0.9765365, 1.096643, 1.130091, -2.199343, 1.426673, -1.111447, 1.022836, 0.3243722, -1.379597, 0.5657481, 0.3882732, 0.4727194, -1.863508, 1.930808, -2.208656, 3.768777, -3.048735, -0.9756731, 2.835813, -0.5466586, -0.8495884, -1.01364, 3.006804, -3.42625, 3.67089, -3.945822, 2.422581, 1.201496, -4.081305, 4.14252, -4.111643, 6.607538, -7.966488, 4.639179, -0.7386827, 0.8313129, -2.768316, 2.921392, -1.099849, -1.282437, 2.584964, -1.793654, -0.3356566, 1.937738, -1.520658, -0.4906164, 1.334719, 0.1855116, -1.426068, 0.4251048, 0.7311593, 0.805419, -4.199551, 4.810565, -0.6986185, -3.512983, 3.927193, -2.427377, 0.973366, 0.2616808, -0.3474692, -0.2068548, -0.06643334, 0.04638905, 0.5419027, 0.7041565, -2.887704, 1.923478, 1.403508, -1.992136, -0.549389, 1.699698, -0.9905922, 2.047376, -3.781715, 2.062618, 1.177554, -1.714831, 1.515269, -3.391185, 4.95529, -4.489154, 3.00445, 0.312977, -4.643479, 5.133755, -1.686342, 0.07045126, -0.6920145, -0.9930881, 3.367741, -1.345611, -2.247801, 1.270736, 1.49801, 0.2457106, -3.484956, 1.860746, 1.438569, -0.2374528, -1.844652, -1.226115, 5.371839, -4.100458, 0.6062782, -0.6866252, 2.266515, -1.289189, -0.3561671, -0.2189949, 1.613202, -1.672137, 0.757007, -0.1485733, 0.08780119, 0.2074883, -0.8060206, 0.824896, -0.4391338, 0.3185433, -0.3939731, 1.505551, -3.515849, 3.338946, -0.8054523, -0.51108, 0.5243494, -0.5996684, -0.7044256, 2.256803, -1.149293, -0.710998, 1.087693, -1.532921, 2.064165, -1.051576, -0.5726445, 0.886479, 0.4626022, -1.65881, 0.06480941, 2.981227, -3.157095, 0.6702587, 1.090598, -1.966012, 2.714558, -2.359018, 1.038134, 0.4633423, -1.946629, 2.209777, -1.034872, 0.7162702, -1.613471, 1.188879, 0.7512069, -1.48457, 0.3207338, 0.2960884, 0.8517472, -1.767522, 1.308361, -1.444117, 2.689864, -2.672431, 1.52737, -1.853412, 2.986782, -2.574862, 1.675121, -2.02676, 2.267086, -1.123503, -0.4143814, 1.536117, -1.817461, 0.3875571, 1.883977, -2.236437, 0.08944677, 1.567437, -0.6140435, -0.9498701, 0.5531617, 0.9572557, -1.34261, 0.4699647, -0.05364898, 0.7521236, -0.7424882, -0.8605424, 1.343197, 1.024756, -3.156, 1.99173, 0.3571384, -0.162659, -1.270464, -0.08568382, 2.740315, -2.093201, -0.4708353, 0.8318274, 0.2084671, -0.3944737, 0.03626125, 0.6033561, -1.289212, 0.6464015, 0.8889773, -0.4853237, -2.349076, 3.80113, -1.41272, -1.633087, 1.955357, -0.8157892, -0.2061129, 1.269608, -1.322338, 0.405565, -0.975848, 2.254896, -1.616522, 1.11599, -2.518891, 2.200263, 0.3382405, -0.02461885, -3.260708, 4.136405, -1.574789, -0.592823, 0.09290453, 1.89284, -2.764268, 1.62827, -0.2418103, -0.1863096, 0.05272851, 0.773505, -2.105923, 2.135465, -0.2222147, -1.842258, 2.913282, -3.532978, 3.252807, -1.119997, -0.8250616, -0.0910894, 1.855485, -0.9609779, -1.356409, 1.819434, -0.6392132, 0.1354415, -0.7568196, 0.8479168, 0.340826, -1.024692, 0.05461594, 0.7712758, -0.2548694, -0.6451808, 1.766314, -2.879785, 2.368483, -0.8830625, 0.8766245, -1.49479, 0.6016011, 0.6201813, -0.7591024, 0.9330846, -1.167809, 0.1969217, 0.7301146, 0.2535217, -1.665503, 1.388103, -0.2927319, -0.2316237, 0.7219897, -1.04455, -0.40388, 3.096688, -4.103505, 2.366745, -0.1914449, -0.03596604, -0.8653568, 0.6185957, 0.3420398, -0.1603656, -0.6242784, 0.6812374, -0.292685, -0.1170069, 0.8105524, -1.69796, 1.956581, -0.8367011, -0.9491272, 1.858539, -1.647405, 0.7752958, 0.9018175, -2.689078, 2.935306, -1.714448, 0.95227, -1.359235, 1.462692, -0.07780056, -1.621841, 1.647287, -0.2929788, -0.3910293, -0.08086061, 0.5385787, -0.4664483, 0.112888, -3578559e-9, 0.4960095, -0.4853065, -0.8404432, 1.582434, -0.6011976, -0.05852676, -0.4861261, 0.7113125, -0.5853165, 1.015106, -1.062543, -0.1164922, 1.165036, -0.7376394, -0.1493987, -0.3000647, 1.351555, -0.7580083, -0.9263888, 1.203463, -0.4214346, 0.6961816, -1.359494, 0.6271938, 0.294127, 0.3551696, -1.153061, 0.3298167, 0.9837593, -1.330508, 1.189087, -0.887678, -0.04915744, 0.707084, 0.02246077, -0.6738459, -0.1279623, 0.7892311, -0.2106596, -0.2673524, 0.08201177, 0.1376247, -0.4004475, 0.3958434, 0.3714658, -1.114178, 1.151631, -0.9028103, 0.6719804, -0.5057695, 0.3714141, -0.1375943, 0.1308581, -0.378117, 0.09567104, 0.6335908, -0.9161348, 0.7753685, -0.5035715, -0.09044451, 0.5905005, -0.4123638, -549083e-8, 0.1877703, -0.2214217, -9417284e-9, 0.3476342, -0.2649802, 0.01732374, 0.08964624, -0.4234298, 0.6487152, -0.1897812, -0.3328019, 0.415304, -0.3544594, 0.1386826, 0.09710687, 0.09890974, -0.2640932, -0.2092819, 0.8139976, -0.8792912, 0.3525135, 0.3959521, -0.7304828, 0.6386882, -0.7632379, 0.8972735, -0.374574, -0.4003516, 0.7625539, -0.7409907, 0.3675248, 0.2522268, -0.4828779, 0.08163415, 0.3558206, -0.4442818, 0.4253104, -0.4014869, 0.1528354, 0.2731203, -0.5383615, 0.5328281, -0.4222513, 0.3189705, -0.2028892, 0.07324034, -0.01647746, 0.08016064, -0.1249061, -2563702e-9, 0.1666753, -0.1305015, -0.02092467, 0.04591914, 0.03125063, -0.04861056, 1984343e-9, 0.02918894, -81538e-7, -0.05895214, 0.0891412, -0.02479071, -0.04647063, 0.06845154, -0.09877788, 0.110221, -0.04923308, -0.01636902, 0.0492743, -0.06663149, 0.02779124, 0.03984817, -0.03759186, -5945456e-9, -5096019e-9, 0.05300254, -0.05084857, -5671247e-9, 2019742e-9, 0.09632077, -0.1228012, 7013849e-9, 0.07124076, -0.04784297, 0.07330265, -0.1445406, 0.1017659, 0.01504878, -449519e-8, -0.129064, 0.1680833, -0.05664894, -0.02887234, 88951e-7, 0.01589625, 0.01024683, -0.04387858, 0.05096608, -0.04185097, 0.03237483, -9179632e-9, -0.02882481, 0.03760164, -0.01433933, 0.01274443, -0.02899144, 0.01848852, -135795e-8, 0.01552238, -0.03616148, 0.02804533, -2058362e-9, -0.01413906, 9394319e-9, 6893796e-9, -0.01393777, 4224306e-9, 7694726e-9, -0.01020837, 7224075e-9, -4018965e-9, 1639716e-9, -1044446e-9, 1568036e-9, -1355964e-9, 7174446e-10, -4958304e-10, 2863116e-10, 1464789e-11, -306325e-10, -7260704e-11, 422137e-10], [1.984818, 2.625448, 1.309913, -5.275361, -5.876923, 3.778033, 6.017194, -6.131408, 3.082454, -8.671558, 13.81032, -8.056501, 2.593324, -5.478743, 10.43713, -4.311872, -0.6362569, -5.296198, 10.09466, -10.60267, 10.40351, -6.40651, -4.530399, 11.58152, -10.10271, 8.041141, -8.528019, 3.246103, 7.155804, -10.80292, 4.458541, 4.86128, -10.7142, 9.843517, -5.202299, 2.287509, -0.4919528, -1.670959, 2.58317, -3.253631, 2.018725, 3.21728, -3.907274, -3.34366, 5.70881, -0.7639922, 0.2692672, -4.618008, 5.00382, -0.5028646, -4.534445, 3.684519, 3.459514, -4.433925, -5.172186, 10.28106, -4.512315, 1.103886, -2.583602, -2.880949, 14.29247, -16.57506, 5.715578, 4.325455, -3.385564, -2.969327, 6.326559, -5.286735, 1.1659, 4.62093, -8.911137, 8.1325, -3.000497, 2.246193, -11.30714, 18.70883, -10.53961, -4.558574, 9.007293, -6.062458, 8.955803, -14.35113, 13.48092, -10.92703, 10.22244, -5.282048, -2.813466, 5.985625, -4.532696, 3.678158, -5.237055, 7.843066, -7.091375, 0.25436, 7.801883, -9.502969, 4.246395, 2.260973, -6.411619, 9.393709, -8.339087, 0.5992958, 4.216673, 0.3797612, -3.122244, -1.978498, 5.148425, -4.370201, 6.709894, -9.811139, 10.15096, -11.28783, 12.62796, -9.441634, 3.92256, 0.2461124, -2.987036, 4.026113, -2.246634, -0.8812902, 2.493349, -1.227211, -1.105604, 0.6060738, 4.722905, -11.36275, 13.32221, -8.74246, 1.480981, 4.099303, -7.032891, 8.497929, -8.215723, 5.235358, -1.743796, 0.7488025, -0.9624393, -0.3802436, 2.215172, -1.569509, -1.058566, 3.371519, -5.936415, 7.511853, -4.900187, 2.057192, -3.418382, 1.809298, 5.780528, -9.47879, 5.528563, 1.000176, -7.202219, 7.248222, 1.442469, -8.164723, 6.944865, -4.082969, 2.480729, -4.409576, 11.61133, -14.48305, 7.19993, -0.08611442, -1.208728, 0.7908871, 0.3290485, -1.660714, 0.763266, 0.288123, -1.173141, 5.391259, -8.543237, 1.847665, 10.62904, -15.21547, 7.85878, 0.3616734, 2.033866, -11.11119, 13.79342, -8.580985, 5.246429, -4.989082, 1.30642, 2.403877, 0.5274419, -2.248114, -7.743661, 19.65654, -16.16185, 1.223066, 7.01964, -5.467454, 4.288389, -4.768024, 2.794341, -1.276734, 1.444365, 0.8736112, -4.17401, 5.749124, -8.971055, 11.75469, -7.783105, 2.143505, -1.697681, 0.1481125, 4.611382, -1.509349, -8.56474, 9.522793, 0.6510841, -8.19998, 8.205234, -5.581256, 1.795816, 2.178144, -1.555945, -3.275955, 5.430148, -3.251904, 1.654989, -1.866392, 2.293587, -3.786014, 5.110155, -2.913373, -0.9351989, 2.363153, -1.897429, 2.154912, -3.602997, 4.588423, -2.769348, -0.6258008, 1.262822, 0.2875054, 1.404562, -5.513107, 5.896485, -2.219492, -0.9595279, 1.944433, -1.287619, 0.354633, -0.5433568, -0.7345414, 5.705495, -8.311883, 3.985626, 0.4308446, 0.5189603, -1.41428, -0.5803664, 0.525543, 0.7173015, 2.827792, -6.014625, 1.079048, 3.534015, 1.348894, -6.016458, 2.755475, -0.5088597, 2.606319, -1.019308, -3.420893, 3.277527, 0.7187081, -3.982287, 5.267379, -4.332772, 1.169152, 2.228343, -3.071836, 2.03999, -2.669961, 4.097897, -2.698658, 0.1548998, 0.9129748, -2.736486, 5.773412, -5.927594, 1.589086, 2.062292, -0.154694, -2.715522, -0.1401463, 3.863728, -2.404147, 1.277924, -3.707768, 2.134676, 4.817032, -8.972009, 8.367404, -7.591354, 6.971138, -5.413132, 4.106751, -2.564182, 0.4279967, -0.6063325, 3.539021, -5.98619, 5.304129, -0.2741907, -5.931652, 5.370829, 0.7736337, -0.1142074, -7.958972, 8.94635, -1.014781, -2.342633, -1.456011, 3.172377, -0.6472646, -1.457648, 1.017512, 1.419011, -3.951695, 4.169861, -2.656619, 2.039985, -1.339793, -2.701901, 6.63972, -2.814098, -5.802382, 7.964581, -2.556799, -1.316907, 0.08396627, 2.096451, -2.560887, 3.016506, -3.664848, 0.03565345, 8.946201, -14.83119, 10.96008, -2.163664, -3.235016, 1.679018, 4.476605, -7.226709, 2.667702, 1.982421, -1.454802, 0.3584553, -0.5144589, -0.8291215, 0.2031496, 4.390905, -5.019294, 0.9487188, -2.772579, 7.766171, -3.075431, -4.502743, 0.1092686, 7.916723, -5.008587, -1.016636, -2.073464, 8.109891, -7.357344, 3.153667, -1.536565, 0.6481517, 1.653245, -2.373872, 1.323311, -2.524282, 5.418512, -6.259232, 6.030855, -6.395244, 5.040215, -1.604223, -0.6344784, 1.0274, -1.376265, 1.359247, 0.3383911, -2.060281, 1.762669, -1.354783, 2.28239, -1.97431, 0.9108498, -2.454089, 4.656175, -5.016723, 5.181269, -2.923782, -3.371576, 5.681614, -1.074485, -0.9806957, -1.666964, 1.478069, 0.8334381, 0.5656172, -4.19877, 5.016318, -1.965695, -0.9674313, 0.4539988, -0.2087741, 2.914708, -3.389309, 0.5479245, -0.5320209, 2.27845, 0.2561382, -4.184413, 3.977405, -3.272095, 5.593947, -5.453505, -0.08930398, 4.316596, -3.068126, 0.8897761, -1.43911, 2.444541, -1.787052, 0.1364668, 1.406451, -0.8081035, -2.629745, 3.373146, 1.647527, -4.427235, 0.7068637, 0.6496621, 3.380266, -3.970524, -0.276076, 1.842642, -0.2282332, 0.09929349, -1.539053, 2.3342, -1.81072, 0.6363815, -0.9473075, 2.813869, -2.817612, 0.8420208, -0.81106, 2.2319, -1.207505, -0.6789671, -1.622595, 6.377573, -6.183068, 0.9623134, 1.32452, 0.1470847, 1.295131, -4.38373, 3.234551, -1.277824, 3.364793, -4.531163, 1.10544, 1.667009, -1.02524, 0.3591479, 0.5842232, -4.683356, 8.474734, -6.051963, -0.3926464, 3.27685, -0.7499984, -2.243678, 2.498722, -1.555833, 1.238688, -0.6226128, -1.287053, 2.501052, -1.048689, -0.5726023, -0.7386499, 2.805304, -1.384124, -2.748203, 4.943703, -3.845167, 2.484015, -1.912155, 0.5577154, 0.9403087, -1.541256, 2.676959, -4.053245, 3.68653, -2.033724, 0.2951833, 1.353636, -2.989661, 5.148242, -6.112637, 3.417486, 0.2629596, -1.841732, 2.704673, -2.064075, -1.458854, 3.39521, -1.713084, 1.310509, -2.831605, 1.695902, 0.7769662, 0.09986606, -2.051409, 0.7882555, 1.38762, -1.863036, 2.337176, -2.320715, 0.356182, 0.5434831, 1.09005, -2.001458, 1.318893, -1.410844, 2.354043, -2.058669, -0.02179106, 1.519692, -0.7237323, 0.2383098, -2.065584, 2.714757, -0.556305, -0.4375971, -0.9815416, 1.836887, -1.05565, -1.003222, 3.468354, -4.278638, 4.091127, -5.371177, 5.865978, -2.115912, -3.218563, 5.328172, -4.34504, 3.343261, -3.303431, 3.146411, -2.56536, 1.883162, -0.911863, 0.4314998, -2.260286, 5.403804, -5.71075, 1.419736, 3.562515, -4.205845, 0.6840031, 2.746945, -4.000115, 3.975274, -3.414666, 2.804682, -2.373984, 1.410321, -0.02937842, -0.9831047, 1.676109, -0.9595447, -2.512369, 5.851083, -5.211738, 2.364145, -1.326133, 2.058088, -2.036101, 0.4329606, 1.625797, -2.92856, 2.920082, -0.9939691, -2.271464, 3.964779, -2.439033, -0.152587, 1.622086, -2.616789, 3.903084, -3.272726, -0.7505854, 3.74775, -1.58274, -1.830545, 2.176389, -1.853817, 3.047896, -3.901593, 3.27307, -1.848359, 0.3603538, 0.7520484, -1.334794, 1.187621, -0.6297773, 0.9622482, -2.284796, 2.887812, -1.608103, -0.8920587, 2.505012, -2.045342, 1.119683, -0.6037749, -0.8263245, 1.857177, -0.1496987, -1.646409, 0.7851031, 0.2225841, -0.05002504, 0.5709343, -0.919627, -0.1298342, 0.4312981, 0.502218, -0.5870482, 0.1477261, -0.6243731, 0.9095804, 0.02910728, -0.2385701, -1.235658, 1.412699, 0.6854156, -1.759517, 1.129077, -0.5130896, -0.6397204, 1.344392, 0.4967788, -2.071703, 1.076585, -0.3636261, 0.3814771, 1.122795, -2.640551, 2.736628, -3.146798, 3.325266, -1.536994, -0.5040362, 1.322989, -1.724982, 1.08318, 0.675648, -0.6903279, -1.252401, 1.789967, -0.9348953, 1.289224, -1.91528, 1.29196, -1.768673, 4.373657, -5.546378, 3.552129, -1.596421, 1.901695, -2.205492, 0.3207182, 1.936036, -2.320328, 2.17144, -3.038973, 3.238219, -1.516098, -0.1259803, 0.1696742, -0.1249336, 1.087462, -1.424918, 0.5872487, -0.7162998, 1.828644, -1.398932, -0.4226469, 1.59357, -1.683583, 0.7086222, 0.8769029, -1.200639, -0.1073166, 1.065436, -0.7872698, 0.5226309, -0.9517091, 0.766053, 0.6829822, -1.450035, 0.4353241, 0.5141284, -0.4279798, 0.6124343, -1.202899, 1.207293, -1.608808, 3.490121, -4.578518, 2.929948, -1.110342, 0.9938595, -0.2698607, -1.257524, 0.8421205, 0.7361082, -1.237786, 0.9602076, 0.2427613, -2.037627, 1.988313, -1.008731, 2.042285, -3.252794, 2.406883, -2.034337, 3.512013, -4.76504, 4.934877, -4.112111, 2.03296, -0.3710267, 0.5812212, -0.7787292, -0.4089765, 1.227257, -0.7411405, 0.2981604, -0.5303836, 0.7657036, -0.5512966, -0.1686034, 0.7800163, -0.4216719, -7110365e-9, -0.6991584, 1.067979, 0.1832919, -1.491106, 1.832956, -2.194422, 3.072323, -3.44849, 1.631597, 1.739044, -2.608059, 0.04494685, 1.190768, 0.472007, -1.203328, 0.4210991, -0.6187534, 1.093651, -0.5875565, 0.2917473, -0.3810588, 0.03422183, -0.04578806, 0.949193, -1.316194, 0.3443636, 0.3962605, 0.4029357, -1.254027, 0.6068503, 0.2110225, 0.1813281, -0.7134934, 0.5703421, -0.5686153, 0.596369, 0.6375023, -2.352619, 2.167977, -0.763032, 0.7371417, -0.9113359, -0.8567326, 2.081044, -0.851845, 0.1720162, -1.176157, 1.39752, -1.369442, 2.851174, -3.45711, 1.387878, 0.5494197, -0.3600134, -0.4058919, 0.489387, -0.3265941, 0.1558673, 0.7593189, -2.636332, 3.368698, -0.9850217, -2.00324, 2.001579, -0.6736794, 1.058172, -1.460895, 0.1065662, 0.5166361, 0.7263658, -0.9906236, -0.6892578, 1.556346, -0.4345409, -0.4281232, -0.1809818, 0.5620184, 0.04308024, -0.2075269, 0.02043647, -1.029183, 2.246403, -1.476037, -0.2476056, 0.3225289, 0.9416033, -1.33342, 0.4792101, 0.1179182, 0.2420922, -0.6842678, 0.4761156, 0.09797278, -0.7092534, 1.203438, -1.23646, 0.9313616, -0.6829928, 0.3357588, -0.2272996, 1.173299, -2.2717, 1.90527, -0.7257524, 0.2189977, 0.1348551, -1.186461, 1.777105, -1.060479, 0.6053166, -1.313692, 1.584554, -0.9261962, 0.9414058, -1.554906, 1.130037, 2760144e-9, -0.3717761, 0.2017354, -0.5318578, 1.094263, -0.8299097, -0.2067793, 0.7763617, -0.516659, 0.2820508, -0.2060621, -0.07745336, 0.0796323, 0.2780917, -0.09988267, -0.6528815, 1.099091, -0.8032761, -0.1106141, 1.127518, -1.463211, 0.8347554, 0.05579763, -0.4183115, 0.6171997, -1.156738, 1.179716, -0.2763458, -0.2286597, -0.09229492, 0.1305627, 0.1489262, -0.01368123, -0.135761, -0.2045097, 0.630599, -0.8247807, 0.8423926, -0.6660547, 0.3665539, -0.1331751, 0.02380778, 0.07900184, -0.202878, 0.1333686, 0.06616148, 0.03364983, -0.2801476, 0.148065, 0.1231869, -0.04498164, -0.1988253, 0.309111, -0.270256, 0.1088353, 5009324e-9, 0.06514067, -0.1170259, 0.02815444, 0.05155613, -0.07780172, 0.08667416, 0.01929543, -0.2702049, 0.4452495, -0.3059107, -0.01069548, 0.08472354, 0.1530848, -0.3081124, 0.1774267, 0.02122666, -0.04826446, -0.1017675, 0.1948217, -0.06517114, -0.09603556, 0.1408402, -0.2201309, 0.2952789, -0.1663069, -9042358e-9, -0.03573189, 0.1747572, -0.1514509, 0.01843624, 0.04907162, -0.08822895, 0.1602503, -0.1632045, 0.06970005, 0.02072452, -0.06707258, 0.04386921, 0.03423188, -0.02217865, -0.107734, 0.1788786, -0.1421961, 0.09437099, -0.0334582, -0.0384945, 0.01507039, 0.08822271, -0.1203746, 0.06745867, -0.03637032, 0.02570711, 0.02840131, -0.09260645, 0.1006373, -0.06326266, 0.02332398, 0.01394118, -0.05857564, 0.08072441, -0.04084861, -0.02206076, 0.02950735, 812046e-8, -0.02606954, 0.02371548, -0.02795968, 0.02804327, -0.02205673, 0.02452033, -0.02075689, -3516786e-9, 0.02504569, -0.02267899, 0.01124473, -0.01153235, 0.01518904, -6196534e-9, -4889363e-9, 371786e-8, 8729278e-10, -201383e-8, 6185016e-9, -0.01015573, 5599467e-9, 1947021e-9, -3592238e-9, 1241384e-9, 1054947e-11, -1908041e-10, 6342166e-10, -7208134e-10, 2587065e-10, -8812639e-12]], before: [{ "250": -9, "500": 0.4, "1000": -1.2, "2000": -10.2, "3000": -20.4, "4000": -19.9, "8000": -35 }, { "250": -5.9, "500": 1.1, "1000": -5.7, "2000": -11, "3000": -16.2, "4000": -22.8, "8000": -37.8 }, { "250": -8, "500": 0, "1000": -7.7, "2000": -10.7, "3000": -23.9, "4000": -22.8, "8000": -37.8 }, { "250": -9.8, "500": 0.3, "1000": -6.1, "2000": -17.8, "3000": -20.8, "4000": -22.7, "8000": -40.5 }, { "250": -9.4, "500": 0.3, "1000": -6.6, "2000": -10.4, "3000": -18.1, "4000": -20.7, "8000": -40 }], after: [{ "250": -13.8, "500": 1.2, "1000": -2.1, "2000": 0.4, "3000": -2.2, "4000": -1.8, "8000": -4.1 }, { "250": -10.7, "500": 1.8, "1000": -6.6, "2000": -0.3, "3000": 2.1, "4000": -4.7, "8000": -8.2 }, { "250": -12.8, "500": 0.7, "1000": -8.6, "2000": 0, "3000": -5.7, "4000": -4.7, "8000": -7.6 }, { "250": -14.6, "500": 1, "1000": -7, "2000": -7.1, "3000": -2.6, "4000": -4.7, "8000": -11.2 }, { "250": -14.2, "500": 1.1, "1000": -7.5, "2000": 0.3, "3000": 0.1, "4000": -2.7, "8000": -10.5 }], ringing: { above: 8e3, t60: 0.0694 }, seeds: [2643724480, 2660502099, 2677279718, 2694057337, 2710834956], curve: [[10, -13.98], [10.15, -13.98], [10.29, -13.98], [10.44, -13.98], [10.59, -13.98], [10.75, -13.98], [10.91, -13.98], [11.06, -13.98], [11.22, -13.98], [11.39, -13.98], [11.55, -13.98], [11.72, -13.98], [11.89, -13.98], [12.07, -13.98], [12.24, -13.98], [12.42, -13.98], [12.6, -13.98], [12.78, -13.98], [12.97, -13.98], [13.16, -13.98], [13.35, -13.98], [13.54, -13.98], [13.74, -13.98], [13.94, -13.98], [14.14, -13.98], [14.35, -13.98], [14.56, -13.98], [14.77, -13.98], [14.98, -13.98], [15.2, -13.98], [15.42, -13.98], [15.65, -13.98], [15.87, -13.98], [16.1, -13.98], [16.34, -13.98], [16.58, -13.98], [16.82, -13.98], [17.06, -13.98], [17.31, -13.98], [17.56, -13.98], [17.82, -13.98], [18.08, -13.98], [18.34, -13.98], [18.61, -13.98], [18.88, -13.98], [19.15, -13.98], [19.43, -13.98], [19.71, -13.98], [20, -13.98], [20.29, -13.98], [20.59, -13.98], [20.89, -13.98], [21.19, -13.98], [21.5, -13.98], [21.81, -13.98], [22.13, -13.98], [22.45, -13.98], [22.78, -13.98], [23.11, -13.98], [23.44, -13.98], [23.78, -13.98], [24.13, -13.98], [24.48, -13.98], [24.84, -13.98], [25.2, -13.98], [25.56, -13.98], [25.94, -13.98], [26.31, -13.98], [26.7, -13.98], [27.09, -13.98], [27.48, -13.98], [27.88, -13.98], [28.28, -13.98], [28.7, -13.98], [29.11, -13.98], [29.54, -13.98], [29.97, -13.98], [30.4, -13.98], [30.84, -13.98], [31.29, -13.98], [31.75, -13.98], [32.21, -13.98], [32.68, -13.98], [33.15, -13.98], [33.64, -13.98], [34.13, -13.98], [34.62, -13.98], [35.13, -13.98], [35.64, -13.98], [36.15, -13.98], [36.68, -13.98], [37.21, -13.98], [37.75, -13.98], [38.3, -13.98], [38.86, -13.98], [39.43, -13.98], [40, -13.98], [40.58, -13.98], [41.17, -13.98], [41.77, -13.98], [42.38, -13.98], [42.99, -13.98], [43.62, -13.98], [44.25, -13.98], [44.9, -13.98], [45.55, -13.98], [46.21, -13.98], [46.89, -13.98], [47.57, -13.98], [48.26, -13.98], [48.96, -13.98], [49.67, -13.98], [50.4, -13.98], [51.13, -13.98], [51.87, -13.98], [52.63, -13.98], [53.39, -13.98], [54.17, -13.98], [54.96, -13.98], [55.76, -13.98], [56.57, -13.98], [57.39, -13.98], [58.23, -13.98], [59.07, -13.98], [59.93, -13.98], [60.8, -13.98], [61.69, -13.98], [62.59, -13.98], [63.5, -13.98], [64.42, -13.98], [65.36, -13.98], [66.31, -13.98], [67.27, -13.98], [68.25, -13.98], [69.24, -13.98], [70.25, -13.98], [71.27, -13.98], [72.31, -13.98], [73.36, -13.98], [74.43, -13.98], [75.51, -13.98], [76.61, -13.98], [77.72, -13.98], [78.85, -13.98], [80, -13.98], [81.16, -13.98], [82.34, -13.98], [83.54, -13.98], [84.76, -13.98], [85.99, -13.98], [87.24, -13.98], [88.51, -13.98], [89.8, -13.98], [91.1, -13.98], [92.43, -13.98], [93.77, -13.98], [95.14, -13.98], [96.52, -13.98], [97.92, -13.98], [99.35, -13.98], [100.79, -13.98], [102.26, -13.98], [103.75, -13.98], [105.26, -13.98], [106.79, -13.98], [108.34, -13.98], [109.92, -13.98], [111.52, -13.98], [113.14, -13.98], [114.78, -13.98], [116.45, -13.98], [118.15, -13.98], [119.86, -13.98], [121.61, -13.98], [123.38, -13.98], [125.17, -13.98], [126.99, -13.98], [128.84, -13.98], [130.71, -13.98], [132.61, -13.98], [134.54, -13.98], [136.5, -13.98], [138.49, -13.98], [140.5, -13.98], [142.54, -13.98], [144.62, -13.98], [146.72, -13.98], [148.85, -13.98], [151.02, -13.98], [153.22, -13.98], [155.45, -13.98], [157.71, -13.98], [160, -13.98], [162.33, -13.98], [164.69, -13.98], [167.08, -13.98], [169.51, -13.98], [171.98, -13.98], [174.48, -13.98], [177.02, -13.98], [179.59, -13.98], [182.21, -13.98], [184.86, -13.98], [187.55, -13.98], [190.27, -13.98], [193.04, -13.98], [195.85, -13.98], [198.7, -13.98], [201.59, -13.98], [204.52, -13.98], [207.49, -13.98], [210.51, -13.98], [213.57, -13.98], [216.68, -13.98], [219.83, -13.24], [223.03, -12.26], [226.27, -11.37], [229.57, -10.59], [232.9, -10.06], [236.29, -9.42], [239.73, -8.81], [243.22, -8.28], [246.75, -7.55], [250.34, -6.76], [253.98, -6.32], [257.68, -6.08], [261.43, -5.76], [265.23, -5.45], [269.09, -5.11], [273, -4.67], [276.97, -4.2], [281, -3.74], [285.09, -3.2], [289.23, -2.59], [293.44, -1.94], [297.71, -1.2], [302.04, -0.34], [306.43, 0.62], [310.89, 1.56], [315.41, 2.55], [320, 3.22], [324.65, 3.46], [329.38, 3.82], [334.17, 4.06], [339.03, 4.35], [343.96, 4.51], [348.96, 4.48], [354.04, 4.33], [359.19, 4.07], [364.41, 3.65], [369.71, 3.31], [375.09, 2.96], [380.55, 2.59], [386.08, 1.8], [391.7, 0.75], [397.39, -0.54], [403.17, -1.16], [409.04, -1.34], [414.99, -1.24], [421.02, -0.95], [427.15, -0.55], [433.36, -0.08], [439.67, -0.07], [446.06, -0.48], [452.55, -1.21], [459.13, -1.55], [465.81, -1.88], [472.58, -2.04], [479.46, -2.23], [486.43, -2.16], [493.51, -1.79], [500.69, -1.22], [507.97, -1.09], [515.36, -1.46], [522.85, -1.77], [530.46, -2.09], [538.17, -2.48], [546, -2.84], [553.94, -3.16], [562, -3.3], [570.18, -3.3], [578.47, -3.03], [586.88, -2.74], [595.42, -2.34], [604.08, -1.48], [612.87, -0.39], [621.78, 0.59], [630.82, 0.95], [640, 1.4], [649.31, 2.11], [658.75, 2.5], [668.34, 2.6], [678.06, 2.65], [687.92, 2.41], [697.92, 1.95], [708.08, 1.51], [718.38, 1.16], [728.82, 0.9], [739.43, 0.7], [750.18, 0.64], [761.09, 0.66], [772.16, 0.6], [783.39, 0.51], [794.79, 0.52], [806.35, 0.38], [818.08, -0.01], [829.98, -0.61], [842.05, -1.34], [854.3, -2], [866.72, -2.31], [879.33, -2.45], [892.12, -2.52], [905.1, -2.43], [918.26, -2.28], [931.62, -2.23], [945.17, -2.3], [958.92, -2.53], [972.86, -2.87], [987.01, -2.94], [1001.37, -2.85], [1015.94, -2.8], [1030.71, -3.11], [1045.71, -3.84], [1060.92, -4.17], [1076.35, -3.74], [1092, -3], [1107.89, -2.25], [1124, -1.54], [1140.35, -1.54], [1156.94, -1.77], [1173.77, -1.89], [1190.84, -2.1], [1208.16, -2.31], [1225.73, -2.46], [1243.56, -2.76], [1261.65, -3.22], [1280, -3.77], [1298.62, -4.01], [1317.51, -3.87], [1336.67, -3.27], [1356.11, -2.87], [1375.84, -2.72], [1395.85, -2.45], [1416.15, -2.15], [1436.75, -1.9], [1457.65, -1.64], [1478.85, -1.31], [1500.36, -0.86], [1522.19, -0.55], [1544.33, -0.39], [1566.79, -0.27], [1589.58, 0.1], [1612.7, 0.93], [1636.16, 1.93], [1659.95, 2.8], [1684.1, 3.27], [1708.6, 3.31], [1733.45, 3.8], [1758.66, 4.19], [1784.24, 4.73], [1810.19, 5.24], [1836.52, 5.78], [1863.24, 6.34], [1890.34, 6.9], [1917.83, 7.43], [1945.73, 7.9], [1974.03, 8.32], [2002.74, 8.7], [2031.87, 9.01], [2061.43, 9.28], [2091.41, 9.61], [2121.83, 10.27], [2152.69, 11.41], [2184.01, 12.12], [2215.77, 12.72], [2248, 12.85], [2280.7, 12.83], [2313.87, 12.89], [2347.53, 13.06], [2381.68, 13.25], [2416.32, 13.35], [2451.46, 13.35], [2487.12, 13.63], [2523.3, 13.86], [2560, 13.93], [2597.24, 14.13], [2635.01, 14.54], [2673.34, 14.74], [2712.23, 14.94], [2751.68, 15.24], [2791.7, 15.32], [2832.31, 15.48], [2873.5, 15.66], [2915.3, 15.96], [2957.7, 16.04], [3000.72, 16.23], [3044.37, 16.47], [3088.65, 16.64], [3133.58, 16.94], [3179.16, 17.07], [3225.4, 16.92], [3272.31, 16.71], [3319.91, 16.57], [3368.2, 16.58], [3417.19, 16.49], [3466.89, 16.5], [3517.32, 16.41], [3568.48, 16.45], [3620.39, 16.47], [3673.05, 16.36], [3726.47, 16.26], [3780.67, 16.4], [3835.67, 16.33], [3891.46, 16.29], [3948.06, 16.17], [4005.49, 16.05], [4063.75, 16.01], [4122.86, 15.93], [4182.82, 15.9], [4243.66, 15.7], [4305.39, 15.45], [4368.01, 15.17], [4431.55, 15.01], [4496.01, 15], [4561.4, 15.06], [4627.75, 15.3], [4695.06, 15.58], [4763.35, 15.45], [4832.64, 15.42], [4902.93, 15.5], [4974.24, 15.55], [5046.6, 15.46], [5120, 15.62], [5194.47, 15.98], [5270.03, 16.25], [5346.68, 16.65], [5424.45, 17.16], [5503.35, 17.65], [5583.4, 18.18], [5664.61, 18.74], [5747.01, 19.19], [5830.6, 19.57], [5915.41, 19.74], [6001.45, 20.23], [6088.74, 20.61], [6177.3, 20.82], [6267.15, 21.28], [6358.31, 21.96], [6450.8, 22.62], [6544.62, 22.72], [6639.82, 23.18], [6736.4, 23.43], [6834.38, 24.25], [6933.79, 24.77], [7034.64, 25.09], [7136.96, 25.25], [7240.77, 25.32], [7346.09, 25.37], [7452.94, 25.85], [7561.35, 26.1], [7671.33, 26.21], [7782.91, 26.64], [7896.12, 27.05], [8010.97, 27.6], [8127.49, 28.35], [8245.71, 29.38], [8365.65, 30.47], [8487.33, 31.39], [8610.78, 31.95], [8736.03, 32.63], [8863.09, 33.38], [8992.01, 34.26], [9122.8, 34.82], [9255.5, 35.81], [9390.12, 36.45], [9526.7, 37.07], [9665.27, 37.64], [9805.86, 38.26], [9948.49, 38.75], [10093.19, 39.21], [10240, 39.6], [10388.94, 39.78], [10540.05, 40], [10693.36, 40.1], [10848.9, 40.21], [11006.7, 40.37], [11166.8, 40.45], [11329.22, 40.48], [11494.01, 40.53], [11661.2, 40.53], [11830.81, 40.56], [12002.89, 40.58], [12177.48, 40.73], [12354.61, 40.77], [12534.31, 40.79], [12716.62, 40.81], [12901.59, 40.75], [13089.25, 40.93], [13279.64, 41.18], [13472.79, 41.46], [13668.76, 41.7], [13867.58, 41.89], [14069.29, 42.13], [14273.93, 42.38], [14481.55, 42.66], [14692.19, 42.91], [14905.89, 43.18], [15122.7, 43.43], [15342.66, 43.57], [15565.83, 43.82], [15792.24, 44.02], [16021.94, 44.24], [16254.99, 44.65], [16491.42, 44.87], [16731.29, 45.01], [16974.66, 45.16], [17221.56, 45.27], [17472.05, 45.49], [17726.19, 45.63], [17984.02, 45.8], [18245.61, 45.9], [18510.99, 46.01], [18780.24, 46.12], [19053.41, 46.22], [19330.55, 46.32], [19611.72, 46.39], [19896.97, 46.5], [20186.38, 46.57], [20480, 46.63], [20777.89, 46.66], [21080.11, 46.68], [21386.73, 46.68], [21697.8, 46.72], [22013.41, 46.71]] }, viola: { header: "body_viola_1.h", sha256: "71cfbd19983d13fdfb0a5f9115d3c35467d00272dbd1e2068899ab1868e28410", plateau: 396, variants: [[1.835562, 3.485794, -4.050949, 2.483282, -12.53193, 16.81958, -15.55188, 14.54203, -8.574938, 4.041707, -6.307076, 8.645228, -14.03602, 27.59992, -36.359, 29.11272, -18.27186, 20.70152, -21.40045, 4.776661, 12.01499, -10.40718, 0.2109401, 3.384418, -4.687702, 8.388179, -9.041805, 5.159179, -1.427896, -2.672171, 11.30732, -20.83071, 22.25382, -14.61251, 3.691405, 4.751992, -7.179232, 4.739977, -2.193835, 1.004352, 1.081086, -2.20256, -1.494225, 5.229725, -3.516333, 2.033959, -4.907253, 2.749076, 5.416923, -8.025441, 3.785466, -3.469008, 7.302622, -4.289608, -6.790915, 11.85666, -5.599698, 2.855843, -10.30774, 14.44047, -9.10027, 3.897603, 0.887028, -14.33628, 28.85511, -29.69585, 18.17206, -6.446346, -0.604577, 3.601497, -0.1893645, -9.205303, 15.79461, -16.43624, 16.39696, -14.05331, 6.019925, 2.074479, -8.247282, 14.16168, -13.4032, 5.104981, 0.3510354, -2.035786, 5.806921, -7.823181, 5.63383, -3.018503, -0.6897798, 4.914186, -2.698309, -3.653414, 3.013661, 3.318243, -4.620121, 1.320258, -1.247771, 4.73809, -7.905554, 9.070023, -5.673677, -0.1427897, -1.066549, 9.62835, -11.82045, 4.181235, -1.202076, 9.561686, -18.62957, 21.20085, -19.99132, 15.0625, -6.161756, 0.6125883, -0.2422656, -2.881754, 9.032029, -10.70646, 9.646644, -9.955678, 6.184379, 5.890193, -19.29351, 25.32694, -20.82993, 7.041135, 7.634998, -10.80587, 3.223401, -0.3435739, 7.493561, -10.33901, 1.111667, 7.756553, -6.906208, 1.658115, 3.608261, -8.075233, 8.26842, -3.72003, -0.9395026, 4.036562, -7.480236, 10.48591, -9.981675, 6.756308, -3.831239, 1.568379, -2.148559, 9.657936, -16.68335, 10.97075, 1.218339, -5.610833, 4.483861, -3.573067, -2.620883, 14.3336, -19.70246, 13.68378, -6.139721, 7.53409, -15.72929, 21.8844, -22.69191, 19.16242, -12.01319, 4.500993, -0.1544193, -3.200586, 6.84655, -6.558832, 1.849183, 0.9680719, 1.02286, -3.089792, 0.8405943, 3.247487, -4.16831, 1.686747, 1.230749, -2.258745, -1.09825, 8.072643, -12.46856, 11.72005, -10.32093, 8.790828, -4.127345, 0.2185707, -2.584025, 8.63782, -13.28252, 14.42458, -11.72847, 6.841723, -2.203822, -1.187466, 1.806356, 1.348978, -4.436738, 1.016795, 9.074543, -19.30881, 24.97103, -24.64341, 15.65223, -0.7768045, -8.884105, 9.338873, -7.692974, 6.434201, -2.396068, -1.243662, -1.123998, 6.371405, -6.497715, 1.311477, 0.773589, 4.011654, -9.851279, 12.18856, -12.07296, 9.193659, -3.176177, -0.3058932, -2.92669, 5.558756, 0.6958588, -9.988372, 12.32275, -9.697763, 8.335864, -6.708926, 0.8404188, 6.736252, -9.059465, 5.231735, -2.840292, 5.521191, -7.338604, 4.380998, -1.421578, 3.36837, -7.176079, 6.209814, -0.7343807, -2.646745, 2.357059, -2.809747, 4.294911, -2.513086, -2.960781, 8.331551, -10.60714, 8.100674, -2.118729, -0.4394615, -4.440675, 10.33978, -10.39085, 6.118583, -1.411922, -1.259926, -1.009635, 6.192057, -5.430707, -3.330662, 9.362554, -5.95785, 0.08638191, 1.754036, -1.559635, 0.3710723, 3.284676, -5.570845, 1.334422, 6.328828, -11.06584, 12.56471, -13.65046, 14.84707, -15.36942, 14.05966, -10.46346, 5.274785, 1.269944, -6.610593, 6.943188, -5.51816, 7.465206, -9.487202, 7.498322, -3.991781, 2.182143, -3.032465, 5.435276, -6.79902, 7.801323, -10.58352, 12.23942, -9.001623, 2.43803, 3.593055, -6.221932, 4.193107, 0.3054101, -2.963057, 1.665668, 3.453307, -10.39333, 13.32558, -6.889033, -4.580177, 9.891368, -5.505706, -0.7081605, 2.539437, -1.699736, -0.4740515, 4.73509, -7.369138, 4.612944, 0.5941146, -5.128441, 10.05348, -13.76954, 11.72558, -4.85801, 0.6632188, -3.247341, 6.918523, -5.546261, 2.42933, -0.8519571, -3.384882, 9.707464, -9.652649, 2.876934, 1.021624, 1.00678, -1.33004, -4.832489, 11.36412, -10.58265, 5.577636, -5.13487, 8.835985, -8.989336, 5.532479, -4.863274, 6.593381, -5.260307, 1.012244, 2.334932, -4.448134, 5.748378, -3.844103, -0.9594441, 2.376265, 3.34727, -10.33572, 10.77484, -5.59601, 1.161175, 0.03059315, 1.635227, -6.363125, 10.32733, -7.464214, 0.4116846, 2.609184, -1.240203, 0.795174, -1.984412, 2.606478, -2.750217, 2.568766, -0.9914671, -0.2110367, -2.558656, 7.472596, -8.903052, 7.27517, -7.466899, 8.633234, -6.073273, 0.6123966, 2.668946, -2.277065, 1.047591, -2.384526, 7.319996, -12.31945, 12.23688, -6.94476, 0.8052115, 2.878402, -3.169561, 1.059036, 0.6854352, -0.6026121, 0.1115824, -0.2026537, 0.2326772, -0.5970343, 2.386464, -4.700886, 5.830218, -6.071462, 5.618064, -3.12929, -0.2006862, 1.196305, -0.6057197, 0.5126707, 0.6460512, -3.666797, 6.47319, -8.819491, 10.59502, -9.128289, 4.267966, 0.3863108, -3.254804, 4.750044, -3.24499, -2.127595, 6.940015, -6.598635, 3.059944, -0.7073093, 0.6880352, -2.855191, 6.19462, -7.375422, 5.019089, -2.196263, 1.054877, 0.3492206, -2.709636, 2.228549, 1.753022, -2.631518, -2.071767, 5.337856, -3.162168, 0.2797629, -0.3402915, 1.686331, -2.93023, 4.064834, -3.625178, 1.233415, -0.1912021, 1.907828, -2.641243, 0.9081868, -0.2810777, 1.124818, 0.3950357, -3.693609, 4.278432, -1.207267, -2.315898, 3.194514, -1.186292, -1.29516, 1.676666, 1.28376, -6.107257, 8.559171, -6.890416, 3.612944, 0.04867775, -3.478875, 3.120705, 0.9039405, -2.118251, -1.115306, 2.486971, 0.7202086, -4.129013, 5.100733, -4.905119, 3.128033, 0.8383032, -3.544472, 3.309621, -3.553098, 4.377209, -2.055435, -1.892884, 3.849857, -4.976771, 5.893691, -4.695809, 2.899907, -2.525938, 0.7736257, 4.145276, -7.86567, 5.892953, -0.4339656, -2.487996, 0.9887226, 1.914073, -4.56239, 7.177603, -7.826414, 4.956516, -1.502376, 0.6108626, -1.126976, 1.23458, -1.476902, 1.423403, 0.3218262, -2.232322, 2.545118, -2.77886, 3.126167, -1.621168, -0.1787071, 0.1595221, -0.7608581, 2.365593, -0.3668865, -5.034396, 7.288753, -4.680915, 2.004343, -1.302444, 0.7358, -0.4287782, 1.668913, -2.956255, 2.104744, -0.3346975, 0.2146803, -0.9672975, 0.2942546, 0.6721934, 0.5251357, -3.053001, 4.686208, -4.831486, 3.262413, -0.6273895, 0.06338348, -2.90758, 5.294726, -4.236373, 2.181828, -1.401144, 0.3997132, 1.169365, -1.132518, -0.474044, 1.59282, -2.032923, 2.499472, -2.705715, 2.573523, -2.461717, 3.011234, -5.255156, 8.115509, -8.570249, 6.713229, -5.595983, 6.13657, -6.858985, 6.531856, -4.993134, 3.392801, -2.74559, 2.162734, -0.7477321, -0.4617072, 0.581503, -1.14263, 3.392476, -4.504879, 1.6976, 1.815289, -2.172127, 1.928145, -4.099345, 6.039458, -5.316598, 3.998852, -3.001117, -0.1302404, 4.764025, -5.544047, 0.8574381, 3.778791, -4.242735, 2.622117, -1.592845, 1.593479, -2.944162, 5.003985, -5.601195, 3.556695, 0.1560997, -3.037572, 3.624322, -3.975564, 5.99218, -7.586491, 6.756621, -4.816748, 3.429046, -2.699568, 1.960738, -0.6755416, -0.9290702, 2.192299, -2.208218, 0.1719171, 2.501113, -3.180551, 2.071573, -0.7785219, -0.8671367, 1.655884, 1.35305, -6.593058, 8.888081, -7.213087, 4.307929, -1.123684, -1.462232, 0.1498493, 4.590551, -6.590574, 3.793588, -1.416938, 2.314305, -3.312956, 1.788906, 0.6103156, -1.117915, -0.1805958, 0.8509125, 0.1999213, -2.149069, 3.920599, -3.727446, 0.6367415, 2.232401, -1.746812, 0.03539812, 0.1781731, -0.4258044, 2.477913, -5.075975, 6.16389, -5.031209, 2.74952, -0.8975251, -0.2208155, 0.9034409, -0.8811066, 0.1926035, 0.6669015, -1.355021, 1.489342, -1.254447, 1.590382, -1.805456, -0.02775584, 2.498937, -1.353543, -3.309833, 5.778609, -2.899532, -1.544214, 3.009744, -1.886088, 0.8755372, -0.778027, 0.9518575, -1.030102, 0.9959858, -1.077483, 2.032895, -4.040148, 5.289975, -3.897355, 1.398488, -0.6836017, 0.9251496, 0.53168, -2.676924, 3.149905, -3.22705, 4.728008, -5.984122, 5.500741, -4.940239, 5.526943, -5.690019, 4.104745, -1.964168, 0.4384812, 1.233156, -2.623478, 1.323583, 1.771006, -2.777224, 1.729014, -1.488297, 1.683958, -0.9912167, 0.3117877, 0.3088553, -1.750624, 2.74362, -2.056448, 1.250625, -2.125487, 3.738654, -3.519528, 0.7589413, 1.867841, -1.537011, -1.237877, 4.064353, -5.739056, 5.923204, -4.023912, 0.6178878, 1.598278, -1.092694, -0.01059048, -0.2758217, 0.4883262, 0.2315008, 0.01101901, -1.042912, 0.3280241, 1.586299, -2.329697, 2.398911, -2.943247, 2.592135, -0.7794902, 0.09537964, -2.050066, 4.005864, -3.337463, 1.03218, 1.174452, -2.855098, 2.956903, -0.938498, -0.9233158, 0.8281927, -0.1943179, 0.3159733, -0.2798829, -0.3349618, 0.1703099, 1.473737, -2.963316, 2.217184, 0.3003555, -1.74743, 0.6154984, 1.379329, -2.422876, 3.000529, -3.402774, 2.412941, -0.2723497, -0.5543761, -1.169918, 3.823329, -4.844496, 3.221564, -0.7350759, -0.01171544, -0.7849679, 0.9731073, -0.3084859, 0.2249503, -0.714185, 0.6166122, -0.1692084, 0.4750464, -1.107924, 0.9121017, -0.03646602, -0.6577117, 0.6819296, 0.1885634, -1.541161, 2.343448, -2.008834, 0.6268417, 1.285292, -2.205846, 0.7043778, 2.158604, -4.092644, 4.93432, -5.704357, 5.955391, -4.998837, 3.692377, -2.816028, 1.899339, -0.7955784, 0.09415354, 0.1993582, 0.02395672, -1.555992, 3.724237, -4.317425, 2.682205, -0.1498892, -1.628766, 1.522276, -0.2679457, -0.0821025, -0.3849567, -0.1737551, 1.702749, -2.683993, 2.629845, -1.830402, 0.8112085, -0.5255783, 1.09953, -1.393726, 1.044653, -0.682926, 0.02815075, 1.123298, -1.466331, 0.6327185, -0.1875868, 0.541605, -0.4985314, 0.138197, -0.7154124, 1.937369, -2.133484, 1.059791, -0.1192565, -0.1547872, 0.2803805, -0.1191349, -0.5633901, 1.11842, -1.058575, 0.5878021, -0.09862825, -8027111e-9, -0.09813466, -0.3303192, 1.249057, -1.930315, 2.264261, -2.329498, 1.9108, -1.326733, 1.126974, -1.181026, 0.9641684, -0.229221, -0.4909316, 0.2486225, 0.8305647, -1.60412, 1.596127, -1.264068, 1.067657, -0.9484604, 0.5284276, 0.04773363, -0.3359945, 0.6647573, -1.224212, 1.21366, -0.4792587, -0.09620356, 0.156464, 0.142046, -0.5515642, 0.374017, 0.558384, -1.153273, 0.7542128, -0.1156739, -0.06352354, 0.04683719, -0.04222299, -0.360617, 1.150939, -1.415826, 0.632522, 0.4159935, -0.5697981, -0.2835901, 1.128501, -1.19056, 0.7984076, -0.5462901, 0.469957, -0.3617091, 0.1814325, -0.05567173, 0.03146932, 0.1340846, -0.5021854, 0.6892792, -0.6768457, 0.8230197, -0.9401108, 0.6742708, -0.2008414, -0.2759083, 0.6797522, -0.7980337, 0.6522942, -0.5071269, 0.3823501, -0.1662609, -0.09588772, 0.2287265, -0.08977219, -0.1869132, 0.3140159, -0.2270023, -0.04001969, 0.4351517, -0.7118228, 0.7082936, -0.5507194, 0.3595973, -0.2126861, 0.1762739, -0.1338783, -0.02126964, 0.1490374, -0.1454411, 0.1280198, -0.1514095, 0.06706444, 0.1420109, -0.2301611, 0.1305086, -0.07478267, 0.08879075, -0.01298146, -0.04525327, -0.05951045, 0.1448634, -0.0313913, -0.1675973, 0.2643685, -0.2166799, 0.1020077, -0.01807529, 0.02570955, -0.1043153, 0.1301466, -0.025566, -0.0966033, 0.102273, -0.03200233, -3939871e-9, -0.02851552, 0.07864019, -0.06751706, 6084451e-9, -552107e-8, 0.09071907, -0.1467674, 0.1051379, -0.03194597, 1111107e-9, -1728042e-9, 0.01177654, -0.04113868, 0.06341137, -0.0403186, 0.01055452, -0.01857656, 0.02932848, -8839685e-9, -0.0171687, 0.02109444, -6539174e-9, -8841259e-9, 0.01329652, -0.01184655, 0.01290678, -0.01428334, 0.01144018, -4021446e-9, -3509443e-9, 4704232e-9, 1543382e-9, -0.01035826, 0.01513299, -0.01194416, 4749017e-9, -288567e-9, -6423542e-10, 6609342e-10, -8876108e-10, 1234034e-9, -103948e-8, 1598263e-10, 5398943e-10, -5842932e-10, 298889e-9, -927752e-10, 2794679e-11], [2.225734, 0.8451134, 3.328611, -7.850786, -6.64786, 19.59025, -21.95917, 18.79747, -11.71032, 8.664599, -14.75105, 26.45012, -36.91492, 31.44011, -6.082278, -16.88153, 21.36902, -14.40529, 11.07301, -10.54825, 5.267868, 1.478305, -4.085145, 5.520652, -7.29927, 0.5882448, 10.89866, -9.796891, -1.598441, 3.743746, 5.949942, -14.12422, 16.56441, -20.11116, 26.27978, -28.39079, 20.74996, -7.579305, 0.3619837, -3.155302, 7.874916, -8.081324, 5.832667, -0.9521911, -8.924262, 13.52418, -3.245059, -10.79937, 12.47913, -5.504933, -0.2696654, 4.134772, -8.311213, 11.62462, -10.68639, 3.671423, 1.302608, 5.007003, -12.71413, 8.538463, -0.7636535, 1.218189, -1.948074, -5.550281, 9.111717, 0.8518264, -14.60571, 18.52675, -10.92682, 0.2732301, 4.304733, -3.181162, 1.838429, 0.2429114, -5.002124, 5.479332, 2.577604, -7.622332, 0.9789714, 5.905996, -2.960955, -3.130197, 8.369003, -17.66968, 26.29757, -23.69298, 14.21583, -7.375072, 2.253878, 1.228505, 2.297598, -6.935181, 1.864171, 5.611241, -2.391994, -6.858782, 13.38238, -19.23843, 23.58014, -19.97646, 11.89735, -7.046627, 3.086381, 6.313816, -17.88813, 21.15025, -13.29932, 4.050217, -0.1702702, -3.326936, 9.083302, -10.19123, 3.665445, 3.831633, -4.919811, 0.6914817, 0.8449848, 4.1651, -10.01372, 11.52684, -8.620176, 2.549249, 4.625323, -10.37954, 13.71593, -13.3027, 8.978433, -4.761728, 2.516306, 1.784503, -6.879409, 4.121556, 6.979306, -15.95169, 18.20189, -20.75976, 26.20247, -25.14656, 15.95425, -10.73978, 11.65477, -8.246702, 0.6518914, 3.808986, -6.435808, 7.618473, -2.131625, -4.84399, 2.836989, 2.722672, 0.4577141, -7.628417, 7.706237, -6.066122, 12.06124, -20.01971, 20.91784, -14.43751, 5.504328, 1.193088, -6.344114, 10.9077, -8.44917, -1.425695, 8.922895, -12.65413, 15.01216, -10.02818, -0.5557507, 4.864439, -2.841766, 1.776026, 0.2722685, -5.955776, 9.597556, -7.93119, 6.476766, -8.529542, 8.84072, -4.596212, 1.481157, -3.279568, 6.053951, -4.280071, -2.159339, 4.944659, 1.867042, -9.688304, 7.967974, -0.6809047, -4.206232, 6.272555, -5.639527, 0.8951138, 2.93323, 0.02375294, -4.24715, 0.7044353, 6.806368, -8.954125, 6.475816, -3.832392, -0.1103737, 3.636626, -3.884375, 5.647905, -9.719379, 8.49699, -4.029098, 3.8265, -3.926627, 1.125967, -2.613719, 9.260052, -13.58521, 15.39302, -17.81883, 16.12223, -7.542059, 0.1088155, 0.7105334, 0.1666754, 0.8861725, -1.81378, 1.428576, -0.5186379, 1.009496, -3.353332, 3.070493, 1.05557, -1.320493, -5.816511, 12.05248, -9.75599, 1.021465, 7.793513, -11.93971, 9.740503, -3.995832, -0.7377604, 3.827001, -6.498531, 6.990267, -4.405705, 2.832404, -5.111546, 7.059152, -4.65729, 0.7336504, 2.004768, -4.653231, 5.356425, -0.6837933, -6.603224, 10.55054, -9.354806, 5.237941, -1.374802, 0.5286916, -2.322059, 3.017024, -1.319383, -1.320327, 5.774475, -10.64015, 8.796142, 1.144774, -11.47491, 17.29293, -18.69303, 16.49372, -14.42343, 15.43552, -15.37294, 9.642229, -0.8946748, -6.352559, 11.73379, -15.14814, 13.87933, -9.403049, 7.737805, -8.066044, 4.533224, -0.5525671, 2.788344, -5.612188, 1.858008, 1.845653, 1.195642, -4.345894, 1.930163, 0.3663279, 1.159731, -1.216984, -2.303921, 4.998262, -6.166964, 6.808778, -3.498616, -2.59829, 4.241519, -1.047466, -1.38558, 0.9313178, 1.47269, -3.599472, 3.283391, -0.4512094, -4.227147, 7.726547, -4.925726, -1.838609, 4.469151, -2.45152, 1.070745, -0.7682307, -0.1517608, -0.4889317, 4.684144, -9.521985, 11.34876, -10.29528, 7.080221, -2.076603, -0.06997878, -3.770418, 6.822586, -2.21042, -6.174307, 11.3066, -10.73047, 4.969253, 2.337774, -5.746294, 4.470198, -2.293755, 0.9422574, 0.573229, -1.466685, 0.08349182, 1.688027, -1.271249, 1.729223, -6.348914, 9.606644, -5.190118, -2.400521, 5.415896, -3.72403, 1.139022, 0.757396, -2.276431, 3.770351, -4.638808, 3.621692, -0.8085407, -1.353475, -0.05381908, 4.361881, -6.032922, 1.03296, 6.428582, -8.813556, 5.605418, -2.271503, 0.963628, 0.1786899, -1.017365, 0.3990429, -0.7590166, 5.166306, -11.19944, 12.70074, -8.175026, 3.155395, -2.525161, 5.454726, -9.038245, 11.57397, -12.3239, 11.18279, -7.800918, 2.866244, -0.5422667, 3.407583, -6.590421, 5.297637, -3.174184, 4.275669, -5.759615, 5.497825, -5.490464, 5.119882, -3.080629, 2.495799, -4.698646, 6.227649, -6.333142, 7.332, -8.205536, 6.582618, -3.655931, 1.782882, -1.056488, 1.385997, -3.899293, 6.723796, -5.599789, 1.873829, -0.5748817, 0.4746606, 1.648101, -2.847602, 1.484761, -1.330578, 1.64298, 1.572666, -4.501106, 0.9272033, 5.847066, -8.220357, 5.145353, -1.239601, -0.8498828, 2.767206, -5.124149, 5.512318, -4.53449, 5.026535, -5.351548, 3.844969, -4.149093, 6.936011, -6.659647, 1.77607, 2.885273, -4.513303, 3.927064, -1.880907, 0.04129268, -0.6405062, 2.238184, -1.770094, 0.6375779, -1.454444, 1.994448, 0.1075185, -1.970141, 0.9178494, 1.152316, -2.31262, 3.149216, -3.998665, 4.31739, -3.532139, 0.5808952, 4.383598, -8.164544, 8.041998, -5.377234, 3.284781, -2.551121, 1.52577, 0.833553, -2.577525, 0.8225843, 3.595981, -6.447468, 6.398184, -6.172781, 6.254836, -4.664064, 2.496991, -1.342764, -0.2864636, 2.116445, -1.722422, 0.154411, 0.04573444, 0.5033735, -0.4233305, 0.413391, -1.053343, 1.637032, -2.082881, 2.49203, -1.62653, -0.2261543, 0.1618063, 2.3893, -4.242858, 3.729096, -2.851781, 3.171641, -3.045782, 1.058484, 1.014505, -1.73183, 2.475221, -3.394004, 2.061534, 1.418193, -3.377623, 2.549246, -2.025802, 3.063503, -2.475197, -0.7096341, 3.085449, -4.051771, 5.649169, -6.356721, 4.649619, -2.863736, 1.502675, 0.9604061, -2.386686, 0.2831947, 3.115869, -5.710463, 9.013767, -12.57507, 12.47158, -8.369381, 4.690855, -3.304056, 1.673035, 1.569076, -4.235401, 3.725765, -0.4607624, -2.348144, 2.532188, -0.944327, -1.038384, 3.093266, -4.675619, 4.869256, -3.605702, 1.487665, 0.567551, -0.6281243, -2.646895, 6.809438, -8.108337, 6.608515, -4.451063, 2.007972, 0.3220578, -0.9646036, 0.4048394, -1.417055, 4.208427, -5.455215, 4.251144, -3.742053, 4.189741, -1.790132, -3.09233, 5.079848, -2.601907, -0.4005357, 1.128177, -0.2086998, -1.078176, 1.838447, -1.139565, -0.6648165, 1.139089, 0.487765, -0.6784755, -2.461628, 5.126844, -4.809801, 4.15532, -4.623615, 4.428552, -3.367893, 2.552202, -0.9671683, -2.051315, 3.913159, -2.904146, 1.347837, -1.127969, 0.8242404, 0.6568669, -1.878877, 1.310523, 0.492626, -1.341898, 9230245e-9, 2.170873, -3.099628, 2.455579, -1.626553, 1.649525, -1.869421, 1.486401, -0.6519567, -1.238922, 4.415671, -5.587622, 2.169856, 2.270886, -3.233717, 1.779273, -1.138764, 1.779828, -2.508926, 3.115239, -4.082921, 4.85986, -4.490202, 3.109226, -1.134279, -0.5809014, 0.3892135, 0.7354546, 0.01949308, -1.347602, 0.6312172, -0.3691837, 2.850801, -4.891638, 4.228901, -2.821809, 1.640881, 0.06700538, -1.413615, 1.213993, -0.7635725, 1.714728, -2.655519, 1.175234, 1.288449, -1.337262, -0.3348216, 0.4035612, 0.6825734, -0.1115864, -1.441933, 1.422203, -0.08498817, -1.165288, 2.123904, -2.305757, 1.554931, -1.405929, 2.251726, -2.335652, 1.499965, -1.597993, 2.425868, -1.491738, -1.612791, 4.220351, -4.817394, 4.99447, -5.856696, 5.777814, -3.179234, -0.7159531, 3.015263, -2.561369, 1.662738, -2.406966, 2.661879, -0.3809266, -1.130538, -0.883154, 2.640175, -0.9292293, -0.6615693, -0.8419122, 2.294017, -1.612918, 2.008287, -4.344176, 4.095067, -0.01763788, -2.743513, 1.390904, 1.090378, -2.328492, 2.932386, -2.979053, 2.034349, -1.056771, 1.02976, -1.752907, 3.172821, -4.827907, 4.478588, -1.103455, -2.652087, 4.448232, -4.752698, 4.019959, -2.336143, 0.959263, -0.5489739, 0.2467427, 0.312169, -0.5306777, 0.2549228, -0.1957173, 0.8880685, -1.804682, 1.937372, -0.8820644, -0.8920278, 2.132979, -1.959308, 1.19408, -1.128407, 1.650192, -2.167281, 2.585636, -2.589014, 1.613206, -0.05916912, -0.6758326, 0.2971737, -0.2358703, 0.6611482, -0.3225116, -0.2125593, 0.1173454, -0.7746381, 2.148924, -2.283493, 1.989146, -3.153698, 3.975788, -2.292954, 0.04349724, 0.07475633, 1.1463, -1.577336, 1.068699, -0.5632952, 0.1035525, 0.6996384, -1.717559, 2.302555, -1.726491, 0.0608141, 1.318391, -1.193568, 0.146716, 0.3063191, -0.1338593, 0.7526573, -2.20823, 2.570747, -1.043556, -0.7622207, 1.389559, -1.050657, 0.3652038, 0.2862277, -0.445347, 0.4212419, -1.400564, 3.213587, -4.082661, 3.809692, -3.817955, 3.50552, -1.736992, 0.895819, -2.868464, 4.466501, -2.983194, 0.6042248, 0.4384713, -0.7998749, 1.306639, -1.782962, 1.986767, -1.885671, 1.400479, -0.5860444, 0.4575147, -1.799637, 2.866965, -1.547607, -0.893168, 1.855774, -1.217099, 0.5319176, -0.4499638, 0.499502, -0.2721452, -0.1161109, 0.4772661, -0.5886617, 0.1651225, 0.6051157, -0.986577, 0.4681486, 0.411662, -0.1664979, -1.55188, 2.765038, -1.968314, 0.7382651, -1.275111, 2.87603, -3.20812, 2.146798, -1.60418, 1.820871, -1.078002, -0.6810011, 1.701806, -1.733099, 1.829, -1.96766, 1.888855, -2.121028, 2.608769, -2.476883, 1.584801, -0.8275204, 0.7690732, -0.8257574, 0.4432407, -0.06407339, -0.06770952, 0.5035714, -1.131405, 0.9953243, -0.1226151, -0.3961367, 0.4107382, -0.5383312, 0.2521618, 1.01552, -2.049102, 1.744109, -0.7262485, -0.240871, 0.9340169, -0.9298496, 0.3338406, -0.1967457, 0.7994637, -1.017133, 0.2546246, 0.6295456, -0.9332414, 1.005286, -1.178176, 1.288227, -1.28866, 1.159055, -0.6671254, 3438288e-9, 0.1327894, 0.4466114, -1.060821, 1.089344, -0.6926904, 0.3461205, -0.2312919, 0.2505956, -0.1916239, 0.01249581, -0.09698464, 0.6432297, -1.050208, 0.6619466, 0.1592107, -0.4185428, -0.2469435, 1.210198, -1.656257, 1.407422, -0.8864052, 0.4893376, -0.3414761, 0.3763012, -0.2693204, -0.1333436, 0.3722417, -0.1965171, 0.1625014, -0.574132, 0.8978174, -0.7169105, 0.3150966, -0.1983837, 0.3899218, -0.2831759, -0.3408193, 0.8264177, -0.8967482, 0.9250831, -0.7631294, 0.2480996, -0.04980849, 0.3812798, -0.4887913, 0.2536628, -0.3686338, 0.7924286, -0.7087373, -0.03417729, 0.6486357, -0.6308041, 0.3752576, -0.3006693, 0.2797176, -0.2269808, 0.2314683, -0.07632354, -0.4060646, 0.864388, -0.9959278, 0.9468392, -0.8762227, 0.753736, -0.5995485, 0.4659619, -0.3128035, 0.1372114, 0.0153703, -0.1750705, 0.2698779, -0.1270013, -0.1458569, 0.258762, -0.1884461, 0.09297991, -0.05691947, 0.1160659, -0.2519741, 0.3323773, -0.2612317, 0.1573271, -0.1898818, 0.2118002, 0.04764942, -0.3962057, 0.4145757, -0.2055292, 0.1562778, -0.2397545, 0.2171023, -0.1241988, 0.09292234, -0.06538172, -0.07355527, 0.2464875, -0.2526676, 0.1105161, -0.06487258, 0.1342458, -0.08234598, -0.09291681, 0.1406558, -0.03297333, -0.01054982, -0.05506166, 0.05053492, 0.06218329, -0.1383777, 0.1579153, -0.2029636, 0.2268181, -0.1792631, 0.1408869, -0.1268143, 0.05438484, 0.04477207, -0.06247473, 9599823e-9, 0.02094774, -0.0128033, 0.02121624, -0.05619831, 0.07325283, -0.06087931, 0.048733, -0.04671076, 0.04894758, -0.0545448, 0.0473434, -0.01548061, -0.01202931, 0.01309937, -0.01036944, 0.01610727, -0.01149911, -2847357e-9, 8546167e-9, -7927953e-9, 0.01127443, -0.01403874, 0.0134988, -0.01802184, 0.02508838, -0.01704565, -7364543e-9, 0.02597552, -0.02772687, 0.02383173, -0.02037267, 0.01168074, -5755114e-10, -3359676e-9, 1926432e-9, -2671552e-9, 4489137e-9, -3454496e-9, 1296156e-9, -5364142e-10, 598262e-9, -4750584e-10, 1854958e-10, -1760517e-11]], before: [{ "250": -5.9, "500": -3.2, "1000": -1.7, "2000": -7.6, "3000": -10.9, "4000": -16.1, "8000": -35.8 }, { "250": -3.5, "500": 6, "1000": 4.6, "2000": -2.9, "3000": -9.4, "4000": -9.7, "8000": -31.7 }], after: [{ "250": -7.7, "500": -7.6, "1000": -7.9, "2000": -3.8, "3000": -2.5, "4000": -8.6, "8000": -13.8 }, { "250": -5.3, "500": 1.6, "1000": -1.7, "2000": 1, "3000": -0.9, "4000": -2.2, "8000": -8.6 }], ringing: { above: 8e3, t60: 0.0619 }, seeds: [1547874406, 1564652025], curve: [[10, -9.16], [10.15, -9.16], [10.29, -9.16], [10.44, -9.16], [10.59, -9.16], [10.75, -9.16], [10.91, -9.16], [11.06, -9.16], [11.22, -9.16], [11.39, -9.16], [11.55, -9.16], [11.72, -9.16], [11.89, -9.16], [12.07, -9.16], [12.24, -9.16], [12.42, -9.16], [12.6, -9.16], [12.78, -9.16], [12.97, -9.16], [13.16, -9.16], [13.35, -9.16], [13.54, -9.16], [13.74, -9.16], [13.94, -9.16], [14.14, -9.16], [14.35, -9.16], [14.56, -9.16], [14.77, -9.16], [14.98, -9.16], [15.2, -9.16], [15.42, -9.16], [15.65, -9.16], [15.87, -9.16], [16.1, -9.16], [16.34, -9.16], [16.58, -9.16], [16.82, -9.16], [17.06, -9.16], [17.31, -9.16], [17.56, -9.16], [17.82, -9.16], [18.08, -9.16], [18.34, -9.16], [18.61, -9.16], [18.88, -9.16], [19.15, -9.16], [19.43, -9.16], [19.71, -9.16], [20, -9.16], [20.29, -9.16], [20.59, -9.16], [20.89, -9.16], [21.19, -9.16], [21.5, -9.16], [21.81, -9.16], [22.13, -9.16], [22.45, -9.16], [22.78, -9.16], [23.11, -9.16], [23.44, -9.16], [23.78, -9.16], [24.13, -9.16], [24.48, -9.16], [24.84, -9.16], [25.2, -9.16], [25.56, -9.16], [25.94, -9.16], [26.31, -9.16], [26.7, -9.16], [27.09, -9.16], [27.48, -9.16], [27.88, -9.16], [28.28, -9.16], [28.7, -9.16], [29.11, -9.16], [29.54, -9.16], [29.97, -9.16], [30.4, -9.16], [30.84, -9.16], [31.29, -9.16], [31.75, -9.16], [32.21, -9.16], [32.68, -9.16], [33.15, -9.16], [33.64, -9.16], [34.13, -9.16], [34.62, -9.16], [35.13, -9.16], [35.64, -9.16], [36.15, -9.16], [36.68, -9.16], [37.21, -9.16], [37.75, -9.16], [38.3, -9.16], [38.86, -9.16], [39.43, -9.16], [40, -9.16], [40.58, -9.16], [41.17, -9.16], [41.77, -9.16], [42.38, -9.16], [42.99, -9.16], [43.62, -9.16], [44.25, -9.16], [44.9, -9.16], [45.55, -9.16], [46.21, -9.16], [46.89, -9.16], [47.57, -9.16], [48.26, -9.16], [48.96, -9.16], [49.67, -9.16], [50.4, -9.16], [51.13, -9.16], [51.87, -9.16], [52.63, -9.16], [53.39, -9.16], [54.17, -9.16], [54.96, -9.16], [55.76, -9.16], [56.57, -9.16], [57.39, -9.16], [58.23, -9.16], [59.07, -9.16], [59.93, -9.16], [60.8, -9.16], [61.69, -9.16], [62.59, -9.16], [63.5, -9.16], [64.42, -9.16], [65.36, -9.16], [66.31, -9.16], [67.27, -9.16], [68.25, -9.16], [69.24, -9.16], [70.25, -9.16], [71.27, -9.16], [72.31, -9.16], [73.36, -9.16], [74.43, -9.16], [75.51, -9.16], [76.61, -9.16], [77.72, -9.16], [78.85, -9.16], [80, -9.16], [81.16, -9.16], [82.34, -9.16], [83.54, -9.16], [84.76, -9.16], [85.99, -9.16], [87.24, -9.16], [88.51, -9.16], [89.8, -9.16], [91.1, -9.16], [92.43, -9.16], [93.77, -9.16], [95.14, -9.16], [96.52, -9.16], [97.92, -9.16], [99.35, -9.16], [100.79, -9.16], [102.26, -9.16], [103.75, -9.16], [105.26, -9.16], [106.79, -9.16], [108.34, -9.16], [109.92, -9.16], [111.52, -9.16], [113.14, -9.16], [114.78, -9.16], [116.45, -9.16], [118.15, -9.16], [119.86, -9.16], [121.61, -9.16], [123.38, -9.16], [125.17, -9.16], [126.99, -9.16], [128.84, -9.16], [130.71, -9.16], [132.61, -9.16], [134.54, -9.16], [136.5, -9.16], [138.49, -9.16], [140.5, -9.16], [142.54, -9.16], [144.62, -9.16], [146.72, -9.16], [148.85, -9.16], [151.02, -9.16], [153.22, -9.16], [155.45, -9.16], [157.71, -9.16], [160, -9.16], [162.33, -9.16], [164.69, -9.16], [167.08, -9.16], [169.51, -9.16], [171.98, -9.08], [174.48, -8.6], [177.02, -8.55], [179.59, -8.32], [182.21, -8.07], [184.86, -7.74], [187.55, -7.43], [190.27, -6.89], [193.04, -6.26], [195.85, -5.55], [198.7, -4.72], [201.59, -4.27], [204.52, -4.11], [207.49, -3.95], [210.51, -3.7], [213.57, -3.54], [216.68, -3.36], [219.83, -3.11], [223.03, -2.78], [226.27, -2.46], [229.57, -2.06], [232.9, -1.58], [236.29, -1.17], [239.73, -0.62], [243.22, -0.02], [246.75, 0.51], [250.34, 0.97], [253.98, 1.36], [257.68, 1.57], [261.43, 1.66], [265.23, 1.66], [269.09, 1.7], [273, 1.77], [276.97, 1.81], [281, 1.85], [285.09, 1.92], [289.23, 1.92], [293.44, 1.96], [297.71, 1.97], [302.04, 1.99], [306.43, 1.99], [310.89, 2.03], [315.41, 2.12], [320, 2.27], [324.65, 2.42], [329.38, 2.43], [334.17, 2.37], [339.03, 2.28], [343.96, 2.19], [348.96, 2.26], [354.04, 2.38], [359.19, 2.55], [364.41, 2.67], [369.71, 2.79], [375.09, 2.92], [380.55, 3.12], [386.08, 3.26], [391.7, 3.17], [397.39, 2.69], [403.17, 1.97], [409.04, 1.11], [414.99, 0.56], [421.02, 0.26], [427.15, 0.27], [433.36, 0.45], [439.67, 0.71], [446.06, 0.71], [452.55, 0.44], [459.13, -0.01], [465.81, -0.56], [472.58, -1], [479.46, -1.41], [486.43, -1.66], [493.51, -1.76], [500.69, -1.65], [507.97, -1.44], [515.36, -1.23], [522.85, -1.11], [530.46, -1.01], [538.17, -1.1], [546, -1.3], [553.94, -1.38], [562, -1.35], [570.18, -1.35], [578.47, -1.28], [586.88, -1.33], [595.42, -2], [604.08, -3.05], [612.87, -4.2], [621.78, -4.97], [630.82, -5.47], [640, -5.74], [649.31, -5.79], [658.75, -5.84], [668.34, -5.87], [678.06, -6.09], [687.92, -6.42], [697.92, -6.57], [708.08, -6.65], [718.38, -6.71], [728.82, -6.73], [739.43, -6.82], [750.18, -6.82], [761.09, -6.6], [772.16, -6.11], [783.39, -5.51], [794.79, -4.95], [806.35, -4.59], [818.08, -4.53], [829.98, -4.6], [842.05, -4.89], [854.3, -5.18], [866.72, -5.13], [879.33, -5.04], [892.12, -4.87], [905.1, -4.96], [918.26, -5.12], [931.62, -4.95], [945.17, -4.83], [958.92, -4.22], [972.86, -3.38], [987.01, -3.35], [1001.37, -3.46], [1015.94, -3.49], [1030.71, -3.68], [1045.71, -4.09], [1060.92, -4.05], [1076.35, -3.76], [1092, -3.94], [1107.89, -3.93], [1124, -3.76], [1140.35, -3.45], [1156.94, -2.91], [1173.77, -2.82], [1190.84, -2.87], [1208.16, -3.09], [1225.73, -3.29], [1243.56, -3.22], [1261.65, -3.04], [1280, -2.82], [1298.62, -2.29], [1317.51, -1], [1336.67, -0.26], [1356.11, 0.11], [1375.84, 1.31], [1395.85, 2.22], [1416.15, 2.34], [1436.75, 2.41], [1457.65, 2.33], [1478.85, 2.43], [1500.36, 2.56], [1522.19, 2.37], [1544.33, 2.27], [1566.79, 2.14], [1589.58, 2.17], [1612.7, 2.28], [1636.16, 2.22], [1659.95, 2.16], [1684.1, 2.28], [1708.6, 2.28], [1733.45, 2.19], [1758.66, 2.48], [1784.24, 2.92], [1810.19, 3.31], [1836.52, 3.68], [1863.24, 4.21], [1890.34, 4.58], [1917.83, 5.1], [1945.73, 5.74], [1974.03, 6.32], [2002.74, 6.68], [2031.87, 6.84], [2061.43, 7.34], [2091.41, 8.06], [2121.83, 8.31], [2152.69, 8.79], [2184.01, 9.41], [2215.77, 9.64], [2248, 9.87], [2280.7, 9.9], [2313.87, 9.68], [2347.53, 9.11], [2381.68, 9.19], [2416.32, 9.5], [2451.46, 9.72], [2487.12, 9.74], [2523.3, 9.69], [2560, 9.67], [2597.24, 9.26], [2635.01, 9.13], [2673.34, 9.13], [2712.23, 9.06], [2751.68, 9.13], [2791.7, 9.23], [2832.31, 8.99], [2873.5, 9.55], [2915.3, 10.26], [2957.7, 10.95], [3000.72, 11.3], [3044.37, 11.35], [3088.65, 11.61], [3133.58, 11.58], [3179.16, 11.45], [3225.4, 10.97], [3272.31, 10.7], [3319.91, 10.44], [3368.2, 10.08], [3417.19, 9.95], [3466.89, 9.89], [3517.32, 10], [3568.48, 10.19], [3620.39, 10.05], [3673.05, 9.96], [3726.47, 9.95], [3780.67, 9.96], [3835.67, 10.01], [3891.46, 10.13], [3948.06, 10.26], [4005.49, 10.35], [4063.75, 10.67], [4122.86, 10.97], [4182.82, 11.35], [4243.66, 11.81], [4305.39, 12.42], [4368.01, 12.71], [4431.55, 13.63], [4496.01, 14.73], [4561.4, 15.13], [4627.75, 15.44], [4695.06, 15.58], [4763.35, 15.72], [4832.64, 16.21], [4902.93, 16.28], [4974.24, 16.34], [5046.6, 16.42], [5120, 17.21], [5194.47, 18.24], [5270.03, 18.58], [5346.68, 18.53], [5424.45, 18.36], [5503.35, 18.35], [5583.4, 18.39], [5664.61, 18.53], [5747.01, 18.59], [5830.6, 18.94], [5915.41, 19.72], [6001.45, 19.94], [6088.74, 20.34], [6177.3, 20.26], [6267.15, 20.46], [6358.31, 20.65], [6450.8, 20.79], [6544.62, 20.96], [6639.82, 21.32], [6736.4, 22.16], [6834.38, 22.68], [6933.79, 23.17], [7034.64, 23.27], [7136.96, 23.3], [7240.77, 23], [7346.09, 22.87], [7452.94, 22.79], [7561.35, 23], [7671.33, 23.29], [7782.91, 24.56], [7896.12, 24.86], [8010.97, 25.25], [8127.49, 25.76], [8245.71, 26.21], [8365.65, 26.79], [8487.33, 27.22], [8610.78, 27.94], [8736.03, 28.71], [8863.09, 29.76], [8992.01, 30.51], [9122.8, 32.27], [9255.5, 33.29], [9390.12, 34.25], [9526.7, 34.93], [9665.27, 35.81], [9805.86, 36.46], [9948.49, 37.56], [10093.19, 38.28], [10240, 38.67], [10388.94, 39.07], [10540.05, 39.08], [10693.36, 39.25], [10848.9, 39.27], [11006.7, 39.37], [11166.8, 39.33], [11329.22, 39.38], [11494.01, 39.37], [11661.2, 39.26], [11830.81, 38.98], [12002.89, 39.11], [12177.48, 39.34], [12354.61, 39.38], [12534.31, 39.54], [12716.62, 39.66], [12901.59, 39.83], [13089.25, 40.31], [13279.64, 40.74], [13472.79, 41.14], [13668.76, 41.59], [13867.58, 42.13], [14069.29, 42.65], [14273.93, 43.07], [14481.55, 43.62], [14692.19, 44.25], [14905.89, 45.34], [15122.7, 45.93], [15342.66, 46.21], [15565.83, 46.69], [15792.24, 47.05], [16021.94, 47.18], [16254.99, 47.64], [16491.42, 48.02], [16731.29, 48.46], [16974.66, 48.71], [17221.56, 48.95], [17472.05, 49.16], [17726.19, 49.37], [17984.02, 49.66], [18245.61, 49.91], [18510.99, 50.17], [18780.24, 50.4], [19053.41, 50.62], [19330.55, 50.84], [19611.72, 51.11], [19896.97, 51.4], [20186.38, 51.73], [20480, 51.87], [20777.89, 51.86], [21080.11, 51.82], [21386.73, 51.81], [21697.8, 51.75], [22013.41, 51.76]] }, cello: { header: "body_cello_1.h", sha256: "1518ed989f23537d69a4d2ecc7fbe4811443ba44a8b1cf1a46957153bd13a940", plateau: 176.4, variants: [[2.280327, 3.871982, 3.072081, -8.119442, -5.401554, -3.804046, 4.216243, 10.87761, -2.91047, -4.584475, -7.059925, 15.14956, -6.974925, 5.361236, -9.681401, 1.770501, 4.580582, -4.882617, 4.692736, -3.881025, 3.265159, 1.412839, -3.850201, -1.083749, 7.520537, -4.6619, -5.223641, 4.772469, -0.63357, 2.993462, -2.682821, -3.975173, 7.89016, -4.252751, -0.1960852, 4.413422, -5.117293, -1.025431, 2.139716, 2.522102, 1.214977, -7.983809, 1.694315, 7.251077, -5.18074, 0.04235646, 3.876474, -5.6863, 1.33325, 0.3244713, 4.759424, -1.938407, -8.937456, 8.449227, 2.147629, -7.978535, 7.499886, -3.96758, -1.460238, 4.982611, -5.745065, 4.316895, 1.267583, -5.198687, 0.7773238, 3.881065, -2.607713, -1.582235, 8.027956, -11.82094, 3.352089, 9.180379, -8.052898, -1.981839, 4.215408, 0.991076, -2.301678, -0.4262656, -3.187173, 10.17745, -6.553176, -4.076285, 3.984715, 4.846575, -5.337065, -1.92977, 4.916075, -2.336167, 0.973898, -4.13102, 7.104121, -4.096617, -1.686626, 2.814756, -2.083232, 5.293463, -6.995462, 2.164411, 1.51867, 2.009238, -5.968649, 3.442368, -0.2290851, 1.49794, -2.096023, 1.142082, -3.234252, 3.614123, 0.8801571, -1.132203, -1.244105, -6.059083, 12.79628, -1.852833, -12.1468, 10.56044, -4.187642, 2.968613, 0.8033839, -6.349376, 4.380485, 1.677626, -3.421428, 1.596135, 1.02724, -5.000217, 6.588804, -0.7570803, -4.033666, -0.9632748, 4.588457, -0.467604, 0.5126846, -2.646957, -5.704235, 13.49134, -7.591557, 1.015744, -1.807155, -0.8075651, 4.906852, -0.5009589, -4.429719, 0.5831139, 3.759474, -2.676644, 1.947138, -4.000577, 4.960089, -1.08196, -4.641967, 4.132809, 1.598588, -3.674334, 2.623658, -3.811686, 4.382268, -3.164206, 3.567525, -3.493085, 0.05564758, 1.700132, 2.136676, -4.816878, 0.7189604, 3.855763, -4.334679, 4.480079, -2.767237, -2.784814, 4.549968, -1.736496, 1.68178, -0.9241963, -3.982959, 4.322991, 0.337354, -0.2890691, -2.621346, 0.3650856, 2.805311, -1.492596, 0.9264896, -2.694701, 1.727838, 1.022128, -3.046782, 5.614548, -5.621268, 0.5829415, 4.198513, -6.498013, 6.228004, 0.03414278, -6.233244, 2.150361, 3.95068, 0.2726872, -6.133996, 4.613024, -4.753421, 6.995039, 1.001719, -10.08409, 2.891816, 6.533117, -0.2656717, -7.577014, 3.960871, -0.9209923, 4.797258, -6.262214, 3.634315, -2.886465, 3.123914, -1.843392, 0.4386746, 1.650742, -3.698129, 0.4216716, 4.430068, -0.01236926, -7.871654, 5.172899, 2.804846, -4.587698, 2.428898, 1.292328, -6.836464, 7.133008, -1.984749, 0.9472494, -3.104183, 1.294022, 1.540452, -0.6101678, -1.679074, 1.792054, 1.404077, -4.485589, 1.737076, 2.298611, 0.9772756, -4.831313, 0.3126327, 3.210078, 2.394215, -7.056104, 3.846876, 1.136791, -3.802424, 3.094309, 1.127425, -1.699138, -4.65602, 7.652833, -2.392555, -1.910884, 0.9349634, 0.1806617, 1.097897, -3.98639, 6.444913, -4.585262, 0.3076158, -1.203878, 6.319063, -7.114138, 2.851712, 0.6986492, -1.701026, 1.370144, -1.017551, 2.069375, -2.856931, 0.5287399, 3.553362, -6.927547, 8.067384, -4.439047, -0.693445, -0.09717002, 4.27716, -3.301841, -1.288476, 3.583938, -5.159065, 7.74382, -6.985731, 1.925366, 1.905314, -0.461344, -4.094468, 6.034798, -3.150704, -0.2131082, 1.053153, -0.9445657, -0.5057435, 4.790759, -8.518323, 8.243417, -4.77188, 0.5867713, 1.444774, 0.3175897, -2.691022, 0.4578508, 6.400476, -9.765695, 4.355018, 2.459761, -3.472028, 3.130977, -4.072249, 1.610357, 2.044808, 0.7166897, -5.83122, 3.813216, 1.200723, -0.8461814, -0.5619229, 1.289802, -8.604245, 14.89186, -5.183652, -9.219236, 8.264659, 0.4330465, -1.200939, -0.7280142, -2.121297, 4.061833, -2.138042, 0.1439039, 1.84158, -4.081007, 4.195343, -1.995638, -0.5978688, 1.936979, -1.684549, 2.086295, -2.342503, -0.9732864, 3.038026, 1.475225, -3.842174, -0.5259622, 0.2162923, 5.841068, -4.227032, -3.266219, 3.724245, 0.8239833, -0.9797744, -2.276781, 4.049786, -3.619444, 2.22404, -2.38502, 4.544942, -3.52752, -0.2135344, -1.495817, 6.315854, -4.514803, -1.087841, 2.854261, -2.435688, 2.099677, 0.741984, -4.771749, 4.963567, -2.10533, 1.524642, -2.002943, -1.191637, 4.031579, -1.34918, -1.025089, -1.202795, 2.355985, -0.8226415, 0.7276352, -0.929669, -0.241315, 0.4255417, -0.1312946, 0.2870933, 1.352971, -2.73514, 0.1789081, 2.761621, -2.233584, 0.8155903, -1.268423, 2.355124, -1.14934, -2.276743, 4.293661, -4.64999, 5.323826, -4.459709, 2.222196, -1.62062, 0.07997567, 3.306522, -2.79022, 0.4561206, -2.424661, 1.802028, 6.129229, -8.960339, 1.14172, 4.238292, -1.430237, 0.5086903, -4.979124, 6.036718, -1.5939, 0.4632889, -4.277281, 4.130904, 0.5464223, -0.7971049, -2.788307, 2.202763, -0.04251276, 1.989828, -2.204694, -2.932063, 5.443986, -2.691919, 0.7293446, 0.3884878, -3.563142, 4.030492, 1.289202, -5.136679, 2.465969, 0.778472, -0.0346589, -0.8370979, 0.1902892, -0.9575843, 1.862592, -0.4477285, -0.7291446, 0.2322018, -0.8327515, 2.14671, -0.4551293, -3.508401, 5.043288, -2.814626, 0.04384652, -9876746e-9, 2.324148, -3.061225, 0.3482725, 2.806039, -4.536853, 4.983319, -2.10656, -2.417776, 2.161516, 1.470856, -2.07345, 1.337941, -2.275339, 1.755162, 0.5360072, -0.8327238, -0.5434811, 0.02944933, 3.101584, -5.515528, 4.682839, -3.0846, 2.324827, 0.4756274, -3.593657, 2.106924, 0.5421873, 0.1923012, -0.6159239, -0.645874, 0.04299216, 0.9423796, -0.5316924, 1.717229, -3.199895, 1.505633, 0.3001775, 0.1626967, -0.7072869, 1.501142, -2.342041, 0.4558694, 1.543135, 0.2374304, -1.303984, -1.808742, 2.497898, 2.131278, -3.71475, -0.4351552, 1.818132, 1.12596, -0.7553316, -3.206106, 4.185242, -1.800011, 0.4980007, -1.116997, 1.537135, -1.080164, 0.3066022, 0.2455775, 0.1468834, -1.50589, 2.016477, -0.2565421, -2.127495, 2.341775, -1.067209, 1.263474, -1.779024, -0.4642993, 2.97466, -2.583177, 1.498258, -0.3847507, -2.91672, 5.767201, -5.128019, 3.862457, -3.909533, 3.439997, -2.704315, 2.806149, -2.026724, -0.8832198, 2.945144, -0.6961924, -2.73758, 1.341322, 1.810907, -0.1451865, -1.374062, -2.838625, 4.391506, 0.8558506, -2.240514, -2.61327, 2.77985, 2.895043, -5.198123, 2.478769, 0.358768, -1.789887, 2.454585, -2.216995, 1.185199, -0.3078812, 0.4153744, -0.5177579, -0.103585, -0.7036996, 2.583251, -1.272305, -2.377493, 2.96538, -0.941888, 0.3809157, -1.177668, 1.794899, -2.49528, 2.42285, -6432899e-9, -3.011246, 2.378841, 1.771825, -3.547553, 1.114359, 0.275837, 0.6066218, 0.0495644, -1.03496, -0.3390776, 1.023485, 0.3591309, -0.5593778, -0.1373839, -0.8939064, 2.120075, -1.47499, -0.208108, 1.600768, -0.872852, -2.531425, 4.421221, -2.484781, 0.8899693, -0.8816984, -0.482501, 0.9871911, 1.057897, -0.4658324, -2.862107, 2.341076, 0.3343893, 0.9649514, -2.601335, -0.3502701, 2.526144, 0.1836762, -2.332312, 0.1861249, 1.952531, -0.5105845, -1.363423, -7514713e-9, 2.078151, -1.360653, -0.3102017, 1.278141, -3.376249, 4.68485, -1.809661, -0.6355423, -1.638109, 2.265404, 2.270463, -3.955079, 0.08525308, 0.9613866, 2.193861, -2.079272, -0.9754527, 0.7332863, 1.617172, -1.543452, 0.1015419, 0.0726417, 0.4504494, -0.6962684, 0.6680103, 0.3739096, -2.536753, 3.609123, -2.167573, -0.3411891, 1.352716, 0.2297242, -0.7628624, -3.015766, 4.548124, 0.9496959, -3.893322, -0.1864113, 0.8127757, 2.900125, -0.3194951, -5.369278, 3.552174, 1.498423, -1.251901, -1.078325, 1.126569, -1.638625, 3.257401, -1.623192, -3.133408, 4.430573, -1.034471, 0.1762636, -3.043449, 1.900512, 3.698581, -5.123911, 0.3381024, 3.956509, -3.913178, 1.579763, 0.2141696, -2061674e-10, -1.756667, 2.055428, 0.8090495, -3.537274, 2.609651, 0.160539, -1.55838, 1.675301, -0.8879025, -1.497586, 3.069871, -0.8501471, -1.903317, 1.052167, 0.729166, -0.4599286, -0.3565572, 1.537384, -3.345196, 2.870317, 0.08106022, -1.250181, -0.792647, 2.933737, -2.648795, 0.8503113, 0.213822, -0.4598927, 0.8943995, -0.6740349, -0.7680971, 1.620531, -1.128589, 1.274462, -2.530394, 2.372487, -0.4718268, -0.02110824, -1.593193, 2.439886, -1.237497, -0.2785721, 0.1055767, 1.184661, -0.6286783, -1.890497, 2.884486, -2.062753, 1.775472, -1.346115, 0.0957374, -0.0624041, 1.110696, -0.9789877, 0.4943153, -1.043162, 0.5954234, 1.078126, -1.187242, 0.7218842, -1.605825, 1.300354, 0.6074413, -0.832259, -0.2043562, 0.5495732, -1.033213, 1.272593, -0.4060274, 0.7921601, -2.482794, 1.220686, 2.410991, -2.771709, 0.05886754, 0.982235, -0.7009215, 1.63229, -1.821009, -0.4422776, 2.115418, -1.359744, 1.256084, -2.630969, 1.252471, 2.810246, -3.590845, 0.3851006, 1.622851, -1.185054, 0.7719529, -0.5320866, -0.59744, 1.957059, -2.009938, 0.8119047, -0.4612736, 1.414779, -1.061956, -1.137982, 2.545744, -2.571738, 2.325472, -1.152307, -0.4498072, 0.6713598, -1.035461, 2.481204, -1.517206, -1.102072, 0.1728626, 2.079301, -0.5135941, -1.492178, 0.6445957, -0.3195908, 0.9527301, 0.3175499, -1.887446, 1.247366, 0.5931637, -1.958412, 2.013198, -0.9062804, 0.1982357, -0.362171, 0.04305824, 0.7826137, -0.7666059, 0.714066, -1.700746, 1.465942, 0.7968912, -1.305445, -0.3363545, 0.1264183, 1.001728, 0.3694212, -1.764835, 0.8511783, -0.4894921, 1.035264, 0.06204153, -0.7455778, -1.063506, 1.638614, 0.4617964, -0.878356, -0.9898207, 1.088577, 0.3665489, -0.1427557, -0.6699532, -0.3798981, 1.511779, -0.2770755, -1.780001, 1.810196, 0.2695096, -1.959477, 1.351521, 0.3640457, -0.4892966, -0.7604063, 0.6781279, 0.5616906, -0.3393526, -0.5923822, -0.04877084, 0.7218092, 0.4643072, -1.440219, 0.442531, 0.7870355, -0.5076147, -0.4513399, 0.7370573, -0.398737, 0.1519264, -0.2670814, 0.5845919, -0.5061529, -0.3805294, 1.206777, -0.9092639, 0.04783072, 0.3321014, -0.2107114, -0.03956144, 0.06617028, 0.4919865, -1.081337, 0.8363674, -0.195875, 0.1220721, -0.5369519, 0.7085796, -0.3391319, -0.01224773, -0.1619687, 0.3190475, -0.09582571, 0.06346031, 1579131e-9, -0.3792101, -0.1084722, 1.163397, -0.7158071, -0.5082003, 0.2901012, 0.4745356, -0.1347486, -0.3897257, 0.2664891, -0.2517366, 0.1826805, 0.7006515, -1.290041, 0.2746368, 1.171444, -1.288582, 0.4826781, -0.2932633, 0.8285622, -0.6165634, -0.6460709, 1.210945, -0.541589, 0.1438866, -0.335472, 0.1537261, 0.3224534, -0.4761734, 0.3247442, -0.1735365, 0.2094895, -0.2980225, 0.2203622, -0.1357906, 0.1652514, -0.06019841, -0.1693089, 0.1500887, 0.08825963, -0.1155841, -0.05111918, 0.0139998, 0.1795409, -0.1984319, 0.06700834, 0.05462189, -0.09981518, -0.02986185, 0.2119484, -0.1822298, 0.02231512, 0.07044191, -0.09874207, 0.01224121, 0.2248038, -0.3816154, 0.2916583, -0.1606471, 0.1923568, -0.2092951, 0.06037162, 8455432e-9, 0.07444177, 3985971e-9, -0.1692912, 0.05668998, 0.1196475, -0.01629, -0.05938697, -0.1521118, 0.2718651, -0.08074537, -0.08651575, 0.0416642, 0.04715884, -0.09404482, 0.1195967, -0.09073533, -1630637e-9, 0.09759846, -0.11825, 0.0583609, -0.03232015, 0.07272093, -0.05419414, -0.03228153, 0.05729356, -0.03006964, 0.0199285, 0.01172095, -0.04057889, -0.0138864, 0.06328964, -0.01114212, -0.04095986, 0.01002868, 0.0249149, -6197916e-9, -0.01618039, -703211e-8, 0.05640127, -0.08196782, 0.06314124, -0.02318755, -6694811e-9, 0.01861661, -0.02233229, 0.02242393, -0.01745886, 8509933e-9, 2751268e-9, -0.01006446, 6334649e-9, -1050526e-9, 3407127e-9, -3170327e-9, -2860695e-9, 1430362e-9, 5614442e-9, -5613639e-9, 2633839e-9, -3901354e-9, 3752045e-9, -395796e-9, -9751796e-10, 741958e-9, -1015229e-9, 7712158e-10, -1447481e-10, -166848e-10], [2.403838, 3.091628, 4.280693, -5.541224, -17.20354, 12.34111, -3.005681, 8.497354, -2.051133, -6.175009, 5.273983, -0.8653079, 2.53938, -4.83281, 6.076319, -9.635841, 7.056911, -2.909943, -3.582889, 11.25065, -4.825757, -5.360581, 0.6473835, 10.77886, -5.293238, -8.722691, 7.01163, 0.514575, -4.615421, 10.45356, -14.82606, 9.649764, 0.6893194, -4.025033, 5.200139, -8.830825, 7.741887, 1.075023, -9.77299, 7.834016, -1.211775, 0.7943503, -0.8070766, -3.893218, 2.708752, 2.111069, 3.885232, -10.36205, 2.179821, 8.839706, -8.081313, -1.175837, 6.468567, -1.313343, -6.969984, 5.906017, -0.3457599, 0.5501016, -0.5972609, -2.391954, 1.636115, -2.11256, 8.525901, -10.21118, 5.811608, -5.732703, 5.681473, -1.555048, 0.7830327, -0.7337833, -5.227182, 9.015763, -3.464084, -4.974738, 7.440761, 0.2021632, -10.24039, 7.945029, 1.434019, -1.488898, -3.165038, 0.3021851, 1.602594, 4.855497, -6.853465, 0.03900609, 3.421613, -0.8362286, -0.3972127, 0.1548158, -1.614059, 4.029316, -7.71587, 7.888143, 1.375068, -9.877601, 5.915455, 2.054884, -3.985916, 4.484439, -5.711635, 0.4841166, 7.238842, -3.737076, -8.279572, 11.77694, -4.336599, -2.033302, 3.687614, -3.60005, 0.6230106, 2.414848, 1.459175, -8.300256, 6.721805, 2.389217, -6.500189, 2.993976, -2.22588, 4.348455, 0.6662304, -7.182884, 2.007744, 6.959255, -6.724005, 3.099414, -2.687371, 2.375033, 0.1391263, -4.362645, 5.435956, -1.041533, -2689804e-9, -4.669663, 5.294067, -2.010877, 0.794662, -0.2635382, 1.403278, -4.09155, 2.377707, -0.1118166, 2.444916, -2.024204, -2.52549, 1.791795, 4.275824, -9.208006, 11.87413, -10.32102, 4.224242, -0.5286409, 2.08282, -2.837812, 0.3491841, 1.03324, 0.7626012, -3.772631, 2.542336, 3.922543, -5.794119, -0.1701305, 3.258078, -1.887195, 4.195105, -5.646245, 0.2537403, 2.150861, 1.618648, -0.3986107, -2.698815, -2.341914, 4.126396, 5.133549, -8.460299, 2.073041, -3.574772, 8.602987, 0.1781696, -10.81237, 4.78054, 3.465169, 1.786602, -5.682148, -1.303496, 5.358566, -2.486196, 1.466893, -0.8507617, -2.623779, 3.611798, -1.525265, 0.7093944, -0.9163944, 0.6771118, 0.02116723, -1.425426, 2.281627, -1.982154, 2.617632, -2.69303, -1.134029, 4.096423, -0.3798102, -3.937371, 1.433948, 3.085782, -4.35583, 5.399426, -5.351743, -0.6195052, 7.322274, -6.576937, 1.65015, 0.3779848, 1.172014, -4.212621, 5.494418, -3.503223, 2.623636, -2.963507, -1.210555, 4.641559, 0.1953166, -3.723112, -0.1295329, 0.6487611, 1.667071, 2.790141, -4.950726, -2.522698, 4.715704, 1.067889, 0.2593014, -3.689504, -2.086548, 4.509813, 0.9918528, 1.776696, -7.578162, 0.6236576, 5.67628, -0.3422299, -2.631009, 1.414997, -4.390136, 4.991028, -1.689125, 3.214807, -5.370118, 1.843312, 1.017573, -0.5763911, 1.789725, -3.685728, 2.458553, -0.2965868, -0.6184424, 2.523857, -3.358582, -0.3075853, 2.971257, -1.796215, 2.336614, -1.534654, -4.81246, 5.544165, 2.129047, -2.886383, -3.73752, 4.292052, 0.296964, -2.66604, 2.267924, 0.9844697, -4.465258, 3.234683, 0.5566287, -1.547138, -1.502539, 6.089884, -6.339655, 2.088887, -1.766873, 5.388232, -4.498588, 1.329089, -1.36289, -0.3257802, 4.917888, -4.637196, -4248365e-9, 1.788015, 0.1373281, -3.293977, 4.970104, -1.514954, -2.759419, 0.3196697, 2.934772, 0.9457137, -3.343489, -2.201118, 6.211515, -3.730757, 0.7944336, 0.3964636, -0.8311136, 0.9387552, -2.322998, 2.667627, 0.9297391, -1.905448, -3.085136, 3.811947, 2.330342, -2.797155, -3.451782, 3.718509, 2.324987, -4.096763, -0.1123547, 4.320614, -3.540716, -1.228178, 2.865337, -0.5648713, 1.514011, -3.171294, -0.9850042, 3.540645, 2.402711, -8.583635, 7.589194, -2.0352, -2.839836, 4.164147, -4.28029, 6.259174, -5.762608, 1.275582, 0.2691093, 1.406594, -0.6623415, 0.4280572, -3.28496, 2.543227, 3.352855, -5.964183, 2.319529, 1.092392, 0.1895219, -3.283608, 4.569558, -4.230765, 2.720024, 0.3802327, -2.672476, 1.650817, 1.243515, -4.029976, 5.647251, -3.845654, 0.7020754, -1.242858, 1.58638, 3.446816, -5.699663, -0.3039753, 4.591596, -2.706503, 2.033511, -2.497858, 0.2147037, 0.9315907, -0.2640915, 1.557397, -1.183074, -2.625977, 3.308678, -1.147087, 1.651712, -2.388577, 1.706479, -2.961608, 3.592624, -1.123479, 0.05889573, -0.6494602, 0.07923503, -0.2346968, -0.2661731, 2.658053, 0.3312423, -7.569976, 7.202551, -1.018391, -0.8299655, 0.4314159, -1.888552, 1.615544, 0.8845818, -1.904998, 0.1465798, 2.898921, -3.806325, 1.959241, -1.698258, 3.504867, -3.546307, 2.32852, -1.795221, 1.511786, -2.287135, 3.098359, -1.175364, -0.8092837, 0.5383328, -1.673591, 3.136362, 0.08774942, -4.489478, 3.831021, 0.6201589, -4.558089, 5.229214, -3.010702, 1.302007, -1.563405, 2.573713, -3.223046, 2.153212, -0.8691364, 2.284213, -2.645281, -0.9674869, 2.486807, -0.4604075, 0.8881173, -2.749791, 1.444189, 0.2779395, 0.8992176, -2.102264, -0.3964531, 5.506624, -7.531556, 3.330307, 1.757532, -2.01814, 0.1993118, -0.6818149, 2.139117, -2.404213, 1.424461, 0.2723387, -0.1010892, -2.442658, 1.585672, 3.479548, -4.29513, -0.02409711, 1.014769, 0.4431748, 1.913877, -3.183664, -1.279154, 3.523515, -0.4299772, 0.2782467, -3.441576, 2.404823, 1.372058, -2.473176, 2.084244, -1.173995, -0.9938459, 0.6012936, 3.220169, -4.202196, 1.29036, 0.329564, -0.2596204, 0.5720209, -0.7257442, 1.130945, -1.410902, -0.6701275, 2.728763, -1.474668, 0.3380027, -1.474104, 0.5438957, 2.598316, -3.150798, 2.666163, -4.796703, 4.967596, 0.4831984, -4.530418, 1.794257, 1.382622, -0.6428837, 1.103521, -3.09246, 1.458097, 0.303505, 1.482578, 0.07287261, -5.559407, 4.833258, 1.70387, -4.498064, 3.286371, -3.189962, 3.772274, -2.494712, 0.06815248, 0.2778232, 1.925273, -2.322734, -0.1089759, -8465976e-9, 2.992886, -2.212671, -2.016185, 1.676341, 3.246929, -3.863356, -1.201618, 4.101135, -2.739377, 1.795138, -1.794178, 0.3276191, 1.71693, -2.685078, 1.899825, 0.7953056, -2.868586, 2.277061, -1.745713, 2.340839, -0.5320188, -3.039308, 3.014015, 0.1533239, -0.7137937, -1.273121, 0.243112, 2.291149, 1.100248, -6.720316, 3.716689, 3.014008, -0.7639056, -5.765896, 5.019234, -0.4365601, -0.282548, -0.4264059, -0.6939512, 0.8743435, 0.1934483, 0.7714496, -2.198349, 0.6854121, 0.7086894, 0.7672424, -1.263258, 0.3359938, -2.499356, 5.343315, -3.716645, 0.3742889, 0.6122424, -0.4029478, 0.3782884, -0.3263276, 0.626936, -1.565058, 1.909105, -0.7705637, 0.3844617, -2.221908, 2.868394, -0.9598944, 0.09463549, -0.5239251, -0.1896697, 0.3601756, 1.160919, -0.9788939, -1.704417, 2.650748, -0.8129267, 0.08075461, -1.097714, 0.3488177, 1.579669, -0.07392705, -4.225715, 4.703423, -0.1030763, -2.683341, 0.9869842, 0.3096137, 0.1209612, -0.3122498, 1.780557, -3.196432, 0.7621402, 1.216074, 0.7671829, -0.6532273, -2.121508, 0.7628257, 2.164702, -0.6077922, -1.851587, 1.204185, -0.09984018, 0.825217, -2.662257, 2.929057, -0.1132117, -1.747254, -0.3889767, 2.285119, -1.101322, -0.6761899, 1.536375, -1.071569, -1.029845, 2.390278, -0.9787857, -1.888552, 3.493186, -1.844811, -1.166546, 1.018857, 0.812736, 1.187554, -4.883936, 3.594584, 1.197591, -2.268707, -0.9277432, 1.864514, 1.006498, -1.359501, -2.348462, 3.076189, 1.155622, -3.839287, 2.021635, 1.171693, -3.002383, 2.329682, -0.2122964, 0.1682854, -2.304204, 1.739901, 2.056506, -2.383687, -2.142443, 3.359974, 0.5600186, -0.7944993, -3.389432, 3.010579, 0.7581692, 0.01878111, -1.941627, -0.7378457, 2.559339, -0.071996, -0.6914938, -1.335238, 1.303652, -0.3355357, 0.8328251, -5072782e-9, -1.981761, 1.478128, -2462578e-9, 0.2110828, 0.05187023, -1.031328, 0.2021775, 0.1969145, 1.678824, -1.373017, -1.400151, 0.8323417, 2.077839, -1.914641, -0.07155814, 0.2768449, 0.2109102, 1.136331, -3.279049, 2.928535, -0.9023746, 0.6318604, 0.1094245, -3.61714, 4.429274, -0.561267, -1.356588, -0.05061588, -1.000227, 4.561955, -4.622845, 0.4293064, 1.777399, 0.3103452, -1.569974, 0.4373139, -0.6738252, 0.7948016, 2.006342, -3.150943, 0.2470915, 1.946409, -1.783367, 0.9106567, 1.093261, -2.862984, 1.671481, 0.958377, -1.57714, 0.02153385, 0.930992, 0.1384335, -0.9406561, -0.1261138, 0.1810633, 2.229026, -3.072288, 0.7024972, 0.6217935, 0.3029379, -0.268713, 0.2247066, -1.789061, 0.8057114, 2.760584, -2.302847, -1.193877, 1.5957, -0.7652117, 1.802642, -1.765847, 0.03628392, 0.8535451, -1.074338, 0.8403481, 0.1832789, -0.2557282, -0.286754, -1.027541, 2.205188, 0.0528679, -2.688075, 1.715257, 0.1866248, -0.1560452, 0.9694707, -3.09683, 1.802503, 2.500504, -3.222517, -0.2889666, 1.841607, -0.08149393, -0.4610221, -0.3325725, -1.516677, 4.199712, -2.750159, -0.5643107, 0.8580792, 0.2944247, -0.4952628, 1.179979, -1.377619, -1.036623, 2.79978, -0.6945354, -1.744977, 0.7290499, 1.350574, -1.015407, -0.4584104, 0.3390218, 0.9006497, -1.266628, 0.535136, 0.3844667, -0.9020111, 0.4034667, 1.285789, -2.026648, -0.07291656, 2.296805, -1.169157, -1.040801, 0.7294176, 0.4318933, 0.1035767, -0.3878057, -1.178416, 1.862788, -0.1856516, -0.8684822, 0.1095139, 0.2450483, -0.0765719, 0.2511159, 0.5400093, -1.663038, 0.7754515, 1.141173, -2.033355, 1.908735, -0.7671165, -0.851357, 1.289517, -0.5706488, 0.09919254, -0.2684493, 0.9480852, -1.304449, 0.06883551, 1.400554, -0.8892508, 0.1926811, -0.8788179, 0.3609547, 1.157091, -7500635e-9, -1.847685, 0.3189708, 1.473643, 0.1535291, -1.666161, 0.5254474, -0.06691162, 1.361817, -1.283875, -0.3369666, 0.8075022, 0.04627447, -0.5115683, 0.301725, -0.2025001, 0.5643828, -1.002087, 1.049512, -0.7451744, 0.5816182, -0.9818193, 1.54744, -1.411197, 0.7531298, -0.02130733, -1.022608, 1.638361, -0.8956595, -4954457e-9, 0.2349625, -0.6572194, 0.7988573, -0.02480679, -0.1894403, -0.2480021, -0.1711277, 0.5986868, 0.1060329, -0.6797748, 0.6453917, -0.5871057, -0.1461085, 1.195482, -0.9714718, 0.2716624, -0.4266684, 0.478819, -0.1962168, 0.6434594, -1.068564, 0.3486618, 0.5424842, -0.4852873, -0.02373695, 0.06904982, 0.3028014, -0.3184467, -5917427e-9, -0.1369605, 0.4810156, -0.3336202, 0.4221075, -0.971782, 0.6330848, 0.3389725, -0.2645322, -0.3701293, 0.2698418, -0.04208088, 0.265237, -0.380041, 0.1910668, 0.1206365, -0.1645175, -0.3745128, 0.6064258, 4562883e-9, -0.3129654, 0.08913151, -0.137059, -0.1293828, 0.9244884, -0.8037386, -0.124269, 0.198761, 0.2460731, 0.07807162, -0.4610641, 0.01940475, 0.3537493, -0.1784299, 0.1625671, -0.1839224, -0.2190523, 0.3974029, -0.03056418, -0.1638391, 0.09957511, -0.2193024, 0.2069981, 0.197338, -0.3796452, 0.01458497, 0.3013117, -0.1420382, -0.05924868, -0.08165797, 0.1976435, -0.05971491, -646786e-8, 0.03741332, -0.203668, 0.1365352, 0.1164267, 0.02899855, -0.313371, 0.1053981, 0.220863, -0.09806957, -0.1364828, 0.03432162, 0.1495312, -0.05233399, -0.1460122, 0.1383213, -0.05288747, 0.1028092, -0.1521447, 0.08711507, -0.06732317, 0.1256365, -0.09629133, -0.03506357, 0.1172606, -0.07018093, -9776398e-9, -4980245e-9, 0.02485535, 0.06068032, -0.09114157, -2797022e-9, 554972e-8, 0.06687422, 1558365e-9, -0.08260656, -0.01067147, 0.07763139, 9711153e-9, -0.0441288, -0.02582455, 0.02614585, 0.03533975, -0.03556625, 5869563e-9, -0.01039447, 607634e-8, 0.02128493, -0.0159968, -0.01234851, 0.01189681, -1509948e-9, 5257041e-9, 4898614e-9, -0.02442171, 0.01973395, -3828425e-9, -143865e-9, -4669228e-11, -1702282e-11, -3995973e-9, 5884261e-9, -3423035e-9, 2593251e-9, -2150061e-9, -6249577e-10, 1906137e-9, -6969094e-10, -2982388e-12, -186626e-9, 2499642e-10, -154978e-9, 3928632e-11], [1.827821, 6.887465, -5.520968, 5.258324, -16.85757, -0.9159378, 9.725964, 3.649299, -0.6020953, -2.279292, -8.156051, 11.7085, 0.6853457, -6.920071, 4.551941, -4.873729, -0.4721219, 2.741784, 0.32045, 2.160467, -3.442633, 1.673082, -2.214064, 7.422132, -9.482265, 4.030701, 1.517196, -3.543364, 0.2102698, 1.903541, -1.212513, 3.083376, -3.996195, 2.150721, 2.79532, -6.463424, 1.577761, 8.676853, -10.76066, 0.2920834, 6.000465, -0.8414399, -1.360063, -3.541966, 1.727501, 5.672632, -3.960897, -1.56591, 1.449511, -2.051634, 0.6303145, 9.34682, -14.05728, 4.036379, 3.008715, 0.979569, -0.4061695, -9.058432, 11.07787, -0.7102286, -3.834739, -4.051087, 5.890939, 2.822191, -4.560554, -1.152617, 0.5123813, -0.2947179, 6.206744, -3.389804, -8.214213, 11.5527, -7.516815, 2.449985, 9.285346, -17.44118, 6.614835, 4.962093, 0.6159291, -6.377231, 0.8321948, 1.90587, -0.02778068, 3.309342, -6.681718, 5.825878, -4.403214, -0.2238588, 6.776788, -3.961394, -6.649542, 8.328761, -0.4603138, -1.215087, -4.266546, 3.88917, 2.386596, -3.386606, -2.131381, 6.059933, -3.522032, -5.230513, 11.27661, -4.584559, -6.848781, 8.467696, -6.361224, 10.64523, -9.751029, -2.174733, 3.965482, 10.83743, -16.19944, 3.711423, 3.805992, 0.6952909, -2.481719, -0.1864495, -0.1790791, 0.152384, 2.388101, -0.5592514, -6.74848, 9.906892, -2.201532, -7.111502, 4.01498, 5.903375, -4.878214, -5.041342, 7.766655, -4.680166, 5.725152, -6.734169, 3.197586, -1.447866, 1.428221, 2.377344, -4.285945, 0.7452878, -1.391546, 6.458285, -6.846513, 4.664951, -3.950518, 2.060036, -1.175767, 2.561194, -2.20698, 2.958676, -4.744674, -1.871946, 13.12283, -12.64715, 1.82482, 2.220653, 1.958785, -1.643632, -4.33026, 5.1886, -0.08559519, -1.303471, -1.503323, 1.254731, 0.8692608, -1.171345, 3.225493, -5.11004, -1.113811, 8.414405, -4.415192, -3.406177, 3.615765, -1.17855, 1.822867, -1.618966, -3.266934, 8.906002, -6.758269, -2.099968, 5.607396, -3.833848, 5.342749, -4.317355, -2.384674, 2.467036, 3.594215, -2.823846, -1.156474, -0.5230701, 1.07972, 3.056374, -3.354226, -1.569534, 4.441956, -3.364043, 2.566219, -5.047904, 8.003941, -5.833737, -0.3168934, 4.208892, -5.055371, 4.909423, -1.896056, -3.584328, 5.136603, -0.3465535, -5.21591, 6.389651, -3.45395, 0.2016758, -0.5245693, 3.406591, -3.984033, 1.725629, -0.4891535, -0.1914606, 2.486899, -1.963037, -3.452942, 5.884328, -3.766387, 4.69234, -5.641716, 1.013468, 0.8026298, 2.701449, -0.5793205, -5.888385, 5.547748, -1.536803, 0.6822607, 1.356742, -3.972206, -0.1781556, 5.18415, -2.059878, -1.043872, -2.054521, 1.292984, 5.153744, -6.592735, 2.513178, 0.9020913, -3.261261, 2.635816, 2.547903, -4.04201, -2.242116, 6.440347, -3.919202, 1.790293, -1.928874, 0.814266, -0.7186727, 3.312517, -3.126757, -1.363318, 3.835394, -2.999663, 4.174742, -5.25746, 0.2231834, 4.766798, -2.253639, 0.3931033, -4.772115, 4.822327, 1.559538, -0.9372568, -5.820369, 4.269496, 3.310331, -5.555762, 5.862385, -8.982698, 7.881178, -1.572062, -0.7616415, -0.9639647, 0.5288537, -0.1115166, 2.656747, -3.221979, -0.5803323, 4.526813, -5.532586, 3.545038, -0.3785181, -0.9412661, 2.108294, -6.372456, 8.363732, -2.400238, -4.595599, 5.4159, -4.024814, 3.514408, -1.182201, -1.07901, 0.3069366, 0.999977, -1.070095, 0.9276822, -0.4424379, -0.04691452, 0.762416, -2.230171, 1.373404, 2.481958, -2.737181, -2.36792, 5.807349, -3.67114, -1.103111, 3.662392, -1.268924, -1.513223, -1.224991, 4.731401, -2.238483, -1.282368, 0.3988422, 0.9962349, 0.7096968, -2.903105, 1.768773, 1.809723, -2.25464, -1.605444, 4.597035, -4.556751, 3.471521, -1.528191, -0.9077325, 1.616223, -0.09212382, -1.742559, 1.987316, 0.6797984, -4.251359, 3.793083, 0.9289166, -3.537714, 1.271138, 0.4426408, 2.404938, -4.907114, 2.336085, 1.123312, -1.493773, 1.463701, -0.8275733, -1.653902, 1.132367, 1.638939, 0.4268899, -3.387068, -0.309909, 5.052985, -3.345674, -0.5814238, 0.5075257, 2.275535, -3.783612, 3.27113, -2.167671, 0.8911508, 1.134369, -2.074128, -0.1667171, 1.646727, 1.147478, -2.370516, -0.8290456, 1.391847, 1.525078, -0.896368, -2.382932, 2.983385, -2.77146, 4.105833, -3.674117, 1.004255, 0.2968694, 0.0909821, -1.285442, 3.245648, -3.210527, 0.7266137, 0.06704593, 0.01272046, 2.001099, -1.285663, -3.648206, 3.705612, 2.049099, -3.773346, 1.148133, -0.1571141, -0.7142629, 1.364612, 2.744384, -7.032936, 4.088655, 0.08703827, 2.112032, -3.59484, -1.396625, 3.600407, 1.345341, -3.74904, 0.606148, 0.5309172, 1.342412, -1.046867, -2.043483, 4.045327, -1.977864, -1.484094, 1.225141, -0.02264674, 3.146422, -5.288805, 0.4926007, 4.45234, -2.939281, -0.2684083, -0.1053473, 1.760405, -0.6405225, -2.596026, 3.218934, 0.2233788, -2.599494, 1.016509, 0.5745024, -0.3095127, -0.2449462, 2.266812, -4.849367, 3.262514, 0.1522791, 0.8269337, -2.770901, 0.4779386, 0.6339789, 3.10011, -4.473592, 0.6668431, 1.093097, 0.8928379, -0.9868905, -0.994037, 1.505018, -1.212402, 0.6344741, 1.326735, -1.251719, -2.835244, 4.23472, -0.0977003, -2.348059, 1.042803, -1.536896, 3.062472, -1.671388, 0.8196533, -3.353033, 3.398753, 2.205355, -5.882295, 2.921617, -0.266034, 1.7545, -0.8738549, -3.864779, 4.68332, 0.3317729, -3.849972, 1.631992, 1.958315, -1.935708, 0.4997269, -1.27458, 1.412222, 0.8348494, -0.6299144, -2.09535, 1.870083, -0.9459779, 2.6078, -0.9028833, -3.819752, 2.785191, 0.5586316, 0.7021141, -0.1027793, -4.340594, 4.53919, -2.809935, 4.64531, -4.143378, -0.6928421, 2.932021, -1.931255, 0.7886915, 0.9259596, -1.114658, -2.015371, 3.573393, -0.9800677, -1.538756, 1.368484, -486034e-8, -0.8307578, 1.071187, -1.779721, 1.801463, 0.4073933, -1.704107, 0.3483681, -0.9333601, 3.705645, -2.867169, -0.3687394, 0.5267004, 0.1771675, 1.380535, -1.227257, -1.737698, 1.896001, 0.8199964, -0.2051108, -3.525123, 4.34146, -1.404255, -0.6465186, -0.7381557, 2.659542, -1.584688, -0.4814887, -9694893e-10, 1.659618, -2.380415, 1.894338, 0.67275, -3.837411, 4.526337, -3.82402, 3.171778, -1.209448, -0.6994813, 0.3965336, 0.2135456, -0.9180566, 3.296375, -3.935979, 1.02722, 0.08185487, 1.731663, -1.087315, -1.614055, 1.378647, 0.4057281, 0.7594024, -3.024104, 2.011601, 0.7193586, -1.519922, 0.9222898, -0.5349555, 1.136335, -3.051109, 2.994367, 0.5152639, -1.74426, -1.017143, 1.519494, 1.024124, -1.858135, 1.051598, 0.2099986, -3.199501, 4.831708, -2.024909, -0.1696821, -0.6526963, -0.9050725, 3.099942, -0.228906, -1.48025, -3.021441, 4.934063, -1.23084, 0.1338626, -1.829261, 0.7414299, 1.295878, -1.613031, 1.280928, -0.3825441, -0.1595531, -0.6513699, 0.6940477, 0.1337135, 0.2558991, -1.187162, 1.421966, -0.2846145, -2.066681, 1.764324, 1.073558, 0.1534037, -3.327602, 0.8598227, 2.047189, 0.8006437, -2.252649, -0.4629248, 0.04694569, 2.420328, -0.8524013, -1.968057, 2.039588, -0.5289121, -1.685925, 2.835704, -1.349671, 0.3492455, -0.9446796, 0.08084663, 1.047985, 0.0835066, -1.564324, 2.272884, -2.551091, 1.117361, 0.8749582, -1.165895, 0.9741809, -0.9462144, 0.1062137, 0.7569897, -1.520577, 2.160424, -0.7066422, -1.570623, 1.188635, 0.5920826, -1.043289, 0.2662109, 1.467397, -3.420555, 3.604299, -1.902637, -0.03280177, 1.172035, -1.296076, 1.310742, -1.972348, 1.415822, 0.9852507, -1.273054, -1.756585, 2.966392, -0.3473821, -1.406303, -0.218719, 2.460317, -2.871332, 1.618313, -0.5337775, 1.019262, -1.087837, -1.001037, 2.438475, -1.804882, 1.267867, -0.4735491, -0.8981869, 0.4782739, 0.4896549, 0.2497462, -0.3758104, -0.5862613, 0.2143996, -0.3570638, 2.841317, -3.755016, 1.386427, 0.2003985, 0.1303193, 0.5810571, -2.061771, 1.712001, -0.2115965, 0.2356931, -1.727748, 1.338006, 2.140344, -4.223599, 2.589307, -2.139761, 4.243943, -3.502437, 0.1728605, 0.8450906, -0.7299532, 1.380027, -0.2938094, -1.170931, -0.2951461, 1.103904, 1.57114, -2.91084, 0.685408, 1.048801, -0.5062762, -0.8352349, 1.403573, 0.1332169, -1.77497, 0.5565442, 0.8534068, -0.3094478, 1.306786, -3.265317, 2.045763, -0.7466423, 2.569118, -2.641297, -0.2578501, 0.8198416, 0.3930053, 0.2631589, -0.5528724, -0.7161675, -0.1674107, 2.798578, -2.180428, -1.600972, 2.993387, -0.5635962, -0.7295214, -1.07333, 1.558173, 0.3101673, 0.06972059, -2.271643, 1.073793, 2.370555, -2.586487, -0.1194416, 1.864351, -1.984536, 1.151424, 0.8909266, -2.567718, 1.907799, -0.6012811, 0.7895019, -0.8867556, -0.6103256, 2.009187, -1.636942, 0.1082783, 0.8194828, -0.1287228, -0.9606828, 0.7579086, 0.1090624, -0.1209228, -1.041082, 2.584413, -2.698732, 0.9735618, 0.2740854, -0.2076504, 0.2509614, -0.3593322, 0.3024892, -0.723075, 0.8683374, -0.3277929, 0.2409618, -0.6180747, 0.775591, -0.5602601, -0.1278347, 0.8287073, -1.229231, 1.291573, 0.2326805, -2.416997, 1.564527, 1.199697, -1.112176, -0.562593, -0.2559395, 2.295266, -2.806416, 1.978787, -0.2326023, -1.213288, 0.3854657, 0.9929485, -0.3023957, -0.2503888, -0.8816705, 0.5754319, 1.4625, -1.385947, -0.587166, 1.00213, 0.1627394, -0.8420469, 0.8906491, -0.8803851, 0.4862334, 0.4881327, -0.8935229, -0.2544946, 1.367289, -0.5175722, -0.6977423, 0.338538, 0.4715163, -0.8946739, 1.149852, -0.143397, -1.571646, 1.622814, -0.6080917, 0.2442556, 0.02897457, -0.02840725, -0.7856825, 0.6907039, 0.5521784, -0.7610883, 0.3058209, -0.4560558, 0.1447288, 0.3628129, 0.4208051, -1.032508, 0.3279463, -0.0197194, 0.3359476, -0.3961854, 1.164041, -2.160458, 1.495357, -0.3044687, 0.3808727, -0.6652458, 0.3143675, -0.2067192, 0.4587074, -0.1449534, -0.6148307, 0.5305746, 0.5758531, -0.9804003, -0.1596664, 1.290363, -1.102757, 0.3434237, 0.08221369, -0.3263608, 0.6774814, -1.023202, 0.975508, -0.4441923, 0.1587211, -0.2303325, -0.2023249, 0.6808623, -0.06702369, -0.6780721, 0.3840555, -0.1319176, 0.6316201, -0.6798, 7186812e-9, 0.1564352, 0.4239516, -0.6841871, -0.06435465, 1.171695, -1.142668, -0.2645731, 1.240835, -0.588536, -0.4759994, 0.6959075, -0.5999919, 0.616843, -0.2277298, -0.2454114, 0.02997652, 0.3400845, -0.06996851, -0.3729672, 0.3379226, -0.1874926, 0.2721177, -0.1311405, -0.1996891, -230127e-8, 0.4080416, -0.1704784, -0.1941505, -0.06425448, 0.3285833, -2925691e-9, -0.3054654, 0.0987573, 0.2109325, -0.3757916, 0.6017597, -0.5260154, -0.1663156, 0.5444712, -0.03465806, -0.4415178, 0.4549704, -0.5042959, 0.5551847, -0.5417369, 0.7210895, -0.7163992, 0.2308447, 0.1499317, -0.1378539, 0.1458707, -0.2467138, 0.1099516, 0.2355181, -0.4170708, 0.2976198, -0.07579046, -0.05154805, 0.03280993, 0.0459516, -0.06742295, 0.07835136, -0.05287497, -0.1387789, 0.1620606, 0.2221226, -0.3480525, -0.04886294, 0.1812526, 0.09382736, -0.1495443, 0.06540148, -0.1724591, 0.1581738, 0.09517675, -0.1650092, -1402013e-9, 0.03273891, 0.1101326, -0.1320301, -0.0513853, 0.1922113, -0.0955553, -0.09590388, 0.1543927, -0.115023, 0.1038895, -0.1011284, 0.09509175, -0.1084091, 0.04876638, 0.08269293, -0.09512441, -0.0109232, 0.02296798, 0.03729243, 1231157e-9, -0.04980133, -0.03566349, 0.1160352, -0.06891914, 0.02644811, -0.05337728, 0.04504134, -6566255e-9, 0.01179487, -0.01564937, -0.01100298, 6557652e-9, 0.01671197, 3909137e-10, -0.02587925, 0.01445436, 186963e-8, 6984257e-9, -0.01910999, 0.01512834, -883492e-8, 0.01200919, -0.01333377, 7842552e-9, -7087527e-9, 756349e-8, 1458512e-9, -9000429e-9, 3517678e-9, 4422799e-9, -42205e-7, 1400568e-10, 1453375e-9, -7713693e-10, 3846182e-10, -64573e-8, 4711175e-10, -3541557e-11, -3018302e-11, -1921997e-11]], before: [{ "250": -12.1, "500": -1.3, "1000": -6.6, "2000": -13.8, "3000": -20.3, "4000": -33.6, "8000": -43.3 }, { "250": -6.5, "500": -4.4, "1000": -3.6, "2000": -11, "3000": -16, "4000": -30.8, "8000": -44.5 }, { "250": -6.2, "500": -5, "1000": -8.3, "2000": -10.7, "3000": -26.1, "4000": -38.4, "8000": -46 }], after: [{ "250": -7.6, "500": -1.7, "1000": -2, "2000": -0.7, "3000": -2.4, "4000": -5.6, "8000": -4 }, { "250": -2.1, "500": -4.7, "1000": 1, "2000": 2.1, "3000": 1.8, "4000": -2.8, "8000": -4.7 }, { "250": -1.7, "500": -5.4, "1000": -3.7, "2000": 2.4, "3000": -8.3, "4000": -10.3, "8000": -6.9 }], ringing: { above: 8e3, t60: 0.0812 }, seeds: [568025166, 584802785, 534469928], curve: [[10, -15.7], [10.15, -15.7], [10.29, -15.7], [10.44, -15.7], [10.59, -15.7], [10.75, -15.7], [10.91, -15.7], [11.06, -15.7], [11.22, -15.7], [11.39, -15.7], [11.55, -15.7], [11.72, -15.7], [11.89, -15.7], [12.07, -15.7], [12.24, -15.7], [12.42, -15.7], [12.6, -15.7], [12.78, -15.7], [12.97, -15.7], [13.16, -15.7], [13.35, -15.7], [13.54, -15.7], [13.74, -15.7], [13.94, -15.7], [14.14, -15.7], [14.35, -15.7], [14.56, -15.7], [14.77, -15.7], [14.98, -15.7], [15.2, -15.7], [15.42, -15.7], [15.65, -15.7], [15.87, -15.7], [16.1, -15.7], [16.34, -15.7], [16.58, -15.7], [16.82, -15.7], [17.06, -15.7], [17.31, -15.7], [17.56, -15.7], [17.82, -15.7], [18.08, -15.7], [18.34, -15.7], [18.61, -15.7], [18.88, -15.7], [19.15, -15.7], [19.43, -15.7], [19.71, -15.7], [20, -15.7], [20.29, -15.7], [20.59, -15.7], [20.89, -15.7], [21.19, -15.7], [21.5, -15.7], [21.81, -15.7], [22.13, -15.7], [22.45, -15.7], [22.78, -15.7], [23.11, -15.7], [23.44, -15.7], [23.78, -15.7], [24.13, -15.7], [24.48, -15.7], [24.84, -15.7], [25.2, -15.7], [25.56, -15.7], [25.94, -15.7], [26.31, -15.7], [26.7, -15.7], [27.09, -15.7], [27.48, -15.7], [27.88, -15.7], [28.28, -15.7], [28.7, -15.7], [29.11, -15.7], [29.54, -15.7], [29.97, -15.7], [30.4, -15.7], [30.84, -15.7], [31.29, -15.7], [31.75, -15.7], [32.21, -15.7], [32.68, -15.7], [33.15, -15.7], [33.64, -15.7], [34.13, -15.7], [34.62, -15.7], [35.13, -15.7], [35.64, -15.7], [36.15, -15.7], [36.68, -15.7], [37.21, -15.7], [37.75, -15.7], [38.3, -15.7], [38.86, -15.7], [39.43, -15.7], [40, -15.7], [40.58, -15.7], [41.17, -15.7], [41.77, -15.7], [42.38, -15.7], [42.99, -15.7], [43.62, -15.7], [44.25, -15.7], [44.9, -15.7], [45.55, -15.7], [46.21, -15.7], [46.89, -15.7], [47.57, -15.7], [48.26, -15.7], [48.96, -15.7], [49.67, -15.7], [50.4, -15.7], [51.13, -15.7], [51.87, -15.7], [52.63, -15.7], [53.39, -15.7], [54.17, -15.7], [54.96, -15.7], [55.76, -15.7], [56.57, -15.7], [57.39, -15.7], [58.23, -15.7], [59.07, -15.7], [59.93, -15.7], [60.8, -15.7], [61.69, -15.7], [62.59, -15.7], [63.5, -15.7], [64.42, -15.7], [65.36, -15.35], [66.31, -14.76], [67.27, -13.9], [68.25, -13.02], [69.24, -12.13], [70.25, -11.22], [71.27, -10.29], [72.31, -9.33], [73.36, -8.33], [74.43, -7.32], [75.51, -6.33], [76.61, -5.34], [77.72, -4.38], [78.85, -3.47], [80, -2.69], [81.16, -2.05], [82.34, -1.45], [83.54, -0.9], [84.76, -0.42], [85.99, 0], [87.24, 0.38], [88.51, 0.44], [89.8, 0.69], [91.1, 1.02], [92.43, 1.34], [93.77, 1.68], [95.14, 2.03], [96.52, 2.41], [97.92, 2.82], [99.35, 3.36], [100.79, 3.35], [102.26, 2.98], [103.75, 2.63], [105.26, 2.31], [106.79, 2.03], [108.34, 1.78], [109.92, 1.59], [111.52, 1.43], [113.14, 1.25], [114.78, 1.08], [116.45, 0.94], [118.15, 0.83], [119.86, 0.73], [121.61, 0.65], [123.38, 0.5], [125.17, 0.34], [126.99, 0.52], [128.84, 0.93], [130.71, 1.18], [132.61, 1.04], [134.54, 1.06], [136.5, 1.09], [138.49, 1.04], [140.5, 0.99], [142.54, 0.93], [144.62, 0.61], [146.72, 0.6], [148.85, 0.71], [151.02, 0.72], [153.22, 0.74], [155.45, 0.58], [157.71, 0.65], [160, 0.3], [162.33, -0.33], [164.69, -1.07], [167.08, -1.77], [169.51, -2.36], [171.98, -2.91], [174.48, -3.34], [177.02, -3.81], [179.59, -4.21], [182.21, -4.56], [184.86, -4.85], [187.55, -5.06], [190.27, -5.22], [193.04, -5.33], [195.85, -5.36], [198.7, -5.35], [201.59, -5.15], [204.52, -4.79], [207.49, -4.41], [210.51, -4.03], [213.57, -3.64], [216.68, -3.24], [219.83, -2.77], [223.03, -2.4], [226.27, -1.88], [229.57, -1.29], [232.9, -0.63], [236.29, -0.29], [239.73, 0.19], [243.22, 0.5], [246.75, 0.69], [250.34, 0.82], [253.98, 1.15], [257.68, 1.5], [261.43, 1.77], [265.23, 1.85], [269.09, 1.65], [273, 1.33], [276.97, 0.82], [281, 0.5], [285.09, 0.31], [289.23, 0.05], [293.44, -0.18], [297.71, -0.46], [302.04, -0.66], [306.43, -0.74], [310.89, -0.67], [315.41, -0.51], [320, -0.44], [324.65, -0.62], [329.38, -1.06], [334.17, -1.45], [339.03, -1.76], [343.96, -1.84], [348.96, -1.71], [354.04, -1.4], [359.19, -1.16], [364.41, -0.92], [369.71, -0.79], [375.09, -0.67], [380.55, -0.61], [386.08, -0.71], [391.7, -0.87], [397.39, -1.2], [403.17, -1.55], [409.04, -1.92], [414.99, -2.17], [421.02, -2.24], [427.15, -2.15], [433.36, -1.99], [439.67, -1.79], [446.06, -1.61], [452.55, -1.54], [459.13, -1.66], [465.81, -1.88], [472.58, -2.1], [479.46, -2.52], [486.43, -3.08], [493.51, -3.55], [500.69, -3.97], [507.97, -4.15], [515.36, -4.01], [522.85, -3.89], [530.46, -3.89], [538.17, -4.02], [546, -4.12], [553.94, -4.06], [562, -3.99], [570.18, -4.01], [578.47, -3.88], [586.88, -3.61], [595.42, -3.49], [604.08, -3.32], [612.87, -3.4], [621.78, -4.03], [630.82, -4.19], [640, -3.79], [649.31, -3.53], [658.75, -3.83], [668.34, -4.37], [678.06, -4.68], [687.92, -4.61], [697.92, -4.45], [708.08, -4.36], [718.38, -4.34], [728.82, -4.28], [739.43, -4.22], [750.18, -4.28], [761.09, -4.53], [772.16, -4.76], [783.39, -4.53], [794.79, -3.88], [806.35, -3.45], [818.08, -3.27], [829.98, -2.98], [842.05, -2.51], [854.3, -2.07], [866.72, -1.69], [879.33, -1.35], [892.12, -1.2], [905.1, -1.13], [918.26, -0.99], [931.62, -0.9], [945.17, -0.89], [958.92, -0.6], [972.86, 0.01], [987.01, 0.55], [1001.37, 0.99], [1015.94, 1.23], [1030.71, 1.43], [1045.71, 1.61], [1060.92, 1.66], [1076.35, 1.67], [1092, 1.76], [1107.89, 1.62], [1124, 1.51], [1140.35, 1.68], [1156.94, 1.87], [1173.77, 1.7], [1190.84, 1.67], [1208.16, 1.41], [1225.73, 1.33], [1243.56, 1.67], [1261.65, 1.95], [1280, 1.98], [1298.62, 2.14], [1317.51, 2.4], [1336.67, 2.33], [1356.11, 2.58], [1375.84, 3.07], [1395.85, 3.33], [1416.15, 3.49], [1436.75, 3.61], [1457.65, 3.41], [1478.85, 3.63], [1500.36, 4], [1522.19, 4.32], [1544.33, 4.42], [1566.79, 4.49], [1589.58, 4.34], [1612.7, 4.15], [1636.16, 4.38], [1659.95, 4.68], [1684.1, 5.26], [1708.6, 5.77], [1733.45, 6.13], [1758.66, 6.38], [1784.24, 6.57], [1810.19, 7.02], [1836.52, 7.03], [1863.24, 7.36], [1890.34, 7.81], [1917.83, 8.06], [1945.73, 8.5], [1974.03, 8.92], [2002.74, 9.47], [2031.87, 9.82], [2061.43, 9.82], [2091.41, 9.81], [2121.83, 9.85], [2152.69, 10.06], [2184.01, 10.08], [2215.77, 10], [2248, 10.34], [2280.7, 10.67], [2313.87, 11.77], [2347.53, 12.16], [2381.68, 12.23], [2416.32, 12.35], [2451.46, 12.24], [2487.12, 12.06], [2523.3, 12.03], [2560, 12.64], [2597.24, 13.07], [2635.01, 13.2], [2673.34, 13.13], [2712.23, 13.03], [2751.68, 12.99], [2791.7, 13.14], [2832.31, 13.48], [2873.5, 13.93], [2915.3, 14.11], [2957.7, 14.22], [3000.72, 14.18], [3044.37, 14.28], [3088.65, 14.53], [3133.58, 14.99], [3179.16, 15.27], [3225.4, 15.34], [3272.31, 16.02], [3319.91, 16.47], [3368.2, 17.47], [3417.19, 18.5], [3466.89, 19.75], [3517.32, 20.96], [3568.48, 22.05], [3620.39, 22.38], [3673.05, 22.78], [3726.47, 23.1], [3780.67, 23.93], [3835.67, 24.11], [3891.46, 24.25], [3948.06, 24.37], [4005.49, 24.4], [4063.75, 24.67], [4122.86, 25.25], [4182.82, 25.38], [4243.66, 25.26], [4305.39, 25.44], [4368.01, 25.22], [4431.55, 24.95], [4496.01, 24.72], [4561.4, 24.68], [4627.75, 24.72], [4695.06, 24.71], [4763.35, 24.48], [4832.64, 24.06], [4902.93, 23.92], [4974.24, 23.72], [5046.6, 23.78], [5120, 23.75], [5194.47, 23.67], [5270.03, 23.8], [5346.68, 23.97], [5424.45, 23.95], [5503.35, 24.23], [5583.4, 24.47], [5664.61, 24.92], [5747.01, 25.05], [5830.6, 25.07], [5915.41, 25.18], [6001.45, 25.49], [6088.74, 26.21], [6177.3, 26.21], [6267.15, 26.44], [6358.31, 26.49], [6450.8, 26.71], [6544.62, 27.19], [6639.82, 27.61], [6736.4, 28.17], [6834.38, 28.75], [6933.79, 29.47], [7034.64, 30.16], [7136.96, 30.77], [7240.77, 31.25], [7346.09, 31.66], [7452.94, 32.12], [7561.35, 32.78], [7671.33, 33.31], [7782.91, 34.15], [7896.12, 34.96], [8010.97, 35.7], [8127.49, 36.29], [8245.71, 37.05], [8365.65, 37.39], [8487.33, 37.71], [8610.78, 38.17], [8736.03, 38.52], [8863.09, 38.83], [8992.01, 39.07], [9122.8, 39.36], [9255.5, 39.63], [9390.12, 39.97], [9526.7, 40.23], [9665.27, 40.46], [9805.86, 40.8], [9948.49, 41.12], [10093.19, 41.54], [10240, 41.71], [10388.94, 41.59], [10540.05, 41.67], [10693.36, 41.66], [10848.9, 41.62], [11006.7, 41.49], [11166.8, 41.26], [11329.22, 41.17], [11494.01, 41.03], [11661.2, 40.98], [11830.81, 40.9], [12002.89, 40.74], [12177.48, 40.53], [12354.61, 40.43], [12534.31, 40.29], [12716.62, 40.24], [12901.59, 40.3], [13089.25, 40.57], [13279.64, 40.76], [13472.79, 40.97], [13668.76, 41.1], [13867.58, 41.34], [14069.29, 41.7], [14273.93, 41.88], [14481.55, 42.14], [14692.19, 42.31], [14905.89, 42.5], [15122.7, 42.77], [15342.66, 43.07], [15565.83, 43.24], [15792.24, 43.34], [16021.94, 43.42], [16254.99, 43.38], [16491.42, 43.3], [16731.29, 43.22], [16974.66, 43.12], [17221.56, 43.01], [17472.05, 42.88], [17726.19, 42.77], [17984.02, 42.66], [18245.61, 42.49], [18510.99, 42.35], [18780.24, 42.18], [19053.41, 42.03], [19330.55, 41.89], [19611.72, 41.72], [19896.97, 41.59], [20186.38, 41.44], [20480, 41.38], [20777.89, 41.39], [21080.11, 41.44], [21386.73, 41.43], [21697.8, 41.44], [22013.41, 41.47]] }, contrabass: { header: "body_cello_1.h", stretched: 1.418817646451331, sha256: "1518ed989f23537d69a4d2ecc7fbe4811443ba44a8b1cf1a46957153bd13a940", plateau: 88.08, variants: [[0.4923312, -0.2518757, 4.594076, -2.954262, 4.719779, -5.268087, -3.59461, -5.908226, 7.00386, 2.210321, 2.90635, -6.705743, 4.737713, 0.8177731, 0.6241584, -4.269909, 3.211541, -6.003457, 6.944788, -7.006261, 8.523327, -4.403535, -0.8414956, 6.433004, -11.683, 6.468735, -2.074839, 4.189971, -0.7250524, -1.434073, -5.194723, 9.493097, -2.427484, -1.743739, -0.1374611, -0.4657822, -1.456544, 1.190841, 1.256276, 4.584167, -7.569925, 5.001235, -9.790171, 13.06618, -12.34542, 15.70554, -13.58248, 8.318413, -6.362547, 4.623705, -5.867867, 6.202939, -0.4202901, -3.474962, 2.778483, -1.97044, 0.8622039, -0.3947169, -0.452877, 2.140646, -0.1953721, -3.765609, 2.13326, -0.9978913, 7.095451, -6.744886, 2.108625, -5.678263, 5.849331, -0.1067393, -1.648447, 3.445495, -5.167314, 4.935337, -6.195162, 5.664779, -3.821251, 1.724414, 1.627664, -1.990077, 2.504156, -3.943004, 1.071879, 0.9007482, -0.2700146, 2.016367, -3.36975, 2.04812, 0.4312077, -0.3423397, -3.168733, 3.074937, -0.6992246, 1.672747, -3.217471, 5.626171, -6.674136, 1.166548, 2.134024, -0.5493018, 2.420223, -1.89944, -3.358947, 2.61398, 1.090184, 0.2829049, -0.9413204, 0.1041963, -1.997601, 0.9096639, -1.734382, 9.479352, -6.514512, -3.416333, -0.06656654, 1.311108, 4.95454, 0.1209097, -3.996407, -1.318645, 2.432268, -4.332871, 8.258552, -6.161878, 1.470378, 2.060574, -1.368045, -0.5620266, -2.428752, 1.43986, 4.214323, -4.812842, 3.535096, -3.751397, 4.290321, -3.780573, 2.865399, -5.593633, 4.128524, 0.6085551, 4.105789, -4.309511, -3.849776, 0.3810401, 3.067848, 2.643636, -2.279195, -0.1339718, 1.869275, -6.922932, 5.835081, -3.902597, 5.868822, -2.492846, 0.7437639, -3.034874, 1.317205, 0.6598401, -3.902374, 6.157787, -2.210979, 1.806656, -4.06335, 1.360385, 0.4952874, 1.582265, -5.235822, 4.679258, -0.9357438, 3.004025, -5.230707, 3.064194, -2.387638, 0.04052359, 1.549115, 3.113444, -5.082702, 1.252503, -1.066749, 4.257696, -1.705668, -1.824246, -1.466716, 1.898348, 1.906821, -0.8646492, -0.4634071, -1.169531, 0.7019147, 2.445958, -6.416936, 7.940001, -7.279663, 8.290451, -6.682611, -0.188165, 4.455036, -5.754154, 8.196958, -6.422605, 0.0990934, 4.445887, -7.389818, 6.892423, -3.251255, 3.440432, -5.379498, 5.6814, -5.519588, 2.593771, -0.2127793, -0.8634056, 4.454128, -4.272328, 2.097371, -3.278071, 1.279869, 0.5948665, 0.5301905, 1.876323, -3.220735, -0.0297371, 3.278373, -4.056927, 0.9874201, 0.2672695, 2.517499, -1.280089, -2.682022, 2.768917, 0.9357465, -5.034054, 3.530671, 2.936736, -5.129747, 3.111477, -3.286796, 1.694401, 2.547115, -2.272688, 1.339013, -2.801927, 3.279077, -4.595168, 1.219841, 5.2928, -3.676853, 2.030927, -2.406725, -0.9048389, -1.421593, 3.413755, 2.493078, -4.746893, 2.902271, -1.136936, -2.103414, 5.221723, -7.141855, 4.755662, -2.04632, 5.825493, -6.233816, 1.298481, -2.508884, 4.770586, -1.484596, 0.6905615, -3.90933, 4.520902, -2.678473, 0.3783967, 2.674544, -3.123424, 1.944815, -4.366638, 4.484984, 0.7138408, -2.257585, 1.310608, -2.341094, 1.3982, 4625069e-9, -0.8075107, 2.797325, -2.056798, 1.040405, -2.026589, -0.9839986, 2.955713, 0.9414927, -1.135344, -3.793298, 7.367226, -9.702752, 9.677103, -6.883946, 5.688474, -4.960973, 2.366029, -0.9340768, -0.144686, 2.5748, -3.200879, 2.783408, -3.015433, 1.776319, -2.488764, 5.925708, -4.579525, 1.201518, -2.816858, 4.536195, -3.578031, 2.373125, -0.7883324, 1.390186, -3.22642, 2.640442, -3.438659, 4.808398, -2.447493, 1.380922, -3.378296, 3.547909, -3.473884, 3.720923, -0.5338328, -1.814397, 0.7301401, -2.196688, 3.588349, -1.430027, 0.1263564, 1.965735, -3.800002, 1.886304, -2.418103, 3.772376, -1.434912, 0.5855723, -0.736508, -0.4544271, 1.003207, 0.05350761, -3.303398, 3.566299, -1.075257, 2.13802, -1.578817, 0.588105, -5.293963, 6.670119, -3.757904, 3.921252, -4.776456, 4.881962, -3.686203, 0.4564091, 1.223358, -1.559829, 2.302906, -2.971407, 2.946803, -1.697287, 0.6103122, 1.232733, -4.176481, 3.363639, -0.3510082, -0.6129829, -0.2759692, 3.841168, -5.185793, 0.9807112, 0.764884, 0.1232751, 1.605544, -2.815347, 1.122796, 0.9594622, -0.7975591, 1.289891, -4.42651, 4.043662, -1.788283, 1.777433, 0.9540944, -3.64262, 2.341565, -1.946359, 2.647362, -2.420711, 0.7226617, 1.535601, -2.041459, 3.268559, -3.626403, 1.812006, -2.914742, 1.771457, 1.937802, -0.8543227, 1.651195, -2.645059, -1.610493, 1.519357, 0.2461684, 0.6745756, 0.4904714, 1.248078, -2.654137, -0.7049188, 0.1884254, 1.558556, -0.4831964, 0.7422986, -1.084894, 1.807353, -1.770304, -1.323821, 1.007024, 2.434174, -1.286291, -1.133568, 0.457322, -1.224765, 3.728389, -4.034294, 3.628032, -2.34716, -0.7217467, 1.031766, 0.312122, 0.4772879, 0.4919706, -3.145063, 4.369764, -5.091789, 3.931675, -1.198793, -0.3836342, 0.7334154, 0.7347862, -1.426259, 0.3667504, -0.5554422, -0.09293739, 0.05302981, 2.417712, -1.076334, -0.2724054, -2.682809, 2.792467, -0.591728, -0.3495889, 1.433647, -0.3073928, -1.238351, -1.171666, 3.226515, -0.6751363, -1.967097, 1.615465, -1.801949, 2.290747, -0.8670762, 2.028288, -5.245312, 3.931771, -1.518781, 3.473991, -4.013418, 0.1509339, 2.956745, -3.874884, 4.062528, -2.950023, 0.831546, 1.076583, -2.725215, 4.494647, -4.004238, 0.9326314, 1.433517, -2.007767, 1.359248, -2.083075, 4.453396, -3.33691, 1.08547, -2.040651, 4.273724, -6.980288, 7.385893, -5.266508, 4.866648, -2.857846, 0.3928115, -1.986497, 0.7396435, 2.901423, -1.035098, -1.085346, -0.1820193, -0.3138671, 2.309877, -2.98106, 2.687031, -1.574723, 0.66786, -2.044631, 3.336419, 0.1314859, -3.4486, 1.005083, 0.8167212, 0.7726662, -0.4040991, -1.442302, 1.866225, -0.8894928, 0.3771378, -1.134113, 0.3491101, 1.202034, -0.2007688, -1.293456, 2.518373, -3.486702, 2.613214, -2.282302, 1.902323, 1.178894, -3.761596, 6.042423, -7.275352, 3.995272, -2.704196, 4.272642, -2.077736, 0.9101686, -0.1633294, -3.568678, 1.616321, 2.356138, -0.3530821, -0.06097677, -1.247676, 0.1405526, -0.4530962, -0.5965735, 4.323848, -3.398505, -0.7581126, 1.674758, -0.1725955, -2.003657, 3.88937, -3.056428, 1.745103, -2.31923, 2.38599, -1.583641, -0.07308322, 1.620245, 0.4260046, -0.8760088, -3.167843, 1.690829, 3.311745, -1.773618, 0.5348351, -4.373074, 5.076688, -2.010279, 0.2024066, 0.4919182, -0.9244305, 0.5797116, 0.5189369, -1.997793, 3.071068, -1.902076, -1.29977, 1.802864, 1.052338, -1.655491, 0.3544197, -0.8215304, 0.3167167, 2.184167, -3.38519, 3.920582, -4.798308, 4.006433, -2.51006, 2.421019, -1.651693, -1.067643, 2.151957, -0.5354205, -1.021601, 2.657013, -3.303462, 0.3457436, 2.241578, -2.925464, 4.921847, -4.85364, 1.934008, -0.9057956, -0.1310073, 1.395361, 0.7833609, -2.438672, 1.533747, -2.987183, 4.527801, -2.229087, 0.2773058, -0.455545, 0.6005604, -0.5406141, 0.05980615, -0.7054737, 1.80279, 0.1748293, -1.828047, 0.9808067, -1.153342, 0.5974514, 0.6238025, 0.2838888, 0.06585498, -1.649729, 1.335091, -1.146018, 1.270805, -0.547571, -0.2948688, 0.9729424, -0.8596226, 0.8670841, -1.062133, -0.9021112, 2.673081, -1.700225, 0.4515647, 0.5705836, -2.327588, 2.715255, -1.229426, 0.1846328, -0.2151878, 0.5981441, -1.486319, 2.644674, -2.812333, 1.993741, -1.519148, 0.2061441, 1.453197, -0.713954, 0.2624417, -0.5643891, -0.7781399, 0.1822093, 0.6705889, 0.4862619, 1.82983, -4.455379, 3.022829, -2.375727, 2.688035, -2.285656, 1.392667, 1.247216, -3.812875, 5.102333, -5.325641, 3.207217, -0.7138094, 0.0474944, -0.1831595, -1.029391, 2.599856, -1.19676, 0.296682, -1.642992, 0.185258, 0.9027992, 0.7536172, -0.6494185, -0.2932689, 0.8882714, -0.5239684, -1.441438, 1.934291, -2.581528, 3.579519, -1.995543, 1.253163, -1.47985, 0.4502359, -0.2715494, 1.070562, -2.465951, 2.359704, 0.3470682, -1.875519, 2.452614, -2.977469, 2.796145, -3.226859, 1.962008, -0.2522473, 0.9414406, 0.2422358, -2.541458, 2.575018, -1.865276, 0.8939351, -1.464578, 3.485053, -4.171465, 3.538601, -1.537232, 0.1291533, 0.7015836, -3.48762, 3.162484, 0.1602733, -8878917e-9, -0.5632729, 0.340217, -2.230388, 2.596521, -1.314385, 1.782762, -2.24144, 1.317645, -0.03868081, -1.137296, 1.89686, -2.835489, 2.770794, 0.0286875, -1.728765, 1.068042, -1.987472, 2.24387, -0.149336, -0.9210405, 1.214577, -1.997558, 3.535427, -4.920017, 4.253059, -2.723589, 0.09189996, 2.22995, -0.944277, 0.9380632, -2.907483, 1.547287, -0.4644688, 0.5169631, 1.187969, -1.343161, 0.698289, -1.457194, 1.033686, 0.5992096, -1.632773, 0.9001144, -0.5186075, 2.403534, -1.700198, -1.392772, 1.635603, -0.5508689, -0.8214752, 2.09762, -1.61947, 1.881441, -2.662277, 2.017099, -1.986464, 2.351915, -1.142997, -0.3943634, -0.154605, 0.6869355, 0.9101613, -0.8308739, 0.05362739, -1.390697, 0.9442949, -0.1392168, 0.834824, 0.1392857, -0.3882475, -0.4878209, -0.08172785, 0.4302915, -0.3797355, -0.4549947, 1.655042, -1.270435, 0.7652582, 0.2134593, -1.16424, 0.1370853, -0.07193362, 0.1744758, 1.28942, -1.372586, 1.213337, -1.213074, -0.2721482, 0.5317716, 0.08819704, 0.8112149, -1.861402, 1.719318, -3700462e-10, -1.178449, -0.07307666, 0.3562366, 0.3035173, 0.7877019, -1.298439, 2.139463, -3.716446, 1.624099, 0.325852, 0.8584206, -0.9399508, 1.141252, -1.319844, 0.5920828, -1.841653, 0.7515372, 1.68508, 0.7108803, -1.271452, -1.003089, -0.4719111, 0.9945897, 1.563512, -2.722986, 1.93071, -0.3413189, -0.07341832, 0.6623565, -2.131126, 0.5068845, 1.13019, -0.2335641, 0.9007404, -1.43712, 0.4619968, -0.01349617, -0.4779602, 0.6419349, -1.400806, 2.499645, -0.9980833, -0.5562034, 0.3593629, -0.5417088, 0.2702809, 0.5572391, -0.1801411, -1.136877, 2.091767, -2.00027, 1.488481, -0.9907949, -0.2052009, 2.192084, -2.814516, 0.826504, 0.8206034, -1.192175, 1.511631, -0.2467438, -0.9289041, 0.4664212, -1.049393, 1.537333, -0.8813458, 0.3797068, 0.6303239, -1.055306, 1.273959, -2.22608, 1.446751, -0.1226395, -0.3813303, 0.9892081, -0.1436499, -0.5352694, 0.03603551, -0.7459535, 0.5447167, 0.6819314, 0.01838472, -0.8120757, 0.7148074, -0.9258014, 0.8057289, 0.442518, -1.854315, 1.749047, -1.124868, 0.6474771, 1.017918, -2.163966, 1.764576, -0.9286165, -0.2830663, 0.647705, 0.1725294, -0.8557427, 1.004244, -0.2645631, -0.466033, 0.3961636, 2753992e-9, -0.4999867, 0.08332498, 0.8240824, -0.8194385, 1.395014, -2.144293, 0.8069728, 0.6917287, -0.4738395, -0.02698011, 0.4193578, -0.9056311, 1.128238, -1.167542, 0.7154212, 0.2673931, -0.6053613, 0.1741423, 0.07135673, -0.7540397, 2.076999, -1.652693, 0.4296483, -0.767547, 0.03789908, 1.26399, -0.04596183, -0.2132449, -0.8359911, -0.05065169, 0.02092857, 0.7924731, 0.8451849, -1.941473, 1.245959, -0.915323, 0.8060878, -0.7066115, 0.1481539, 0.3164739, 0.6403755, -1.060421, 0.7580052, -0.7366226, -0.1054772, 0.5227541, -0.2055387, 0.3313578, -0.08467455, 0.6094885, -1.176836, -0.3145296, 0.9190336, -0.06162701, 0.5148147, -1.069637, 0.6592029, -0.2600679, -0.1746952, 0.6505341, -0.8053854, 0.6878867, -0.5394158, 0.5559582, -0.01533359, -0.6145512, -0.275069, 1.482404, -1.683938, 1.619635, -0.7721208, -0.3283622, 0.1431621, 0.5409165, -0.4509576, -0.3132546, -0.1076073, 1.727691, -1.828158, 1.131424, -0.5917371, -0.4161671, 0.5296677, -0.3373505, 0.1055394, 1.109234, -1.19809, 0.7263579, -1.026207, 0.6056817, -0.1397282, 0.06648487, -0.068315, 0.1347876, 0.2426897, 0.1573925, 0.2804561, -2.277887, 1.886797, -1.109427, 1.577004, 0.07174678, -1.139897, 0.4756271, -1.135614, 1.317434, -0.8694462, 1.421459, -1.303826, 0.5651844, 0.3637717, -1.159521, 0.3122527, 0.197885, 0.5023052, -0.2712492, 0.3647605, -0.8561281, 0.2062615, -0.162789, 0.4723715, 0.1471979, -0.4266801, 0.5899295, -0.9791776, 0.7017113, 0.1543127, -0.8277693, 0.4420595, -0.04346721, 0.3653673, 0.1661554, -0.1595336, -1.407487, 1.493998, -0.3390506, 0.1690723, -0.1698661, -0.5164944, 1.501205, -1.450448, 0.1584459, 0.0405744, 0.6174971, -0.4323916, 0.4379467, -0.7627554, 0.8003095, -1.0454, 0.9757334, -0.7457546, 1.025963, -1.247884, 1.121379, -0.5067601, -0.2423002, 0.6731598, -1.213084, 0.8436192, 0.2561695, -0.1400404, 0.2278744, -1.024022, 0.3472566, 0.2242677, 0.06853123, 0.9726942, -1.422734, 0.04289639, 0.3768691, -0.2794872, 0.4516779, 0.01497226, 0.04068068, -0.02664583, -0.4335996, -0.4415187, 0.5663922, 0.8848959, -1.241001, 0.8057153, -0.3997526, 0.1200159, -0.4464521, 0.4376746, -0.1107371, 0.1515421, -0.670576, 1.421303, -0.9629347, 0.3308394, -1.015287, 0.3062925, 1.342825, -0.6983551, -0.4736657, 0.271111, 0.09619692, -0.3037599, 0.1131923, 0.5387303, -0.7056579, 0.5979207, -0.5498162, -0.03424591, 0.702477, -0.7855802, 0.4439216, 0.02544448, -0.21775, -0.05051467, 0.4193095, -0.3114464, -0.2890509, 0.08761459, 0.7792319, -0.4538021, -0.2166516, 0.02086712, -0.3831454, 0.985738, -0.9987279, 1.268041, -1.531005, 1.599798, -1.267288, 0.0677607, 0.4025278, -0.1297636, 0.6689794, -1.051445, 0.5550539, -0.2476198, 0.2493595, -0.04057937, 0.2450518, -1.242111, 1.719724, -1.432351, 1.323848, -1.112696, 0.3265919, 0.6563717, -1.038636, 0.5763951, -0.167531, 0.3418355, -0.6964602, 0.7188577, -0.673998, 0.7038462, -0.1277711, -0.4183845, 0.142229, 0.2527341, -0.7138359, 0.7588148, 0.1195975, -0.7501578, 1.169898, -1.573199, 0.8527911, -0.07763007, 0.4651398, -0.7444878, 0.2587866, 0.2244115, -0.3443476, 0.6390323, -1.270473, 1.058468, -0.1443498, -0.07406342, 0.1645374, -0.7774226, 0.8919861, -0.3952464, 0.1443814, 0.03384633, -0.734084, 1.236461, -0.884198, 0.4364002, -0.332663, 0.4480696, -0.5490752, 0.2090356, -0.1459429, 0.4033411, 0.08452664, -0.3123131, -1383634e-10, -0.5125083, 0.7324779, -0.1068408, -0.1208429, 0.399458, -0.7109536, 0.3434137, -0.01341729, 0.08853107, -0.3856671, 0.423525, 0.138618, -0.3489862, 0.0997025, -0.1623616, 0.1170488, 0.2069916, -0.4507317, 0.5713188, -0.4593381, 0.3028324, -0.2644284, 0.2690763, -0.3130642, 0.1814634, -0.2493941, 0.661793, -0.699492, 0.7493687, -0.9478492, 0.5986247, -0.4379195, 0.4462921, 0.22333, -0.6696193, 0.6086492, -0.5452178, 0.1101311, 0.194581, -0.03782898, 0.1013093, -0.087204, -4391534e-9, -0.1735949, -0.1490733, 0.5526025, -0.2548265, 0.05187992, -0.04763405, 0.05189054, -0.163787, -0.1597177, 0.4715021, -0.3726946, 0.3991878, -0.1995499, -0.1778807, 0.2400838, -0.3105872, 0.283232, -0.11929, 0.07872492, 3653991e-9, -0.04066905, 0.1886596, -0.4126389, 0.09611477, 0.1932016, -0.0219035, 0.1288806, -0.3481979, 0.3348703, -0.4099681, 0.4128931, -0.3276649, 0.3360893, -0.1638913, -0.1057169, 0.2564915, -0.4356166, 0.4681535, -0.1672703, -0.147626, 0.2062244, -0.02855374, -0.1770072, 0.1955423, -0.204805, 0.3329227, -0.2109055, -0.1413905, 0.2464728, -0.1770921, 0.1706693, -0.09781805, -4943513e-9, 0.07923074, -0.1716807, 0.1100832, 0.07384721, -0.1743562, 0.2111767, -0.1441633, 1342137e-9, 0.03381453, 0.1058658, -0.2795877, 0.1410107, 0.1516882, -0.1316853, 0.1493853, -0.3664516, 0.3087085, -0.1770913, 0.2339987, -0.1600934, -0.1044173, 0.2944572, -0.1381752, -0.1447592, 0.1112653, -0.06227544, 0.1294198, 0.05371443, -0.1808716, 0.0986943, -0.1524432, 0.1157538, 0.1551405, -0.2573303, 0.1451005, -0.1094439, 0.1565562, -0.09473008, -0.01905287, 0.01640072, 0.06228071, -0.09131453, 0.04460779, -0.05779214, 0.1369941, -0.05960656, -0.03973292, -0.04478365, 0.09871651, -0.06898664, 0.08297052, -0.06929804, 0.0304658, -0.02571674, 0.02898897, -0.02212047, -0.03047629, 0.08811005, -0.03804057, -0.03924004, 0.02126723, 0.01715487, -0.02161333, 0.04806749, -0.07847974, 0.05987207, 3777275e-9, -0.05626272, 0.04356336, -0.02101313, 0.06174602, -0.09430916, 0.05195133, 0.0110646, -0.0272872, -1074266e-9, 0.01644271, -4046021e-9, 397828e-8, 4155042e-10, -0.01235567, 8050089e-9, -0.02506312, 0.04038003, -6532254e-9, -0.01183933, 2393189e-9, -0.0158352, 0.02853179, -0.0192893, 0.02077528, -0.02594251, -1538795e-9, 0.01910927, 2274734e-9, 2458685e-9, -0.01711255, 649263e-8, -0.01930532, 0.02854377, -8282947e-9, 752125e-8, -7908509e-9, -4465471e-9, 1205571e-10, 4868419e-9, -7537057e-11, 7747755e-10, -3285694e-9, 2528054e-9, -1032863e-9, 2026722e-10, -4019166e-10, 2863001e-10, 9630301e-10, -9321812e-10, 2438982e-10, -2563327e-10, -1339588e-9, 275605e-8, -1467136e-9, 1000624e-9, -1532331e-9, 4127021e-10, 1065384e-9, -1353471e-9, 8764271e-10, -29453e-8, 6709417e-11, -624184e-10, 9865882e-11, -1175811e-10, 53351e-9, -7102272e-12], [1.047329, -2.905901, 8.845186, -3.153444, -3.197825, 3.903116, -6.337399, -2.116459, -3.229357, 8.529704, -1.545527, 5.151512, -4.497212, 2.90468, 1.70691, -10.05904, 3.3989, 2.759454, -1.940295, 6.199471, -5.040153, 0.2863225, 0.02199505, -4.661447, 9.969069, -12.35109, 11.77426, -9.51297, 11.58697, -10.61109, 4.891828, -2.464291, 3.518032, -3.968319, 4.416344, -2.071201, -1.72871, 2.551906, -2.556562, -1.321839, 5.891458, -3.723079, 3.219099, -6.762334, 4.791145, -1.188569, 1.596483, 1.038552, -3.754856, 2.014644, 1.347073, -4.53415, 6.057487, -7.254578, 5.979306, -2.261099, 3.955436, -5.433197, 0.1331258, -0.02895765, 2.756876, -1.125518, 3.856789, -8.870546, 10.59671, -9.951486, 6.511289, -5.020721, 5.102858, 0.3537178, -4.067417, -0.5791685, 3.936012, -3.963895, 6.485874, -8.44656, 8.728748, -8.334724, 3.609786, 0.2334105, 1.440593, -2.363183, 3.42106, -4.96473, 0.6744735, 3.354504, -0.1922786, 0.2001029, -4.273282, 0.6181193, 3.560361, -2.554317, 3.939594, -2.645525, 1.075378, -3.577258, -2.685764, 5.326311, 4.404938, -0.8896636, -7.853655, 2.487773, -1.690259, 5.160605, 1.40369, -3.919374, 0.1252435, -1.403624, 3.343644, -3.977113, 3.38223, -1.298013, 2.640184, -3.542814, 1.651747, -3.119083, 3.805503, -0.2203121, -0.1430852, -3.913374, 7.381369, -8.79281, 7.964319, -5.57083, 3.194723, -0.4048416, -1.810153, -0.2258156, 5.084697, -7.599376, 8.186738, -10.26047, 9.814883, -6.139712, 4.326846, -0.5689053, -1.956394, -4.551918, 6.784473, 1.273115, -3.746315, -1.760366, 4.057466, -2.472895, 0.5731343, 2.232258, -4.065193, 3.095464, -3.478305, 4.335996, -0.6958562, -2.145957, -1.413052, 4.99954, -4.292182, 2.724004, -3.469191, 5.754902, -3.49282, -3.459345, 4.49493, -0.8264198, 0.8056348, -0.3630821, -1.746357, 0.8753364, 0.9657343, -2.198031, 1.35554, 1.986251, -3.849705, 4.492228, -4.499654, 1.75812, -0.5508951, 2.092921, -0.3710424, -2.092133, 0.4044949, -1.20687, 5.829396, -4.518518, -0.0863277, -1.316302, 2.253819, 0.8178943, 0.7264492, -3.790642, -0.223502, 4.723421, -1.775523, -2.936793, 4.047395, -5.671285, 6.685222, -3.339196, 2.695289, -5.470064, 2.167725, 2.946994, -0.6902515, -4.3642, 4.782366, -3.350693, 4.992789, -4.929747, 0.888698, 0.5934036, -1.084613, 0.7429649, 4.021232, -3.039909, -2.152692, 0.5092633, -1.303538, 4.364683, -1.269832, 0.1185782, 0.01061821, 0.3644245, -6.533691, 6.242463, -1.63735, 3.111452, 0.1345253, -4.538272, 1.094719, 0.8382594, -1.52614, 2.456179, -1.670932, 6.889291, -11.27197, 7.889025, -7.884343, 7.867954, -2.485091, 0.4116003, 0.2601793, -2.049136, 2.439859, -3.802947, 2.092935, 1.365873, -0.1037757, -0.07850907, 1.112587, -5.068557, 2.584488, -0.314249, 1.420121, 3.002814, -5.055355, 3.607665, -5.655467, 2.767713, 2.365549, -1.696575, 2.937675, -6.742641, 8.591963, -9.693535, 6.985738, -1.311598, -0.6199696, 0.9892202, -4.581135, 6.236372, -2.407852, 1.585245, -5.366137, 2.5579, 3.977933, -3.075076, 1.105972, -4.294757, 3.519017, 1.272757, 0.2657331, -3.146636, 0.4760164, 0.2706733, 0.1794635, 2.011942, -1.192272, 1.308343, -3.959238, 2.238533, -2.547653, 5.196157, -2.663405, 2.366471, -4.031279, 1.145732, -1.165883, 4.289244, -5.811982, 8.383469, -8.066824, 4.033535, -3.630909, 4.339603, -1.927284, 0.9861713, -1.27332, -1.453882, 1.341987, 2.86812, -0.688357, -3.233857, -0.2676956, 1.932867, -0.8033502, 3.557749, -2.919176, -0.9688969, -0.3562949, 2.893416, -1.698376, -0.5528885, 1.859247, -2.880347, 3.105499, -1.633848, 0.1109648, 1.321039, -2.192074, 0.5465473, -1.354932, 4.261412, -1.952775, 0.459103, -3.569179, 1.605376, 3.210273, -1.940656, -0.4268434, -1.026363, 1.444721, -0.2449194, 0.2078044, -0.6227829, 1.019927, -0.3271565, -0.92123, -0.3015784, 1.893475, -1.163925, -0.1631626, -0.1980109, 0.6420363, 1.998525, -2.730328, -0.4286968, -0.7524296, 3.766734, -2.522329, 0.7055708, -0.06633739, 0.5413487, -0.313014, -2.035137, 0.9186617, 1.905679, -1.527017, 2.994662, -6.67904, 7.644358, -7.135416, 6.511009, -3.736152, 0.5407452, -0.6969248, -1.091205, 5.25213, -2.524064, -0.1703985, -1.303568, -3.352166, 5.337427, -1.584144, 4.375259, -3.505485, -3.697989, 3.010712, -1.643684, 5.699118, -5.648812, 0.5764675, 1.65386, 2.228726, -5.216287, 3.222849, -0.8203425, -1.110948, 0.8579548, 0.6196381, 2.155484, -4.124949, 3.755952, -4.929081, 1.690584, 3.773571, -5.209788, 6.662814, -5.530002, 1.019587, -1.828717, 4.205418, -1.382007, -1.33262, 1.898311, -2.881189, 3.331194, -3.073195, 1.608786, 1.172141, -0.6952993, -3.058721, 4.23048, -2.903575, 2.415259, -2.428501, 2.01271, -1.305852, 0.4973624, 1.188173, -2.776815, 2.999659, -5.152495, 8.474162, -7.289672, 4.02456, -3.14751, 2.578119, 0.1738689, -3.038451, 2.248615, 0.6999784, -1.440452, 0.1561125, 1.495624, -1.612697, -0.7723556, 2.27624, -1.711756, 2.436649, -3.577339, 2.495752, -1.150794, 0.654811, 1.210484, -3.589931, 3.323061, -1.57154, 1.697698, -1.720638, -0.2205798, 0.5141443, 1.333496, -1.270736, 0.4207054, -1.298746, -0.1241097, 4.057763, -4.230741, 3.305727, -4.753207, 4.660056, -4.722818, 5.235257, -1.860258, -0.9517752, 0.2276417, 1.34308, -2.558691, 1.415206, -1.051419, 3.726794, -2.184029, -0.7316975, -1.729451, 2.035712, 1.145115, -0.3687223, -0.914562, 0.232816, -0.5291088, -0.525066, 1.751615, 0.3799579, -2.423052, 3.176389, -3.960258, 3.708955, -1.369313, -2.090631, 1.525965, 2.677401, -3.272798, 3.030848, -4.339662, 2.344405, -0.6830974, 1.494281, 0.5438326, -3.433938, 3.483339, -2.029942, 1.30144, -1.394721, 0.9873528, -1.945864, 3.566726, -2.24869, 2.352149, -4.262692, 2.844273, -2.626325, 4.386108, -2.1435, 0.8603834, -3.226438, 2.199905, 1.229882, -2.291761, 2.491567, -1.419608, -1.029593, 2.100931, -2.115437, 1.281741, -0.2805194, 0.6963656, 0.292152, -1.536692, 0.5371581, -1.029524, 1.792322, -0.7444287, 2.067999, -3.974336, 2.690052, -0.8614007, 0.596412, -1.078032, 0.9104243, 0.4283267, -1.149719, 0.6597541, -4577946e-9, -0.6578765, 1.000238, -1.270319, 1.417424, -0.9191004, 2.466797, -3.975976, 1.071132, 0.6363357, -0.192705, 2.213972, -1.47438, -0.8396979, -1.69284, 3.107021, -1.181001, 0.7471976, -0.8540934, 1.962457, -3.853131, 2.614944, -1.160906, 1.648727, -0.580493, -0.1939072, -0.2615986, -0.4072764, 0.09086239, 0.3493597, 0.6875596, -0.4975682, -0.02107919, 0.2989076, -1.576807, 2.226734, -1.955251, 1.343934, -1.076439, 1.876546, -2.226622, 1.579263, 0.1487087, -2.567592, 2.406565, 0.08771861, -1.257686, 0.04711046, 2.498591, -3.340252, 2.059285, -2.469334, 3.399188, -2.549165, 1.420724, 1.047074, -3.811094, 3.383947, -2.283446, 1.758688, 0.06211474, -0.6810584, -0.1314832, -1.234685, 3.201175, -3.390695, 3.408616, -2.691128, -0.3825837, 3.060967, -3.878715, 5.012307, -4.627489, 0.9656845, 1.008907, -0.7183656, 2.130285, -2.853713, 1.139244, 0.4340948, -1.435745, 1.40968, -0.9160504, 1.487611, -1.615697, 1.251064, -1.415915, 0.9953916, -0.5405655, -0.1217133, 1.602911, -2.13007, 2.162915, -2.689766, 2.284735, -0.7543285, -1.011312, 1.406659, -0.8028814, 1.502741, -1.398544, -0.5822281, 1.378198, -1.851169, 2.131508, -0.9231066, 1.190779, -2.168948, 0.3717403, 1.248615, -0.107253, -0.6257551, -1.038914, 1.799507, -0.2069181, -0.4479352, 0.0627296, 0.2945463, -1.658434, 2.084947, -1.895244, 2.433346, -1.52132, 0.9920224, -1.233363, -0.1578284, 0.1444975, -0.3468351, 2.909174, -2.203671, -0.6292813, 1.191622, -0.4827132, -1.337054, 1.647269, 0.2555151, 0.346103, -1.433294, -0.2575859, 0.5205203, 1.02412, -0.3841927, -1.279783, 1.630953, -1.3681, 0.3441841, 1.250896, -2.085362, 1.846617, -0.3580504, -0.7870887, 0.1129724, 0.08195372, 0.3637385, -0.3947711, 0.9310953, -0.6451901, 0.1679796, -1.17127, 0.4054715, 1.455326, -0.8625722, 0.0243771, -0.267323, 131609e-8, 0.5634535, -1.131248, 1.333875, -1.062101, 1.33828, -1.750763, 0.5229688, 1.50726, -1.102174, -0.8613153, 0.5893444, 0.05253123, 1.211808, -1.689689, 1.711592, -2.38929, 0.995245, 0.5960391, 0.4537397, -0.6638563, -0.6193651, 0.6717725, -1.009547, 1.646813, -0.5326635, -0.6530106, 1.019541, -0.4934043, -1.612388, 1.86312, -0.3117055, 1.196546, -1.876969, 0.5168207, 0.1690357, -1.004832, 0.8817388, 0.8803167, -0.5825053, 0.2803898, -1.777712, 1.60175, -1.47253, 1.854199, -0.07123186, -0.5557878, -0.307887, -0.5250053, 1.224239, -1.739064, 2.439341, -1.458847, 0.9659025, -1.604752, 1.221084, -1.168112, 1.08719, -0.1437608, 0.6017075, -0.5360381, -1.150683, 0.6630616, -0.1179624, 1.230916, -0.1792692, -1.183453, 1.164432, -2.300436, 2.691233, -1.888692, 2.690762, -3.543741, 2.589521, -1.949617, 2.340177, -1.608736, -0.1867184, 1.576243, -1.862453, 0.1827459, 1.182254, -0.6904315, 0.6910068, -0.6077449, 0.4349841, -1.178714, 0.1119677, 0.812571, 0.7355567, -0.9837161, 0.7934061, -1.590183, 0.1848552, 1.804539, -2.723033, 4.047989, -3.288036, 0.6230238, -0.1621052, 0.07385311, 1.37406, -1.326864, 0.6968839, -1.315731, 0.9621026, 0.289925, -0.02550669, -1.054255, 1.156941, -0.682904, 0.7435954, -1.154146, 0.8665063, -0.1738181, 0.1559447, -0.2482547, -0.1253945, 0.02955693, 0.6241976, -0.8740613, 0.2952784, 0.6441001, -1.047068, 0.9848116, -1.118917, 1.767043, -2.970349, 2.864903, -0.8787618, 0.2950675, -1.081177, 0.5564532, 0.3072838, -0.7660644, 0.8943194, -0.01585853, 0.08937859, -1.688968, 1.244209, 1.071868, -1.59859, 1.373486, -1.903462, 1.466443, -0.9857112, 0.3424058, 1.76919, -2.289021, 1.786351, -2.22235, 0.297424, 2.23409, -1.693245, 0.9732888, -0.9756728, 0.07608773, 0.7423682, -1.156913, 1.419216, -1.188598, 1.207666, -1.439122, 0.4346027, 1.059881, -0.4690226, -1.428609, 1.547247, -0.7312238, 1.176556, -1.079355, -0.4247753, 0.988771, -0.6851649, 1.151432, -1.697266, 1.398856, -1.190224, 1.370222, -1.008385, 1.114748, -1.255126, -0.5505532, 1.727447, -1.680778, 2.212131, -1.108034, 0.4034341, -1.48582, -3845547e-9, 1.48498, -0.5683499, 0.4059292, 0.2430657, -0.984462, -0.01986533, 0.08957378, 0.8538256, -1.060922, 1.14711, -1.092457, 0.8226061, -0.8237732, 0.2633853, 1.302558, -1.475719, -0.261253, 0.6214479, -0.1176277, 1.57121, -3.056107, 3.071867, -2.993526, 2.570962, -1.638129, 1.332365, -0.9769022, -0.2787094, 1.04698, -0.8536918, 1.165002, -1.789277, 1.579266, -0.5014056, -0.2349476, -0.4827742, 0.7090771, 0.4153678, 0.01306987, -0.6816231, 0.03157725, -1.270229, 2.562032, -1.166082, 0.5938504, -0.3942385, -1.133364, 0.7612997, 0.4892937, -0.0782147, 0.3324723, -1.084585, 0.6662019, 0.01364689, -0.4294441, 0.2808327, 0.4737855, -1.248687, 1.728085, -1.707501, 2.170982, -2.242331, 0.5103935, 0.3118877, 0.2105461, 0.2464816, -0.1717774, -0.6743754, 0.4068398, -0.2140838, 0.9282614, -0.9487797, 0.02432125, 0.5163982, -0.3204869, 0.2465548, -0.5626017, 1.097615, -1.375513, 0.7045813, 0.08594691, 0.5301116, -1.486278, 0.8255663, 0.3862662, -0.3768376, -0.1309216, 0.2341599, -0.07496981, 0.2938613, -0.5262917, -0.336176, 0.9671887, -0.7003297, 1.472054, -2.207208, 1.272601, -0.2052367, -0.07289091, 0.01312712, -0.08927406, 0.1760776, 0.4345427, -0.6226468, -0.07943537, -0.4264354, 1.468051, -1.190741, 1.075315, -0.8585001, -0.1156219, -0.4422902, 1.07603, 0.5189324, -1.942445, 2.298606, -2.810928, 3.091729, -1.793565, -0.3678325, 0.784302, -0.6274479, 0.97695, 0.4105884, -1.28075, 0.1728229, -0.2153649, 0.6042781, 0.08361398, -0.3762998, -0.1581956, 1.158207, -1.557524, 0.8622056, 0.1001224, -0.7479887, 0.5306524, -0.1576095, 0.5941079, -0.8260164, 0.4636526, -0.4829857, 1.171553, -1.437183, 0.7481141, -0.4204488, 0.4260376, -0.09352345, -0.09234788, 0.8220826, -1.183438, 0.1180736, -0.0759296, 0.3449205, 0.514692, -0.01753911, -0.7749881, 0.1138967, 0.3149423, -0.8277021, 1.432977, -1.342517, 1.652307, -1.581684, 0.3111689, 0.2525861, -4877e-6, 0.1342954, 0.3837022, -1.325446, 0.7497075, -0.05115359, 0.2417741, 0.5135845, -1.120177, 0.785297, -1.416147, 1.72582, -0.680773, 0.3311002, -0.4976442, -0.1057617, 0.6323949, -0.2411754, -0.3909545, 0.5873363, -0.7670569, 1.113231, -1.679392, 2.030321, -0.9954323, 0.102535, -0.623544, 0.2408879, 0.3176996, 0.59511, -0.7969134, 0.5265098, -0.7771693, 0.2015014, 0.09646235, 0.07354163, 0.5388847, -0.5863542, 0.1369069, -0.1986526, 0.0304065, 0.3396161, -0.6690362, 0.6121409, -0.3450848, 0.8775545, -1.10032, 0.3052574, 0.3472806, -1.020771, 1.225417, -0.5915172, 0.4756034, -0.2817627, -0.5142548, 0.60195, -0.4421472, 0.5221919, -0.4471636, 0.1471813, 0.996848, -2.075125, 1.414421, 0.1784088, -0.7619611, -0.6064179, 1.478317, -0.2572913, 0.3896865, -1.529687, 0.6296919, -0.12682, 0.4729086, 0.0400306, -0.08562634, 0.4221458, -1.236295, 0.7900351, -0.6124996, 0.6608647, 0.5075514, -1.051945, 0.6414279, -0.9064351, 1.37786, -1.19944, 0.8142969, -0.6731328, 0.2744166, -0.1987849, 1.009693, -0.626217, -0.5130119, 0.2023798, -0.4619717, 1.263149, -0.5142497, 0.3292191, -0.7083938, -0.2256534, 0.6428972, -0.2435044, 0.1298757, 0.08436493, 0.2032822, -0.7330368, 0.691446, -0.8693373, 0.7531669, -0.06216702, -0.04464066, 0.2009183, -0.56124, -0.0927988, 0.858746, -0.8126414, 0.6758629, -0.7254401, 0.7811387, -0.435672, -0.4165917, 0.7076529, -0.2709873, 0.04319536, 0.2860744, -0.8799852, 0.5556594, 0.1832402, 0.05015226, -0.5508697, 0.7798678, -1.117838, 0.9895456, -0.7493886, 1.068667, -0.7949849, -0.06545065, 0.2644288, -0.4240607, 0.7090891, -2820441e-9, -0.9186261, 0.9509155, -0.7957417, 0.6554907, -0.187395, -0.2389228, 0.5271669, -0.7234397, 0.6818998, -0.6779942, 0.4320775, 0.3959979, -0.683259, 0.1831526, -0.1678487, 0.2975425, -0.03377603, 0.1120081, -0.4515625, 0.7823248, -0.8201726, 0.2717887, -0.2846954, 0.6790232, -0.2150498, -0.0952367, -0.04792871, -0.2930764, 0.3547045, 0.05616792, 0.04489921, -0.417199, 0.4694532, -0.2970504, 0.02250155, 0.2292634, -0.3613743, 0.4557821, -0.4024029, 0.1487328, -0.05090808, -0.03622958, 0.2938075, -0.3712272, 0.5201828, -0.5973254, 0.2705325, -0.4802651, 0.8014688, -0.3236151, 0.2052671, -0.3506362, -0.103715, 0.118863, 0.3307926, -0.2409516, -0.1226305, 0.3431132, -0.2761615, 0.2725414, -0.8230821, 0.8711439, -0.2684787, 0.2921863, -0.2596766, -0.08177094, -0.207014, 0.2274611, 0.01970702, 0.42273, -0.5289484, 9662968e-9, 0.1995883, -0.2496237, 0.2515712, 0.04707363, -0.2694047, 0.1560686, -0.05710178, 4222347e-9, 0.1979842, -0.2130603, 0.07945781, -0.1629587, 0.1468896, -8075064e-9, -0.04667548, 0.1293702, 0.04364107, -0.2424799, 0.0471087, -0.02910309, 0.1696059, -0.05532897, 0.01723036, -0.06283494, 0.07018415, -0.08337863, -0.0359842, -0.01495368, 0.3153581, -0.3820155, 0.2233926, 0.03788643, -0.2450167, 0.09996752, -0.03472841, 0.2126264, -0.05607054, -0.2133032, 0.1621319, -1109418e-9, -0.1228643, 0.0892758, 0.04186646, 7180722e-9, -0.03117309, -0.07265097, 0.03473316, 0.06048008, -0.07100167, 0.014896, 0.08108598, -0.08531927, 0.1249287, -0.2618087, 0.2086905, -0.1129034, 0.1749898, -0.1589462, 0.1099635, -0.0846918, -0.05499321, 0.1858615, -0.2487002, 0.2730194, -0.2047571, 0.085065, 0.06186846, -0.1308255, 0.09446822, -0.06130683, -0.01605781, 0.01048697, 0.1314458, -0.1427041, 0.12281, -0.1961187, 0.2175967, -0.2283444, 0.224017, -0.1617884, 0.118975, -0.0453753, -0.02547232, 0.01921305, -0.04545925, 0.09473524, -0.05576772, -0.01167886, 0.02140443, 9077668e-9, -0.03088423, 0.02191123, 3756381e-9, -0.01173194, 0.03549075, -0.1097435, 0.1277761, -0.05359147, 0.01656885, 4384132e-9, -0.07458442, 0.09616272, -0.05394029, 0.02553902, 6980329e-9, -0.04274968, 0.04048064, -0.01027917, -0.03537142, 0.08552275, -0.1075338, 0.08226185, -7215978e-9, -0.05464898, 0.04695952, -0.02483047, 0.02038044, 4716022e-10, -0.03201277, 0.06019711, -0.0653947, 0.03629464, -0.01010271, -2385683e-9, 0.0119339, -0.01486099, 0.02559044, -0.0204226, -324631e-8, -8848912e-9, 0.01797968, 9386306e-9, -2493087e-9, -0.02254161, 0.01143987, -1966224e-9, 4938992e-9, 2105912e-10, 3801582e-9, -7363521e-9, -4876541e-9, 8963734e-9, -3641879e-9, 5889227e-9, -5177906e-9, -2830112e-9, 8911602e-9, -0.01064721, 4952704e-9, 244952e-8, -1059923e-9, -1987626e-9, 7685707e-10, -7449812e-10, 1540183e-9, 6492169e-12, -1994708e-9, 252842e-8, -1161688e-9, -48745e-8, 6971825e-10, -4101838e-10, 2510803e-10, 493432e-10, -1568812e-10, -8365561e-12, 1550837e-10, -3759126e-11, -587722e-10, 1453318e-11], [0.7419495, -1.265564, 5.35289, -0.6943601, 0.6334268, -4.401392, -4.008138, 0.1925556, 4.19544, -5.691241, 5.843494, 0.099229, 6.955515, -10.69527, 10.33675, -15.56398, 12.53921, -6.918823, 5.81623, -5.937945, 5.985502, -2.661318, -768486e-8, 1.241098, -4.992014, 2.609143, -2.613938, 9.835529, -4.843904, -5.668846, 5.978791, -3.260036, 5.180192, -4.412985, -0.9056323, 4.982444, -3.831642, -0.1764503, -0.3866241, 0.6798881, 3.871277, -2.927142, 0.8026502, -9.561519, 13.22909, -6.816519, 9.164402, -8.740796, 0.2639447, -1.659077, 4.349079, 1.37606, -3.764044, 0.7715982, 3.356407, -5.849794, 2.208801, 0.2719999, 2.368731, -2.444048, 0.693714, -4.893127, 10.35797, -7.244517, 3.932821, -5.635353, 1.288105, 3.118792, 1.214756, -2.527023, 2.517651, -4.496631, -0.3933576, 1.219114, 3.392789, -0.01198432, -0.3866742, -4.669404, 1.925265, 1.12289, 2.863835, -4.517564, 0.05304438, 2.18799, 0.3239052, -0.4396546, 0.4904329, 0.1378095, -4.68579, 2.39029, 0.9807748, 2.074262, 1.711745, -4.033321, -2.146698, 1.126689, 1.150527, 0.3171987, 2.267927, -0.3621547, -3.889809, -0.6339567, 4.458255, -0.7234749, -1.095996, -2.674009, 4.480564, -1.408719, 0.03776914, -3.426088, 5.597327, -2.681751, -1.798878, 3.814806, -2.441041, -2.261801, 3.509013, 1.781509, -2.016303, -2.769108, 0.4813841, 4.865514, -5.979201, 6.261843, -5.533944, 1.688407, 0.3141121, 1.888964, -3.845308, 4.161042, -4.621686, 3.109729, -0.9591434, 2.531528, -4.325526, 2.819863, -2.084788, 3.044678, -2.758246, 2.358037, -3.607696, 6.02174, -7.678247, 6.040367, -5.065084, 5.837377, -3.789383, 3.364513, -5.576518, 4.653312, -4.905352, 5.761701, -3.311818, 2.272276, -0.1981421, -2.211044, -0.2530527, -1.041379, 3.495257, 0.6987089, -2.821554, 3.894921, -5.726846, 1.693433, -0.9035234, 5.499915, -5.565781, 4.890765, -5.081723, 1.271063, 1.642669, -0.9757851, 1.264714, -3.410186, 3.879449, -2.393294, 3.926683, -6.780227, 4.490329, -1.603398, 1.971858, -1.390437, 0.4620914, 1.098973, -4.283376, 3.327913, -1.822301, 5.434386, -7.024824, 3.408093, 3.757451, -10.14156, 7.060049, -3.024858, 4.133472, 1.742005, -6.981953, 3.134867, -2.291744, 0.5758592, 4.445875, -1.193241, -3.259818, 1.430417, -1.939449, 3.772087, -2.110734, 2.206465, -1.303279, -3.559896, 1.776801, 2.136945, -1.310107, 5.154293, -3.886747, -4.970298, 3.110487, -0.3517122, 2.814779, 0.9740766, -4.061146, 3.36236, -0.6802968, -5.398347, 5.580874, -2.594875, 4.937474, -6.461361, 5.938492, -8.207558, 10.90749, -7.57887, 1.063244, -0.4845971, 0.8543578, 3.347977, -5.872034, 6.703894, -7.627695, 6.478577, -4.461258, 2.125454, -0.8690537, 1.034592, 0.1244537, 1.333212, -6.305386, 5.946514, -2.078286, 3.304507, -4.898815, 2.670747, -1.310293, -0.3986984, 1.723863, 0.8182193, -1.277466, -1.035942, -0.214691, 3.096208, -2.660986, -0.6007843, 2.395504, -2.898479, 4.243369, -2.348264, -1.131606, 2.19655, -5.386675, 8.163781, -6.143649, 4.340156, -4.062842, 3.652478, -2.463551, -1.390795, 5.441008, -6.237713, 5.268841, -4.961137, 2.884339, 2.532098, -4.664043, 4.804475, -9.544857, 9.240026, -1.149978, -2.260994, 3.582714, -6.399337, 3.527856, -0.6449058, 1.164912, 1.870659, -2.878177, 0.1878314, 1.58543, -7.474836, 10.52564, -6.303773, 5.138287, -2.193012, -1.991967, -0.594968, -0.5693736, 4.227874, -2.532136, 1.851107, -1.183892, 0.8155486, -3.268306, 3.415515, -4.486906, 4.340133, 2.335416, -4.845514, 2.762633, -3.298275, 2.432821, -0.7091373, -2.265051, 5.742823, -2.606798, 1.299498, -5.095257, 1.645021, 3.306556, -2.822648, 2.833373, -3.192411, 4.155596, -3.137145, -3.151716, 5.030614, -2.729896, 4.368865, -3.950014, -0.5564143, 3.378624, -4.027588, 3.230018, -3.493645, 3.926797, -1.244869, -1.175028, 1.827574, -0.9802976, -1.06538, 0.5023927, -0.7885379, 3.427184, -1.69885, -1.337715, 1.353702, -1.318074, -0.369016, 2.119618, -0.1467004, -0.0435771, -1.765012, 0.06626097, 1.723189, -3.111445, 5.328441, -4.706247, 4.73844, -4.101396, -0.9338017, 1.086058, 1.23714, 0.8310472, -0.3546836, -0.3940518, -0.912942, -0.9571256, -0.565337, 5.375968, -4.090661, 1.575623, -2.390097, 1.671525, -0.7014104, 1.782831, -1.456547, -0.6584014, 1.262073, 0.3345494, -2.048716, 2.336087, -1.691041, 0.355128, 0.7605579, -0.04441729, -0.9428544, 1.110498, -1.15074, 0.04640055, 1.347762, -1.847078, 1.867268, -1.419597, 1.86316, -1.380536, -0.7261625, 0.0339029, 0.8885328, 0.03461748, 1.120872, -3.201563, 4.992368, -5.803731, 4.496861, -3.761448, 3.927456, -4.659837, 4.272376, 0.1155318, -1.994306, -0.7535787, -0.2634893, 3.118176, -2.033293, 1.353134, -2.903822, 3.157076, -2.642164, 1.859859, 0.7893198, -2.282365, 0.8280067, -0.3148567, 1.307955, -0.3706386, -2.332399, 2.908714, -0.5106648, -0.9589701, 1.515507, -2.854352, 2.385356, -0.2793541, -0.4981418, -0.1271871, 0.2949756, 1.000517, -1.761183, 2.950559, -4.922612, 2.815194, -0.2837763, 2.797714, -4.632861, 3.762334, -3.55309, 3.513599, -2.806091, 2.591164, -3.482343, 3.212255, -0.7208954, -0.02757079, -1.1757, 0.2649577, 1.711875, -1.317595, -0.09321526, 1.302343, -2.639621, 1.902533, -0.6982032, 2.017305, -2.240154, 1.913015, -2.864741, 1.362493, 0.07887801, 1.266433, -1.769546, 1.929717, -0.7945315, -1.649259, -0.7475149, 4.712417, -3.591929, 2.47357, -3.867288, 3.786194, -3.104443, 3.315755, -2.118529, 0.202874, 0.02068487, -0.229973, 2.473548, -3.232973, 0.6187992, 0.4740423, 0.8794039, -0.7171405, 0.9832702, -2.288168, 0.8940191, 1.357652, -1.772414, 1.254104, 0.1417183, -0.7043928, -0.1424135, 0.5053418, -1.068699, 1.109497, 0.9129118, -1.644051, 0.8679746, -0.7584612, -0.1881704, 0.3137447, 0.5996067, 1.201163, -0.4098067, -3.693132, 1.72887, 1.215877, 2.14732, -3.697, 1.744559, -1.519959, 1.493065, -1.147445, 2.950104, -4.40964, 1.551709, 1.84076, -1.070621, 0.8368478, -2.080914, 0.1285451, 1.013517, 1.553523, -2.148566, -0.1166558, 1.437268, -0.8353526, -0.1389605, -0.2001919, 0.1905667, 1.985628, -3.18787, 2.463279, -2.500859, 2.75852, -2.735381, 3.161777, -2.599785, 2.512283, -4.12847, 3.626233, -1.389029, 1.381014, -2.647406, 2.89362, -1.327186, -0.8111249, 0.8184474, -0.05307217, 0.9114736, -2.264025, 3.485163, -3.675245, 2.327601, -2.405331, 3.264952, -1.25879, -0.473479, -1.251359, 2.739714, -2.865902, 3.918615, -4.307605, 2.760416, -1.759802, 1.357936, 0.5161501, -1.966526, 1.658674, -2.01212, 2.501662, -2.203549, 2.444625, -2.019375, 0.9643303, -0.5246568, -0.4074472, 1.036716, -1.232343, 1.439343, -0.5866009, 1.790708, -3.739596, 0.6220525, 1.763331, -0.3021029, 1.445005, -2.357444, 0.3150023, 0.5695129, -1.160992, 1.268024, -0.6130806, 1.466283, -1.012369, -0.5200533, -0.07159896, -0.3644273, 2.854106, -4.020933, 3.019847, -1.399805, 0.451157, 0.9641797, -2.534124, 1.34729, -0.2209027, 0.9460473, 1.462705, -4.925207, 5.142991, -5.75396, 5.8118, -2.983527, 0.876242, 0.7285427, -2.304782, 2.137173, -2.567107, 3.182052, -1.379896, -1.688361, 3.737558, -3.175553, 1.823645, -2.050851, 2.029565, -0.257489, -2.704873, 3.62021, -1.538355, 1.466336, -2.228118, 0.1596429, 0.3316925, 1.100513, -0.8661502, 0.08648063, 0.8699293, -1.833601, 1.455753, -1.353791, 1.137673, 1.032639, -1.553832, -0.6399715, 1.098027, -0.8062381, 1.140669, 0.2101993, -1.636421, 1.282863, 0.03489199, 0.1171661, -2.435189, 1.973513, -0.6189681, 2.318146, -1.419564, -0.7338469, -0.02781692, -0.7412269, 1.693883, 0.277338, -2.455622, 3.073102, -2.122621, 1.719476, -1.106928, -1.187959, 0.1981383, 2.256336, -1.160365, 0.3624079, 0.610975, -2.954821, 2.453865, -2.047551, 1.794288, 1.363043, -1.172328, -0.7916941, -0.7459568, 0.0409266, 2.096223, -1.894007, 1.689625, -0.8879765, 0.546573, -0.3379545, -0.9822159, -0.4744446, 1.597339, -1.373933, 3.801737, -3.55429, 1.668566, -2.953244, 2.42729, -0.5119445, -0.6899338, 2.215056, -1.549171, 0.7626947, -1.219567, -0.456588, 1.628184, -0.8591776, 0.7817728, -0.4725002, 0.3774706, -0.8648369, -1.13686, 3.293999, -2.200863, 1.556591, -2.39837, 1.347138, 0.284722, -0.8838233, 1.770237, -2.817184, 3.213941, -1.94393, -0.3438703, 0.4523942, 0.284377, 0.9650476, -1.582101, 0.9038143, -2.313287, 4.417107, -3.792378, 2.037368, -0.8744901, -0.3382227, 0.8779872, -1.337588, 1.804931, -0.1011841, -1.242091, -0.02943772, -0.04934344, 1.893191, -2.181188, 1.382258, -0.3085351, -1.447157, 2.045575, -1.364929, 1.382106, -0.3931971, -1.97993, 2.605104, -3.127502, 4.197778, -2.417416, 0.8837573, -2.635036, 3.549347, -2.373835, 0.9537939, 0.4510449, -1.805908, 2.902644, -2.513887, 1.503475, -2.034842, 1.8065, -0.4622758, 0.198297, 0.5228952, -0.8584959, -1.08365, 2.0746, -0.630449, -0.6017718, 0.2861388, -0.1421342, 0.7164504, 0.1074998, -0.7704564, -0.9355024, 2.031673, -1.88677, 2.136676, -2.021617, 2.291291, -2.329457, -0.1537501, 2.033031, -0.5716385, -1.024562, 0.3392226, 0.3104232, 1.484781, -2.565579, 0.622579, 0.0577362, 0.5252714, 0.1970128, 0.2575511, -0.6284651, -0.01734753, -0.7821292, -0.3184976, 1.958641, 0.4972505, -1.682765, -0.04442159, 0.2161722, -0.06115631, 0.6687667, -1.418539, 2.147314, -0.988346, -1.32884, 2.317004, -2.256832, 1.466456, -0.4158775, 0.7060113, -0.7470438, -0.8734168, 0.8818937, 0.640494, -0.3864551, -0.359866, 0.4428724, -1.014814, 0.9554104, 0.2419487, -0.5553506, -0.08962315, -0.2123404, 0.2195666, 1.699378, -2.754258, 1.617349, -1.092052, 2.045833, -2.105015, 0.8239716, -0.4408603, -0.07855491, 1.847397, -1.428299, -0.2485452, -0.2573477, 0.2804651, 0.8018704, -0.2974602, 0.04128798, -0.6031456, -0.6776031, 2.05917, -1.071142, -0.1661381, -0.08097349, 1.120151, -1.54268, 0.7170897, -0.2822204, 0.47873, -0.4794159, 0.9696027, -0.5651997, -0.44144, 0.2744046, -0.9314798, 0.8836594, 1.182466, -1.005551, -0.03355588, -0.603594, 0.5007411, -0.3393138, 1.185776, -1.297643, 0.3366507, 0.2533507, 0.2367721, -0.06698161, -1.064394, 1.493254, -1.052659, 0.2151329, 0.02535787, -0.5435305, 2.155796, -2.054202, 1.52353, -2.100131, 1.261977, -1.176112, 1.674071, 0.4220223, -1.211663, -0.1539558, 0.2600564, -0.1321169, 0.311586, -0.205635, 0.28418, -0.3166229, 0.3581864, -0.276327, 0.3497916, -1.105435, 1.423822, -1.070908, 1.319851, -1.653213, 1.090879, -0.5245213, 0.314878, 0.5606631, -1.079569, 0.2282288, -0.4378653, 2.018239, -1.499192, -0.3373341, 0.8398539, -1.313293, 1.176917, 0.6047238, -1.193591, 1.668768, -3.482062, 3.738609, -3.104966, 2.195722, -0.4044832, 0.7581977, -1.554569, 0.4665193, -0.6674793, 0.7782302, 0.7493081, -0.7177122, 0.1880819, -0.5145184, -0.04373674, 0.4479341, 0.4419989, -1.198415, 1.42316, -1.061143, -0.1688596, 0.4587227, 0.1664246, 1.008059, -1.727499, 0.2380798, -0.4662258, 1.789228, -0.7257213, -1.130618, 1.927236, -1.728735, 0.8234149, 0.09045652, -0.568646, 0.9189304, -1.151004, 0.5523102, 0.05390266, 0.1876489, 0.426272, -1.101427, -0.04866453, 0.8607522, -0.345548, 0.4121956, -0.706286, -0.03258307, 0.8694379, -0.8876231, 0.9102055, -0.6382708, -0.352868, 0.4214948, 0.3627852, -0.6323668, 0.6332561, -0.2803772, 0.3650784, -1.242734, 0.8701445, -0.07943108, 0.5263157, -0.6577176, 0.5214912, -0.6596197, 0.520662, -1.115063, 2.144281, -2.210325, 1.815826, -1.290131, 0.3290143, 1.167081, -2.237962, 1.608359, -0.8352651, 1.144251, -0.7020133, -0.1870808, -0.2658314, 0.8114089, -0.1825792, -0.3313645, 0.3488564, -0.8222941, 1.069733, -0.738666, 1.577032, -2.992281, 2.504008, -1.122681, 1.210372, -1.894427, 1.330734, -0.314062, 0.6032823, -1.533582, 1.55776, -0.9791624, 0.7088296, -0.7672008, 0.9201293, -1.182369, 0.9407201, -0.09368282, 0.2862382, -0.6522914, -0.02590693, -0.9089747, 1.468059, 1.030558, -1.368189, 0.03044856, -1.115884, 0.7305876, 0.8480985, -0.08173969, -0.3935901, -0.2622209, 0.4701384, -0.2939734, 0.3474591, -1.001607, 0.6644005, 0.1030666, 0.2530525, 0.4917447, -1.280447, -0.352651, 1.342214, -0.3774103, -0.520627, 0.7040175, -1141539e-9, -0.3847567, -0.09941916, -0.4168175, 0.9684625, -0.5646766, 0.714483, -0.06649873, -0.7039267, -1.157861, 1.756263, 0.442219, -0.6358848, -0.5703382, 0.5405927, -0.6986537, 0.984606, -0.855931, 1.228724, -1.208261, 0.2082757, 0.4555428, -0.7250308, 1.027344, -0.9455001, 0.4059409, -0.01432322, 0.4036391, -0.5066181, -0.3678093, 0.118148, 0.8010603, -0.7466465, 1.10835, -1.22839, 0.7096497, -1.167896, 0.7679416, -0.185449, 1.384334, -1.568037, 1.262847, -1.690257, 0.9513271, -0.6892428, 0.5817651, 0.4827555, 0.2724285, -0.8825362, -0.4787712, 0.6123141, -0.1758314, 0.2532638, 0.1810618, -0.1969644, 0.3774764, -0.7019482, -0.7008469, 1.590132, -0.5474527, 6539415e-9, 6274553e-10, -0.4173178, 0.8067607, -0.9755701, 0.5016089, 0.0713041, -0.338896, 0.8334766, -0.8267758, 0.7505417, -1.311803, 0.7204022, 0.4019929, -0.1860876, 0.2601152, -1.240713, 1.097427, -0.1910643, 0.06876894, -0.0342718, -0.2039649, -0.09632475, 0.1050836, 0.3816865, -0.3233841, -0.1944777, 0.6057348, -0.5197915, 0.1644325, -0.1585986, -0.03142889, 0.448306, -0.4682459, 0.2976759, -0.05327384, 0.4371391, -1.596845, 1.567659, -0.8194343, 0.8201997, 0.05010041, -1.020692, 0.04428986, 0.746806, -0.6175769, 0.7922442, -0.9041317, 1.282097, -1.350783, 0.4950476, -0.1247328, -0.1852289, 0.2423711, 0.805408, -0.7620147, 0.2359644, -1.30677, 1.271621, 0.2983255, -0.1474049, -0.5215746, -0.3203668, 0.4111447, 0.09602907, 0.7913358, -0.9070968, -0.06446256, -0.0412281, -0.2047424, 0.6801484, 0.1461549, -0.5236387, 0.2999322, -0.4441664, 0.3103438, -0.2963257, 0.1599988, 0.5374609, -0.6918468, 0.4729647, -0.43822, 0.1813714, 0.0720409, -0.05314124, -0.1878828, 0.6205709, -0.8977884, 0.6140282, 0.0125823, -0.2259392, -0.08849696, 0.3189985, -0.4118042, 0.5444018, -0.4594567, 0.237942, -0.1457718, -0.1289269, 0.4013808, -0.2010703, 0.04201325, -0.07084474, -0.07612154, -0.01306495, 0.2050486, 0.196695, -0.6102413, 0.1711907, 0.2428819, 0.2851919, -0.5381689, -0.09878185, 0.2441844, 0.1692052, -0.2091556, 0.120138, -0.2354542, 0.3917514, -0.342878, 0.1539435, -0.2049434, 0.1311329, 0.1973478, -0.06034198, -0.1625526, -0.08381803, 0.1122005, 0.08195522, 0.02217593, 0.04774671, -0.3569086, 0.2415376, -0.02816281, 0.01225708, 0.2614007, -0.3158897, 0.03841457, -0.2218533, 0.2753042, -0.07251303, 0.3172772, -0.1386997, -0.38685, 0.2974479, -0.2283112, 0.1178207, 0.3721153, -0.5355694, 0.3900436, -0.01051209, -0.4056463, 0.3043401, -0.2600431, 0.3307718, -0.05900094, 0.08628496, -0.267481, 0.136638, -0.2010753, 0.2672896, -0.1426148, 0.1678291, -0.02513903, -0.07844781, -0.2294433, 0.2822624, -0.1152973, 0.1872202, -0.1554269, 0.1319357, -0.321073, 0.3335549, -0.3078309, 0.3184916, 7082364e-9, -0.193164, -0.0531063, 0.04588977, 0.1878072, -0.244926, 0.1938776, 0.03898672, -0.1835138, 0.09773449, -0.1753591, 0.1487565, -0.04200366, 0.3251465, -0.383328, 0.0144962, 0.08154757, -0.01822696, -0.01915248, 0.2097138, -0.252795, 0.1705558, -0.2273501, 0.1551148, 1069031e-10, -0.05432461, 0.1989798, -0.2346233, 0.05332373, -1348469e-9, 0.07231171, -0.05356947, -0.02112668, 0.01568658, -0.01357373, 0.1072445, -0.04620835, -0.06022735, -0.05784721, 0.08690341, 0.0429778, -0.05482511, 0.0292107, -0.05782237, 0.08696965, -0.1203463, 0.1405044, -0.08435853, 0.01470427, -0.03415935, 290609e-8, 0.09590113, -0.03245303, -0.07586571, 0.06260529, -0.04008461, 0.01785087, -1388046e-9, -6667805e-9, 0.1062617, -0.1441627, 0.04390985, -0.04097617, 0.08404077, -0.02613635, 0.02294941, -0.06212628, 0.02013866, -6925059e-9, 0.05040542, -0.02860384, -0.02176797, 8262655e-9, 8692441e-9, 9694604e-9, 0.01384342, -0.03769873, 0.01366066, -0.03258821, 0.05469981, -0.01736349, 0.01551809, -0.02140956, -5308934e-9, 4499908e-9, -0.03238395, 0.06017145, -0.01227752, 0.01205449, -0.04387839, 0.0124158, 2497952e-9, -4605945e-9, 0.02173428, -6812624e-9, 5854439e-9, -0.02426672, 0.01087092, 9185933e-9, -8770065e-9, -1900629e-9, 5599854e-9, -3057165e-9, 5323818e-9, -8114871e-9, 0.01768837, -0.0174906, -2109335e-9, -1456522e-9, 0.01531701, -4479673e-9, 6192981e-10, -4629211e-9, -1725718e-9, -1183267e-9, 7592149e-9, -6866209e-9, 9071068e-9, -5765638e-9, -1446993e-9, 5420205e-10, 1273298e-9, -4207713e-10, -2102808e-10, 126748e-8, -5488194e-10, -8170259e-10, 7241282e-10, -4177419e-10, 5224559e-10, -8841331e-10, 3244856e-10, 6404771e-10, -352522e-9, 2774784e-11, -1757003e-10, 6800728e-11, 1209303e-11, 3574563e-12]], before: [{ "250": 4.4, "500": 7.2, "1000": 3.8, "2000": -7, "3000": -22.7, "4000": -26.4, "8000": -39.2 }, { "250": 11.5, "500": 11.7, "1000": -0.2, "2000": -2.8, "3000": -22.2, "4000": -23.5, "8000": -38.3 }, { "250": 1.3, "500": 5.7, "1000": -4.2, "2000": -16.7, "3000": -30.8, "4000": -32.8, "8000": -44.5 }], after: [{ "250": -8, "500": -7.5, "1000": -3.5, "2000": -8.9, "3000": -11.6, "4000": -11.6, "8000": -11.2 }, { "250": -0.9, "500": -3.1, "1000": -7.5, "2000": -4.8, "3000": -11.1, "4000": -8.5, "8000": -10 }, { "250": -11.1, "500": -9.1, "1000": -11.5, "2000": -18.6, "3000": -19.7, "4000": -18.1, "8000": -16.5 }], ringing: { above: 5638.5, t60: 0.0963 }, seeds: [220256911, 203479292, 253812149], curve: [[10, -4.35], [10.15, -4.35], [10.29, -4.35], [10.44, -4.35], [10.59, -4.35], [10.75, -4.35], [10.91, -4.35], [11.06, -4.35], [11.22, -4.35], [11.39, -4.35], [11.55, -4.35], [11.72, -4.35], [11.89, -4.35], [12.07, -4.35], [12.24, -4.35], [12.42, -4.35], [12.6, -4.35], [12.78, -4.35], [12.97, -4.35], [13.16, -4.35], [13.35, -4.35], [13.54, -4.35], [13.74, -4.35], [13.94, -4.35], [14.14, -4.35], [14.35, -4.35], [14.56, -4.35], [14.77, -4.35], [14.98, -4.35], [15.2, -4.35], [15.42, -4.35], [15.65, -4.35], [15.87, -4.35], [16.1, -4.35], [16.34, -4.35], [16.58, -4.35], [16.82, -4.35], [17.06, -4.35], [17.31, -4.35], [17.56, -4.35], [17.82, -4.35], [18.08, -4.35], [18.34, -4.35], [18.61, -4.35], [18.88, -4.35], [19.15, -4.35], [19.43, -4.35], [19.71, -4.35], [20, -4.35], [20.29, -4.35], [20.59, -4.35], [20.89, -4.35], [21.19, -4.35], [21.5, -4.35], [21.81, -4.35], [22.13, -4.35], [22.45, -4.35], [22.78, -4.35], [23.11, -4.35], [23.44, -4.35], [23.78, -4.35], [24.13, -4.35], [24.48, -4.35], [24.84, -4.35], [25.2, -4.35], [25.56, -4.35], [25.94, -4.35], [26.31, -4.35], [26.7, -4.35], [27.09, -4.35], [27.48, -4.35], [27.88, -4.35], [28.28, -4.35], [28.7, -4.35], [29.11, -4.35], [29.54, -4.35], [29.97, -4.35], [30.4, -4.35], [30.84, -4.35], [31.29, -4.35], [31.75, -4.35], [32.21, -4.35], [32.68, -4.35], [33.15, -4.35], [33.64, -4.35], [34.13, -4.35], [34.62, -4.35], [35.13, -4.35], [35.64, -4.35], [36.15, -4.35], [36.68, -4.35], [37.21, -4.35], [37.75, -4.35], [38.3, -4.35], [38.86, -4.35], [39.43, -4.35], [40, -4.35], [40.58, -4.35], [41.17, -4.35], [41.77, -4.35], [42.38, -4.35], [42.99, -4.35], [43.62, -4.35], [44.25, -4.35], [44.9, -4.35], [45.55, -4.35], [46.21, -4.35], [46.89, -4.35], [47.57, -4.35], [48.26, -4.35], [48.96, -4.35], [49.67, -4.35], [50.4, -4.35], [51.13, -4.35], [51.87, -4.35], [52.63, -4.24], [53.39, -3.67], [54.17, -3.09], [54.96, -2.5], [55.76, -1.96], [56.57, -1.44], [57.39, -0.99], [58.23, -0.56], [59.07, -0.18], [59.93, 0.14], [60.8, 0.43], [61.69, 0.7], [62.59, 0.91], [63.5, 1.06], [64.42, 1.08], [65.36, 0.89], [66.31, 0.78], [67.27, 0.86], [68.25, 0.98], [69.24, 1.12], [70.25, 1.29], [71.27, 1.49], [72.31, 1.74], [73.36, 2.11], [74.43, 2.51], [75.51, 2.83], [76.61, 3.18], [77.72, 3.58], [78.85, 4], [80, 4.42], [81.16, 4.88], [82.34, 5.36], [83.54, 5.87], [84.76, 6.39], [85.99, 6.92], [87.24, 7.36], [88.51, 7.74], [89.8, 8.04], [91.1, 8.23], [92.43, 8.28], [93.77, 8.23], [95.14, 8.1], [96.52, 7.92], [97.92, 7.73], [99.35, 7.27], [100.79, 6.69], [102.26, 5.95], [103.75, 5.19], [105.26, 4.43], [106.79, 3.69], [108.34, 2.95], [109.92, 2.07], [111.52, 1.46], [113.14, 0.86], [114.78, 0.27], [116.45, -0.28], [118.15, -0.78], [119.86, -1.25], [121.61, -1.69], [123.38, -1.97], [125.17, -2.26], [126.99, -2.48], [128.84, -2.61], [130.71, -2.67], [132.61, -2.61], [134.54, -2.53], [136.5, -2.46], [138.49, -2.28], [140.5, -2.03], [142.54, -1.74], [144.62, -1.27], [146.72, -0.92], [148.85, -0.71], [151.02, -0.35], [153.22, 0.02], [155.45, 0.53], [157.71, 0.98], [160, 1.53], [162.33, 1.89], [164.69, 2.54], [167.08, 3.14], [169.51, 3.61], [171.98, 3.98], [174.48, 4.06], [177.02, 4.37], [179.59, 4.7], [182.21, 4.96], [184.86, 5.1], [187.55, 4.98], [190.27, 4.61], [193.04, 4.14], [195.85, 3.67], [198.7, 3.23], [201.59, 2.73], [204.52, 2.03], [207.49, 1.29], [210.51, 0.52], [213.57, -0.14], [216.68, -0.67], [219.83, -1.05], [223.03, -1.32], [226.27, -1.73], [229.57, -2.37], [232.9, -3.25], [236.29, -3.96], [239.73, -4.6], [243.22, -4.99], [246.75, -5.19], [250.34, -5.33], [253.98, -5.19], [257.68, -4.98], [261.43, -4.89], [265.23, -4.77], [269.09, -4.74], [273, -4.85], [276.97, -5.11], [281, -5.38], [285.09, -5.69], [289.23, -6.06], [293.44, -6.24], [297.71, -6.24], [302.04, -6.1], [306.43, -5.91], [310.89, -5.65], [315.41, -5.48], [320, -5.35], [324.65, -5.33], [329.38, -5.37], [334.17, -5.44], [339.03, -5.7], [343.96, -6.13], [348.96, -6.4], [354.04, -6.62], [359.19, -6.57], [364.41, -6.31], [369.71, -6.06], [375.09, -5.97], [380.55, -6.04], [386.08, -5.96], [391.7, -5.79], [397.39, -5.6], [403.17, -5.66], [409.04, -5.55], [414.99, -5.45], [421.02, -5.42], [427.15, -5.36], [433.36, -5.84], [439.67, -6.47], [446.06, -6.55], [452.55, -6.2], [459.13, -6.17], [465.81, -6.73], [472.58, -7.34], [479.46, -7.67], [486.43, -7.67], [493.51, -7.65], [500.69, -7.7], [507.97, -7.92], [515.36, -8.27], [522.85, -8.56], [530.46, -9.04], [538.17, -9.67], [546, -10.24], [553.94, -10.22], [562, -9.97], [570.18, -10.01], [578.47, -10.24], [586.88, -10.31], [595.42, -10.25], [604.08, -10.23], [612.87, -10.26], [621.78, -10.37], [630.82, -10.66], [640, -10.77], [649.31, -10.57], [658.75, -10.51], [668.34, -10.44], [678.06, -10.05], [687.92, -9.41], [697.92, -8.88], [708.08, -8.41], [718.38, -8.02], [728.82, -7.55], [739.43, -7.1], [750.18, -6.8], [761.09, -6.46], [772.16, -6.16], [783.39, -6.02], [794.79, -5.83], [806.35, -5.29], [818.08, -4.87], [829.98, -4.73], [842.05, -4.45], [854.3, -4.4], [866.72, -4.06], [879.33, -3.36], [892.12, -2.82], [905.1, -2.58], [918.26, -2.27], [931.62, -1.96], [945.17, -1.88], [958.92, -1.44], [972.86, -0.8], [987.01, -0.5], [1001.37, -0.23], [1015.94, -0.11], [1030.71, -0.46], [1045.71, -0.2], [1060.92, 0.07], [1076.35, 0.24], [1092, 0.2], [1107.89, 0.19], [1124, -0.15], [1140.35, -0.57], [1156.94, -0.65], [1173.77, -0.67], [1190.84, -0.47], [1208.16, -0.35], [1225.73, -0.37], [1243.56, -0.54], [1261.65, -0.64], [1280, -0.69], [1298.62, -1.09], [1317.51, -1.15], [1336.67, -1.22], [1356.11, -1.37], [1375.84, -1.37], [1395.85, -1.41], [1416.15, -1.27], [1436.75, -1.09], [1457.65, -1.15], [1478.85, -1.1], [1500.36, -0.96], [1522.19, -0.74], [1544.33, -0.78], [1566.79, -0.78], [1589.58, -0.37], [1612.7, 0.18], [1636.16, 1.41], [1659.95, 1.81], [1684.1, 2.09], [1708.6, 2.33], [1733.45, 2.35], [1758.66, 2.35], [1784.24, 2.53], [1810.19, 3.37], [1836.52, 3.91], [1863.24, 4.08], [1890.34, 4.1], [1917.83, 4.15], [1945.73, 4.31], [1974.03, 4.63], [2002.74, 5.13], [2031.87, 5.62], [2061.43, 5.9], [2091.41, 6.02], [2121.83, 6.08], [2152.69, 6.25], [2184.01, 6.57], [2215.77, 7.12], [2248, 7.45], [2280.7, 7.66], [2313.87, 8.52], [2347.53, 8.99], [2381.68, 10.14], [2416.32, 11.36], [2451.46, 12.72], [2487.12, 14.14], [2523.3, 15.1], [2560, 15.47], [2597.24, 15.8], [2635.01, 16.2], [2673.34, 16.94], [2712.23, 17.06], [2751.68, 17.12], [2791.7, 17.33], [2832.31, 17.32], [2873.5, 17.69], [2915.3, 18.11], [2957.7, 18.17], [3000.72, 18.12], [3044.37, 18.31], [3088.65, 18.01], [3133.58, 17.79], [3179.16, 17.56], [3225.4, 17.74], [3272.31, 18.1], [3319.91, 18.37], [3368.2, 18.45], [3417.19, 18.37], [3466.89, 18.54], [3517.32, 18.74], [3568.48, 19.12], [3620.39, 19.27], [3673.05, 19.43], [3726.47, 19.81], [3780.67, 20.12], [3835.67, 20.3], [3891.46, 20.76], [3948.06, 21.28], [4005.49, 21.86], [4063.75, 22.1], [4122.86, 22.38], [4182.82, 22.63], [4243.66, 23.22], [4305.39, 24.19], [4368.01, 24.22], [4431.55, 24.77], [4496.01, 24.92], [4561.4, 25.24], [4627.75, 25.54], [4695.06, 25.81], [4763.35, 26.22], [4832.64, 26.71], [4902.93, 27.35], [4974.24, 27.76], [5046.6, 28.25], [5120, 28.51], [5194.47, 28.55], [5270.03, 28.92], [5346.68, 29.17], [5424.45, 29.3], [5503.35, 30.21], [5583.4, 30.38], [5664.61, 30.93], [5747.01, 31.36], [5830.6, 32.12], [5915.41, 32.43], [6001.45, 32.66], [6088.74, 33.12], [6177.3, 33.42], [6267.15, 33.68], [6358.31, 33.87], [6450.8, 34.08], [6544.62, 34.22], [6639.82, 34.41], [6736.4, 34.46], [6834.38, 34.6], [6933.79, 34.73], [7034.64, 34.97], [7136.96, 35.21], [7240.77, 35.31], [7346.09, 35.3], [7452.94, 35.44], [7561.35, 35.51], [7671.33, 35.53], [7782.91, 35.41], [7896.12, 35.34], [8010.97, 35.32], [8127.49, 35.26], [8245.71, 35.35], [8365.65, 35.36], [8487.33, 35.27], [8610.78, 35.19], [8736.03, 35.18], [8863.09, 35.15], [8992.01, 35.2], [9122.8, 35.21], [9255.5, 35.32], [9390.12, 35.34], [9526.7, 35.37], [9665.27, 35.31], [9805.86, 35.45], [9948.49, 35.55], [10093.19, 35.55], [10240, 35.61], [10388.94, 35.57], [10540.05, 35.59], [10693.36, 35.69], [10848.9, 35.79], [11006.7, 35.78], [11166.8, 35.67], [11329.22, 35.53], [11494.01, 35.45], [11661.2, 35.43], [11830.81, 35.43], [12002.89, 35.35], [12177.48, 35.31], [12354.61, 35.25], [12534.31, 35.18], [12716.62, 35.14], [12901.59, 35.07], [13089.25, 35.09], [13279.64, 35.09], [13472.79, 35.08], [13668.76, 35.12], [13867.58, 35.19], [14069.29, 35.35], [14273.93, 35.55], [14481.55, 35.77], [14692.19, 36.01], [14905.89, 36.31], [15122.7, 36.63], [15342.66, 36.95], [15565.83, 37.31], [15792.24, 37.73], [16021.94, 38.15], [16254.99, 38.66], [16491.42, 39.16], [16731.29, 39.8], [16974.66, 40.53], [17221.56, 41.25], [17472.05, 41.99], [17726.19, 42.69], [17984.02, 43.25], [18245.61, 43.68], [18510.99, 44.02], [18780.24, 44.28], [19053.41, 44.5], [19330.55, 44.69], [19611.72, 44.85], [19896.97, 44.95], [20186.38, 45.04], [20480, 45.12], [20777.89, 45.19], [21080.11, 45.25], [21386.73, 45.31], [21697.8, 45.36], [22013.41, 45.41]] } } };
 
 // render/node/string-body-radiation.json
 var string_body_radiation_default = {
-  method: "native/strings-model/body_target.py --fit --write: each instrument's corrected bodies (Artifastring's body times the renders' correction, every variant) brought nearest their target under its 0 dB point by an order-2 Butterworth high-pass, least squares in dB at the target's points",
+  method: "native/strings-model/body_target.py --fit --write: each instrument's corrected bodies (Artifastring's body times the renders' correction, every variant, over a third of an octave about each point) brought nearest their target under its plateau (400 Hz to 1 kHz) by an order-2 Butterworth high-pass, least squares in dB at the target's points",
   corrections: {
     path: "render/node/string-body-corrections.json",
-    sha256: "7ae4534e32ca797a598d64db268a9da766f5293f77e7d785c1a805589d109273"
+    sha256: "b38af4658a3eaa412a00e394c6794817e239712c398b0108299d716e9d09d187"
   },
   bodies: {
     violin: "652cf586eddfb526e4d316dbbd14f062d0787b3648d0e6c9c2ca1e64f6dd9db1",
     viola: "71cfbd19983d13fdfb0a5f9115d3c35467d00272dbd1e2068899ab1868e28410",
-    cello: "1518ed989f23537d69a4d2ecc7fbe4811443ba44a8b1cf1a46957153bd13a940"
+    cello: "1518ed989f23537d69a4d2ecc7fbe4811443ba44a8b1cf1a46957153bd13a940",
+    contrabass: "1518ed989f23537d69a4d2ecc7fbe4811443ba44a8b1cf1a46957153bd13a940"
   },
   instruments: {
     violin: {
-      hz: 132.5,
+      hz: 251.3,
       order: 2,
-      offDb: 2.5,
-      unradiatedOffDb: 5.6
+      offDb: 2.8,
+      unradiatedOffDb: 4.6
     },
     viola: {
-      hz: 197.8,
+      hz: 227.2,
       order: 2,
-      offDb: 2.3,
-      unradiatedOffDb: 11.8
+      offDb: 3.9,
+      unradiatedOffDb: 7.6
     },
     cello: {
-      hz: 43,
+      hz: 63,
       order: 2,
-      offDb: 3.4,
+      offDb: 3.6,
+      unradiatedOffDb: 3.8
+    },
+    contrabass: {
+      hz: 49.7,
+      order: 2,
+      offDb: 3.7,
       unradiatedOffDb: 4.3
     }
   }
@@ -26282,7 +43650,7 @@ var number = (v) => Number.isFinite(+v) ? +v : null;
 function stringsDial({ type, variant, seed: seed2, from, start, variants, fitted, gainDb, neutralDb, finger, heardThrough, labels, send, keep, kept, forget, clock = () => performance.now() / 1e3, every: every2 = 5e-3 }) {
   const kindOf = (type2) => {
     const name = INSTRUMENTS[type2], body = name, { hz, measured: measured3, source: source2 } = airMode(body), scaled = bowedOf(name).bodyScale ?? null;
-    const radiation = fitted ? string_body_radiation_default.instruments[scaled ? scaled.from : name] : null;
+    const own2 = Boolean(string_body_corrections_default.instruments[name]), radiation = fitted ? string_body_radiation_default.instruments[own2 || !scaled ? name : scaled.from] : null;
     return {
       instrument: name,
       name,
@@ -26290,7 +43658,7 @@ function stringsDial({ type, variant, seed: seed2, from, start, variants, fitted
       fingerboard: fingerboardEnd(body),
       airMode: { hz: Math.round(10 * hz) / 10, measured: measured3, source: source2 },
       bodyScaled: scaled ? { from: scaled.from, ratio: +scaled.ratio.toFixed(4) } : null,
-      correctedRadiation: radiation ? scaled ? { hz: +(radiation.hz / scaled.ratio).toFixed(1), scaled: true } : { hz: radiation.hz, offDb: radiation.offDb, unradiatedOffDb: radiation.unradiatedOffDb } : null,
+      correctedRadiation: radiation ? scaled && !own2 ? { hz: +(radiation.hz / scaled.ratio).toFixed(1), scaled: true } : { hz: radiation.hz, offDb: radiation.offDb, unradiatedOffDb: radiation.unradiatedOffDb } : null,
       vibrato: instrumentVibrato(name),
       neutral: NEUTRAL_NOTES[name] ?? null,
       neutralDb: neutralDb(name, type2),

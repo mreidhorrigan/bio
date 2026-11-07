@@ -9219,6 +9219,7 @@ var init_sources = __esm({
         "fletcher-1964": { kind: "literature", authors: "H. Fletcher", title: "Normal Vibration Frequencies of a Stiff Piano String", year: 1964, doi: "10.1121/1.1918933", in: "JASA 36(1), 203-209" },
         "schelleng-1973": { kind: "literature", authors: "J. C. Schelleng", title: "The bowed string and the player", year: 1973, doi: "10.1121/1.1913322", in: "JASA 53(1), 26-41" },
         "schoonderwaldt-2009": { kind: "literature", authors: "E. Schoonderwaldt", title: "The player and the bowed string: Coordination of bowing parameters in violin and viola performance", year: 2009, doi: "10.1121/1.3203209", in: "JASA 126(5), 2709-2720" },
+        "schoonderwaldt-altenmuller-2014": { kind: "literature", authors: "E. Schoonderwaldt, E. Altenmüller", title: "Coordination in fast repetitive violin-bowing patterns", year: 2014, doi: "10.1371/journal.pone.0106615", in: "PLoS ONE 9(9), e106615" },
         "schoonderwaldt-guettler-askenfelt-2003": { kind: "literature", authors: "E. Schoonderwaldt, K. Guettler, A. Askenfelt", title: "Effect of the width of the bow hair on the violin string spectrum", year: 2003, in: "Proceedings of the Stockholm Music Acoustics Conference (SMAC 03), Stockholm", saved: "research-downloads/strings/bow-hair/schoonderwaldt-guettler-askenfelt-2003-smac-bow-width.pdf", noDoi: "conference proceedings: none found at Crossref (29 October 2026)" },
         "guettler-askenfelt-1997": { kind: "literature", authors: "K. Guettler, A. Askenfelt", title: "Acceptance limits for the duration of pre-Helmholtz transients in bowed string attacks", year: 1997, doi: "10.1121/1.418520", in: "JASA 101(5), 2903-2913" },
         "iso-16-1975": { kind: "literature", authors: "International Organization for Standardization", title: "ISO 16:1975 Acoustics -- Standard tuning frequency (Standard musical pitch)", year: 1975, standard: "ISO 16:1975" },
@@ -9301,7 +9302,8 @@ var init_sources = __esm({
         "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" },
         "cellofun-extensions": { kind: "vernacular", who: `cellofun.eu, a cellist's technique encyclopaedia: "Extensions On The Cello" and "Simple Extensions in the Neck Region"`, url: "https://cellofun.eu/?p=1661", accessed: "2026-11-06" },
         "gale-triangulation": { kind: "vernacular", who: `T. B. Gale, Triangulation of Fingering Systems for the Double Bass (A Complete Method), Vol. 1, its publisher's page: "Closed Hand (Simandl 1-2-4), Open Hand (extension fingering 1-2-3-4), and Thumb Positions"`, url: "https://www.sheetmusicplus.com/en/product/triangulation-of-fingering-systems-for-the-double-bass-a-complete-method-vol-1-22576307.html", accessed: "2026-11-06" },
-        "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" }
+        "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" },
+        "furneaux-1999": { kind: "literature", authors: "S. Furneaux, M. F. Land", title: "The effects of skill on the eye-hand span during musical sight-reading", year: 1999, doi: "10.1098/rspb.1999.0943", in: "Proceedings of the Royal Society of London B 266(1436), 2435-2440" }
       }
     };
   }
@@ -10737,6 +10739,10 @@ var init_bowed2 = __esm({
             },
             lifted: { value: 0.03, unit: "s", kind: "unmeasured", reason: "ours: a stroke ended with its bow stopped on the string lifted this long before the next stroke at the latest", searched: [{ where: "web search", query: "bowed note release bow lift off string timing measured violin players decay after bow", date: "2026-10-29", found: "spiccato's tails (Guettler & Askenfelt); a violin offset detector's envelopes (ISMIR 2015); no player's release measured" }] },
             slur: { value: 0.012, unit: "s", kind: "unmeasured", reason: "ours: a slur's finger change", searched: [{ where: "web search", query: "string players damping pizzicato with finger decay time measured; legato finger change transition time violin ms", date: "2026-10-29", found: "plucked cello strings' damping measured and modelled (Mansour & Scavone), not a finger's; sample libraries' legato transitions (100-333 ms), not players'; no finger's damping nor finger change measured" }] },
+            crossing: {
+              share: { value: 0.207, unit: "share of the note it crosses to", kind: "literature", source: "schoonderwaldt-altenmuller-2014", at: "Results, the string crossing's width", note: "a slur across strings rolled from one string to the next over this, the bow on both at once, the one it leaves lifted as the one it takes is set down: the bow on both strings over the middle 0.32 of its inclination's peak-to-peak swing (median over the players' repeated crossings, 80% within 0.18 to 0.54, the bow hair's and strings' compliance), the inclination near sinusoidal and one crossing a note, 2 asin(0.32) / pi of a note; the crossing's duration affected by tempo", measuredOn: ["violin"] },
+              seconds: { value: [0.028, 0.053], unit: "s", kind: "literature", source: "schoonderwaldt-altenmuller-2014", at: "Methods (3.9 to 7.5 notes/s); Results", note: "that share at the note rates measured, 7.5 to 3.9 notes a second (its 80% at the fastest 15 to 48 ms): a crossing held within them, unmeasured beyond", measuredOn: ["violin"] }
+            },
             loure: {
               within: { value: 0.1, unit: "semitones", kind: "unmeasured", reason: "ours: a pitch slurred to again within this of the one before is loure, one bow, each note marked by the bow slowed on the string", searched: [{ where: "web search", query: "portato loure bowing measured bow velocity force violin motion capture", date: "2026-10-29", found: "bow velocity's profile from rectangular to sinusoidal as strokes quicken (Schoonderwaldt); no portato or loure measured" }] },
               seconds: { value: 0.08, unit: "s", kind: "unmeasured", reason: "ours: its slowing over this round the note's time (the bow's following at least)", searched: [{ where: "web search", query: "portato loure bowing measured bow velocity force violin motion capture", date: "2026-10-29", found: "bow velocity's profile from rectangular to sinusoidal as strokes quicken (Schoonderwaldt); no portato or loure measured" }] },
@@ -11034,7 +11040,9 @@ var init_bowed2 = __esm({
               least: { value: 0.05, unit: "semitones", kind: "unmeasured", reason: "ours: a slide narrower than this (5 cents) none, taken as near the least change of pitch heard", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }, { where: "web search", query: "frequency difference limen pure tone 1 kHz percent cents just noticeable difference pitch musicians Wier Jesteadt Green 1977", date: "2026-10-29", found: "Wier, Jesteadt & Green 1977 (JASA 61, 178-184) measured pure tones' frequency difference limens by frequency and level, their values not reached in what was read; no slide's least width measured" }] }
             },
             hand: {
-              shift: { value: 0.3, unit: "s, the hand moved from one position to another", kind: "literature", source: "visentin-2015", at: "Table 2", note: "six highly trained violinists' durations of shift, first to third position and third to fifth, on one string and two: averages of 294 to 404 ms for four of them at 60 to 100 beats a minute, another's about 450 ms; begun notes before its arrival where the tempo asks it. The least of them taken. Measured on violinists alone: a cello's or bass's longer shifts unmeasured", measuredOn: ["violin"] }
+              shift: { value: 0.3, unit: "s, the hand moved from one position to another", kind: "literature", source: "visentin-2015", at: "Table 2", note: "six highly trained violinists' durations of shift, first to third position and third to fifth, on one string and two: averages of 294 to 404 ms for four of them at 60 to 100 beats a minute, another's about 450 ms; begun notes before its arrival where the tempo asks it. The least of them taken. Measured on violinists alone: a cello's or bass's longer shifts unmeasured", measuredOn: ["violin"] },
+              least: { value: 0.5, unit: "semitones above its open string, the nearest its nut a finger stops it", kind: "unmeasured", reason: "ours: a quarter tone -- a low first finger, a semitone over its open string, stops it at the nut as players are taught (1L), a quarter tone pressed back from there; nearer, the finger's own width stops the string further from the nut than asked, and a player takes the note on the string below (the model's finger, physical-strings.js MODEL.leastFinger, is its own limit, not a player's)", searched: [{ where: "web search", query: "quarter tone above open string violin first finger close to the nut playable", date: "2026-11-07", found: "none measured: a low first finger a semitone over the open string, at the nut, taught (violinlounge.com, how to play a low first finger); fingers press over a width, stopping the string some way back from the nut (fiddlerman.com forum, notes placement problem)" }] },
+              foresee: { value: 1, unit: "s, how far ahead of the note it plays its hand plans its notes", kind: "literature", source: "furneaux-1999", at: "abstract; Results", note: "the eye-hand span in time while sight-reading, about 1 s for professional and amateur pianists alike (0.7 s at fast tempos, 1.3 s at slow); four notes ahead for professionals, two for amateurs. Measured on pianists: a string player's unmeasured", measuredOn: ["piano"] }
             }
           }
         },
@@ -13179,21 +13187,26 @@ var init_bowed_instruments = __esm({
 });
 
 // public/shared/performers/idiom.js
+function bowedHand(id4, strings3, reach) {
+  const family = (name12) => tryPlayer(id4, `hand.${name12}`) ?? tryPlayer("violin-family", `hand.${name12}`);
+  const [frame4, extended] = ["frame", "extended"].map((name12) => handOf(id4, name12)), [shift, least, foresee] = ["shift", "least", "foresee"].map(family);
+  return [frame4, extended, shift, least, foresee].every(Number.isFinite) ? {
+    strings: [...strings3],
+    reach,
+    first: FIRST,
+    frame: +frame4.toFixed(6),
+    extended: +extended.toFixed(6),
+    shift,
+    least,
+    foresee,
+    unit: "semitones; s",
+    source: "registry/players/bowed.json hand: its frame, first finger to fourth in its lowest position, its players' (vernacular; a given instrument's read between them by its size, bowed-instruments.js bySize); a shift's time violinists' measured (Visentin et al. 2015); the nearest its nut a finger stops a string (ours); how far ahead it plans, pianists' eye-hand span sight-reading (Furneaux & Land 1999)"
+  } : null;
+}
 function idiomFacts(facts) {
   const register = [...facts.compass.register];
   if (facts.kind === "bow") {
-    const { strings: strings3, reach } = facts.articulation, id4 = facts.instrument;
-    const [frame4, extended] = ["frame", "extended"].map((name12) => handOf(id4, name12)), shift = tryPlayer(id4, "hand.shift") ?? tryPlayer("violin-family", "hand.shift");
-    const hand = [frame4, extended, shift].every(Number.isFinite) ? {
-      strings: [...strings3],
-      reach,
-      first: FIRST,
-      frame: +frame4.toFixed(6),
-      extended: +extended.toFixed(6),
-      shift,
-      unit: "semitones; s",
-      source: "registry/players/bowed.json hand: its frame, first finger to fourth in its lowest position, its players' (vernacular; a given instrument's read between them by its size, bowed-instruments.js bySize); a shift's time violinists' measured (Visentin et al. 2015)"
-    } : null;
+    const { strings: strings3, reach } = facts.articulation, hand = bowedHand(facts.instrument, strings3, reach);
     const ceiling = facts.compass.harmonicCeiling ?? null, harmonics = ceiling == null ? [] : strings3.flatMap((open) => {
       const out = [];
       for (let n = 2; open + 12 * Math.log2(n) <= ceiling; n++) out.push(+(open + 12 * Math.log2(n)).toFixed(3));
@@ -13249,10 +13262,15 @@ function idiomOf(idiom) {
     const stopped = places.filter((p) => p > 0);
     return stopped.length < 2 || Math.max(...stopped) <= top(Math.min(...stopped), frame4) + 1e-9;
   };
-  const handStates = (pitch5) => hand ? hand.strings.flatMap((open, string) => {
-    const place2 = pitch5 - open;
-    return place2 >= -OPEN && place2 <= hand.reach + OPEN ? [{ string, place: Math.abs(place2) < OPEN ? 0 : +place2.toFixed(6) }] : [];
-  }) : [];
+  const handStates = (pitch5) => {
+    if (!hand) return [];
+    const every2 = hand.strings.flatMap((open, string) => {
+      const place2 = pitch5 - open;
+      return place2 >= -OPEN && place2 <= hand.reach + OPEN ? [{ string, place: Math.abs(place2) < OPEN ? 0 : +place2.toFixed(6) }] : [];
+    });
+    const stopped = every2.filter((state2) => state2.place === 0 || !(state2.place < hand.least));
+    return stopped.length ? stopped : every2;
+  };
   const POSITIONS = hand ? [...Array(Math.floor(hand.reach) + 1).keys()] : [];
   const holding = (place2) => place2 === 0 ? POSITIONS : POSITIONS.filter((q3) => q3 <= place2 + 1e-9 && place2 <= top(q3, hand.extended) + 1e-9);
   const statesOf = /* @__PURE__ */ new Map();
@@ -13323,8 +13341,33 @@ function idiomOf(idiom) {
     });
     return path && path.map((s, k2) => states[k2][s]);
   };
+  const foreseen2 = (steps, position2) => {
+    if (!hand || !steps.length) return null;
+    const toGo = new Array(steps.length);
+    for (let k2 = steps.length - 1; k2 >= 0; k2--) {
+      const after = toGo[k2 + 1], stay = /* @__PURE__ */ new Map();
+      let cheapest = Infinity;
+      if (after) steps[k2 + 1].states.forEach((state2, j) => {
+        if (after[j] < (stay.get(state2.position) ?? Infinity)) stay.set(state2.position, after[j]);
+        cheapest = Math.min(cheapest, after[j]);
+      });
+      const shifted = after ? hand.shift / Math.max(steps[k2 + 1].since, 1e-6) + cheapest : 0;
+      toGo[k2] = steps[k2].states.map((state2) => state2.place / 12 + (after ? Math.min(stay.get(state2.position) ?? Infinity, shifted) : 0));
+    }
+    let here = position2;
+    return steps.map((step2, k2) => {
+      const cost = (j) => toGo[k2][j] + (here != null && step2.states[j].position !== here ? hand.shift / Math.max(step2.since, 1e-6) : 0), off = (j) => Math.abs(step2.states[j].position - (here ?? 0));
+      const best = step2.states.reduce((best2, _, j) => {
+        if (best2 < 0) return j;
+        const d = cost(j) - cost(best2);
+        return d < -1e-12 || Math.abs(d) <= 1e-12 && off(j) < off(best2) ? j : best2;
+      }, -1);
+      here = step2.states[best]?.position ?? null;
+      return step2.states[best] ?? null;
+    });
+  };
   const techniquesIn = ([low, high]) => Object.fromEntries(Object.entries(idiom.techniques ?? {}).map(([kind, ranges2]) => [kind, covered(ranges2, low, high)]));
-  return Object.freeze({ registerAt, move, walk, together: together2, handStates, fingering, techniquesIn, favours: idiom.favours ?? null, hand, law });
+  return Object.freeze({ registerAt, move, walk, together: together2, handStates, statesAt, foreseen: foreseen2, fingering, techniquesIn, favours: idiom.favours ?? null, hand, law });
 }
 function byPosition(frontier) {
   const best = /* @__PURE__ */ new Map();
@@ -17603,6 +17646,14 @@ function planPhrase2({ instrument = "violin", register = null, pool, meter, bpm,
   if (line.status === "declined") return { ...line, strokes: [], changes: [] };
   return { ...bowPhrase(line.notes, { kind, choices }), motif: line.motif, apex: line.apex, variation: line.variation, lead: line.lead, ...line.choice ? { choice: line.choice } : {} };
 }
+function bowingOf({ notes, strokes }) {
+  const first = new Set((strokes ?? []).map((stroke2) => stroke2.notes[0]));
+  return notes.map((note, k2) => {
+    const before4 = notes[k2 - 1];
+    if (!before4 || note.start - before4.end > JOIN_WITHIN) return "begun";
+    return first.has(note.id) || Math.abs(note.pitch - before4.pitch) < SAME_PITCH ? "change" : "slurred";
+  });
+}
 function bowPhrase(input, { kind, choices = BOWED_LINE }) {
   const bow = { ...BOW, strings: kind.strings, reach: kind.reach, lengthCm: kind.lengthCm }, length = bow.lengthCm, changes = [];
   const notes = input.map((note) => ({ ...note }));
@@ -17737,7 +17788,7 @@ function bowPhrase(input, { kind, choices = BOWED_LINE }) {
   for (const stroke2 of drawn4) if (stroke2.change) changes.push({ at: stroke2.change.at, change: "a bow change inside the held note", because: "it wants more than the whole bow at its slowest" });
   return { status: "bowed", notes, strokes: drawn4, changes, startAt: drawn4[0]?.from ?? 0 };
 }
-var LINE_SETTING, SAME, JOIN_WITHIN, MARGIN_GRAINS, BISECTIONS, REPAIRS_PER_NOTE, REPAIRS_MORE, bowed, BOW_CM, BOWED_INSTRUMENTS, SLIDE, BOWED_SLIDE_SPEED, BOWED_LINE;
+var LINE_SETTING, SAME, JOIN_WITHIN, MARGIN_GRAINS, BISECTIONS, REPAIRS_PER_NOTE, REPAIRS_MORE, SAME_PITCH, bowed, BOW_CM, BOWED_INSTRUMENTS, SLIDE, BOWED_SLIDE_SPEED, BOWED_LINE;
 var init_bowed_line = __esm({
   "public/shared/performers/bowed-line.js"() {
     init_bow();
@@ -17752,6 +17803,7 @@ var init_bowed_line = __esm({
     BISECTIONS = LINE_SETTING("bisections");
     REPAIRS_PER_NOTE = LINE_SETTING("repairsPerNote");
     REPAIRS_MORE = LINE_SETTING("repairsMore");
+    SAME_PITCH = setting("strings-seat", "samePitch");
     bowed = (instrument, lengthCm) => {
       const { strings: strings3, range: range3, register } = instrumentRange(instrument);
       return Object.freeze({ strings: strings3, reach: range3[1] - strings3.at(-1), lengthCm, register, range: range3 });
@@ -18191,18 +18243,18 @@ var init_physical_strings_calibration = __esm({
             ]
           },
           levels: {
-            ppp: -59.52,
-            pp: -58.03,
-            p: -53.01,
-            mp: -50.43,
-            mf: -47.36,
-            f: -43.23,
-            ff: -37.09,
-            fff: -31.34
+            ppp: -61.1,
+            pp: -54.76,
+            p: -50.61,
+            mp: -43.81,
+            mf: -39.07,
+            f: -32.42,
+            ff: -27.19,
+            fff: -23.48
           },
           recordedMf: -46.91,
-          gainDb: 0.45,
-          stemGainDb: 4.58,
+          gainDb: -7.84,
+          stemGainDb: -3.71,
           contacts: {
             ppp: 0.2,
             pp: 0.2,
@@ -18503,6 +18555,1853 @@ var init_physical_strings_calibration = __esm({
                   level: -59.15,
                   contact: 0.2
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.23784,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.16818
+                      ],
+                      pp: [
+                        0.4,
+                        0.33636,
+                        0.28284,
+                        0.28284,
+                        0.28284,
+                        0.23784,
+                        0.23784,
+                        0.2,
+                        0.2,
+                        0.23784
+                      ],
+                      p: [
+                        0.23784,
+                        0.67272,
+                        0.56569,
+                        0.67272,
+                        0.4,
+                        0.4,
+                        0.4,
+                        0.47568,
+                        0.33636,
+                        0.33636
+                      ],
+                      mp: [
+                        1.13137,
+                        1.13137,
+                        1.13137,
+                        1.13137,
+                        0.67272,
+                        0.67272,
+                        1.34543,
+                        0.67272,
+                        0.67272,
+                        0.8
+                      ],
+                      mf: [
+                        1.90273,
+                        1.90273,
+                        1.34543,
+                        1.90273,
+                        1.90273,
+                        1.6,
+                        1.90273,
+                        2.69087,
+                        1.6,
+                        1.6
+                      ],
+                      f: [
+                        3.80546,
+                        3.2,
+                        3.80546,
+                        4.52548,
+                        4.52548,
+                        2.69087,
+                        3.80546,
+                        4.52548,
+                        2.26274,
+                        3.2
+                      ],
+                      ff: [
+                        12.79997,
+                        10.76345,
+                        9.05095,
+                        10.76345,
+                        3.2,
+                        10.76345,
+                        4.52548,
+                        5.38173,
+                        5.38173,
+                        10.76345
+                      ],
+                      fff: [
+                        15.22182,
+                        2.69087,
+                        12.79997,
+                        4.52548,
+                        12.79997,
+                        4.52548,
+                        3.80546,
+                        3.80546,
+                        9.05095,
+                        12.79997
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.033378,
+                        0.031756,
+                        0.029127,
+                        0.027207,
+                        0.024744,
+                        0.023741,
+                        0.022177,
+                        0.020717,
+                        0.019352,
+                        0.018077
+                      ],
+                      pp: [
+                        0.066559,
+                        0.063143,
+                        0.059901,
+                        0.056827,
+                        0.053149,
+                        0.051143,
+                        0.048519,
+                        0.046028,
+                        0.043665,
+                        0.041424
+                      ],
+                      p: [
+                        0.12116,
+                        0.147589,
+                        0.120214,
+                        0.113601,
+                        0.107352,
+                        0.101447,
+                        0.095867,
+                        0.090592,
+                        0.085609,
+                        0.080901
+                      ],
+                      mp: [
+                        0.23173,
+                        0.223377,
+                        0.215326,
+                        0.207563,
+                        0.200081,
+                        0.192869,
+                        0.164407,
+                        0.179215,
+                        0.172755,
+                        0.166528
+                      ],
+                      mf: [
+                        0.528919,
+                        0.50094,
+                        0.474443,
+                        0.449347,
+                        0.425578,
+                        0.40307,
+                        0.348313,
+                        0.361557,
+                        0.342431,
+                        0.324318
+                      ],
+                      f: [
+                        0.965974,
+                        0.660553,
+                        0.754048,
+                        0.921948,
+                        0.986585,
+                        0.977753,
+                        0.784708,
+                        0.696208,
+                        0.78577,
+                        0.730552
+                      ],
+                      ff: [
+                        2.279161,
+                        1.961396,
+                        1.825786,
+                        2.454158,
+                        0.94662,
+                        2.441195,
+                        1.43243,
+                        0.743299,
+                        1.429886,
+                        2.045329
+                      ],
+                      fff: [
+                        2.672717,
+                        0.801438,
+                        3.293881,
+                        0.788466,
+                        3.262132,
+                        1.203437,
+                        0.747193,
+                        0.76315,
+                        2.811325,
+                        3.4216
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.14142,
+                        0.16818,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.14142
+                      ],
+                      pp: [
+                        0.28284,
+                        0.23784,
+                        0.23784,
+                        0.23784,
+                        0.2,
+                        0.23784,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.14142
+                      ],
+                      p: [
+                        0.4,
+                        0.33636,
+                        0.33636,
+                        0.23784,
+                        0.28284,
+                        0.28284,
+                        0.23784,
+                        0.23784,
+                        0.23784,
+                        0.2
+                      ],
+                      mp: [
+                        0.95137,
+                        0.8,
+                        0.8,
+                        0.8,
+                        0.56569,
+                        0.56569,
+                        0.56569,
+                        0.4,
+                        0.4,
+                        0.2
+                      ],
+                      mf: [
+                        1.6,
+                        1.34543,
+                        1.34543,
+                        1.13137,
+                        1.13137,
+                        0.8,
+                        1.13137,
+                        1.13137,
+                        1.6,
+                        1.13137
+                      ],
+                      f: [
+                        1.90273,
+                        2.69087,
+                        2.69087,
+                        1.90273,
+                        2.26274,
+                        1.90273,
+                        2.26274,
+                        3.2,
+                        1.6,
+                        2.26274
+                      ],
+                      ff: [
+                        9.05095,
+                        3.2,
+                        5.38173,
+                        3.2,
+                        10.76345,
+                        4.52548,
+                        6.39999,
+                        3.2,
+                        3.2,
+                        4.52548
+                      ],
+                      fff: [
+                        15.22182,
+                        15.22182,
+                        15.22182,
+                        4.52548,
+                        10.76345,
+                        5.38173,
+                        5.38173,
+                        12.79997,
+                        6.39999,
+                        9.05095
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.017213,
+                        0.016168,
+                        0.015184,
+                        0.014261,
+                        0.013394,
+                        0.01258,
+                        0.011814,
+                        0.011097,
+                        0.010422,
+                        9787e-6
+                      ],
+                      pp: [
+                        0.035375,
+                        0.033495,
+                        0.031714,
+                        0.030029,
+                        0.028432,
+                        0.026922,
+                        0.02549,
+                        0.024135,
+                        0.022853,
+                        0.021637
+                      ],
+                      p: [
+                        0.078904,
+                        0.074004,
+                        0.069408,
+                        0.065098,
+                        0.061055,
+                        0.057263,
+                        0.053708,
+                        0.050371,
+                        0.047243,
+                        0.044307
+                      ],
+                      mp: [
+                        0.152138,
+                        0.14392,
+                        0.136149,
+                        0.128795,
+                        0.121838,
+                        0.115259,
+                        0.102271,
+                        0.103145,
+                        0.097573,
+                        0.096096
+                      ],
+                      mf: [
+                        0.329246,
+                        0.306203,
+                        0.284774,
+                        0.264843,
+                        0.246308,
+                        0.229072,
+                        0.19238,
+                        0.19813,
+                        0.184264,
+                        0.171368
+                      ],
+                      f: [
+                        0.700254,
+                        0.652047,
+                        0.607157,
+                        0.56536,
+                        0.526438,
+                        0.490199,
+                        0.415026,
+                        0.425028,
+                        0.416453,
+                        0.368521
+                      ],
+                      ff: [
+                        1.897448,
+                        0.68661,
+                        1.109097,
+                        0.807851,
+                        1.618221,
+                        1.109548,
+                        0.80134,
+                        0.727141,
+                        0.888634,
+                        0.896901
+                      ],
+                      fff: [
+                        2.9515,
+                        3.17496,
+                        3.385564,
+                        1.195446,
+                        1.699389,
+                        1.759901,
+                        0.867359,
+                        2.114109,
+                        1.238338,
+                        1.648385
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.11892
+                      ],
+                      pp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.14142,
+                        0.2,
+                        0.11892,
+                        0.14142,
+                        0.11892
+                      ],
+                      p: [
+                        0.2,
+                        0.16818,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.16818,
+                        0.16818,
+                        0.14142
+                      ],
+                      mp: [
+                        0.28284,
+                        0.28284,
+                        0.28284,
+                        0.28284,
+                        0.23784,
+                        0.28284,
+                        0.28284,
+                        0.28284,
+                        0.23784,
+                        0.2
+                      ],
+                      mf: [
+                        0.56569,
+                        0.47568,
+                        0.67272,
+                        0.47568,
+                        0.47568,
+                        0.47568,
+                        0.28284,
+                        0.4,
+                        0.4,
+                        0.67272
+                      ],
+                      f: [
+                        1.34543,
+                        1.34543,
+                        0.95137,
+                        1.34543,
+                        1.13137,
+                        0.95137,
+                        1.34543,
+                        0.67272,
+                        1.34543,
+                        1.13137
+                      ],
+                      ff: [
+                        3.2,
+                        2.26274,
+                        2.26274,
+                        1.90273,
+                        2.26274,
+                        1.90273,
+                        2.26274,
+                        2.69087,
+                        2.26274,
+                        2.26274
+                      ],
+                      fff: [
+                        3.2,
+                        3.80546,
+                        4.52548,
+                        4.52548,
+                        2.69087,
+                        3.2,
+                        5.38173,
+                        7.61091,
+                        3.80546,
+                        6.39999
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.025396,
+                        0.020377,
+                        0.013853,
+                        0.014557,
+                        0.01021,
+                        7415e-6,
+                        8896e-6,
+                        0.017514,
+                        0.014247,
+                        0.016741
+                      ],
+                      pp: [
+                        0.027263,
+                        0.026741,
+                        0.026229,
+                        0.025728,
+                        0.025234,
+                        0.024751,
+                        0.024278,
+                        0.023813,
+                        0.023357,
+                        0.02291
+                      ],
+                      p: [
+                        0.059783,
+                        0.058332,
+                        0.056913,
+                        0.055532,
+                        0.054184,
+                        0.052868,
+                        0.051584,
+                        0.050331,
+                        0.049109,
+                        0.047916
+                      ],
+                      mp: [
+                        0.121385,
+                        0.11852,
+                        0.115721,
+                        0.112989,
+                        0.110321,
+                        0.107716,
+                        0.105174,
+                        0.102689,
+                        0.100266,
+                        0.097899
+                      ],
+                      mf: [
+                        0.24826,
+                        0.243697,
+                        0.239217,
+                        0.234818,
+                        0.220468,
+                        0.226264,
+                        0.222105,
+                        0.218023,
+                        0.214014,
+                        0.21008
+                      ],
+                      f: [
+                        0.49604,
+                        0.488969,
+                        0.481999,
+                        0.47513,
+                        0.468357,
+                        0.461683,
+                        0.455104,
+                        0.461569,
+                        0.442221,
+                        0.435918
+                      ],
+                      ff: [
+                        1.052999,
+                        1.043945,
+                        1.034969,
+                        1.02607,
+                        1.017248,
+                        1.008501,
+                        0.99983,
+                        0.991233,
+                        0.98271,
+                        0.97426
+                      ],
+                      fff: [
+                        1.657252,
+                        1.772572,
+                        1.833534,
+                        1.840329,
+                        1.27902,
+                        1.883018,
+                        2.062553,
+                        2.520338,
+                        1.325793,
+                        2.610408
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.11892
+                      ],
+                      pp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.16818,
+                        0.14142,
+                        0.11892,
+                        0.11892
+                      ],
+                      p: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.14142,
+                        0.16818,
+                        0.14142,
+                        0.14142,
+                        0.2,
+                        0.16818,
+                        0.16818,
+                        0.14142,
+                        0.16818,
+                        0.2,
+                        0.16818,
+                        0.23784,
+                        0.2,
+                        0.16818,
+                        0.14142
+                      ],
+                      mp: [
+                        0.14142,
+                        0.14142,
+                        0.16818,
+                        0.11892,
+                        0.14142,
+                        0.16818,
+                        0.16818,
+                        0.2,
+                        0.16818,
+                        0.2,
+                        0.16818,
+                        0.28284,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.33636,
+                        0.28284,
+                        0.33636,
+                        0.2,
+                        0.23784,
+                        0.4
+                      ],
+                      mf: [
+                        0.8,
+                        0.33636,
+                        0.2,
+                        0.11892,
+                        0.2,
+                        0.33636,
+                        0.28284,
+                        0.28284,
+                        0.28284,
+                        0.33636,
+                        0.33636,
+                        0.67272,
+                        0.47568,
+                        0.23784,
+                        0.47568,
+                        0.2,
+                        0.8,
+                        0.47568,
+                        0.8,
+                        0.28284,
+                        0.47568,
+                        0.67272
+                      ],
+                      f: [
+                        1.13137,
+                        1.34543,
+                        1.34543,
+                        1.13137,
+                        0.56569,
+                        1.34543,
+                        0.8,
+                        0.95137,
+                        0.8,
+                        0.95137,
+                        0.95137,
+                        1.34543,
+                        1.13137,
+                        1.13137,
+                        1.34543,
+                        0.33636,
+                        1.13137,
+                        0.95137,
+                        1.34543,
+                        0.56569,
+                        1.6,
+                        3.2
+                      ],
+                      ff: [
+                        1.90273,
+                        1.90273,
+                        2.69087,
+                        1.34543,
+                        1.6,
+                        1.90273,
+                        1.90273,
+                        1.90273,
+                        1.90273,
+                        1.90273,
+                        2.26274,
+                        1.6,
+                        1.90273,
+                        1.90273,
+                        1.90273,
+                        0.8,
+                        1.90273,
+                        1.34543,
+                        1.90273,
+                        1.34543,
+                        3.2,
+                        5.38173
+                      ],
+                      fff: [
+                        3.80546,
+                        4.52548,
+                        5.38173,
+                        2.69087,
+                        4.52548,
+                        3.80546,
+                        7.61091,
+                        5.38173,
+                        7.61091,
+                        5.38173,
+                        4.52548,
+                        7.61091,
+                        6.39999,
+                        4.52548,
+                        4.52548,
+                        1.13137,
+                        4.52548,
+                        1.90273,
+                        2.26274,
+                        2.26274,
+                        5.38173,
+                        12.79997
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.023468,
+                        0.05,
+                        0.039145,
+                        0.05,
+                        0.06,
+                        0.03024,
+                        0.0118,
+                        0.017968,
+                        6343e-6,
+                        5443e-6,
+                        4791e-6,
+                        73e-4,
+                        4184e-6,
+                        9981e-6,
+                        9992e-6,
+                        2538e-6,
+                        0.010661,
+                        2609e-6,
+                        414e-5,
+                        0.05,
+                        0.032744,
+                        0.054772
+                      ],
+                      pp: [
+                        0.049457,
+                        0.049522,
+                        0.034956,
+                        0.049652,
+                        0.06,
+                        0.026096,
+                        0.012704,
+                        0.012379,
+                        0.012396,
+                        0.012413,
+                        0.012431,
+                        0.019032,
+                        0.012464,
+                        0.011076,
+                        0.010775,
+                        5609e-6,
+                        0.023692,
+                        756e-5,
+                        0.012567,
+                        0.06,
+                        0.036911,
+                        0.057606
+                      ],
+                      p: [
+                        0.029644,
+                        0.03277,
+                        0.037359,
+                        0.032131,
+                        0.039091,
+                        0.03213,
+                        0.032128,
+                        0.03213,
+                        0.032129,
+                        0.032129,
+                        0.032128,
+                        0.044761,
+                        0.032128,
+                        0.027374,
+                        0.029607,
+                        0.014464,
+                        0.048315,
+                        0.019329,
+                        0.032126,
+                        0.1,
+                        0.047328,
+                        0.109532
+                      ],
+                      mp: [
+                        0.061287,
+                        0.0615,
+                        0.070895,
+                        0.063252,
+                        0.058553,
+                        0.06236,
+                        0.062577,
+                        0.062796,
+                        0.063013,
+                        0.063232,
+                        0.063452,
+                        0.094102,
+                        0.063894,
+                        0.054057,
+                        0.06434,
+                        0.028587,
+                        0.09951,
+                        0.043224,
+                        0.062774,
+                        0.1,
+                        0.087316,
+                        0.227037
+                      ],
+                      mf: [
+                        0.150949,
+                        0.140252,
+                        0.142603,
+                        0.063252,
+                        0.12019,
+                        0.131553,
+                        0.132612,
+                        0.133679,
+                        0.134756,
+                        0.135843,
+                        0.136936,
+                        0.200955,
+                        0.13915,
+                        0.118548,
+                        0.1414,
+                        0.063954,
+                        0.21217,
+                        0.084884,
+                        0.146011,
+                        0.152254,
+                        0.188883,
+                        0.493393
+                      ],
+                      f: [
+                        0.271974,
+                        0.274252,
+                        0.309279,
+                        0.293117,
+                        0.249596,
+                        0.33218,
+                        0.285931,
+                        0.288327,
+                        0.290742,
+                        0.293176,
+                        0.295632,
+                        0.455048,
+                        0.300606,
+                        0.303124,
+                        0.305662,
+                        0.142709,
+                        0.400844,
+                        0.188236,
+                        0.316032,
+                        0.266966,
+                        0.439122,
+                        1.144954
+                      ],
+                      ff: [
+                        0.546555,
+                        0.558877,
+                        0.678255,
+                        0.397117,
+                        0.496257,
+                        0.610997,
+                        0.681805,
+                        0.638851,
+                        0.653252,
+                        0.667978,
+                        0.683035,
+                        0.59536,
+                        0.713094,
+                        0.727318,
+                        0.697915,
+                        0.309644,
+                        0.890813,
+                        0.391808,
+                        0.705388,
+                        0.520133,
+                        1.061423,
+                        1.921429
+                      ],
+                      fff: [
+                        1.082247,
+                        1.114294,
+                        1.259849,
+                        0.835299,
+                        1.092427,
+                        1.21007,
+                        1.497886,
+                        1.316417,
+                        1.366824,
+                        1.4073,
+                        1.46857,
+                        2.210409,
+                        1.581025,
+                        1.386092,
+                        1.418511,
+                        0.615293,
+                        1.888944,
+                        0.759183,
+                        0.850713,
+                        1.021853,
+                        1.967427,
+                        4.605402
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 11.0611,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "mf",
+                    round: 2,
+                    from: "mf"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "mf",
+                    round: 4,
+                    from: "mp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 16.4567,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 20.5033,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "p",
+                    round: 0,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "mp",
+                    round: 0,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  }
+                ]
               }
             },
             {
@@ -18683,6 +20582,1895 @@ var init_physical_strings_calibration = __esm({
                   level: -55.33,
                   contact: 0.2
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.23784,
+                        0.16818,
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.16818
+                      ],
+                      pp: [
+                        0.28284,
+                        0.33636,
+                        0.28284,
+                        0.14142,
+                        0.23784,
+                        0.28284,
+                        0.33636,
+                        0.2,
+                        0.23784,
+                        0.2
+                      ],
+                      p: [
+                        0.8,
+                        0.47568,
+                        0.56569,
+                        0.4,
+                        0.4,
+                        0.4,
+                        0.33636,
+                        0.28284,
+                        0.28284,
+                        0.28284
+                      ],
+                      mp: [
+                        1.13137,
+                        0.95137,
+                        0.95137,
+                        0.95137,
+                        0.8,
+                        0.67272,
+                        0.8,
+                        0.67272,
+                        0.67272,
+                        0.56569
+                      ],
+                      mf: [
+                        1.90273,
+                        1.6,
+                        1.34543,
+                        1.34543,
+                        1.90273,
+                        1.6,
+                        1.34543,
+                        1.6,
+                        1.90273,
+                        1.34543
+                      ],
+                      f: [
+                        3.80546,
+                        3.2,
+                        3.2,
+                        1.90273,
+                        2.69087,
+                        2.69087,
+                        1.90273,
+                        3.2,
+                        2.69087,
+                        2.69087
+                      ],
+                      ff: [
+                        10.76345,
+                        10.76345,
+                        3.80546,
+                        3.80546,
+                        6.39999,
+                        3.80546,
+                        5.38173,
+                        7.61091,
+                        5.38173,
+                        6.39999
+                      ],
+                      fff: [
+                        12.79997,
+                        15.22182,
+                        12.79997,
+                        4.52548,
+                        12.79997,
+                        2.26274,
+                        15.22182,
+                        9.05095,
+                        12.79997,
+                        9.05095
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.016894,
+                        0.015662,
+                        0.014521,
+                        0.013464,
+                        0.012483,
+                        0.011575,
+                        0.01073,
+                        9949e-6,
+                        9224e-6,
+                        8552e-6
+                      ],
+                      pp: [
+                        0.034063,
+                        0.031907,
+                        0.029887,
+                        0.027996,
+                        0.026224,
+                        0.024565,
+                        0.023009,
+                        0.021552,
+                        0.020188,
+                        0.018912
+                      ],
+                      p: [
+                        0.063787,
+                        0.060513,
+                        0.057407,
+                        0.05446,
+                        0.051665,
+                        0.049014,
+                        0.046497,
+                        0.044111,
+                        0.041846,
+                        0.039699
+                      ],
+                      mp: [
+                        0.132403,
+                        0.12345,
+                        0.115103,
+                        0.10732,
+                        0.100063,
+                        0.093299,
+                        0.08699,
+                        0.081109,
+                        0.075625,
+                        0.070511
+                      ],
+                      mf: [
+                        0.267783,
+                        0.250691,
+                        0.23469,
+                        0.21971,
+                        0.205686,
+                        0.192559,
+                        0.180268,
+                        0.168761,
+                        0.15799,
+                        0.147906
+                      ],
+                      f: [
+                        0.589942,
+                        0.520584,
+                        0.49072,
+                        0.508165,
+                        0.436032,
+                        0.41102,
+                        0.387442,
+                        0.344491,
+                        0.346199,
+                        0.324515
+                      ],
+                      ff: [
+                        1.252001,
+                        1.265364,
+                        0.666629,
+                        0.582006,
+                        0.866295,
+                        1.011286,
+                        0.772213,
+                        0.719436,
+                        0.735711,
+                        0.604482
+                      ],
+                      fff: [
+                        1.518848,
+                        1.759661,
+                        1.790182,
+                        0.589226,
+                        1.470524,
+                        0.671661,
+                        1.930911,
+                        1.357512,
+                        1.939357,
+                        0.901239
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.16818,
+                        0.16818,
+                        0.2,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.2
+                      ],
+                      pp: [
+                        0.23784,
+                        0.28284,
+                        0.33636,
+                        0.23784,
+                        0.23784,
+                        0.23784,
+                        0.2,
+                        0.2,
+                        0.23784,
+                        0.16818
+                      ],
+                      p: [
+                        0.56569,
+                        0.4,
+                        0.47568,
+                        0.47568,
+                        0.33636,
+                        0.28284,
+                        0.33636,
+                        0.28284,
+                        0.33636,
+                        0.33636
+                      ],
+                      mp: [
+                        1.13137,
+                        0.8,
+                        0.67272,
+                        0.8,
+                        0.67272,
+                        0.47568,
+                        0.56569,
+                        0.47568,
+                        0.8,
+                        0.67272
+                      ],
+                      mf: [
+                        1.6,
+                        1.34543,
+                        1.90273,
+                        1.6,
+                        1.34543,
+                        1.13137,
+                        1.34543,
+                        1.6,
+                        1.6,
+                        1.13137
+                      ],
+                      f: [
+                        1.90273,
+                        2.26274,
+                        2.69087,
+                        2.69087,
+                        2.26274,
+                        1.90273,
+                        2.69087,
+                        3.80546,
+                        2.69087,
+                        3.2
+                      ],
+                      ff: [
+                        4.52548,
+                        10.76345,
+                        4.52548,
+                        2.69087,
+                        4.52548,
+                        4.52548,
+                        9.05095,
+                        3.80546,
+                        6.39999,
+                        7.61091
+                      ],
+                      fff: [
+                        15.22182,
+                        12.79997,
+                        3.80546,
+                        15.22182,
+                        15.22182,
+                        4.52548,
+                        4.52548,
+                        12.79997,
+                        12.79997,
+                        3.80546
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.015843,
+                        0.014716,
+                        0.013669,
+                        0.012696,
+                        0.011793,
+                        0.010066,
+                        0.010174,
+                        9451e-6,
+                        0.01122,
+                        0.013501
+                      ],
+                      pp: [
+                        0.03161,
+                        0.030495,
+                        0.02942,
+                        0.028382,
+                        0.027381,
+                        0.024224,
+                        0.025484,
+                        0.024586,
+                        0.023831,
+                        0.022881
+                      ],
+                      p: [
+                        0.059717,
+                        0.058478,
+                        0.057264,
+                        0.056077,
+                        0.054915,
+                        0.04943,
+                        0.052659,
+                        0.051566,
+                        0.051918,
+                        0.049449
+                      ],
+                      mp: [
+                        0.1146,
+                        0.112129,
+                        0.10971,
+                        0.107345,
+                        0.10503,
+                        0.095113,
+                        0.100549,
+                        0.098381,
+                        0.10055,
+                        0.094183
+                      ],
+                      mf: [
+                        0.244834,
+                        0.237162,
+                        0.229731,
+                        0.222533,
+                        0.215561,
+                        0.192222,
+                        0.202264,
+                        0.195926,
+                        0.199733,
+                        0.183841
+                      ],
+                      f: [
+                        0.478672,
+                        0.468898,
+                        0.459324,
+                        0.449946,
+                        0.440759,
+                        0.411746,
+                        0.422944,
+                        0.414309,
+                        0.450365,
+                        0.397562
+                      ],
+                      ff: [
+                        0.718832,
+                        1.443476,
+                        0.715348,
+                        0.446151,
+                        0.974121,
+                        0.669268,
+                        1.282406,
+                        0.531702,
+                        0.973283,
+                        0.984848
+                      ],
+                      fff: [
+                        2.371162,
+                        1.731046,
+                        0.592428,
+                        1.389706,
+                        2.055156,
+                        0.67163,
+                        0.587547,
+                        1.787985,
+                        1.87225,
+                        0.583913
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892
+                      ],
+                      pp: [
+                        0.11892,
+                        0.14142,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.14142,
+                        0.14142,
+                        0.14142,
+                        0.11892
+                      ],
+                      p: [
+                        0.16818,
+                        0.2,
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.16818,
+                        0.16818,
+                        0.16818
+                      ],
+                      mp: [
+                        0.28284,
+                        0.28284,
+                        0.33636,
+                        0.4,
+                        0.28284,
+                        0.28284,
+                        0.28284,
+                        0.23784,
+                        0.23784,
+                        0.2
+                      ],
+                      mf: [
+                        0.56569,
+                        0.67272,
+                        0.56569,
+                        0.8,
+                        0.56569,
+                        0.56569,
+                        0.67272,
+                        0.47568,
+                        0.56569,
+                        0.67272
+                      ],
+                      f: [
+                        1.6,
+                        1.34543,
+                        1.34543,
+                        1.6,
+                        1.6,
+                        1.6,
+                        1.34543,
+                        1.90273,
+                        1.13137,
+                        1.6
+                      ],
+                      ff: [
+                        1.90273,
+                        2.69087,
+                        1.90273,
+                        3.2,
+                        3.80546,
+                        1.90273,
+                        3.2,
+                        3.80546,
+                        2.69087,
+                        3.80546
+                      ],
+                      fff: [
+                        3.80546,
+                        6.39999,
+                        3.80546,
+                        9.05095,
+                        7.61091,
+                        5.38173,
+                        9.05095,
+                        6.39999,
+                        5.38173,
+                        15.22182
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.013857,
+                        0.013159,
+                        0.01224,
+                        0.014713,
+                        0.01059,
+                        985e-5,
+                        9161e-6,
+                        8521e-6,
+                        7926e-6,
+                        0.017418
+                      ],
+                      pp: [
+                        0.026829,
+                        0.026343,
+                        0.025837,
+                        0.031763,
+                        0.024882,
+                        0.023915,
+                        0.023962,
+                        0.023515,
+                        0.023076,
+                        0.022646
+                      ],
+                      p: [
+                        0.052033,
+                        0.051724,
+                        0.051415,
+                        0.066913,
+                        0.050804,
+                        0.050502,
+                        0.050201,
+                        0.049903,
+                        0.049605,
+                        0.049311
+                      ],
+                      mp: [
+                        0.102112,
+                        0.10207,
+                        0.102028,
+                        0.137089,
+                        0.101946,
+                        0.101905,
+                        0.101863,
+                        0.101823,
+                        0.10178,
+                        0.10174
+                      ],
+                      mf: [
+                        0.20488,
+                        0.224489,
+                        0.20706,
+                        0.283767,
+                        0.209265,
+                        0.210376,
+                        0.211493,
+                        0.212616,
+                        0.213744,
+                        0.214878
+                      ],
+                      f: [
+                        0.4489,
+                        0.515814,
+                        0.449614,
+                        0.590573,
+                        0.450326,
+                        0.450684,
+                        0.451041,
+                        0.451398,
+                        0.451756,
+                        0.452114
+                      ],
+                      ff: [
+                        0.907578,
+                        1.083564,
+                        0.891967,
+                        1.232161,
+                        0.937866,
+                        0.909164,
+                        0.953388,
+                        0.961245,
+                        0.969165,
+                        0.977152
+                      ],
+                      fff: [
+                        2.021632,
+                        2.186368,
+                        1.521578,
+                        2.917525,
+                        2.246237,
+                        2.041464,
+                        2.012915,
+                        1.397753,
+                        1.914121,
+                        3.32123
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.16818
+                      ],
+                      pp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.2
+                      ],
+                      p: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.16818,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.16818,
+                        0.14142,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.23784
+                      ],
+                      mp: [
+                        0.16818,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.14142,
+                        0.14142,
+                        0.14142,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.16818,
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.28284,
+                        0.2,
+                        0.11892,
+                        0.11892,
+                        0.23784
+                      ],
+                      mf: [
+                        0.8,
+                        0.2,
+                        0.33636,
+                        0.16818,
+                        0.67272,
+                        1.13137,
+                        0.33636,
+                        0.23784,
+                        0.33636,
+                        0.28284,
+                        0.33636,
+                        0.4,
+                        0.4,
+                        0.33636,
+                        0.33636,
+                        0.33636,
+                        0.33636,
+                        0.4,
+                        0.28284,
+                        0.2,
+                        0.2,
+                        0.11892
+                      ],
+                      f: [
+                        1.6,
+                        0.67272,
+                        1.6,
+                        2.26274,
+                        1.34543,
+                        1.6,
+                        1.34543,
+                        0.67272,
+                        0.95137,
+                        0.8,
+                        0.95137,
+                        1.13137,
+                        1.34543,
+                        0.8,
+                        0.95137,
+                        0.8,
+                        0.8,
+                        0.95137,
+                        0.8,
+                        0.67272,
+                        0.47568,
+                        0.56569
+                      ],
+                      ff: [
+                        3.2,
+                        2.26274,
+                        1.90273,
+                        2.69087,
+                        2.69087,
+                        3.80546,
+                        1.6,
+                        1.34543,
+                        1.6,
+                        1.6,
+                        1.90273,
+                        1.90273,
+                        2.26274,
+                        1.6,
+                        1.6,
+                        1.13137,
+                        1.34543,
+                        1.34543,
+                        1.13137,
+                        1.34543,
+                        0.95137,
+                        0.95137
+                      ],
+                      fff: [
+                        5.38173,
+                        3.80546,
+                        4.52548,
+                        6.39999,
+                        6.39999,
+                        9.05095,
+                        1.90273,
+                        3.80546,
+                        3.80546,
+                        5.38173,
+                        3.80546,
+                        3.80546,
+                        5.38173,
+                        4.52548,
+                        3.80546,
+                        2.69087,
+                        3.2,
+                        2.26274,
+                        1.6,
+                        3.2,
+                        1.90273,
+                        3.2
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.075715,
+                        0.073844,
+                        0.055932,
+                        8574e-6,
+                        0.02341,
+                        0.054772,
+                        0.040946,
+                        0.039573,
+                        0.021601,
+                        0.021171,
+                        0.02075,
+                        0.021296,
+                        7862e-6,
+                        7773e-6,
+                        0.030941,
+                        0.011323,
+                        0.030325,
+                        0.018025,
+                        0.016034,
+                        0.08409,
+                        0.05,
+                        0.057326
+                      ],
+                      pp: [
+                        0.064401,
+                        0.073844,
+                        0.055932,
+                        0.07746,
+                        0.022759,
+                        0.054007,
+                        0.022176,
+                        0.043868,
+                        0.020748,
+                        0.022469,
+                        0.018723,
+                        0.015309,
+                        0.019985,
+                        0.014763,
+                        0.024949,
+                        0.015908,
+                        0.02539,
+                        0.019945,
+                        0.011509,
+                        0.088011,
+                        0.06,
+                        0.06
+                      ],
+                      p: [
+                        0.060919,
+                        0.073844,
+                        0.055932,
+                        0.07,
+                        0.084666,
+                        0.049208,
+                        0.047151,
+                        0.047467,
+                        0.043292,
+                        0.041482,
+                        0.039748,
+                        0.041283,
+                        0.041289,
+                        0.037018,
+                        0.033508,
+                        0.033661,
+                        0.030766,
+                        0.029479,
+                        0.019827,
+                        0.090026,
+                        0.040834,
+                        0.07548
+                      ],
+                      mp: [
+                        0.106339,
+                        0.103428,
+                        0.101479,
+                        0.106257,
+                        0.096842,
+                        0.109064,
+                        0.092416,
+                        0.070851,
+                        0.088192,
+                        0.086153,
+                        0.084163,
+                        0.082216,
+                        0.083787,
+                        0.085022,
+                        0.076646,
+                        0.074874,
+                        0.073143,
+                        0.071451,
+                        0.049818,
+                        0.108071,
+                        0.0575,
+                        0.091957
+                      ],
+                      mf: [
+                        0.310484,
+                        0.229897,
+                        0.244682,
+                        0.214907,
+                        0.265302,
+                        0.422846,
+                        0.23603,
+                        0.157394,
+                        0.199332,
+                        0.217956,
+                        0.209553,
+                        0.201473,
+                        0.204531,
+                        0.186237,
+                        0.179058,
+                        0.172155,
+                        0.165518,
+                        0.159137,
+                        0.108847,
+                        0.185936,
+                        0.126398,
+                        0.135978
+                      ],
+                      f: [
+                        0.593405,
+                        0.41715,
+                        0.564072,
+                        0.862413,
+                        0.529809,
+                        0.562965,
+                        0.495338,
+                        0.336888,
+                        0.434008,
+                        0.452985,
+                        0.439012,
+                        0.425469,
+                        0.523298,
+                        0.399625,
+                        0.3873,
+                        0.375353,
+                        0.363775,
+                        0.352554,
+                        0.241407,
+                        0.417237,
+                        0.276153,
+                        0.311025
+                      ],
+                      ff: [
+                        1.120512,
+                        0.980483,
+                        0.964329,
+                        1.026284,
+                        0.932815,
+                        1.459192,
+                        0.902331,
+                        0.634476,
+                        0.798831,
+                        0.858462,
+                        0.844318,
+                        0.875128,
+                        1.146962,
+                        0.803269,
+                        0.790035,
+                        0.777019,
+                        0.764217,
+                        0.751626,
+                        0.501383,
+                        0.881142,
+                        0.618057,
+                        0.703302
+                      ],
+                      fff: [
+                        2.011675,
+                        1.875747,
+                        2.153299,
+                        1.859703,
+                        1.95428,
+                        3.036101,
+                        1.068853,
+                        1.630652,
+                        1.777293,
+                        1.812389,
+                        1.804622,
+                        1.796886,
+                        2.315038,
+                        1.92528,
+                        1.223896,
+                        2.224621,
+                        1.758709,
+                        1.751172,
+                        1.041215,
+                        1.818247,
+                        1.338516,
+                        1.721343
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 4,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 4,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 4,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "pp",
+                    round: 4,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 12.41,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 12.41,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 13.7589,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 17.8056,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 17.8056,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 19.1544,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 20.5033,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 21.8522,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 24.55,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 24.55,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  }
+                ]
               }
             },
             {
@@ -18863,6 +22651,2056 @@ var init_physical_strings_calibration = __esm({
                   level: -54,
                   contact: 0.165
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.33636,
+                        0.23784,
+                        0.23784,
+                        0.23784,
+                        0.28284,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2,
+                        0.2
+                      ],
+                      pp: [
+                        0.56569,
+                        0.4,
+                        0.33636,
+                        0.47568,
+                        0.4,
+                        0.28284,
+                        0.23784,
+                        0.23784,
+                        0.28284,
+                        0.28284
+                      ],
+                      p: [
+                        0.8,
+                        0.8,
+                        0.8,
+                        0.8,
+                        0.56569,
+                        0.4,
+                        0.28284,
+                        0.23784,
+                        0.33636,
+                        0.47568
+                      ],
+                      mp: [
+                        1.34543,
+                        1.34543,
+                        1.34543,
+                        1.6,
+                        0.95137,
+                        0.8,
+                        1.34543,
+                        1.13137,
+                        0.56569,
+                        1.34543
+                      ],
+                      mf: [
+                        3.80546,
+                        2.69087,
+                        3.2,
+                        1.90273,
+                        2.69087,
+                        1.13137,
+                        1.90273,
+                        1.6,
+                        1.6,
+                        1.90273
+                      ],
+                      f: [
+                        6.39999,
+                        3.80546,
+                        3.80546,
+                        6.39999,
+                        1.6,
+                        1.6,
+                        4.52548,
+                        3.80546,
+                        1.6,
+                        3.2
+                      ],
+                      ff: [
+                        12.79997,
+                        15.22182,
+                        3.80546,
+                        7.61091,
+                        3.80546,
+                        4.52548,
+                        4.52548,
+                        5.38173,
+                        6.39999,
+                        10.76345
+                      ],
+                      fff: [
+                        9.05095,
+                        4.52548,
+                        10.76345,
+                        12.79997,
+                        9.05095,
+                        7.61091,
+                        4.52548,
+                        4.52548,
+                        10.76345,
+                        4.52548
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.018704,
+                        0.017105,
+                        0.015642,
+                        0.014306,
+                        0.013082,
+                        0.010753,
+                        0.010941,
+                        0.010006,
+                        9151e-6,
+                        0.010955
+                      ],
+                      pp: [
+                        0.041652,
+                        0.037544,
+                        0.033843,
+                        0.030505,
+                        0.027499,
+                        0.02232,
+                        0.022343,
+                        0.02014,
+                        0.018154,
+                        0.023243
+                      ],
+                      p: [
+                        0.067471,
+                        0.063148,
+                        0.059101,
+                        0.055313,
+                        0.051768,
+                        0.045122,
+                        0.045346,
+                        0.042439,
+                        0.03972,
+                        0.047395
+                      ],
+                      mp: [
+                        0.158749,
+                        0.142744,
+                        0.128356,
+                        0.115414,
+                        0.10378,
+                        0.084429,
+                        0.08391,
+                        0.075452,
+                        0.067845,
+                        0.086442
+                      ],
+                      mf: [
+                        0.332787,
+                        0.280184,
+                        0.254757,
+                        0.231637,
+                        0.210616,
+                        0.191503,
+                        0.174124,
+                        0.158322,
+                        0.143954,
+                        0.182064
+                      ],
+                      f: [
+                        0.882449,
+                        0.511271,
+                        0.528266,
+                        0.487149,
+                        0.370835,
+                        0.378299,
+                        0.403585,
+                        0.3608,
+                        0.317526,
+                        0.378169
+                      ],
+                      ff: [
+                        1.426571,
+                        1.126559,
+                        0.462782,
+                        0.717599,
+                        0.527942,
+                        0.505875,
+                        0.435671,
+                        0.465301,
+                        0.919092,
+                        0.948126
+                      ],
+                      fff: [
+                        0.950834,
+                        0.592656,
+                        0.935594,
+                        1.238623,
+                        1.202811,
+                        1.27035,
+                        0.447214,
+                        0.5,
+                        1.452456,
+                        0.447214
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.16818,
+                        0.16818,
+                        0.2,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.14142,
+                        0.16818,
+                        0.16818,
+                        0.16818
+                      ],
+                      pp: [
+                        0.28284,
+                        0.23784,
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.23784,
+                        0.2,
+                        0.2,
+                        0.23784,
+                        0.2
+                      ],
+                      p: [
+                        0.47568,
+                        0.4,
+                        0.47568,
+                        0.28284,
+                        0.33636,
+                        0.33636,
+                        0.28284,
+                        0.28284,
+                        0.33636,
+                        0.33636
+                      ],
+                      mp: [
+                        0.8,
+                        0.67272,
+                        0.95137,
+                        0.8,
+                        0.67272,
+                        1.13137,
+                        0.56569,
+                        0.47568,
+                        0.67272,
+                        0.67272
+                      ],
+                      mf: [
+                        1.34543,
+                        1.34543,
+                        1.34543,
+                        1.13137,
+                        1.90273,
+                        1.90273,
+                        1.90273,
+                        1.6,
+                        1.6,
+                        1.34543
+                      ],
+                      f: [
+                        2.26274,
+                        2.26274,
+                        4.52548,
+                        1.90273,
+                        3.2,
+                        3.80546,
+                        3.2,
+                        3.2,
+                        2.26274,
+                        3.80546
+                      ],
+                      ff: [
+                        5.38173,
+                        6.39999,
+                        4.52548,
+                        9.05095,
+                        5.38173,
+                        3.80546,
+                        2.69087,
+                        7.61091,
+                        4.52548,
+                        7.61091
+                      ],
+                      fff: [
+                        12.79997,
+                        12.79997,
+                        12.79997,
+                        9.05095,
+                        12.79997,
+                        5.38173,
+                        15.22182,
+                        12.79997,
+                        12.79997,
+                        6.39999
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.015475,
+                        0.015307,
+                        0.01514,
+                        0.014973,
+                        0.016618,
+                        0.014648,
+                        0.014488,
+                        0.014329,
+                        0.014172,
+                        0.014018
+                      ],
+                      pp: [
+                        0.032753,
+                        0.032503,
+                        0.032255,
+                        0.03201,
+                        0.035927,
+                        0.031522,
+                        0.031283,
+                        0.031043,
+                        0.030807,
+                        0.030571
+                      ],
+                      p: [
+                        0.064866,
+                        0.064895,
+                        0.064924,
+                        0.064952,
+                        0.077173,
+                        0.065008,
+                        0.065036,
+                        0.065065,
+                        0.065094,
+                        0.065121
+                      ],
+                      mp: [
+                        0.124515,
+                        0.124265,
+                        0.124016,
+                        0.123769,
+                        0.144237,
+                        0.123272,
+                        0.123026,
+                        0.12278,
+                        0.122533,
+                        0.122288
+                      ],
+                      mf: [
+                        0.247562,
+                        0.248006,
+                        0.248454,
+                        0.248901,
+                        0.29165,
+                        0.249797,
+                        0.250248,
+                        0.250697,
+                        0.251149,
+                        0.251599
+                      ],
+                      f: [
+                        0.482504,
+                        0.524607,
+                        0.528443,
+                        0.497748,
+                        0.624767,
+                        0.540123,
+                        0.526173,
+                        0.548052,
+                        0.55206,
+                        0.556097
+                      ],
+                      ff: [
+                        0.830897,
+                        1.055444,
+                        0.885994,
+                        1.101644,
+                        1.20801,
+                        0.630585,
+                        0.448541,
+                        1.040251,
+                        1.027108,
+                        1.109229
+                      ],
+                      fff: [
+                        2.040825,
+                        2.065424,
+                        2.09032,
+                        1.312849,
+                        2.459115,
+                        0.704478,
+                        2.601242,
+                        2.183438,
+                        2.54146,
+                        1.032389
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.16818,
+                        0.11892,
+                        0.11892,
+                        0.11892
+                      ],
+                      pp: [
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.16818,
+                        0.16818,
+                        0.2,
+                        0.2,
+                        0.14142,
+                        0.14142,
+                        0.14142
+                      ],
+                      p: [
+                        0.14142,
+                        0.16818,
+                        0.16818,
+                        0.2,
+                        0.2,
+                        0.23784,
+                        0.23784,
+                        0.2,
+                        0.2,
+                        0.16818
+                      ],
+                      mp: [
+                        0.16818,
+                        0.23784,
+                        0.28284,
+                        0.33636,
+                        0.28284,
+                        0.56569,
+                        0.28284,
+                        0.33636,
+                        0.28284,
+                        0.23784
+                      ],
+                      mf: [
+                        0.4,
+                        0.67272,
+                        0.67272,
+                        0.67272,
+                        0.67272,
+                        1.13137,
+                        0.56569,
+                        0.47568,
+                        0.67272,
+                        0.67272
+                      ],
+                      f: [
+                        1.34543,
+                        1.34543,
+                        1.34543,
+                        1.6,
+                        1.34543,
+                        1.90273,
+                        1.34543,
+                        1.13137,
+                        1.34543,
+                        1.90273
+                      ],
+                      ff: [
+                        1.90273,
+                        3.2,
+                        2.26274,
+                        1.90273,
+                        1.90273,
+                        3.80546,
+                        2.26274,
+                        2.26274,
+                        1.90273,
+                        4.52548
+                      ],
+                      fff: [
+                        3.80546,
+                        5.38173,
+                        5.38173,
+                        4.52548,
+                        5.38173,
+                        12.79997,
+                        7.61091,
+                        6.39999,
+                        6.39999,
+                        9.05095
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.016064,
+                        0.015602,
+                        8026e-6,
+                        825e-5,
+                        848e-5,
+                        0.013476,
+                        8936e-6,
+                        9211e-6,
+                        9468e-6,
+                        9732e-6
+                      ],
+                      pp: [
+                        0.021316,
+                        0.021133,
+                        0.020952,
+                        0.020772,
+                        0.020594,
+                        0.028043,
+                        0.019819,
+                        0.020068,
+                        0.019897,
+                        0.019726
+                      ],
+                      p: [
+                        0.04342,
+                        0.0434,
+                        0.043381,
+                        0.043361,
+                        0.043342,
+                        0.060891,
+                        0.042035,
+                        0.043282,
+                        0.043263,
+                        0.043243
+                      ],
+                      mp: [
+                        0.084318,
+                        0.084798,
+                        0.085285,
+                        0.085771,
+                        0.086262,
+                        0.129131,
+                        0.083923,
+                        0.08775,
+                        0.08825,
+                        0.088755
+                      ],
+                      mf: [
+                        0.173688,
+                        0.174983,
+                        0.176289,
+                        0.177606,
+                        0.178931,
+                        0.276904,
+                        0.17774,
+                        0.182965,
+                        0.184332,
+                        0.185708
+                      ],
+                      f: [
+                        0.352294,
+                        0.356771,
+                        0.361304,
+                        0.365894,
+                        0.370544,
+                        0.556997,
+                        0.370879,
+                        0.384848,
+                        0.389737,
+                        0.394689
+                      ],
+                      ff: [
+                        0.748409,
+                        0.694997,
+                        0.709962,
+                        0.725249,
+                        0.740864,
+                        1.131804,
+                        0.742782,
+                        0.789758,
+                        0.806764,
+                        0.824134
+                      ],
+                      fff: [
+                        0.836798,
+                        1.354002,
+                        1.822286,
+                        1.728065,
+                        1.562707,
+                        2.384875,
+                        1.789405,
+                        2.080357,
+                        2.017499,
+                        1.598167
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011,
+                        24.55,
+                        25.8989,
+                        27.2478,
+                        28.5967
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.23784,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.23784,
+                        0.11892
+                      ],
+                      pp: [
+                        0.23784,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.2,
+                        0.11892,
+                        0.23784,
+                        0.11892
+                      ],
+                      p: [
+                        0.16818,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.16818,
+                        0.14142,
+                        0.16818,
+                        0.33636,
+                        0.16818,
+                        0.23784,
+                        0.11892
+                      ],
+                      mp: [
+                        0.14142,
+                        0.11892,
+                        0.14142,
+                        0.11892,
+                        0.11892,
+                        0.14142,
+                        0.2,
+                        0.16818,
+                        0.23784,
+                        0.16818,
+                        0.11892,
+                        0.16818,
+                        0.2,
+                        0.14142,
+                        0.2,
+                        0.23784,
+                        0.23784,
+                        0.28284,
+                        0.33636,
+                        0.2,
+                        0.33636,
+                        0.14142
+                      ],
+                      mf: [
+                        0.47568,
+                        0.11892,
+                        0.4,
+                        0.2,
+                        0.33636,
+                        0.4,
+                        0.8,
+                        0.23784,
+                        0.95137,
+                        0.33636,
+                        0.16818,
+                        0.28284,
+                        0.4,
+                        0.23784,
+                        0.56569,
+                        0.4,
+                        0.56569,
+                        0.8,
+                        1.13137,
+                        0.33636,
+                        0.56569,
+                        0.28284
+                      ],
+                      f: [
+                        1.34543,
+                        0.28284,
+                        0.95137,
+                        1.13137,
+                        1.34543,
+                        1.13137,
+                        1.90273,
+                        0.67272,
+                        2.69087,
+                        0.8,
+                        0.28284,
+                        0.67272,
+                        1.13137,
+                        0.56569,
+                        1.34543,
+                        0.8,
+                        1.13137,
+                        1.34543,
+                        2.26274,
+                        1.34543,
+                        1.13137,
+                        0.8
+                      ],
+                      ff: [
+                        2.69087,
+                        1.6,
+                        2.26274,
+                        2.26274,
+                        1.90273,
+                        2.26274,
+                        3.2,
+                        1.90273,
+                        5.38173,
+                        1.90273,
+                        0.56569,
+                        2.26274,
+                        2.69087,
+                        1.34543,
+                        4.52548,
+                        1.13137,
+                        1.90273,
+                        2.69087,
+                        7.61091,
+                        1.6,
+                        4.52548,
+                        1.90273
+                      ],
+                      fff: [
+                        3.2,
+                        3.2,
+                        5.38173,
+                        5.38173,
+                        3.2,
+                        2.69087,
+                        3.2,
+                        2.69087,
+                        1.90273,
+                        3.2,
+                        1.34543,
+                        3.2,
+                        3.2,
+                        3.2,
+                        5.38173,
+                        4.52548,
+                        4.52548,
+                        6.39999,
+                        15.22182,
+                        5.38173,
+                        3.80546,
+                        4.52548
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.06,
+                        0.128705,
+                        0.066359,
+                        0.070711,
+                        0.05,
+                        0.05,
+                        0.036899,
+                        0.05,
+                        0.05,
+                        0.03268,
+                        0.036969,
+                        0.022001,
+                        0.033207,
+                        3517e-6,
+                        0.040797,
+                        0.015975,
+                        0.03337,
+                        0.023619,
+                        0.026205,
+                        0.014381,
+                        0.134164,
+                        0.093814
+                      ],
+                      pp: [
+                        0.06,
+                        0.128705,
+                        0.066359,
+                        0.07746,
+                        0.06,
+                        0.034815,
+                        0.033281,
+                        0.06,
+                        0.050583,
+                        0.027205,
+                        0.037669,
+                        0.019389,
+                        0.021871,
+                        0.041602,
+                        0.035918,
+                        0.017632,
+                        0.033325,
+                        0.027117,
+                        0.056602,
+                        0.013714,
+                        0.134164,
+                        0.093814
+                      ],
+                      p: [
+                        0.068173,
+                        0.128705,
+                        0.066359,
+                        0.090357,
+                        0.066952,
+                        0.052893,
+                        0.083832,
+                        0.052831,
+                        0.114892,
+                        0.038731,
+                        0.041887,
+                        0.045535,
+                        0.047156,
+                        0.026112,
+                        0.049383,
+                        0.04975,
+                        0.050647,
+                        0.065939,
+                        0.119567,
+                        0.048444,
+                        0.134164,
+                        0.1
+                      ],
+                      mp: [
+                        0.120213,
+                        0.085448,
+                        0.112877,
+                        0.092953,
+                        0.094027,
+                        0.095114,
+                        0.16448,
+                        0.087535,
+                        0.222418,
+                        0.08482,
+                        0.034232,
+                        0.101907,
+                        0.103085,
+                        0.056823,
+                        0.122521,
+                        0.106702,
+                        0.107935,
+                        0.138453,
+                        0.213024,
+                        0.095634,
+                        0.202219,
+                        0.114321
+                      ],
+                      mf: [
+                        0.295097,
+                        0.171851,
+                        0.255522,
+                        0.191134,
+                        0.207737,
+                        0.211161,
+                        0.347814,
+                        0.190227,
+                        0.493634,
+                        0.190173,
+                        0.079481,
+                        0.232935,
+                        0.236775,
+                        0.130765,
+                        0.290463,
+                        0.241674,
+                        0.252782,
+                        0.336093,
+                        0.468704,
+                        0.233179,
+                        0.301673,
+                        0.281979
+                      ],
+                      f: [
+                        0.522171,
+                        0.213624,
+                        0.51624,
+                        0.519599,
+                        0.522978,
+                        0.526379,
+                        0.796211,
+                        0.417921,
+                        1.098462,
+                        0.413154,
+                        0.174651,
+                        0.505209,
+                        0.543669,
+                        0.276456,
+                        0.630739,
+                        0.513607,
+                        0.565286,
+                        0.678178,
+                        1.082305,
+                        0.565235,
+                        0.580136,
+                        0.583909
+                      ],
+                      ff: [
+                        0.950257,
+                        0.749624,
+                        1.236551,
+                        0.794247,
+                        0.824706,
+                        1.119941,
+                        1.598438,
+                        0.895388,
+                        2.298881,
+                        0.903788,
+                        0.376169,
+                        1.156024,
+                        1.260206,
+                        0.601677,
+                        1.497828,
+                        1.151828,
+                        1.353655,
+                        1.582696,
+                        3.48092,
+                        1.080762,
+                        1.454035,
+                        1.480272
+                      ],
+                      fff: [
+                        1.324974,
+                        1.577722,
+                        2.033664,
+                        2.122535,
+                        1.204554,
+                        1.223758,
+                        1.226504,
+                        1.186853,
+                        0.852686,
+                        1.548253,
+                        0.753969,
+                        1.760648,
+                        1.795943,
+                        1.266987,
+                        1.771886,
+                        2.764405,
+                        3.039661,
+                        3.691538,
+                        6.323651,
+                        2.984923,
+                        2.805013,
+                        2.835067
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 0,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "mf",
+                    round: 2,
+                    from: "mf"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 12.41,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 13.7589,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 13.7589,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 16.4567,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 16.4567,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 16.4567,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 3,
+                    stop: 16.4567,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 17.8056,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 19.1544,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 20.5033,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 21.8522,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 21.8522,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 3,
+                    stop: 25.8989,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "p",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 27.2478,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 28.5967,
+                    dynamic: "p",
+                    round: 0,
+                    from: "p"
+                  }
+                ]
               }
             }
           ],
@@ -18911,6 +24749,16 @@ var init_physical_strings_calibration = __esm({
             },
             method: "calibrate-strings-model.mjs --release: TU Berlin's Violin_modern single tones at pp and ff, each one's fall from its knee (3 dB under its held level, from 6 to 26 dB under, dB/s), their median; the model's notes at 8 of their pitches on its first variant, its bow left on the string the rest bisected so that their median falls as theirs",
             date: "2026-10-18"
+          },
+          attackFrom: {
+            ppp: 1,
+            pp: 1,
+            p: 1,
+            mp: 1,
+            mf: 1,
+            f: 1,
+            ff: 1,
+            fff: 1
           }
         },
         viola: {
@@ -18965,18 +24813,18 @@ var init_physical_strings_calibration = __esm({
             ]
           },
           levels: {
-            ppp: -58.37,
-            pp: -56.98,
-            p: -53.01,
-            mp: -49.96,
-            mf: -47.33,
-            f: -43.57,
-            ff: -41,
-            fff: -39.22
+            ppp: -54.98,
+            pp: -51.15,
+            p: -48.04,
+            mp: -44.45,
+            mf: -40.02,
+            f: -37.47,
+            ff: -31.68,
+            fff: -27.59
           },
           recordedMf: -54.57,
-          gainDb: -7.24,
-          stemGainDb: 1.83,
+          gainDb: -14.55,
+          stemGainDb: -5.48,
           contacts: {
             ppp: 0.2,
             pp: 0.2,
@@ -19277,6 +25125,1582 @@ var init_physical_strings_calibration = __esm({
                   level: -58.37,
                   contact: 0.2
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.24,
+                        0.40363,
+                        0.33941,
+                        0.28541,
+                        0.24,
+                        0.33941,
+                        0.33941,
+                        0.28541,
+                        0.28541,
+                        0.16971
+                      ],
+                      pp: [
+                        0.80726,
+                        0.67882,
+                        0.48,
+                        0.57082,
+                        0.80726,
+                        0.57082,
+                        0.48,
+                        0.33941,
+                        0.48,
+                        0.48
+                      ],
+                      p: [
+                        0.80726,
+                        0.96,
+                        0.96,
+                        1.14164,
+                        0.96,
+                        0.80726,
+                        1.14164,
+                        0.96,
+                        0.80726,
+                        0.48
+                      ],
+                      mp: [
+                        1.61452,
+                        1.61452,
+                        1.35765,
+                        1.92,
+                        1.92,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.14164
+                      ],
+                      mf: [
+                        2.28328,
+                        2.71529,
+                        3.22904,
+                        1.92,
+                        2.28328,
+                        1.35765,
+                        2.71529,
+                        1.92,
+                        1.35765,
+                        1.92
+                      ],
+                      f: [
+                        3.84,
+                        3.22904,
+                        4.56656,
+                        1.92,
+                        3.84,
+                        3.84,
+                        5.43059,
+                        4.56656,
+                        2.71529,
+                        2.28328
+                      ],
+                      ff: [
+                        6.4581,
+                        7.68002,
+                        7.68002,
+                        5.43059,
+                        5.43059,
+                        4.56656,
+                        7.68002,
+                        7.68002,
+                        5.43059,
+                        3.22904
+                      ],
+                      fff: [
+                        12.91619,
+                        9.13313,
+                        9.13313,
+                        3.22904,
+                        10.86118,
+                        9.13313,
+                        7.68002,
+                        12.91619,
+                        7.68002,
+                        3.22904
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.04785,
+                        0.047185,
+                        0.046527,
+                        0.045879,
+                        0.047409,
+                        0.04461,
+                        0.04399,
+                        0.043377,
+                        0.042773,
+                        0.043863
+                      ],
+                      pp: [
+                        0.079971,
+                        0.079055,
+                        0.078148,
+                        0.077251,
+                        0.076366,
+                        0.075491,
+                        0.074625,
+                        0.073769,
+                        0.072923,
+                        0.072087
+                      ],
+                      p: [
+                        0.143721,
+                        0.139679,
+                        0.114089,
+                        0.13193,
+                        0.128218,
+                        0.12461,
+                        0.121105,
+                        0.117698,
+                        0.114386,
+                        0.111169
+                      ],
+                      mp: [
+                        0.23507,
+                        0.22578,
+                        0.216858,
+                        0.208287,
+                        0.200055,
+                        0.19215,
+                        0.184557,
+                        0.177262,
+                        0.170257,
+                        0.163529
+                      ],
+                      mf: [
+                        0.383313,
+                        0.369491,
+                        0.356167,
+                        0.343325,
+                        0.330945,
+                        0.319012,
+                        0.307509,
+                        0.296421,
+                        0.285732,
+                        0.275428
+                      ],
+                      f: [
+                        0.631562,
+                        0.375433,
+                        0.600407,
+                        0.287319,
+                        0.58971,
+                        0.461253,
+                        0.542635,
+                        0.529081,
+                        0.515867,
+                        0.39819
+                      ],
+                      ff: [
+                        1.034985,
+                        1.056297,
+                        1.087572,
+                        0.719995,
+                        0.948079,
+                        0.890277,
+                        0.832811,
+                        1.075285,
+                        0.951681,
+                        0.474482
+                      ],
+                      fff: [
+                        1.601824,
+                        1.416794,
+                        1.371779,
+                        0.497641,
+                        1.973368,
+                        0.789031,
+                        0.777818,
+                        1.764897,
+                        1.296824,
+                        0.551429
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.16971,
+                        0.24,
+                        0.24,
+                        0.24,
+                        0.20182,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.24,
+                        0.20182
+                      ],
+                      pp: [
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.33941,
+                        0.28541,
+                        0.40363,
+                        0.24,
+                        0.33941,
+                        0.33941,
+                        0.28541
+                      ],
+                      p: [
+                        0.48,
+                        0.48,
+                        0.80726,
+                        0.80726,
+                        0.48,
+                        0.80726,
+                        0.28541,
+                        0.40363,
+                        0.48,
+                        0.57082
+                      ],
+                      mp: [
+                        0.96,
+                        1.35765,
+                        1.14164,
+                        1.14164,
+                        1.14164,
+                        1.14164,
+                        0.67882,
+                        0.96,
+                        0.48,
+                        0.57082
+                      ],
+                      mf: [
+                        2.28328,
+                        2.28328,
+                        1.61452,
+                        1.61452,
+                        1.14164,
+                        1.61452,
+                        1.35765,
+                        1.14164,
+                        1.14164,
+                        1.35765
+                      ],
+                      f: [
+                        3.22904,
+                        3.84,
+                        3.22904,
+                        1.92,
+                        2.28328,
+                        2.71529,
+                        1.92,
+                        1.92,
+                        1.92,
+                        2.28328
+                      ],
+                      ff: [
+                        7.68002,
+                        5.43059,
+                        4.56656,
+                        3.84,
+                        3.84,
+                        3.84,
+                        2.71529,
+                        1.92,
+                        1.92,
+                        3.84
+                      ],
+                      fff: [
+                        12.91619,
+                        9.13313,
+                        4.56656,
+                        5.43059,
+                        3.84,
+                        5.43059,
+                        3.84,
+                        4.56656,
+                        4.56656,
+                        6.4581
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.041303,
+                        0.042374,
+                        0.038622,
+                        0.037346,
+                        0.036113,
+                        0.034921,
+                        0.033769,
+                        0.032654,
+                        0.031576,
+                        0.030534
+                      ],
+                      pp: [
+                        0.073873,
+                        0.070851,
+                        0.067951,
+                        0.065171,
+                        0.062503,
+                        0.059946,
+                        0.057494,
+                        0.05514,
+                        0.052885,
+                        0.050721
+                      ],
+                      p: [
+                        0.104363,
+                        0.10138,
+                        0.098482,
+                        0.095667,
+                        0.092932,
+                        0.090276,
+                        0.087695,
+                        0.085189,
+                        0.082753,
+                        0.080389
+                      ],
+                      mp: [
+                        0.167953,
+                        0.164156,
+                        0.158075,
+                        0.152218,
+                        0.146579,
+                        0.141149,
+                        0.135919,
+                        0.130882,
+                        0.126035,
+                        0.121363
+                      ],
+                      mf: [
+                        0.309698,
+                        0.294255,
+                        0.279583,
+                        0.265643,
+                        0.252397,
+                        0.239812,
+                        0.227854,
+                        0.216492,
+                        0.205698,
+                        0.195441
+                      ],
+                      f: [
+                        0.541888,
+                        0.512099,
+                        0.483945,
+                        0.457339,
+                        0.432196,
+                        0.408438,
+                        0.385983,
+                        0.364762,
+                        0.344711,
+                        0.325759
+                      ],
+                      ff: [
+                        0.884974,
+                        0.82745,
+                        0.804352,
+                        0.737237,
+                        0.67572,
+                        0.61934,
+                        0.567663,
+                        0.520296,
+                        0.476881,
+                        0.525176
+                      ],
+                      fff: [
+                        1.574511,
+                        1.432896,
+                        0.808369,
+                        1.080667,
+                        0.69766,
+                        0.888017,
+                        0.885404,
+                        0.861483,
+                        0.914104,
+                        0.703516
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.1427,
+                        0.20182,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.20182,
+                        0.16971
+                      ],
+                      pp: [
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.20182,
+                        0.20182,
+                        0.20182,
+                        0.20182,
+                        0.20182
+                      ],
+                      p: [
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.20182,
+                        0.24,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.24,
+                        0.24
+                      ],
+                      mp: [
+                        0.1427,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.40363,
+                        0.33941,
+                        0.33941,
+                        0.40363
+                      ],
+                      mf: [
+                        0.16971,
+                        0.33941,
+                        0.40363,
+                        0.40363,
+                        0.48,
+                        0.57082,
+                        0.57082,
+                        0.57082,
+                        0.48,
+                        0.48
+                      ],
+                      f: [
+                        0.40363,
+                        0.57082,
+                        0.80726,
+                        0.67882,
+                        0.80726,
+                        0.80726,
+                        1.14164,
+                        0.96,
+                        0.96,
+                        1.14164
+                      ],
+                      ff: [
+                        1.35765,
+                        0.96,
+                        1.14164,
+                        1.35765,
+                        1.61452,
+                        1.14164,
+                        1.35765,
+                        1.92,
+                        1.61452,
+                        1.35765
+                      ],
+                      fff: [
+                        1.61452,
+                        1.92,
+                        1.61452,
+                        1.92,
+                        1.61452,
+                        1.92,
+                        1.61452,
+                        1.92,
+                        1.92,
+                        3.22904
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.070711,
+                        0.045322,
+                        0.041751,
+                        0.02593,
+                        0.026888,
+                        0.029872,
+                        0.033188,
+                        0.036874,
+                        0.040967,
+                        0.045516
+                      ],
+                      pp: [
+                        0.060141,
+                        0.049842,
+                        0.033392,
+                        0.037382,
+                        0.041849,
+                        0.046848,
+                        0.052447,
+                        0.058713,
+                        0.065729,
+                        0.073582
+                      ],
+                      p: [
+                        0.064692,
+                        0.067984,
+                        0.071442,
+                        0.075078,
+                        0.078897,
+                        0.082912,
+                        0.087129,
+                        0.091563,
+                        0.096221,
+                        0.101118
+                      ],
+                      mp: [
+                        0.09657,
+                        0.102244,
+                        0.108252,
+                        0.114611,
+                        0.121345,
+                        0.128474,
+                        0.136022,
+                        0.144013,
+                        0.152474,
+                        0.161432
+                      ],
+                      mf: [
+                        0.159142,
+                        0.1682,
+                        0.177774,
+                        0.187892,
+                        0.198587,
+                        0.20989,
+                        0.221835,
+                        0.234462,
+                        0.247807,
+                        0.261912
+                      ],
+                      f: [
+                        0.244454,
+                        0.258762,
+                        0.273907,
+                        0.28994,
+                        0.306909,
+                        0.324871,
+                        0.343886,
+                        0.364013,
+                        0.38532,
+                        0.407873
+                      ],
+                      ff: [
+                        0.391627,
+                        0.414467,
+                        0.438639,
+                        0.46422,
+                        0.491294,
+                        0.519944,
+                        0.550267,
+                        0.582359,
+                        0.616322,
+                        0.652267
+                      ],
+                      fff: [
+                        0.647789,
+                        0.681826,
+                        0.717651,
+                        0.74154,
+                        0.795046,
+                        0.836817,
+                        0.880786,
+                        0.927065,
+                        0.975775,
+                        1.027045
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.28541,
+                        0.16971,
+                        0.16971
+                      ],
+                      pp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.20182,
+                        0.24,
+                        0.33941,
+                        0.16971,
+                        0.20182
+                      ],
+                      p: [
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.40363,
+                        0.20182,
+                        0.28541
+                      ],
+                      mp: [
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.20182,
+                        0.24,
+                        0.20182,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.33941,
+                        0.33941,
+                        0.33941,
+                        0.80726,
+                        0.24,
+                        0.48
+                      ],
+                      mf: [
+                        0.57082,
+                        0.16971,
+                        0.33941,
+                        0.28541,
+                        0.48,
+                        0.33941,
+                        0.40363,
+                        0.40363,
+                        0.33941,
+                        0.48,
+                        0.48,
+                        0.40363,
+                        0.57082,
+                        0.48,
+                        0.48,
+                        1.14164,
+                        0.67882,
+                        0.67882
+                      ],
+                      f: [
+                        0.57082,
+                        0.67882,
+                        0.96,
+                        0.96,
+                        0.80726,
+                        0.57082,
+                        1.61452,
+                        0.96,
+                        0.96,
+                        0.67882,
+                        0.67882,
+                        0.67882,
+                        1.14164,
+                        1.14164,
+                        0.67882,
+                        1.61452,
+                        0.57082,
+                        0.96
+                      ],
+                      ff: [
+                        1.35765,
+                        1.61452,
+                        1.61452,
+                        1.35765,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.14164,
+                        1.14164,
+                        1.14164,
+                        1.14164,
+                        0.96,
+                        1.35765,
+                        1.35765,
+                        0.96,
+                        1.92,
+                        0.96,
+                        1.35765
+                      ],
+                      fff: [
+                        2.28328,
+                        1.61452,
+                        1.92,
+                        1.92,
+                        2.28328,
+                        1.92,
+                        2.28328,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.92,
+                        1.92,
+                        1.35765,
+                        5.43059,
+                        1.35765,
+                        1.61452
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.061169,
+                        0.05932,
+                        0.05,
+                        0.044701,
+                        0.015699,
+                        0.032833,
+                        0.036299,
+                        0.018624,
+                        0.019717,
+                        0.020874,
+                        0.022096,
+                        0.023393,
+                        0.024764,
+                        0.026217,
+                        0.026192,
+                        0.051852,
+                        0.031102,
+                        0.032927
+                      ],
+                      pp: [
+                        0.06228,
+                        0.06,
+                        0.04161,
+                        0.032039,
+                        0.052894,
+                        0.032708,
+                        0.029127,
+                        0.03084,
+                        0.032654,
+                        0.034574,
+                        0.036608,
+                        0.038761,
+                        0.041039,
+                        0.043453,
+                        0.044797,
+                        0.081558,
+                        0.05158,
+                        0.054613
+                      ],
+                      p: [
+                        0.054986,
+                        0.055723,
+                        0.070375,
+                        0.057228,
+                        0.057997,
+                        0.058775,
+                        0.059563,
+                        0.060362,
+                        0.061172,
+                        0.061993,
+                        0.062823,
+                        0.063666,
+                        0.064521,
+                        0.065386,
+                        0.062196,
+                        0.129872,
+                        0.068054,
+                        0.068967
+                      ],
+                      mp: [
+                        0.082002,
+                        0.12163,
+                        0.084545,
+                        0.085847,
+                        0.087168,
+                        0.08851,
+                        0.089873,
+                        0.091255,
+                        0.09266,
+                        0.094086,
+                        0.095533,
+                        0.097004,
+                        0.098497,
+                        0.100012,
+                        0.090033,
+                        0.194512,
+                        0.104703,
+                        0.106314
+                      ],
+                      mf: [
+                        0.172322,
+                        0.134427,
+                        0.136103,
+                        0.137802,
+                        0.139521,
+                        0.14126,
+                        0.143023,
+                        0.144808,
+                        0.146613,
+                        0.148444,
+                        0.150295,
+                        0.15217,
+                        0.154069,
+                        0.15599,
+                        0.135907,
+                        0.30764,
+                        0.159992,
+                        0.163921
+                      ],
+                      f: [
+                        0.217219,
+                        0.218828,
+                        0.220449,
+                        0.222082,
+                        0.223729,
+                        0.225385,
+                        0.262031,
+                        0.228737,
+                        0.230432,
+                        0.23214,
+                        0.23386,
+                        0.235591,
+                        0.237338,
+                        0.239096,
+                        0.198612,
+                        0.493689,
+                        0.231007,
+                        0.246261
+                      ],
+                      ff: [
+                        0.346767,
+                        0.358171,
+                        0.357693,
+                        0.357215,
+                        0.356738,
+                        0.356262,
+                        0.355786,
+                        0.355311,
+                        0.354836,
+                        0.354361,
+                        0.353887,
+                        0.353414,
+                        0.352943,
+                        0.352471,
+                        0.282676,
+                        0.778939,
+                        0.322766,
+                        0.369934
+                      ],
+                      fff: [
+                        0.531168,
+                        0.53213,
+                        0.533096,
+                        0.534063,
+                        0.535031,
+                        0.536001,
+                        0.536973,
+                        0.537948,
+                        0.538924,
+                        0.539901,
+                        0.54088,
+                        0.541861,
+                        0.542843,
+                        0.543829,
+                        0.429217,
+                        1.237281,
+                        0.489303,
+                        0.547785
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 11.0611,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 20.5033,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  }
+                ]
               }
             },
             {
@@ -19457,6 +26881,1659 @@ var init_physical_strings_calibration = __esm({
                   level: -55.28,
                   contact: 0.165
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.20182,
+                        0.16971,
+                        0.28541,
+                        0.24,
+                        0.24,
+                        0.24,
+                        0.28541,
+                        0.20182,
+                        0.20182,
+                        0.20182
+                      ],
+                      pp: [
+                        0.24,
+                        0.33941,
+                        0.57082,
+                        0.33941,
+                        0.33941,
+                        0.28541,
+                        0.33941,
+                        0.20182,
+                        0.33941,
+                        0.24
+                      ],
+                      p: [
+                        0.48,
+                        0.67882,
+                        0.96,
+                        0.48,
+                        0.80726,
+                        0.67882,
+                        0.48,
+                        0.48,
+                        0.40363,
+                        0.40363
+                      ],
+                      mp: [
+                        0.96,
+                        0.96,
+                        0.96,
+                        0.80726,
+                        0.80726,
+                        0.80726,
+                        0.80726,
+                        0.67882,
+                        0.80726,
+                        0.80726
+                      ],
+                      mf: [
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.92,
+                        1.14164,
+                        1.14164,
+                        1.35765
+                      ],
+                      f: [
+                        2.28328,
+                        3.22904,
+                        2.71529,
+                        1.92,
+                        1.92,
+                        1.61452,
+                        1.61452,
+                        1.35765,
+                        1.92,
+                        1.92
+                      ],
+                      ff: [
+                        4.56656,
+                        5.43059,
+                        4.56656,
+                        3.84,
+                        3.84,
+                        4.56656,
+                        3.84,
+                        1.61452,
+                        2.71529,
+                        3.22904
+                      ],
+                      fff: [
+                        10.86118,
+                        6.4581,
+                        2.28328,
+                        9.13313,
+                        7.68002,
+                        3.84,
+                        6.4581,
+                        4.56656,
+                        4.56656,
+                        7.68002
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.034473,
+                        0.033022,
+                        0.031631,
+                        0.030298,
+                        0.029022,
+                        0.0278,
+                        0.026629,
+                        0.025507,
+                        0.024433,
+                        0.023402
+                      ],
+                      pp: [
+                        0.054811,
+                        0.05317,
+                        0.051577,
+                        0.050032,
+                        0.048534,
+                        0.04708,
+                        0.04567,
+                        0.044303,
+                        0.042976,
+                        0.041689
+                      ],
+                      p: [
+                        0.093622,
+                        0.089551,
+                        0.085659,
+                        0.081936,
+                        0.078374,
+                        0.074966,
+                        0.071708,
+                        0.06859,
+                        0.06561,
+                        0.062757
+                      ],
+                      mp: [
+                        0.148231,
+                        0.141128,
+                        0.134366,
+                        0.127927,
+                        0.121798,
+                        0.115962,
+                        0.110406,
+                        0.105116,
+                        0.10008,
+                        0.095284
+                      ],
+                      mf: [
+                        0.263099,
+                        0.247353,
+                        0.23255,
+                        0.218632,
+                        0.205547,
+                        0.193247,
+                        0.181682,
+                        0.170808,
+                        0.160585,
+                        0.150976
+                      ],
+                      f: [
+                        0.446877,
+                        0.41877,
+                        0.392431,
+                        0.367749,
+                        0.344619,
+                        0.322945,
+                        0.302632,
+                        0.294284,
+                        0.265761,
+                        0.249046
+                      ],
+                      ff: [
+                        0.580307,
+                        0.668074,
+                        0.69501,
+                        0.623382,
+                        0.56936,
+                        0.501516,
+                        0.464143,
+                        0.40347,
+                        0.447668,
+                        0.324591
+                      ],
+                      fff: [
+                        1.674206,
+                        0.912362,
+                        0.514149,
+                        1.253015,
+                        1.159945,
+                        0.678486,
+                        0.966166,
+                        0.603026,
+                        0.774675,
+                        0.75742
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.1427,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.24,
+                        0.20182
+                      ],
+                      pp: [
+                        0.20182,
+                        0.20182,
+                        0.24,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.24
+                      ],
+                      p: [
+                        0.28541,
+                        0.33941,
+                        0.28541,
+                        0.33941,
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.33941,
+                        0.48,
+                        0.40363
+                      ],
+                      mp: [
+                        0.48,
+                        0.57082,
+                        0.40363,
+                        0.80726,
+                        0.57082,
+                        0.67882,
+                        0.80726,
+                        0.67882,
+                        0.67882,
+                        0.96
+                      ],
+                      mf: [
+                        1.14164,
+                        0.96,
+                        1.14164,
+                        0.96,
+                        1.14164,
+                        0.96,
+                        1.35765,
+                        1.14164,
+                        1.61452,
+                        1.92
+                      ],
+                      f: [
+                        1.92,
+                        2.71529,
+                        1.92,
+                        1.14164,
+                        2.28328,
+                        1.92,
+                        1.92,
+                        1.14164,
+                        1.92,
+                        1.92
+                      ],
+                      ff: [
+                        2.71529,
+                        3.84,
+                        3.22904,
+                        2.71529,
+                        3.22904,
+                        3.22904,
+                        3.84,
+                        2.28328,
+                        1.92,
+                        3.84
+                      ],
+                      fff: [
+                        6.4581,
+                        6.4581,
+                        6.4581,
+                        5.43059,
+                        5.43059,
+                        4.56656,
+                        5.43059,
+                        2.71529,
+                        5.43059,
+                        6.4581
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.058143,
+                        0.041661,
+                        0.044514,
+                        0.047563,
+                        0.050821,
+                        0.054302,
+                        0.05802,
+                        0.061995,
+                        0.066242,
+                        0.070779
+                      ],
+                      pp: [
+                        0.092629,
+                        0.083212,
+                        0.086398,
+                        0.089706,
+                        0.093142,
+                        0.096709,
+                        0.100412,
+                        0.104259,
+                        0.108251,
+                        0.112397
+                      ],
+                      p: [
+                        0.12088,
+                        0.126534,
+                        0.132455,
+                        0.13865,
+                        0.145137,
+                        0.151926,
+                        0.159034,
+                        0.166473,
+                        0.174262,
+                        0.182415
+                      ],
+                      mp: [
+                        0.19379,
+                        0.20201,
+                        0.210577,
+                        0.219509,
+                        0.228818,
+                        0.238524,
+                        0.248639,
+                        0.259184,
+                        0.270178,
+                        0.281637
+                      ],
+                      mf: [
+                        0.326926,
+                        0.336336,
+                        0.346015,
+                        0.355973,
+                        0.366219,
+                        0.376759,
+                        0.387602,
+                        0.398758,
+                        0.410234,
+                        0.422042
+                      ],
+                      f: [
+                        0.698958,
+                        0.689091,
+                        0.679363,
+                        0.669773,
+                        0.660318,
+                        0.650996,
+                        0.641806,
+                        0.675406,
+                        0.623812,
+                        0.615006
+                      ],
+                      ff: [
+                        1.252689,
+                        1.023769,
+                        1.015674,
+                        0.920375,
+                        1.064825,
+                        1.078872,
+                        1.106584,
+                        1.107527,
+                        1.107171,
+                        1.136942
+                      ],
+                      fff: [
+                        1.977708,
+                        2.039542,
+                        1.916632,
+                        2.014701,
+                        2.236884,
+                        1.773968,
+                        1.718718,
+                        1.028811,
+                        2.530021,
+                        2.609122
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.28541,
+                        0.33941,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427
+                      ],
+                      pp: [
+                        0.28541,
+                        0.33941,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.16971
+                      ],
+                      p: [
+                        0.16971,
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.20182
+                      ],
+                      mp: [
+                        0.20182,
+                        0.28541,
+                        0.28541,
+                        0.1427,
+                        0.20182,
+                        0.1427,
+                        0.16971,
+                        0.20182,
+                        0.20182,
+                        0.24
+                      ],
+                      mf: [
+                        0.67882,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.40363,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.33941,
+                        0.28541
+                      ],
+                      f: [
+                        0.67882,
+                        0.57082,
+                        0.57082,
+                        0.80726,
+                        0.67882,
+                        0.67882,
+                        0.57082,
+                        0.40363,
+                        0.67882,
+                        0.40363
+                      ],
+                      ff: [
+                        1.14164,
+                        0.96,
+                        1.61452,
+                        1.14164,
+                        1.35765,
+                        0.96,
+                        0.80726,
+                        0.96,
+                        0.96,
+                        0.80726
+                      ],
+                      fff: [
+                        1.92,
+                        1.92,
+                        1.35765,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.61452
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.074361,
+                        0.103346,
+                        0.088011,
+                        0.05932,
+                        0.045876,
+                        0.08409,
+                        0.070711,
+                        0.036284,
+                        0.054772,
+                        0.037292
+                      ],
+                      pp: [
+                        0.074361,
+                        0.103346,
+                        0.088011,
+                        0.057275,
+                        0.045876,
+                        0.088011,
+                        0.07746,
+                        0.049641,
+                        0.055833,
+                        0.057675
+                      ],
+                      p: [
+                        0.069805,
+                        0.11016,
+                        0.059573,
+                        0.075195,
+                        0.063075,
+                        0.080297,
+                        0.069383,
+                        0.07277,
+                        0.076324,
+                        0.08005
+                      ],
+                      mp: [
+                        0.113897,
+                        0.12506,
+                        0.11311,
+                        0.112716,
+                        0.112326,
+                        0.111936,
+                        0.111548,
+                        0.111162,
+                        0.110776,
+                        0.110392
+                      ],
+                      mf: [
+                        0.198632,
+                        0.195715,
+                        0.192841,
+                        0.19001,
+                        0.187219,
+                        0.18447,
+                        0.18176,
+                        0.179092,
+                        0.176461,
+                        0.17387
+                      ],
+                      f: [
+                        0.297089,
+                        0.292789,
+                        0.28855,
+                        0.284373,
+                        0.280257,
+                        0.276201,
+                        0.272203,
+                        0.268262,
+                        0.264378,
+                        0.260552
+                      ],
+                      ff: [
+                        0.491779,
+                        0.48376,
+                        0.475872,
+                        0.468112,
+                        0.460479,
+                        0.452972,
+                        0.445584,
+                        0.388521,
+                        0.431171,
+                        0.424142
+                      ],
+                      fff: [
+                        0.769849,
+                        0.756764,
+                        0.743902,
+                        0.731259,
+                        0.718831,
+                        0.706615,
+                        0.694605,
+                        0.660589,
+                        0.671195,
+                        0.659787
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427
+                      ],
+                      pp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.1427
+                      ],
+                      p: [
+                        0.20182,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.20182,
+                        0.16971,
+                        0.16971,
+                        0.20182,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.24,
+                        0.24,
+                        0.20182,
+                        0.16971,
+                        0.16971
+                      ],
+                      mp: [
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.24,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.20182,
+                        0.16971
+                      ],
+                      mf: [
+                        0.24,
+                        0.20182,
+                        0.48,
+                        0.20182,
+                        0.24,
+                        0.33941,
+                        0.33941,
+                        0.28541,
+                        0.40363,
+                        0.33941,
+                        0.40363,
+                        0.48,
+                        0.33941,
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.24
+                      ],
+                      f: [
+                        0.40363,
+                        0.48,
+                        0.48,
+                        0.67882,
+                        0.48,
+                        0.48,
+                        0.57082,
+                        0.33941,
+                        0.24,
+                        0.57082,
+                        0.67882,
+                        0.57082,
+                        0.48,
+                        0.57082,
+                        0.67882,
+                        0.80726,
+                        0.67882,
+                        0.33941
+                      ],
+                      ff: [
+                        0.67882,
+                        0.96,
+                        0.96,
+                        0.96,
+                        0.80726,
+                        0.80726,
+                        0.96,
+                        0.80726,
+                        0.48,
+                        0.96,
+                        0.96,
+                        1.35765,
+                        0.80726,
+                        1.35765,
+                        1.14164,
+                        1.14164,
+                        0.96,
+                        0.57082
+                      ],
+                      fff: [
+                        1.14164,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.14164,
+                        1.14164,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.61452,
+                        1.92,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.14164
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.018746,
+                        0.06,
+                        0.070711,
+                        0.045307,
+                        0.030138,
+                        0.022705,
+                        0.020672,
+                        0.032901,
+                        0.022673,
+                        0.019497,
+                        0.016957,
+                        0.020725,
+                        0.020107,
+                        0.021894,
+                        0.023841,
+                        0.027311,
+                        0.023506,
+                        0.028509
+                      ],
+                      pp: [
+                        0.07746,
+                        0.06,
+                        0.066509,
+                        0.054759,
+                        0.028883,
+                        0.033033,
+                        0.027422,
+                        0.028226,
+                        0.029056,
+                        0.029909,
+                        0.030786,
+                        0.03169,
+                        0.03262,
+                        0.033579,
+                        0.034563,
+                        0.035577,
+                        0.036623,
+                        0.029875
+                      ],
+                      p: [
+                        0.047591,
+                        0.069163,
+                        0.060059,
+                        0.043521,
+                        0.044433,
+                        0.045364,
+                        0.046315,
+                        0.047285,
+                        0.048275,
+                        0.049285,
+                        0.050318,
+                        0.051372,
+                        0.052447,
+                        0.053547,
+                        0.054669,
+                        0.055813,
+                        0.056983,
+                        0.05151
+                      ],
+                      mp: [
+                        0.062631,
+                        0.067307,
+                        0.068316,
+                        0.069341,
+                        0.070381,
+                        0.071436,
+                        0.072508,
+                        0.073594,
+                        0.074697,
+                        0.075818,
+                        0.076953,
+                        0.078108,
+                        0.079278,
+                        0.080468,
+                        0.081675,
+                        0.082899,
+                        0.084142,
+                        0.07368
+                      ],
+                      mf: [
+                        0.099535,
+                        0.111088,
+                        0.11226,
+                        0.113443,
+                        0.114638,
+                        0.118343,
+                        0.11707,
+                        0.118303,
+                        0.11955,
+                        0.12081,
+                        0.122084,
+                        0.123371,
+                        0.124671,
+                        0.125987,
+                        0.127314,
+                        0.128656,
+                        0.130013,
+                        0.109189
+                      ],
+                      f: [
+                        0.15093,
+                        0.162662,
+                        0.16519,
+                        0.167757,
+                        0.170362,
+                        0.173009,
+                        0.175697,
+                        0.178426,
+                        0.181198,
+                        0.184013,
+                        0.186872,
+                        0.189774,
+                        0.192724,
+                        0.195717,
+                        0.2027,
+                        0.201847,
+                        0.204982,
+                        0.161176
+                      ],
+                      ff: [
+                        0.219306,
+                        0.263073,
+                        0.26598,
+                        0.268918,
+                        0.271891,
+                        0.274896,
+                        0.277932,
+                        0.281004,
+                        0.284109,
+                        0.287249,
+                        0.28041,
+                        0.293633,
+                        0.296877,
+                        0.318752,
+                        0.325232,
+                        0.306827,
+                        0.310218,
+                        0.227989
+                      ],
+                      fff: [
+                        0.35587,
+                        0.395973,
+                        0.403154,
+                        0.410464,
+                        0.417907,
+                        0.425485,
+                        0.4332,
+                        0.441056,
+                        0.449054,
+                        0.457197,
+                        0.465487,
+                        0.473929,
+                        0.482521,
+                        0.491273,
+                        0.52242,
+                        0.50925,
+                        0.476023,
+                        0.37049
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 11.0611,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 4,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 2,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 2.9678,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 7.0144,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 7.0144,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 8.3633,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 8.3633,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 11.0611,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 11.0611,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 2,
+                    stop: 12.41,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 15.1078,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  }
+                ]
               }
             },
             {
@@ -19637,9 +28714,1609 @@ var init_physical_strings_calibration = __esm({
                   level: -56.11,
                   contact: 0.165
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.20182,
+                        0.24,
+                        0.33941,
+                        0.24,
+                        0.33941,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.24
+                      ],
+                      pp: [
+                        0.33941,
+                        0.48,
+                        0.40363,
+                        0.48,
+                        0.48,
+                        0.48,
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.48
+                      ],
+                      p: [
+                        0.67882,
+                        0.57082,
+                        0.67882,
+                        0.67882,
+                        0.96,
+                        0.67882,
+                        0.57082,
+                        0.80726,
+                        0.67882,
+                        0.67882
+                      ],
+                      mp: [
+                        1.61452,
+                        1.35765,
+                        0.96,
+                        1.14164,
+                        1.14164,
+                        0.96,
+                        0.96,
+                        0.80726,
+                        0.80726,
+                        0.96
+                      ],
+                      mf: [
+                        1.92,
+                        1.92,
+                        1.92,
+                        1.92,
+                        1.92,
+                        1.92,
+                        1.92,
+                        1.14164,
+                        1.61452,
+                        1.61452
+                      ],
+                      f: [
+                        3.84,
+                        4.56656,
+                        3.84,
+                        1.92,
+                        2.71529,
+                        3.22904,
+                        2.71529,
+                        3.22904,
+                        1.92,
+                        1.92
+                      ],
+                      ff: [
+                        9.13313,
+                        4.56656,
+                        9.13313,
+                        2.71529,
+                        7.68002,
+                        4.56656,
+                        5.43059,
+                        3.84,
+                        3.22904,
+                        4.56656
+                      ],
+                      fff: [
+                        4.56656,
+                        10.86118,
+                        10.86118,
+                        4.56656,
+                        12.91619,
+                        3.84,
+                        6.4581,
+                        4.56656,
+                        4.56656,
+                        3.22904
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.039369,
+                        0.038523,
+                        0.037697,
+                        0.036889,
+                        0.036098,
+                        0.035323,
+                        0.034566,
+                        0.033824,
+                        0.033098,
+                        0.032389
+                      ],
+                      pp: [
+                        0.07551,
+                        0.064972,
+                        0.063253,
+                        0.061578,
+                        0.059947,
+                        0.058362,
+                        0.056816,
+                        0.055313,
+                        0.053848,
+                        0.052423
+                      ],
+                      p: [
+                        0.120382,
+                        0.115131,
+                        0.110109,
+                        0.105307,
+                        0.100712,
+                        0.09632,
+                        0.092119,
+                        0.088101,
+                        0.084258,
+                        0.080584
+                      ],
+                      mp: [
+                        0.173268,
+                        0.167142,
+                        0.161233,
+                        0.15553,
+                        0.150032,
+                        0.144728,
+                        0.13961,
+                        0.134674,
+                        0.129913,
+                        0.125318
+                      ],
+                      mf: [
+                        0.288571,
+                        0.278225,
+                        0.268251,
+                        0.258633,
+                        0.24936,
+                        0.240422,
+                        0.231803,
+                        0.223492,
+                        0.215478,
+                        0.207753
+                      ],
+                      f: [
+                        0.537105,
+                        0.542806,
+                        0.510959,
+                        0.24481,
+                        0.452763,
+                        0.363482,
+                        0.401195,
+                        0.377657,
+                        0.355501,
+                        0.334644
+                      ],
+                      ff: [
+                        1.150004,
+                        0.611933,
+                        0.850546,
+                        0.351784,
+                        0.909268,
+                        0.548761,
+                        0.67227,
+                        0.672873,
+                        0.674856,
+                        0.626384
+                      ],
+                      fff: [
+                        0.857361,
+                        1.367099,
+                        1.540769,
+                        0.699001,
+                        1.885633,
+                        0.5,
+                        0.85291,
+                        0.546113,
+                        0.782761,
+                        0.683407
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.20182,
+                        0.16971,
+                        0.24,
+                        0.24,
+                        0.20182,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.24,
+                        0.24
+                      ],
+                      pp: [
+                        0.24,
+                        0.24,
+                        0.40363,
+                        0.28541,
+                        0.28541,
+                        0.67882,
+                        0.24,
+                        0.33941,
+                        0.40363,
+                        0.33941
+                      ],
+                      p: [
+                        0.57082,
+                        0.40363,
+                        0.67882,
+                        0.57082,
+                        0.48,
+                        0.67882,
+                        0.40363,
+                        0.40363,
+                        0.57082,
+                        0.80726
+                      ],
+                      mp: [
+                        0.80726,
+                        0.96,
+                        0.80726,
+                        0.80726,
+                        1.14164,
+                        0.67882,
+                        0.67882,
+                        0.96,
+                        0.96,
+                        0.96
+                      ],
+                      mf: [
+                        1.35765,
+                        1.92,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.14164,
+                        1.35765,
+                        1.14164
+                      ],
+                      f: [
+                        1.92,
+                        1.61452,
+                        2.71529,
+                        1.92,
+                        2.28328,
+                        1.92,
+                        1.61452,
+                        2.28328,
+                        1.92,
+                        2.71529
+                      ],
+                      ff: [
+                        5.43059,
+                        3.84,
+                        3.84,
+                        3.84,
+                        3.84,
+                        4.56656,
+                        2.71529,
+                        2.28328,
+                        2.71529,
+                        4.56656
+                      ],
+                      fff: [
+                        10.86118,
+                        7.68002,
+                        4.56656,
+                        5.43059,
+                        3.84,
+                        5.43059,
+                        3.84,
+                        3.22904,
+                        4.56656,
+                        4.56656
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.029146,
+                        0.029878,
+                        0.030629,
+                        0.031397,
+                        0.032185,
+                        0.032994,
+                        0.033822,
+                        0.03467,
+                        0.035541,
+                        0.036433
+                      ],
+                      pp: [
+                        0.049619,
+                        0.050659,
+                        0.051721,
+                        0.052806,
+                        0.053913,
+                        0.055043,
+                        0.056197,
+                        0.057376,
+                        0.058578,
+                        0.059807
+                      ],
+                      p: [
+                        0.076324,
+                        0.078411,
+                        0.080556,
+                        0.082758,
+                        0.085021,
+                        0.087345,
+                        0.089734,
+                        0.092188,
+                        0.09471,
+                        0.097299
+                      ],
+                      mp: [
+                        0.120128,
+                        0.122284,
+                        0.124478,
+                        0.126712,
+                        0.128985,
+                        0.1313,
+                        0.133656,
+                        0.136055,
+                        0.138496,
+                        0.140982
+                      ],
+                      mf: [
+                        0.178593,
+                        0.183999,
+                        0.189568,
+                        0.195307,
+                        0.201218,
+                        0.207308,
+                        0.213583,
+                        0.220046,
+                        0.226707,
+                        0.23357
+                      ],
+                      f: [
+                        0.351651,
+                        0.359382,
+                        0.343897,
+                        0.375362,
+                        0.383614,
+                        0.392047,
+                        0.400668,
+                        0.409479,
+                        0.418482,
+                        0.427683
+                      ],
+                      ff: [
+                        0.795235,
+                        0.610316,
+                        0.599299,
+                        0.693311,
+                        0.662328,
+                        0.632729,
+                        0.604453,
+                        0.577079,
+                        0.632578,
+                        0.662996
+                      ],
+                      fff: [
+                        1.319041,
+                        1.238725,
+                        0.691232,
+                        1.060859,
+                        1.004726,
+                        0.883972,
+                        0.888283,
+                        0.824773,
+                        0.85614,
+                        0.721063
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.16971,
+                        0.16971
+                      ],
+                      pp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.16971
+                      ],
+                      p: [
+                        0.1427,
+                        0.16971,
+                        0.16971,
+                        0.20182,
+                        0.20182,
+                        0.24,
+                        0.16971,
+                        0.24,
+                        0.20182,
+                        0.20182
+                      ],
+                      mp: [
+                        0.1427,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.24,
+                        0.28541,
+                        0.20182,
+                        0.28541,
+                        0.24,
+                        0.24
+                      ],
+                      mf: [
+                        0.48,
+                        0.33941,
+                        0.57082,
+                        0.33941,
+                        0.57082,
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.40363,
+                        0.33941
+                      ],
+                      f: [
+                        0.57082,
+                        0.57082,
+                        0.80726,
+                        0.67882,
+                        0.48,
+                        0.67882,
+                        0.96,
+                        0.67882,
+                        0.57082,
+                        0.96
+                      ],
+                      ff: [
+                        1.14164,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        0.96,
+                        0.96,
+                        1.35765,
+                        1.14164,
+                        0.80726,
+                        1.61452
+                      ],
+                      fff: [
+                        2.28328,
+                        1.92,
+                        2.28328,
+                        1.92,
+                        1.61452,
+                        2.28328,
+                        1.35765,
+                        1.61452,
+                        1.61452,
+                        2.28328
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.060279,
+                        0.05,
+                        0.041847,
+                        0.031103,
+                        0.022448,
+                        0.017144,
+                        0.021583,
+                        0.025303,
+                        0.03074,
+                        0.037345
+                      ],
+                      pp: [
+                        0.067746,
+                        0.057183,
+                        0.0342,
+                        0.035759,
+                        0.037387,
+                        0.039089,
+                        0.04087,
+                        0.04273,
+                        0.044676,
+                        0.046711
+                      ],
+                      p: [
+                        0.08657,
+                        0.065154,
+                        0.065223,
+                        0.065291,
+                        0.06536,
+                        0.065429,
+                        0.065498,
+                        0.065567,
+                        0.065636,
+                        0.065705
+                      ],
+                      mp: [
+                        0.119028,
+                        0.116585,
+                        0.114192,
+                        0.11185,
+                        0.109554,
+                        0.107306,
+                        0.105103,
+                        0.102946,
+                        0.100832,
+                        0.098764
+                      ],
+                      mf: [
+                        0.195122,
+                        0.190273,
+                        0.185542,
+                        0.180931,
+                        0.176434,
+                        0.172049,
+                        0.167772,
+                        0.163603,
+                        0.159535,
+                        0.155569
+                      ],
+                      f: [
+                        0.281077,
+                        0.279411,
+                        0.277752,
+                        0.276104,
+                        0.274467,
+                        0.272838,
+                        0.27122,
+                        0.269611,
+                        0.268012,
+                        0.266422
+                      ],
+                      ff: [
+                        0.458221,
+                        0.453475,
+                        0.448778,
+                        0.444129,
+                        0.439529,
+                        0.434977,
+                        0.430473,
+                        0.426013,
+                        0.421601,
+                        0.417233
+                      ],
+                      fff: [
+                        0.835061,
+                        0.822727,
+                        0.810574,
+                        0.798601,
+                        0.786806,
+                        0.775183,
+                        0.583345,
+                        0.702244,
+                        0.741339,
+                        0.730388
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.24,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.20182,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.1427,
+                        0.16971,
+                        0.20182,
+                        0.16971,
+                        0.16971
+                      ],
+                      pp: [
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.20182,
+                        0.20182,
+                        0.20182,
+                        0.24,
+                        0.16971,
+                        0.16971
+                      ],
+                      p: [
+                        0.16971,
+                        0.16971,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.1427,
+                        0.20182,
+                        0.16971,
+                        0.20182,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.20182,
+                        0.28541,
+                        0.24,
+                        0.16971,
+                        0.20182
+                      ],
+                      mp: [
+                        0.16971,
+                        0.20182,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.16971,
+                        0.24,
+                        0.20182,
+                        0.24,
+                        0.24,
+                        0.24,
+                        0.28541,
+                        0.28541,
+                        0.33941,
+                        0.33941,
+                        0.20182,
+                        0.28541
+                      ],
+                      mf: [
+                        0.16971,
+                        0.20182,
+                        0.28541,
+                        0.28541,
+                        0.1427,
+                        0.33941,
+                        0.20182,
+                        0.28541,
+                        0.28541,
+                        0.28541,
+                        0.40363,
+                        0.33941,
+                        0.40363,
+                        0.40363,
+                        0.57082,
+                        0.67882,
+                        0.33941,
+                        0.48
+                      ],
+                      f: [
+                        0.67882,
+                        0.48,
+                        0.67882,
+                        0.67882,
+                        0.57082,
+                        0.67882,
+                        0.96,
+                        0.80726,
+                        0.48,
+                        0.48,
+                        0.67882,
+                        0.48,
+                        0.80726,
+                        0.96,
+                        0.80726,
+                        0.96,
+                        0.48,
+                        0.80726
+                      ],
+                      ff: [
+                        1.35765,
+                        1.35765,
+                        0.96,
+                        1.35765,
+                        1.14164,
+                        0.96,
+                        1.35765,
+                        0.96,
+                        0.80726,
+                        0.96,
+                        0.80726,
+                        0.67882,
+                        1.14164,
+                        1.14164,
+                        1.14164,
+                        1.35765,
+                        0.80726,
+                        0.80726
+                      ],
+                      fff: [
+                        1.14164,
+                        1.61452,
+                        1.61452,
+                        1.61452,
+                        1.92,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.35765,
+                        1.61452,
+                        1.35765,
+                        1.35765,
+                        1.61452,
+                        1.92,
+                        1.35765,
+                        1.61452,
+                        1.14164,
+                        1.14164
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.050701,
+                        0.05932,
+                        0.05,
+                        0.040549,
+                        0.017819,
+                        0.033384,
+                        0.037346,
+                        0.015526,
+                        0.017679,
+                        0.017286,
+                        0.017011,
+                        0.017538,
+                        0.018081,
+                        0.01864,
+                        0.019994,
+                        0.01981,
+                        0.020423,
+                        0.019677
+                      ],
+                      pp: [
+                        0.048615,
+                        0.06,
+                        0.040693,
+                        0.032687,
+                        0.056137,
+                        0.030627,
+                        0.027268,
+                        0.021779,
+                        0.031303,
+                        0.02679,
+                        0.025399,
+                        0.026735,
+                        0.02814,
+                        0.029621,
+                        0.032682,
+                        0.032818,
+                        0.034543,
+                        0.032504
+                      ],
+                      p: [
+                        0.045229,
+                        0.05293,
+                        0.053956,
+                        0.051865,
+                        0.051342,
+                        0.050821,
+                        0.050308,
+                        0.0498,
+                        0.049296,
+                        0.048798,
+                        0.048305,
+                        0.047817,
+                        0.047334,
+                        0.046856,
+                        0.049066,
+                        0.045913,
+                        0.045448,
+                        0.040981
+                      ],
+                      mp: [
+                        0.062193,
+                        0.102364,
+                        0.065604,
+                        0.06662,
+                        0.06765,
+                        0.068697,
+                        0.06976,
+                        0.07084,
+                        0.071937,
+                        0.07305,
+                        0.07418,
+                        0.075329,
+                        0.076494,
+                        0.077677,
+                        0.080419,
+                        0.080101,
+                        0.081341,
+                        0.068144
+                      ],
+                      mf: [
+                        0.103187,
+                        0.110053,
+                        0.110919,
+                        0.111791,
+                        0.11267,
+                        0.113556,
+                        0.114451,
+                        0.11535,
+                        0.116258,
+                        0.117172,
+                        0.118094,
+                        0.119022,
+                        0.119958,
+                        0.120901,
+                        0.1424,
+                        0.122811,
+                        0.123778,
+                        0.101461
+                      ],
+                      f: [
+                        0.146889,
+                        0.22262,
+                        0.16913,
+                        0.169665,
+                        0.170199,
+                        0.170738,
+                        0.19211,
+                        0.171818,
+                        0.17236,
+                        0.189213,
+                        0.173452,
+                        0.183814,
+                        0.174549,
+                        0.175099,
+                        0.213187,
+                        0.176208,
+                        0.176764,
+                        0.148869
+                      ],
+                      ff: [
+                        0.230143,
+                        0.280552,
+                        0.278578,
+                        0.276618,
+                        0.274673,
+                        0.27274,
+                        0.270822,
+                        0.268917,
+                        0.267025,
+                        0.289442,
+                        0.263281,
+                        0.271594,
+                        0.259589,
+                        0.257764,
+                        0.322203,
+                        0.255992,
+                        0.252361,
+                        0.198002
+                      ],
+                      fff: [
+                        0.36243,
+                        0.473954,
+                        0.468516,
+                        0.463141,
+                        0.457829,
+                        0.452577,
+                        0.447384,
+                        0.442253,
+                        0.437179,
+                        0.452199,
+                        0.427206,
+                        0.422304,
+                        0.41746,
+                        0.41267,
+                        0.483163,
+                        0.437211,
+                        0.398631,
+                        0.289118
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 0,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 2,
+                    stop: 8.3633,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 0,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  }
+                ]
               }
             }
-          ]
+          ],
+          attackFrom: {
+            ppp: 1,
+            pp: 1,
+            p: 1,
+            mp: 1,
+            mf: 1,
+            f: 1,
+            ff: 1,
+            fff: 1
+          }
         },
         cello: {
           forces: {
@@ -19693,18 +30370,18 @@ var init_physical_strings_calibration = __esm({
             ]
           },
           levels: {
-            ppp: -56.65,
-            pp: -54.16,
-            p: -50.74,
-            mp: -50.08,
-            mf: -45.42,
-            f: -39.38,
-            ff: -36.96,
-            fff: -31.41
+            ppp: -49.59,
+            pp: -45.11,
+            p: -41.46,
+            mp: -37.07,
+            mf: -31.92,
+            f: -27.91,
+            ff: -24.67,
+            fff: -21.43
           },
           recordedMf: -56.59,
-          gainDb: -11.17,
-          stemGainDb: -12.32,
+          gainDb: -24.67,
+          stemGainDb: -25.82,
           contacts: {
             ppp: 0.2,
             pp: 0.2,
@@ -20005,6 +30682,1694 @@ var init_physical_strings_calibration = __esm({
                   level: -54.31,
                   contact: 0.165
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.28,
+                        1.28,
+                        0.9051,
+                        1.81019,
+                        0.76109,
+                        1.07635,
+                        0.76109,
+                        1.07635,
+                        1.52219,
+                        1.07635
+                      ],
+                      pp: [
+                        2.15269,
+                        1.81019,
+                        1.81019,
+                        1.52219,
+                        1.52219,
+                        1.52219,
+                        1.28,
+                        1.28,
+                        1.52219,
+                        1.81019
+                      ],
+                      p: [
+                        2.56,
+                        2.56,
+                        2.15269,
+                        2.56,
+                        2.56,
+                        1.81019,
+                        2.56,
+                        2.15269,
+                        2.15269,
+                        1.81019
+                      ],
+                      mp: [
+                        3.04437,
+                        3.04437,
+                        1.81019,
+                        3.62039,
+                        2.15269,
+                        3.04437,
+                        1.81019,
+                        2.56,
+                        1.81019,
+                        1.28
+                      ],
+                      mf: [
+                        8.61078,
+                        5.12,
+                        5.12,
+                        3.04437,
+                        10.24,
+                        3.62039,
+                        3.04437,
+                        3.04437,
+                        1.81019,
+                        2.56
+                      ],
+                      f: [
+                        10.24,
+                        6.08874,
+                        6.08874,
+                        4.30539,
+                        14.48155,
+                        6.08874,
+                        6.08874,
+                        4.30539,
+                        4.30539,
+                        3.62039
+                      ],
+                      ff: [
+                        17.22156,
+                        14.48155,
+                        7.24077,
+                        12.17748,
+                        17.22156,
+                        6.08874,
+                        5.12,
+                        5.12,
+                        3.62039,
+                        3.62039
+                      ],
+                      fff: [
+                        17.22156,
+                        17.22156,
+                        14.48155,
+                        12.17748,
+                        17.22156,
+                        20.48,
+                        5.12,
+                        6.08874,
+                        3.62039,
+                        3.62039
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.029849,
+                        0.027331,
+                        0.025026,
+                        0.022913,
+                        0.02098,
+                        0.01921,
+                        0.017589,
+                        0.017531,
+                        0.024161,
+                        0.013501
+                      ],
+                      pp: [
+                        0.053639,
+                        0.049857,
+                        0.04385,
+                        0.039724,
+                        0.03594,
+                        0.032515,
+                        0.029418,
+                        0.030057,
+                        0.024081,
+                        0.033735
+                      ],
+                      p: [
+                        0.069955,
+                        0.070883,
+                        0.064098,
+                        0.061356,
+                        0.058732,
+                        0.05622,
+                        0.053627,
+                        0.051512,
+                        0.04931,
+                        0.047201
+                      ],
+                      mp: [
+                        0.154264,
+                        0.146754,
+                        0.113265,
+                        0.115346,
+                        0.104693,
+                        0.095023,
+                        0.086245,
+                        0.085769,
+                        0.127886,
+                        0.064488
+                      ],
+                      mf: [
+                        0.245398,
+                        0.268007,
+                        0.208863,
+                        0.200007,
+                        0.176743,
+                        0.159145,
+                        0.141815,
+                        0.168751,
+                        0.145213,
+                        0.14993
+                      ],
+                      f: [
+                        0.387446,
+                        0.217693,
+                        0.305651,
+                        0.3,
+                        0.34641,
+                        0.272708,
+                        0.211382,
+                        0.172717,
+                        0.218216,
+                        0.207818
+                      ],
+                      ff: [
+                        0.663914,
+                        0.707141,
+                        0.287922,
+                        0.34641,
+                        0.378807,
+                        0.272708,
+                        0.282843,
+                        0.257297,
+                        0.27139,
+                        0.251005
+                      ],
+                      fff: [
+                        0.544896,
+                        0.612993,
+                        0.700418,
+                        0.34641,
+                        0.395877,
+                        0.625905,
+                        0.282843,
+                        0.264575,
+                        0.27139,
+                        0.251005
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.53817,
+                        0.64,
+                        0.53817,
+                        0.53817,
+                        0.53817,
+                        0.45255,
+                        0.76109,
+                        0.53817,
+                        0.64,
+                        0.64
+                      ],
+                      pp: [
+                        0.76109,
+                        0.64,
+                        0.9051,
+                        0.9051,
+                        0.9051,
+                        0.76109,
+                        1.07635,
+                        0.9051,
+                        0.9051,
+                        0.76109
+                      ],
+                      p: [
+                        1.28,
+                        1.28,
+                        1.81019,
+                        1.81019,
+                        1.52219,
+                        1.07635,
+                        1.28,
+                        1.28,
+                        1.28,
+                        1.52219
+                      ],
+                      mp: [
+                        2.15269,
+                        2.15269,
+                        1.81019,
+                        2.56,
+                        1.81019,
+                        2.15269,
+                        2.56,
+                        2.56,
+                        1.81019,
+                        1.81019
+                      ],
+                      mf: [
+                        4.30539,
+                        4.30539,
+                        3.62039,
+                        2.56,
+                        2.15269,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        4.30539,
+                        2.56
+                      ],
+                      f: [
+                        7.24077,
+                        7.24077,
+                        6.08874,
+                        7.24077,
+                        6.08874,
+                        3.04437,
+                        7.24077,
+                        4.30539,
+                        6.08874,
+                        7.24077
+                      ],
+                      ff: [
+                        12.17748,
+                        12.17748,
+                        14.48155,
+                        10.24,
+                        7.24077,
+                        8.61078,
+                        7.24077,
+                        6.08874,
+                        10.24,
+                        7.24077
+                      ],
+                      fff: [
+                        17.22156,
+                        12.17748,
+                        20.48,
+                        17.22156,
+                        12.17748,
+                        20.48,
+                        8.61078,
+                        4.30539,
+                        17.22156,
+                        17.22156
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.034036,
+                        0.03277,
+                        0.031552,
+                        0.032266,
+                        0.029248,
+                        0.028162,
+                        0.026842,
+                        0.026105,
+                        0.025133,
+                        0.025007
+                      ],
+                      pp: [
+                        0.057845,
+                        0.05564,
+                        0.053831,
+                        0.051483,
+                        0.04952,
+                        0.047635,
+                        0.04582,
+                        0.044075,
+                        0.042396,
+                        0.043082
+                      ],
+                      p: [
+                        0.095962,
+                        0.092106,
+                        0.088718,
+                        0.084854,
+                        0.080274,
+                        0.078173,
+                        0.069475,
+                        0.072018,
+                        0.069123,
+                        0.073793
+                      ],
+                      mp: [
+                        0.145475,
+                        0.141049,
+                        0.170139,
+                        0.132595,
+                        0.128561,
+                        0.12465,
+                        0.105223,
+                        0.117179,
+                        0.113614,
+                        0.124035
+                      ],
+                      mf: [
+                        0.26456,
+                        0.255332,
+                        0.256887,
+                        0.23783,
+                        0.229533,
+                        0.221528,
+                        0.209761,
+                        0.175853,
+                        0.199147,
+                        0.211214
+                      ],
+                      f: [
+                        0.406154,
+                        0.460997,
+                        0.487498,
+                        0.398624,
+                        0.370676,
+                        0.29756,
+                        0.320526,
+                        0.298054,
+                        0.323484,
+                        0.319045
+                      ],
+                      ff: [
+                        0.661499,
+                        0.830833,
+                        0.889561,
+                        0.693124,
+                        0.569827,
+                        0.602119,
+                        0.413651,
+                        0.402881,
+                        0.547823,
+                        0.375697
+                      ],
+                      fff: [
+                        1.275626,
+                        0.652544,
+                        1.322125,
+                        1.075438,
+                        0.954666,
+                        1.108318,
+                        0.482255,
+                        0.432267,
+                        1.036976,
+                        1.006273
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.26909,
+                        0.38055,
+                        0.45255,
+                        0.53817,
+                        0.38055,
+                        0.53817,
+                        0.26909,
+                        0.53817,
+                        0.53817,
+                        0.64
+                      ],
+                      pp: [
+                        0.45255,
+                        0.76109,
+                        0.76109,
+                        0.64,
+                        0.76109,
+                        0.76109,
+                        0.9051,
+                        0.64,
+                        0.9051,
+                        0.76109
+                      ],
+                      p: [
+                        1.28,
+                        1.07635,
+                        1.52219,
+                        1.28,
+                        1.28,
+                        1.28,
+                        1.81019,
+                        1.81019,
+                        1.28,
+                        1.28
+                      ],
+                      mp: [
+                        1.52219,
+                        1.81019,
+                        1.52219,
+                        2.56,
+                        2.15269,
+                        1.81019,
+                        2.15269,
+                        1.52219,
+                        2.56,
+                        1.81019
+                      ],
+                      mf: [
+                        3.04437,
+                        2.56,
+                        4.30539,
+                        2.56,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        2.56,
+                        3.62039,
+                        3.04437
+                      ],
+                      f: [
+                        5.12,
+                        5.12,
+                        4.30539,
+                        5.12,
+                        5.12,
+                        4.30539,
+                        3.04437,
+                        5.12,
+                        6.08874,
+                        6.08874
+                      ],
+                      ff: [
+                        7.24077,
+                        7.24077,
+                        6.08874,
+                        6.08874,
+                        7.24077,
+                        12.17748,
+                        14.48155,
+                        7.24077,
+                        6.08874,
+                        5.12
+                      ],
+                      fff: [
+                        17.22156,
+                        10.24,
+                        10.24,
+                        7.24077,
+                        12.17748,
+                        12.17748,
+                        20.48,
+                        14.48155,
+                        8.61078,
+                        14.48155
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.0392,
+                        0.04038,
+                        0.041595,
+                        0.042846,
+                        0.044136,
+                        0.045464,
+                        0.055441,
+                        0.04824,
+                        0.049692,
+                        0.050015
+                      ],
+                      pp: [
+                        0.070479,
+                        0.071707,
+                        0.072959,
+                        0.074234,
+                        0.075528,
+                        0.076847,
+                        0.086341,
+                        0.084181,
+                        0.080939,
+                        0.082351
+                      ],
+                      p: [
+                        0.111445,
+                        0.114177,
+                        0.116975,
+                        0.119842,
+                        0.12278,
+                        0.125788,
+                        0.141804,
+                        0.137348,
+                        0.131816,
+                        0.133109
+                      ],
+                      mp: [
+                        0.18157,
+                        0.186141,
+                        0.190826,
+                        0.19563,
+                        0.200555,
+                        0.205605,
+                        0.238021,
+                        0.228851,
+                        0.21519,
+                        0.215216
+                      ],
+                      mf: [
+                        0.314357,
+                        0.320676,
+                        0.328795,
+                        0.336262,
+                        0.343896,
+                        0.351706,
+                        0.389636,
+                        0.406568,
+                        0.360861,
+                        0.377868
+                      ],
+                      f: [
+                        0.571164,
+                        0.586113,
+                        0.5215,
+                        0.617194,
+                        0.633347,
+                        0.561823,
+                        0.658487,
+                        0.625485,
+                        0.57835,
+                        0.700949
+                      ],
+                      ff: [
+                        0.846777,
+                        0.909391,
+                        0.856688,
+                        0.799621,
+                        1.126405,
+                        1.209688,
+                        1.46463,
+                        1.302542,
+                        0.946203,
+                        0.671997
+                      ],
+                      fff: [
+                        1.634213,
+                        1.209343,
+                        1.545536,
+                        1.015013,
+                        1.097638,
+                        1.495397,
+                        2.160587,
+                        2.143189,
+                        1.503315,
+                        1.499854
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.22627,
+                        0.22627,
+                        0.22627,
+                        0.32,
+                        0.22627,
+                        0.22627,
+                        0.22627,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.26909,
+                        0.45255,
+                        0.22627,
+                        0.32,
+                        0.26909,
+                        0.22627,
+                        0.32,
+                        0.22627
+                      ],
+                      pp: [
+                        0.32,
+                        0.26909,
+                        0.32,
+                        0.32,
+                        0.26909,
+                        0.26909,
+                        0.26909,
+                        0.26909,
+                        0.45255,
+                        0.26909,
+                        0.26909,
+                        0.45255,
+                        0.38055,
+                        0.38055,
+                        0.32,
+                        0.26909,
+                        0.45255,
+                        0.26909
+                      ],
+                      p: [
+                        0.53817,
+                        0.45255,
+                        0.53817,
+                        0.64,
+                        0.38055,
+                        0.45255,
+                        0.45255,
+                        0.53817,
+                        0.64,
+                        0.45255,
+                        0.53817,
+                        0.64,
+                        0.38055,
+                        0.38055,
+                        0.38055,
+                        0.38055,
+                        0.9051,
+                        0.26909
+                      ],
+                      mp: [
+                        0.9051,
+                        1.07635,
+                        0.76109,
+                        1.28,
+                        0.76109,
+                        0.64,
+                        1.07635,
+                        1.07635,
+                        0.76109,
+                        0.64,
+                        0.9051,
+                        0.9051,
+                        0.9051,
+                        0.9051,
+                        0.76109,
+                        0.53817,
+                        1.52219,
+                        0.38055
+                      ],
+                      mf: [
+                        3.04437,
+                        2.56,
+                        2.56,
+                        2.15269,
+                        2.15269,
+                        1.07635,
+                        1.81019,
+                        2.15269,
+                        1.52219,
+                        1.28,
+                        1.81019,
+                        1.81019,
+                        1.28,
+                        1.52219,
+                        1.28,
+                        0.9051,
+                        3.04437,
+                        0.9051
+                      ],
+                      f: [
+                        5.12,
+                        4.30539,
+                        4.30539,
+                        3.04437,
+                        2.56,
+                        3.04437,
+                        2.56,
+                        2.15269,
+                        2.15269,
+                        2.15269,
+                        2.56,
+                        2.15269,
+                        2.15269,
+                        2.56,
+                        1.81019,
+                        2.56,
+                        3.62039,
+                        1.81019
+                      ],
+                      ff: [
+                        6.08874,
+                        7.24077,
+                        5.12,
+                        5.12,
+                        4.30539,
+                        5.12,
+                        5.12,
+                        5.12,
+                        3.04437,
+                        2.56,
+                        4.30539,
+                        3.04437,
+                        3.04437,
+                        4.30539,
+                        2.56,
+                        5.12,
+                        5.12,
+                        2.15269
+                      ],
+                      fff: [
+                        6.08874,
+                        12.17748,
+                        10.24,
+                        8.61078,
+                        6.08874,
+                        7.24077,
+                        7.24077,
+                        7.24077,
+                        5.12,
+                        4.30539,
+                        5.12,
+                        5.12,
+                        6.08874,
+                        3.62039,
+                        6.08874,
+                        7.24077,
+                        6.08874,
+                        4.30539
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.040862,
+                        0.038945,
+                        0.037118,
+                        0.035377,
+                        0.033717,
+                        0.032135,
+                        0.030707,
+                        0.033054,
+                        0.027821,
+                        0.02243,
+                        0.029973,
+                        0.024087,
+                        0.022957,
+                        0.02188,
+                        0.020854,
+                        0.019875,
+                        0.045809,
+                        0.015237
+                      ],
+                      pp: [
+                        0.069923,
+                        0.066636,
+                        0.063505,
+                        0.060519,
+                        0.057674,
+                        0.054963,
+                        0.053275,
+                        0.059648,
+                        0.047572,
+                        0.038673,
+                        0.050967,
+                        0.041173,
+                        0.039239,
+                        0.037394,
+                        0.035637,
+                        0.033962,
+                        0.078883,
+                        0.02571
+                      ],
+                      p: [
+                        0.098348,
+                        0.113959,
+                        0.106592,
+                        0.101422,
+                        0.096505,
+                        0.091824,
+                        0.096404,
+                        0.10015,
+                        0.079101,
+                        0.064398,
+                        0.085625,
+                        0.068141,
+                        0.064837,
+                        0.061692,
+                        0.0587,
+                        0.055854,
+                        0.132136,
+                        0.041114
+                      ],
+                      mp: [
+                        0.173181,
+                        0.214709,
+                        0.158996,
+                        0.152347,
+                        0.145975,
+                        0.13987,
+                        0.146637,
+                        0.151337,
+                        0.123044,
+                        0.099597,
+                        0.138736,
+                        0.108242,
+                        0.103714,
+                        0.099377,
+                        0.09522,
+                        0.091237,
+                        0.216896,
+                        0.067288
+                      ],
+                      mf: [
+                        0.303539,
+                        0.283745,
+                        0.274967,
+                        0.261706,
+                        0.245645,
+                        0.237073,
+                        0.255565,
+                        0.272034,
+                        0.2044,
+                        0.157857,
+                        0.211888,
+                        0.17623,
+                        0.167731,
+                        0.159642,
+                        0.151943,
+                        0.144614,
+                        0.374418,
+                        0.11023
+                      ],
+                      f: [
+                        0.507644,
+                        0.486957,
+                        0.460157,
+                        0.438107,
+                        0.417113,
+                        0.397127,
+                        0.410643,
+                        0.485745,
+                        0.342727,
+                        0.26349,
+                        0.397745,
+                        0.294974,
+                        0.281607,
+                        0.268112,
+                        0.255265,
+                        0.243033,
+                        0.610441,
+                        0.17252
+                      ],
+                      ff: [
+                        0.842596,
+                        0.80284,
+                        0.715721,
+                        0.723311,
+                        0.666572,
+                        0.661715,
+                        0.712685,
+                        0.801367,
+                        0.572404,
+                        0.42903,
+                        0.678474,
+                        0.485226,
+                        0.471783,
+                        0.449524,
+                        0.428316,
+                        0.451312,
+                        0.91429,
+                        0.283444
+                      ],
+                      fff: [
+                        0.91918,
+                        1.46758,
+                        1.386291,
+                        1.202239,
+                        0.957392,
+                        0.986176,
+                        1.178378,
+                        1.271586,
+                        0.984852,
+                        0.731904,
+                        1.104197,
+                        0.823094,
+                        0.755855,
+                        0.700459,
+                        0.69966,
+                        0.75611,
+                        1.169544,
+                        0.481768
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "f",
+                    round: 0,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "f",
+                    round: 1,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 4,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "mf",
+                    round: 2,
+                    from: "mf"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 11.0611,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 0,
+                    stop: 11.0611,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 11.0611,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 11.0611,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 2.9678,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 8.3633,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 2,
+                    stop: 11.0611,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 16.4567,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 20.5033,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 21.8522,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  }
+                ]
               }
             },
             {
@@ -20185,6 +32550,1757 @@ var init_physical_strings_calibration = __esm({
                   level: -53.08,
                   contact: 0.2
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.9051,
+                        0.45255,
+                        0.53817,
+                        0.53817,
+                        0.45255,
+                        0.53817,
+                        0.45255,
+                        0.45255,
+                        0.45255,
+                        0.32
+                      ],
+                      pp: [
+                        0.9051,
+                        0.38055,
+                        0.76109,
+                        0.9051,
+                        0.76109,
+                        0.76109,
+                        0.64,
+                        0.53817,
+                        0.53817,
+                        0.76109
+                      ],
+                      p: [
+                        2.15269,
+                        1.28,
+                        2.15269,
+                        1.28,
+                        1.52219,
+                        1.28,
+                        0.9051,
+                        1.07635,
+                        0.53817,
+                        0.76109
+                      ],
+                      mp: [
+                        3.62039,
+                        2.56,
+                        3.04437,
+                        3.04437,
+                        2.56,
+                        2.56,
+                        1.28,
+                        0.53817,
+                        1.81019,
+                        0.53817
+                      ],
+                      mf: [
+                        3.62039,
+                        3.04437,
+                        2.56,
+                        4.30539,
+                        3.62039,
+                        3.04437,
+                        3.62039,
+                        2.56,
+                        3.04437,
+                        3.04437
+                      ],
+                      f: [
+                        3.62039,
+                        7.24077,
+                        5.12,
+                        7.24077,
+                        7.24077,
+                        7.24077,
+                        4.30539,
+                        3.62039,
+                        2.56,
+                        1.52219
+                      ],
+                      ff: [
+                        10.24,
+                        8.61078,
+                        14.48155,
+                        12.17748,
+                        4.30539,
+                        8.61078,
+                        7.24077,
+                        5.12,
+                        3.04437,
+                        1.52219
+                      ],
+                      fff: [
+                        14.48155,
+                        10.24,
+                        14.48155,
+                        20.48,
+                        4.30539,
+                        12.17748,
+                        7.24077,
+                        10.24,
+                        5.12,
+                        3.62039
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.031844,
+                        0.023801,
+                        0.022646,
+                        0.022584,
+                        0.0205,
+                        0.019505,
+                        0.018557,
+                        0.017657,
+                        0.0168,
+                        0.015983
+                      ],
+                      pp: [
+                        0.049658,
+                        0.046215,
+                        0.043008,
+                        0.04079,
+                        0.03725,
+                        0.034667,
+                        0.032263,
+                        0.030025,
+                        0.027941,
+                        0.026005
+                      ],
+                      p: [
+                        0.077643,
+                        0.073121,
+                        0.068864,
+                        0.066121,
+                        0.061076,
+                        0.05752,
+                        0.054169,
+                        0.051015,
+                        0.048045,
+                        0.045247
+                      ],
+                      mp: [
+                        0.12094,
+                        0.115028,
+                        0.109405,
+                        0.104665,
+                        0.098971,
+                        0.099199,
+                        0.089533,
+                        0.080214,
+                        0.080994,
+                        0.077034
+                      ],
+                      mf: [
+                        0.250377,
+                        0.223349,
+                        0.199239,
+                        0.187146,
+                        0.158545,
+                        0.141431,
+                        0.145493,
+                        0.112545,
+                        0.148838,
+                        0.11205
+                      ],
+                      f: [
+                        0.336378,
+                        0.44073,
+                        0.297938,
+                        0.35844,
+                        0.311271,
+                        0.255653,
+                        0.236587,
+                        0.20626,
+                        0.231072,
+                        0.194292
+                      ],
+                      ff: [
+                        0.4,
+                        0.446192,
+                        0.606001,
+                        0.556038,
+                        0.361698,
+                        0.450863,
+                        0.417134,
+                        0.35438,
+                        0.26727,
+                        0.194292
+                      ],
+                      fff: [
+                        0.625624,
+                        0.611921,
+                        0.568673,
+                        0.939554,
+                        0.361698,
+                        0.561815,
+                        0.459775,
+                        0.739324,
+                        0.377736,
+                        0.296066
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.38055,
+                        0.38055,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.26909,
+                        0.26909
+                      ],
+                      pp: [
+                        0.64,
+                        0.76109,
+                        0.76109,
+                        0.38055,
+                        0.53817,
+                        0.45255,
+                        0.45255,
+                        0.45255,
+                        0.45255,
+                        0.45255
+                      ],
+                      p: [
+                        0.9051,
+                        1.07635,
+                        1.28,
+                        0.76109,
+                        1.07635,
+                        0.76109,
+                        0.9051,
+                        0.76109,
+                        0.64,
+                        0.64
+                      ],
+                      mp: [
+                        1.52219,
+                        1.52219,
+                        1.52219,
+                        1.52219,
+                        1.07635,
+                        1.81019,
+                        1.28,
+                        0.53817,
+                        0.9051,
+                        1.28
+                      ],
+                      mf: [
+                        3.04437,
+                        2.56,
+                        2.56,
+                        3.04437,
+                        2.56,
+                        3.04437,
+                        2.15269,
+                        2.15269,
+                        2.15269,
+                        2.15269
+                      ],
+                      f: [
+                        4.30539,
+                        3.62039,
+                        3.62039,
+                        5.12,
+                        4.30539,
+                        3.62039,
+                        4.30539,
+                        3.04437,
+                        3.04437,
+                        3.04437
+                      ],
+                      ff: [
+                        7.24077,
+                        10.24,
+                        6.08874,
+                        6.08874,
+                        6.08874,
+                        7.24077,
+                        6.08874,
+                        4.30539,
+                        5.12,
+                        5.12
+                      ],
+                      fff: [
+                        14.48155,
+                        12.17748,
+                        14.48155,
+                        6.08874,
+                        10.24,
+                        7.24077,
+                        14.48155,
+                        10.24,
+                        8.61078,
+                        7.24077
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.024039,
+                        0.023052,
+                        0.022108,
+                        0.021201,
+                        0.020333,
+                        0.019498,
+                        0.01908,
+                        0.017932,
+                        0.015908,
+                        0.016492
+                      ],
+                      pp: [
+                        0.043789,
+                        0.041518,
+                        0.039364,
+                        0.03732,
+                        0.035385,
+                        0.033548,
+                        0.031806,
+                        0.030156,
+                        0.026531,
+                        0.027109
+                      ],
+                      p: [
+                        0.070266,
+                        0.066837,
+                        0.063578,
+                        0.060475,
+                        0.057525,
+                        0.05472,
+                        0.053303,
+                        0.049509,
+                        0.042045,
+                        0.044797
+                      ],
+                      mp: [
+                        0.109599,
+                        0.103527,
+                        0.097791,
+                        0.092373,
+                        0.087254,
+                        0.110068,
+                        0.077854,
+                        0.07354,
+                        0.065625,
+                        0.065617
+                      ],
+                      mf: [
+                        0.189464,
+                        0.17917,
+                        0.169436,
+                        0.16023,
+                        0.151524,
+                        0.143293,
+                        0.138035,
+                        0.128145,
+                        0.114088,
+                        0.114598
+                      ],
+                      f: [
+                        0.323258,
+                        0.30614,
+                        0.289929,
+                        0.28155,
+                        0.260037,
+                        0.246268,
+                        0.286362,
+                        0.220876,
+                        0.179022,
+                        0.198103
+                      ],
+                      ff: [
+                        0.613199,
+                        0.579718,
+                        0.520741,
+                        0.389466,
+                        0.489847,
+                        0.440075,
+                        0.467074,
+                        0.361195,
+                        0.339644,
+                        0.369943
+                      ],
+                      fff: [
+                        1.033571,
+                        0.897913,
+                        0.844428,
+                        0.521645,
+                        0.768187,
+                        0.560618,
+                        0.787162,
+                        0.759556,
+                        0.495164,
+                        0.500667
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.19027,
+                        0.32,
+                        0.26909,
+                        0.26909,
+                        0.26909,
+                        0.22627,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.22627
+                      ],
+                      pp: [
+                        0.38055,
+                        0.45255,
+                        0.45255,
+                        0.32,
+                        0.38055,
+                        0.38055,
+                        0.38055,
+                        0.26909,
+                        0.32,
+                        0.32
+                      ],
+                      p: [
+                        0.76109,
+                        0.9051,
+                        0.64,
+                        0.38055,
+                        0.38055,
+                        0.53817,
+                        0.53817,
+                        0.45255,
+                        0.38055,
+                        0.45255
+                      ],
+                      mp: [
+                        1.28,
+                        1.52219,
+                        1.28,
+                        0.76109,
+                        0.9051,
+                        0.9051,
+                        0.9051,
+                        0.64,
+                        0.9051,
+                        0.9051
+                      ],
+                      mf: [
+                        1.81019,
+                        2.56,
+                        1.81019,
+                        1.52219,
+                        1.28,
+                        1.81019,
+                        1.52219,
+                        1.28,
+                        1.52219,
+                        1.52219
+                      ],
+                      f: [
+                        3.04437,
+                        3.62039,
+                        3.04437,
+                        2.15269,
+                        3.62039,
+                        3.04437,
+                        2.15269,
+                        2.56,
+                        3.04437,
+                        2.56
+                      ],
+                      ff: [
+                        6.08874,
+                        7.24077,
+                        4.30539,
+                        4.30539,
+                        6.08874,
+                        3.04437,
+                        4.30539,
+                        3.62039,
+                        3.62039,
+                        3.62039
+                      ],
+                      fff: [
+                        12.17748,
+                        12.17748,
+                        12.17748,
+                        4.30539,
+                        5.12,
+                        7.24077,
+                        4.30539,
+                        7.24077,
+                        7.24077,
+                        8.61078
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.037446,
+                        0.037347,
+                        0.034563,
+                        0.027141,
+                        0.031901,
+                        0.030649,
+                        0.029446,
+                        0.028289,
+                        0.027178,
+                        0.026113
+                      ],
+                      pp: [
+                        0.068618,
+                        0.067616,
+                        0.062764,
+                        0.052369,
+                        0.057409,
+                        0.054906,
+                        0.052512,
+                        0.050222,
+                        0.048033,
+                        0.045938
+                      ],
+                      p: [
+                        0.112532,
+                        0.114694,
+                        0.103154,
+                        0.083724,
+                        0.094561,
+                        0.090536,
+                        0.086682,
+                        0.082992,
+                        0.079459,
+                        0.076076
+                      ],
+                      mp: [
+                        0.18489,
+                        0.208362,
+                        0.168407,
+                        0.135605,
+                        0.153392,
+                        0.146395,
+                        0.139718,
+                        0.133343,
+                        0.127261,
+                        0.121456
+                      ],
+                      mf: [
+                        0.311582,
+                        0.354163,
+                        0.285072,
+                        0.211516,
+                        0.255409,
+                        0.249475,
+                        0.238626,
+                        0.222317,
+                        0.218322,
+                        0.208828
+                      ],
+                      f: [
+                        0.543468,
+                        0.624138,
+                        0.491657,
+                        0.347468,
+                        0.444785,
+                        0.423054,
+                        0.333402,
+                        0.367198,
+                        0.364022,
+                        0.346235
+                      ],
+                      ff: [
+                        0.958982,
+                        1.069411,
+                        0.631392,
+                        0.59772,
+                        0.762324,
+                        0.697676,
+                        0.665681,
+                        0.635155,
+                        0.630547,
+                        0.598351
+                      ],
+                      fff: [
+                        1.738233,
+                        1.87527,
+                        1.556507,
+                        0.748872,
+                        0.807706,
+                        0.775516,
+                        0.550649,
+                        1.181028,
+                        1.117587,
+                        1.126307
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.32,
+                        0.26909,
+                        0.26909,
+                        0.22627,
+                        0.22627,
+                        0.19027,
+                        0.19027,
+                        0.22627,
+                        0.26909,
+                        0.19027,
+                        0.22627,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027
+                      ],
+                      pp: [
+                        0.22627,
+                        0.19027,
+                        0.19027,
+                        0.22627,
+                        0.19027,
+                        0.22627,
+                        0.19027,
+                        0.32,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.26909,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.22627
+                      ],
+                      p: [
+                        0.22627,
+                        0.32,
+                        0.19027,
+                        0.26909,
+                        0.19027,
+                        0.22627,
+                        0.26909,
+                        0.19027,
+                        0.32,
+                        0.26909,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.32
+                      ],
+                      mp: [
+                        0.64,
+                        0.64,
+                        0.64,
+                        0.45255,
+                        0.32,
+                        0.38055,
+                        0.32,
+                        0.32,
+                        0.45255,
+                        0.32,
+                        0.53817,
+                        0.45255,
+                        0.38055,
+                        0.45255,
+                        0.53817,
+                        0.45255,
+                        0.45255,
+                        0.64
+                      ],
+                      mf: [
+                        0.9051,
+                        1.07635,
+                        1.07635,
+                        0.9051,
+                        0.76109,
+                        0.76109,
+                        0.76109,
+                        0.53817,
+                        0.76109,
+                        0.53817,
+                        0.76109,
+                        0.9051,
+                        0.76109,
+                        0.76109,
+                        0.9051,
+                        0.76109,
+                        0.38055,
+                        0.9051
+                      ],
+                      f: [
+                        1.52219,
+                        1.81019,
+                        1.81019,
+                        1.52219,
+                        1.52219,
+                        1.81019,
+                        1.52219,
+                        1.07635,
+                        1.52219,
+                        1.07635,
+                        1.52219,
+                        1.28,
+                        1.28,
+                        1.28,
+                        1.28,
+                        1.28,
+                        1.52219,
+                        1.81019
+                      ],
+                      ff: [
+                        2.56,
+                        3.04437,
+                        2.56,
+                        2.56,
+                        2.56,
+                        2.56,
+                        2.56,
+                        2.15269,
+                        2.15269,
+                        1.81019,
+                        2.56,
+                        2.15269,
+                        2.56,
+                        2.56,
+                        1.81019,
+                        2.56,
+                        2.15269,
+                        2.15269
+                      ],
+                      fff: [
+                        3.62039,
+                        3.62039,
+                        5.12,
+                        3.04437,
+                        4.30539,
+                        4.30539,
+                        4.30539,
+                        2.56,
+                        4.30539,
+                        2.56,
+                        3.62039,
+                        4.30539,
+                        4.30539,
+                        3.62039,
+                        3.62039,
+                        3.62039,
+                        5.12,
+                        3.04437
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.054772,
+                        0.05,
+                        0.05,
+                        0.057326,
+                        0.070711,
+                        0.074009,
+                        0.054772,
+                        0.033822,
+                        0.05,
+                        0.024828,
+                        0.027203,
+                        0.028156,
+                        0.021443,
+                        0.020957,
+                        0.027822,
+                        0.023757,
+                        0.028738,
+                        0.028094
+                      ],
+                      pp: [
+                        0.035531,
+                        0.0554,
+                        0.056134,
+                        0.054944,
+                        0.070316,
+                        0.072817,
+                        0.055978,
+                        0.054913,
+                        0.048573,
+                        0.033369,
+                        0.053001,
+                        0.040679,
+                        0.041894,
+                        0.043143,
+                        0.04443,
+                        0.045757,
+                        0.047123,
+                        0.048528
+                      ],
+                      p: [
+                        0.073232,
+                        0.097188,
+                        0.089985,
+                        0.077211,
+                        0.077207,
+                        0.077201,
+                        0.077196,
+                        0.058686,
+                        0.077186,
+                        0.062784,
+                        0.077176,
+                        0.077171,
+                        0.077167,
+                        0.077161,
+                        0.077156,
+                        0.077152,
+                        0.077146,
+                        0.077142
+                      ],
+                      mp: [
+                        0.156623,
+                        0.135708,
+                        0.119576,
+                        0.119908,
+                        0.12024,
+                        0.120572,
+                        0.120907,
+                        0.091316,
+                        0.121578,
+                        0.097511,
+                        0.15441,
+                        0.12259,
+                        0.12293,
+                        0.123272,
+                        0.123613,
+                        0.123956,
+                        0.124298,
+                        0.124643
+                      ],
+                      mf: [
+                        0.203193,
+                        0.203465,
+                        0.203738,
+                        0.204011,
+                        0.204284,
+                        0.204559,
+                        0.204833,
+                        0.146627,
+                        0.205381,
+                        0.163214,
+                        0.205933,
+                        0.206209,
+                        0.206485,
+                        0.206762,
+                        0.207038,
+                        0.207316,
+                        0.207595,
+                        0.207872
+                      ],
+                      f: [
+                        0.357222,
+                        0.354011,
+                        0.350829,
+                        0.347676,
+                        0.34455,
+                        0.341453,
+                        0.338383,
+                        0.236576,
+                        0.332839,
+                        0.260791,
+                        0.326379,
+                        0.323445,
+                        0.320537,
+                        0.317657,
+                        0.321106,
+                        0.267614,
+                        0.309166,
+                        0.306388
+                      ],
+                      ff: [
+                        0.513722,
+                        0.60857,
+                        0.584549,
+                        0.594969,
+                        0.588283,
+                        0.495713,
+                        0.575135,
+                        0.386816,
+                        0.56228,
+                        0.409609,
+                        0.549713,
+                        0.543535,
+                        0.537426,
+                        0.531388,
+                        0.506997,
+                        0.466396,
+                        0.513672,
+                        0.507899
+                      ],
+                      fff: [
+                        0.944481,
+                        0.951385,
+                        0.958338,
+                        0.744781,
+                        0.9724,
+                        0.979507,
+                        0.986667,
+                        0.615644,
+                        1.001144,
+                        0.678241,
+                        1.015835,
+                        1.016147,
+                        0.96868,
+                        0.829743,
+                        0.905106,
+                        0.779009,
+                        1.138059,
+                        0.927739
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 0,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "mp",
+                    round: 2,
+                    from: "mp"
+                  },
+                  {
+                    string: 0,
+                    stop: 9.7122,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 11.0611,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "f",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 9.7122,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 2,
+                    stop: 1.6189,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 2,
+                    stop: 5.6656,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 2,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 2,
+                    stop: 9.7122,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 2,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 1.6189,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 9.7122,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 11.0611,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 13.7589,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 19.1544,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 19.1544,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 20.5033,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 21.8522,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  }
+                ]
               }
             },
             {
@@ -20365,6 +34481,1631 @@ var init_physical_strings_calibration = __esm({
                   level: -51.32,
                   contact: 0.2
                 }
+              },
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "4e325424f929bf4c",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.64,
+                        0.45255,
+                        0.53817,
+                        0.53817,
+                        0.38055,
+                        0.38055,
+                        0.53817,
+                        0.38055,
+                        0.45255,
+                        0.32
+                      ],
+                      pp: [
+                        1.07635,
+                        0.76109,
+                        0.64,
+                        0.76109,
+                        0.76109,
+                        0.9051,
+                        0.76109,
+                        0.64,
+                        0.64,
+                        0.53817
+                      ],
+                      p: [
+                        1.81019,
+                        1.52219,
+                        1.07635,
+                        1.52219,
+                        1.28,
+                        1.52219,
+                        0.76109,
+                        1.07635,
+                        0.64,
+                        0.64
+                      ],
+                      mp: [
+                        3.62039,
+                        2.56,
+                        1.81019,
+                        3.04437,
+                        2.15269,
+                        2.56,
+                        2.15269,
+                        1.81019,
+                        2.15269,
+                        1.81019
+                      ],
+                      mf: [
+                        6.08874,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        3.62039,
+                        3.04437,
+                        2.56,
+                        2.56,
+                        2.56
+                      ],
+                      f: [
+                        5.12,
+                        7.24077,
+                        6.08874,
+                        5.12,
+                        6.08874,
+                        4.30539,
+                        3.04437,
+                        3.62039,
+                        3.62039,
+                        5.12
+                      ],
+                      ff: [
+                        5.12,
+                        8.61078,
+                        20.48,
+                        17.22156,
+                        7.24077,
+                        12.17748,
+                        7.24077,
+                        7.24077,
+                        7.24077,
+                        5.12
+                      ],
+                      fff: [
+                        4.30539,
+                        14.48155,
+                        10.24,
+                        12.17748,
+                        17.22156,
+                        8.61078,
+                        8.61078,
+                        8.61078,
+                        6.08874,
+                        5.12
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.030505,
+                        0.028294,
+                        0.026244,
+                        0.024342,
+                        0.022579,
+                        0.020943,
+                        0.019203,
+                        0.018018,
+                        0.016714,
+                        0.015503
+                      ],
+                      pp: [
+                        0.051597,
+                        0.047957,
+                        0.044577,
+                        0.041433,
+                        0.03851,
+                        0.035795,
+                        0.033232,
+                        0.030924,
+                        0.028743,
+                        0.026716
+                      ],
+                      p: [
+                        0.083701,
+                        0.077934,
+                        0.072565,
+                        0.067565,
+                        0.06291,
+                        0.058576,
+                        0.054397,
+                        0.050781,
+                        0.047283,
+                        0.044025
+                      ],
+                      mp: [
+                        0.147183,
+                        0.126267,
+                        0.117474,
+                        0.109295,
+                        0.101684,
+                        0.094604,
+                        0.085727,
+                        0.081888,
+                        0.076186,
+                        0.070881
+                      ],
+                      mf: [
+                        0.220232,
+                        0.240615,
+                        0.213925,
+                        0.190196,
+                        0.169098,
+                        0.165434,
+                        0.127986,
+                        0.118839,
+                        0.140941,
+                        0.122023
+                      ],
+                      f: [
+                        0.330519,
+                        0.48192,
+                        0.3909,
+                        0.323221,
+                        0.293527,
+                        0.224409,
+                        0.227665,
+                        0.190997,
+                        0.185284,
+                        0.272709
+                      ],
+                      ff: [
+                        0.32956,
+                        0.518204,
+                        0.806144,
+                        0.757096,
+                        0.396398,
+                        0.549982,
+                        0.395604,
+                        0.391412,
+                        0.341489,
+                        0.35112
+                      ],
+                      fff: [
+                        0.29907,
+                        0.753821,
+                        0.718945,
+                        0.561913,
+                        1.073045,
+                        0.5,
+                        0.422949,
+                        0.614989,
+                        0.496885,
+                        0.35112
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.32,
+                        0.38055,
+                        0.38055,
+                        0.32,
+                        0.32,
+                        0.26909,
+                        0.32,
+                        0.26909,
+                        0.32,
+                        0.45255
+                      ],
+                      pp: [
+                        0.45255,
+                        0.53817,
+                        0.53817,
+                        0.76109,
+                        0.64,
+                        0.45255,
+                        0.64,
+                        0.45255,
+                        0.53817,
+                        0.45255
+                      ],
+                      p: [
+                        0.76109,
+                        0.9051,
+                        1.07635,
+                        0.76109,
+                        0.64,
+                        1.28,
+                        0.76109,
+                        0.76109,
+                        0.76109,
+                        0.64
+                      ],
+                      mp: [
+                        1.52219,
+                        1.52219,
+                        1.52219,
+                        1.28,
+                        1.52219,
+                        1.28,
+                        1.52219,
+                        1.52219,
+                        1.07635,
+                        1.28
+                      ],
+                      mf: [
+                        2.56,
+                        3.04437,
+                        2.56,
+                        2.15269,
+                        1.52219,
+                        2.56,
+                        1.07635,
+                        2.15269,
+                        2.56,
+                        2.56
+                      ],
+                      f: [
+                        3.62039,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        4.30539,
+                        5.12,
+                        3.62039,
+                        3.04437,
+                        3.62039
+                      ],
+                      ff: [
+                        7.24077,
+                        5.12,
+                        5.12,
+                        7.24077,
+                        4.30539,
+                        7.24077,
+                        7.24077,
+                        5.12,
+                        6.08874,
+                        4.30539
+                      ],
+                      fff: [
+                        10.24,
+                        12.17748,
+                        7.24077,
+                        10.24,
+                        8.61078,
+                        10.24,
+                        10.24,
+                        10.24,
+                        10.24,
+                        12.17748
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.021288,
+                        0.021189,
+                        0.021092,
+                        0.020996,
+                        0.020899,
+                        0.020803,
+                        0.020706,
+                        0.020611,
+                        0.020518,
+                        0.020422
+                      ],
+                      pp: [
+                        0.037418,
+                        0.037013,
+                        0.036614,
+                        0.036218,
+                        0.035827,
+                        0.03544,
+                        0.035058,
+                        0.034678,
+                        0.034305,
+                        0.033936
+                      ],
+                      p: [
+                        0.060787,
+                        0.059765,
+                        0.05876,
+                        0.057773,
+                        0.056801,
+                        0.074418,
+                        0.054909,
+                        0.053985,
+                        0.053077,
+                        0.052185
+                      ],
+                      mp: [
+                        0.100107,
+                        0.098603,
+                        0.097124,
+                        0.095665,
+                        0.094228,
+                        0.092814,
+                        0.091419,
+                        0.090047,
+                        0.088694,
+                        0.087363
+                      ],
+                      mf: [
+                        0.166284,
+                        0.163982,
+                        0.161711,
+                        0.159473,
+                        0.157265,
+                        0.155088,
+                        0.152941,
+                        0.150824,
+                        0.148735,
+                        0.146675
+                      ],
+                      f: [
+                        0.281013,
+                        0.277654,
+                        0.274334,
+                        0.271053,
+                        0.234906,
+                        0.264611,
+                        0.261447,
+                        0.258321,
+                        0.255231,
+                        0.252181
+                      ],
+                      ff: [
+                        0.493833,
+                        0.46551,
+                        0.495568,
+                        0.496633,
+                        0.447559,
+                        0.464918,
+                        0.462672,
+                        0.451876,
+                        0.441332,
+                        0.431034
+                      ],
+                      fff: [
+                        0.676647,
+                        0.817633,
+                        0.777905,
+                        0.774797,
+                        0.701563,
+                        0.672775,
+                        0.688496,
+                        0.840784,
+                        0.889234,
+                        0.729914
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.19027,
+                        0.26909,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.26909
+                      ],
+                      pp: [
+                        0.45255,
+                        0.32,
+                        0.45255,
+                        0.38055,
+                        0.32,
+                        0.38055,
+                        0.45255,
+                        0.45255,
+                        0.38055,
+                        0.38055
+                      ],
+                      p: [
+                        0.76109,
+                        0.9051,
+                        0.9051,
+                        0.9051,
+                        0.76109,
+                        0.76109,
+                        0.76109,
+                        0.53817,
+                        0.64,
+                        0.64
+                      ],
+                      mp: [
+                        1.52219,
+                        1.07635,
+                        1.07635,
+                        1.28,
+                        1.07635,
+                        1.07635,
+                        1.28,
+                        1.52219,
+                        1.07635,
+                        1.07635
+                      ],
+                      mf: [
+                        3.04437,
+                        1.81019,
+                        2.56,
+                        2.56,
+                        1.81019,
+                        2.15269,
+                        2.56,
+                        1.52219,
+                        2.15269,
+                        1.81019
+                      ],
+                      f: [
+                        4.30539,
+                        4.30539,
+                        4.30539,
+                        3.62039,
+                        3.62039,
+                        3.62039,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        3.04437
+                      ],
+                      ff: [
+                        7.24077,
+                        6.08874,
+                        6.08874,
+                        6.08874,
+                        7.24077,
+                        5.12,
+                        5.12,
+                        5.12,
+                        6.08874,
+                        5.12
+                      ],
+                      fff: [
+                        12.17748,
+                        12.17748,
+                        12.17748,
+                        7.24077,
+                        10.24,
+                        8.61078,
+                        8.61078,
+                        10.24,
+                        8.61078,
+                        7.24077
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.033094,
+                        0.032205,
+                        0.031342,
+                        0.0305,
+                        0.029681,
+                        0.028886,
+                        0.028109,
+                        0.027356,
+                        0.026621,
+                        0.025907
+                      ],
+                      pp: [
+                        0.056466,
+                        0.055092,
+                        0.053753,
+                        0.052444,
+                        0.051168,
+                        0.049923,
+                        0.048709,
+                        0.047523,
+                        0.046369,
+                        0.04524
+                      ],
+                      p: [
+                        0.089141,
+                        0.0872,
+                        0.085302,
+                        0.083444,
+                        0.081627,
+                        0.07985,
+                        0.078111,
+                        0.07641,
+                        0.074745,
+                        0.073119
+                      ],
+                      mp: [
+                        0.147339,
+                        0.143689,
+                        0.140129,
+                        0.136657,
+                        0.133271,
+                        0.129969,
+                        0.126751,
+                        0.12361,
+                        0.120546,
+                        0.117561
+                      ],
+                      mf: [
+                        0.250774,
+                        0.242852,
+                        0.235179,
+                        0.227749,
+                        0.220552,
+                        0.213585,
+                        0.206837,
+                        0.200302,
+                        0.193974,
+                        0.187846
+                      ],
+                      f: [
+                        0.434256,
+                        0.419275,
+                        0.404811,
+                        0.390844,
+                        0.377361,
+                        0.364343,
+                        0.351773,
+                        0.339637,
+                        0.32792,
+                        0.316608
+                      ],
+                      ff: [
+                        0.714472,
+                        0.693794,
+                        0.673714,
+                        0.654216,
+                        0.635281,
+                        0.616897,
+                        0.60964,
+                        0.581705,
+                        0.564869,
+                        0.54852
+                      ],
+                      fff: [
+                        1.254506,
+                        1.201757,
+                        1.192243,
+                        0.806302,
+                        1.06855,
+                        1.012026,
+                        0.969473,
+                        1.017625,
+                        0.889658,
+                        0.991471
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        1.6189,
+                        2.9678,
+                        4.3167,
+                        5.6656,
+                        7.0144,
+                        8.3633,
+                        9.7122,
+                        11.0611,
+                        12.41,
+                        13.7589,
+                        15.1078,
+                        16.4567,
+                        17.8056,
+                        19.1544,
+                        20.5033,
+                        21.8522,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.19027,
+                        0.32,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.32,
+                        0.19027,
+                        0.22627,
+                        0.22627,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.22627,
+                        0.22627,
+                        0.22627
+                      ],
+                      pp: [
+                        0.32,
+                        0.19027,
+                        0.22627,
+                        0.38055,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.19027,
+                        0.38055,
+                        0.26909,
+                        0.22627,
+                        0.32,
+                        0.26909,
+                        0.32,
+                        0.32,
+                        0.32,
+                        0.26909,
+                        0.32
+                      ],
+                      p: [
+                        0.22627,
+                        0.19027,
+                        0.26909,
+                        0.22627,
+                        0.22627,
+                        0.26909,
+                        0.22627,
+                        0.26909,
+                        0.45255,
+                        0.38055,
+                        0.38055,
+                        0.45255,
+                        0.38055,
+                        0.45255,
+                        0.45255,
+                        0.45255,
+                        0.38055,
+                        0.38055
+                      ],
+                      mp: [
+                        0.53817,
+                        0.38055,
+                        0.53817,
+                        0.53817,
+                        0.45255,
+                        0.45255,
+                        0.45255,
+                        0.64,
+                        0.9051,
+                        0.64,
+                        0.76109,
+                        0.64,
+                        0.45255,
+                        0.76109,
+                        0.76109,
+                        0.53817,
+                        0.76109,
+                        0.76109
+                      ],
+                      mf: [
+                        1.28,
+                        1.07635,
+                        1.07635,
+                        1.07635,
+                        0.76109,
+                        0.9051,
+                        1.28,
+                        1.28,
+                        1.28,
+                        1.07635,
+                        1.28,
+                        1.28,
+                        0.9051,
+                        1.52219,
+                        1.28,
+                        1.07635,
+                        0.53817,
+                        2.15269
+                      ],
+                      f: [
+                        2.15269,
+                        1.81019,
+                        2.56,
+                        3.04437,
+                        2.15269,
+                        2.56,
+                        2.15269,
+                        2.15269,
+                        2.15269,
+                        2.15269,
+                        3.04437,
+                        2.15269,
+                        1.28,
+                        2.15269,
+                        2.15269,
+                        2.15269,
+                        1.81019,
+                        2.56
+                      ],
+                      ff: [
+                        4.30539,
+                        3.62039,
+                        3.04437,
+                        3.04437,
+                        3.04437,
+                        3.62039,
+                        3.62039,
+                        3.62039,
+                        3.62039,
+                        2.56,
+                        3.04437,
+                        2.56,
+                        2.15269,
+                        3.04437,
+                        3.62039,
+                        2.56,
+                        2.56,
+                        6.08874
+                      ],
+                      fff: [
+                        4.30539,
+                        6.08874,
+                        4.30539,
+                        4.30539,
+                        3.62039,
+                        4.30539,
+                        6.08874,
+                        4.30539,
+                        4.30539,
+                        3.04437,
+                        4.30539,
+                        6.08874,
+                        3.04437,
+                        7.24077,
+                        3.04437,
+                        4.30539,
+                        3.04437,
+                        4.30539
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.05,
+                        0.046867,
+                        0.074009,
+                        0.053918,
+                        0.054772,
+                        0.049426,
+                        0.05,
+                        0.056353,
+                        0.041282,
+                        0.022778,
+                        0.031426,
+                        0.025537,
+                        0.020948,
+                        0.033651,
+                        0.030313,
+                        0.027402,
+                        0.033986,
+                        0.039997
+                      ],
+                      pp: [
+                        0.043986,
+                        0.050573,
+                        0.070956,
+                        0.049944,
+                        0.053469,
+                        0.05031,
+                        0.051235,
+                        0.050628,
+                        0.074562,
+                        0.050283,
+                        0.053158,
+                        0.051996,
+                        0.039981,
+                        0.05709,
+                        0.05468,
+                        0.050183,
+                        0.056544,
+                        0.06419
+                      ],
+                      p: [
+                        0.070681,
+                        0.081591,
+                        0.082218,
+                        0.08285,
+                        0.083487,
+                        0.084129,
+                        0.084776,
+                        0.085428,
+                        0.098036,
+                        0.086745,
+                        0.087412,
+                        0.088085,
+                        0.066636,
+                        0.095558,
+                        0.090132,
+                        0.082392,
+                        0.091522,
+                        0.102467
+                      ],
+                      mp: [
+                        0.151606,
+                        0.134691,
+                        0.122315,
+                        0.12426,
+                        0.133097,
+                        0.128243,
+                        0.130282,
+                        0.136846,
+                        0.159876,
+                        0.136597,
+                        0.141568,
+                        0.140975,
+                        0.104637,
+                        0.158609,
+                        0.147806,
+                        0.130525,
+                        0.152544,
+                        0.174423
+                      ],
+                      mf: [
+                        0.197218,
+                        0.19993,
+                        0.202679,
+                        0.205465,
+                        0.20829,
+                        0.211153,
+                        0.214056,
+                        0.229501,
+                        0.250059,
+                        0.223006,
+                        0.242326,
+                        0.22918,
+                        0.170026,
+                        0.264319,
+                        0.238762,
+                        0.211676,
+                        0.215357,
+                        0.341647
+                      ],
+                      f: [
+                        0.355619,
+                        0.355786,
+                        0.355953,
+                        0.35612,
+                        0.356287,
+                        0.356454,
+                        0.356621,
+                        0.388505,
+                        0.430962,
+                        0.357124,
+                        0.394556,
+                        0.357459,
+                        0.259921,
+                        0.413325,
+                        0.357962,
+                        0.283748,
+                        0.305233,
+                        0.535339
+                      ],
+                      ff: [
+                        0.594358,
+                        0.617151,
+                        0.613694,
+                        0.610258,
+                        0.594844,
+                        0.603439,
+                        0.60006,
+                        0.667344,
+                        0.742821,
+                        0.590034,
+                        0.680833,
+                        0.583442,
+                        0.410161,
+                        0.618039,
+                        0.556353,
+                        0.481395,
+                        0.484562,
+                        1.037267
+                      ],
+                      fff: [
+                        0.931213,
+                        0.934291,
+                        1.023776,
+                        0.940477,
+                        0.933656,
+                        0.946705,
+                        0.949834,
+                        1.056137,
+                        1.204054,
+                        0.959285,
+                        1.0777,
+                        0.965637,
+                        0.647909,
+                        1.100966,
+                        0.712035,
+                        0.74135,
+                        0.841338,
+                        1.096207
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "f",
+                    round: 1,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 4.3167,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 7.0144,
+                    dynamic: "fff",
+                    round: 0,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 11.0611,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 1.6189,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 8.3633,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 2.9678,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 5.6656,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 2.9678,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 4.3167,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 5.6656,
+                    dynamic: "pp",
+                    round: 1,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 7.0144,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "ppp",
+                    round: 0,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 8.3633,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  }
+                ]
               }
             }
           ],
@@ -20413,6 +36154,16 @@ var init_physical_strings_calibration = __esm({
             },
             method: "calibrate-strings-model.mjs --release: TU Berlin's Cello_modern single tones at pp and ff, each one's fall from its knee (3 dB under its held level, from 6 to 26 dB under, dB/s), their median; the model's notes at 8 of their pitches on its first variant, its bow left on the string the rest bisected so that their median falls as theirs",
             date: "2026-10-18"
+          },
+          attackFrom: {
+            ppp: 1,
+            pp: 1,
+            p: 1,
+            mp: 1,
+            mf: 1,
+            f: 1,
+            ff: 1,
+            fff: 1
           }
         },
         contrabass: {
@@ -20467,18 +36218,18 @@ var init_physical_strings_calibration = __esm({
             ]
           },
           levels: {
-            ppp: -63.77,
-            pp: -62.18,
-            p: -70.24,
-            mp: -66.5,
-            mf: -61.98,
-            f: -59.07,
-            ff: -55.23,
-            fff: -47.11
+            ppp: -36.07,
+            pp: -32.16,
+            p: -28.12,
+            mp: -24.88,
+            mf: -20.93,
+            f: -16.4,
+            ff: -12.45,
+            fff: -11.1
           },
           recordedMf: -55.37,
-          gainDb: 6.61,
-          stemGainDb: 23.84,
+          gainDb: -34.44,
+          stemGainDb: -17.21,
           contacts: {
             ppp: 0.2,
             pp: 0.2,
@@ -20604,6 +36355,1655 @@ var init_physical_strings_calibration = __esm({
           balance: {
             method: "scripts/strings-balance.mjs --write contrabass: its held notes at mf, f, ff, fff on chairs 0 and 1, each instrument at its sound power's measured pitch, played as the band plays them; its mean offset from its sound power's level 13.8 dB against the others' 3.9 dB (violin, viola, cello)",
             date: "2026-10-18"
+          },
+          variants: [
+            {
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "ae353ac94f81a693",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.50365,
+                        3.0073
+                      ],
+                      pp: [
+                        2.12648,
+                        4.25296
+                      ],
+                      p: [
+                        3.0073,
+                        7.1526
+                      ],
+                      mp: [
+                        3.0073,
+                        7.1526
+                      ],
+                      mf: [
+                        12.0292,
+                        8.50593
+                      ],
+                      f: [
+                        34.02371,
+                        14.30521
+                      ],
+                      ff: [
+                        34.02371,
+                        28.61041
+                      ],
+                      fff: [
+                        40.46124,
+                        57.22083
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.040366,
+                        0.039532
+                      ],
+                      pp: [
+                        0.061215,
+                        0.061215
+                      ],
+                      p: [
+                        0.093363,
+                        0.102235
+                      ],
+                      mp: [
+                        0.093363,
+                        0.100135
+                      ],
+                      mf: [
+                        0.244949,
+                        0.162709
+                      ],
+                      f: [
+                        0.356507,
+                        0.318527
+                      ],
+                      ff: [
+                        0.669087,
+                        0.491238
+                      ],
+                      fff: [
+                        0.613362,
+                        0.812585
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.50365,
+                        1.06324
+                      ],
+                      pp: [
+                        1.26441,
+                        1.06324
+                      ],
+                      p: [
+                        6.0146,
+                        1.06324
+                      ],
+                      mp: [
+                        5.05765,
+                        5.05765
+                      ],
+                      mf: [
+                        7.1526,
+                        7.1526
+                      ],
+                      f: [
+                        12.0292,
+                        10.11531
+                      ],
+                      ff: [
+                        20.23062,
+                        12.0292
+                      ],
+                      fff: [
+                        24.05839,
+                        24.05839
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.029815,
+                        0.02431
+                      ],
+                      pp: [
+                        0.044898,
+                        0.023888
+                      ],
+                      p: [
+                        0.105649,
+                        0.039395
+                      ],
+                      mp: [
+                        0.102621,
+                        0.085547
+                      ],
+                      mf: [
+                        0.1572,
+                        0.129391
+                      ],
+                      f: [
+                        0.242125,
+                        0.207782
+                      ],
+                      ff: [
+                        0.4005,
+                        0.231924
+                      ],
+                      fff: [
+                        0.477197,
+                        0.388269
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.26441,
+                        1.26441
+                      ],
+                      pp: [
+                        1.50365,
+                        1.78815
+                      ],
+                      p: [
+                        1.78815,
+                        3.0073
+                      ],
+                      mp: [
+                        3.5763,
+                        4.25296
+                      ],
+                      mf: [
+                        5.05765,
+                        5.05765
+                      ],
+                      f: [
+                        8.50593,
+                        12.0292
+                      ],
+                      ff: [
+                        12.0292,
+                        17.01185
+                      ],
+                      fff: [
+                        14.30521,
+                        24.05839
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.028151,
+                        0.028151
+                      ],
+                      pp: [
+                        0.044585,
+                        0.044585
+                      ],
+                      p: [
+                        0.06779,
+                        0.06779
+                      ],
+                      mp: [
+                        0.101167,
+                        0.101167
+                      ],
+                      mf: [
+                        0.158787,
+                        0.158787
+                      ],
+                      f: [
+                        0.266707,
+                        0.266707
+                      ],
+                      ff: [
+                        0.419613,
+                        0.419613
+                      ],
+                      fff: [
+                        0.631409,
+                        0.527248
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.06324,
+                        0.89408
+                      ],
+                      pp: [
+                        1.06324,
+                        0.89408
+                      ],
+                      p: [
+                        1.26441,
+                        1.06324
+                      ],
+                      mp: [
+                        1.26441,
+                        1.26441
+                      ],
+                      mf: [
+                        2.52883,
+                        1.78815
+                      ],
+                      f: [
+                        5.05765,
+                        3.5763
+                      ],
+                      ff: [
+                        8.50593,
+                        1.78815
+                      ],
+                      fff: [
+                        17.01185,
+                        3.5763
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.029556,
+                        0.011151
+                      ],
+                      pp: [
+                        0.033887,
+                        0.020058
+                      ],
+                      p: [
+                        0.055153,
+                        0.031051
+                      ],
+                      mp: [
+                        0.089564,
+                        0.046922
+                      ],
+                      mf: [
+                        0.13611,
+                        0.08092
+                      ],
+                      f: [
+                        0.218049,
+                        0.139868
+                      ],
+                      ff: [
+                        0.344202,
+                        0.214774
+                      ],
+                      fff: [
+                        0.837828,
+                        0.5
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "p"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "mf",
+                    round: 1,
+                    from: "mf"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "ppp",
+                    round: 2,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "fff",
+                    round: 0,
+                    from: "fff"
+                  }
+                ]
+              }
+            },
+            {
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "ae353ac94f81a693",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.50365,
+                        1.06324
+                      ],
+                      pp: [
+                        1.50365,
+                        1.50365
+                      ],
+                      p: [
+                        1.78815,
+                        2.52883
+                      ],
+                      mp: [
+                        10.11531,
+                        3.0073
+                      ],
+                      mf: [
+                        7.1526,
+                        7.1526
+                      ],
+                      f: [
+                        24.05839,
+                        8.50593
+                      ],
+                      ff: [
+                        17.01185,
+                        17.01185
+                      ],
+                      fff: [
+                        24.05839,
+                        34.02371
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.063374,
+                        0.018555
+                      ],
+                      pp: [
+                        0.063374,
+                        0.037572
+                      ],
+                      p: [
+                        0.068173,
+                        0.048695
+                      ],
+                      mp: [
+                        0.217007,
+                        0.072041
+                      ],
+                      mf: [
+                        0.164741,
+                        0.205051
+                      ],
+                      f: [
+                        0.449207,
+                        0.220534
+                      ],
+                      ff: [
+                        0.398333,
+                        0.404519
+                      ],
+                      fff: [
+                        0.513883,
+                        0.731248
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.50365,
+                        1.78815
+                      ],
+                      pp: [
+                        2.52883,
+                        2.12648
+                      ],
+                      p: [
+                        4.25296,
+                        4.25296
+                      ],
+                      mp: [
+                        4.25296,
+                        5.05765
+                      ],
+                      mf: [
+                        5.05765,
+                        7.1526
+                      ],
+                      f: [
+                        5.05765,
+                        6.0146
+                      ],
+                      ff: [
+                        6.0146,
+                        12.0292
+                      ],
+                      fff: [
+                        7.1526,
+                        8.50593
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.047933,
+                        0.047933
+                      ],
+                      pp: [
+                        0.085317,
+                        0.085317
+                      ],
+                      p: [
+                        0.127867,
+                        0.127867
+                      ],
+                      mp: [
+                        0.135026,
+                        0.15568
+                      ],
+                      mf: [
+                        0.163974,
+                        0.237108
+                      ],
+                      f: [
+                        0.173205,
+                        0.204939
+                      ],
+                      ff: [
+                        0.2,
+                        0.399102
+                      ],
+                      fff: [
+                        0.202809,
+                        0.264575
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.89408,
+                        0.89408
+                      ],
+                      pp: [
+                        1.06324,
+                        1.26441
+                      ],
+                      p: [
+                        1.78815,
+                        2.12648
+                      ],
+                      mp: [
+                        2.52883,
+                        2.52883
+                      ],
+                      mf: [
+                        3.5763,
+                        4.25296
+                      ],
+                      f: [
+                        5.05765,
+                        6.0146
+                      ],
+                      ff: [
+                        10.11531,
+                        7.1526
+                      ],
+                      fff: [
+                        12.0292,
+                        12.0292
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.029254,
+                        0.029254
+                      ],
+                      pp: [
+                        0.049018,
+                        0.049018
+                      ],
+                      p: [
+                        0.080082,
+                        0.080082
+                      ],
+                      mp: [
+                        0.118132,
+                        0.118132
+                      ],
+                      mf: [
+                        0.187004,
+                        0.187004
+                      ],
+                      f: [
+                        0.249883,
+                        0.261022
+                      ],
+                      ff: [
+                        0.462969,
+                        0.34641
+                      ],
+                      fff: [
+                        0.580896,
+                        0.582466
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.89408,
+                        0.89408
+                      ],
+                      pp: [
+                        0.89408,
+                        0.89408
+                      ],
+                      p: [
+                        0.89408,
+                        0.89408
+                      ],
+                      mp: [
+                        1.50365,
+                        1.06324
+                      ],
+                      mf: [
+                        3.0073,
+                        1.50365
+                      ],
+                      f: [
+                        3.5763,
+                        2.12648
+                      ],
+                      ff: [
+                        7.1526,
+                        3.0073
+                      ],
+                      fff: [
+                        12.0292,
+                        3.5763
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.054772,
+                        0.041279
+                      ],
+                      pp: [
+                        0.047331,
+                        0.041991
+                      ],
+                      p: [
+                        0.053062,
+                        0.041462
+                      ],
+                      mp: [
+                        0.094697,
+                        0.063899
+                      ],
+                      mf: [
+                        0.158939,
+                        0.11226
+                      ],
+                      f: [
+                        0.250282,
+                        0.286667
+                      ],
+                      ff: [
+                        0.46176,
+                        0.184033
+                      ],
+                      fff: [
+                        0.671941,
+                        0.359105
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 2,
+                    from: "p"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "mp",
+                    round: 3,
+                    from: "mp"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "f",
+                    round: 1,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "f",
+                    round: 1,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 2,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  },
+                  {
+                    string: 2,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 1,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "ppp",
+                    round: 1,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "pp",
+                    round: 2,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "fff"
+                  }
+                ]
+              }
+            },
+            {
+              law: {
+                method: "native/strings-model/neutral.py, round 4: each string at ordinario, each note set down at its force and held there, no attack curve, the force the middle of those that start Helmholtz motion from silence on every seed",
+                round: 4,
+                engine: "ae353ac94f81a693",
+                classifier: "3047fa79a3d1",
+                contact: 0.1,
+                strings: [
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        0.89408,
+                        1.26441
+                      ],
+                      pp: [
+                        0.89408,
+                        2.12648
+                      ],
+                      p: [
+                        5.05765,
+                        2.52883
+                      ],
+                      mp: [
+                        10.11531,
+                        3.5763
+                      ],
+                      mf: [
+                        10.11531,
+                        4.25296
+                      ],
+                      f: [
+                        20.23062,
+                        7.1526
+                      ],
+                      ff: [
+                        24.05839,
+                        14.30521
+                      ],
+                      fff: [
+                        34.02371,
+                        20.23062
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.039288,
+                        0.03373
+                      ],
+                      pp: [
+                        0.04222,
+                        0.053353
+                      ],
+                      p: [
+                        0.1,
+                        0.050601
+                      ],
+                      mp: [
+                        0.162875,
+                        0.077811
+                      ],
+                      mf: [
+                        0.162875,
+                        0.120693
+                      ],
+                      f: [
+                        0.445645,
+                        0.210074
+                      ],
+                      ff: [
+                        0.416179,
+                        0.299818
+                      ],
+                      fff: [
+                        0.693399,
+                        0.453659
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.26441,
+                        1.50365
+                      ],
+                      pp: [
+                        1.78815,
+                        1.78815
+                      ],
+                      p: [
+                        5.05765,
+                        4.25296
+                      ],
+                      mp: [
+                        6.0146,
+                        3.5763
+                      ],
+                      mf: [
+                        10.11531,
+                        7.1526
+                      ],
+                      f: [
+                        10.11531,
+                        10.11531
+                      ],
+                      ff: [
+                        8.50593,
+                        12.0292
+                      ],
+                      fff: [
+                        8.50593,
+                        14.30521
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.04178,
+                        0.040076
+                      ],
+                      pp: [
+                        0.062628,
+                        0.062628
+                      ],
+                      p: [
+                        0.146934,
+                        0.100621
+                      ],
+                      mp: [
+                        0.201262,
+                        0.108912
+                      ],
+                      mf: [
+                        0.331412,
+                        0.221318
+                      ],
+                      f: [
+                        0.360097,
+                        0.298793
+                      ],
+                      ff: [
+                        0.310984,
+                        0.40132
+                      ],
+                      fff: [
+                        0.310984,
+                        0.447214
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        12.41
+                      ],
+                      pp: [
+                        0.27,
+                        12.41
+                      ],
+                      p: [
+                        0.27,
+                        12.41
+                      ],
+                      mp: [
+                        0.27,
+                        12.41
+                      ],
+                      mf: [
+                        0.27,
+                        12.41
+                      ],
+                      f: [
+                        0.27,
+                        12.41
+                      ],
+                      ff: [
+                        0.27,
+                        12.41
+                      ],
+                      fff: [
+                        0.27,
+                        12.41
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.06324,
+                        1.06324
+                      ],
+                      pp: [
+                        1.26441,
+                        1.26441
+                      ],
+                      p: [
+                        1.50365,
+                        1.78815
+                      ],
+                      mp: [
+                        3.0073,
+                        3.0073
+                      ],
+                      mf: [
+                        5.05765,
+                        5.05765
+                      ],
+                      f: [
+                        7.1526,
+                        8.50593
+                      ],
+                      ff: [
+                        14.30521,
+                        8.50593
+                      ],
+                      fff: [
+                        20.23062,
+                        12.0292
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.028484,
+                        0.028484
+                      ],
+                      pp: [
+                        0.046,
+                        0.046
+                      ],
+                      p: [
+                        0.073614,
+                        0.073614
+                      ],
+                      mp: [
+                        0.11074,
+                        0.11074
+                      ],
+                      mf: [
+                        0.187845,
+                        0.187845
+                      ],
+                      f: [
+                        0.277485,
+                        0.277485
+                      ],
+                      ff: [
+                        0.549733,
+                        0.356269
+                      ],
+                      fff: [
+                        0.805201,
+                        0.445539
+                      ]
+                    }
+                  },
+                  {
+                    stops: {
+                      ppp: [
+                        0.27,
+                        23.2011
+                      ],
+                      pp: [
+                        0.27,
+                        23.2011
+                      ],
+                      p: [
+                        0.27,
+                        23.2011
+                      ],
+                      mp: [
+                        0.27,
+                        23.2011
+                      ],
+                      mf: [
+                        0.27,
+                        23.2011
+                      ],
+                      f: [
+                        0.27,
+                        23.2011
+                      ],
+                      ff: [
+                        0.27,
+                        23.2011
+                      ],
+                      fff: [
+                        0.27,
+                        23.2011
+                      ]
+                    },
+                    force: {
+                      ppp: [
+                        1.50365,
+                        0.89408
+                      ],
+                      pp: [
+                        1.50365,
+                        0.89408
+                      ],
+                      p: [
+                        1.06324,
+                        1.06324
+                      ],
+                      mp: [
+                        1.78815,
+                        1.50365
+                      ],
+                      mf: [
+                        3.5763,
+                        1.06324
+                      ],
+                      f: [
+                        3.5763,
+                        4.25296
+                      ],
+                      ff: [
+                        8.50593,
+                        5.05765
+                      ],
+                      fff: [
+                        14.30521,
+                        4.25296
+                      ]
+                    },
+                    speed: {
+                      ppp: [
+                        0.06069,
+                        0.039464
+                      ],
+                      pp: [
+                        0.059461,
+                        0.033824
+                      ],
+                      p: [
+                        0.074724,
+                        0.066492
+                      ],
+                      mp: [
+                        0.134023,
+                        0.134023
+                      ],
+                      mf: [
+                        0.228291,
+                        0.228953
+                      ],
+                      f: [
+                        0.292125,
+                        0.342319
+                      ],
+                      ff: [
+                        0.532039,
+                        0.524942
+                      ],
+                      fff: [
+                        0.857003,
+                        0.366284
+                      ]
+                    }
+                  }
+                ],
+                kept: [
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "p",
+                    round: 0,
+                    from: "p"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "mp",
+                    round: 2,
+                    from: "mp"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "mf",
+                    round: 2,
+                    from: "mp"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 0,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 0.27,
+                    dynamic: "fff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "f",
+                    round: 3,
+                    from: "f"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "ff",
+                    round: 2,
+                    from: "ff"
+                  },
+                  {
+                    string: 1,
+                    stop: 12.41,
+                    dynamic: "fff",
+                    round: 1,
+                    from: "fff"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "ppp",
+                    round: 3,
+                    from: "ppp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "pp",
+                    round: 3,
+                    from: "pp"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "mf",
+                    round: 3,
+                    from: "mf"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "ff",
+                    round: 3,
+                    from: "ff"
+                  },
+                  {
+                    string: 3,
+                    stop: 23.2011,
+                    dynamic: "fff",
+                    round: 2,
+                    from: "fff"
+                  }
+                ]
+              }
+            }
+          ],
+          attackFrom: {
+            ppp: 1,
+            pp: 1,
+            p: 1,
+            mp: 1,
+            mf: 1,
+            f: 1,
+            ff: 1,
+            fff: 1
           }
         },
         violello: {
@@ -21691,38 +39091,38 @@ var init_physical_strings_calibration = __esm({
         method: "each instrument's recorded pizzicati (vsco2-ce, iowa-mis: each pitch's loudest layer, its named string where the bank names one); the model's notes plucked at 0.08, 0.12, 0.17, 0.25 of the string from the bridge, the position whose attack's brightness (centroid of twelve harmonics over 40 ms) is nearest the recordings' (median); then each string's losses (0.25, 0.35, 0.5, 0.7, 1, 1.4, 2, 2.8, 4, 5.6, 8 times its modes' own) whose decay at 0.3 and 1 s after the peak is nearest (median of the sum of the two differences); the pull at the loudest recorded dynamic setting the pluck's peak over the model's bowed level as far as the recorded peak is over the recorded bowed level (median), the other dynamics' pulls in proportion to the model's bowed levels, never less than a softer one's",
         instruments: {
           violin: {
-            position: 0.12,
+            position: 0.25,
             losses: [
+              4,
+              2,
               2.8,
-              0.25,
-              0.5,
-              0.25
+              2
             ],
             pull: {
-              pp: 0.044,
-              p: 0.11,
-              mp: 0.148,
-              mf: 0.3,
-              f: 0.489,
-              ff: 0.548
+              pp: 0.038,
+              p: 0.062,
+              mp: 0.136,
+              mf: 0.234,
+              f: 0.504,
+              ff: 0.919
             },
             notes: 13
           },
           viola: {
-            position: 0.25,
+            position: 0.17,
             losses: [
-              5.6,
-              2.8,
-              2,
-              0.25
+              4,
+              4,
+              4,
+              2
             ],
             pull: {
-              pp: 0.042,
-              p: 0.081,
-              mp: 0.154,
-              mf: 0.373,
-              f: 0.607,
-              ff: 0.607
+              pp: 0.035,
+              p: 0.05,
+              mp: 0.076,
+              mf: 0.126,
+              f: 0.169,
+              ff: 0.33
             },
             notes: 43
           },
@@ -21730,35 +39130,35 @@ var init_physical_strings_calibration = __esm({
             position: 0.17,
             losses: [
               2.8,
-              4,
+              5.6,
               2.8,
-              0.5
+              1.4
             ],
             pull: {
-              pp: 0.089,
-              p: 0.159,
-              mp: 0.232,
-              mf: 0.724,
-              f: 0.857,
-              ff: 0.986
+              pp: 0.167,
+              p: 0.254,
+              mp: 0.422,
+              mf: 0.763,
+              f: 1.211,
+              ff: 1.758
             },
             notes: 45
           },
           contrabass: {
-            position: 0.17,
+            position: 0.25,
             losses: [
+              2,
               1.4,
-              8,
-              2.8,
-              1
+              4,
+              2
             ],
             pull: {
-              pp: 0.034,
-              p: 0.092,
-              mp: 0.116,
-              mf: 0.258,
-              f: 0.369,
-              ff: 0.376
+              pp: 0.111,
+              p: 0.177,
+              mp: 0.257,
+              mf: 0.405,
+              f: 0.682,
+              ff: 1.075
             },
             notes: 14
           }
@@ -23991,6 +41391,7 @@ var init_physical_strings = __esm({
     init_bowed_instruments();
     init_registry();
     init_fnv1a();
+    init_idiom();
     init_noise();
     init_player_noise();
     init_physical_strings_calibration();
@@ -24122,6 +41523,10 @@ var init_physical_strings = __esm({
       step: COMPILER("step"),
       slur: PLAYED("slur"),
       joined: COMPILER("joined"),
+      // A slur across strings rolled from one to the next over `share` of the note it crosses to, within `seconds`: the bow
+      // on both at once, the string it leaves lifted as the one it takes is set down (Schoonderwaldt & Altenmüller 2014: the
+      // middle 0.32 of the bow's inclination swing).
+      crossing: Object.freeze({ share: PLAYED("crossing.share"), seconds: Object.freeze(PLAYED("crossing.seconds")) }),
       // A pitch slurred to again (within `within` semitones of the one before) is louré: one bow, each note marked by the
       // bow slowed on the string -- to `speed` of its own and lightened to `force` of its weight, over `seconds` round the
       // note's time (the model's, and its slowing's own at least: `follow`), never lifted nor reversed -- as a player marks
@@ -110628,6 +128033,7 @@ var BowedStringClodbot = class extends Agent {
         startTick: tick,
         perTick,
         notes: planned.notes,
+        bowing: bowingOf(planned),
         status: planned.status,
         startBar: clock7.bar,
         endBar: clock7.bar + bars,
@@ -110653,11 +128059,16 @@ var BowedStringClodbot = class extends Agent {
       const planned = phrase.startTick + note.start / phrase.perTick, at2 = Math.max(tick, this.partTick?.(planned, clock7) ?? planned);
       if (at2 >= tick + 1) continue;
       phrase.sounded.add(index);
-      const next2 = phrase.notes[index + 1], slurred = Boolean(note.slur) && next2?.slur === note.slur;
-      const seconds2 = slurred ? (next2.start - note.start) * 1.08 : (note.end - note.start) * 0.95;
+      const next2 = phrase.notes[index + 1], bowing = phrase.bowing?.[index] ?? "begun", onward = phrase.bowing?.[index + 1], goesOn = onward === "slurred" || onward === "change";
+      const tickOf = (n) => {
+        const due3 = phrase.startTick + n.start / phrase.perTick;
+        return Math.max(tick, this.partTick?.(due3, clock7) ?? due3);
+      };
+      const letGo = Boolean(this.audio.physical) || this.audio.mode === "samples" && Boolean(this.audio.sampleDesign?.bowed);
+      const seconds2 = goesOn ? Math.max(tickOf(next2) - at2, 0) * perTick || next2.start - note.start : (note.end - note.start) * 0.95, struck = goesOn && letGo ? seconds2 + (next2.end - next2.start) : seconds2;
       const pitch5 = followHarmony(note.pitch, this.notes, this.playing?.register ?? BOWED_INSTRUMENTS[this.instrument].register);
       const tone = phrase.tone ?? {}, limits = this.audio.instrumentLimits?.(this.instrument) ?? null;
-      const joined = slurred || Boolean(note.slur) && phrase.notes[index - 1]?.slur === note.slur;
+      const joined = bowing === "slurred" || onward === "slurred";
       const natural6 = !this.harmonic && !joined && tone.harmonic && limits?.harmonicNear ? limits.harmonicNear(pitch5, { partial: tone.harmonic.partial }) : null;
       const harmonic = this.harmonic ?? (natural6 ? { ...tone.harmonic, ...natural6 } : null);
       const multiphonic = !harmonic && !joined && tone.multiphonic && limits?.multiphonicNear ? limits.multiphonicNear(tone.multiphonic.choice, pitch5, { compass: limits.range, pool: this.notes ?? [], dynamic: note.dynamic ?? "mf" }) : null;
@@ -110667,15 +128078,26 @@ var BowedStringClodbot = class extends Agent {
         const intensity = vibratoIntensity({ position: last2?.end > 0 ? note.start / last2.end : 1 / 2, seconds: seconds2, delay: player2.delay });
         return { curve: Array.from(vibratoCurve(player2, { seconds: seconds2, pitch: sounded, velocity: note.velocity, note: `${phrase.startBar}:${index}`, expression: { intensity, scope: scope23 } })), step: AUTHORED_VIBRATO.step };
       })() : null;
-      const strike = () => this.audio.bowedString(sounded, seconds2, note.velocity, (at2 - tick) * perTick, {
-        instrument: this.instrument,
-        ...harmonic ? { harmonic } : {},
-        ...note.fioritura ? { ownSubdivision: true } : {},
-        ...multiphonic ? { multiphonic } : {},
-        ...tone.contact ? { contact: tone.contact } : {},
-        ...tone.pressure ? { bowPressure: tone.pressure } : {},
-        ...vibrato ? { stroke: { vibrato } } : {}
-      });
+      const entry3 = STROKE.entry[note.dynamic] ?? STROKE.entry.mf;
+      const stroke2 = bowing === "slurred" ? { into: STROKE.into, attack: STROKE.legato } : bowing === "change" ? { change: true, attack: Math.max(STROKE.legato, entry3) } : limits?.engine ? { attack: entry3 } : {};
+      const told = { ...stroke2, ...vibrato ? { vibrato } : {}, ...struck > seconds2 ? { captured: { pitch: sounded, seconds: seconds2 } } : {} };
+      const before4 = this.bowHeld, begins = this.audio.eventStart?.((at2 - tick) * perTick);
+      this.bowHeld = null;
+      if (before4) this.audio.releaseSample?.(before4.held, { atSeconds: bowing === "begun" ? Math.min(before4.until, begins) : begins, seconds: stroke2.attack ?? STROKE.legato, note: before4.held });
+      const strike = () => {
+        const held2 = this.audio.bowedString(sounded, struck, note.velocity, (at2 - tick) * perTick, {
+          instrument: this.instrument,
+          ...harmonic ? { harmonic } : {},
+          ...note.fioritura ? { ownSubdivision: true } : {},
+          ...multiphonic ? { multiphonic } : {},
+          ...tone.contact ? { contact: tone.contact } : {},
+          ...tone.pressure ? { bowPressure: tone.pressure } : {},
+          ...bowing === "slurred" ? { slurred: true } : {},
+          ...Object.keys(told).length ? { stroke: told } : {}
+        });
+        if (struck > seconds2 && held2 != null) this.bowHeld = { held: held2, until: begins + seconds2 };
+        return held2;
+      };
       const record4 = phrase.records?.[index];
       const play = () => {
         if (record4) strikeWith(this, [{ pitch: sounded, language: record4 }], strike);
