@@ -1037,7 +1037,10 @@ var sources_default = {
     "johnston-1988": { kind: "literature", authors: "J. D. Johnston", title: "Transform coding of audio signals using perceptual noise criteria", year: 1988, doi: "10.1109/49.608", in: "IEEE Journal on Selected Areas in Communications 6(2), 314-323", note: "a perceptual coder's masking threshold: the critical bands' edges (Table II) and the masking offsets by tonality (registry/perception/bands.json)" },
     "schroeder-atal-hall-1979": { kind: "literature", authors: "M. R. Schroeder, B. S. Atal, J. L. Hall", title: "Optimizing digital speech coders by exploiting masking properties of the human ear", year: 1979, doi: "10.1121/1.383662", in: "The Journal of the Acoustical Society of America 66(6), 1647-1652", note: "the spreading function of masking across critical bands (registry/perception/bands.json spreading-function)" },
     "zwicker-1961": { kind: "literature", authors: "E. Zwicker", title: "Subdivision of the Audible Frequency Range into Critical Bands (Frequenzgruppen)", year: 1961, doi: "10.1121/1.1908630", in: "The Journal of the Acoustical Society of America 33(2), 248", note: "the critical bands' edges, as Johnston 1988 tabulates them after Scharf 1970 (registry/perception/bands.json critical-band-edges)" },
-    "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" }
+    "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" },
+    "cellofun-extensions": { kind: "vernacular", who: `cellofun.eu, a cellist's technique encyclopaedia: "Extensions On The Cello" and "Simple Extensions in the Neck Region"`, url: "https://cellofun.eu/?p=1661", accessed: "2026-11-06" },
+    "gale-triangulation": { kind: "vernacular", who: `T. B. Gale, Triangulation of Fingering Systems for the Double Bass (A Complete Method), Vol. 1, its publisher's page: "Closed Hand (Simandl 1-2-4), Open Hand (extension fingering 1-2-3-4), and Thumb Positions"`, url: "https://www.sheetmusicplus.com/en/product/triangulation-of-fingering-systems-for-the-double-bass-a-complete-method-vol-1-22576307.html", accessed: "2026-11-06" },
+    "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" }
   }
 };
 
@@ -2738,6 +2741,9 @@ var bowed_default2 = {
         slide: {
           holdMost: { value: 0.95, unit: "share of its note", kind: "unmeasured", reason: "ours: a glissando's held first pitch at most this share of its note, so it always slides", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] },
           least: { value: 0.05, unit: "semitones", kind: "unmeasured", reason: "ours: a slide narrower than this (5 cents) none, taken as near the least change of pitch heard", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }, { where: "web search", query: "frequency difference limen pure tone 1 kHz percent cents just noticeable difference pitch musicians Wier Jesteadt Green 1977", date: "2026-10-29", found: "Wier, Jesteadt & Green 1977 (JASA 61, 178-184) measured pure tones' frequency difference limens by frequency and level, their values not reached in what was read; no slide's least width measured" }] }
+        },
+        hand: {
+          shift: { value: 0.3, unit: "s, the hand moved from one position to another", kind: "literature", source: "visentin-2015", at: "Table 2", note: "six highly trained violinists' durations of shift, first to third position and third to fifth, on one string and two: averages of 294 to 404 ms for four of them at 60 to 100 beats a minute, another's about 450 ms; begun notes before its arrival where the tempo asks it. The least of them taken. Measured on violinists alone: a cello's or bass's longer shifts unmeasured", measuredOn: ["violin"] }
         }
       }
     },
@@ -2750,6 +2756,10 @@ var bowed_default2 = {
         vibrato: {
           rate: { value: 5.5, unit: "Hz", kind: "literature", source: "geringer-allen-2004", note: "violinists' and cellists' about 5.5 Hz, neither instrument nor experience differing (high school and university players)" },
           width: { value: 40, unit: "cents, peak to peak", kind: "literature", source: "allen-geringer-macleod-2009", note: "an artist's about 40 cents in first position" }
+        },
+        hand: {
+          frame: { value: 5, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: `"A perfect fourth is the usual comfortable span for violinists and violists" from the first finger to the fourth: Galamian's frame, the octave across two strings` },
+          extended: { value: 6, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "unmeasured", reason: "ours: the fourth finger extended a semitone past its frame", searched: [{ where: "web search", query: "Galamian frame of the hand violin first finger fourth finger perfect fourth octave adjacent strings", date: "2026-11-06", found: "the frame a fourth from the first finger to the fourth (the octave across two strings: Galamian); no extension's span given" }] }
         }
       }
     },
@@ -2762,6 +2772,10 @@ var bowed_default2 = {
         vibrato: {
           rate: { value: 5.5, unit: "Hz", kind: "unmeasured", reason: "ours: the violinists' and cellists' rate, measured alike (Geringer & Allen 2004), taken for the viola between them", searched: [{ where: "web search", query: "MacLeod 2008 vibrato rates widths violin viola players dynamic level pitch register results viola width cents", date: "2026-10-29", found: "MacLeod 2008 (walled: SOURCES_TO_FETCH) measured violists with violinists, its tables not reached; no account gives a viola's rate or width" }, { where: "web search", query: "Geringer Allen 2004 vibrato violin cello students rate width cents results cellists narrower", date: "2026-10-29", found: "Geringer & Allen 2004 (walled: SOURCES_TO_FETCH): by its abstract's account, rates about 5.5 Hz, neither instrument nor experience differing, and violinists' widths wider than cellists'; the widths themselves in its tables, not reached" }] },
           width: { value: 36, unit: "cents, peak to peak", kind: "unmeasured", reason: "ours: between the violin's and the cello's", searched: [{ where: "web search", query: "MacLeod 2008 vibrato rates widths violin viola players dynamic level pitch register results viola width cents", date: "2026-10-29", found: "MacLeod 2008 (walled: SOURCES_TO_FETCH) measured violists with violinists, its tables not reached; no account gives a viola's rate or width" }, { where: "web search", query: "Geringer Allen 2004 vibrato violin cello students rate width cents results cellists narrower", date: "2026-10-29", found: "Geringer & Allen 2004 (walled: SOURCES_TO_FETCH): by its abstract's account, rates about 5.5 Hz, neither instrument nor experience differing, and violinists' widths wider than cellists'; the widths themselves in its tables, not reached" }] }
+        },
+        hand: {
+          frame: { value: 5, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: '"A perfect fourth is the usual comfortable span for violinists and violists" from the first finger to the fourth' },
+          extended: { value: 6, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "unmeasured", reason: "ours: the fourth finger extended a semitone past its frame", searched: [{ where: "web search", query: "Galamian frame of the hand violin first finger fourth finger perfect fourth octave adjacent strings", date: "2026-11-06", found: "the frame a fourth from the first finger to the fourth (the octave across two strings: Galamian); no extension's span given" }] }
         }
       }
     },
@@ -2774,6 +2788,10 @@ var bowed_default2 = {
         vibrato: {
           rate: { value: 5.5, unit: "Hz", kind: "literature", source: "geringer-allen-2004", note: "violinists' and cellists' about 5.5 Hz, neither instrument nor experience differing (high school and university players)" },
           width: { value: 30, unit: "cents, peak to peak", kind: "unmeasured", reason: "ours: narrower than the violin's, as Geringer & Allen 2004 measured, how much authored", searched: [{ where: "web search", query: "Geringer Allen 2004 vibrato violin cello students rate width cents results cellists narrower", date: "2026-10-29", found: "Geringer & Allen 2004 (walled: SOURCES_TO_FETCH): by its abstract's account, rates about 5.5 Hz, neither instrument nor experience differing, and violinists' widths wider than cellists'; the widths themselves in its tables, not reached" }, { where: "arXiv", query: "hu-2025: cellists' vibrato by string register", date: "2026-10-29", found: "cellists' depth (half the peak-to-peak) rising with the stopped note's place toward the bridge, fitted 63.8 (x - 0.054)^2 + 3.31 cents over x, its place as a share of the string from the nut (R^2 0.51, 94 excerpts); rates 5.26 Hz (s.d. 0.28, TinySOL's players) and 6.48 Hz (s.d. 0.42, three soloists' concerto recordings); no one width an instrument's" }] }
+        },
+        hand: {
+          frame: { value: 3, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: '"the first and fourth fingers cover only a minor third" in the neck region, without extension' },
+          extended: { value: 4, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: 'the 1-4 major third, an extension "frequent enough ... to count as a basic part of left-hand technique" in the neck region (its 1-4 perfect fourth a double extension)' }
         }
       }
     },
@@ -2785,6 +2803,10 @@ var bowed_default2 = {
         vibrato: {
           rate: { value: 5.17, unit: "Hz", kind: "literature", source: "mick-2024", note: "double bassists' mean, 40 players" },
           width: { value: 19, unit: "cents, peak to peak", kind: "literature", source: "mick-2024", note: "double bassists' mean, 40 players" }
+        },
+        hand: {
+          frame: { value: 2, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "gale-triangulation", note: "the closed hand (Simandl's 1-2-4), each of its fingers a semitone from the next: a whole tone, first to fourth" },
+          extended: { value: 3, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "vernacular", source: "gale-triangulation", note: 'the open hand, "extension fingering 1-2-3-4", a finger a semitone: a minor third' }
         }
       }
     }
@@ -2919,6 +2941,11 @@ var winds_default2 = {
         },
         flow: {
           turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow through the reed's channel turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a clarinet's reed channel's flow, its level measured", date: "2026-11-03", found: "none measured: J. O. Smith, Physical Audio Signal Processing, 'Single-Reed Theory' -- synthesis models' noise modulated by the reed 'despite a lack of firm basis in acoustic measurements to date', turbulence near the reed's closing the basic model's chief omission; a reed channel's flow laminar-like below a Reynolds number of about 4000, seldom reached in saxophones and clarinets (TU Delft repository); a synthesis patent's noise following the breath, its level unmeasured" }] }
+        },
+        idiom: {
+          leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+          up: { value: 0.04, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a resonance (a register: overblown with its register key) above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+          down: { value: 0.12, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a resonance (a register: overblown with its register key) below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
         }
       }
     },
@@ -2926,6 +2953,11 @@ var winds_default2 = {
       values: {
         flow: {
           turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow between the lips turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the lips' slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017's trumpet; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a brass player's lips' flow, its level measured or modelled", date: "2026-11-03", found: "none measured: C. Vergez & X. Rodet's trumpet model (ICMC 2001), the jet out of the lips losing its energy to turbulence in the mouthpiece's cup, no noise level; Adachi & Sato's lips, and Giordano's (ISMA 2017) Navier-Stokes flow over them, no level given" }] }
+        },
+        idiom: {
+          leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+          up: { value: 0.02, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a partial above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+          down: { value: 0.02, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a partial below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
         }
       }
     },
@@ -2934,6 +2966,11 @@ var winds_default2 = {
         breath: {
           perHz: { value: 0.8, unit: "Pa/Hz", kind: "literature", source: "fletcher-1975", at: '"p = 0.008 v" mbar at a note of v Hz', note: "four flutists' blowing pressure rising with the note's frequency, its jet's speed sqrt(2p/rho): 20 m/s at D4, 40 at D6 (the same number as render/synthesis/workers/openwind_worker.py WOODWINDS jet pressure, the worker's own until it reads the registry)" },
           ffOverPp: { range: [1, 2], unit: "", kind: "literature", source: "fletcher-1975", note: "two of his four flutists raising their pressure about twice from pp to ff, two holding it" }
+        },
+        idiom: {
+          leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+          up: { value: 0.05, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a resonance (a register: overblown by its jet) above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+          down: { value: 0.1, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a resonance (a register: overblown by its jet) below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
         }
       }
     }
@@ -3405,13 +3442,10 @@ var personality_default = {
         figureWidth: { range: [0.15, 0.6], unit: "share of a dimension", kind: "setting", reason: "its taste in figures (figure-space.js drawTaste): how wide its range in each dimension of the figure space, from a cautious player's, near the one figure it favours, to a daring one's, over much of the space, at its daring times a share each range draws its own (ours)" },
         vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
         harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
-        tuplets: { range: [0, 1], unit: "share", kind: "setting", reason: `its rhythm on the rhythm engine (line-rhythm.js, where its player is switched to it): how much a division other than the meter space's own two and three weighs against them (meter-space.js METER_SPACE.layers), from none -- only twos and threes -- to as much as a three: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note (the owner, 2 October 2026: "make sure EVERY tuplet ratio is allowed")` },
-        syncopation: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how often a span whose parts are alike has the layer under them regrouped by a syncopation and its resolution (euclidean.js syncopate), from never to wherever one fits" },
-        syncopationLength: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: a syncopation's length L in events (the owner, 4 November 2026), drawn from two of its span's parts to all of them, toward the whole by this share (line-rhythm.js toward: a half draws evenly)" },
-        syncopationMeter: { range: [0.3, 1], unit: "share", kind: "setting", reason: `its rhythm on the engine: a syncopation's meter M, a cardinality dissonant with its layer that repeats in L, drawn toward the largest by this share: "usually weighted toward L" (the owner, 4 November 2026), so most players' shares lean toward it and some away` },
-        syncopationRepeats: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how many times a syncopation's meter repeats in L (the owner, 4 November 2026), toward the most by this share" },
-        syncopationWithin: { range: [0, 0.7], unit: "share", kind: "setting", reason: `its rhythm on the engine: the length, 0 to L, of a syncopation within the syncopation, its groups beginning there syncopated again -- "the usual weighting is toward 0, but it's not the only possible one" (the owner, 4 November 2026): most players' shares lean toward 0, some toward L` },
-        rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
+        tuplets: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its lean on the piece's rhythm on the rhythm engine (opening-time.js rhythm, line-rhythm.js, where its player is switched to it): how far it draws the piece's share of divisions other than the meter space's own two and three (meter-space.js METER_SPACE.layers: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note) toward 1, or toward 0 below the middle -- from halfway to none to halfway to as much as a three, the piece's own at its middle: a weight on the piece's, never its own in its place (the owner, 6 November 2026: a player's personality never holds the piece's surface rhythm)" },
+        syncopation: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: `its lean on the piece's rhythm on the engine: how far it draws the piece's share of spans syncopated (euclidean.js syncopate, opening-time.js rhythm) toward wherever one fits, or toward never below the middle, the piece's own at its middle; a syncopation's length, meter, repeats and the syncopation within it are the piece's alone (the owner, 6 November 2026: "make sure the player-personality doesn't have some specific surface-texture or rhythm items (e.g., re: specific syncopations) confused with personality items")` },
+        rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" },
+        themes: { range: [0, 1], unit: "share of its phrases", kind: "setting", reason: "its lean toward restating its themes: how often a phrase of a section that states its theme restates it, from its first note (themes.js), rather than developing it -- from a line that states its theme only where its form brings it, 0, to one restating it in every phrase its form lets it, 1, about the planner's own 0.5 (line.js LINE.restate); a section that develops its theme restates it a share of that (registry/method/melody.json themes developing)" }
       }
     }
   }
@@ -3854,6 +3888,24 @@ var melody_default = {
         repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
         voices: { value: 1, unit: "share", kind: "setting", reason: "as many voices as stream apart" }
       }
+    },
+    idiom: {
+      about: "An instrument's idiom told its player as relations, each a region of its items' joint space (public/shared/performers/idiom.js; research/IDIOM_AS_RELATIONS.md): a move's cost on its instrument by its direction, register and time, the notes it plays together, the hand's states; a line's search charged them, a player's daring carrying it toward the idiom's edge.",
+      source: "ours",
+      settings: {
+        weight: { value: [4, 0.5], unit: "a move's cost a unit of -log of the share of its time it leaves (none for a move needing no time, 0.69 at half its time, without bound toward all of it), against the line's other costs (a pool step from where it is wanted 1, a rule broken 60), at a daring of 0 and of 1", kind: "setting", reason: "ours: a cautious player's line keeping well within its instrument's idiom, a daring one's near its edge; beyond its edge a rule broken, whatever its daring" },
+        beyond: { value: 60, unit: "a move's cost in a figure's walk where it needs more time than it has", kind: "setting", reason: "ours: as a rule the line breaks (line.js RULE), far dearer than any way from the figure's path, so that a figure makes a move its instrument cannot only where no walk keeps its rules without it" },
+        share: { value: 0.25, unit: "share of the way toward the band's idioms, a round", kind: "setting", reason: `ours: how far a round of the piece's negotiation moves its weights toward what its instruments' idioms favour, so that the rounds settle (a contraction) and never reach the idioms alone: the seed's draw stays the prior (research/IDIOM_AS_RELATIONS.md, "Back through the player, over the piece")` }
+      }
+    },
+    themes: {
+      about: "A line's themes over its piece's form (public/shared/performers/themes.js; bots/lib/modules/line-themes.js; line.js): which theme a phrase states and how it varies it, from its section's formal role in the conductor's form (plex_clodbot, mh_PlexBOT's archetypes: stochastic-config.js plex) and its player's lean toward restating (personality.js `themes`). The owner, 6 November 2026: \"the soloist musebot's compositions tend not to be catchy and memorable because, even when the personality might want them, they lack most methods for recognizably repeating themes, I believe because the metrical structure keeps shifting throughout instead of taking shape according to a form.\" A theme keeps its rhythm and shape in any meter (line.js refitMotif), and what its notes divide into wherever it comes.",
+      source: "ours",
+      settings: {
+        treatments: { value: { establish: "state", "complex-frame": "state", depart: "develop", contrast: "contrast", develop: "develop", climax: "develop", relax: "state", stabilize: "contrast", return: "return", "complex-return": "return" }, unit: "how a section in each formal role treats a line's theme", kind: "setting", reason: "ours, after the sections of a classical form (W. E. Caplin 1998, Classical Form): a section that states its theme (the opening, and the calm after a climax) begins with it as it was first stated, from its first note; one that develops it (a departure, a development, a climax) sequences and inverts it; one that contrasts (a contrasting middle, and the frame's stable middle) brings a theme of its own, as unlike the first as its slate holds (line.js chooseMotif); one that returns brings back the first, from its first note. A role it does not name develops." },
+        developments: { value: ["sequence", "inversion"], unit: "the variations a phrase that develops its theme draws among, each as likely", kind: "setting", reason: "ours: the line's own (line.js LINE.variations): its idea sequenced, two steps higher, or inverted" },
+        developing: { value: 0.25, unit: "share of its player's lean toward restating, in a section that develops its theme", kind: "setting", reason: "ours: a developing section restates its theme a quarter as often as a stating one, so that the theme is heard to return where the form returns" }
+      }
     }
   }
 };
@@ -3926,7 +3978,7 @@ var EQUATION = Object.freeze({
   "string-density": ({ T, L, f0 }) => T / (2 * L * f0) ** 2,
   "string-impedance": ({ T, mu }) => Math.sqrt(T * mu),
   "inharmonicity-at-open": ({ takes, stopped }) => median(takes) / 2 ** (2 * stopped / 12),
-  "stiffness-from-inharmonicity": ({ B, T, L }) => B * T * L * L / Math.PI ** 2,
+  "stiffness-from-inharmonicity": ({ B: B2, T, L }) => B2 * T * L * L / Math.PI ** 2,
   "cylinder-diameter": ({ mu, rho }) => Math.sqrt(4 * mu / (Math.PI * rho)),
   "young-from-stiffness": ({ EI, d }) => 64 * EI / (Math.PI * d ** 4),
   "mean": ({ values }) => values.reduce((a, b) => a + b, 0) / values.length,
@@ -3946,8 +3998,8 @@ var EQUATION = Object.freeze({
   "ratio": ({ a, b }) => a / b,
   "lowest-hz": ({ tuning, a4 }) => a4 * 2 ** ((Math.min(...tuning) - 69) / 12),
   "loss-table": ({ decays, modes, f0, E, d, T, L }) => {
-    const B = Math.PI ** 3 * E * d ** 4 / (64 * T * L * L);
-    return decays.slice(0, modes).map((r, k) => [(k + 1) * f0 * Math.sqrt(1 + B * (k + 1) ** 2), r]);
+    const B2 = Math.PI ** 3 * E * d ** 4 / (64 * T * L * L);
+    return decays.slice(0, modes).map((r, k) => [(k + 1) * f0 * Math.sqrt(1 + B2 * (k + 1) ** 2), r]);
   },
   "mersenne-f0": ({ T, mu, L }) => Math.sqrt(T / mu) / (2 * L),
   "cylinder-stiffness": ({ E, d }) => E * Math.PI * d ** 4 / 64,
@@ -4294,6 +4346,17 @@ var OPENING_TIME = Object.freeze({
   phraseBarsAtMost: 8,
   // The band's density before any is heard, drawn between these (ours).
   density: Object.freeze([0.35, 0.85]),
+  // Its rhythm's shares (line-rhythm.js RHYTHM_SHARES, in their order), each drawn between these: a syncopation's meter M
+  // "usually weighted toward L" and the length within it "usually ... toward 0, but it's not the only possible one" (the
+  // owner, 4 November 2026), so most pieces lean so and some away; the rest anywhere (ours).
+  rhythm: Object.freeze({
+    tuplets: Object.freeze([0, 1]),
+    syncopation: Object.freeze([0, 1]),
+    length: Object.freeze([0, 1]),
+    meter: Object.freeze([0.3, 1]),
+    repeats: Object.freeze([0, 1]),
+    within: Object.freeze([0, 0.7])
+  }),
   // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
   // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
   reference: 4
@@ -10617,6 +10680,7 @@ var outOf = (position) => slideAt(position, "position", "out");
 var hzOf = (m) => 440 * 2 ** ((m - 69) / 12);
 var S = null;
 var V = null;
+var B = null;
 var P = null;
 var active = false;
 var status = null;
@@ -10655,6 +10719,7 @@ function sender(path) {
   };
 }
 var took = (r) => {
+  if ("mute" in r && r.mute !== B) return poll();
   P = r;
   say("");
   refresh();
@@ -10675,7 +10740,7 @@ async function poll() {
   }
   if (!active) return;
   S = s2;
-  if (s2.model && s2.version !== V) build(s2);
+  if (s2.model && (s2.version !== V || (s2.mute ?? null) !== B)) build(s2);
   shown2(s2);
   soloShown2(s2);
   if (s2.soloist?.playing && s2.version === V && s2.played?.pitch != null) {
@@ -10833,6 +10898,7 @@ $2("plainRise").onclick = () => {
 };
 function build(s2) {
   V = s2.version;
+  B = s2.mute ?? null;
   P = s2.played;
   impedance = null;
   for (const box of ["tongue", "repeat", "lungs", "vibrato", "noise", "flutter", "hum", "growl", "excitorPlayer", "excitorInstrument", "excitorPhysics", "holes", "slideBox", "diagram"]) $2(box).replaceChildren();
@@ -11639,7 +11705,7 @@ async function load2(file, { wait = 120 } = {}) {
   if (!await taken2(file.model, { wait })) throw new Error(`the ${label(file.model)} was not taken up`);
   const r = await post("/settings", { settings: file.settings });
   if (r.error) throw new Error(r.error);
-  if (r.pitch !== void 0) took(r);
+  if (r.pitch !== void 0) await took(r);
   if (file.words) $2("words").value = file.words;
   if (r.player) S = { ...S, player: r.player };
   poll();

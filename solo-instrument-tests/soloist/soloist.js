@@ -9298,7 +9298,10 @@ var init_sources = __esm({
         "johnston-1988": { kind: "literature", authors: "J. D. Johnston", title: "Transform coding of audio signals using perceptual noise criteria", year: 1988, doi: "10.1109/49.608", in: "IEEE Journal on Selected Areas in Communications 6(2), 314-323", note: "a perceptual coder's masking threshold: the critical bands' edges (Table II) and the masking offsets by tonality (registry/perception/bands.json)" },
         "schroeder-atal-hall-1979": { kind: "literature", authors: "M. R. Schroeder, B. S. Atal, J. L. Hall", title: "Optimizing digital speech coders by exploiting masking properties of the human ear", year: 1979, doi: "10.1121/1.383662", in: "The Journal of the Acoustical Society of America 66(6), 1647-1652", note: "the spreading function of masking across critical bands (registry/perception/bands.json spreading-function)" },
         "zwicker-1961": { kind: "literature", authors: "E. Zwicker", title: "Subdivision of the Audible Frequency Range into Critical Bands (Frequenzgruppen)", year: 1961, doi: "10.1121/1.1908630", in: "The Journal of the Acoustical Society of America 33(2), 248", note: "the critical bands' edges, as Johnston 1988 tabulates them after Scharf 1970 (registry/perception/bands.json critical-band-edges)" },
-        "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" }
+        "zwicker-fastl-2007": { kind: "literature", authors: "H. Fastl, E. Zwicker", title: "Psychoacoustics: Facts and Models", year: 2007, doi: "10.1007/978-3-540-68888-4", in: "Springer, 3rd ed.", note: "specific loudness growing as excitation to about 0.23 (registry/perception/bands.json loudness-exponent)" },
+        "cellofun-extensions": { kind: "vernacular", who: `cellofun.eu, a cellist's technique encyclopaedia: "Extensions On The Cello" and "Simple Extensions in the Neck Region"`, url: "https://cellofun.eu/?p=1661", accessed: "2026-11-06" },
+        "gale-triangulation": { kind: "vernacular", who: `T. B. Gale, Triangulation of Fingering Systems for the Double Bass (A Complete Method), Vol. 1, its publisher's page: "Closed Hand (Simandl 1-2-4), Open Hand (extension fingering 1-2-3-4), and Thumb Positions"`, url: "https://www.sheetmusicplus.com/en/product/triangulation-of-fingering-systems-for-the-double-bass-a-complete-method-vol-1-22576307.html", accessed: "2026-11-06" },
+        "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" }
       }
     };
   }
@@ -11029,6 +11032,9 @@ var init_bowed2 = __esm({
             slide: {
               holdMost: { value: 0.95, unit: "share of its note", kind: "unmeasured", reason: "ours: a glissando's held first pitch at most this share of its note, so it always slides", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }] },
               least: { value: 0.05, unit: "semitones", kind: "unmeasured", reason: "ours: a slide narrower than this (5 cents) none, taken as near the least change of pitch heard", searched: [{ where: "web search", query: "measured portamento glissando slide speed violin performance semitones per second study", date: "2026-10-29", found: "none in semitones a second: slides measured as durations (Leech-Wilkinson), as Hz/s gradients on cello recordings (arXiv 2604.22037, 2026), detected on violin (Yang's AVA); leads in SOURCES_TO_FETCH.md" }, { where: "web search", query: "frequency difference limen pure tone 1 kHz percent cents just noticeable difference pitch musicians Wier Jesteadt Green 1977", date: "2026-10-29", found: "Wier, Jesteadt & Green 1977 (JASA 61, 178-184) measured pure tones' frequency difference limens by frequency and level, their values not reached in what was read; no slide's least width measured" }] }
+            },
+            hand: {
+              shift: { value: 0.3, unit: "s, the hand moved from one position to another", kind: "literature", source: "visentin-2015", at: "Table 2", note: "six highly trained violinists' durations of shift, first to third position and third to fifth, on one string and two: averages of 294 to 404 ms for four of them at 60 to 100 beats a minute, another's about 450 ms; begun notes before its arrival where the tempo asks it. The least of them taken. Measured on violinists alone: a cello's or bass's longer shifts unmeasured", measuredOn: ["violin"] }
             }
           }
         },
@@ -11041,6 +11047,10 @@ var init_bowed2 = __esm({
             vibrato: {
               rate: { value: 5.5, unit: "Hz", kind: "literature", source: "geringer-allen-2004", note: "violinists' and cellists' about 5.5 Hz, neither instrument nor experience differing (high school and university players)" },
               width: { value: 40, unit: "cents, peak to peak", kind: "literature", source: "allen-geringer-macleod-2009", note: "an artist's about 40 cents in first position" }
+            },
+            hand: {
+              frame: { value: 5, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: `"A perfect fourth is the usual comfortable span for violinists and violists" from the first finger to the fourth: Galamian's frame, the octave across two strings` },
+              extended: { value: 6, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "unmeasured", reason: "ours: the fourth finger extended a semitone past its frame", searched: [{ where: "web search", query: "Galamian frame of the hand violin first finger fourth finger perfect fourth octave adjacent strings", date: "2026-11-06", found: "the frame a fourth from the first finger to the fourth (the octave across two strings: Galamian); no extension's span given" }] }
             }
           }
         },
@@ -11053,6 +11063,10 @@ var init_bowed2 = __esm({
             vibrato: {
               rate: { value: 5.5, unit: "Hz", kind: "unmeasured", reason: "ours: the violinists' and cellists' rate, measured alike (Geringer & Allen 2004), taken for the viola between them", searched: [{ where: "web search", query: "MacLeod 2008 vibrato rates widths violin viola players dynamic level pitch register results viola width cents", date: "2026-10-29", found: "MacLeod 2008 (walled: SOURCES_TO_FETCH) measured violists with violinists, its tables not reached; no account gives a viola's rate or width" }, { where: "web search", query: "Geringer Allen 2004 vibrato violin cello students rate width cents results cellists narrower", date: "2026-10-29", found: "Geringer & Allen 2004 (walled: SOURCES_TO_FETCH): by its abstract's account, rates about 5.5 Hz, neither instrument nor experience differing, and violinists' widths wider than cellists'; the widths themselves in its tables, not reached" }] },
               width: { value: 36, unit: "cents, peak to peak", kind: "unmeasured", reason: "ours: between the violin's and the cello's", searched: [{ where: "web search", query: "MacLeod 2008 vibrato rates widths violin viola players dynamic level pitch register results viola width cents", date: "2026-10-29", found: "MacLeod 2008 (walled: SOURCES_TO_FETCH) measured violists with violinists, its tables not reached; no account gives a viola's rate or width" }, { where: "web search", query: "Geringer Allen 2004 vibrato violin cello students rate width cents results cellists narrower", date: "2026-10-29", found: "Geringer & Allen 2004 (walled: SOURCES_TO_FETCH): by its abstract's account, rates about 5.5 Hz, neither instrument nor experience differing, and violinists' widths wider than cellists'; the widths themselves in its tables, not reached" }] }
+            },
+            hand: {
+              frame: { value: 5, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: '"A perfect fourth is the usual comfortable span for violinists and violists" from the first finger to the fourth' },
+              extended: { value: 6, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "unmeasured", reason: "ours: the fourth finger extended a semitone past its frame", searched: [{ where: "web search", query: "Galamian frame of the hand violin first finger fourth finger perfect fourth octave adjacent strings", date: "2026-11-06", found: "the frame a fourth from the first finger to the fourth (the octave across two strings: Galamian); no extension's span given" }] }
             }
           }
         },
@@ -11065,6 +11079,10 @@ var init_bowed2 = __esm({
             vibrato: {
               rate: { value: 5.5, unit: "Hz", kind: "literature", source: "geringer-allen-2004", note: "violinists' and cellists' about 5.5 Hz, neither instrument nor experience differing (high school and university players)" },
               width: { value: 30, unit: "cents, peak to peak", kind: "unmeasured", reason: "ours: narrower than the violin's, as Geringer & Allen 2004 measured, how much authored", searched: [{ where: "web search", query: "Geringer Allen 2004 vibrato violin cello students rate width cents results cellists narrower", date: "2026-10-29", found: "Geringer & Allen 2004 (walled: SOURCES_TO_FETCH): by its abstract's account, rates about 5.5 Hz, neither instrument nor experience differing, and violinists' widths wider than cellists'; the widths themselves in its tables, not reached" }, { where: "arXiv", query: "hu-2025: cellists' vibrato by string register", date: "2026-10-29", found: "cellists' depth (half the peak-to-peak) rising with the stopped note's place toward the bridge, fitted 63.8 (x - 0.054)^2 + 3.31 cents over x, its place as a share of the string from the nut (R^2 0.51, 94 excerpts); rates 5.26 Hz (s.d. 0.28, TinySOL's players) and 6.48 Hz (s.d. 0.42, three soloists' concerto recordings); no one width an instrument's" }] }
+            },
+            hand: {
+              frame: { value: 3, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: '"the first and fourth fingers cover only a minor third" in the neck region, without extension' },
+              extended: { value: 4, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "vernacular", source: "cellofun-extensions", note: 'the 1-4 major third, an extension "frequent enough ... to count as a basic part of left-hand technique" in the neck region (its 1-4 perfect fourth a double extension)' }
             }
           }
         },
@@ -11076,6 +11094,10 @@ var init_bowed2 = __esm({
             vibrato: {
               rate: { value: 5.17, unit: "Hz", kind: "literature", source: "mick-2024", note: "double bassists' mean, 40 players" },
               width: { value: 19, unit: "cents, peak to peak", kind: "literature", source: "mick-2024", note: "double bassists' mean, 40 players" }
+            },
+            hand: {
+              frame: { value: 2, unit: "semitones, first finger to fourth, in the lowest position", kind: "vernacular", source: "gale-triangulation", note: "the closed hand (Simandl's 1-2-4), each of its fingers a semitone from the next: a whole tone, first to fourth" },
+              extended: { value: 3, unit: "semitones, first finger to fourth, extended, in the lowest position", kind: "vernacular", source: "gale-triangulation", note: 'the open hand, "extension fingering 1-2-3-4", a finger a semitone: a minor third' }
             }
           }
         }
@@ -11220,6 +11242,11 @@ var init_winds2 = __esm({
             },
             flow: {
               turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow through the reed's channel turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a clarinet's reed channel's flow, its level measured", date: "2026-11-03", found: "none measured: J. O. Smith, Physical Audio Signal Processing, 'Single-Reed Theory' -- synthesis models' noise modulated by the reed 'despite a lack of firm basis in acoustic measurements to date', turbulence near the reed's closing the basic model's chief omission; a reed channel's flow laminar-like below a Reynolds number of about 4000, seldom reached in saxophones and clarinets (TU Delft repository); a synthesis patent's noise following the breath, its level unmeasured" }] }
+            },
+            idiom: {
+              leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+              up: { value: 0.04, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a resonance (a register: overblown with its register key) above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+              down: { value: 0.12, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a resonance (a register: overblown with its register key) below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
             }
           }
         },
@@ -11227,6 +11254,11 @@ var init_winds2 = __esm({
           values: {
             flow: {
               turbulence: { value: 0, unit: "1/sqrt(Hz)", kind: "unmeasured", reason: `ours, to be fitted: the flow between the lips turbulent, its fluctuation a share of the flow per root hertz, white to the engine's own rate (native/openwind src/stream.rs turbulence, the lips' slit's coefficient moved by it each step, and the offline renders' openwind_compiled.py alike; public/shared/performers/turbulence.js turbulenceOf); none until fitted to players' held notes, the noise between their harmonics on the anechoic recordings (Weinzierl et al. 2017's trumpet; research/MODELING_GAPS.md, "No turbulent noise in the reed's or the lips' flow")`, searched: [{ where: "the web", query: "turbulent noise in a brass player's lips' flow, its level measured or modelled", date: "2026-11-03", found: "none measured: C. Vergez & X. Rodet's trumpet model (ICMC 2001), the jet out of the lips losing its energy to turbulence in the mouthpiece's cup, no noise level; Adachi & Sato's lips, and Giordano's (ISMA 2017) Navier-Stokes flow over them, no level given" }] }
+            },
+            idiom: {
+              leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+              up: { value: 0.02, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a partial above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+              down: { value: 0.02, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a partial below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
             }
           }
         },
@@ -11235,6 +11267,11 @@ var init_winds2 = __esm({
             breath: {
               perHz: { value: 0.8, unit: "Pa/Hz", kind: "literature", source: "fletcher-1975", at: '"p = 0.008 v" mbar at a note of v Hz', note: "four flutists' blowing pressure rising with the note's frequency, its jet's speed sqrt(2p/rho): 20 m/s at D4, 40 at D6 (the same number as render/synthesis/workers/openwind_worker.py WOODWINDS jet pressure, the worker's own until it reads the registry)" },
               ffOverPp: { range: [1, 2], unit: "", kind: "literature", source: "fletcher-1975", note: "two of his four flutists raising their pressure about twice from pp to ff, two holding it" }
+            },
+            idiom: {
+              leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+              up: { value: 0.05, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a resonance (a register: overblown by its jet) above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
+              down: { value: 0.1, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a resonance (a register: overblown by its jet) below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
             }
           }
         }
@@ -11726,13 +11763,10 @@ var init_personality = __esm({
             figureWidth: { range: [0.15, 0.6], unit: "share of a dimension", kind: "setting", reason: "its taste in figures (figure-space.js drawTaste): how wide its range in each dimension of the figure space, from a cautious player's, near the one figure it favours, to a daring one's, over much of the space, at its daring times a share each range draws its own (ours)" },
             vibratoMost: { value: 3, unit: "times its players' measured width", kind: "setting", reason: `its tone: the widest vibrato a character's range reaches (the owner, 3 November 2026: "some performer characters might allow huge vibrato ranges; others not"), three times its players' measured width (vibrato.js): on the violin's 40 c, 120 c peak to peak, as wide as professional lyric singers' mean extent of +-71 c (Prame 1997, doi:10.1121/1.419735); its share 1/3 its players' own, the ordinary a clean tone keeps about` },
             harmonicPartials: { range: [2, 3], unit: "partial", kind: "setting", reason: "its tone: the natural harmonic a phrase of a bowed string takes, its partial by its technique's depth -- the octave at a shallow one, the twelfth at a deep one: the string touched at its half or its third, the two natural harmonics a string player most plays and the surest to speak" },
-            tuplets: { range: [0, 1], unit: "share", kind: "setting", reason: `its rhythm on the rhythm engine (line-rhythm.js, where its player is switched to it): how much a division other than the meter space's own two and three weighs against them (meter-space.js METER_SPACE.layers), from none -- only twos and threes -- to as much as a three: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note (the owner, 2 October 2026: "make sure EVERY tuplet ratio is allowed")` },
-            syncopation: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how often a span whose parts are alike has the layer under them regrouped by a syncopation and its resolution (euclidean.js syncopate), from never to wherever one fits" },
-            syncopationLength: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: a syncopation's length L in events (the owner, 4 November 2026), drawn from two of its span's parts to all of them, toward the whole by this share (line-rhythm.js toward: a half draws evenly)" },
-            syncopationMeter: { range: [0.3, 1], unit: "share", kind: "setting", reason: `its rhythm on the engine: a syncopation's meter M, a cardinality dissonant with its layer that repeats in L, drawn toward the largest by this share: "usually weighted toward L" (the owner, 4 November 2026), so most players' shares lean toward it and some away` },
-            syncopationRepeats: { range: [0, 1], unit: "share", kind: "setting", reason: "its rhythm on the engine: how many times a syncopation's meter repeats in L (the owner, 4 November 2026), toward the most by this share" },
-            syncopationWithin: { range: [0, 0.7], unit: "share", kind: "setting", reason: `its rhythm on the engine: the length, 0 to L, of a syncopation within the syncopation, its groups beginning there syncopated again -- "the usual weighting is toward 0, but it's not the only possible one" (the owner, 4 November 2026): most players' shares lean toward 0, some toward L` },
-            rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" }
+            tuplets: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its lean on the piece's rhythm on the rhythm engine (opening-time.js rhythm, line-rhythm.js, where its player is switched to it): how far it draws the piece's share of divisions other than the meter space's own two and three (meter-space.js METER_SPACE.layers: a five, seven or thirteen in the time of one, wherever the span holds it at its quickest note) toward 1, or toward 0 below the middle -- from halfway to none to halfway to as much as a three, the piece's own at its middle: a weight on the piece's, never its own in its place (the owner, 6 November 2026: a player's personality never holds the piece's surface rhythm)" },
+            syncopation: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: `its lean on the piece's rhythm on the engine: how far it draws the piece's share of spans syncopated (euclidean.js syncopate, opening-time.js rhythm) toward wherever one fits, or toward never below the middle, the piece's own at its middle; a syncopation's length, meter, repeats and the syncopation within it are the piece's alone (the owner, 6 November 2026: "make sure the player-personality doesn't have some specific surface-texture or rhythm items (e.g., re: specific syncopations) confused with personality items")` },
+            rhythmicGrammars: { range: [-0.5, 0.5], unit: "share of the way", kind: "setting", reason: "its tone: how far its motifs' rhythmic grammars' shares are drawn toward 1 -- a rhythm on a repeated tone, unequal durations, a rest inside it (line.js LINE.grammars) -- and the others' toward 0, from the cleanest tone's -1/2 (the rhythmic ones halfway to 0, the others halfway to 1) to the most extreme's 1/2: the planner's own, none, at the middle" },
+            themes: { range: [0, 1], unit: "share of its phrases", kind: "setting", reason: "its lean toward restating its themes: how often a phrase of a section that states its theme restates it, from its first note (themes.js), rather than developing it -- from a line that states its theme only where its form brings it, 0, to one restating it in every phrase its form lets it, 1, about the planner's own 0.5 (line.js LINE.restate); a section that develops its theme restates it a share of that (registry/method/melody.json themes developing)" }
           }
         }
       }
@@ -12189,6 +12223,24 @@ var init_melody = __esm({
             stride: { value: 0, unit: "share", kind: "setting", reason: "none" },
             repeat: { value: 0, unit: "share", kind: "setting", reason: "none" },
             voices: { value: 1, unit: "share", kind: "setting", reason: "as many voices as stream apart" }
+          }
+        },
+        idiom: {
+          about: "An instrument's idiom told its player as relations, each a region of its items' joint space (public/shared/performers/idiom.js; research/IDIOM_AS_RELATIONS.md): a move's cost on its instrument by its direction, register and time, the notes it plays together, the hand's states; a line's search charged them, a player's daring carrying it toward the idiom's edge.",
+          source: "ours",
+          settings: {
+            weight: { value: [4, 0.5], unit: "a move's cost a unit of -log of the share of its time it leaves (none for a move needing no time, 0.69 at half its time, without bound toward all of it), against the line's other costs (a pool step from where it is wanted 1, a rule broken 60), at a daring of 0 and of 1", kind: "setting", reason: "ours: a cautious player's line keeping well within its instrument's idiom, a daring one's near its edge; beyond its edge a rule broken, whatever its daring" },
+            beyond: { value: 60, unit: "a move's cost in a figure's walk where it needs more time than it has", kind: "setting", reason: "ours: as a rule the line breaks (line.js RULE), far dearer than any way from the figure's path, so that a figure makes a move its instrument cannot only where no walk keeps its rules without it" },
+            share: { value: 0.25, unit: "share of the way toward the band's idioms, a round", kind: "setting", reason: `ours: how far a round of the piece's negotiation moves its weights toward what its instruments' idioms favour, so that the rounds settle (a contraction) and never reach the idioms alone: the seed's draw stays the prior (research/IDIOM_AS_RELATIONS.md, "Back through the player, over the piece")` }
+          }
+        },
+        themes: {
+          about: "A line's themes over its piece's form (public/shared/performers/themes.js; bots/lib/modules/line-themes.js; line.js): which theme a phrase states and how it varies it, from its section's formal role in the conductor's form (plex_clodbot, mh_PlexBOT's archetypes: stochastic-config.js plex) and its player's lean toward restating (personality.js `themes`). The owner, 6 November 2026: \"the soloist musebot's compositions tend not to be catchy and memorable because, even when the personality might want them, they lack most methods for recognizably repeating themes, I believe because the metrical structure keeps shifting throughout instead of taking shape according to a form.\" A theme keeps its rhythm and shape in any meter (line.js refitMotif), and what its notes divide into wherever it comes.",
+          source: "ours",
+          settings: {
+            treatments: { value: { establish: "state", "complex-frame": "state", depart: "develop", contrast: "contrast", develop: "develop", climax: "develop", relax: "state", stabilize: "contrast", return: "return", "complex-return": "return" }, unit: "how a section in each formal role treats a line's theme", kind: "setting", reason: "ours, after the sections of a classical form (W. E. Caplin 1998, Classical Form): a section that states its theme (the opening, and the calm after a climax) begins with it as it was first stated, from its first note; one that develops it (a departure, a development, a climax) sequences and inverts it; one that contrasts (a contrasting middle, and the frame's stable middle) brings a theme of its own, as unlike the first as its slate holds (line.js chooseMotif); one that returns brings back the first, from its first note. A role it does not name develops." },
+            developments: { value: ["sequence", "inversion"], unit: "the variations a phrase that develops its theme draws among, each as likely", kind: "setting", reason: "ours: the line's own (line.js LINE.variations): its idea sequenced, two steps higher, or inverted" },
+            developing: { value: 0.25, unit: "share of its player's lean toward restating, in a section that develops its theme", kind: "setting", reason: "ours: a developing section restates its theme a quarter as often as a stating one, so that the theme is heard to return where the form returns" }
           }
         }
       }
@@ -12801,6 +12853,570 @@ var init_streams = __esm({
   }
 });
 
+// public/shared/performers/wind-registers.json
+var wind_registers_default;
+var init_wind_registers = __esm({
+  "public/shared/performers/wind-registers.json"() {
+    wind_registers_default = {
+      schema: "musebots.wind-registers/1",
+      about: "Each wind's register at each of its notes, sounding MIDI, as runs [low, high, register]: a woodwind's the resonance its standard fingering speaks on (1 its lowest), a brass instrument's the partial its standard fingering sounds. Baked by scripts/bake-wind-registers.mjs: never edited by hand.",
+      instruments: {
+        "alto-flute": {
+          source: "render/synthesis/openwind-fingerings/alto-flute.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [55, 68, 1],
+            [69, 80, 2],
+            [81, 81, 3],
+            [82, 84, 4],
+            [85, 85, 3],
+            [86, 91, 4]
+          ]
+        },
+        "alto-saxophone": {
+          source: "render/synthesis/openwind-fingerings/alto-saxophone.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [49, 63, 1],
+            [64, 80, 2]
+          ]
+        },
+        "baritone-saxophone": {
+          source: "render/synthesis/openwind-fingerings/baritone-saxophone.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [37, 51, 1],
+            [52, 68, 2]
+          ]
+        },
+        "bass-clarinet": {
+          source: "render/synthesis/openwind-fingerings/bass-clarinet.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [38, 56, 1],
+            [57, 69, 2],
+            [70, 72, 3],
+            [73, 77, 4]
+          ]
+        },
+        bassoon: {
+          source: "render/synthesis/openwind-fingerings/bassoon.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [34, 53, 1],
+            [54, 62, 2],
+            [63, 66, 3],
+            [67, 71, 4],
+            [74, 77, 4]
+          ]
+        },
+        clarinet: {
+          source: "render/synthesis/openwind-fingerings/clarinet.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [50, 68, 1],
+            [69, 82, 2],
+            [83, 88, 3],
+            [89, 94, 4]
+          ]
+        },
+        contrabassoon: {
+          source: "render/synthesis/openwind-fingerings/contrabassoon.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [22, 41, 1],
+            [42, 50, 2],
+            [51, 54, 3],
+            [55, 58, 4]
+          ]
+        },
+        "e-flat-clarinet": {
+          source: "render/synthesis/openwind-fingerings/e-flat-clarinet.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [55, 73, 1],
+            [74, 87, 2],
+            [88, 93, 3],
+            [94, 94, 4]
+          ]
+        },
+        "english-horn": {
+          source: "render/synthesis/openwind-fingerings/english-horn.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [51, 65, 1],
+            [66, 77, 2],
+            [78, 84, 4]
+          ]
+        },
+        flute: {
+          source: "render/synthesis/openwind-fingerings/flute.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [59, 70, 1],
+            [71, 85, 2],
+            [86, 88, 3],
+            [89, 89, 4],
+            [90, 91, 3],
+            [92, 98, 4]
+          ]
+        },
+        oboe: {
+          source: "render/synthesis/openwind-fingerings/oboe.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [58, 72, 1],
+            [73, 84, 2],
+            [85, 93, 4]
+          ]
+        },
+        piccolo: {
+          source: "render/synthesis/openwind-fingerings/piccolo.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [74, 85, 1],
+            [86, 97, 2],
+            [98, 98, 3],
+            [99, 105, 4],
+            [107, 108, 4]
+          ]
+        },
+        "soprano-saxophone": {
+          source: "render/synthesis/openwind-fingerings/soprano-saxophone.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [56, 70, 1],
+            [71, 87, 2]
+          ]
+        },
+        "tenor-saxophone": {
+          source: "render/synthesis/openwind-fingerings/tenor-saxophone.json: each note's standard fingering's resonance (its `mode`)",
+          runs: [
+            [44, 58, 1],
+            [59, 75, 2]
+          ]
+        },
+        horn: {
+          source: "public/shared/performers/brass-standard-fingerings.json horn: each note's standard fingering's partial",
+          runs: [
+            [35, 41, 2],
+            [42, 48, 3],
+            [49, 53, 4],
+            [54, 57, 5],
+            [58, 60, 6],
+            [61, 65, 8],
+            [66, 67, 9],
+            [68, 69, 10],
+            [70, 72, 12],
+            [73, 77, 16]
+          ]
+        },
+        trombone: {
+          source: "public/shared/performers/brass-standard-fingerings.json trombone: each note's standard fingering's partial",
+          runs: [
+            [40, 46, 2],
+            [47, 53, 3],
+            [54, 58, 4],
+            [59, 62, 5],
+            [63, 65, 6],
+            [66, 67, 7],
+            [68, 70, 8]
+          ]
+        },
+        trumpet: {
+          source: "public/shared/performers/brass-standard-fingerings.json trumpet: each note's standard fingering's partial",
+          runs: [
+            [52, 58, 2],
+            [59, 65, 3],
+            [66, 70, 4],
+            [71, 74, 5],
+            [75, 77, 6],
+            [78, 82, 8]
+          ]
+        },
+        tuba: {
+          source: "public/shared/performers/brass-standard-fingerings.json tuba: each note's standard fingering's partial",
+          runs: [
+            [18, 24, 1],
+            [26, 36, 2],
+            [37, 43, 3],
+            [44, 48, 4],
+            [49, 52, 5],
+            [53, 55, 6],
+            [56, 60, 8],
+            [61, 62, 9],
+            [63, 64, 10],
+            [65, 67, 12],
+            [68, 69, 14],
+            [70, 72, 16]
+          ]
+        }
+      }
+    };
+  }
+});
+
+// public/shared/performers/contrabass.js
+var CONTRABASS;
+var init_contrabass = __esm({
+  "public/shared/performers/contrabass.js"() {
+    init_registry();
+    CONTRABASS = Object.freeze({
+      strings: Object.freeze(keysOf("contrabass", "strings").map((name12) => {
+        const of2 = (key2) => value("contrabass", `strings.${name12}.${key2}`);
+        return Object.freeze({
+          name: name12,
+          pitch: of2("pitch"),
+          f0: of2("f0"),
+          T: of2("tension"),
+          L: of2("length"),
+          pl: of2("density"),
+          d: of2("diameter"),
+          E: of2("young"),
+          B: of2("inharmonicity"),
+          r0: of2("lossR0"),
+          r2: of2("lossR2")
+        });
+      })),
+      // (The nearest measured body in its air mode, the cello's, stretched in time by this, its correction and corner with
+      // it: interim -- the registry's engine choice, objects/bowed.json `engine`.)
+      bodyScale: Object.freeze({ from: value("contrabass", "engine.bodyFrom"), ratio: value("contrabass", "engine.bodyRatio"), interim: true })
+    });
+  }
+});
+
+// public/shared/performers/string-bodies.js
+function airMode(name12) {
+  sheetOf(name12);
+  const e3 = entry(name12, "body.airMode");
+  if (e3.kind === "literature") return { hz: e3.value, measured: true, source: cite(e3.source) };
+  return { hz: e3.value, measured: false, source: "calculated from Goldblatt's measurements of its body and f-holes as a Helmholtz resonator, scaled by the violin's measured A0" };
+}
+var DIMENSIONS, hasBody, sheetOf, SHEETS, cite, measured, MEASURED_AIR_MODES;
+var init_string_bodies = __esm({
+  "public/shared/performers/string-bodies.js"() {
+    init_registry();
+    DIMENSIONS = ["body", "upper", "middle", "lower", "ribs", "archTop", "archBack", "fLength", "fWidth", "fThickness", "fingerboard", "string"];
+    hasBody = (name12) => Boolean(OBJECTS[name12]) && (() => {
+      try {
+        entry(name12, "body.string");
+        return true;
+      } catch {
+        return false;
+      }
+    })();
+    sheetOf = (name12) => {
+      if (!hasBody(name12)) throw new Error(`string-bodies.js: no sheet for ${name12}`);
+      return Object.freeze(Object.fromEntries(DIMENSIONS.map((k2) => [k2, value(name12, `body.${k2}`)])));
+    };
+    SHEETS = Object.freeze(Object.fromEntries(["violin", "viola", "cello", "contrabass"].map((name12) => [name12, sheetOf(name12)])));
+    cite = (id4) => {
+      const s = source(id4);
+      return `${s.authors.split(",").map((a) => a.trim().split(" ").at(-1)).join(" & ")} ${s.year}, doi:${s.doi}`;
+    };
+    measured = entry("violin", "body.airMode");
+    MEASURED_AIR_MODES = Object.freeze({ violin: Object.freeze({ hz: measured.value, source: cite(measured.source) }) });
+  }
+});
+
+// public/shared/performers/bowed-instruments.js
+function bySize(table, name12, size = lowestHz, { linear: linear2 = false } = {}) {
+  if (Object.hasOwn(table, name12)) return table[name12];
+  const x = Math.log(size(name12)), known = Object.keys(table).map((n) => [Math.log(size(n)), table[n]]).sort((a, b) => a[0] - b[0]);
+  if (!known.length) throw new Error(`bowed-instruments.js bySize: nothing measured to read ${name12} from`);
+  if (x <= known[0][0]) return known[0][1];
+  for (let k2 = 1; k2 < known.length; k2++) if (x <= known[k2][0]) {
+    const [x0, v0] = known[k2 - 1], [x1, v1] = known[k2], w = (x - x0) / (x1 - x0);
+    return !linear2 && v0 > 0 && v1 > 0 ? Math.exp(Math.log(v0) + (Math.log(v1) - Math.log(v0)) * w) : v0 + (v1 - v0) * w;
+  }
+  return known[known.length - 1][1];
+}
+var ARTIFASTRING, GIVEN, stringsOf, given, BOWED, BOWED_TYPES, bowedOf, lossAt, lowestHz, airHz, GIVEN_BOWED;
+var init_bowed_instruments = __esm({
+  "public/shared/performers/bowed-instruments.js"() {
+    init_contrabass();
+    init_string_bodies();
+    init_registry();
+    ARTIFASTRING = Object.freeze(["violin", "viola", "cello"]);
+    GIVEN = children("violin-family").filter((name12) => !ARTIFASTRING.includes(name12) && name12 !== "contrabass");
+    stringsOf = (name12) => Object.freeze(keysOf(name12, "strings").map((s) => {
+      const of2 = (key2) => value(name12, `strings.${s}.${key2}`);
+      return Object.freeze({
+        name: s,
+        pitch: of2("pitch"),
+        f0: of2("f0"),
+        T: of2("tension"),
+        L: of2("length"),
+        pl: of2("density"),
+        d: of2("diameter"),
+        E: of2("young"),
+        B: of2("inharmonicity"),
+        losses: Object.freeze(of2("losses").map((p) => Object.freeze([...p])))
+      });
+    }));
+    given = GIVEN.map((name12, k2) => Object.freeze({
+      name: name12,
+      type: ARTIFASTRING.length + 1 + k2,
+      solver: value(name12, "engine.solver"),
+      strings: stringsOf(name12),
+      bodyScale: Object.freeze({ from: value(name12, "engine.bodyFrom"), ratio: value(name12, "engine.bodyRatio"), interim: true }),
+      opens: Object.freeze(value(name12, "tuning")),
+      fictional: Boolean(OBJECTS[name12].fictional),
+      given: true
+    }));
+    BOWED = Object.freeze([
+      ...ARTIFASTRING.map((name12, type) => Object.freeze({ name: name12, type, solver: name12, strings: null, bodyScale: null, opens: Object.freeze(value(name12, "tuning")), fictional: false, given: false })),
+      Object.freeze({
+        name: "contrabass",
+        type: ARTIFASTRING.length,
+        solver: value("contrabass", "engine.solver"),
+        strings: CONTRABASS.strings,
+        bodyScale: CONTRABASS.bodyScale,
+        opens: Object.freeze(CONTRABASS.strings.map((s) => s.pitch)),
+        fictional: false,
+        given: false
+      }),
+      ...given
+    ]);
+    BOWED_TYPES = Object.freeze(Object.fromEntries(BOWED.map((i) => [i.name, i.type])));
+    bowedOf = (name12) => {
+      const i = BOWED.find((b) => b.name === name12);
+      if (!i) throw new Error(`bowed-instruments.js: no bowed instrument ${name12}`);
+      return i;
+    };
+    lossAt = (string, hz2) => string.losses ? equation("table-read", { table: string.losses, x: hz2 }) : equation("string-loss-law", { r0: string.r0, r2: string.r2, f: hz2 });
+    lowestHz = (name12) => value(name12, "lowestHz");
+    airHz = (name12) => airMode(name12).hz;
+    GIVEN_BOWED = Object.freeze(BOWED.filter((i) => i.given));
+  }
+});
+
+// public/shared/performers/idiom.js
+function idiomFacts(facts) {
+  const register = [...facts.compass.register];
+  if (facts.kind === "bow") {
+    const { strings: strings3, reach } = facts.articulation, id4 = facts.instrument;
+    const [frame4, extended] = ["frame", "extended"].map((name12) => handOf(id4, name12)), shift = tryPlayer(id4, "hand.shift") ?? tryPlayer("violin-family", "hand.shift");
+    const hand = [frame4, extended, shift].every(Number.isFinite) ? {
+      strings: [...strings3],
+      reach,
+      first: FIRST,
+      frame: +frame4.toFixed(6),
+      extended: +extended.toFixed(6),
+      shift,
+      unit: "semitones; s",
+      source: "registry/players/bowed.json hand: its frame, first finger to fourth in its lowest position, its players' (vernacular; a given instrument's read between them by its size, bowed-instruments.js bySize); a shift's time violinists' measured (Visentin et al. 2015)"
+    } : null;
+    const ceiling = facts.compass.harmonicCeiling ?? null, harmonics = ceiling == null ? [] : strings3.flatMap((open) => {
+      const out = [];
+      for (let n = 2; open + 12 * Math.log2(n) <= ceiling; n++) out.push(+(open + 12 * Math.log2(n)).toFixed(3));
+      return out;
+    });
+    return {
+      schema: IDIOM_SCHEMA,
+      moves: hand ? { by: "hand" } : null,
+      together: hand ? { by: "strings", adjacent: true } : null,
+      hand,
+      techniques: harmonics.length ? { harmonic: harmonics.map((p) => [+(p - NEAR).toFixed(3), +(p + NEAR).toFixed(3)]) } : {},
+      favours: { register, pitches: strings3.map((p) => [p, 1]), source: "its players' register (instrument-ranges.js); its open strings, which ring" }
+    };
+  }
+  const runs = wind_registers_default.instruments[facts.model]?.runs ?? wind_registers_default.instruments[facts.instrument]?.runs ?? null;
+  const law = Object.fromEntries(["leap", "up", "down"].map((name12) => [name12, tryPlayer(facts.model, `idiom.${name12}`)]));
+  const multiphonics = (facts.techniques?.multiphonics ?? []).map((m) => ({ id: m.id, pitches: [...m.pitches] }));
+  return {
+    schema: IDIOM_SCHEMA,
+    moves: runs && Object.values(law).every(Number.isFinite) ? {
+      by: "registers",
+      registers: runs.map((run15) => [...run15]),
+      law,
+      unit: "s",
+      source: `wind-registers.json (${wind_registers_default.instruments[facts.model]?.source ?? wind_registers_default.instruments[facts.instrument]?.source}); registry/players/winds.json idiom (ours, unmeasured)`
+    } : null,
+    together: multiphonics.length ? { by: "multiphonics", multiphonics } : null,
+    hand: null,
+    techniques: multiphonics.length ? { multiphonic: multiphonics.map((m) => [Math.min(...m.pitches), Math.max(...m.pitches)]) } : {},
+    favours: { register, pitches: [], source: "its players' register (instrument-ranges.js)" }
+  };
+}
+function idiomOf(idiom) {
+  if (!idiom) return null;
+  const hand = idiom.hand, runs = idiom.moves?.registers ?? null, law = idiom.moves?.law ?? null;
+  const registerAt = (pitch5) => {
+    if (!runs) return null;
+    let best = null, far = Infinity;
+    for (const [low, high, register] of runs) {
+      const off = pitch5 < low ? low - pitch5 : pitch5 > high ? pitch5 - high : 0;
+      if (off < far) {
+        far = off;
+        best = register;
+      }
+    }
+    return best;
+  };
+  const top = (place2, frame4) => {
+    const length = 2 ** (-FIRST / 12) - 2 ** (-(FIRST + frame4) / 12), left = 2 ** (-Math.max(place2, 0) / 12) - length;
+    return left > 0 ? -12 * Math.log2(left) : Infinity;
+  };
+  const held2 = (places, frame4) => {
+    const stopped = places.filter((p) => p > 0);
+    return stopped.length < 2 || Math.max(...stopped) <= top(Math.min(...stopped), frame4) + 1e-9;
+  };
+  const handStates = (pitch5) => hand ? hand.strings.flatMap((open, string) => {
+    const place2 = pitch5 - open;
+    return place2 >= -OPEN && place2 <= hand.reach + OPEN ? [{ string, place: Math.abs(place2) < OPEN ? 0 : +place2.toFixed(6) }] : [];
+  }) : [];
+  const POSITIONS = hand ? [...Array(Math.floor(hand.reach) + 1).keys()] : [];
+  const holding = (place2) => place2 === 0 ? POSITIONS : POSITIONS.filter((q3) => q3 <= place2 + 1e-9 && place2 <= top(q3, hand.extended) + 1e-9);
+  const statesOf = /* @__PURE__ */ new Map();
+  const statesAt = (pitch5) => {
+    if (!statesOf.has(pitch5)) statesOf.set(pitch5, hand ? handStates(pitch5).flatMap(({ string, place: place2 }) => holding(place2).map((position2) => ({ string, place: place2, position: position2 }))) : [{ register: registerAt(pitch5) }]);
+    return statesOf.get(pitch5);
+  };
+  const shiftOf2 = (a, b) => a.position === b.position ? 0 : hand.shift;
+  const needs = /* @__PURE__ */ new Map();
+  const neededFor = (from, to) => {
+    const key2 = `${from}|${to}`;
+    if (needs.has(key2)) return needs.get(key2);
+    let needed = Infinity;
+    if (law) {
+      const crossed = registerAt(to) - registerAt(from), octaves = Math.abs(to - from) / 12;
+      needed = law.leap * octaves + Math.min(1, octaves) * (crossed > 0 ? law.up * crossed : -law.down * crossed);
+    } else if (hand) {
+      const a = new Set(statesAt(from).map((state2) => state2.position)), b = statesAt(to);
+      needed = !a.size || !b.length ? Infinity : b.some((state2) => a.has(state2.position)) ? 0 : hand.shift;
+    } else needed = 0;
+    needs.set(key2, needed);
+    return needed;
+  };
+  const move = (from, to, seconds2) => {
+    const needed = neededFor(from, to);
+    return { needed, share: seconds2 > 0 ? needed / seconds2 : needed > 0 ? Infinity : 0, beyond: needed > seconds2 };
+  };
+  const least = (frontier) => frontier.reduce((most, f) => Math.min(most, f.cost), Infinity);
+  const walk = (price) => ({
+    start: (pitch5) => hand ? byPosition(statesAt(pitch5).map((state2) => ({ state: state2, cost: 0 }))) : statesAt(pitch5).map((state2) => ({ state: state2, cost: 0 })),
+    next: (frontier, from, to, seconds2) => {
+      if (!hand) return statesAt(to).flatMap((state2) => {
+        const cost = least(frontier) + price(neededFor(from, to), seconds2);
+        return cost < Infinity ? [{ state: state2, cost }] : [];
+      });
+      const here = new Map(frontier.map((f) => [f.state.position, f.cost])), shifted = least(frontier) + price(hand.shift, seconds2);
+      return byPosition(statesAt(to).map((state2) => ({ state: state2, cost: Math.min(here.get(state2.position) ?? Infinity, shifted) })).filter((f) => f.cost < Infinity));
+    },
+    least
+  });
+  const together2 = (pitches) => {
+    if (pitches.length < 2) return { playable: true, cost: 0 };
+    if (hand) {
+      let best = null;
+      for (const order4 of permutations(pitches)) for (let low = 0; low + order4.length <= hand.strings.length; low++) {
+        const places = order4.map((pitch5, k2) => pitch5 - hand.strings[low + k2]);
+        if (places.some((p) => p < -OPEN || p > hand.reach + OPEN)) continue;
+        const cost = held2(places, hand.frame) ? 0 : held2(places, hand.extended) ? 1 / 2 : null;
+        if (cost != null && (!best || cost < best.cost)) best = { playable: true, cost, strings: order4.map((_, k2) => low + k2), places: places.map((p) => Math.abs(p) < OPEN ? 0 : +p.toFixed(6)), pitches: [...order4] };
+      }
+      return best ?? { playable: false };
+    }
+    for (const m of idiom.together?.multiphonics ?? []) if (pitches.every((p) => m.pitches.some((q3) => Math.abs(p - q3) <= NEAR))) return { playable: true, cost: 0, multiphonic: m.id, pitches: [...m.pitches] };
+    return { playable: false };
+  };
+  const fingering = (pitches, seconds2, { random: random2, temperature = 1 / 4 }) => {
+    if (!hand) return null;
+    const states = pitches.map(statesAt);
+    const path = drawPath({
+      counts: states.map((list15) => list15.length),
+      cost: (k2, s) => states[k2][s].place / 12,
+      move: (k2, a, b) => {
+        const need = shiftOf2(states[k2][a], states[k2 + 1][b]);
+        return need ? need / Math.max(seconds2[k2], 1e-6) : 0;
+      },
+      temperature,
+      random: random2
+    });
+    return path && path.map((s, k2) => states[k2][s]);
+  };
+  const techniquesIn = ([low, high]) => Object.fromEntries(Object.entries(idiom.techniques ?? {}).map(([kind, ranges2]) => [kind, covered(ranges2, low, high)]));
+  return Object.freeze({ registerAt, move, walk, together: together2, handStates, fingering, techniquesIn, favours: idiom.favours ?? null, hand, law });
+}
+function byPosition(frontier) {
+  const best = /* @__PURE__ */ new Map();
+  for (const f of frontier) {
+    const known = best.get(f.state.position);
+    if (!known || f.cost < known.cost) best.set(f.state.position, f);
+  }
+  return [...best.values()];
+}
+function* permutations(list15) {
+  if (list15.length < 2) {
+    yield [...list15];
+    return;
+  }
+  for (let k2 = 0; k2 < list15.length; k2++) for (const rest of permutations([...list15.slice(0, k2), ...list15.slice(k2 + 1)])) yield [list15[k2], ...rest];
+}
+function covered(ranges2, low, high) {
+  if (!(high > low)) return 0;
+  const parts2 = ranges2.map(([a, b]) => [Math.max(a, low), Math.min(b, high)]).filter(([a, b]) => b > a).sort((x, y) => x[0] - y[0]);
+  let sum9 = 0, end = low;
+  for (const [a, b] of parts2) {
+    if (b > end) {
+      sum9 += b - Math.max(a, end);
+      end = b;
+    }
+  }
+  return +(sum9 / (high - low)).toFixed(6);
+}
+function drawPath({ counts, cost = () => 0, move = () => 0, temperature = 1, random: random2 }) {
+  const n = counts.length;
+  if (!n) return [];
+  const sum9 = (logs) => {
+    const most = Math.max(...logs);
+    return most === -Infinity ? -Infinity : most + Math.log(logs.reduce((s, x) => s + Math.exp(x - most), 0));
+  };
+  const forward2 = [Array.from({ length: counts[0] }, (_, s) => -cost(0, s) / temperature)];
+  for (let k2 = 1; k2 < n; k2++) forward2.push(Array.from({ length: counts[k2] }, (_, b) => -cost(k2, b) / temperature + sum9(forward2[k2 - 1].map((f, a) => f - move(k2 - 1, a, b) / temperature))));
+  const pick2 = (logs) => {
+    const most = Math.max(...logs);
+    if (most === -Infinity) return -1;
+    const weights = logs.map((x) => Math.exp(x - most)), total = weights.reduce((s, x) => s + x, 0);
+    let left = random2() * total;
+    for (let s = 0; s < weights.length; s++) {
+      if (!weights[s]) continue;
+      left -= weights[s];
+      if (left < 0) return s;
+    }
+    return weights.findLastIndex((x) => x > 0);
+  };
+  const path = new Array(n);
+  path[n - 1] = pick2(forward2[n - 1]);
+  if (path[n - 1] < 0) return null;
+  for (let k2 = n - 2; k2 >= 0; k2--) path[k2] = pick2(forward2[k2].map((f, a) => f - move(k2, a, path[k2 + 1]) / temperature));
+  return path;
+}
+var IDIOM_SCHEMA, FIRST, OPEN, NEAR, tryPlayer, handOf, heedPrice;
+var init_idiom = __esm({
+  "public/shared/performers/idiom.js"() {
+    init_wind_registers();
+    init_registry();
+    init_bowed_instruments();
+    IDIOM_SCHEMA = "musebots.idiom/1";
+    FIRST = 2;
+    OPEN = 0.05;
+    NEAR = 0.5;
+    tryPlayer = (model, path) => {
+      try {
+        return player(model, path);
+      } catch {
+        return null;
+      }
+    };
+    handOf = (id4, name12) => {
+      const own2 = tryPlayer(id4, `hand.${name12}`);
+      if (Number.isFinite(own2)) return own2;
+      const table = Object.fromEntries(BOWED.filter((i) => !i.given).flatMap((i) => {
+        const v = tryPlayer(i.name, `hand.${name12}`);
+        return Number.isFinite(v) ? [[i.name, v]] : [];
+      }));
+      try {
+        return Object.keys(table).length ? bySize(table, id4) : null;
+      } catch {
+        return null;
+      }
+    };
+    heedPrice = (weight3, beyond) => (needed, seconds2) => {
+      const share = seconds2 > 0 ? needed / seconds2 : needed > 0 ? Infinity : 0;
+      return share >= 1 ? beyond : -weight3 * Math.log1p(-share);
+    };
+  }
+});
+
 // public/shared/performers/figure-space.js
 function drawFigure(taste, random2) {
   const ranges2 = taste == null ? EVERY : FIGURE_SPACE.locate(taste);
@@ -12819,7 +13435,7 @@ function figurePoint(name12, at2 = {}) {
   const ranges2 = FIGURE_SPACE.locate(name12);
   return Object.freeze(Object.fromEntries(NAMES.map((key2) => [key2, at2[key2] ?? (ranges2[key2][0] + ranges2[key2][1]) / 2])));
 }
-function voicesOf({ from, to, moves, low, high, point, pitches, seconds: seconds2, sounding: sounding2 }) {
+function voicesOf({ from, to, moves, low, high, point, pitches, seconds: seconds2, sounding: sounding2, quickest = seconds2 }) {
   if (!(point.voices > 0) || !pitches?.length || !(seconds2 > 0)) return null;
   const top = Math.min(high, pitches.length - 1), cycle = point.order < 1 / 2 ? 1 : -1;
   const spans2 = (step2) => {
@@ -12833,12 +13449,13 @@ function voicesOf({ from, to, moves, low, high, point, pitches, seconds: seconds
   };
   const placed3 = (count13) => {
     const heard = streamingInterval(count13 * seconds2 - (sounding2 ?? seconds2)), notes = Math.floor((moves + 1) / count13);
+    const together2 = streamingInterval(count13 * quickest - (sounding2 ?? seconds2) * quickest / seconds2);
     for (let spacing2 = 1; spacing2 <= top - low; spacing2++) {
       let best = null;
       for (let held2 = 0; held2 < count13; held2++) {
         const landing = ((held2 + cycle * moves) % count13 + count13) % count13, start = from - held2 * spacing2, end = to - landing * spacing2;
         const drift = Math.ceil(Math.abs(end - start) / Math.max(1, notes - 1));
-        if (drift && !(spans2(drift).most <= heard)) continue;
+        if (drift && !(spans2(drift).most <= together2)) continue;
         if (!(spacing2 - drift >= 1 && spans2(spacing2 - drift).least > heard)) continue;
         let fits = true;
         for (let voice = 0; voice < count13 && fits; voice++) {
@@ -12991,10 +13608,10 @@ function plainPath({ from, to, moves, low, high, point }) {
   out[moves - 1] = to;
   return { path: out, chosen: trillSpans([from, ...out]).filter(({ at: at3, from: first }) => circled.slice(first, at3).every(Boolean)).map(({ at: at3 }) => at3) };
 }
-function figurePath({ from, to, moves, low = 0, high, point, pitches = null, seconds: seconds2 = null, sounding: sounding2 = seconds2, history = [from], voices: among2 = true }) {
+function figurePath({ from, to, moves, low = 0, high, point, pitches = null, seconds: seconds2 = null, sounding: sounding2 = seconds2, quickest = seconds2, history = [from], voices: among2 = true }) {
   if (!(moves >= 1)) return { path: [], apart: /* @__PURE__ */ new Set(), chosen: /* @__PURE__ */ new Set() };
   const top = high ?? (pitches ? pitches.length - 1 : Math.max(from, to));
-  const voices = among2 && Math.abs(to - from) <= moves ? voicesOf({ from, to, moves, low, high: top, point, pitches, seconds: seconds2, sounding: sounding2 }) : null;
+  const voices = among2 && Math.abs(to - from) <= moves ? voicesOf({ from, to, moves, low, high: top, point, pitches, seconds: seconds2, sounding: sounding2, quickest }) : null;
   const { path, apart: apart3 = /* @__PURE__ */ new Set(), chosen: circling = null } = voices ? compoundPath({ from, to, moves, voices }) : plainPath({ from, to, moves, low, high: top, point });
   const own2 = [from, ...path], line = [...history.slice(0, -1), ...own2], before4 = line.length - own2.length;
   const mine = circling ?? trillsIn(own2), chosen = new Set(mine), heard = new Set(trillsIn(line));
@@ -13003,18 +13620,34 @@ function figurePath({ from, to, moves, low = 0, high, point, pitches = null, sec
   }
   return { path, apart: apart3, chosen };
 }
-function figureWalk({ from, to, moves, low = 0, high, point, pitches = null, seconds: seconds2 = null, sounding: sounding2 = seconds2, history = [from], after = [], last: last2 = false, landing = Infinity, choices, rules = {}, strict = false, random: random2 = Math.random }) {
+function figureWalk({ from, to, moves, low = 0, high, point, pitches = null, seconds: seconds2 = null, sounding: sounding2 = seconds2, history = [from], times = null, after = [], last: last2 = false, landing = Infinity, choices, rules = {}, strict = false, random: random2 = Math.random }) {
   if (!(moves >= 1)) return [];
   const lengths = Array.isArray(seconds2) ? seconds2 : null, quickest = lengths ? Math.min(...lengths) : seconds2;
   const slowest = lengths ? Math.max(...lengths.length > 1 ? lengths.slice(0, -1) : lengths) : seconds2;
   const waiting = melodyRules(choices, rules).replay(history).leap;
-  const { path, apart: apart3, chosen } = figurePath({ from, to, moves, low, high, point, pitches, seconds: slowest, sounding: lengths ? slowest : sounding2, history, voices: !waiting });
+  const { path, apart: apart3, chosen } = figurePath({ from, to, moves, low, high, point, pitches, seconds: slowest, sounding: lengths ? slowest : sounding2, quickest, history, voices: !waiting });
   const top = high ?? Math.max(from, to, ...path);
   const near9 = [...Array(THIRD + THIRD + 1).keys()].map((d) => d - THIRD);
   const reach = Math.max(THIRD, ...path.map((index, k2) => Math.abs(index - (k2 ? path[k2 - 1] : from))));
   const loose = { ...rules, runMost: Infinity, trill: false, alike: Infinity };
   const tries = strict ? [rules] : [rules, { ...rules, runMost: Infinity }, { ...rules, runMost: Infinity, trill: false }, loose, { ...loose, heard: false }, { ...loose, heard: false, leaps: false, widest: Infinity }];
   const gapAt = (note) => lengths ? note ? lengths[note - 1] : quickest : note ? gapOf(seconds2, sounding2 ?? seconds2) : seconds2;
+  const timeOf = (note) => lengths ? note ? lengths[note - 1] : quickest : seconds2;
+  const idiom = choices?.idiom?.walk && pitches && quickest > 0 ? choices.idiom : null, walk = idiom && idiom.walk(heedPrice(idiom.weight, BEYOND));
+  const heed = (hand, a, b, k2) => {
+    const next2 = walk.next(hand, pitches[a], pitches[b], timeOf(k2 - 1));
+    return next2.length ? [next2, walk.least(next2) - walk.least(hand)] : [walk.start(pitches[b]), BEYOND];
+  };
+  const carried = () => {
+    if (!(times?.length >= history.length - 1)) return walk.start(pitches[from]);
+    let hand = walk.start(pitches[history[0]]);
+    for (let k2 = 1; k2 < history.length; k2++) {
+      const next2 = walk.next(hand, pitches[history[k2 - 1]], pitches[history[k2]], times[k2 - 1]);
+      hand = next2.length ? next2 : walk.start(pitches[history[k2]]);
+    }
+    return hand;
+  };
+  const held2 = walk ? carried() : null;
   const alone = (state2, k2, index) => {
     if (!state2.waited || !pitches || !(quickest > 0) || apart3.has(k2) || apart3.has(k2 - 1)) return false;
     return state2.before != null && heardApart(pitches[state2.before], pitches[state2.at], pitches[index], gapAt(k2 - 1));
@@ -13022,7 +13655,7 @@ function figureWalk({ from, to, moves, low = 0, high, point, pitches = null, sec
   for (const asked of tries) {
     const kept = melodyRules(choices, asked), runMost = asked.runMost ?? choices.runMost, alikeMost = asked.alike ?? ALIKE_MOST;
     const earlier = history.slice(0, -1);
-    let states = [{ at: from, before: earlier.at(-1), rule: kept.replay(history), waited: kept.replay(earlier).leap, cost: 0, line: [] }];
+    let states = [{ at: from, before: earlier.at(-1), rule: kept.replay(history), waited: kept.replay(earlier).leap, cost: 0, line: [], hand: held2 }];
     for (let k2 = 1; k2 <= moves && states.length; k2++) {
       const left = moves - k2, ideal = path[k2 - 1], next2 = [];
       for (const state2 of states) {
@@ -13035,7 +13668,9 @@ function figureWalk({ from, to, moves, low = 0, high, point, pitches = null, sec
           const line = [...state2.line, index];
           if (k2 === moves && rule2.len + runAtStart([index, ...after], rule2.dir) > runMost) continue;
           if (k2 === moves && rule2.same + alikeAtStart(after, index) > alikeMost) continue;
-          next2.push({ at: index, before: state2.at, rule: rule2, waited: state2.rule.leap, line, cost: state2.cost + Math.abs(index - ideal) + JITTER * random2() });
+          if (k2 === moves && rule2.leap && !answeredAfter(after, index, rule2.leap, asked.acrossRepeats)) continue;
+          const [hand, heeded] = walk ? heed(state2.hand, state2.at, index, k2) : [null, 0];
+          next2.push({ at: index, before: state2.at, rule: rule2, waited: state2.rule.leap, line, hand, cost: state2.cost + Math.abs(index - ideal) + heeded + JITTER * random2() });
         }
       }
       next2.sort((a, b) => a.cost - b.cost);
@@ -13054,16 +13689,18 @@ function figureWalk({ from, to, moves, low = 0, high, point, pitches = null, sec
   }
   return strict ? null : Array.from({ length: moves }, (_, k2) => from + Math.round((k2 + 1) * (to - from) / moves));
 }
-var THIRD, BEAM, JITTER, SKEW, SKEWED, PAIR, VOICE_NOTES, FIGURE_DIMENSIONS, NAMES, FIGURE_NAMES, asRange, FIGURE_SPACE, EVERY, clamp2, alikeAtStart;
+var THIRD, BEAM, JITTER, BEYOND, SKEW, SKEWED, PAIR, VOICE_NOTES, FIGURE_DIMENSIONS, NAMES, FIGURE_NAMES, asRange, FIGURE_SPACE, EVERY, clamp2, alikeAtStart, answeredAfter;
 var init_figure_space = __esm({
   "public/shared/performers/figure-space.js"() {
     init_registry();
     init_style_space();
     init_melody_rules();
     init_streams();
+    init_idiom();
     THIRD = setting("figure-space", "third");
     BEAM = setting("figure-space", "beam");
     JITTER = setting("figure-space", "jitter");
+    BEYOND = setting("idiom", "beyond");
     SKEW = setting("figure-space", "skew");
     SKEWED = new Set(setting("figure-space", "skewed"));
     PAIR = setting("figure-space", "pair");
@@ -13093,6 +13730,10 @@ var init_figure_space = __esm({
     alikeAtStart = (after, index) => {
       const k2 = after.findIndex((next2) => next2 !== index);
       return k2 < 0 ? after.length : k2;
+    };
+    answeredAfter = (after, index, leap, acrossRepeats) => {
+      const next2 = acrossRepeats ? after.find((note) => note !== index) : after[0];
+      return next2 == null ? !after.length : answers(next2 - index, leap);
     };
   }
 });
@@ -13712,29 +14353,29 @@ var init_meter_tactus = __esm({
 // public/shared/dynamics.js
 function beyondOf(velocity) {
   const v = Number(velocity) || 0, { ppp, fff } = DYNAMIC_VELOCITY;
-  if (v < ppp) return -BEYOND.marks * Math.min(1, (ppp - v) / ppp);
-  if (v > fff) return BEYOND.marks * Math.min(1, (v - fff) / (BEYOND.loudest - fff));
+  if (v < ppp) return -BEYOND2.marks * Math.min(1, (ppp - v) / ppp);
+  if (v > fff) return BEYOND2.marks * Math.min(1, (v - fff) / (BEYOND2.loudest - fff));
   return 0;
 }
 function velocityBeyond(level) {
   const x = Number(level) || 0, { ppp, fff } = DYNAMIC_VELOCITY;
-  return x < 0 ? ppp * (1 - Math.min(1, x * x)) : fff + (BEYOND.loudest - fff) * Math.min(1, (x - 1) ** 2);
+  return x < 0 ? ppp * (1 - Math.min(1, x * x)) : fff + (BEYOND2.loudest - fff) * Math.min(1, (x - 1) ** 2);
 }
-var DYNAMICS, DYNAMIC_VELOCITY, BEYOND, MARKS, dynamicOf, scoredDynamicOf;
+var DYNAMICS, DYNAMIC_VELOCITY, BEYOND2, MARKS, dynamicOf, scoredDynamicOf;
 var init_dynamics = __esm({
   "public/shared/dynamics.js"() {
     DYNAMICS = Object.freeze([["ppp", 0.19], ["pp", 0.32], ["p", 0.44], ["mp", 0.57], ["mf", 0.69], ["f", 0.82], ["ff", 0.94], ["fff", 1.01]]);
     DYNAMIC_VELOCITY = Object.freeze({ ppp: 16 / 127, pp: 33 / 127, p: 49 / 127, mp: 64 / 127, mf: 80 / 127, f: 96 / 127, ff: 112 / 127, fff: 1 });
-    BEYOND = Object.freeze({ marks: 5, loudest: 1.5, shrink: 0.6 });
+    BEYOND2 = Object.freeze({ marks: 5, loudest: 1.5, shrink: 0.6 });
     MARKS = Object.freeze([
-      ...Array.from({ length: BEYOND.marks }, (_, k2) => "p".repeat(3 + BEYOND.marks - k2)),
+      ...Array.from({ length: BEYOND2.marks }, (_, k2) => "p".repeat(3 + BEYOND2.marks - k2)),
       ...DYNAMICS.map(([m]) => m),
-      ...Array.from({ length: BEYOND.marks }, (_, k2) => "f".repeat(4 + k2))
+      ...Array.from({ length: BEYOND2.marks }, (_, k2) => "f".repeat(4 + k2))
     ]);
     dynamicOf = (velocity) => {
       const beyond = beyondOf(velocity);
-      if (beyond <= -0.5) return "p".repeat(3 + Math.min(BEYOND.marks, Math.round(-beyond)));
-      if (beyond >= 0.5) return "f".repeat(3 + Math.min(BEYOND.marks, Math.round(beyond)));
+      if (beyond <= -0.5) return "p".repeat(3 + Math.min(BEYOND2.marks, Math.round(-beyond)));
+      if (beyond >= 0.5) return "f".repeat(3 + Math.min(BEYOND2.marks, Math.round(beyond)));
       return scoredDynamicOf(velocity);
     };
     scoredDynamicOf = (velocity) => DYNAMICS.find(([, limit]) => velocity < limit)?.[0] ?? "fff";
@@ -15171,7 +15812,8 @@ function openingTime(seed3) {
     tempoUnit: drawn4.tempoUnit,
     ...drawn4.tala ? { tala: drawn4.tala } : {}
   });
-  const opening = Object.freeze({ meter, bpm, phraseSeconds, tala: meter.groups, density });
+  const rhythm2 = Object.freeze(Object.fromEntries(Object.entries(OPENING_TIME.rhythm).map(([name12, [low, high]]) => [name12, +(low + (high - low) * random2()).toFixed(3)])));
+  const opening = Object.freeze({ meter, bpm, phraseSeconds, tala: meter.groups, density, rhythm: rhythm2 });
   openings.set(key2, opening);
   if (openings.size > CACHED) openings.delete(openings.keys().next().value);
   return opening;
@@ -15192,6 +15834,17 @@ var init_opening_time = __esm({
       phraseBarsAtMost: 8,
       // The band's density before any is heard, drawn between these (ours).
       density: Object.freeze([0.35, 0.85]),
+      // Its rhythm's shares (line-rhythm.js RHYTHM_SHARES, in their order), each drawn between these: a syncopation's meter M
+      // "usually weighted toward L" and the length within it "usually ... toward 0, but it's not the only possible one" (the
+      // owner, 4 November 2026), so most pieces lean so and some away; the rest anywhere (ours).
+      rhythm: Object.freeze({
+        tuplets: Object.freeze([0, 1]),
+        syncopation: Object.freeze([0, 1]),
+        length: Object.freeze([0, 1]),
+        meter: Object.freeze([0.3, 1]),
+        repeats: Object.freeze([0, 1]),
+        within: Object.freeze([0, 0.7])
+      }),
       // The note a drawn meter's tempo counts (tempo-range.js tempoUnit): the quarter, as the research reports count every
       // tempo (research/meter/MUSEBOTS_METER_SELECTION_RESEARCH_REPORT.md: "All BPM values below mean quarter-note BPM").
       reference: 4
@@ -15622,22 +16275,36 @@ function chooseMotif({ groups, density, heard = [], random: random2, choices = L
   };
 }
 function fitMotif(motif, { groups, density, heard = [], random: random2, choices, beatSeconds = null, bar = null }) {
-  const same4 = motif?.groups?.length === groups.length && motif.groups.every((group2, i) => group2.first === groups[i].first && group2.count === groups[i].count);
-  if (same4) return { motif: motif.cells.every((cell) => cell.scoreTime?.axis === "felt-beats") ? motif : { ...motif, cells: motif.cells.map((cell) => retimeCell(cell)) } };
-  if (!motif?.cells?.length) {
+  const theme = motif?.theme ?? motif;
+  if (!theme?.cells?.length) {
     const { motif: chosen, ...choice } = chooseMotif({ groups, density, heard, random: random2, choices, beatSeconds, bar });
     return { motif: chosen, choice };
   }
-  const grammar = choices.grammars.includes(motif.grammar) ? motif.grammar : null;
-  const fresh = makeMotif({ groups, density: Number.isFinite(motif.density) ? motif.density : density, grammar, random: random2, choices, beatSeconds, bar });
-  const old = soundingCells(motif.cells), sounding2 = fresh.cells.flatMap((cell, k2) => cell.rest ? [] : [k2]);
-  const steps = recovered(sounding2.map((k2, j2) => j2 ? old[j2]?.step ?? fresh.cells[k2].step : 0), choices);
-  const core7 = new Set(sounding2.flatMap((k2, j2) => j2 <= 1 || j2 === sounding2.length - 1 || old[j2]?.core ? [k2] : []));
+  if (sameGroups(theme.groups, groups)) return { motif: theme.cells.every((cell) => cell.scoreTime?.axis === "felt-beats") ? theme : { ...theme, cells: theme.cells.map((cell) => retimeCell(cell)) } };
+  return { motif: refitMotif(theme, groups, choices) };
+}
+function refitMotif(theme, groups, choices = LINE) {
+  const m = theme.groups.length, n = groups.length, sourceOf2 = (j2) => j2 === n - 1 ? m - 1 : j2 < m - 1 ? j2 : (j2 - (m - 1)) % Math.max(1, m - 1);
+  let offset = 0;
+  const offsets2 = theme.cells.map((cell, k2) => offset += k2 ? cell.step : 0);
+  const placed3 = [];
+  groups.forEach((group2, j2) => {
+    const source3 = theme.groups[sourceOf2(j2)], shift = authoredFraction(group2.first - source3.first);
+    theme.cells.forEach((cell, k2) => {
+      const at2 = cellInterval(cell).at, within3 = at2.sub(authoredFraction(source3.first));
+      if (within3.sign() >= 0 && within3.lt(authoredFraction(Math.min(source3.count, group2.count)))) placed3.push({ k: k2, at: at2.add(shift) });
+    });
+  });
+  const beats2 = groups.reduce((sum9, group2) => sum9 + group2.count, 0);
+  const sounding2 = placed3.flatMap((cell, i) => theme.cells[cell.k].rest ? [] : [i]);
+  const steps = recovered(sounding2.map((i, j2) => j2 ? offsets2[placed3[i].k] - offsets2[placed3[sounding2[j2 - 1]].k] : 0), choices);
+  const core7 = new Set(sounding2.flatMap((i, j2) => j2 <= 1 || j2 === sounding2.length - 1 || theme.cells[placed3[i].k].core ? [i] : []));
   let j = 0;
-  return { motif: Object.freeze({ ...fresh, cells: Object.freeze(fresh.cells.map((cell, k2) => {
-    const { core: _, ...plain9 } = cell, step2 = cell.rest ? 0 : steps[j++];
-    return Object.freeze({ ...plain9, step: step2, ...core7.has(k2) || cell.rest || fresh.cells[k2 + 1]?.rest ? { core: true } : {} });
-  })) }) };
+  const cells = placed3.map(({ k: k2, at: at2 }, i) => {
+    const { core: _, rest, source: source3, ...plain9 } = theme.cells[k2], end = placed3[i + 1]?.at ?? authoredFraction(beats2);
+    return Object.freeze(rhythmCell(at2, end.sub(at2), { ...plain9, step: rest ? 0 : steps[j++], from: k2, ...core7.has(i) || rest || placed3[i + 1] && theme.cells[placed3[i + 1].k].rest ? { core: true } : {}, ...rest ? { rest: true } : {}, ...source3 ? { source: source3 } : {} }));
+  });
+  return Object.freeze({ ...theme, cells: Object.freeze(cells), beats: beats2, groups: Object.freeze(groups.map((group2) => Object.freeze({ ...group2 }))), theme });
 }
 function simplifyMotif(motif, amount, random2) {
   if (!(amount > 0)) return motif;
@@ -15687,7 +16354,7 @@ function simplifyMotif(motif, amount, random2) {
     let h = 0;
     return cells.map((cell) => {
       const source3 = cell.sources[cell.offsets.indexOf(cell.offset)] ?? null;
-      return { ...rhythmCell(cellInterval(cell).at, cellInterval(cell).duration), step: cell.rest ? 0 : heardSteps[h++], ...cell.core ? { core: true } : {}, ...cell.rest ? { rest: true } : {}, ...source3 ? { source: source3 } : {} };
+      return { ...rhythmCell(cellInterval(cell).at, cellInterval(cell).duration), step: cell.rest ? 0 : heardSteps[h++], ...cell.core ? { core: true } : {}, ...cell.rest ? { rest: true } : {}, ...source3 ? { source: source3 } : {}, ...Number.isInteger(cell.from) ? { from: cell.from } : {} };
     });
   };
   const keeps = (cells) => {
@@ -15855,6 +16522,18 @@ function contour({ segments, top, variation, climax, avoid, rangeSteps, lead = n
   let apexTarget = floor5 + span2;
   if (apexTarget === avoid) apexTarget += apexTarget < top && apexTarget + 1 - floor5 <= rangeSteps ? 1 : -1;
   const rules = melodyRules(choices, { acrossRepeats: true });
+  const idiom = choices.idiom?.walk && pitches && secondsIn ? choices.idiom : null;
+  const walk = idiom && idiom.walk(heedPrice(idiom.weight, RULE));
+  const heed = (frontier, line2, notes, times) => {
+    const all = line2.concat(notes);
+    let at2 = frontier ?? walk.start(pitches[all[0]]);
+    const before4 = walk.least(at2);
+    for (let k2 = Math.max(1, line2.length); k2 < all.length; k2++) {
+      const next2 = walk.next(at2, pitches[all[k2 - 1]], pitches[all[k2]], times[k2 - 1]);
+      at2 = next2.length ? next2 : walk.start(pitches[all[k2]]).map((f) => ({ ...f, cost: walk.least(at2) + RULE }));
+    }
+    return [at2, walk.least(at2) - before4];
+  };
   const cost = (line2, notes, apex2, silences = [], from = null) => {
     const all = line2.concat(notes), first2 = Math.max(1, line2.length);
     let total = 0;
@@ -15897,30 +16576,35 @@ function contour({ segments, top, variation, climax, avoid, rangeSteps, lead = n
     if (to < climbFrom + Math.min(n - 1, 1)) to = climbFrom + Math.min(n - 1, 1);
     return { desired: n > 1 ? Math.round(climbFrom + (to - climbFrom) * j / (n - 1)) : to, climbFrom };
   };
-  let states = [{ line: [], starts: [], silences: [], cost: 0, ideaStart: null, climbFrom: null }];
+  let states = [{ line: [], times: [], hand: null, starts: [], silences: [], cost: 0, ideaStart: null, climbFrom: null }];
   segments.forEach((segment2, s) => {
     if (segment2.role === "cadence" || segment2.role === "pickup") return;
     const offsets2 = offsetsOf2(segment2.cells), apex2 = s === apexSegment, breathes = s > 0 && segments[s - 1].comma;
     const shapes2 = [[offsets2, 0], ...segment2.role === "continuation" || segment2.role === "answer" ? [[offsets2.map((offset) => -offset), 0.5]] : []].map(([shape, extra]) => [apex2 ? unique9(shape, segment2.cells.map((cell) => Boolean(cell.core))) : shape, extra]);
     const middle3 = (list15) => list15.reduce((sum9, value4) => sum9 + value4, 0) / list15.length, wantedMiddle = middle3(offsets2);
+    const seconds2 = idiom ? segment2.cells.map((cell) => secondsIn({ ...cell, bar: segment2.bar })) : null;
     const next2 = [];
     for (const state2 of states) {
       const { desired, climbFrom = state2.climbFrom } = wanted(state2, segment2, s, offsets2);
       const weight3 = segment2.role === "idea" && Number.isInteger(lead) ? 2 : 1;
       const silences = breathes ? [...state2.silences, state2.line.length] : state2.silences, waiting = pending2(state2.line, silences)[0], walked2 = state2.line.length ? rules.replay(state2.line, { silences }) : null;
       const keep3 = (notes, extra) => {
-        const line2 = state2.line.concat(notes), after = segment2.comma ? [...silences, line2.length] : silences;
+        const line2 = state2.line.concat(notes), after = segment2.comma ? [...silences, line2.length] : silences, times = seconds2 ? state2.times.concat(seconds2) : null;
+        const [hand, heeded] = idiom ? heed(state2.hand, state2.line, notes, times) : [null, 0];
         next2.push({
           line: line2,
+          times,
+          hand,
           starts: [...state2.starts, notes[0]],
           silences,
           ideaStart: state2.ideaStart ?? (segment2.role === "idea" ? notes[0] : null),
           climbFrom,
-          cost: state2.cost + weight3 * Math.abs(middle3(notes) - desired - wantedMiddle) + extra + cost(state2.line, notes, apex2, silences, walked2) + pending2(line2, after)[0] - waiting
+          cost: state2.cost + weight3 * Math.abs(middle3(notes) - desired - wantedMiddle) + extra + cost(state2.line, notes, apex2, silences, walked2) + heeded + pending2(line2, after)[0] - waiting
         });
       };
+      const exact12 = segment2.role === "idea" && Number.isInteger(lead) && offsets2.every((offset) => lead + offset >= 0 && lead + offset <= top);
       let fitted2 = false;
-      for (const [shape, extra] of shapes2) for (let start = 0; start <= top; start++) {
+      for (const [shape, extra] of shapes2) for (let start = exact12 ? lead : 0; start <= (exact12 ? lead : top); start++) {
         const notes = shape.map((offset) => start + offset);
         if (notes.some((index) => index < 0 || index > top)) continue;
         fitted2 = true;
@@ -15948,7 +16632,7 @@ function contour({ segments, top, variation, climax, avoid, rangeSteps, lead = n
   const cadence = segments.find((segment2) => segment2.role === "cadence"), lastPlaced = segments.findLast((segment2) => segment2.role !== "cadence" && segment2.role !== "pickup");
   const figures2 = mulberry32(fnv1a(`${shapeKey}:cadence`)), point = drawFigure(choices.figures ?? null, figures2);
   const cadenceSeconds = cadence && secondsIn ? cadence.cells.map((cell) => secondsIn({ ...cell, bar: cadence.bar })) : null;
-  const approach = ({ from, to, count: count12, low, high, history, strict = true }) => figureWalk({ from, to, moves: count12, low, high, point, pitches, seconds: cadenceSeconds, history, last: true, choices, strict, random: figures2 });
+  const approach = ({ from, to, count: count12, low, high, history, times = null, strict = true }) => figureWalk({ from, to, moves: count12, low, high, point, pitches, seconds: cadenceSeconds, history, times, last: true, choices, rules: { acrossRepeats: true }, strict, random: figures2 });
   const finished = states.map((state2) => {
     const line2 = [...state2.line];
     let extra = 0;
@@ -15958,17 +16642,17 @@ function contour({ segments, top, variation, climax, avoid, rangeSteps, lead = n
       const aim = floor5 + Math.round(landing * span2), lowest = Math.min(Math.max(aim, from - 2 * count12, 0), ceiling);
       let steps = null, target = lowest;
       for (const tonic of (finalTargets ?? []).filter((index) => index <= ceiling).sort((a, b) => Math.abs(a - floor5) - Math.abs(b - floor5) || a - b)) {
-        steps = approach({ from, to: tonic, count: count12, low: Math.min(low, tonic), high: ceiling, history: line2 });
+        steps = approach({ from, to: tonic, count: count12, low: Math.min(low, tonic), high: ceiling, history: line2, times: state2.times });
         if (steps) {
           extra += Math.abs(tonic - floor5) * 0.5;
           break;
         }
       }
       if (!steps) {
-        for (; target <= ceiling && !steps; target++) steps = approach({ from, to: target, count: count12, low, high: ceiling, history: line2 });
+        for (; target <= ceiling && !steps; target++) steps = approach({ from, to: target, count: count12, low, high: ceiling, history: line2, times: state2.times });
         if (steps) extra += (target - 1 - lowest) * 0.5 + (finalTargets?.length ? RULE / 4 : 0);
         else {
-          steps = approach({ from, to: lowest, count: count12, low, high: ceiling, history: line2, strict: false });
+          steps = approach({ from, to: lowest, count: count12, low, high: ceiling, history: line2, times: state2.times, strict: false });
           extra += RULE;
         }
       }
@@ -16069,7 +16753,7 @@ function runContour({ count: count12, low = 0, high, from = low, apex = high, re
   }
   return null;
 }
-function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 0.5, fioriture = 0, motif = null, motifDensity = null, phraseIndex = 0, previousApex = null, climax = false, pickup: asked = null, lead = null, heard = [], final = null, coreOnly = false, random: random2, choices = LINE }) {
+function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 0.5, fioriture = 0, motif = null, motifDensity = null, phraseIndex = 0, previousApex = null, climax = false, pickup: asked = null, lead = null, heard = [], final = null, coreOnly = false, variation: told = null, nextPhrase = null, random: random2, choices = LINE }) {
   const pickup = final ? null : asked;
   const pitches = linePitches(pool, register);
   if (pitches.length < 3) return { status: "declined", reason: "fewer than three pitches in its register to play a line with", notes: [] };
@@ -16079,16 +16763,16 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   const quickest = choices.shortest ?? LINE.shortest, shares = choices.rhythm ? rhythmShares(choices.rhythm) : null, units = beats2.map((beat) => beat.length / subdivision);
   const bar = shares ? barOf({ groups, beatSeconds: beats2.map((beat) => beat.length * tick), unitsPerBeat: units }) : null;
   const motifBar = shares ? barOf({ groups, beatSeconds: beats2.map(() => Math.min(...beats2.map((beat) => beat.length * tick))), unitsPerBeat: units }) : null;
-  const notesIn = (at2, end, count12) => {
-    const tree = spanTree({ at: at2, end }, { bar, quickest, shares, random: random2 }), most2 = leavesOf(tree);
-    return noteSpans(placeNotes(tree, Math.max(1, Math.min(most2, count12(most2))), random2), end);
+  const notesIn = (at2, end, count12, draw = random2) => {
+    const tree = spanTree({ at: at2, end }, { bar, quickest, shares, random: draw }), most2 = leavesOf(tree);
+    return noteSpans(placeNotes(tree, Math.max(1, Math.min(most2, count12(most2))), draw), end);
   };
   const { motif: mine, choice = null } = fitMotif(motif, { groups, density: motifDensity ?? choices.motifDensity, heard, random: random2, choices, beatSeconds, bar: motifBar });
   let hash16 = 2166136261;
   if (final) for (const character of (mine?.cells ?? []).map((cell) => `${cell.at}:${cell.beats}:${cell.step}`).join("|")) hash16 = Math.imul(hash16 ^ character.charCodeAt(0), 16777619) >>> 0;
   const [fewest, most] = choices.recall ?? [0, 0], recalls = Boolean(final) && (Math.imul(hash16, 2654435761) >>> 8) / 16777216 < fewest + (most - fewest) * ((hash16 >>> 8) / 16777216);
   const own2 = recalls && final?.motif?.cells?.length ? fitMotif(final.motif, { groups, density: motifDensity ?? choices.motifDensity, heard, random: random2, choices, beatSeconds, bar: motifBar }).motif : mine;
-  const variation = recalls ? "return" : choices.variations[phraseIndex % choices.variations.length];
+  const variation = recalls ? "return" : told ?? choices.variations[phraseIndex % choices.variations.length];
   const drawOf = (k2) => (Math.imul(hash16, [2246822519, 3266489917][k2]) >>> 8) / 16777216, shape = choices.recallCadence ?? { augment: 0, fragment: 0 };
   const cadenceShape = recalls ? { augment: drawOf(0) < shape.augment ? 2 : 1, keep: +(1 - shape.fragment * drawOf(1)).toFixed(3) } : null;
   const tickOf = (bar2, position2) => {
@@ -16101,7 +16785,9 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
     return (bar2 * pulses + (beat?.start ?? 0) + (beat?.length ?? pulses / beats2.length) * (fraction4 + extra)) * tick;
   };
   const made2 = Number.isFinite(own2.density) ? own2.density : density;
-  const sparser = clamp4((made2 - density) / Math.max(made2, 1e-9), 0, 1), played = simplifyMotif(own2, sparser, random2);
+  const theme = own2.theme ?? own2, themeKey = motifKey(theme);
+  const numbered = own2.cells.every((cell) => Number.isInteger(cell.from)) ? own2 : { ...own2, cells: own2.cells.map((cell, k2) => ({ ...cell, from: k2 })) };
+  const sparser = clamp4((made2 - density) / Math.max(made2, 1e-9), 0, 1), played = simplifyMotif(numbered, sparser, random2);
   const segments = phraseSegments({
     bars,
     motif: played,
@@ -16127,7 +16813,8 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   const motifSpan = ideaOffsets.length ? Math.max(...ideaOffsets) - Math.min(...ideaOffsets) : 0;
   const rangeSteps = Math.max(3, motifSpan + 3, Math.round(choices.phraseRange * (climax ? 4 / 3 : 1) / Math.max(1e-9, semitoneStep)));
   const avoid = previousApex == null ? null : pitches.findIndex((pitch5) => Math.abs(pitch5 - previousApex) < 0.5);
-  const leadIndex = Number.isFinite(lead) ? pitches.reduce((best, pitch5, k2) => Math.abs(pitch5 - lead) < Math.abs(pitches[best] - lead) ? k2 : best, 0) : null;
+  const indexNear = (value4) => pitches.reduce((best, pitch5, k2) => Math.abs(pitch5 - value4) < Math.abs(pitches[best] - value4) ? k2 : best, 0);
+  const leadIndex = Number.isFinite(lead) ? indexNear(lead) : null;
   const tonic = Number(final?.tonic), classOf2 = (pitch5) => ((pitch5 - tonic) % 12 + 12) % 12, apart3 = (pitch5) => Math.min(classOf2(pitch5), 12 - classOf2(pitch5));
   const nearest3 = final && Number.isFinite(tonic) ? Math.min(...pitches.map(apart3)) : null;
   const finalTargets = nearest3 != null && nearest3 <= 0.5 ? pitches.flatMap((pitch5, k2) => Math.abs(apart3(pitch5) - nearest3) < 1e-6 ? [k2] : []) : null;
@@ -16140,13 +16827,13 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   let landing = null;
   if (pickupSegment) {
     const count12 = pickupSegment.cells.length, direction2 = pickupSegment.fill === "up" ? 1 : -1, tone = line.at(-1);
-    const nextVariation = choices.variations[(phraseIndex + 1) % choices.variations.length];
+    const nextVariation = nextPhrase?.variation ?? choices.variations[(phraseIndex + 1) % choices.variations.length];
     const nextOffsets = (() => {
       let sum9 = 0;
       return own2.cells.map((cell, k2) => sum9 += k2 ? nextVariation === "inversion" ? -cell.step : cell.step : 0);
     })();
     const low = -Math.min(...nextOffsets), high = top - Math.max(...nextOffsets) - 3;
-    landing = clamp4(low <= high ? clamp4(tone + direction2 * (count12 + 1), low, high) : tone + direction2 * (count12 + 1), 0, top);
+    landing = Number.isFinite(nextPhrase?.lead) ? indexNear(nextPhrase.lead) : clamp4(low <= high ? clamp4(tone + direction2 * (count12 + 1), low, high) : tone + direction2 * (count12 + 1), 0, top);
     const reflect = (index) => {
       let value4 = index;
       for (let guard = 0; guard < 4 && (value4 < 0 || value4 > top); guard++) value4 = value4 < 0 ? -value4 : 2 * top - value4;
@@ -16157,15 +16844,16 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   const skeleton = [...line, ...pickupRun];
   const more = clamp4((density - made2) / Math.max(1 - made2, 1e-9), 0, 1);
   const division = (cell) => {
-    const { at: at2, end, duration } = cellInterval(cell), covered2 = beats2.slice(at2.floor(), Math.ceil(end.toNumber()));
-    const minimum2 = Math.min(...covered2.map((beat) => beat.length * tick)), span2 = duration.toNumber() * minimum2;
+    const { at: at2, end, duration } = cellInterval(cell), covered3 = beats2.slice(at2.floor(), Math.ceil(end.toNumber()));
+    const minimum2 = Math.min(...covered3.map((beat) => beat.length * tick)), span2 = duration.toNumber() * minimum2;
     const most2 = Math.floor(span2 / (choices.shortest ?? LINE.shortest) + 1e-9);
     return most2 < 2 ? 1 : Math.min(most2, divisionOf(density, { seconds: span2, choices }));
   };
   const holds = (cell) => bar ? bar.secondsOf(cellInterval(cell).at, cellInterval(cell).end) >= FIGURE_LEAST * quickest - 1e-9 : cell.beats >= 1 - 1e-9;
-  const figureOf = (cell) => notesIn(cellInterval(cell).at, cellInterval(cell).end, (most2) => countOf(density, most2, { least: FIGURE_LEAST }));
-  const held2 = played.cells.flatMap((cell, k2) => holds(cell) && !cell.rest && !played.cells[k2 + 1]?.rest ? [k2] : []), chosen = drawnSet(held2.length, held2.length * more, random2);
-  const divided = played.cells.map((cell, k2) => chosen.has(held2.indexOf(k2)) && held2.includes(k2));
+  const figureOf = (cell) => {
+    const { at: at2, end } = cellInterval(cell);
+    return notesIn(at2, end, (most2) => countOf(density, most2, { least: FIGURE_LEAST }), mulberry32(fnv1a(`${themeKey}:${cell.from}:${at2}:${end}`)));
+  };
   const skeletonCells = segments.flatMap((segment2, s) => segment2.cells.map((cell, k2) => ({
     ...cell,
     bar: segment2.bar,
@@ -16173,17 +16861,23 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
     segment: s,
     ...segment2.comma && k2 === segment2.cells.length - 1 ? { comma: true } : {}
   })));
+  const open = (cell, k2) => !(cell.cadence || cell.fill || cell.comma || (cell.role === "idea" || cell.role === "repetition" || cell.role === "answer") && cell.cell <= 1) && holds(cell) && skeleton[k2 + 1] !== skeleton[k2];
+  const ranked = [...drawnSet(theme.cells.length, theme.cells.length, mulberry32(fnv1a(`${themeKey}:divided`)))], rank = (from) => ranked.indexOf(from);
+  const taken = new Set(skeletonCells.flatMap((cell, k2) => open(cell, k2) ? [cell.from] : []));
+  const held2 = played.cells.filter((cell, k2) => holds(cell) && !cell.rest && !played.cells[k2 + 1]?.rest && taken.has(cell.from)).sort((a, b) => rank(a.from) - rank(b.from));
+  const divided = new Set(held2.slice(0, clamp4(Math.round(held2.length * more), 0, held2.length)).map((cell) => cell.from));
   const cells = [], indices = [], lowest = Math.min(...line);
+  const onsetOf = (cell) => tickOf(cell.bar, cellInterval(cell).at).toNumber() * tick, onsets = [];
   skeletonCells.forEach((cell, k2) => {
-    const stated = (cell.role === "idea" || cell.role === "repetition" || cell.role === "answer") && cell.cell <= 1;
-    const plain9 = cell.cadence || cell.fill || cell.comma || stated || !holds(cell) || !divided[cell.cell] || skeleton[k2 + 1] === skeleton[k2];
+    const plain9 = !open(cell, k2) || !divided.has(cell.from);
     const spans2 = plain9 ? null : bar ? figureOf(cell) : null, parts2 = spans2?.length ?? (plain9 ? 1 : division(cell));
     if (parts2 <= 1) {
       cells.push(cell);
       indices.push(skeleton[k2]);
+      onsets.push(onsetOf(cell));
       return;
     }
-    const next2 = skeleton[k2 + 1] ?? skeleton[k2], figures2 = mulberry32(fnv1a(`${skeleton.join(",")}:${k2}:${parts2}`));
+    const next2 = skeleton[k2 + 1] ?? skeleton[k2], figures2 = mulberry32(fnv1a(`${themeKey}:${cell.from}:${parts2}:${next2 - skeleton[k2]}`));
     const partOf = (j) => spans2?.[j] ?? { at: cellInterval(cell).at.add(cellInterval(cell).duration.mul(new Rational(j, parts2))), duration: cellInterval(cell).duration.div(parts2) };
     const lengthOf = ({ at: at2, duration }) => tickOf(cell.bar, at2.add(duration)).sub(tickOf(cell.bar, at2)).toNumber() * tick;
     const figure2 = figureWalk({
@@ -16196,14 +16890,17 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
       pitches,
       seconds: [...Array(parts2).keys()].slice(1).concat(parts2 - 1).map((j) => lengthOf(partOf(j))),
       history: [...indices, skeleton[k2]],
+      times: [...onsets, onsetOf(cell)].slice(1).map((onset, j) => onset - onsets[j]),
       after: skeleton.slice(k2 + 2),
       choices,
+      rules: { acrossRepeats: true },
       random: figures2
     });
     for (let j = 0; j < parts2; j++) {
-      const { at: at2, duration } = partOf(j);
-      cells.push(rhythmCell(at2, duration, { ...cell, figure: j > 0 }));
+      const { at: at2, duration } = partOf(j), part = rhythmCell(at2, duration, { ...cell, figure: j > 0 });
+      cells.push(part);
       indices.push(j ? figure2[j - 1] : skeleton[k2]);
+      onsets.push(onsetOf(part));
     }
   });
   const notes = cells.map((cell, k2) => {
@@ -16342,7 +17039,7 @@ function planLine({ register, pool, meter, bpm, bars, density = 0.4, loudness = 
   }
   return { status: "planned", notes, motif: own2, apex: pitches[apex], variation, lead: landing != null ? pitches[landing] : null, ...choice ? { choice } : {}, ...cadenceShape ? { cadence: cadenceShape } : {} };
 }
-var openingBeatSeconds, FIGURE_LEAST, LINE, clamp4, RULE, WIDEST, fit2, smooth, swellLevel, PHRASE_OFFSETS, meterKey, offsetsOf, shapeRules, trillFree, keepsShape, stepOf, heardMotif, backOf;
+var openingBeatSeconds, FIGURE_LEAST, LINE, clamp4, RULE, WIDEST, fit2, smooth, swellLevel, PHRASE_OFFSETS, meterKey, offsetsOf, shapeRules, trillFree, keepsShape, stepOf, motifKey, heardMotif, backOf, sameGroups;
 var init_line = __esm({
   "public/shared/performers/line.js"() {
     init_fioritura();
@@ -16356,6 +17053,7 @@ var init_line = __esm({
     init_line_rhythm();
     init_melody_rules();
     init_figure_space();
+    init_idiom();
     init_mulberry32();
     init_fnv1a();
     openingBeatSeconds = () => {
@@ -16422,8 +17120,10 @@ var init_line = __esm({
       recallCadence: Object.freeze({ augment: 0.5, fragment: 0.75 }),
       // How many settings of the phrase's segments the search keeps at each.
       beam: 12,
-      // The motif's variations, phrase by phrase, in turn.
+      // The motif's variations, phrase by phrase, in turn, where its player hears no form; and, where it does, how often a
+      // phrase of a section that states its theme restates it (themes.js: its player's lean, personality.js `themes`).
       variations: Object.freeze(["statement", "sequence", "inversion", "return"]),
+      restate: 0.5,
       // The motif's seed grammars (the memorable motifs report, §5.6: "deliberately varied seed classes"): free steps; an
       // arch to one peak; a shape circling its first note (anchor-centred); a rhythm on a repeated tone; a leap answered by
       // steps back; unequal (long-short) durations; a rest inside it as part of its signature. How many candidates a line's
@@ -16459,6 +17159,7 @@ var init_line = __esm({
     trillFree = (steps) => !shapeRules(false).broken(offsetsOf(steps)).length;
     keepsShape = (steps) => !shapeRules(true).broken(offsetsOf(steps)).length;
     stepOf = (random2, direction2) => direction2 * (random2() < 0.7 ? 1 : 2);
+    motifKey = (motif) => fnv1a(`${motif?.grammar ?? "free"}:${(motif?.cells ?? []).map((cell) => `${cell.at}/${cell.beats}/${cell.step}${cell.rest ? "r" : ""}`).join(",")}`).toString(16);
     heardMotif = (motif) => motif && typeof motif.grammar === "string" && Number(motif.beats) > 0 && Array.isArray(motif.cells) && motif.cells.length >= 2 && motif.cells.every((cell) => Number.isFinite(cell?.at) && Number(cell?.beats) > 0 && Number.isFinite(cell?.step));
     backOf = (order4, k2, weights, draw) => {
       const shares = order4.slice(0, k2 + 1).map((g) => 1 / (Number(weights[g]) || 1)), total = shares.reduce((a, b) => a + b, 0);
@@ -16469,6 +17170,7 @@ var init_line = __esm({
       }
       return k2;
     };
+    sameGroups = (a, b) => a?.length === b.length && a.every((group2, i) => group2.first === b[i].first && group2.count === b[i].count);
   }
 });
 
@@ -16497,141 +17199,6 @@ var init_evidence = __esm({
     CERTIFYING = Object.freeze(["measured", "mechanism-derived"]);
     isNumber = (value4) => typeof value4 === "number" && Number.isFinite(value4);
     isInterval = (value4) => Array.isArray(value4) && value4.length === 2 && value4.every(isNumber) && value4[0] <= value4[1];
-  }
-});
-
-// public/shared/performers/contrabass.js
-var CONTRABASS;
-var init_contrabass = __esm({
-  "public/shared/performers/contrabass.js"() {
-    init_registry();
-    CONTRABASS = Object.freeze({
-      strings: Object.freeze(keysOf("contrabass", "strings").map((name12) => {
-        const of2 = (key2) => value("contrabass", `strings.${name12}.${key2}`);
-        return Object.freeze({
-          name: name12,
-          pitch: of2("pitch"),
-          f0: of2("f0"),
-          T: of2("tension"),
-          L: of2("length"),
-          pl: of2("density"),
-          d: of2("diameter"),
-          E: of2("young"),
-          B: of2("inharmonicity"),
-          r0: of2("lossR0"),
-          r2: of2("lossR2")
-        });
-      })),
-      // (The nearest measured body in its air mode, the cello's, stretched in time by this, its correction and corner with
-      // it: interim -- the registry's engine choice, objects/bowed.json `engine`.)
-      bodyScale: Object.freeze({ from: value("contrabass", "engine.bodyFrom"), ratio: value("contrabass", "engine.bodyRatio"), interim: true })
-    });
-  }
-});
-
-// public/shared/performers/string-bodies.js
-function airMode(name12) {
-  sheetOf(name12);
-  const e3 = entry(name12, "body.airMode");
-  if (e3.kind === "literature") return { hz: e3.value, measured: true, source: cite(e3.source) };
-  return { hz: e3.value, measured: false, source: "calculated from Goldblatt's measurements of its body and f-holes as a Helmholtz resonator, scaled by the violin's measured A0" };
-}
-var DIMENSIONS, hasBody, sheetOf, SHEETS, cite, measured, MEASURED_AIR_MODES;
-var init_string_bodies = __esm({
-  "public/shared/performers/string-bodies.js"() {
-    init_registry();
-    DIMENSIONS = ["body", "upper", "middle", "lower", "ribs", "archTop", "archBack", "fLength", "fWidth", "fThickness", "fingerboard", "string"];
-    hasBody = (name12) => Boolean(OBJECTS[name12]) && (() => {
-      try {
-        entry(name12, "body.string");
-        return true;
-      } catch {
-        return false;
-      }
-    })();
-    sheetOf = (name12) => {
-      if (!hasBody(name12)) throw new Error(`string-bodies.js: no sheet for ${name12}`);
-      return Object.freeze(Object.fromEntries(DIMENSIONS.map((k2) => [k2, value(name12, `body.${k2}`)])));
-    };
-    SHEETS = Object.freeze(Object.fromEntries(["violin", "viola", "cello", "contrabass"].map((name12) => [name12, sheetOf(name12)])));
-    cite = (id4) => {
-      const s = source(id4);
-      return `${s.authors.split(",").map((a) => a.trim().split(" ").at(-1)).join(" & ")} ${s.year}, doi:${s.doi}`;
-    };
-    measured = entry("violin", "body.airMode");
-    MEASURED_AIR_MODES = Object.freeze({ violin: Object.freeze({ hz: measured.value, source: cite(measured.source) }) });
-  }
-});
-
-// public/shared/performers/bowed-instruments.js
-function bySize(table, name12, size = lowestHz, { linear: linear2 = false } = {}) {
-  if (Object.hasOwn(table, name12)) return table[name12];
-  const x = Math.log(size(name12)), known = Object.keys(table).map((n) => [Math.log(size(n)), table[n]]).sort((a, b) => a[0] - b[0]);
-  if (!known.length) throw new Error(`bowed-instruments.js bySize: nothing measured to read ${name12} from`);
-  if (x <= known[0][0]) return known[0][1];
-  for (let k2 = 1; k2 < known.length; k2++) if (x <= known[k2][0]) {
-    const [x0, v0] = known[k2 - 1], [x1, v1] = known[k2], w = (x - x0) / (x1 - x0);
-    return !linear2 && v0 > 0 && v1 > 0 ? Math.exp(Math.log(v0) + (Math.log(v1) - Math.log(v0)) * w) : v0 + (v1 - v0) * w;
-  }
-  return known[known.length - 1][1];
-}
-var ARTIFASTRING, GIVEN, stringsOf, given, BOWED, BOWED_TYPES, bowedOf, lossAt, lowestHz, airHz, GIVEN_BOWED;
-var init_bowed_instruments = __esm({
-  "public/shared/performers/bowed-instruments.js"() {
-    init_contrabass();
-    init_string_bodies();
-    init_registry();
-    ARTIFASTRING = Object.freeze(["violin", "viola", "cello"]);
-    GIVEN = children("violin-family").filter((name12) => !ARTIFASTRING.includes(name12) && name12 !== "contrabass");
-    stringsOf = (name12) => Object.freeze(keysOf(name12, "strings").map((s) => {
-      const of2 = (key2) => value(name12, `strings.${s}.${key2}`);
-      return Object.freeze({
-        name: s,
-        pitch: of2("pitch"),
-        f0: of2("f0"),
-        T: of2("tension"),
-        L: of2("length"),
-        pl: of2("density"),
-        d: of2("diameter"),
-        E: of2("young"),
-        B: of2("inharmonicity"),
-        losses: Object.freeze(of2("losses").map((p) => Object.freeze([...p])))
-      });
-    }));
-    given = GIVEN.map((name12, k2) => Object.freeze({
-      name: name12,
-      type: ARTIFASTRING.length + 1 + k2,
-      solver: value(name12, "engine.solver"),
-      strings: stringsOf(name12),
-      bodyScale: Object.freeze({ from: value(name12, "engine.bodyFrom"), ratio: value(name12, "engine.bodyRatio"), interim: true }),
-      opens: Object.freeze(value(name12, "tuning")),
-      fictional: Boolean(OBJECTS[name12].fictional),
-      given: true
-    }));
-    BOWED = Object.freeze([
-      ...ARTIFASTRING.map((name12, type) => Object.freeze({ name: name12, type, solver: name12, strings: null, bodyScale: null, opens: Object.freeze(value(name12, "tuning")), fictional: false, given: false })),
-      Object.freeze({
-        name: "contrabass",
-        type: ARTIFASTRING.length,
-        solver: value("contrabass", "engine.solver"),
-        strings: CONTRABASS.strings,
-        bodyScale: CONTRABASS.bodyScale,
-        opens: Object.freeze(CONTRABASS.strings.map((s) => s.pitch)),
-        fictional: false,
-        given: false
-      }),
-      ...given
-    ]);
-    BOWED_TYPES = Object.freeze(Object.fromEntries(BOWED.map((i) => [i.name, i.type])));
-    bowedOf = (name12) => {
-      const i = BOWED.find((b) => b.name === name12);
-      if (!i) throw new Error(`bowed-instruments.js: no bowed instrument ${name12}`);
-      return i;
-    };
-    lossAt = (string, hz2) => string.losses ? equation("table-read", { table: string.losses, x: hz2 }) : equation("string-loss-law", { r0: string.r0, r2: string.r2, f: hz2 });
-    lowestHz = (name12) => value(name12, "lowestHz");
-    airHz = (name12) => airMode(name12).hz;
-    GIVEN_BOWED = Object.freeze(BOWED.filter((i) => i.given));
   }
 });
 
@@ -17029,10 +17596,10 @@ function bowedLimits(instrument) {
   const { range: range3, register, strings: strings3 } = BOWED_INSTRUMENTS[instrument];
   return Object.freeze({ instrument, engine: null, range: range3, register, strings: strings3, harmonicNear: null, multiphonicNear: null, evidence: "authored" });
 }
-function planPhrase2({ instrument = "violin", register = null, pool, meter, bpm, bars, density = LINE_SETTING("density"), loudness = LINE_SETTING("loudness"), fioriture = 0, motif = null, motifDensity, phraseIndex = 0, previousApex = null, climax = false, pickup = null, lead = null, heard = [], final = null, coreOnly = false, random: random2, choices = BOWED_LINE }) {
+function planPhrase2({ instrument = "violin", register = null, pool, meter, bpm, bars, density = LINE_SETTING("density"), loudness = LINE_SETTING("loudness"), fioriture = 0, motif = null, motifDensity, phraseIndex = 0, previousApex = null, climax = false, pickup = null, lead = null, heard = [], final = null, coreOnly = false, variation = null, nextPhrase = null, random: random2, choices = BOWED_LINE }) {
   const kind = typeof instrument === "string" ? BOWED_INSTRUMENTS[instrument] : instrument;
   if (!kind) throw new RangeError(`no bowed instrument ${instrument}`);
-  const line = planLine({ register: register ?? kind.register, pool, meter, bpm, bars, density, loudness, fioriture, motif, motifDensity, phraseIndex, previousApex, climax, pickup, lead, heard, final, coreOnly, random: random2, choices });
+  const line = planLine({ register: register ?? kind.register, pool, meter, bpm, bars, density, loudness, fioriture, motif, motifDensity, phraseIndex, previousApex, climax, pickup, lead, heard, final, coreOnly, variation, nextPhrase, random: random2, choices });
   if (line.status === "declined") return { ...line, strokes: [], changes: [] };
   return { ...bowPhrase(line.notes, { kind, choices }), motif: line.motif, apex: line.apex, variation: line.variation, lead: line.lead, ...line.choice ? { choice: line.choice } : {} };
 }
@@ -27034,10 +27601,10 @@ function flutist(kind, { choices = WIND_LINE, shortenShare = 0.5 } = {}) {
     evidence: ["a flute spends more air than a voice; its flow rises with loudness (Fletcher 1975); the numbers authored"]
   });
 }
-function planPhrase({ instrument = "flute", register = null, pool, meter, bpm, bars, density = 0.4, loudness = 0.5, fioriture = 0, motif = null, motifDensity, phraseIndex = 0, previousApex = null, climax = false, pickup = null, lead = null, heard = [], final = null, coreOnly = false, random: random2, choices = WIND_LINE }) {
+function planPhrase({ instrument = "flute", register = null, pool, meter, bpm, bars, density = 0.4, loudness = 0.5, fioriture = 0, motif = null, motifDensity, phraseIndex = 0, previousApex = null, climax = false, pickup = null, lead = null, heard = [], final = null, coreOnly = false, variation = null, nextPhrase = null, random: random2, choices = WIND_LINE }) {
   const kind = typeof instrument === "string" ? WIND_INSTRUMENTS[instrument] : instrument;
   if (!kind) throw new RangeError(`no wind instrument ${instrument}`);
-  const line = planLine({ register: register ?? kind.register, pool, meter, bpm, bars, density, loudness, fioriture, motif, motifDensity, phraseIndex, previousApex, climax, pickup, lead, heard, final, coreOnly, random: random2, choices });
+  const line = planLine({ register: register ?? kind.register, pool, meter, bpm, bars, density, loudness, fioriture, motif, motifDensity, phraseIndex, previousApex, climax, pickup, lead, heard, final, coreOnly, variation, nextPhrase, random: random2, choices });
   if (line.status === "declined") return { ...line, breaths: [], changes: [] };
   return { ...breathPhrase(line.notes, { kind, choices }), motif: line.motif, apex: line.apex, variation: line.variation, lead: line.lead, ...line.choice ? { choice: line.choice } : {} };
 }
@@ -36798,7 +37365,7 @@ function contextAt2(member, time, state2) {
   const cell = cells[lo - 1];
   return cell && cmp2(time, cell.to, state2) < 0 ? cell : null;
 }
-function covered(member, events3, state2) {
+function covered2(member, events3, state2) {
   if (!member.environment.complete) return false;
   for (const event2 of events3) {
     state2.budget.charge();
@@ -36874,7 +37441,7 @@ function evaluate2(model, promise, member, state2, replay = false) {
     const missing = prerequisites(model, promise, member, state2);
     if (missing) return freeze10({ id: promise.id, status: "UNKNOWN", reason: missing });
     const material2 = reconstruct(member, promise, state2, replay);
-    if (!covered(member, material2.events, state2)) return freeze10({ id: promise.id, status: "UNKNOWN", reason: "Incomplete sounding environment or sustain context" });
+    if (!covered2(member, material2.events, state2)) return freeze10({ id: promise.id, status: "UNKNOWN", reason: "Incomplete sounding environment or sustain context" });
     for (const { event: event2, register } of material2.registrations) {
       state2.budget.charge();
       if (event2.pitch !== null && (order2(member.space, register.low, event2.pitch, state2) > 0 || order2(member.space, event2.pitch, register.high, state2) > 0)) {
@@ -42626,15 +43193,15 @@ function solveRhythmicTiling(prepared4, options = {}) {
     let admitted = 1;
     while (pending2.length) {
       s.charge();
-      const { selected: selected2, covered: covered2 } = pending2.pop();
-      if (covered2 === model.full) {
+      const { selected: selected2, covered: covered3 } = pending2.pop();
+      if (covered3 === model.full) {
         const entries = valuesOf(selected2, model, s);
         if (model.mode === "tiling" || !periodicity(entries, model, s).periodic) return satResult(model, entries, rows.length + 1, s);
         rows.push({ selected: selected2.toString(16), pivot: null });
         continue;
       }
       let pivot = 0;
-      while (covered2 & bit(pivot)) {
+      while (covered3 & bit(pivot)) {
         s.charge();
         pivot++;
       }
@@ -42643,7 +43210,7 @@ function solveRhythmicTiling(prepared4, options = {}) {
       for (const b of model.allowed) {
         s.charge();
         const mask = model.translated.get(b);
-        if (!(mask & covered2) && mask & bit(pivot)) children2.push({ selected: selected2 | bit(b), covered: covered2 | mask });
+        if (!(mask & covered3) && mask & bit(pivot)) children2.push({ selected: selected2 | bit(b), covered: covered3 | mask });
       }
       if (children2.length > s.limits.maxNodes - admitted) fail21("Tiling discovered-node allowance", "node-budget");
       admitted += children2.length;
@@ -45674,14 +46241,14 @@ var fingering_shading_default = { about: "Each woodwind's charted fingerings by 
 var BEND_REACH = 60;
 var RANK_COST = 0.2;
 var BEND_COST = 1 / 50;
-var NEAR = 1.01;
+var NEAR2 = 1.01;
 var CHARTED = Object.freeze({ alto: "alto-flute" });
 function scoreFingering(instrument, pitch5) {
   const w = fingering_shading_default.instruments[CHARTED[instrument] ?? instrument];
   if (!w || !Number.isFinite(pitch5)) return null;
   const options = [];
   for (const [midi, fingerings] of w.notes) {
-    if (Math.abs(midi - pitch5) > NEAR) continue;
+    if (Math.abs(midi - pitch5) > NEAR2) continue;
     const wanted = 100 * (pitch5 - midi);
     for (const [k2, [rank, shadings]] of fingerings.entries()) for (const [u, cents3, fingering] of shadings) {
       const bend = wanted - cents3;
@@ -48990,7 +49557,7 @@ var freeze20 = (value4) => frozenJson(value4, { bytes: 65536, items: 8192 }).dat
 var reportedPlacement = (report, phase, cursor2) => {
   if (!phase) return phase;
   const placed3 = Number.isFinite(report.timing.placementSeconds) ? report.timing.placementSeconds : null, lean = report.timing.lean;
-  const leaned = lean ? leanSeconds(lean, { phrasePosition: cursor2?.phrasePosition ?? 0, phase: 0 }) : null, placement = leaned === null ? placed3 : (placed3 ?? 0) + leaned;
+  const leaned2 = lean ? leanSeconds(lean, { phrasePosition: cursor2?.phrasePosition ?? 0, phase: 0 }) : null, placement = leaned2 === null ? placed3 : (placed3 ?? 0) + leaned2;
   return { ...phase, calibrationVersion: report.timing.phase?.calibrationVersion ?? null, ...placement === null ? {} : { placementSeconds: placement } };
 };
 var COORDINATION_WEIGHT = Object.freeze({ tight: 1, loose: 0.5, released: 0 });
@@ -55423,7 +55990,7 @@ var PresentationHistory = class {
     if (!previous) return null;
     const since = this.presentations.filter((entry3) => entry3.atBeats > previous.atBeats && entry3.atBeats <= atBeats);
     const others = new Set(since.map((entry3) => entry3.family).filter((value4) => value4 !== String(family)));
-    const covered2 = this.dropped === 0 || this.presentations.includes(previous);
+    const covered3 = this.dropped === 0 || this.presentations.includes(previous);
     return Object.freeze({
       beats: round8(atBeats - previous.atBeats),
       presentations: since.length,
@@ -55433,8 +56000,8 @@ var PresentationHistory = class {
       // appearance, which cannot find it.
       familyContinued: summary2.untilBeats > previous.atBeats && atBeats - summary2.untilBeats <= policy2.immediateBeats,
       layers: new Set(since.map((entry3) => entry3.layer).filter(Boolean)).size,
-      quiet: since.length ? false : covered2 ? true : null,
-      coverage: covered2 ? "complete" : "partial"
+      quiet: since.length ? false : covered3 ? true : null,
+      coverage: covered3 ? "complete" : "partial"
     });
   }
   // Has this role come round again with different material? Formal-role
@@ -56828,7 +57395,7 @@ function installHoldTiming(audio) {
 
 // public/render/bot-host.js
 init_opening_time();
-var OPEN = 1;
+var OPEN2 = 1;
 var CLOSING = 2;
 var availableModes = (definition) => [...definition?.previewOutputModes || definition?.outputModes || []];
 var outputMode = (definition, requested) => {
@@ -56968,7 +57535,7 @@ var HeadlessBot = class {
       else this.hooks.onWarning?.(`${this.definition.name} asked for a fork (${args?.[0]?.conflict}); this host cannot add a bot, so it was not made`, this);
     }
     const message2 = { type: "protocol", address, args };
-    if (this.joined && this.socket?.readyState === OPEN) this.transmit(message2);
+    if (this.joined && this.socket?.readyState === OPEN2) this.transmit(message2);
     else {
       this.pending.push(message2);
       if (this.pending.length > 256) this.pending.shift();
@@ -57240,7 +57807,7 @@ var HeadlessBot = class {
     if (this.joined) this.send("/broadcast/agentState", [agentState({ definition: this.definition, bot: this.bot, incarnation: this.incarnation, state: state2, output: this.output })]);
   }
   publishSetup() {
-    if (this.joined && this.socket?.readyState === OPEN) this.transmit({ type: "ensemble_bot", bot: this.setup() });
+    if (this.joined && this.socket?.readyState === OPEN2) this.transmit({ type: "ensemble_bot", bot: this.setup() });
   }
   fadeSeconds(payload2 = {}) {
     return lifecycleFadeSeconds(payload2, this.lastClock);
@@ -64780,9 +65347,9 @@ function soundPowerDb(instrument, velocity, pitch5 = null) {
     return d.db + d.dbPerSemitone * (p - d.pitch);
   };
   const line = (v2) => at2(entry3.pp) + (at2(entry3.ff) - at2(entry3.pp)) * (v2 - MEASURED_AT.pp) / (MEASURED_AT.ff - MEASURED_AT.pp);
-  const v = Number.isFinite(velocity) ? Math.max(0, Math.min(BEYOND.loudest, velocity)) : MEASURED_AT.ff, beyond = beyondOf(v);
+  const v = Number.isFinite(velocity) ? Math.max(0, Math.min(BEYOND2.loudest, velocity)) : MEASURED_AT.ff, beyond = beyondOf(v);
   if (!beyond) return line(v);
-  const { ppp, pp, ff, fff } = DYNAMIC_VELOCITY, q3 = BEYOND.shrink, k2 = Math.abs(beyond), far = q3 * (1 - q3 ** k2) / (1 - q3);
+  const { ppp, pp, ff, fff } = DYNAMIC_VELOCITY, q3 = BEYOND2.shrink, k2 = Math.abs(beyond), far = q3 * (1 - q3 ** k2) / (1 - q3);
   return beyond < 0 ? line(ppp) - (line(pp) - line(ppp)) * far : line(fff) + (line(fff) - line(ff)) * far;
 }
 var stemLevelDb = (instrument, velocity, pitch5 = null) => {
@@ -71007,14 +71574,14 @@ function declareMember(bot, group2) {
 // public/client-ensemble.js
 init_opening_time();
 var { EnsembleSession } = ensemble_session_default;
-var OPEN2 = 1;
+var OPEN3 = 1;
 var CLOSED = 3;
 var MAX_RETAINED_PLANS = 512;
 var HOLD_ADDRESSES = /* @__PURE__ */ new Set(["/broadcast/hold", "/broadcast/holdRelease", "/broadcast/holdReady", "/broadcast/holdSelect"]);
 var LocalSocket = class {
   constructor(ensemble) {
     this.ensemble = ensemble;
-    this.readyState = OPEN2;
+    this.readyState = OPEN3;
     this.listeners = /* @__PURE__ */ new Map();
     queueMicrotask(() => this.emit("open", {}));
   }
@@ -71031,7 +71598,7 @@ var LocalSocket = class {
     this.emit("message", { data });
   }
   send(value4) {
-    if (this.readyState !== OPEN2) return;
+    if (this.readyState !== OPEN3) return;
     this.ensemble.receive(this, JSON.parse(value4));
   }
   close() {
@@ -84584,10 +85151,10 @@ var PerformedTiming = (Base, { instrument = null } = {}) => named3(class extends
     }
     if (lean) {
       const bars = Math.max(1, Number(clock7.meter.phraseBars) || bandPhraseBars()), phrasePosition2 = (((Number(clock7.bar) || 0) % bars + bars) % bars + ticks / clock7.meter.pulsesPerBar) / bars;
-      const leaned = leanSeconds(lean, { phrasePosition: phrasePosition2, phase: place2.phase ?? 0 });
-      if (leaned) {
-        seconds2 += leaned;
-        reason = `${reason === "on its score time" ? "" : `${reason}; `}leaning ${Math.abs(leaned * 1e3).toFixed(1)} ms ${leaned < 0 ? "ahead" : "behind"} (${lean.shape})`;
+      const leaned2 = leanSeconds(lean, { phrasePosition: phrasePosition2, phase: place2.phase ?? 0 });
+      if (leaned2) {
+        seconds2 += leaned2;
+        reason = `${reason === "on its score time" ? "" : `${reason}; `}leaning ${Math.abs(leaned2 * 1e3).toFixed(1)} ms ${leaned2 < 0 ? "ahead" : "behind"} (${lean.shape})`;
       }
     }
     if (seconds2 && record4) {
@@ -84938,17 +85505,17 @@ function soloCourse(random2, { intensityAt = null, mostBars = Infinity } = {}) {
       sections.push(Object.freeze({ from, to: from + bars, region, target, jump, restate, start: last2 ? last2.target : target, ...intensity === null ? {} : { intensity } }));
     }
   };
-  const sectionAt3 = (position2) => {
+  const sectionAt4 = (position2) => {
     extend(position2);
     return sections.find((entry3) => position2 >= entry3.from && position2 < entry3.to) ?? sections[0];
   };
   const at2 = (position2) => {
-    const section2 = sectionAt3(position2);
+    const section2 = sectionAt4(position2);
     if (section2.jump) return section2.target;
     const along3 = Math.min(1, (position2 - section2.from) / Math.min(SOLO_COURSE.rampBars, section2.to - section2.from));
     return section2.start + (section2.target - section2.start) * along3;
   };
-  return { at: at2, restateAt: (position2) => sectionAt3(position2).restate, sections };
+  return { at: at2, restateAt: (position2) => sectionAt4(position2).restate, sections };
 }
 function checkedFillness(value4) {
   if (value4 == null) return null;
@@ -87484,19 +88051,30 @@ var withAnnouncement = (list15, plan2) => {
 };
 var isReturn = (role) => typeof role === "string" && /return/.test(role);
 var tensionOf = (section2) => Number(section2?.tension ?? section2?.hdensity) || 0;
-function formJoins(form, { announced = [] } = {}) {
+function formSections(form, { announced = [] } = {}) {
   const payload2 = form?.payload, sections = payload2?.sections ?? [];
-  if (sections.length <= 1) return [];
-  const since = Number(form.createdAt?.bar ?? form.appliesAt?.bar) || 0;
-  const known = new Map((announced ?? []).filter((item) => item && item.section !== null && (!form.author || item.author === form.author) && item.created >= since).map((item) => [item.section, item.bar]));
-  const starts = [];
-  let bar = Number(form.appliesAt?.bar) || 0;
+  const since = Number(form?.createdAt?.bar ?? form?.appliesAt?.bar) || 0;
+  const known = new Map((announced ?? []).filter((item) => item && item.section !== null && (!form?.author || item.author === form.author) && item.created >= since).map((item) => [item.section, item.bar]));
+  const out = [];
+  let bar = Number(form?.appliesAt?.bar) || 0;
   sections.forEach((section2, index) => {
     const id4 = section2.id ?? index;
     if (known.has(id4)) bar = known.get(id4);
-    starts.push(bar);
-    bar += Math.max(1, Number(section2.phrases) || 1) * Math.max(1, Number(section2.phraseBars ?? payload2.phraseBars) || DEFAULT_PHRASE_BARS);
+    if (out.length) out.at(-1).endBar = bar;
+    const length = Math.max(1, Number(section2.phrases) || 1) * Math.max(1, Number(section2.phraseBars ?? payload2.phraseBars) || DEFAULT_PHRASE_BARS);
+    out.push({ index, role: section2.role ?? null, bar, endBar: bar + length });
+    bar += length;
   });
+  return out;
+}
+function sectionAt2(form, bar, { announced = [] } = {}) {
+  const sections = formSections(form, { announced });
+  return sections.findLast((section2) => section2.bar <= bar) ?? sections[0] ?? null;
+}
+function formJoins(form, { announced = [] } = {}) {
+  const sections = form?.payload?.sections ?? [];
+  if (sections.length <= 1) return [];
+  const starts = formSections(form, { announced }).map((section2) => section2.bar);
   return sections.slice(1).map((section2, i) => {
     const fromTension = tensionOf(sections[i]), toTension = tensionOf(section2);
     return { bar: starts[i + 1], from: sections[i].role, to: section2.role, fromTension, toTension, move: toTension - fromTension, ...section2.fills !== void 0 ? { fills: section2.fills } : {} };
@@ -87598,6 +88176,12 @@ var FormMarks = (Base) => class extends Base {
     if (message2?.address !== EDITS_ADDRESS) return;
     const joins = message2.args?.[0]?.joins;
     if (Array.isArray(joins)) this.announcedEdits = new Map(joins.filter((join3) => Number.isInteger(join3?.bar)).map((join3) => [join3.bar, join3]));
+  }
+  // The form's section `bar` lies in (form-joins.js sectionAt: {index, role, bar, endBar}), or null where it has heard
+  // no form: a player's themes follow it (line-themes.js).
+  formSectionAt(bar) {
+    const form = this.activeFormPlan ?? this.markedForm;
+    return form ? sectionAt2(form, bar, { announced: this.announcedSections }) : null;
   }
   // How a join is marked (joinMark): from the intensities either side of it, each the casting's where one was announced
   // for that section, else the form's tension, and the drummer's own draw for the join (the same whenever it is asked).
@@ -91389,9 +91973,9 @@ function enumerateVoicings(pkg, structureId, { tonicCents, offsetCents = 0, voic
   });
   const out = [];
   let truncated = false;
-  const walk = (index, chosen, last2, covered2) => {
+  const walk = (index, chosen, last2, covered3) => {
     if (truncated || !work()) return;
-    const uncovered = required.filter((role) => !covered2.has(role)).length;
+    const uncovered = required.filter((role) => !covered3.has(role)).length;
     if (uncovered > voices.length - index) return;
     if (index === voices.length) {
       if (uncovered === 0 && chosen.some((note) => Number.isFinite(note.cents))) {
@@ -91405,7 +91989,7 @@ function enumerateVoicings(pkg, structureId, { tonicCents, offsetCents = 0, voic
     }
     for (const note of options[index]) {
       if (Number.isFinite(note.cents) && note.cents <= last2 + tol) continue;
-      const next2 = note.role !== null && !covered2.has(note.role) ? /* @__PURE__ */ new Set([...covered2, note.role]) : covered2;
+      const next2 = note.role !== null && !covered3.has(note.role) ? /* @__PURE__ */ new Set([...covered3, note.role]) : covered3;
       chosen.push(note);
       walk(index + 1, chosen, Number.isFinite(note.cents) ? note.cents : last2, next2);
       chosen.pop();
@@ -92968,9 +93552,9 @@ var meterOf3 = (numerator, home2, groups, levels = null) => ({
   ...levels?.length && numerator === home2.numerator ? { sections: levels.map((level) => [...level]), ...home2.sectionDynamics ? { sectionDynamics: [...home2.sectionDynamics] } : {} } : home2.sections && numerator === home2.numerator ? { sections: home2.sections.map((level) => [...level]), sectionDynamics: [...home2.sectionDynamics] } : {}
 });
 var sameLength = (a, b) => a && b && a.numerator === b.numerator && a.denominator === b.denominator;
-var sameGroups = (a, b) => (a?.groups ?? []).join("+") === (b?.groups ?? []).join("+");
+var sameGroups2 = (a, b) => (a?.groups ?? []).join("+") === (b?.groups ?? []).join("+");
 var sameSections = (a, b) => JSON.stringify(a?.sections ?? null) === JSON.stringify(b?.sections ?? null) && JSON.stringify(a?.sectionDynamics ?? null) === JSON.stringify(b?.sectionDynamics ?? null);
-var sameBar = (a, b) => sameLength(a, b) && sameGroups(a, b) && sameSections(a, b) && a.tempoUnit === b.tempoUnit && JSON.stringify(a.metricReading) === JSON.stringify(b.metricReading);
+var sameBar = (a, b) => sameLength(a, b) && sameGroups2(a, b) && sameSections(a, b) && a.tempoUnit === b.tempoUnit && JSON.stringify(a.metricReading) === JSON.stringify(b.metricReading);
 var gcd19 = (a, b) => {
   while (b) [a, b] = [b, a % b];
   return a;
@@ -99566,16 +100150,16 @@ function onsetsOf(notes, { chordSeconds = MEASURE.chordSeconds } = {}) {
 function occupancyOf(notes, span2) {
   if (!(span2 > 0)) return null;
   const spans2 = notes.filter((note) => finite29(note.start) && note.duration > 0).map((note) => [note.start, note.start + note.duration]).sort((a, b) => a[0] - b[0]);
-  let covered2 = 0, from = null, to = null;
+  let covered3 = 0, from = null, to = null;
   for (const [start, end] of spans2) {
     if (from === null || start > to) {
-      if (from !== null) covered2 += to - from;
+      if (from !== null) covered3 += to - from;
       from = start;
       to = end;
     } else to = Math.max(to, end);
   }
-  if (from !== null) covered2 += to - from;
-  return round10(Math.min(1, covered2 / span2));
+  if (from !== null) covered3 += to - from;
+  return round10(Math.min(1, covered3 / span2));
 }
 function polyphonyOf(notes) {
   const events3 = [];
@@ -100047,7 +100631,7 @@ function compileSections(plan2, { phraseBars = 4 } = {}) {
     return Object.freeze(compiled);
   });
 }
-var sectionAt2 = (sections, bar) => sections.findLast?.((section2) => section2.startBar <= bar) ?? [...sections].reverse().find((section2) => section2.startBar <= bar) ?? null;
+var sectionAt3 = (sections, bar) => sections.findLast?.((section2) => section2.startBar <= bar) ?? [...sections].reverse().find((section2) => section2.startBar <= bar) ?? null;
 function sectionTarget(section2, { roleTension = {}, continuity = {} } = {}) {
   const intensity = clamp0118(section2?.tension ?? section2?.hdensity ?? roleTension[section2?.role] ?? 0.5);
   const isReturn2 = section2?.returnsTo != null;
@@ -104132,15 +104716,7 @@ var PlaysPickups = (Base) => class extends FormMarks(Base) {
 // public/bots/lib/modules/line-motifs.js
 init_line();
 var LINE_MOTIFS = Object.freeze({ kept: 8, cells: 16 });
-var familyOf4 = (by, motif) => {
-  const text18 = `${motif?.grammar ?? "free"}:${(motif?.cells ?? []).map((cell) => `${cell.at}/${cell.step}${cell.rest ? "r" : ""}`).join(",")}`;
-  let hash16 = 2166136261;
-  for (const character of text18) {
-    hash16 ^= character.charCodeAt(0);
-    hash16 = Math.imul(hash16, 16777619);
-  }
-  return `${by}:motif:${motif?.grammar ?? "free"}:${(hash16 >>> 0).toString(16)}`;
-};
+var familyOf4 = (by, motif) => `${by}:motif:${motif?.grammar ?? "free"}:${motifKey(motif?.theme ?? motif)}`;
 function occurrenceRecords(notes, { by, phrase, motif }) {
   const family = familyOf4(by, motif), segments = /* @__PURE__ */ new Map();
   notes.forEach((note, index) => {
@@ -106304,6 +106880,72 @@ init_score_time();
 init_meter_tactus();
 init_bowed_line();
 init_instrument_ranges();
+
+// public/bots/lib/modules/line-themes.js
+init_random_source();
+
+// public/shared/performers/themes.js
+init_registry();
+var THEMES = "themes";
+function themePhrase({ role, first, opening = false, restate, random: random2 }) {
+  const treatment = opening ? "state" : setting(THEMES, "treatments")[role] ?? "develop";
+  if (first && treatment !== "develop") return Object.freeze({ theme: treatment === "return" ? "home" : treatment === "contrast" ? "new" : "current", variation: "statement", states: true });
+  const share = treatment === "develop" ? restate * setting(THEMES, "developing") : restate;
+  if (random2() < share) return Object.freeze({ theme: "current", variation: "statement", states: true });
+  const developments = setting(THEMES, "developments");
+  return Object.freeze({ theme: "current", variation: developments[Math.floor(random2() * developments.length)], states: false });
+}
+
+// public/bots/lib/modules/line-themes.js
+init_line();
+var PlaysThemes = (Base) => class extends Base {
+  // How the phrase from `bar` treats its theme, after its phrase before in section `after` (its index; none, the piece's
+  // first): {section, theme, variation, states} (themes.js), or null where it hears no form.
+  themeAt(bar, after) {
+    const section2 = this.formSectionAt?.(bar);
+    if (!section2) return null;
+    const random2 = createRandomStream(`${this.randomStream?.seed ?? 0}:${this.instanceId ?? ""}:themes:${bar}`);
+    return Object.freeze({ section: section2, ...themePhrase({
+      role: section2.role,
+      first: section2.index !== after,
+      opening: after === void 0,
+      restate: this.playing?.choices?.restate ?? LINE.restate,
+      random: () => random2.next()
+    }) });
+  }
+  // The phrase from `bar` to `end` as its form treats its theme, or null where it hears no form: {told (themeAt),
+  // variation, motif (its theme; null where it takes a theme of its own now; undefined before it has one), lead (its
+  // theme's first note, where it states it from there), heard (its themes, which a new one is to be unlike), next
+  // ({variation, lead?}: the next phrase's, its pickup landing where that one states its theme from its first note)}.
+  phraseTheme(bar, end) {
+    const told = this.themeAt(bar, this.themeSection);
+    if (!told) return null;
+    const { home: home2 = null, current = null } = this.themes ?? {}, theme = told.theme === "home" ? home2 : told.theme === "current" ? current : null;
+    const coming = this.themeAt(end, told.section.index), after = coming?.theme === "home" ? home2 : coming?.theme === "current" && told.theme !== "new" ? theme : null;
+    return {
+      told,
+      variation: told.variation,
+      motif: told.theme === "new" ? null : theme?.motif,
+      lead: told.states ? theme?.pitch ?? null : null,
+      heard: told.theme === "new" ? [.../* @__PURE__ */ new Set([home2, current])].filter(Boolean).map((own2, k2) => ({ ...own2.motif, id: `${this.instanceId}:theme:${k2}` })) : [],
+      next: coming ? { variation: coming.variation, ...coming.states && Number.isFinite(after?.pitch) ? { lead: after.pitch } : {} } : null
+    };
+  }
+  // Its theme as a phrase played it: the first it plays its home and its section's; a theme of its own its section's; its
+  // home its section's again where it returns. A theme takes its first note from the first phrase stating it.
+  themePlayed(phrase, planned) {
+    if (!phrase || !planned?.motif || planned.status === "declined") return;
+    const themes = this.themes ??= { home: null, current: null }, { told } = phrase;
+    this.themeSection = told.section.index;
+    if (told.theme === "home" && themes.home) themes.current = themes.home;
+    else if (told.theme === "new" || !themes.current) themes.current = { motif: planned.motif.theme ?? planned.motif, pitch: null };
+    themes.home ??= themes.current;
+    const first = planned.notes?.find((note) => note.role === "idea")?.pitch;
+    if (told.variation === "statement" && themes.current.pitch == null && Number.isFinite(first)) themes.current.pitch = first;
+  }
+};
+
+// public/bots/clodbots/bowedstring_clodbot.js
 init_line();
 init_random_source();
 init_opening_time();
@@ -109374,6 +110016,7 @@ function turbulenceEntry(model) {
 }
 
 // public/shared/performers/instrument-facts.js
+init_idiom();
 var FACTS_SCHEMA = "musebots.instrument-facts/1";
 var KIND_OF_FAMILY = Object.freeze({ flute: "air", reed: "reed", brass: "lips" });
 var plain8 = (value4) => value4 == null ? null : JSON.parse(JSON.stringify(value4));
@@ -109481,6 +110124,7 @@ function instrumentFacts(instrument, { compass = null, engine = null } = {}) {
     facts.vibrato = vibrato ? { ...plain8(vibrato), measured: plain8({ width: ranges2.width ?? null, rate: ranges2.rate ?? null }) } : null;
     facts.techniques = { kinds: [...BOWED_KINDS], multiphonics: [], mutes: [], sung: [], harmonicCeiling: facts.compass.harmonicCeiling ?? null };
   }
+  facts.idiom = idiomFacts(facts);
   return facts;
 }
 function jetLaw(model) {
@@ -109523,6 +110167,9 @@ function factsAt(facts, pitch5) {
     spending: facts.registers[third].spending ?? null
   };
 }
+
+// public/shared/mcp/instrument-server.js
+init_idiom();
 
 // public/shared/performers/musicxml-motifs.js
 init_rational();
@@ -109569,14 +110216,14 @@ function motifLine(text18, { part = null } = {}) {
 
 // public/shared/mcp/instrument-server.js
 var instrumentUri = (id4, part = null) => `musebots://instrument/${id4}${part ? `/${part}` : ""}`;
-var PARTS = Object.freeze(["compass", "registers", "dynamics", "breath", "bow", "articulation", "vibrato", "techniques", "reed", "engine"]);
+var PARTS = Object.freeze(["compass", "registers", "dynamics", "breath", "bow", "articulation", "vibrato", "techniques", "reed", "engine", "idiom"]);
 function instrumentServer({ instrument, compass = null, engine = null, motifs = [] }) {
   const facts = instrumentFacts(instrument, { compass, engine }), id4 = facts.instrument;
   const lines = (motifs ?? []).map((given3, k2) => ({ id: given3.id ?? `motif-${k2 + 1}`, name: given3.name ?? null, ...motifLine(given3.musicxml, { part: given3.part ?? null }) }));
   const server = new McpServer({
     name: "musebots-instrument",
     version: "0.1.0",
-    instructions: `The ${facts.compass.name} (${id4}): its compass, register, dynamics, ${facts.breath ? "breath and pressure" : "bow"}, articulation, vibrato and techniques${facts.engine ? `, and the engine it is linked to (${facts.engine.name})` : ""} as resources under ${instrumentUri(id4)}; at_pitch for one pitch; its given motifs under ${instrumentUri(id4, "motifs")}.`
+    instructions: `The ${facts.compass.name} (${id4}): its compass, register, dynamics, ${facts.breath ? "breath and pressure" : "bow"}, articulation, vibrato and techniques${facts.engine ? `, and the engine it is linked to (${facts.engine.name})` : ""} and its idiom as resources under ${instrumentUri(id4)}; at_pitch for one pitch${facts.idiom?.moves ? ", move for a move between two" : ""}${facts.idiom?.together ? ", together for notes played at once" : ""}; its given motifs under ${instrumentUri(id4, "motifs")}.`
   });
   server.resource({ uri: instrumentUri(id4), name: `${id4}: its facts`, description: "Everything the player knows of its instrument, each with its source.", read: () => facts });
   for (const part of PARTS) if (facts[part] != null) server.resource({ uri: instrumentUri(id4, part), name: `${id4}: its ${part}`, read: () => facts[part] });
@@ -109592,6 +110239,25 @@ function instrumentServer({ instrument, compass = null, engine = null, motifs = 
       return factsAt(facts, pitch5);
     }
   });
+  const idiom = idiomOf(facts.idiom);
+  if (idiom?.move && facts.idiom.moves) server.tool({
+    name: "move",
+    description: "A move on it from one sounding pitch to another, the first held `seconds` (s): the time it needs (a wind's fingers and registers crossed, a bowed instrument's shift), its share of those seconds, and whether it needs more than it has.",
+    inputSchema: { type: "object", properties: { from: { type: "number" }, to: { type: "number" }, seconds: { type: "number" } }, required: ["from", "to", "seconds"] },
+    call: ({ from, to, seconds: seconds2 }) => {
+      if (![from, to, seconds2].every(Number.isFinite)) throw new RangeError("move: finite pitches and seconds");
+      return idiom.move(from, to, seconds2);
+    }
+  });
+  if (idiom && facts.idiom.together) server.tool({
+    name: "together",
+    description: "Whether it plays these sounding pitches together, and how: on adjacent strings within its hand's frame (a double stop, a chord), or a multiphonic measured on it.",
+    inputSchema: { type: "object", properties: { pitches: { type: "array", items: { type: "number" } } }, required: ["pitches"] },
+    call: ({ pitches }) => {
+      if (!Array.isArray(pitches) || !pitches.every(Number.isFinite)) throw new RangeError("together: finite pitches");
+      return idiom.together(pitches);
+    }
+  });
   return server;
 }
 
@@ -109602,8 +110268,10 @@ init_line();
 init_line_rhythm();
 init_techniques();
 init_figure_space();
-var RHYTHM_LEVERS = Object.freeze(["tuplets", "syncopation", "syncopationLength", "syncopationMeter", "syncopationRepeats", "syncopationWithin"]);
-var LEVERS = Object.freeze(["daring", "density", "loudness", "fioriture", "leap", "slurs", "motifLength", "runs", "rests", "commas", "landing", "phraseRange", "quoting", "tone", ...RHYTHM_LEVERS]);
+init_idiom();
+var RHYTHM_LEVERS = Object.freeze(["tuplets", "syncopation"]);
+var LATER_LEVERS = Object.freeze(["themes"]);
+var LEVERS = Object.freeze(["daring", "density", "loudness", "fioriture", "leap", "slurs", "motifLength", "runs", "rests", "commas", "landing", "phraseRange", "quoting", "tone", ...RHYTHM_LEVERS, ...LATER_LEVERS]);
 var TONE_RANGES = Object.freeze(["vibrato", "depth", "pressure", "contact"]);
 var RANGE = "personality";
 var unit7 = (x) => Math.max(0, Math.min(1, Number(x)));
@@ -109619,6 +110287,7 @@ var across2 = (name12, share) => {
 };
 var ORDINARY = Object.freeze({ vibrato: () => 1 / setting(RANGE, "vibratoMost"), depth: () => 0, pressure: () => 1 / 2, contact: () => 1 / 2 });
 var RHYTHMIC = /* @__PURE__ */ new Set(["repeated", "asymmetric", "rest"]);
+var leaned = (share, a) => a >= 0 ? share + (1 - share) * a : share * (1 + a);
 function drawPersonality(key2, { given: given3 = null, grammars = LINE.grammars } = {}) {
   const stream2 = createRandomStream(`personality:${key2}`), levers = {}, shares = {}, ranges2 = {}, told = [];
   const lever = (name12) => {
@@ -109628,7 +110297,7 @@ function drawPersonality(key2, { given: given3 = null, grammars = LINE.grammars 
       told.push(name12);
     } else levers[name12] = drawn5;
   };
-  for (const name12 of LEVERS) lever(name12);
+  for (const name12 of LEVERS) if (!LATER_LEVERS.includes(name12)) lever(name12);
   for (const grammar of grammars) {
     const drawn5 = stream2.next();
     shares[grammar] = givenShare(given3?.grammars?.[grammar]) ? unit7(given3.grammars[grammar]) : drawn5;
@@ -109646,9 +110315,10 @@ function drawPersonality(key2, { given: given3 = null, grammars = LINE.grammars 
   const drawn4 = drawTaste(() => stream2.next(), (wide) => across2("figureWidth", levers.daring * wide));
   const figures2 = given3?.figures != null ? FIGURE_SPACE.locate(given3.figures) : drawn4;
   if (given3?.figures != null) told.push("figures");
+  for (const name12 of LATER_LEVERS) lever(name12);
   return Object.freeze({ key: String(key2), levers: Object.freeze(levers), grammars: Object.freeze(shares), ranges: Object.freeze(ranges2), figures: figures2, given: Object.freeze(told) });
 }
-function playingOf(personality, facts, base3, { rhythm: rhythm2 = false } = {}) {
+function playingOf(personality, facts, base3, { rhythm: rhythm2 = null } = {}) {
   const { levers, grammars } = personality, daring = levers.daring, tone = levers.tone ?? 1 / 2;
   const engine = facts.compass.engine, [low, high] = engine ? [Math.max(facts.compass.range[0], engine[0]), Math.min(facts.compass.range[1], engine[1])] : facts.compass.range;
   const [from, to] = facts.compass.register.map((p) => Math.max(low, Math.min(high, p)));
@@ -109657,10 +110327,9 @@ function playingOf(personality, facts, base3, { rhythm: rhythm2 = false } = {}) 
   const louder = (mark) => marks[Math.min(marks.length - 1, marks.indexOf(mark) + steps)], softer = (mark) => marks[Math.max(0, marks.indexOf(mark) - steps)];
   const [fastest, slowest] = setting(RANGE, "shortest"), least = setting(RANGE, "grammarLeast");
   const quickest = Math.max(fastest, facts.engine?.quickest ?? 0), calmest = Math.max(slowest, quickest);
-  const pull2 = across2("rhythmicGrammars", tone), pulled = (g, share) => {
-    const a = RHYTHMIC.has(g) ? pull2 : -pull2;
-    return a >= 0 ? share + (1 - share) * a : share * (1 + a);
-  };
+  const pull2 = across2("rhythmicGrammars", tone), pulled = (g, share) => leaned(share, RHYTHMIC.has(g) ? pull2 : -pull2);
+  const piece3 = rhythm2 ? rhythmShares(rhythm2) : null;
+  const idiom = idiomOf(facts.idiom), [heedful, heedless] = setting("idiom", "weight");
   const choices = {
     ...base3,
     shortest: calmest - (calmest - quickest) * daring,
@@ -109672,10 +110341,12 @@ function playingOf(personality, facts, base3, { rhythm: rhythm2 = false } = {}) 
     runMost: Math.round(across2("runs", levers.runs)),
     restShare: across2("rests", levers.rests),
     commaShare: across2("commas", levers.commas),
+    restate: across2("themes", levers.themes ?? 1 / 2),
     landing: Object.freeze([base3.landing[0], across2("landing", levers.landing)]),
     figures: personality.figures ?? base3.figures ?? null,
-    rhythm: rhythm2 ? Object.freeze(Object.fromEntries(RHYTHM_SHARES.map((share, k2) => [share, across2(RHYTHM_LEVERS[k2], levers[RHYTHM_LEVERS[k2]])]))) : base3.rhythm ?? null,
+    rhythm: piece3 ? Object.freeze({ ...piece3, ...Object.fromEntries(RHYTHM_LEVERS.map((name12) => [name12, +leaned(piece3[name12], across2(name12, levers[name12] ?? 1 / 2)).toFixed(6)])) }) : base3.rhythm ?? null,
     grammarWeights: Object.freeze(Object.fromEntries(Object.entries(grammars).map(([g, share]) => [g, least + (1 - least) * pulled(g, share)]))),
+    idiom: idiom && facts.idiom.moves ? Object.freeze({ move: idiom.move, walk: idiom.walk, weight: heedful + (heedless - heedful) * daring }) : base3.idiom ?? null,
     // (A wind's loudest low and softest high, past the comfortable ones by its daring.)
     ...facts.breath ? { lowMost: louder(facts.dynamics.comfortable.low.most), highLeast: softer(facts.dynamics.comfortable.high.least) } : {}
   };
@@ -109684,10 +110355,10 @@ function playingOf(personality, facts, base3, { rhythm: rhythm2 = false } = {}) 
     choices: Object.freeze(choices),
     shaping: Object.freeze({ density: across2("density", levers.density), loudness: across2("loudness", levers.loudness), fioriture: across2("fioriture", levers.fioriture) }),
     quoting: across2("quoting", levers.quoting),
-    tone: toneOf(personality, facts)
+    tone: toneOf(personality, facts, register, idiom)
   });
 }
-function toneOf(personality, facts) {
+function toneOf(personality, facts, register, idiom) {
   const own2 = facts.techniques?.kinds ?? [], engine = facts.engine, ranges2 = personality.ranges ?? drawPersonality(personality.key).ranges;
   const kinds4 = engine?.techniques ? own2.filter((kind) => engine.techniques.includes(kind)) : own2;
   const mutes = kinds4.includes("mute") ? (engine?.mutes ?? facts.techniques.mutes ?? []).filter((m) => (facts.techniques.mutes ?? []).includes(m)) : [];
@@ -109699,7 +110370,8 @@ function toneOf(personality, facts) {
     vibrato: Object.freeze(ranges2.vibrato.map((x) => +(x * most).toFixed(4))),
     depth: ranges2.depth,
     pressure: bipolar2(ranges2.pressure),
-    contact: bipolar2(ranges2.contact)
+    contact: bipolar2(ranges2.contact),
+    affords: Object.freeze(idiom && register ? idiom.techniquesIn(register) : {})
   });
 }
 function phraseTone(personality, playing, { phrase, level }) {
@@ -109710,7 +110382,7 @@ function phraseTone(personality, playing, { phrase, level }) {
   const [takes, which, far, contact, muted, mute] = [draw(), draw(), draw(), draw(), draw(), draw()];
   if (has2("pressure")) out.pressure = +within3(tone.pressure, loud).toFixed(3);
   if (has2("contact")) out.contact = +within3(tone.contact, contact).toFixed(3);
-  const weights = [["hum", 1 - loud], ["harmonic", 1 - loud], ["growl", loud], ["flutter", loud], ["multiphonic", 1 / 2]].filter(([kind]) => has2(kind));
+  const weights = [["hum", 1 - loud], ["harmonic", 1 - loud], ["growl", loud], ["flutter", loud], ["multiphonic", 1 / 2]].filter(([kind]) => has2(kind)).map(([kind, w]) => [kind, w * (tone.affords?.[kind] ?? 1)]).filter(([, w]) => w > 0);
   const total = weights.reduce((sum9, [, w]) => sum9 + w, 0);
   if (takes < tone.share && total > 0) {
     let left = which * total, kind = weights.at(-1)[0];
@@ -109792,7 +110464,7 @@ var PlaysItsPersonality = (Class, { base: base3 }) => class extends Class {
     try {
       const facts = await client.read(instrumentUri(this.instrument)), lines = await client.read(instrumentUri(this.instrument, "motifs"));
       const personality = drawPersonality(`${this.randomStream?.seed ?? 0}:${this.seedIdentity ?? ""}:${this.instrument}`, { given: this.personalityGiven });
-      const playing = playingOf(personality, facts, base3, { rhythm: this.onEngine }), quoted2 = preferredMotif(personality, playing, lines);
+      const playing = playingOf(personality, facts, base3, { rhythm: this.onEngine ? this.bandTime.rhythm : null }), quoted2 = preferredMotif(personality, playing, lines);
       Object.assign(this, { facts, personality, playing, givenLine: quoted2 == null ? null : lines[quoted2] });
       const said = {
         instrument: facts.instrument,
@@ -109804,7 +110476,8 @@ var PlaysItsPersonality = (Class, { base: base3 }) => class extends Class {
         tone: { ...playing.tone },
         engine: facts.engine?.name ?? null,
         motif: quoted2 == null ? "its own" : lines[quoted2].id,
-        rhythm: playing.choices.rhythm ?? null
+        rhythm: playing.choices.rhythm ?? null,
+        idiom: facts.idiom?.favours ?? null
       };
       this.audio?.report?.("personality", said);
       this.decide?.({ personality: said });
@@ -109920,6 +110593,8 @@ var BowedStringClodbot = class extends Agent {
       shaped.density *= room2.density;
       const own2 = this.playing?.register ?? BOWED_INSTRUMENTS[this.instrument].register, register = room2.awayFrom ? registerAway(own2, room2.awayFrom) ?? own2 : own2;
       const pickup = span2.final ? null : this.pickupAt?.(clock7.bar + bars, clock7, draw) ?? null;
+      const themed = this.phraseTheme?.(clock7.bar, clock7.bar + bars) ?? null;
+      const motif = themed && themed.motif !== void 0 ? themed.motif : this.motifToStart?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), register }) ?? this.motif;
       const planned = planPhrase2({
         instrument: this.instrument,
         register,
@@ -109929,13 +110604,14 @@ var BowedStringClodbot = class extends Agent {
         bpm: Number(clock7.bpm) || bandTempo(),
         bars,
         ...shaped,
-        motif: this.motifToStart?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), register }) ?? this.motif,
+        motif,
         motifDensity: BOWEDSTRING.density,
         phraseIndex: this.phraseIndex,
         previousApex: this.previousApex,
         pickup,
-        lead: this.lead,
-        heard: this.motifsHeard?.() ?? [],
+        lead: themed?.lead ?? this.lead,
+        heard: [...this.motifsHeard?.() ?? [], ...themed?.heard ?? []],
+        ...themed ? { variation: themed.variation, nextPhrase: themed.next } : {},
         climax: this.attentionAt?.(clock7.bar)?.role === "climax",
         final: span2.final ? { tonic: ending?.tonic ?? null, .../* @__PURE__ */ ((band2) => band2 ? { motif: band2 } : {})(this.bandMotif?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), pool: this.notes, register: register ?? null })) } : null,
         random: draw,
@@ -109946,6 +110622,7 @@ var BowedStringClodbot = class extends Agent {
       if (planned.apex != null) this.previousApex = planned.apex;
       this.lead = planned.lead ?? null;
       this.phraseIndex++;
+      this.themePlayed?.(themed, planned);
       if (planned.choice) this.sayMotif?.(planned.motif);
       this.phrase = {
         startTick: tick,
@@ -110011,7 +110688,7 @@ var BowedStringClodbot = class extends Agent {
   }
 };
 function defineBowedStringClodbot() {
-  const Bot = PerformedTiming(HearsAttention(PlaysPickups(HearsPartRubato(HearsLineMotifs(GroupingChoice(Closure(PlaysItsPersonality(BowedStringClodbot, { base: BOWED_LINE })), { role: "layer" }))))), { instrument: "melody" });
+  const Bot = PerformedTiming(HearsAttention(PlaysThemes(PlaysPickups(HearsPartRubato(HearsLineMotifs(GroupingChoice(Closure(PlaysItsPersonality(BowedStringClodbot, { base: BOWED_LINE })), { role: "layer" })))))), { instrument: "melody" });
   return defineBot({
     id: "bowedstring_clodbot",
     orchestral: true,
@@ -110136,6 +110813,8 @@ var FluteClodbot = class extends Agent {
       shaped.density *= room2.density;
       const own2 = this.playing?.register ?? WIND_INSTRUMENTS[this.instrument].register, register = room2.awayFrom ? registerAway(own2, room2.awayFrom) ?? own2 : own2;
       const pickup = span2.final ? null : this.pickupAt?.(clock7.bar + bars, clock7, draw) ?? null;
+      const themed = this.phraseTheme?.(clock7.bar, clock7.bar + bars) ?? null;
+      const motif = themed && themed.motif !== void 0 ? themed.motif : this.motifToStart?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), register }) ?? this.motif;
       const planned = planPhrase({
         instrument: this.instrument,
         register,
@@ -110145,13 +110824,14 @@ var FluteClodbot = class extends Agent {
         bpm: Number(clock7.bpm) || bandTempo(),
         bars,
         ...shaped,
-        motif: this.motifToStart?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), register }) ?? this.motif,
+        motif,
         motifDensity: FLUTE.density,
         phraseIndex: this.phraseIndex,
         previousApex: this.previousApex,
         pickup,
-        lead: this.lead,
-        heard: this.motifsHeard?.() ?? [],
+        lead: themed?.lead ?? this.lead,
+        heard: [...this.motifsHeard?.() ?? [], ...themed?.heard ?? []],
+        ...themed ? { variation: themed.variation, nextPhrase: themed.next } : {},
         climax: this.attentionAt?.(clock7.bar)?.role === "climax",
         final: span2.final ? { tonic: ending?.tonic ?? null, .../* @__PURE__ */ ((band2) => band2 ? { motif: band2 } : {})(this.bandMotif?.({ meter, bpm: Number(clock7.bpm) || bandTempo(), pool: this.notes, register: register ?? null })) } : null,
         random: draw,
@@ -110162,6 +110842,7 @@ var FluteClodbot = class extends Agent {
       if (planned.apex != null) this.previousApex = planned.apex;
       this.lead = planned.lead ?? null;
       this.phraseIndex++;
+      this.themePlayed?.(themed, planned);
       if (planned.choice) this.sayMotif?.(planned.motif);
       this.phrase = {
         startTick: tick,
@@ -110233,7 +110914,7 @@ var FluteClodbot = class extends Agent {
     this.memoryPlayed?.report(tick);
   }
 };
-var windPlayerBot = (Class) => PerformedTiming(HearsAttention(PlaysPickups(HearsPartRubato(HearsLineMotifs(GroupingChoice(Closure(PlaysItsPersonality(Class, { base: WIND_LINE })), { role: "layer" }))))), { instrument: "melody" });
+var windPlayerBot = (Class) => PerformedTiming(HearsAttention(PlaysThemes(PlaysPickups(HearsPartRubato(HearsLineMotifs(GroupingChoice(Closure(PlaysItsPersonality(Class, { base: WIND_LINE })), { role: "layer" })))))), { instrument: "melody" });
 function defineFluteClodbot() {
   const Bot = windPlayerBot(FluteClodbot);
   return defineBot({
@@ -110685,7 +111366,7 @@ init_stochastic();
 // public/shared/lazy-coverage.js
 function selectLazyCoverage(entries, { limit, categories, weights, modular = () => 0 }) {
   if (!Number.isSafeInteger(limit) || limit < 0 || entries.length > 65536) throw new RangeError("coverage bounds");
-  const seenIds = /* @__PURE__ */ new Set(), covered2 = /* @__PURE__ */ new Set(), heap = [], out = [];
+  const seenIds = /* @__PURE__ */ new Set(), covered3 = /* @__PURE__ */ new Set(), heap = [], out = [];
   const compare5 = (a, b) => b.gain - a.gain || (a.entry.motifId < b.entry.motifId ? -1 : a.entry.motifId > b.entry.motifId ? 1 : 0);
   const push = (x) => {
     heap.push(x);
@@ -110715,7 +111396,7 @@ function selectLazyCoverage(entries, { limit, categories, weights, modular = () 
   };
   const gain = (x) => {
     let v = 0;
-    for (const c2 of x.categories) if (!covered2.has(c2)) v += weights.get(c2);
+    for (const c2 of x.categories) if (!covered3.has(c2)) v += weights.get(c2);
     v += x.modular;
     if (!Number.isFinite(v)) throw new RangeError("gain overflow");
     return v;
@@ -110740,8 +111421,8 @@ function selectLazyCoverage(entries, { limit, categories, weights, modular = () 
       push(x);
       continue;
     }
-    const fresh = x.categories.filter((c2) => !covered2.has(c2));
-    for (const c2 of fresh) covered2.add(c2);
+    const fresh = x.categories.filter((c2) => !covered3.has(c2));
+    for (const c2 of fresh) covered3.add(c2);
     x.entry.score = Number(x.gain.toFixed(6));
     x.entry.reason = fresh.length ? `covers ${fresh.join(", ")}` : "adds no region the answer did not already hold";
     out.push(x.entry);
@@ -112252,7 +112933,7 @@ var MemoryBot = class _MemoryBot extends Agent {
   sectionOfBar(bar) {
     const plan2 = this.receivedPlans.get(String(this.formProgress?.formPlanId || ""));
     if (!plan2 || !Number.isFinite(Number(bar))) return null;
-    return sectionAt2(compileSections(plan2, { phraseBars: this.currentClock?.meter?.phraseBars || bandPhraseBars() }), Number(bar));
+    return sectionAt3(compileSections(plan2, { phraseBars: this.currentClock?.meter?.phraseBars || bandPhraseBars() }), Number(bar));
   }
   // Material that sounded, filed under the section it was played in: a phrase
   // its author published as it played it (at the bar it was made), or a stored
@@ -112382,7 +113063,7 @@ var MemoryBot = class _MemoryBot extends Agent {
     if (plan2?.kind !== "form") return;
     this.answerForm(plan2, this.currentClock);
     if (String(this.formProgress?.formPlanId || "") === String(plan2.planId) && this.currentClock)
-      this.planSectionReturns(sectionAt2(compileSections(plan2, { phraseBars: this.currentClock.meter?.phraseBars || bandPhraseBars() }), Number(this.currentClock.bar)));
+      this.planSectionReturns(sectionAt3(compileSections(plan2, { phraseBars: this.currentClock.meter?.phraseBars || bandPhraseBars() }), Number(this.currentClock.bar)));
   }
   onTick(tick, clock7) {
     if (!clock7?.barStart) return;
@@ -114513,8 +115194,12 @@ var InSection = (Base) => class extends Base {
   }
   onTick(tick, clock7) {
     if (this.memberOf) declareMember(this, this.memberOf.group);
-    if (this.memberOf && Number.isInteger(clock7?.bar) && this.restingAt(clock7.bar)) return;
     const hit = this.memberOf && Number.isInteger(clock7?.bar) ? this.memberPhraseAt(clock7.bar) : null;
+    if (hit?.resting || hit?.pool?.texture === "hit") {
+      this.readBass?.(clock7);
+      this.hearHarmony?.(clock7);
+    }
+    if (hit?.resting) return;
     if (hit?.pool?.texture === "hit") {
       if (clock7.bar === hit.bar && (clock7.tickInBar ?? 0) === 0 && this.struckAt !== hit.bar) {
         this.struckAt = hit.bar;
@@ -122852,14 +123537,14 @@ function compileFactorizedCadenceProfile(spec, options = {}) {
   function finish(records, domainStatus, whole8, eventCount, state2) {
     const evidence2 = freeze48([...records.values()].map((row) => {
       state2.budget.charge();
-      const covered2 = pairRule2(row) ? row.pairs.length > 0 && row.pairs.every((p) => p.exercised) : row.exercised;
+      const covered3 = pairRule2(row) ? row.pairs.length > 0 && row.pairs.every((p) => p.exercised) : row.exercised;
       return freeze48({
         id: row.id,
         type: row.type,
         required: row.required,
         musicalStatus: row.status,
         exercised: row.exercised,
-        coverageStatus: whole8 && row.required ? covered2 ? "PASS" : "UNKNOWN" : "N/A",
+        coverageStatus: whole8 && row.required ? covered3 ? "PASS" : "UNKNOWN" : "N/A",
         pairs: freeze48(row.pairs.map((p) => {
           state2.budget.charge();
           return freeze48({ ...p });
@@ -124660,7 +125345,7 @@ function fugueExposition({ section: section2, startBar, endBar, groups, collecti
   };
   let { episodes, fragmented, turned, fragments } = episodesOf();
   const nextGiven = (k2) => Math.min(fragmented[k2][0]?.start ?? Infinity, stretto ? total - strettoLength + k2 * strettoSpacing : returns && k2 === 0 ? total - quarters : Infinity);
-  const entryT = order4.map((_, k2) => k2 < 2 ? {} : transformOf(subject, k2 * spacing2, nextGiven(k2)));
+  const entryT = order4.map((_, k2) => k2 < 2 ? {} : transformOf(subject, k2 * spacing2, Math.min(nextGiven(k2), countered ? nextGiven(k2 - 1) : Infinity)));
   const returnStart = (k2) => stretto ? total - strettoLength + k2 * strettoSpacing : returns && k2 === 0 ? total - quarters : null;
   const returnT = order4.map((_, k2) => returnStart(k2) == null || stretto ? {} : transformOf(subject, returnStart(k2), total));
   const ratioOf2 = (t) => {
@@ -128009,6 +128694,31 @@ var PlexClodbot = class extends PlexBot {
     const c2 = this.rules(), archetype = weightedChoice(c2.formArchetypes, c2.formArchetypes.map((item) => item.weight));
     this.sketch = { name: archetype.name, roles: [...archetype.roles] };
     return this.sketch;
+  }
+  // A section drawn as mh_PlexBOT draws it (generateSection), its meter taking shape by its form (the owner, 6 November
+  // 2026: "the metrical structure keeps shifting throughout instead of taking shape according to a form"): it keeps the
+  // whole frame of the section before it -- its meter, its grouping and its phrase -- as often as its role continues what
+  // came before (mh_PlexBOT's `continuity`, by which it weighs only its numerator: its denominator, subdivision, grouping
+  // and phrase had been drawn anew in every section, the meter changing at nearly every one), where that frame is one its
+  // role draws from (its numerators, mh_PlexBOT's chooseNumerator); so the meter holds where the form goes on and moves
+  // where it departs, and a return restores the opening's, as mh_PlexBOT's does. Its own draw after mh_PlexBOT's, which
+  // are as they were; the section's tempo, density and rhythm's weight its role's.
+  generateSection(index, role, previous, home2) {
+    const drawn4 = super.generateSection(index, role, previous, home2), c2 = this.rules(), continuity = Number(c2.continuity?.[role]);
+    if (!previous || RETURN_ROLES2.includes(role) || !(role === "stabilize" ? c2.stableNumerators : c2.numerators).includes(previous.numerator) || !(unitRandom() < continuity)) return drawn4;
+    const { numerator, denominator, subdivision, groups, phraseBars } = previous, target = c2.roleComplexity[role] ?? drawn4.hdensity;
+    const density = c2.hitDensities.reduce((best, value4) => Math.abs(value4 - target) < Math.abs(best - target) ? value4 : best);
+    return {
+      ...drawn4,
+      numerator,
+      denominator,
+      subdivision,
+      groups: [...groups],
+      phraseBars,
+      rhythm: { ...drawn4.rhythm, hits: Math.max(1, Math.round(numerator * subdivision * density)) },
+      tempo: { ...drawn4.tempo, durationBars: phraseBars },
+      rationale: "go on in the meter before, the form continuing"
+    };
   }
   // Where a render declares its length, the bar it ends on (as mh_FormBOT reads it); null in a live room.
   declaredEnd(clock7) {
@@ -137492,6 +138202,13 @@ function sharesOf(n, start, end, breathed, reach) {
   const times = [...new Set([start, ...(swell ?? []).map(([t]) => t), ...(sway ?? []).map(([t]) => t)].map(micro))].filter((t) => t >= micro(start) && t <= micro(last2)).sort((a, b) => a - b);
   return times.map((t) => [t, +clamp43(swellAt(swell, Math.max(t, onset)) * (sway ? 1 + VIBRATO_SHARE * along2(sway, Math.max(t, onset)) : 1), reach).toFixed(6)]);
 }
+function bendsOf(n, start, end) {
+  const path = pathOf2(n);
+  if (!path) return null;
+  const onset = n.atSeconds, held2 = heldOf(n, path), points2 = path.map((p) => [p.seconds, p.cents]);
+  const times = [...new Set([start, ...points2.map(([t]) => t)].map(micro))].filter((t) => t >= micro(start) && t <= micro(end)).sort((a, b) => a - b);
+  return times.map((t) => [t, +(along2(points2, Math.max(t, onset)) - held2).toFixed(3)]);
+}
 function dialChanges(notes, dial) {
   const limits = dial.limits, [low, high] = [Math.min(...dial.notes), Math.max(...dial.notes)], breathed = !dial.partials, out = [], unplayed = [];
   const playable = [];
@@ -137559,14 +138276,16 @@ function dialChanges(notes, dial) {
       }
     }
     if (x.multiphonic) unplayed.push({ note: n.identity, at: n.atSeconds, why: "its multiphonic: the dial plays none yet" });
-    if (!breathed && (n.controls ?? []).some((c2) => c2.action === 1)) unplayed.push({ note: n.identity, at: n.atSeconds, why: "its pitch's path: a brass player's lips would follow it, not its breath" });
     const shares = sharesOf(n, t, end, breathed, limits.swell);
     if (joined) at2(t, "/articulation", how);
     else if (n.performance?.attackSeconds > 0) at2(t, "/articulation", { rise: +clamp43(n.performance.attackSeconds, limits.rise).toFixed(6) });
     at2(t, "/swell", { share: shares[0][1] });
     at2(t, "/pitch", { pitch: +pitch5.toFixed(4), dynamic: scoredDynamicOf(n.velocity) });
+    const bends = breathed ? null : bendsOf(n, t, end);
+    if (bends) at2(t, "/bend", { cents: bends[0][1] });
     if (!joined) at2(t, "/blow", { on: true });
     for (let j = 1; j < shares.length; j++) at2(shares[j - 1][0], "/swell", { share: shares[j][1], seconds: micro(shares[j][0] - shares[j - 1][0]) });
+    for (let j = 1; j < (bends?.length ?? 0); j++) at2(bends[j - 1][0], "/bend", { cents: bends[j][1], seconds: micro(bends[j][0] - bends[j - 1][0]) });
     if (Number.isFinite(own2) && !followed) {
       at2(own2, "/blow", { on: false });
       at2(own2, "/swell", { share: 1 });
