@@ -585,12 +585,15 @@ function playersBand(input) {
   band2.className = "players";
   band2.append(fill2, said2);
   track.append(band2);
+  const titled = (entry) => `${entry.what}
+Source: ${entry.source}.${entry.by ? `
+Taken from ${entry.by}, since nobody has measured it on this instrument.` : ""}`;
   return (entry, place, written) => {
     const value3 = entry?.value != null, [low, high] = value3 ? [entry.value, entry.value] : entry?.range ?? [null, null];
     if (!entry || low == null && high == null) {
       fill2.hidden = true;
-      said2.textContent = "unmeasured";
-      band2.title = "Nobody measured yet for this control.";
+      said2.textContent = "not measured";
+      band2.title = entry?.what ? titled(entry) : "Nobody has measured this for real players yet.";
       return;
     }
     const clip = (x2) => Math.min(1, Math.max(0, x2)), a = low == null ? 0 : place(low), b = high == null ? 1 : place(high);
@@ -599,8 +602,8 @@ function playersBand(input) {
     fill2.classList.toggle("tick", value3);
     fill2.style.left = `calc(8px + (100% - 16px) * ${from})`;
     fill2.style.width = value3 ? "" : `calc((100% - 16px) * ${to - from})`;
-    said2.textContent = `measured ${value3 ? written(low) : low == null ? `≤ ${written(high)}` : high == null ? `≥ ${written(low)}` : `${written(low)}–${written(high)}`}` + (beyond ? ", beyond its reach" : "") + (entry.by ? " (borrowed)" : "");
-    band2.title = `${entry.what[0].toUpperCase()}${entry.what.slice(1)}: ${entry.source}${entry.by ? `; borrowed from ${entry.by}` : ""}.`;
+    said2.textContent = `measured: ${value3 ? written(low) : low == null ? `up to ${written(high)}` : high == null ? `at least ${written(low)}` : `${written(low)} to ${written(high)}`}` + (beyond ? ", beyond the slider" : "") + (entry.by ? ` (on ${entry.by})` : "");
+    band2.title = titled(entry);
   };
 }
 function atPitch(entry, midi) {
@@ -981,6 +984,9 @@ var sources_default = {
     "vsl-academy-double-bass": { kind: "vernacular", who: "Vienna Symphonic Library, Academy: the double bass's page (its strings, compass and notation)", url: "https://www.vsl.co.at/academy/strings/double-bass", accessed: "2026-10-29" },
     "galluzzo-2004": { kind: "literature", authors: "P. M. Galluzzo", title: "On the playability of stringed instruments (PhD thesis, University of Cambridge)", year: 2004, doi: "10.17863/CAM.14046", saved: "research-downloads/strings/bowed-friction-papers/galluzzo-2004-thesis-playability.pdf", note: "a DataCite DOI, checked there: section 4.2.3, the waveform identification" },
     "lampis-2024": { kind: "literature", authors: "A. Lampis, A. Mayer, V. Chatziioannou", title: "An experimental approach for comparing the influence of cello string type on bowed attack response", year: 2024, doi: "10.1121/10.0034330", in: "JASA Express Letters 4, 113201", saved: "research-downloads/strings/lampis-2024-cello-string-attack-jasael.pdf" },
+    "lampis-acta-2024": { kind: "literature", authors: "A. Lampis, A. Mayer, V. Chatziioannou", title: "Assessing playability limits of bowed-string transients using experimental measurements", year: 2024, doi: "10.1051/aacus/2024034", in: "Acta Acustica 8, 44", saved: "research-downloads/strings/lampis-2024-playability-transients-acta.pdf", note: "CC BY; checked on Crossref" },
+    "lampis-attacks-2024": { kind: "other", who: `A. Lampis, "Bridge force waveforms obtained by systematically bowing various cello G-string models", Zenodo 2024, doi:10.5281/zenodo.13374477: a bowing robot's attacks from rest on four cello G strings, each file a bow force and acceleration, its bridge force at 50 kHz -- the recordings behind lampis-acta-2024's Guettler diagrams`, url: "https://doi.org/10.5281/zenodo.13374477", licence: "CC BY 4.0", saved: "research-downloads/strings/lampis-attacks/waveforms", note: "two of its sessions fetched, string C's and string A's (research-downloads/README.md)" },
+    "matusiak-chatziioannou-2024": { kind: "literature", authors: "E. Matusiak, V. Chatziioannou", title: "Elasto-plastic friction modeling toward reconstructing measured bowed-string transients", year: 2024, doi: "10.1121/10.0028228", in: "J. Acoust. Soc. Am. 156(2), 1135-1147", saved: "research-downloads/strings/matusiak-2024/matusiak-chatziioannou-2024-jasa.pdf", note: "CC BY; checked on Crossref" },
     "geringer-allen-2004": { kind: "literature", authors: "J. M. Geringer, M. L. Allen", title: "An Analysis of Vibrato among High School and University Violin and Cello Students", year: 2004, doi: "10.2307/3345438", in: "Journal of Research in Music Education 52(2), 167-178" },
     "allen-geringer-macleod-2009": { kind: "literature", authors: "M. L. Allen, J. M. Geringer, R. B. MacLeod", title: "Performance Practice of Violin Vibrato: An Artist-Level Case Study", year: 2009, doi: "10.1177/1948499209OS-400103", in: "String Research Journal os-4(1), 27-38" },
     "macleod-2008": { kind: "literature", authors: "R. B. MacLeod", title: "Influences of Dynamic Level and Pitch Register on the Vibrato Rates and Widths of Violin and Viola Players", year: 2008, doi: "10.1177/0022429408323070", in: "Journal of Research in Music Education 56(1), 43-54" },
@@ -1000,6 +1006,8 @@ var sources_default = {
     "pamies-vila-hofmann-chatziioannou-2018": { kind: "literature", authors: "M. Pàmies-Vilà, A. Hofmann, V. Chatziioannou", title: "Analysis of Tonguing and Blowing Actions During Clarinet Performance", year: 2018, doi: "10.3389/fpsyg.2018.00617", in: "Frontiers in Psychology 9, 617", saved: "research-downloads/winds/pamies-vila-2018-tonguing-blowing.pdf" },
     "fritz-wolfe-2005": { kind: "literature", authors: "C. Fritz, J. Wolfe", title: "How do clarinet players adjust the resonances of their vocal tracts for different playing effects?", year: 2005, doi: "10.1121/1.2041287", in: "The Journal of the Acoustical Society of America 118(5), 3306-3315", saved: "research-downloads/winds/vocal-tract/fritz-wolfe-2005-clarinet-vocal-tract.pdf" },
     "chen-smith-wolfe-2009": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Pitch bending and glissandi on the clarinet: Roles of the vocal tract and partial tone hole closure", year: 2009, doi: "10.1121/1.3177269", in: "The Journal of the Acoustical Society of America 126(3), 1511-1520", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2009-clarinet-pitch-bending.pdf" },
+    "chen-smith-wolfe-2008": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Experienced saxophonists learn to tune their vocal tracts", year: 2008, doi: "10.1126/science.1151411", in: "Science 319(5864), 776", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2008-saxophonists-tune-vocal-tracts.pdf" },
+    "chen-smith-wolfe-2011": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Saxophonists tune vocal tract resonances in advanced performance techniques", year: 2011, doi: "10.1121/1.3514423", in: "The Journal of the Acoustical Society of America 129(1), 415-426", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2011-saxophonists-tune-vocal-tract-resonances.pdf" },
     "wiertlewski-hayward-2012": { kind: "literature", authors: "M. Wiertlewski, V. Hayward", title: "Transducer for mechanical impedance testing over a wide frequency range through active feedback", year: 2012, doi: "10.1063/1.3683572", in: "Review of Scientific Instruments 83(2), 025001", saved: "research-downloads/strings/finger/wiertlewski-hayward-2012-transducer-impedance-rsi.pdf" },
     "hennig-2011": { kind: "literature", authors: "H. Hennig, R. Fleischmann, A. Fredebohm, Y. Hagmayer, J. Nagler, A. Witt, F. J. Theis, T. Geisel", title: "The Nature and Perception of Fluctuations in Human Musical Rhythms", year: 2011, doi: "10.1371/journal.pone.0026457", in: "PLoS ONE 6(10), e26457", saved: "research-downloads/performer-noise/hennig-2011-fluctuations-human-musical-rhythms.pdf" },
     "mcauley-marsden-2000": { kind: "literature", authors: "J. H. McAuley, C. D. Marsden", title: "Physiological and pathological tremors and rhythmic central motor control", year: 2e3, doi: "10.1093/brain/123.8.1545", in: "Brain 123(8), 1545-1567", read: "its abstract (PubMed 10908186)" },
@@ -1042,7 +1050,13 @@ var sources_default = {
     "cellofun-extensions": { kind: "vernacular", who: `cellofun.eu, a cellist's technique encyclopaedia: "Extensions On The Cello" and "Simple Extensions in the Neck Region"`, url: "https://cellofun.eu/?p=1661", accessed: "2026-11-06" },
     "gale-triangulation": { kind: "vernacular", who: `T. B. Gale, Triangulation of Fingering Systems for the Double Bass (A Complete Method), Vol. 1, its publisher's page: "Closed Hand (Simandl 1-2-4), Open Hand (extension fingering 1-2-3-4), and Thumb Positions"`, url: "https://www.sheetmusicplus.com/en/product/triangulation-of-fingering-systems-for-the-double-bass-a-complete-method-vol-1-22576307.html", accessed: "2026-11-06" },
     "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" },
-    "furneaux-1999": { kind: "literature", authors: "S. Furneaux, M. F. Land", title: "The effects of skill on the eye-hand span during musical sight-reading", year: 1999, doi: "10.1098/rspb.1999.0943", in: "Proceedings of the Royal Society of London B 266(1436), 2435-2440" }
+    "furneaux-1999": { kind: "literature", authors: "S. Furneaux, M. F. Land", title: "The effects of skill on the eye-hand span during musical sight-reading", year: 1999, doi: "10.1098/rspb.1999.0943", in: "Proceedings of the Royal Society of London B 266(1436), 2435-2440" },
+    "gaillard-koehl-gazengel-2024": { kind: "literature", authors: "A. Gaillard, V. Koehl, B. Gazengel", title: "Theoretical and experimental studies about single cane reeds: a review", year: 2024, doi: "10.1051/aacus/2024050", in: "Acta Acustica 8, 63", licence: "CC BY 4.0", saved: "research-downloads/winds/saxophone-reed/aacus240040.pdf" },
+    "ukshini-dirckx-2020": { kind: "literature", authors: "E. Ukshini, J. J. J. Dirckx", title: "Longitudinal and transversal elasticity of natural and artificial materials for musical instrument reeds", year: 2020, doi: "10.3390/ma13204566", in: "Materials 13(20), 4566", licence: "CC BY 4.0", saved: "research-downloads/materials/arundo-donax/ukshini-dirckx-2020-reed-elasticity.pdf" },
+    "wood-handbook-2021": { kind: "literature", authors: "R. J. Ross (ed.), Forest Products Laboratory", title: "Wood handbook: wood as an engineering material", year: 2021, doi: "10.2737/FPL-GTR-282", in: "General Technical Report FPL-GTR-282, USDA Forest Service, Forest Products Laboratory, Madison, WI", licence: "public domain (a work of the United States government)", saved: "research-downloads/materials/wood-handbook/wood-handbook-2021-fpl-gtr-282.pdf" },
+    "global-wood-density-database": { kind: "other", who: 'A. E. Zanne, G. Lopez-Gonzalez, D. A. Coomes, J. Ilic, S. Jansen, S. L. Lewis, R. B. Miller, N. G. Swenson, M. C. Wiemann, J. Chave, "Data from: Towards a worldwide wood economics spectrum", Dryad 2009 (Chave et al. 2009, Ecology Letters 12, 351-366, doi:10.1111/j.1461-0248.2009.01285.x): the Global Wood Density Database, 16,468 basic densities (oven-dry mass over green volume) of 8,412 taxa, each with its region and reference', url: "https://doi.org/10.5061/dryad.234", licence: "CC0 1.0 (Dryad's for every deposit)", saved: "research-downloads/materials/global-wood-density/archive", note: "the copy fetched is the Encyclopedia of Life's on Zenodo (record 13322441), the same records as a Darwin Core archive: Dryad's own refused the download (403)" },
+    "concast-c26000": { kind: "vernacular", who: "Concast Metal Products, C26000 cartridge brass (70/30): its data sheet, the Copper Development Association's values", url: "https://www.concast.com/files/C26000.pdf", accessed: "2026-11-07", saved: "research-downloads/materials/metals/concast-c26000-cartridge-brass.pdf" },
+    "concast-c23000": { kind: "vernacular", who: "Concast Metal Products, C23000 red brass (85/15, instrument makers' gold brass): its data sheet, the Copper Development Association's values", url: "https://www.concast.com/files/C23000.pdf", accessed: "2026-11-07", saved: "research-downloads/materials/metals/concast-c23000-red-brass.pdf" }
   }
 };
 
@@ -1055,7 +1069,40 @@ var constants_default = {
     "t60-db": { value: 60, unit: "dB", kind: "literature", source: "iso-3382-1-2009", note: "a reverberation time's fall: the time a sound takes to decay by 60 dB" },
     milli: { value: 1e3, unit: "1", kind: "literature", source: "nist-sp811-2008", note: "SI's milli: thousandths in one (ms in a second)" },
     "pound-force": { value: 4.4482216152605, unit: "N/lbf", kind: "literature", source: "nist-sp811-2008", note: "one pound-force in newtons, exactly" },
-    "steel-density": { value: 7850, range: [7600, 8e3], unit: "kg/m^3", kind: "vernacular", source: "physics-factbook-steel", note: "the handbooks' steels span the range; 7850 the value engineers take (490 lb/ft^3). A wound string's stiffness enters the models only as E d^4, so its d is taken as the steel cylinder of its density and E what gives its measured stiffness" }
+    "steel-density": { value: 7850, range: [7600, 8e3], unit: "kg/m^3", kind: "vernacular", source: "physics-factbook-steel", note: "the handbooks' steels span the range; 7850 the value engineers take (490 lb/ft^3). A wound string's stiffness enters the models only as E d^4, so its d is taken as the steel cylinder of its density and E what gives its measured stiffness" },
+    "arundo-donax-density": { value: 500, range: [450, 520], unit: "kg/m^3", kind: "literature", source: "gaillard-koehl-gazengel-2024", at: "Table A2", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "clarinet reeds' cane: 450 (Facchinetti, Boutillon & Constantinescu 2003; Pinard, Laine & Vach 2003), 520 (Guimezanes 2008; Taillard et al. 2014), 500 (Chatziioannou 2010; the review gives Ukshini & Dirckx 2020 too, who do not state it)" },
+    "arundo-donax-longitudinal-modulus": { value: 5e9, range: [3e9, 14e9], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "dry, along the fibres, 1 mm specimens: 5.0 (±0.7) GPa; 1.5 mm: 3.0 (±0.2). The range the others' (Gaillard, Koehl & Gazengel 2024, Table A2): 3 to 9.5 along a reed from heel to tip (Guimezanes 2008, Table A3), 10 (Facchinetti 2003; Chatziioannou 2010), 14 (Taillard et al. 2014). Its tissues by indentation: the fibres' sheaths about 7 GPa, the parenchyma 2 to 3, the vascular bundles 1.5 to 2 (Kawasaki et al. 2017, doi:10.1002/jemt.22889)" },
+    "arundo-donax-longitudinal-modulus-wet": { value: 31e8, range: [21e8, 31e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "soaked 15 minutes, as a reed is played: 1 mm specimens 3.1 (±0.4) GPa, 1.5 mm 2.1 (±0.3)" },
+    "arundo-donax-transverse-modulus": { value: 5e8, range: [2e8, 5e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "dry, across the fibres: 1 mm 0.5 (±0.03) GPa, 1.5 mm 0.4 (±0.06); 0.2 to 0.5 along a reed (Guimezanes 2008), 0.4 (Facchinetti 2003; Chatziioannou 2010) (Gaillard, Koehl & Gazengel 2024, Table A2). Ten times softer than along them" },
+    "arundo-donax-transverse-modulus-wet": { value: 1e8, range: [1e8, 2e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "soaked: 1 mm 0.1 (±0.05) GPa, 1.5 mm 0.2 (±0.02); 24 times softer than along the fibres" },
+    "arundo-donax-shear-modulus": { value: 13e8, range: [6e8, 13e8], unit: "Pa", kind: "literature", source: "gaillard-koehl-gazengel-2024", at: "Table A2", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "G_xz, along the fibres and through the thickness: 1.3 GPa (Facchinetti 2003; Chatziioannou 2010), 0.6 to 0.87 along a reed (Guimezanes 2008), 1.1 (Taillard et al. 2014)" },
+    "arundo-donax-poisson": { value: 0.22, unit: "1", kind: "literature", source: "gaillard-koehl-gazengel-2024", at: "Table A2", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "nu_x (Facchinetti 2003; Guimezanes 2008; Chatziioannou 2010); nu_y 0.08 (Chatziioannou 2010)" },
+    "arundo-donax-hysteresis-wet": { value: 0.157, range: [0.119, 0.191], unit: "1", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 3", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "the share of the work of a slow bend lost as it is let go, soaked, along the fibres, 1 mm specimens (11.9, 16.1, 19.1 %); 1.5 mm 14.2 to 32.8 %, across the fibres 28.1 to 41.2 %: a quasi-static loss, not the reed's damping at its resonance" },
+    "legere-longitudinal-modulus": { value: 75e8, range: [59e8, 75e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Légère (polypropylene fibres in polypropylene): the synthetic single reed", note: "1 mm specimens 7.5 (±0.3) GPa, 1.5 mm 5.9 (±0.2): half again cane's, and unchanged by water" },
+    "legere-transverse-modulus": { value: 19e8, range: [18e8, 19e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Légère (polypropylene fibres in polypropylene): the synthetic single reed", note: "1 mm 1.9 (±0.1) GPa, 1.5 mm 1.8 (±0.01): four times softer than along its fibres, where cane is ten" },
+    "legere-density": { value: 910, unit: "kg/m^3", kind: "literature", source: "ukshini-dirckx-2020", at: "4.2", material: "Légère (polypropylene fibres in polypropylene): the synthetic single reed", note: "isotropic polypropylene's, about 0.91 g/mL, as Légère's patent gives it (cited, not measured)" },
+    "fiberreed-longitudinal-modulus": { value: 189e8, range: [154e8, 189e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Carbon Fiberreed (carbon fibres in a matrix): a synthetic single reed", note: "1 mm 18.9 (±6.4) GPa, 1.5 mm 15.4 (±1.1)" },
+    "fiberreed-transverse-modulus": { value: 53e8, range: [43e8, 53e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Carbon Fiberreed (carbon fibres in a matrix): a synthetic single reed", note: "1 mm 5.3 (±0.3) GPa, 1.5 mm 4.3 (±0.3)" },
+    "dalbergia-melanoxylon-gravity": { value: 1.08, range: [0.9, 1.2], unit: "1", kind: "other", source: "global-wood-density-database", material: "Dalbergia melanoxylon Guill. & Perr. (African blackwood, grenadilla, mpingo): the bodies of clarinets, oboes, English horns and piccolos", note: "basic specific gravity: oven-dry mass over green volume, over water's density; its five records, tropical Africa (the database's references 58, 147, 192, 192, 200): 1.08, 1.13, 0.90, 1.20, 1.076; the median taken. Its hygromechanical constants measured by Alkadri et al. 2020 (doi:10.1007/s00226-020-01215-z), not yet fetched" },
+    "acer-pseudoplatanus-gravity": { value: 0.51, range: [0.508, 0.51], unit: "1", kind: "other", source: "global-wood-density-database", material: "Acer pseudoplatanus L. (sycamore maple, mountain maple): bassoons' and contrabassoons' bodies; the violin family's backs, ribs and necks", note: "basic specific gravity: oven-dry mass over green volume, over water's density; Europe (references 28, 60)" },
+    "acer-platanoides-gravity": { value: 0.51, range: [0.508, 0.525], unit: "1", kind: "other", source: "global-wood-density-database", material: "Acer platanoides L. (Norway maple): the violin family's backs and ribs, bassoons' bodies", note: "basic specific gravity: oven-dry mass over green volume, over water's density; Europe (references 158, 28)" },
+    "picea-abies-gravity": { value: 0.37, unit: "1", kind: "other", source: "global-wood-density-database", material: "Picea abies (L.) H. Karst. (Norway spruce, European spruce): the violin family's tops", note: "basic specific gravity: oven-dry mass over green volume, over water's density; Europe (reference 28)" },
+    "paubrasilia-echinata-gravity": { value: 0.89, range: [0.86, 0.92], unit: "1", kind: "other", source: "global-wood-density-database", material: "Paubrasilia echinata (Lam.) Gagnon, H.C.Lima & G.P.Lewis (pernambuco, Caesalpinia echinata in the database): the violin family's bows", note: "basic specific gravity: oven-dry mass over green volume, over water's density; tropical South America (references 35, 44)" },
+    "diospyros-crassiflora-gravity": { value: 0.83, range: [0.775, 0.99], unit: "1", kind: "other", source: "global-wood-density-database", material: "Diospyros crassiflora Hiern (African ebony): the violin family's fingerboards, pegs and tailpieces", note: "basic specific gravity: oven-dry mass over green volume, over water's density; tropical Africa (references 136, 1, 137, 99, 40): 0.80, 0.99, 0.826, 0.90, 0.775, the median taken" },
+    "acer-saccharum-modulus": { value: 126e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-3a", material: "Acer saccharum Marshall (sugar maple, hard maple)", note: "its modulus in static bending at 12 % moisture, specific gravity 0.63 at 12 % (green: 10.7 GPa at 0.56); along the grain about 10 % above it (Table 5-1, note). Its elastic ratios at 12 %: E_T/E_L 0.065, E_R/E_L 0.132, G_LR/E_L 0.111, G_LT/E_L 0.063 (Table 5-1); its Poisson's ratios mu_LR 0.424, mu_LT 0.476, mu_RT 0.774, mu_TR 0.349 (Table 5-2)" },
+    "picea-sitchensis-modulus": { value: 108e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-3a", material: "Picea sitchensis (Bong.) Carr. (Sitka spruce): soundboards and the tops of instruments made in America", note: "its modulus in static bending at 12 % moisture, specific gravity 0.40 at 12 % (green: 8.5 GPa at 0.37); red spruce (Picea rubens) 11.4 GPa at 0.40. Its elastic ratios at 12 %: E_T/E_L 0.043, E_R/E_L 0.078, G_LR/E_L 0.064, G_LT/E_L 0.061, G_RT/E_L 0.003 (Table 5-1)" },
+    "wood-modulus-green-softwood-coefficient": { value: 161e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, green softwoods (16,100 MPa)" },
+    "wood-modulus-green-softwood-exponent": { value: 0.76, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, green softwoods" },
+    "wood-modulus-green-hardwood-coefficient": { value: 139e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, green hardwoods (13,900 MPa)" },
+    "wood-modulus-green-hardwood-exponent": { value: 0.72, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, green hardwoods" },
+    "wood-modulus-dry-softwood-coefficient": { value: 203e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, softwoods at 12 % moisture (20,300 MPa); G their gravity at 12 %. Sitka spruce at 0.40 gives 9.5 GPa, measured 10.8" },
+    "wood-modulus-dry-softwood-exponent": { value: 0.83, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, softwoods at 12 % moisture" },
+    "wood-modulus-dry-hardwood-coefficient": { value: 165e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, hardwoods at 12 % moisture (16,500 MPa); G their gravity at 12 %. Sugar maple at 0.63 gives 11.9 GPa, measured 12.6" },
+    "wood-modulus-dry-hardwood-exponent": { value: 0.7, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, hardwoods at 12 % moisture" },
+    "cartridge-brass-density": { value: 8530, unit: "kg/m^3", kind: "vernacular", source: "concast-c26000", material: "C26000 cartridge brass, 70 % copper and 30 % zinc (yellow brass): the saxophones' and most brass instruments' bodies and bells", note: "at 20 °C" },
+    "cartridge-brass-modulus": { value: 110317e6, unit: "Pa", kind: "vernacular", source: "concast-c26000", material: "C26000 cartridge brass, 70 % copper and 30 % zinc (yellow brass)", note: "in tension, 16,000 ksi" },
+    "gold-brass-density": { value: 8670, unit: "kg/m^3", kind: "vernacular", source: "concast-c23000", material: "C23000 red brass, 85 % copper and 15 % zinc (instrument makers' gold brass): bells and leadpipes", note: "at 20 °C" },
+    "gold-brass-modulus": { value: 110317e6, unit: "Pa", kind: "vernacular", source: "concast-c23000", material: "C23000 red brass, 85 % copper and 15 % zinc (gold brass)", note: "in tension, 16,000 ksi" }
   }
 };
 
@@ -1112,7 +1159,12 @@ var equations_default = {
     sawtooth: { formula: "x = 2 frac(f0 t) - 1: a sawtooth rising from -1 to 1 each period, falling back at once", inputs: { t: "s", f0: "Hz" }, unit: "1", source: null, statistic: "a definition", checks: [{ inputs: { t: 0.3, f0: 1 }, value: -0.4 }, { inputs: { t: 1.7, f0: 3 }, value: -0.8000000000000007 }] },
     "cents-ratio": { formula: "r = 2^(cents / 1200): the frequency ratio of an interval in cents", inputs: { cents: "cents" }, unit: "1", source: null, statistic: "a definition (twelve hundred cents to the octave)", checks: [{ inputs: { cents: 1200 }, value: 2 }, { inputs: { cents: -20 }, value: 0.9885140203528962 }] },
     "normal-deviate": { formula: "z = sqrt(-2 ln max(u, 1e-12)) cos(2 pi v): a standard normal deviate from two uniform ones in [0, 1) (u floored, so a draw of 0 gives a finite deviate)", inputs: { u: "1", v: "1" }, unit: "1", source: "box-muller-1958", statistic: "a transformation (Box & Muller)", checks: [{ inputs: { u: 0.5, v: 0 }, value: 1.1774100225154747 }, { inputs: { u: 0, v: 0.5 }, value: -7.4338443776996765 }] },
-    "hz-midi": { formula: "midi = 69 + 12 log2(f / a4): a frequency as a MIDI note, midi-hz's inverse", inputs: { hz: "Hz", a4: "Hz" }, unit: "MIDI note (semitones, fractional)", source: "iso-16-1975", checks: [{ inputs: { hz: 440, a4: 440 }, value: 69 }, { inputs: { hz: 41.20344461410875, a4: 440 }, value: 28 }] }
+    "hz-midi": { formula: "midi = 69 + 12 log2(f / a4): a frequency as a MIDI note, midi-hz's inverse", inputs: { hz: "Hz", a4: "Hz" }, unit: "MIDI note (semitones, fractional)", source: "iso-16-1975", checks: [{ inputs: { hz: 440, a4: 440 }, value: 69 }, { inputs: { hz: 41.20344461410875, a4: 440 }, value: 28 }] },
+    difference: { formula: "a - b: a quantity less another", inputs: { a: "any", b: "as a" }, unit: "as a", source: null, statistic: "an identity", checks: [{ inputs: { a: 1.537, b: 0.305 }, value: 1.232 }] },
+    scaled: { formula: "x a / b: a quantity scaled by a ratio", inputs: { x: "any", a: "any", b: "as a" }, unit: "as x", source: null, statistic: "an identity", checks: [{ inputs: { x: 0.12, a: 1064, b: 419 }, value: 0.30472553699284 }] },
+    "loss-per-frequency": { formula: "r2 = r1 (2 pi)^2 mu / T: a string's loss per squared wavenumber (its damping term 2 r1 rho A u_txx, m^2/s) as a loss per squared frequency, its modes at k = 2 pi f / c, c^2 = T / mu", inputs: { r1: "m^2/s", T: "N", mu: "kg/m" }, unit: "s", source: "matusiak-chatziioannou-2024", at: "Eq. (1)", checks: [{ inputs: { r1: 87e-4, T: 149.6, mu: 794e-5 }, value: 18229212107445202e-21 }] },
+    "friction-drop-scale": { formula: "k = (s0 - d0) / (s1 - d1): a bow's force measured under one friction (static s0, dynamic d0) moved to another (s1, d1) -- both of Schelleng's bounds on the force, the most and the least, go as one over the drop from static to dynamic friction, so the force keeps its place between them", inputs: { s0: "the static coefficient it was measured under", d0: "its dynamic", s1: "the static coefficient it meets", d1: "its dynamic" }, unit: "1", source: "schelleng-1973", checks: [{ inputs: { s0: 0.654, d0: 0.301, s1: 1.4, d1: 0.5 }, value: 0.39222222222222 }] },
+    "power-law": { formula: "y = a x^b", inputs: { a: "as y", x: "1", b: "1" }, unit: "as a", source: null, statistic: "a power law: the Wood Handbook's modulus from specific gravity (Table 5-11a) is one", checks: [{ inputs: { a: 139e8, x: 1.08, b: 0.72 }, value: 14691965647165176e-6 }, { inputs: { a: 165e8, x: 0.63, b: 0.7 }, value: 11940494937878204e-6 }] }
   }
 };
 
@@ -1148,7 +1200,18 @@ var bowed_default = {
         lowestHz: { kind: "derived", derive: { equation: "lowest-hz", inputs: { tuning: "tuning", a4: "constant:a4" } }, unit: "Hz" },
         bow: {
           stringsAtOnce: { value: 2, unit: "strings", kind: "vernacular", source: "vsl-academy-violin", note: `the bridge's curvature and the bow's tension make it "not possible to sound more than two strings at the same time": a triple or quadruple stop arpeggiated (the violin's page; the family's bridges alike arched)` },
-          hairWidth: { value: 0.01, unit: "m", kind: "unmeasured", reason: "the violin bow's measured width taken for every bow of the family: no viola, cello or bass bow's ribbon found measured (its rehairers set it by the bow's mortise and ferrule, bow by bow)", searched: [{ where: "web search", query: "bow hair ribbon width mm violin viola cello double bass", date: "2026-10-29", found: "retailers' bow lengths, weights and hair lengths; a museum bass bow's head 21.2 mm wide (University of Edinburgh MIMEd 17331); no ribbon width" }, { where: "web search", query: "bow ferrule width mm violin cello bass hair ribbon width rehair specification", date: "2026-10-29", found: "a violin ribbon 10 to 12 mm by its ferrule (violinist.com forum); Arcus's hair cross-sections by bow, mm2 (violin 5-8, cello 9-13, bass 11-16), not widths; no larger bow's ribbon width" }] }
+          hairWidth: { value: 0.01, unit: "m", kind: "unmeasured", reason: "the violin bow's measured width taken for every bow of the family: no viola, cello or bass bow's ribbon found measured (its rehairers set it by the bow's mortise and ferrule, bow by bow)", searched: [{ where: "web search", query: "bow hair ribbon width mm violin viola cello double bass", date: "2026-10-29", found: "retailers' bow lengths, weights and hair lengths; a museum bass bow's head 21.2 mm wide (University of Edinburgh MIMEd 17331); no ribbon width" }, { where: "web search", query: "bow ferrule width mm violin cello bass hair ribbon width rehair specification", date: "2026-10-29", found: "a violin ribbon 10 to 12 mm by its ferrule (violinist.com forum); Arcus's hair cross-sections by bow, mm2 (violin 5-8, cello 9-13, bass 11-16), not widths; no larger bow's ribbon width" }] },
+          hairStiffness: { value: 4829700, unit: "N/m^2", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "the robot's cello bow's hair a spring in series with its contact, per metre of its ribbon's width, optimized against its attacks on string A with the string's torsion and elasto-plastic friction; taken for every bow of the family (no other measured)" },
+          hairDamping: { value: 5767.4, unit: "kg/(s m)", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "the dashpot beside that spring, as it" },
+          stringLoss: {
+            r0: { kind: "derived", derive: { equation: "difference", inputs: { a: "object:lampis-2024-g-strings:A.bowedLoss.r0", b: "object:lampis-2024-g-strings:A.pluckLoss.r0" } }, unit: "1/s", note: "the losses a string has while the bow is on it beyond its own: string A's bowed less its plucked -- the torsion its friction drives and the hair's damping, which the engine does not model; one cello G string's, taken for every string of the family (none other measured)" },
+            r2: { kind: "derived", derive: { equation: "difference", inputs: { a: "object:lampis-2024-g-strings:A.bowedLoss.r2", b: "object:lampis-2024-g-strings:A.pluckLoss.r2" } }, unit: "s", note: "as its r0" }
+          },
+          friction: {
+            static: { value: 1.4, unit: "1", kind: "literature", source: "lampis-acta-2024", at: "4.1, Figure 11a", note: `rosined hair on a cello G string (Dominant), from its bridge force just before the first slip: "approximately 1.4" averaged over all their attacks, strongly dependent on the force, little on the acceleration (Galluzzo's 0.66 the measured span's other end); taken for every string of the family (no other measured), where Artifastring's tables drew theirs from 0.58 to 1.06` },
+            dynamic: { value: 0.5, unit: "1", kind: "literature", source: "lampis-acta-2024", at: "4, Figure 10", note: 'the dynamic coefficient their limits took from the literature (Smith & Woodhouse 2000, "The tribology of rosin"); its drop from the static, 0.9, within the 0.6 at low force to 1 at high they measured at the first slip (4.1, Figure 11b)' },
+            steepness: { value: 0.1, unit: "m/s", kind: "unmeasured", reason: "ours: the speed of slipping over which the friction falls from its static to its dynamic coefficient in Artifastring's hyperbola (its v0), within the 0.05 to 0.3 its tables were drawn from (Percival, Artifastring research/shared/published_constants.py); with it, the static and dynamic above and the hair and losses, the engine's attacks from rest on Lampis' string A met the robot's, 236 of its 859 within 20 periods to its 188 (Artifastring's contact 27) (native/strings-model/lampis_guettler.py, 7 November 2026)", searched: [{ where: "registry sources", query: "lampis-acta-2024: a friction curve's speed scale", date: "2026-11-07", found: 'the coefficients at the first slip and averaged over 0.1 s, a quadratic in force and acceleration "solely as a visualization tool"; no curve against slipping speed' }, { where: "registry sources", query: "matusiak-chatziioannou-2024: its friction law", date: "2026-11-07", found: "an elasto-plastic law (bristles, their stiffness and damping fitted) in place of a curve of slipping speed; no v0" }] }
+          }
         },
         engine: {
           solver: { kind: "derived", like: { candidates: ["violin", "viola", "cello"], match: "lowestHz", take: "@id" }, unit: "Artifastring instrument", note: "the bowed-string engine plays it on the solver and rates of the measured instrument whose lowest open string is nearest its own (itself where it is one)" },
@@ -1538,19 +1601,53 @@ var bowed_default = {
     },
     "lampis-2024-g-strings": {
       is: null,
-      about: "The bowing robot's cello G strings (Lampis, Mayer & Chatziioannou 2024; their bowed responses, Zenodo 2025, doi:10.5281/zenodo.17749110, CC BY 4.0): each string type's transverse impedance as they measured it on their monochord -- the real strings the model's Schelleng diagrams are held to.",
+      about: "The bowing robot's cello G strings (Lampis, Mayer & Chatziioannou 2024; their bowed responses, Zenodo 2025, doi:10.5281/zenodo.17749110, CC BY 4.0; their attacks from rest, lampis-attacks-2024): each string type as they measured it on their monochord, 0.7 m long -- the real strings the model's Schelleng and Guettler diagrams are held to; string A's losses while bowed and the robot's bow's hair as Matusiak & Chatziioannou fitted them to its bridge force.",
       values: {
+        length: { value: 0.7, unit: "m", kind: "literature", source: "lampis-2024", at: "2", note: '"a playing length of L = 70 cm", each string bowed 5.5 cm from the bridge (beta 0.0786)' },
         A: {
-          impedance: { value: 1.09, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "D'Addario Prelude" }
+          impedance: { value: 1.09, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "D'Addario Prelude" },
+          diameter: { value: 1092e-6, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 149.6, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 1.3" },
+          linearDensity: { value: 0.007940000000000001, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.07 g/m" },
+          bendingStiffness: { value: 685e-6, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.14e-4" },
+          quality: { value: 419, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" },
+          pluckLoss: {
+            r0: { kind: "derived", derive: { equation: "scaled", inputs: { x: "object:lampis-2024-g-strings:C.pluckLoss.r0", a: "object:lampis-2024-g-strings:C.quality", b: "object:lampis-2024-g-strings:A.quality" } }, note: "string C's plucked losses (none of string A's measured mode by mode) by the two strings' Q, averaged over their modes", unit: "1/s" },
+            r2: { kind: "derived", derive: { equation: "scaled", inputs: { x: "object:lampis-2024-g-strings:C.pluckLoss.r2", a: "object:lampis-2024-g-strings:C.quality", b: "object:lampis-2024-g-strings:A.quality" } }, note: "string C's plucked losses (none of string A's measured mode by mode) by the two strings' Q, averaged over their modes", unit: "s" }
+          },
+          bowedLoss: {
+            r0: { value: 1.53714, unit: "1/s", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "optimized against the robot's steady bridge force on string A with its transverse motion alone, no torsion, and static friction: the losses of the string while bowed, its torsion's and the hair's among them" },
+            r1: { value: 87e-4, unit: "m^2/s", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "as its r0: a loss per squared wavenumber" },
+            r2: { kind: "derived", derive: { equation: "loss-per-frequency", inputs: { r1: "object:lampis-2024-g-strings:A.bowedLoss.r1", T: "object:lampis-2024-g-strings:A.tension", mu: "object:lampis-2024-g-strings:A.linearDensity" } }, unit: "s" }
+          }
         },
         B: {
-          impedance: { value: 1.12, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Helicore" }
+          impedance: { value: 1.12, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Helicore" },
+          diameter: { value: 877e-6, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 153.2, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.8" },
+          linearDensity: { value: 0.008140000000000001, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.03 g/m" },
+          bendingStiffness: { value: 43200000000000004e-20, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.16e-4" },
+          quality: { value: 503, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" }
         },
         C: {
-          impedance: { value: 0.85, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Thomastik Dominant" }
+          impedance: { value: 0.85, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Thomastik Dominant" },
+          diameter: { value: 115e-5, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 116.3, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.7" },
+          linearDensity: { value: 62e-4, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.06 g/m" },
+          bendingStiffness: { value: 303e-6, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.07e-4" },
+          quality: { value: 1064, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" },
+          pluckLoss: {
+            r0: { value: 0.12, unit: "1/s", kind: "literature", source: "lampis-acta-2024", at: "Fig. 4b", note: "ours, read from its plot: each of its 30 modes' decay pi f / Q, fitted r0 + r2 f^2 (string-loss-law), within 0.4/s of its modes to its 30th but its 10th (1.8 against 1.4)" },
+            r2: { value: 177e-8, unit: "s", kind: "literature", source: "lampis-acta-2024", at: "Fig. 4b", note: "as its r0" }
+          }
         },
         D: {
-          impedance: { value: 1.13, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Kaplan" }
+          impedance: { value: 1.13, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Kaplan" },
+          diameter: { value: 8950000000000001e-19, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 153.5, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.9" },
+          linearDensity: { value: 0.008199999999999999, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.04 g/m" },
+          bendingStiffness: { value: 31e-5, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.42e-4" },
+          quality: { value: 521, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" }
         }
       }
     }
@@ -2859,21 +2956,26 @@ var winds_default = {
       is: "reed-woodwind",
       about: "The contrabassoon, a double reed: its players' tract the reed woodwinds' (the clarinettists' measured) until its own are measured."
     },
-    "soprano-saxophone": {
+    saxophone: {
       is: "reed-woodwind",
-      about: "The soprano saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      abstract: true,
+      about: "A saxophone, whose players' tracts were measured as they played the tenor (Chen, Smith & Wolfe 2008, 2011): every saxophonist's until each size's own are measured."
+    },
+    "soprano-saxophone": {
+      is: "saxophone",
+      about: "The soprano saxophone: its players' tract the saxophonists' (measured on the tenor) until its own are measured."
     },
     "alto-saxophone": {
-      is: "reed-woodwind",
-      about: "The alto saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      is: "saxophone",
+      about: "The alto saxophone: its players' tract the saxophonists' (measured on the tenor) until its own are measured."
     },
     "tenor-saxophone": {
-      is: "reed-woodwind",
-      about: "The tenor saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      is: "saxophone",
+      about: "The tenor saxophone, whose players' tracts were measured as they played (Chen, Smith & Wolfe 2008, 2011)."
     },
     "baritone-saxophone": {
-      is: "reed-woodwind",
-      about: "The baritone saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      is: "saxophone",
+      about: "The baritone saxophone: its players' tract the saxophonists' (measured on the tenor) until its own are measured."
     },
     "jet-woodwind": {
       is: "instrument",
@@ -2954,6 +3056,28 @@ var winds_default2 = {
           leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
           up: { value: 0.04, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a resonance (a register: overblown with its register key) above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
           down: { value: 0.12, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a resonance (a register: overblown with its register key) below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
+        }
+      }
+    },
+    saxophone: {
+      values: {
+        tract: {
+          resonances: { value: [200, 1e3], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.A", note: "a modest first peak consistently around 150-250 Hz, and the next, of primary interest, typically around 1 kHz; measured on the tenor, five expert and three amateur saxophonists" },
+          first: {
+            frequency: { range: [150, 250], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.A", note: "a modest peak in the mouth consistently observed around 150-250 Hz, not tuned in any playing condition studied (III.C: 253 and 242 Hz under a standard and an altissimo note)" },
+            peak: { range: [25e5, 8e6], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.A, III.C, III.E", note: "not more than several MPa s/m^3: 2.5 (240 Hz, a soft note), 3.3 and 2.9 (253 and 242 Hz), 8 under one multiphonic's tract" }
+          },
+          normal: {
+            held: { value: 650, range: [500, 1100], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.D.1; Fig. 7", note: "over the standard range the second resonance from about 500 to 1100 Hz with no simple relation to the note, experts' broadly spread, amateurs' in two bands at about 650 and 1100 Hz; the lower band where it is held" },
+            offset: { value: 60, range: [0, 100], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.C, III.D.1; Fig. 7", note: "in the altissimo (on the tenor from sounding 659-698 Hz) experts tune a strong resonance near the note, typically not more than 100 Hz apart, on or above it rather than below: the note 921 Hz, 60 Hz below its peak at 980; toward the upper standard range experts already adjust it" },
+            peak: { value: 3e6, range: [4e5, 1e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.D.3, III.F", note: "over the standard range amateurs' 0.4-6 MPa s/m^3, experts' rising from about 1 to about 10 near the top of the second register; 3 in normal playing at C#5 against the bore's operating 62" }
+          },
+          altissimo: {
+            peak: { range: [1e7, 4e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "IV; III.C", note: "to play the weaker bore resonances (typically below 30 MPa s/m^3) experienced saxophonists make a strong resonance with impedance maxima ranging from 10 to 40 MPa s/m^3, comparable with the bore's: 33 at 980 Hz against the bore's 9.8 at 949; amateurs, who did not, could not play the altissimo (Chen, Smith & Wolfe 2008)" }
+          },
+          bend: {
+            peak: { range: [1e7, 4e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "IV; III.B; III.F", note: "bugling, 22-28 MPa s/m^3 near the 7th to 12th bore peaks; a pitch bend raising the mouth's peak almost sixfold from 3, the note 91 Hz (300 cents) below its fingering's; 10-40 in bugling and the altissimo" }
+          }
         }
       }
     },
@@ -3152,7 +3276,8 @@ var strings_default = {
         dcBlockHz: { value: 10, unit: "Hz", kind: "setting", reason: "the offset from zero the bow's friction leaves in Artifastring's sound blocked under this, first order, from silence" },
         kaiserBeta: { value: 8, unit: "1", kind: "setting", reason: "a body's impulse response stretched in time read between its samples by a Kaiser-windowed sinc of this beta: a stretch only narrows the band, so nothing folds back" },
         sincHalf: { value: 32, unit: "samples", kind: "setting", reason: "that sinc this many samples either side" },
-        scaledBins: { value: 32768, unit: "bins", kind: "setting", reason: "a minimum-phase body filter scaled to a body's size read and remade at this many frequency bins" }
+        scaledBins: { value: 32768, unit: "bins", kind: "setting", reason: "a minimum-phase body filter scaled to a body's size read and remade at this many frequency bins" },
+        bowContact: { value: false, unit: "switch", kind: "setting", reason: "the bow's contact as measured: its hair's give in series with each cell of the ribbon, the string's losses while bowed beyond its own, and rosin's friction on every string (registry/objects/bowed.json violin-family bow.hairStiffness, hairDamping, stringLoss, friction; Matusiak & Chatziioannou 2024, Lampis et al. 2024): the attacks from rest on Lampis' string A within 20 periods as often as the robot's, 236 of its 859 to its 188, where Artifastring's made 27 (native/strings-model/lampis_guettler.py), each part alone short of it; off, Artifastring's rigid contact, its strings' own losses and its tables' friction. Off until the laws are fitted under it (neutral.py fit, its maps stamped with it): a force measured under the one is played under the other moved by their frictions (friction-drop-scale), which keeps it under Schelleng's most force but not over his least, the bowed losses and the hair raising the least force more than the friction lowers it (a contrabass's mf bow moved from 5.06 N to 2.11 N double-slipped where 3 N held Helmholtz motion, 7 November 2026). The bodies' corrections, levels and pizzicati are measured through the engine, and are measured again when it changes (native/strings-model/README.md)" }
       }
     },
     "bow-planner": {
@@ -4002,6 +4127,11 @@ var EQUATION = Object.freeze({
     return b[1] + (b[1] - a[1]) * (x2 - b[0]) / (b[0] - a[0]);
   },
   "string-loss-law": ({ r0, r2, f }) => r0 + r2 * f * f,
+  "difference": ({ a, b }) => a - b,
+  "scaled": ({ x: x2, a, b }) => x2 * a / b,
+  "friction-drop-scale": ({ s0, d0, s1, d1 }) => (s0 - d0) / (s1 - d1),
+  "power-law": ({ a, x: x2, b }) => a * x2 ** b,
+  "loss-per-frequency": ({ r1, T, mu }) => r1 * (2 * Math.PI) ** 2 * mu / T,
   "least": ({ values }) => Math.min(...values),
   "ratio": ({ a, b }) => a / b,
   "lowest-hz": ({ tuning, a4 }) => a4 * 2 ** ((Math.min(...tuning) - 69) / 12),
@@ -4224,6 +4354,10 @@ function settingEntry(method, name2, stack = []) {
   return Object.freeze({ ...leaf, method, name: name2, value: value3 });
 }
 var setting = (method, name2) => settingEntry(method, name2).value;
+function source(id) {
+  if (!Object.hasOwn(sources_default.sources, id)) throw new Error(`registry: no source ${id}`);
+  return sources_default.sources[id];
+}
 
 // public/shared/felt-meter-catalog.js
 var freeze = (value3) => {
@@ -4379,7 +4513,7 @@ function musebotControls({ box, seed: seed2, seconds }) {
     r.className = "row";
     r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="range" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
     r.querySelector("span").textContent = words(name2);
-    r.title = `${grammar ? `its motifs' ${name2} grammar's share` : `its ${words(name2)}`}: drawn from its seed unless ticked, 0 to 1 across its range (registry/method/personality.json)`;
+    r.title = `${grammar ? `How much its motifs use the ${name2} grammar` : `Its ${words(name2)}`}, from 0 to 1 across its range. Drawn from the seed unless ticked (registry/method/personality.json).`;
     const [tick, range, number] = r.querySelectorAll("input");
     range.id = `${id}-${name2}`;
     r.querySelector("label").htmlFor = range.id;
@@ -4424,7 +4558,7 @@ function musebotControls({ box, seed: seed2, seconds }) {
     r.className = "row";
     r.innerHTML = '<label><input type="checkbox"> <span></span></label><input type="number" min="0" max="1" step="0.01"><input type="number" min="0" max="1" step="0.01">';
     r.querySelector("span").textContent = words(name2);
-    r.title = `its range of ${words(name2)}, its low and high shares of its span on its instrument: drawn from its seed unless ticked (personality.js TONE_RANGES; docs/PLAYER_PERSONALITY.md)`;
+    r.title = `Its range of ${words(name2)}: the lowest and highest it uses, each as a share (0 to 1) of what the instrument can do. Drawn from the seed unless ticked (personality.js TONE_RANGES; docs/PLAYER_PERSONALITY.md).`;
     const [tick, low, high] = r.querySelectorAll("input");
     low.id = `${id}-range-${name2}`;
     r.querySelector("label").htmlFor = low.id;
@@ -4474,7 +4608,7 @@ function musebotControls({ box, seed: seed2, seconds }) {
     box.replaceChildren();
     const id = box.id || "musebot", levers = boxOf("Its personality"), head = document.createElement("div");
     head.className = "note musebotNote";
-    head.textContent = "Its levers, its motifs' grammars and its tone's ranges, each drawn from its seed unless ticked; a piece's draw shown on those not ticked.";
+    head.textContent = "Each setting is a share from 0 to 1. Each is drawn from the seed unless you tick it and set it yourself; those not ticked show what the last piece drew.";
     const all = document.createElement("button");
     all.type = "button";
     all.textContent = "All from its seed";
@@ -4484,11 +4618,11 @@ function musebotControls({ box, seed: seed2, seconds }) {
     levers.append(head, all);
     built = player2.levers.map((name2) => share(levers, id, name2));
     if (player2.grammars?.length) {
-      const grammars = boxOf("Its motifs' grammars");
+      const grammars = boxOf("Its motifs' grammars (shares, 0 to 1)");
       built.push(...player2.grammars.map((name2) => share(grammars, id, name2, { grammar: true })));
     }
     if (player2.ranges?.length) {
-      const ranges = boxOf("Its tone's ranges, low and high");
+      const ranges = boxOf("Its tone's ranges, lowest and highest (shares, 0 to 1)");
       built.push(...player2.ranges.map((name2) => span(ranges, id, name2)));
     }
   }
@@ -4725,7 +4859,7 @@ function prerenderControls({ family: family3, button, box, rate, given, named, b
         shown4((at - piece.start) / piece.seconds);
         say2(`Rendering: ${clock(Math.max(0, Math.min(at - piece.start, piece.seconds)))} of ${clock(piece.seconds)} made, at ${Math.round(100 * pace2)} % of real time`);
       } else {
-        say2("Rendering: its sound ringing down");
+        say2("Rendering: letting the last notes ring out");
         if (!(dbOf(samples.reduce((a, v) => Math.max(a, Math.abs(v)), 0)) > QUIET_DB) || (made - ended) / rate() >= RING_MOST) break;
       }
     }
@@ -4748,7 +4882,7 @@ function prerenderControls({ family: family3, button, box, rate, given, named, b
     save.hidden = false;
     save.download = `${named()}, ${piece.player}, seed ${piece.seed}, ${clock(seconds).replace(":", "m")}s.wav`;
     shown4(1);
-    say2(`Rendered: ${clock(seconds)} of sound in ${clock(took2)}, at ${Math.round(100 * seconds / took2)} % of real time -- ${piece.notes} notes, ${piece.player}'s, seed ${piece.seed}` + (piece.late ? `; ${piece.late} came late` : "") + (piece.unplayed?.length ? `; ${piece.unplayed.length} not played here (${piece.unplayed[0].why})` : "") + ".");
+    say2(`Rendered ${clock(seconds)} of sound in ${clock(took2)} (${Math.round(100 * seconds / took2)} % of real time): ${piece.notes} notes by ${piece.player}, seed ${piece.seed}` + (piece.late ? `; ${piece.late} came late` : "") + (piece.unplayed?.length ? `; ${piece.unplayed.length} not played here (${piece.unplayed[0].why})` : "") + ".");
     Object.assign(box.dataset, { seconds: seconds.toFixed(3), piece: String(piece.seconds), peakDb: dbOf(peak).toFixed(1), notes: String(piece.notes), pace: (seconds / took2).toFixed(3) });
     audio.play().catch(() => {
     });
@@ -4768,7 +4902,7 @@ function prerenderControls({ family: family3, button, box, rate, given, named, b
     button.textContent = "■ Stop rendering";
     button.classList.add("on");
     shown4(0);
-    say2("Its band composes the piece ...");
+    say2("Its band is composing the piece ...");
     return ending = (async () => {
       try {
         await before2();
@@ -4884,10 +5018,10 @@ var heardDb = () => state.neutralDb ?? state.gainDb + state.rendersDb - state.st
 var cornerFor = (corrected) => corrected && state.correctedRadiation ? state.correctedRadiation.hz : state.airMode.hz;
 var hairAsk = (string = s) => ({ do: "hair", string, width: value2.hair / 1e3 });
 var NOISE_KINDS = [
-  ["force", "Bow force", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the force asked.`],
-  ["speed", "Bow speed", (sd) => `At 1, ${+(100 * sd).toPrecision(2)} % of the speed asked.`],
-  ["contact", "The bow's place", (sd) => `At 1, ${+(1e3 * sd).toPrecision(2)} thousandths of the string's length.`],
-  ["finger", "The finger's pitch", (sd) => `At 1, ${sd} cents.`]
+  ["force", "Bow force (× a player's)", (sd) => `At 1, it wavers by ${+(100 * sd).toPrecision(2)} % of the force set.`],
+  ["speed", "Bow speed (× a player's)", (sd) => `At 1, it wavers by ${+(100 * sd).toPrecision(2)} % of the speed set.`],
+  ["contact", "Bow's place (× a player's)", (sd) => `At 1, it wavers by ${+(1e3 * sd).toPrecision(2)} thousandths of the string's length.`],
+  ["finger", "Finger's pitch (× a player's)", (sd) => `At 1, it wavers by ${sd} cents.`]
 ];
 var noiseId = (kind) => `noise${kind[0].toUpperCase()}${kind.slice(1)}`;
 var noiseAsks = () => NOISE_KINDS.map(([kind]) => ({ do: "noise", what: kind, temperature: value2.noisePlayer * value2[noiseId(kind)] }));
@@ -4901,12 +5035,12 @@ var BUILD = [
   ["d", "Diameter (m)", "build"],
   ["pl", "Linear density (kg/m)", "build"],
   ["E", "Young's modulus (Pa)", "build"],
-  ["mus", "Static friction μs", "buildPhysics"],
-  ["mud", "Dynamic friction μd", "buildPhysics"],
+  ["mus", "Static friction μs (no unit)", "buildPhysics"],
+  ["mud", "Dynamic friction μd (no unit)", "buildPhysics"],
   ["v0", "Friction curve slope v0 (m/s)", "buildPhysics"],
-  ["loss", "Modes' losses (× own)", "buildPhysics"],
-  ["slope", "Losses tilt (× n^slope)", "buildPhysics"],
-  ["modes", "Modes (the most)", "buildPhysics"]
+  ["loss", "Losses (× Artifastring's)", "buildPhysics"],
+  ["slope", "Losses tilt (exponent: mode n's losses × n^tilt)", "buildPhysics"],
+  ["modes", "Modes (at most, count)", "buildPhysics"]
 ];
 var ownBuild = (k) => ({ T: k.T, L: k.L, d: k.d, pl: k.pl, E: k.E, mus: k.mus, mud: k.mud, v0: k.v0, loss: 1, slope: 0, modes: k.N });
 var startBuild = (k) => ({ ...ownBuild(k), modes: state.mostModes });
@@ -4920,9 +5054,9 @@ function read() {
   if (!k) return;
   const f0 = openHz(k), length = k.L * (1 - finger()), Z2 = Math.sqrt(k.T * k.pl), v = value2.speed, b = value2.beta, F2 = value2.force;
   const most = 2 * Z2 * v / (b * (k.mus - k.mud)), corner = 2 * Z2 * v / b;
-  notes.pitch.textContent = `${name(midiOf(f0) + value2.pitch)} · finger ${(100 * finger()).toFixed(1)} % of the string from the nut`;
-  notes.beta.textContent = `${(1e3 * b * length).toFixed(1)} mm from the bridge, of ${(1e3 * length).toFixed(0)} mm sounding · smaller is nearer the bridge (sul ponticello), larger toward the fingerboard (sul tasto)`;
-  notes.stroke.textContent = `${(value2.stroke / state.bow.length).toFixed(0)} % of a ${(100 * state.bow.length).toFixed(0)} cm bow · a stroke lasts about ${(value2.stroke / 100 / value2.speed).toFixed(2)} s at this speed`;
+  notes.pitch.textContent = `${name(midiOf(f0) + value2.pitch)}. The finger is ${(100 * finger()).toFixed(1)} % of the string's length from the nut.`;
+  notes.beta.textContent = `${(1e3 * b * length).toFixed(1)} mm from the bridge, on ${(1e3 * length).toFixed(0)} mm of sounding string. Smaller is nearer the bridge (sul ponticello); larger is nearer the fingerboard (sul tasto).`;
+  notes.stroke.textContent = `${(value2.stroke / state.bow.length).toFixed(0)} % of a ${(100 * state.bow.length).toFixed(0)} cm bow. At this speed a stroke lasts about ${(value2.stroke / 100 / value2.speed).toFixed(2)} s.`;
   const rows = [
     ["The force most for a clean (Helmholtz) tone", k.mus > k.mud ? `${most.toFixed(2)} N — you are at ${(100 * F2 / most).toFixed(0)} % of it` : "none: μs is not over μd"],
     ["Helmholtz force on the bridge, 2Zv/β", `${corner.toFixed(2)} N (${(20 * Math.log10(corner)).toFixed(1)} dB re 1 N): what loudness the stroke asks`],
@@ -4960,15 +5094,15 @@ function limits() {
   if (value2.beta < nearest) setters.beta(nearest, true);
   hairNote();
   drawPlayers();
-  $("fingerboardLimit").textContent = `at most ${state.fingerboard.toFixed(1)} semitones over the open string, where it meets the end of the ${state.name}'s fingerboard (Goldblatt's measurements)`;
-  $("hairLimit").textContent = `its middle at least half the hair on the string from the bridge (${(value2.hair / 2).toFixed(1)} mm): a violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; the ${state.name}'s not found measured`}`;
+  $("fingerboardLimit").textContent = `up to ${state.fingerboard.toFixed(1)} semitones above the open string, where the ${state.name}'s fingerboard ends (measured by Goldblatt)`;
+  $("hairLimit").textContent = `the middle of the bow hair stays at least ${(value2.hair / 2).toFixed(1)} mm from the bridge (half the hair on the string). A violin bow's hair is about ${(1e3 * state.bow.hairWidth).toFixed(0)} mm wide (Schoonderwaldt, Guettler & Askenfelt 2003)${state.instrument === "violin" ? "" : `; no measurement found for the ${state.name}'s`}`;
 }
 var bands = {};
 function drawPlayers() {
   const R = state.players;
   if (!R) return;
   const open = midiOf(openHz(builds[s])), shortly2 = (v) => String(+(+v).toPrecision(2));
-  const WRITTEN2 = { pitch: (v) => name(Math.round(open + v)), force: (v) => `${shortly2(v)} N`, width: (v) => `${Math.round(v)} ¢`, rate: (v) => `${shortly2(v)} Hz`, damping: (v) => `${shortly2(v)}×` };
+  const WRITTEN2 = { pitch: (v) => name(Math.round(open + v)), force: (v) => `${shortly2(v)} N`, width: (v) => `${Math.round(v)} cents`, rate: (v) => `${shortly2(v)} Hz`, damping: (v) => `${shortly2(v)}× a fingertip's`, beta: (v) => `${shortly2(v)} of the string` };
   for (const [id, set] of Object.entries(setters)) {
     if (id === "volume") continue;
     const entry = id === "pitch" && R.pitch ? { ...R.pitch, range: R.pitch.range.map((m) => m - open) } : R[id] ?? null;
@@ -4977,13 +5111,13 @@ function drawPlayers() {
 }
 function hairNote() {
   const modes = inUse.modes[s] ?? state.strings[s].N, cells = inUse.points[s] ?? 0, cell = inUse.cellMm[s];
-  notes.hair.textContent = value2.hair > 0 && cells > 0 ? `${cells > 1 ? `${cells} cells of ${(value2.hair / cells).toFixed(1)} mm` : `one cell, ${value2.hair.toFixed(1)} mm`}, each sticking and slipping on its own: its ${modes} modes hold cells no finer than ${Number.isFinite(cell) ? cell.toFixed(1) : "?"} mm apart (more modes, finer cells); under the ribbon's ${(1e3 * state.bow.hairWidth).toFixed(0)} mm, the bow tilted` : "Artifastring's point bow";
-  notes.modes.textContent = `${modes} in use, as many as asked and as its rate holds (Artifastring's own ${state.strings[s].N}): more resolve the bow's hair more finely, and take more processing`;
+  notes.hair.textContent = value2.hair > 0 && cells > 0 ? `The hair is computed as ${cells > 1 ? `${cells} strips of ${(value2.hair / cells).toFixed(1)} mm` : `one strip of ${value2.hair.toFixed(1)} mm`}, each sticking and slipping on its own. With ${modes} modes, strips can be no narrower than ${Number.isFinite(cell) ? cell.toFixed(1) : "?"} mm (more modes allow narrower strips). Less than the full ${(1e3 * state.bow.hairWidth).toFixed(0)} mm means the bow is tilted.` : "At 0, Artifastring's bow touching at a single point.";
+  notes.modes.textContent = `${modes} in use: as many as asked for, up to what the sample rate allows (Artifastring's own is ${state.strings[s].N}). More modes compute the bow's hair more finely, and take more processing.`;
 }
 function bodyNote() {
   const c = state.correctedRadiation;
   const b = state.bodyScaled;
-  $("bodyNote").textContent = (b ? `Its body: Artifastring's ${b.from} bodies scaled to the ${state.name}'s size, every resonance ${b.ratio} times lower (the ratio of the two instruments' lowest air modes) -- for now, until a measured bass body is fitted. ` : "") + `Corrected: Artifastring's ${b ? b.from : state.name} bodies, whose highs fall as a low-pass filter's do, brought to the instrument's radiation by the renders' own filter${b ? ", scaled with them" : ""}. Radiating: a body sounds nothing at 0 Hz, so the bow's drag, building as a stroke starts, is not heard as a low thump. Lowest air mode (A0): ${state.airMode.hz} Hz, ${state.airMode.source}.` + (c ? ` Corrected, the fall starts at ${c.hz} Hz, where the correction's own cut stops` + (c.scaled ? ` (the ${b.from}'s, scaled).` : ` (within ${c.offDb} dB of the radiation under A0, against ${c.unradiatedOffDb} dB without it).`) : "");
+  $("bodyNote").textContent = (b ? `The body is Artifastring's ${b.from} body scaled to the ${state.name}'s size, with every resonance ${b.ratio} times lower (the ratio of the two instruments' lowest air resonances). This stands in until a measured bass body is fitted. ` : "") + `Corrected: Artifastring's ${b ? b.from : state.name} bodies lose their high frequencies like a low-pass filter; the renders' own filter${b ? ", scaled the same way," : ""} restores the instrument's measured radiation. Radiating: a real body makes no sound at 0 Hz, so the bow's drag, building up as a stroke starts, is not heard as a low thump. Lowest air resonance (A0): ${state.airMode.hz} Hz, ${state.airMode.source}.` + (c ? ` When corrected, the roll-off starts at ${c.hz} Hz, where the correction's own cut ends` + (c.scaled ? ` (the ${b.from}'s, scaled).` : ` (within ${c.offDb} dB of the radiation below A0, compared with ${c.unradiatedOffDb} dB without it).`) : "");
 }
 function showBuild() {
   const own2 = state.strings[s];
@@ -5020,7 +5154,7 @@ async function instrument(type, variant) {
   strings2();
   limits();
   showBuild();
-  $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
+  $("vibratoNote").textContent = `measured on ${state.name} players: ${state.vibrato.width} cents wide at ${state.vibrato.rate} Hz`;
   setters.corner(cornerFor($("correcting").checked), true);
   bodyNote();
   await ask([fingerAsk(), dampingAsk(), radiateAsk(), ...builds.map((_, i) => buildAsk(i)), hairAsk()]);
@@ -5033,14 +5167,14 @@ function variants() {
   $("variants").textContent = `of ${n}`;
 }
 function describe() {
-  document.getElementById("what").textContent = `The ${state.name} on Artifastring, heard through ${state.heardThrough}: ${state.bodyScaled ? `the ${state.bodyScaled.from}'s body` : "Artifastring's"} no. ${state.variant}, seed ${state.seed} · ` + (state.neutral ? `taken up on its neutral note, from ${state.neutral.map.split("/").pop()}` : `its good note made from ${state.from.split("/").pop()}`);
+  document.getElementById("what").textContent = `The ${state.name}, modelled by Artifastring and heard through ${state.heardThrough}: ${state.bodyScaled ? `the ${state.bodyScaled.from}'s body` : "Artifastring's"} no. ${state.variant}, seed ${state.seed}. ` + (state.neutral ? `It starts on its neutral note, from ${state.neutral.map.split("/").pop()}.` : `It starts on a good note made from ${state.from.split("/").pop()}.`);
 }
 async function init(status2) {
   for (const until = performance.now() + 6e4; ; ) {
     state = await (await fetch("/strings/state", { cache: "no-store" })).json();
     if (state.rate && Object.keys(state.constants).length && state.strings.filter(Boolean).length === 4) break;
     if (performance.now() > until) throw new Error("its host did not say its strings within a minute");
-    status2.textContent = "Starting the strings' host ...";
+    status2.textContent = "Starting the strings' engine ...";
     await new Promise((done) => setTimeout(done, 250));
   }
   INSTRUMENT_OF = Object.keys(state.variants);
@@ -5063,8 +5197,8 @@ async function init(status2) {
     if (bowing) later("alternate", () => [alternateAsk()]);
     read();
   };
-  dial("strokes", "stroke", "Bow a stroke (cm)", { min: state.bow.length, max: 100 * state.bow.length, log: true, value: Math.min(100 * state.bow.length, 100 * st.drawn), onchange: strokes, note: "" });
-  dial("strokes", "start", "A stroke's start (s)", {
+  dial("strokes", "stroke", "Bow length per stroke (cm)", { min: state.bow.length, max: 100 * state.bow.length, log: true, value: Math.min(100 * state.bow.length, 100 * st.drawn), onchange: strokes, note: "" });
+  dial("strokes", "start", "Stroke start (s)", {
     min: Math.min(...times) / 10,
     max: Math.max(...times) * 10,
     log: true,
@@ -5073,29 +5207,29 @@ async function init(status2) {
       started();
       strokes();
     },
-    note: "How long the bow takes to come up to speed: at Play, and in every stroke after a turn."
+    note: "How long the bow takes to come up to speed, when you press Play and after every change of bow."
   });
-  dial("strokes", "end", "A stroke's end (s)", {
+  dial("strokes", "end", "Stroke end (s)", {
     min: Math.min(...times) / 10,
     max: Math.max(...times) * 10,
     log: true,
     value: state.bow.endSeconds,
     onchange: strokes,
-    note: "How long the bow takes to slow into the turn; from there it comes up to speed the other way over the start."
+    note: "How long the bow takes to slow down before changing direction. It then comes up to speed the other way over the start time."
   });
   attackCurves();
-  dial("left", "pitch", "Pitch (semitones)", { min: 0, max: 1, value: semis, onchange: () => {
+  dial("left", "pitch", "Pitch (semitones above the open string)", { min: 0, max: 1, value: semis, onchange: () => {
     limits();
     later("finger", () => [fingerAsk()]);
     bowed();
   }, note: "" });
-  dial("left", "firmness", "Finger firmness", {
+  dial("left", "firmness", "Finger firmness (share, 0 to 1)", {
     min: 1e-3,
     max: 1,
     log: true,
     value: 1,
     onchange: () => later("finger", () => [fingerAsk()]),
-    note: "A share of Artifastring's finger stiffness (K_FINGER): 1 a finger stopping the string; light, it touches and sounds a harmonic."
+    note: "A share of Artifastring's finger stiffness (K_FINGER). At 1 the finger stops the string; a light touch sounds a harmonic."
   });
   const fingertip = state.finger, artifastring = fingertip.artifastring / fingertip.damping;
   dial("left", "damping", "Finger damping (× a fingertip's)", {
@@ -5104,9 +5238,9 @@ async function init(status2) {
     log: true,
     value: 1,
     onchange: () => later("damping", () => [dampingAsk()]),
-    note: `1: a fingertip's measured, ${fingertip.damping} N·s/m (Wiertlewski & Hayward 2012); a light touch its pad's, in proportion. Artifastring's own, ${Math.round(artifastring)}: stopped notes dead within a fifth of a second, the high ones with sidebands.`
+    note: `At 1, a fingertip's measured damping, ${fingertip.damping} N·s/m (Wiertlewski & Hayward 2012); a light touch damps in proportion. Artifastring's own value, ${Math.round(artifastring)}, kills stopped notes within a fifth of a second and gives high ones sidebands.`
   });
-  dial("right", "beta", "Contact point β", { min: 0.02, max: 0.5, log: true, value: beta, onchange: () => {
+  dial("right", "beta", "Contact point β (share of the string from the bridge)", { min: 0.02, max: 0.5, log: true, value: beta, onchange: () => {
     limits();
     bowed();
   }, note: "" });
@@ -5134,23 +5268,23 @@ async function init(status2) {
     log: true,
     value: state.vibrato.width,
     onchange: vibrated,
-    note: "Peak to peak: the pitch goes half of it above and half below."
+    note: "From lowest to highest: the pitch goes half of it above the note and half below."
   });
   dial("vibrato", "rate", "Rate (Hz)", { min: state.vibrato.rate / 10, max: state.vibrato.rate * 10, log: true, value: state.vibrato.rate, onchange: vibrated });
   $("vibrating").onchange = () => later("vibrato", () => [vibratoAsk()]);
-  $("vibratoNote").textContent = `measured for the ${state.name}: ${state.vibrato.width} cents at ${state.vibrato.rate} Hz`;
+  $("vibratoNote").textContent = `measured on ${state.name} players: ${state.vibrato.width} cents wide at ${state.vibrato.rate} Hz`;
   const profile = state.noise.profile, noised = () => later("noise", noiseAsks);
-  dial("noise", "noisePlayer", "The player's temperature", {
+  dial("noise", "noisePlayer", "The player's unsteadiness (× a player's)", {
     min: 0,
     max: 5,
     value: 1,
     step: 0.05,
     onchange: noised,
-    note: `Each kind drawn with its power falling as 1/f^${profile.beta} from ${profile.low} to ${profile.high} Hz, a ${profile.tremor.hz} Hz tremor carrying ${Math.round(100 * profile.tremor.share)} % of it.`
+    note: `Scales all the kinds below. Each is random, its power falling as 1/f^${profile.beta} from ${profile.low} to ${profile.high} Hz, with a ${profile.tremor.hz} Hz tremor carrying ${Math.round(100 * profile.tremor.share)} % of it.`
   });
   for (const [kind, label3, size] of NOISE_KINDS) dial("noise", noiseId(kind), label3, { min: 0, max: 5, value: 1, step: 0.05, onchange: noised, note: size(state.noise.kinds[kind].sd) });
   const pulls = Object.values(state.pluck.pull);
-  dial("plucking", "pluckPos", "Where (β)", { min: 0.02, max: 0.5, log: true, value: state.pluck.position });
+  dial("plucking", "pluckPos", "Where (share of the string from the bridge)", { min: 0.02, max: 0.5, log: true, value: state.pluck.position });
   dial("plucking", "pluckForce", "Pull (N)", { min: Math.min(...pulls), max: Math.max(...pulls), log: true, value: state.pluck.pull.mf });
   const built = (key) => () => {
     builds[s][key] = value2[key];
@@ -5166,10 +5300,10 @@ async function init(status2) {
     }, note: "" } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: built(key) });
   }
   const CONSTANTS = [
-    ["A_noise", "Friction noise (share of v0)", "estimated from listening"],
+    ["A_noise", "Friction noise (share of v0, 0 to 1)", "estimated from listening"],
     ["PLUCK_VELOCITY", "Pluck: finger speed (m/s)", "estimated from listening"],
-    ["PLUCK_DISPLACEMENT", "Pluck: pull (m at full)", "estimated from listening"],
-    ["PLUCK_SECONDS", "Pluck: held (s)", "estimated from listening"],
+    ["PLUCK_DISPLACEMENT", "Pluck: how far the string is pulled at full (m)", "estimated from listening"],
+    ["PLUCK_SECONDS", "Pluck: how long it is held (s)", "estimated from listening"],
     ["K_PLUCK", "Pluck: stiffness (N/m)"],
     ["R_PLUCK", "Pluck: damping (kg/s)"],
     ["PLUCK_WIDTH", "Pluck: width (m)"],
@@ -5177,7 +5311,7 @@ async function init(status2) {
   ];
   for (const [key, label3, said2] of CONSTANTS) {
     const own2 = state.constants[key];
-    dial("constants", key, label3, key === "A_noise" ? { min: 0, max: own2 * 10, value: own2, step: 1e-3, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's ${own2}, ${said2}.` : void 0 });
+    dial("constants", key, label3, key === "A_noise" ? { min: 0, max: own2 * 10, value: own2, step: 1e-3, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's value is ${own2}, ${said2}.` : void 0 } : { min: own2 / 10, max: own2 * 10, log: true, value: own2, onchange: () => later(key, () => [{ do: "constant", name: key, value: value2[key] }]), note: said2 ? `Artifastring's value is ${own2}, ${said2}.` : void 0 });
   }
   $("ownConstants").onclick = () => {
     for (const [key] of CONSTANTS) setters[key](state.constants[key], true);
@@ -5189,10 +5323,10 @@ async function init(status2) {
     value: 0,
     step: 0.5,
     onchange: () => later("gain", () => [{ do: "gain", gain: 10 ** ((heardDb() + value2.volume) / 20) }]),
-    note: "0 dB: the instrument's neutral note at broadcast loudness (EBU R128). Louder or softer playing is heard louder or softer against it."
+    note: "At 0 dB the instrument's neutral note plays at broadcast loudness (EBU R128). Louder or softer playing is heard louder or softer than that."
   });
   $("correcting").checked = state.corrected;
-  dial("body", "corner", "Radiation falls under (Hz)", { min: 20, max: 1e3, log: true, value: cornerFor(state.corrected), onchange: () => {
+  dial("body", "corner", "Radiation corner frequency (Hz)", { min: 20, max: 1e3, log: true, value: cornerFor(state.corrected), onchange: () => {
     $("radiating").checked = true;
     later("radiate", () => [radiateAsk()]);
   } });
@@ -5212,13 +5346,13 @@ async function init(status2) {
     if (word === "level") {
       const db = Number(rest3[0]);
       $("meter").style.width = `${Number.isFinite(db) ? Math.max(0, Math.min(100, 100 + 100 * db / 60)) : 0}%`;
-      $("level").textContent = Number.isFinite(db) ? `${db.toFixed(1)} dB of full scale (rms)` : "silent";
+      $("level").textContent = Number.isFinite(db) ? `${db.toFixed(1)} dB relative to full scale (rms)` : "silent";
     } else if (word === "turn") {
       if (+rest3[0] === s) {
         direction = rest3[1] === "down" ? 1 : -1;
         way();
       }
-    } else if (word === "runaway") $("said").textContent = `The model ran away at ${rest3[0]} s and was started again (a moment of silence).`;
+    } else if (word === "runaway") $("said").textContent = `The model became unstable at ${rest3[0]} s and was restarted (a moment of silence).`;
     else if (word === "string" && arrived && !--arrived.left) {
       arrived.done();
       arrived = null;
@@ -5376,12 +5510,12 @@ function started() {
 function attackSaid() {
   if (!forceCurve || !builds[s]) return;
   const [ft, fy] = peakOf(forceCurve.get()), [vt, vy] = peakOf(speedCurve.get());
-  $("attackSaid").textContent = `Its force at most ${(fy * value2.force).toFixed(2)} N (${fy.toFixed(2)}×, ${Math.round(1e3 * ft)} ms in), its speed at most ${(vy * value2.speed).toFixed(3)} m/s (${vy.toFixed(2)}×, ${Math.round(1e3 * vt)} ms in); settled ${Math.round(1e3 * Math.max(forceCurve.get().at(-1)[0], speedCurve.get().at(-1)[0]))} ms in.`;
+  $("attackSaid").textContent = `The force peaks at ${(fy * value2.force).toFixed(2)} N (${fy.toFixed(2)}×) after ${Math.round(1e3 * ft)} ms; the speed peaks at ${(vy * value2.speed).toFixed(3)} m/s (${vy.toFixed(2)}×) after ${Math.round(1e3 * vt)} ms. Both have settled after ${Math.round(1e3 * Math.max(forceCurve.get().at(-1)[0], speedCurve.get().at(-1)[0]))} ms.`;
 }
 function attackCurves() {
   const a = state.attacks;
-  $("attackFrom").innerHTML = `<option value="neutral">as the neutral note is played: set down, drawn up to speed</option>` + (a ? `<option value="silence">the renders' attack from silence</option>` + Object.keys(a.articulations).map((n) => `<option value="${n}">the renders' ${n}</option>`).join("") : "") + `<option value="drawn" disabled>as drawn</option>`;
-  $("attackNote").textContent = a ? `The renders' attacks as they play them at ${a.dynamic}: ${a.fitted ? `the ${state.name}'s fitted onset` : "the model's authored onset (physical-strings.js MODEL.onset; no onset fitted yet)"}, each over the stroke's start dialled. A note held quietly may need its attack to peak over what it settles at to start.` : "The renders' attacks come with the strings' server restarted.";
+  $("attackFrom").innerHTML = `<option value="neutral">the neutral note's: the bow set down, then drawn up to speed</option>` + (a ? `<option value="silence">the renders' attack from silence</option>` + Object.keys(a.articulations).map((n) => `<option value="${n}">the renders' ${n}</option>`).join("") : "") + `<option value="drawn" disabled>as drawn below</option>`;
+  $("attackNote").textContent = a ? `The attacks the renders play at ${a.dynamic}: ${a.fitted ? `the ${state.name}'s fitted onset` : "the model's hand-written onset (physical-strings.js MODEL.onset), since no onset has been fitted yet"}, each stretched over the stroke's start set above. A quiet held note may need an attack that peaks above what it settles at, to get the string going.` : "The renders' attacks appear once the strings' server is restarted.";
   const drawn = () => {
     $("attackFrom").value = "drawn";
     attackSaid();
@@ -5482,10 +5616,10 @@ async function recall(k) {
   await ask(asks);
   read();
   $("said").textContent = [
-    past.length ? `This setting plays ${past.join(" and ")}: switched off under The hands' reach to play it.` : "",
-    before2 ? "Kept before bodies were corrected: heard as it was then, uncorrected (switch it on under Instrument)." : "",
-    k.noise ? "" : "Kept before the hands' noise: heard as it was then, without it.",
-    Number.isFinite(k.dampingNsPerM) || !Number.isFinite(k.damping) ? "" : "Kept before the finger's measured damping: its stopping finger heard as it was then, Artifastring's own."
+    past.length ? `This setting plays ${past.join(" and ")}, so that limit has been switched off under The hands' reach.` : "",
+    before2 ? "Kept before the bodies were corrected, so it is heard as it was then, uncorrected (switch the correction on under Instrument)." : "",
+    k.noise ? "" : "Kept before the hands' noise existed, so it is heard without it, as it was then.",
+    Number.isFinite(k.dampingNsPerM) || !Number.isFinite(k.damping) ? "" : "Kept before the finger's measured damping, so the stopping finger is heard as it was then, with Artifastring's own damping."
   ].filter(Boolean).join(" ");
 }
 async function good() {
@@ -5547,7 +5681,7 @@ async function good() {
   read();
   way();
   if (was) await play();
-  $("said").textContent = own2 ? "" : `A good note made from the ${INSTRUMENT_OF[p.type]}'s: the same bowing at the same place on Schelleng's diagram, ${force.toFixed(2)} N here.`;
+  $("said").textContent = own2 ? "" : `A good note made from the ${INSTRUMENT_OF[p.type]}'s: the same bowing at the same place on Schelleng's diagram, which is ${force.toFixed(2)} N here.`;
 }
 var begun = null;
 var taking = Promise.resolve();
@@ -5607,7 +5741,7 @@ async function neutral() {
   if (was) await play();
   $("said").textContent = "";
 }
-var neutralSaid = (n) => `its neutral note (${n.dynamic}, ${name(n.pitch)} on its ${["first", "second", "third", "fourth", "fifth", "sixth"][n.string] ?? `${n.string + 1}th`} string, ${+n.force.toPrecision(3)} N at ${+n.speed.toPrecision(3)} m/s, settling in ${n.settlesMs} ms${n.withinLimit ? "" : ` -- none of its notes within listeners' ${state.neutralLimitMs} ms`}; the neutral-note fit's ${n.rehearsal ? "rehearsal " : ""}map, round ${n.round})`;
+var neutralSaid = (n) => `its neutral note (${n.dynamic}, ${name(n.pitch)} on its ${["first", "second", "third", "fourth", "fifth", "sixth"][n.string] ?? `${n.string + 1}th`} string, ${+n.force.toPrecision(3)} N at ${+n.speed.toPrecision(3)} m/s, settling in ${n.settlesMs} ms${n.withinLimit ? "" : `; none of its notes settles within the ${state.neutralLimitMs} ms listeners accept`}; from the neutral-note fit's ${n.rehearsal ? "rehearsal " : ""}map, round ${n.round})`;
 var fresh = null;
 var takenFresh = (model2) => fresh === model2;
 function take(model2, { status: status2, choose: choose2 }) {
@@ -5623,7 +5757,7 @@ function take(model2, { status: status2, choose: choose2 }) {
     if (type < 0) throw new Error(`no ${model2} among the strings`);
     status2.classList.remove("failed");
     if (type !== state.type || !placed.has(type)) {
-      status2.textContent = `Taking up the ${model2.replace(/-/g, " ")} ...`;
+      status2.textContent = `Loading the ${model2.replace(/-/g, " ")} ...`;
       if (type !== state.type) {
         await prerendered.stop();
         await instrument(type, 0);
@@ -5632,11 +5766,11 @@ function take(model2, { status: status2, choose: choose2 }) {
       await (state.neutral ? neutral() : good());
       placed.add(type);
     }
-    status2.textContent = `The ${state.name}, ready: heard through ${state.heardThrough}, on ` + (state.neutral ? neutralSaid(state.neutral) : `its good note${type === state.pick.type ? " (the note it started from)" : " (the violin's note, bowed at the same place on Schelleng's diagram)"}`) + ".";
+    status2.textContent = `The ${state.name} is ready, heard through ${state.heardThrough}, on ` + (state.neutral ? neutralSaid(state.neutral) : `its good note${type === state.pick.type ? " (the note it started from)" : " (the violin's note, bowed at the same place on Schelleng's diagram)"}`) + ".";
     describe();
   }).catch((error) => {
     status2.classList.add("failed");
-    status2.textContent = `The strings could not take up the ${model2}: ${error.message}`;
+    status2.textContent = `The strings could not load the ${model2}: ${error.message}`;
   });
 }
 $("soloSeed").value = DEFAULT_SEED;
@@ -5647,7 +5781,7 @@ $("solo").onclick = async () => {
   const on = !state.soloist?.playing;
   if (on) {
     if (bowing) play();
-    $("soloSaid").textContent = "Its band composes the piece ...";
+    $("soloSaid").textContent = "Its band is composing the piece ...";
   }
   const r = await fetch("/strings/soloist", { method: "POST", body: JSON.stringify(on ? { on, ...musebot.given() } : { on }) });
   if (!r.ok) {
@@ -10775,47 +10909,47 @@ async function poll() {
 }
 function shown2(s2) {
   status.classList.toggle("failed", Boolean(s2.failed && !s2.loading));
-  const breathSaid = (n) => n.breathTimes && n.breathTimes !== 1 ? `, its breath ${n.breathTimes} times its players' law's, where it sounds` : "";
-  const neutral2 = s2.neutral ? `, on its neutral note (${etName(s2.notes[s2.neutral.note])} at ${s2.neutral.dynamic}${breathSaid(s2.neutral)})` : s2.model ? `, on the middle of its charted notes: no neutral note found on its body yet (Commands/Make Dial Bodies.command finds it)` : "";
-  status.textContent = s2.loading ? `Making the ${label(s2.loading.model)}: ${s2.loading.step} (${Math.round(s2.loading.seconds)} s)${s2.model ? `. The ${label(s2.model)} is silent until it is ready.` : "."}` : s2.failed ? `The ${label(s2.failed.model)} could not be taken up: ${s2.failed.error}${s2.model ? `. The ${label(s2.model)} still plays.` : ""}` : s2.model ? `The ${label(s2.model)}, ready${neutral2}${s2.threads > 1 ? `; its engine on ${s2.threads} cores` : ""}.` : "Starting ...";
+  const breathSaid = (n) => n.breathTimes && n.breathTimes !== 1 ? `, blown at ${n.breathTimes} times its players' usual breath pressure so that it sounds` : "";
+  const neutral2 = s2.neutral ? `. It starts on its neutral note, ${etName(s2.notes[s2.neutral.note])} at ${s2.neutral.dynamic}${breathSaid(s2.neutral)}` : s2.model ? `. It starts on the middle of its charted notes: no neutral note has been found for this body yet (Commands/Make Dial Bodies.command finds one)` : "";
+  status.textContent = s2.loading ? `Making the ${label(s2.loading.model)}: ${s2.loading.step} (${Math.round(s2.loading.seconds)} s so far).${s2.model ? ` The ${label(s2.model)} is silent until it is ready.` : ""}` : s2.failed ? `The ${label(s2.failed.model)} could not be loaded: ${s2.failed.error}.${s2.model ? ` The ${label(s2.model)} still plays.` : ""}` : s2.model ? `The ${label(s2.model)} is ready${neutral2}.${s2.threads > 1 ? ` Its engine runs on ${s2.threads} processor cores.` : ""}` : "Starting …";
   busy = Boolean(s2.loading) || !s2.model;
   for (const b of blocks()) b.disabled = busy;
   for (const id of ["blow", "reset", "neutral"]) $2(id).disabled = busy;
   $2("tongueNow").disabled = busy || !P?.blowing;
 }
 var MEANING = {
-  gamma: ["breath", "mouth pressure over the closing pressure"],
-  zeta: ["embouchure", "the reed's opening and width under the lips, scaled"],
-  kappa: ["reed flow", "the flow the reed itself moves, scaled"],
-  qfactor: ["reed damping (Q)", "the lips' damping of the reed"],
-  pulsation: ["reed resonance, Hz", "its frequency"],
-  contact_stifness: ["lay contact", "the stiffness of the reed against the lay"],
-  contact_exponent: ["contact exponent", "how the contact stiffens, three either side"],
-  closing_pressure: ["closing pressure, kPa", "the pressure that shuts the reed"]
+  gamma: ["Breath pressure (× the closing pressure)", "The pressure in the player's mouth, as a multiple of the pressure that would push the reed shut."],
+  zeta: ["Embouchure (no unit)", "How far the lip lets the reed open, together with the reed's width, as one scaled number."],
+  kappa: ["Reed's own flow (no unit)", "The air the reed itself pushes as it moves, scaled."],
+  qfactor: ["Reed damping, Q (no unit)", "How quickly the lip damps the reed's vibration. A lower Q means more damping."],
+  pulsation: ["Reed resonance (Hz)", "The frequency at which the reed vibrates by itself."],
+  contact_stifness: ["Lay contact stiffness (no unit)", "How hard the reed is pushed back once it touches the mouthpiece's lay, scaled."],
+  contact_exponent: ["Contact exponent (no unit)", "How sharply that push grows as the reed presses into the lay; the slider moves it up to 3 either way."],
+  closing_pressure: ["Closing pressure (kPa)", "The mouth pressure that would push the reed shut against the mouthpiece."]
 };
 var LIPS = {
-  gamma: ["breath", "mouth pressure over the closing pressure"],
-  zeta: ["lip opening", "the lips' opening and width, scaled"],
-  kappa: ["lip flow", "the flow the lips themselves move, scaled"],
-  qfactor: ["lips' damping (Q)", "their outward mode's quality"],
-  pulsation: ["lip frequency", "their outward resonance, dialled by itself: the pitch asked and its breath kept, their other values their register's there; the bore picks the partial"],
-  contact_stifness: ["contact", "none: lips have no lay"],
-  contact_exponent: ["contact exponent", "none: lips have no lay"],
-  closing_pressure: ["closing pressure, kPa", "the pressure that shuts the lips"],
-  inward_ratio: ["inward resonance", "the inward mode's over the outward's"],
-  inward_qfactor: ["inward damping (Q)", "the inward mode's quality"],
-  inward_coupling: ["inward coupling", "the outward mass over the inward's"]
+  gamma: ["Breath pressure (× the closing pressure)", "The pressure in the player's mouth, as a multiple of the pressure that would push the lips shut."],
+  zeta: ["Lip opening (no unit)", "How far apart the lips rest, together with the width of their opening, as one scaled number."],
+  kappa: ["Lips' own flow (no unit)", "The air the lips themselves push as they move, scaled."],
+  qfactor: ["Lip damping, Q (no unit)", "How quickly the lips' outward motion dies away. A lower Q means more damping."],
+  pulsation: ["Lip frequency", "The frequency at which the lips buzz by themselves. Moving it alone keeps the pitch asked for and the breath; the bore then decides which partial sounds."],
+  contact_stifness: ["Contact (none)", "None: lips have no lay to touch."],
+  contact_exponent: ["Contact exponent (none)", "None: lips have no lay to touch."],
+  closing_pressure: ["Closing pressure (kPa)", "The mouth pressure that would push the lips shut."],
+  inward_ratio: ["Inward resonance (× the outward)", "The frequency of the lips' inward motion, as a multiple of their outward one."],
+  inward_qfactor: ["Inward damping, Q (no unit)", "How quickly the lips' inward motion dies away."],
+  inward_coupling: ["Inward coupling (no unit)", "The mass of the lips' outward motion divided by the mass of their inward one."]
 };
 var JET = {
-  Uj: ["breath", "the jet's speed at the flue, m/s"],
-  noise: ["turbulence", "the jet's noise, its level"],
-  window: ["window", "the share of the embouchure hole the lip leaves"],
-  Ascale: ["jet amplification", "its disturbance's growth over its length"],
-  Gj: ["jet drive", "the jet's push on the air at the edge"],
-  Gl: ["edge losses", "the flow's losses at the edge (vena contracta)"],
-  C: ["jet delay", "its length over its disturbance's speed: the time it takes to cross"],
-  y0: ["jet offset", "its centre from the edge, in its width: one either side"],
-  span: ["dipole span", "the spread of its push about the edge"]
+  Uj: ["Jet speed (m/s)", "The speed of the air as it leaves the player's lips."],
+  noise: ["Turbulence (no unit)", "How much noise the jet carries."],
+  window: ["Window (share, 0 to 1)", "How much of the embouchure hole the lip leaves uncovered."],
+  Ascale: ["Jet amplification (no unit)", "How much a disturbance on the jet grows as it crosses to the edge."],
+  Gj: ["Jet drive (no unit)", "How strongly the jet pushes the air at the edge, scaled."],
+  Gl: ["Edge losses (no unit)", "How much of the flow is lost where it narrows at the edge (the vena contracta), scaled."],
+  C: ["Jet length (m)", "The jet's length over the speed of its disturbances as a share of the jet's: divided by the jet speed, it gives the time a disturbance takes to cross."],
+  y0: ["Jet offset (× the jet's profile width)", "How far the jet's centre sits from the edge; the slider moves it up to 1 either way."],
+  span: ["Dipole span (m)", "How far apart the jet's two pushes on the air sit, either side of the edge."]
 };
 var meaningOf = (name2) => (S.kind === "lips" ? LIPS[name2] : S.kind === "air" ? JET[name2] : null) ?? MEANING[name2] ?? [name2, ""];
 var GROUP = {
@@ -10914,7 +11048,7 @@ function build(s2) {
   $2("diagramNote").textContent = "";
   for (const k in controls) delete controls[k];
   const kind = s2.kind, brass = kind === "lips";
-  what = `The ${label(s2.model)} on OpenWInD's engine, heard through this page, played by you or by a musebot: its player's ${brass ? "lips" : kind === "air" ? "air and fingers" : "reed and fingers"}, tongue, vibrato${kind === "air" ? "" : ", vocal tract"} and the musebot's personality dialled by ear.`;
+  what = `The ${label(s2.model)}, simulated by OpenWInD's engine and heard through this page. You or a musebot play it. You can set its player's ${brass ? "lips" : kind === "air" ? "breath and fingers" : "reed and fingers"}, tongue, vibrato${kind === "air" ? "" : " and vocal tract"}, and the musebot's personality, by ear.`;
   document.getElementById("what").textContent = what;
   const noteText = (m2, k) => !brass ? `${noteName(m2)} (${m2})` : `${etName(m2)} (${s2.fingerings ? `${valvesName(s2.fingerings[k])}, ` : ""}${s2.positions ? `position ${s2.positions[k]}${s2.alternates[k] ? ", alternate" : ""}, ` : ""}partial ${s2.partials[k]})`;
   $2("note").replaceChildren(...s2.notes.map((m2, k) => new Option(noteText(m2, k) + (s2.neutral?.note === k ? " · neutral" : ""), k)));
@@ -10925,32 +11059,32 @@ function build(s2) {
     el.max = high;
   }
   const t = s2.tongue, m = t.measured, ms2 = (v) => Math.round(1e3 * v), L = s2.limits;
-  $2("articulationNote").textContent = `A slurred note on the same pitch (within ${t.samePitch} ¢) is legato-tongued, a half attack.`;
-  row($2("tongue"), "stroke", "Tongued stroke, ms", {
+  $2("articulationNote").textContent = `A slurred note on the same pitch (within ${t.samePitch} cents) is tongued legato: a half attack.`;
+  row($2("tongue"), "stroke", "Tongued stroke (ms)", {
     min: ms2(L.stroke[0]),
     max: ms2(L.stroke[1]),
     step: 1,
     format: Math.round,
     change: (v) => sendArticulation({ stroke: v / 1e3 }),
-    note: `The air ${kind === "reed" ? "shut by the tongue on the reed" : "stopped"} that long before a tongued note. Measured: clarinettists' portato ${ms2(m.portato[0])} ms (sd ${ms2(m.portato[1])}), their staccato ${ms2(m.staccato[0][1])} ms at four notes a second and ${ms2(m.staccato[1][1])} at two (Pàmies-Vilà, Hofmann & Chatziioannou 2018); saxophonists' ${(1e3 * m.saxophone).toFixed(1)} ms (Hofmann & Goebl 2014).`
+    note: `How long the air is ${kind === "reed" ? "stopped by the tongue on the reed" : "stopped"} before a tongued note. Measured: clarinettists' portato ${ms2(m.portato[0])} ms (standard deviation ${ms2(m.portato[1])} ms), and their staccato ${ms2(m.staccato[0][1])} ms at four notes a second and ${ms2(m.staccato[1][1])} ms at two (Pàmies-Vilà, Hofmann & Chatziioannou 2018); saxophonists' ${(1e3 * m.saxophone).toFixed(1)} ms (Hofmann & Goebl 2014).`
   });
-  row($2("tongue"), "softSeconds", "Legato tongue, ms", {
+  row($2("tongue"), "softSeconds", "Legato tongue (ms)", {
     min: ms2(L.softSeconds[0]),
     max: ms2(L.softSeconds[1]),
     step: 1,
     format: Math.round,
     change: (v) => sendArticulation({ softSeconds: v / 1e3 }),
-    note: kind === "reed" ? `The tongue touching the reed to ${Math.round(100 * t.soft)} % of its opening that long: a half attack.` : `The air dipped to ${Math.round(100 * t.dip)} % of itself that long: a half attack.`
+    note: kind === "reed" ? `How long the tongue touches the reed in a legato tongue, closing it to ${Math.round(100 * t.soft)} % of its opening: a half attack.` : `How long the air dips, to ${Math.round(100 * t.dip)} % of itself, in a legato tongue: a half attack.`
   });
-  row($2("tongue"), "rise", "Breath rise from rest, ms", {
+  row($2("tongue"), "rise", "Breath rise from rest (ms)", {
     min: ms2(L.rise[0]),
     max: ms2(L.rise[1]),
     step: 1,
     format: Math.round,
     change: (v) => sendArticulation({ rise: v / 1e3 }),
-    note: kind === "reed" ? "A note from rest: the tongue on the reed as the breath rises, let go as it has risen." : brass ? "A note from rest: the air let go into the lips, attacked as their attack was measured on the engine." : "A note from rest: the air let go into its rise."
+    note: kind === "reed" ? "For a note from silence: the tongue holds the reed while the breath rises, and lets it go once the breath has risen." : brass ? "For a note from silence: the air is let into the lips, which start as they were measured starting on this engine." : "For a note from silence: how long the breath takes to rise."
   });
-  row($2("repeat"), "repeatRate", "Notes a second", {
+  row($2("repeat"), "repeatRate", "Repeated notes (per second)", {
     min: L.repeat[0],
     max: L.repeat[1],
     to: Math.log,
@@ -10958,119 +11092,119 @@ function build(s2) {
     step: 0.1,
     format: (v) => v.toFixed(1),
     change: (v) => sendRepeat({ rate: v }),
-    note: `Each a stroke as the articulation says. Measured on brass: single tonguing to some ${m.single} notes a second, double some ${m.double} (Bertsch & Hoole 2014).`
+    note: `Each note is articulated as chosen above. Measured on brass players: single tonguing up to about ${m.single} notes a second, double tonguing about ${m.double} (Bertsch & Hoole 2014).`
   });
   if (s2.lungs) {
     const n = s2.lungs;
-    row($2("lungs"), "litres", "Breath taken, L", {
+    row($2("lungs"), "litres", "Breath taken (L)", {
       min: L.litres[0],
       max: L.litres[1],
       step: 0.05,
       format: (v) => v.toFixed(2),
       change: (v) => sendBreathing({ litres: v }),
-      note: `Wind players' vital capacity ${n.capacity.litres} L (sd ${n.capacity.sd}; Bouros, Protogerou, Castana & Vasilopoulos 2018), ${Math.round(100 * n.spent.share)} % of it spent in a breath (Cossette, Sliwinski & Macklem 2000): ${n.breath} L.`
+      note: `Wind players' lungs hold ${n.capacity.litres} L at most (standard deviation ${n.capacity.sd} L; Bouros, Protogerou, Castana & Vasilopoulos 2018), and they spend ${Math.round(100 * n.spent.share)} % of that in a breath (Cossette, Sliwinski & Macklem 2000): ${n.breath} L.`
     });
-    row($2("lungs"), "inhale", "Breath in, ms", {
+    row($2("lungs"), "inhale", "Breathing in (ms)", {
       min: ms2(L.inhale[0]),
       max: ms2(L.inhale[1]),
       step: 10,
       format: Math.round,
       change: (v) => sendBreathing({ inhale: v / 1e3 }),
-      note: `Fast and deep (Bouhuys 1964), reed players' fastest some 300 ms (Fuks & Sundberg 1998); by default a singer's full breath, ${ms2(n.inhale.seconds)} ms (Salomoni, van den Hoorn & Hodges 2016), until wind players' own is measured.`
+      note: `Wind players breathe in fast and deep (Bouhuys 1964); reed players' fastest breaths take about 300 ms (Fuks & Sundberg 1998). By default, a singer's full breath: ${ms2(n.inhale.seconds)} ms (Salomoni, van den Hoorn & Hodges 2016), until wind players' own is measured.`
     });
     if (P.breathing && $2("breathing").checked !== P.breathing.on) sendBreathing({ on: $2("breathing").checked });
   }
   const own2 = s2.vibratoOwn;
-  $2("vibratoNote").textContent = `${own2.width > 0 ? `the ${label(s2.model)} players' own: ${own2.width} ¢ at ${own2.rate} Hz` : `the ${label(s2.model)} is played without one${own2.reach ? `; ${own2.reach} ¢ where a style asks` : ""}`}; ${brass ? "the whole embouchure swayed, as the mouthpiece is pressed into the lips and eased, as deep as the note is heard so wide" : "in the breath"}`;
-  row($2("vibrato"), "vibratoWidth", "Width, cents", { min: L.width[0], max: L.width[1], step: 1, format: Math.round, change: (v) => sendVibrato({ width: v }) });
-  row($2("vibrato"), "vibratoRate", "Rate, Hz", { min: L.rate[0], max: L.rate[1], step: 0.1, format: (v) => v.toFixed(1), change: (v) => sendVibrato({ rate: v }) });
+  $2("vibratoNote").textContent = `${own2.width > 0 ? `The ${label(s2.model)}'s players use one ${own2.width} cents wide at ${own2.rate} Hz` : `The ${label(s2.model)} is usually played without vibrato${own2.reach ? `; ${own2.reach} cents wide where a style asks for one` : ""}`}. ${brass ? "It sways the whole embouchure, as the mouthpiece is pressed into the lips and eased off, deeply enough that the note is heard swaying this wide." : "It sways the breath."}`;
+  row($2("vibrato"), "vibratoWidth", "Width (cents)", { min: L.width[0], max: L.width[1], step: 1, format: Math.round, change: (v) => sendVibrato({ width: v }) });
+  row($2("vibrato"), "vibratoRate", "Rate (Hz)", { min: L.rate[0], max: L.rate[1], step: 0.1, format: (v) => v.toFixed(1), change: (v) => sendVibrato({ rate: v }) });
   if (s2.noise) {
     const { profile: f, most } = s2.noise, dial2 = { min: 0, max: most, step: 0.05, format: (v) => v.toFixed(2) };
-    row($2("noise"), "noisePlayer", "The player's temperature", {
+    row($2("noise"), "noisePlayer", "The player's unsteadiness (× a player's)", {
       ...dial2,
       change: (v) => sendNoise({ player: v }),
-      note: `Each kind's under it. Its power falling as 1/f^${f.beta} from ${f.low} to ${f.high} Hz, a ${f.tremor.hz} Hz tremor ${Math.round(100 * f.tremor.share)} % of it.`
+      note: `Scales every kind below. The wavering's power falls as 1/f^${f.beta} from ${f.low} to ${f.high} Hz, with a ${f.tremor.hz} Hz tremor making up ${Math.round(100 * f.tremor.share)} % of it.`
     });
-    for (const { what: what2, sd } of s2.noise.kinds) row($2("noise"), noiseId2(what2), NOISE_LABEL[what2], {
+    for (const { what: what2, sd } of s2.noise.kinds) row($2("noise"), noiseId2(what2), `${NOISE_LABEL[what2]} (× a player's)`, {
       ...dial2,
       change: (v) => sendNoise({ [what2]: v }),
-      note: `At 1, ${+(100 * sd).toPrecision(2)} % of the ${what2 === "breath" ? "pressure" : "tension"} asked.`
+      note: `At 1, it wavers by ${+(100 * sd).toPrecision(2)} % of the ${what2 === "breath" ? "pressure" : "tension"} asked for.`
     });
   }
   if (L.flutterHz) {
-    row($2("flutter"), "flutterHz", "Turns a second", {
+    row($2("flutter"), "flutterHz", "Flutter rate (per second)", {
       min: L.flutterHz[0],
       max: L.flutterHz[1],
       step: 0.5,
       format: (v) => v.toFixed(1),
       change: (v) => sendFlutter({ hz: v }),
-      note: "The middle of the renders' flutters by default: 28 to 33 a second, as speakers' voiceless tongue-tip trills were measured (Elie & Laprie 2017); no wind player's measured."
+      note: "By default the middle of the renders' flutters, 28 to 33 a second, as fast as speakers' voiceless tongue-tip trills were measured (Elie & Laprie 2017). No wind player's flutter has been measured."
     });
-    row($2("flutter"), "flutterDepth", "Breath closed off", {
+    row($2("flutter"), "flutterDepth", "Breath closed off (share, 0 to 1)", {
       min: L.flutterDepth[0],
       max: L.flutterDepth[1],
       step: 0.01,
       format: (v) => v.toFixed(2),
       change: (v) => sendFlutter({ depth: v }),
-      note: "At each turn this share of the breath closed off and let go, its curve squared as the renders' is, on whatever moves under it: an attack, a stroke, a breath."
+      note: "How much of the breath each flutter closes off and lets go, as the renders do it, on top of whatever else the breath is doing: an attack, a tongued note or a new breath."
     });
-    row($2("hum"), "humInterval", "Hummed, semitones from the note", {
+    row($2("hum"), "humInterval", "Hummed pitch (semitones from the note)", {
       min: L.humInterval[0],
       max: L.humInterval[1],
       step: 0.01,
       format: (v) => v.toFixed(2),
       change: (v) => sendHum({ interval: v }),
-      note: "Folded into the player's voice (the registry's low and high breath-model voices), as the renders' hummers are; an octave under by default, the middle of what they draw."
+      note: "Hummed in the player's own voice (the registry's low and high voices), as the renders hum. By default an octave below the note, the middle of what the renders use."
     });
-    row($2("hum"), "humLevel", "Level, × the breath", {
+    row($2("hum"), "humLevel", "Hum level (× the breath)", {
       min: L.humLevel[0],
       max: L.humLevel[1],
       step: 0.01,
       format: (v) => v.toFixed(2),
       change: (v) => sendHum({ level: v }),
-      note: "Its breath swung this much of itself by the voice, its partials falling as the square of their number: the renders' 0.2 by default."
+      note: "How much the voice swings the breath, its overtones weakening as the square of their number. The renders use 0.2."
     });
     if (L.growlInterval) {
-      row($2("growl"), "growlInterval", "Growled, semitones from the note", {
+      row($2("growl"), "growlInterval", "Growled pitch (semitones from the note)", {
         min: L.growlInterval[0],
         max: L.growlInterval[1],
         step: 0.01,
         format: (v) => v.toFixed(2),
         change: (v) => sendGrowl({ interval: v }),
-        note: "Folded into the player's voice as the hum is; an octave under by default, the middle of what the renders' growlers draw."
+        note: "Growled in the player's voice, as the hum is. By default an octave below the note, the middle of what the renders use."
       });
-      row($2("growl"), "growlLevel", "Level, × the breath", {
+      row($2("growl"), "growlLevel", "Growl level (× the breath)", {
         min: L.growlLevel[0],
         max: L.growlLevel[1],
         step: 0.01,
         format: (v) => v.toFixed(2),
         change: (v) => sendGrowl({ level: v }),
-        note: "Its breath swung this much of itself by the rough voice."
+        note: "How much the rough voice swings the breath."
       });
-      row($2("growl"), "growlRough", "Roughness", {
+      row($2("growl"), "growlRough", "Roughness (0 to 1)", {
         min: L.growlRough[0],
         max: L.growlRough[1],
         step: 0.01,
         format: (v) => v.toFixed(2),
         change: (v) => sendGrowl({ rough: v }),
-        note: "Its voice's period doubled, every other pulse this much weaker, with breath noise this rough: 0.3 to 0.9 in the renders."
+        note: "The voice's period doubled, every other pulse this much weaker, with breath noise as rough. The renders use 0.3 to 0.9."
       });
-      $2("techniqueNote").textContent = "Played by the engine as the renders play them. A growl and a hum both on: the growl.";
-    } else $2("techniqueNote").textContent = "This dial was started before its growl: Commands/Start Live Dial.command again brings it.";
-  } else $2("techniqueNote").textContent = "This dial was started before its flutter and hum: Commands/Start Live Dial.command again brings them.";
-  const reach = s2.reach === 4 ? "a quarter to four" : `1/${s2.reach} to ${s2.reach}`, between = `each ${reach} times the rules' value at the pitch and dynamic; the box, its value.`;
+      $2("techniqueNote").textContent = "Played by the engine as the renders play them. With both a growl and a hum on, the growl is heard.";
+    } else $2("techniqueNote").textContent = "This dial was started before growls were added: run Commands/Start Live Dial.command again to get them.";
+  } else $2("techniqueNote").textContent = "This dial was started before flutter and humming were added: run Commands/Start Live Dial.command again to get them.";
+  const reach = s2.reach === 4 ? "from a quarter of to four times" : `from 1/${s2.reach} of to ${s2.reach} times`, between = `Each slider moves its value ${reach} the value the playing rules give at this pitch and dynamic; the box beside it shows the value itself. The shaded band under a slider is what was measured of real players and reeds.`;
   $2("playerLegend").textContent = brass ? "Lips and breath" : kind === "air" ? "Breath and jet" : "Breath and embouchure";
-  $2("excitorNote").textContent = `The player's columns of the engine, ${between}` + (brass ? " The lips' frequency in Hz, over their reach." : "");
+  $2("excitorNote").textContent = `What the player controls. ${between}` + (brass ? " The lip frequency slider is in Hz, across the lips' reach." : "");
   $2("instrumentLegend").textContent = "Reed";
-  $2("instrumentNote").textContent = `The reed's own columns, ${between}`;
+  $2("instrumentNote").textContent = `The reed itself. ${between}`;
   $2("physicsLegend").textContent = brass ? "The lips' contact" : kind === "air" ? "The jet's model" : "The reed's contact";
-  $2("physicsNote").textContent = `The model's constants for the ${brass ? "lips" : kind === "air" ? "jet" : "reed"}, ${between}`;
+  $2("physicsNote").textContent = `The model's constants for the ${brass ? "lips" : kind === "air" ? "jet" : "reed"}. ${between}`;
   const boxOf = { Player: $2("excitorPlayer"), Instrument: $2("excitorInstrument"), Physics: $2("excitorPhysics") };
   for (const k of s2.dials) {
     const name2 = col(k), [text, about] = meaningOf(name2), box = boxOf[groupOf(name2)];
     if (brass && name2 === "pulsation") {
       const [lo, hi] = s2.lipReach;
-      Object.assign(row(box, `lip${k}`, `${text}, Hz`, { min: lo, max: hi, to: Math.log, from: Math.exp, step: 0.1, format: (v) => v.toFixed(1), change: (v) => sendLip({ lip: v }), note: about }), { lip: true });
+      Object.assign(row(box, `lip${k}`, `${text} (Hz)`, { min: lo, max: hi, to: Math.log, from: Math.exp, step: 0.1, format: (v) => v.toFixed(1), change: (v) => sendLip({ lip: v }), note: about }), { lip: true });
       continue;
     }
     const c = row(box, `col${k}`, text, { min: -1, max: 1, change: (x2) => sendDial({ column: k, x: x2 }), note: about });
@@ -11092,9 +11226,9 @@ function build(s2) {
   $2("fingerLegend").textContent = brass ? s2.slide ? "Slide" : "Valves" : "Fingers";
   $2("muteSet").hidden = !s2.mutes?.length;
   $2("mute").replaceChildren(new Option("none", ""), ...(s2.mutes ?? []).map((m2) => new Option(MUTE_NAME[m2] ?? m2, m2)));
-  $2("fingerNote").textContent = s2.slide ? "The slide, at a position from 1 (in) to 7 and past: the note's, its players' chart's, placed where its partial plays it in tune; a pitch between them on the partial played there, glided to. Drawn here by itself, its lips held: the bore gives the pitch." : brass ? "Each valve, 0 pressed to 1 raised -- a half-valve between: the note's fingering, its players' chart's, until the pitch moves." : "Each hole's opening, 0 closed to 1 open: the pitch's, until the pitch moves.";
+  $2("fingerNote").textContent = s2.slide ? "The slide position, from 1 (all the way in) to 7 and beyond. Each note sits where the players' chart puts it, adjusted so its partial plays in tune; a pitch between notes is glided to on the partial played there. Moved here by itself, with the lips held, the bore sets the pitch." : brass ? "Each valve, from 0 (pressed down) to 1 (up); in between is a half-valve. They follow the fingering in the players' chart until you move the pitch." : "Each hole's opening, from 0 (closed) to 1 (open). They follow the fingering for the pitch until you move the pitch.";
   if (s2.slide) {
-    const c = row($2("slideBox"), "slide", "Slide position", {
+    const c = row($2("slideBox"), "slide", "Slide position (1 to 7)", {
       min: 1,
       max: positionOf(s2.slide.most),
       to: outOf,
@@ -11130,16 +11264,22 @@ function build(s2) {
   $2("tractLegend").textContent = brass ? "Vocal tract, upstream of the lips" : kind === "air" ? "The bore, as the jet meets it" : "Vocal tract, upstream of the reed";
   tract = new VocalTract(P.tract);
   const range = (path) => playerEntry(s2.model, `tract.${path}`);
+  const cite = (e) => {
+    const { authors, year } = source(e.source), names = authors.split(", ").map((a) => a.split(" ").at(-1));
+    return `${names.length > 1 ? `${names.slice(0, -1).join(", ")} & ${names.at(-1)}` : names[0]} ${year}`;
+  };
   MEASURED = s2.tractMeasured ? {
     first: { f: range("first.frequency").range, p: range("first.peak").range },
     held: player(s2.model, "tract.normal.held"),
     offset: player(s2.model, "tract.normal.offset"),
     normal: player(s2.model, "tract.normal.peak"),
-    bend: range("bend.peak").range
+    bend: range("bend.peak").range,
+    whose: s2.model.endsWith("-saxophone") ? `saxophonists'${s2.model === "tenor-saxophone" ? "" : " (on the tenor)"}` : "clarinettists'",
+    cites: { first: cite(range("first.frequency")), bend: cite(range("bend.peak")), normal: cite(range("normal.offset")) }
   } : null;
   $2("normal").hidden = $2("none").hidden = $2("tractHow").hidden = kind === "air";
   $2("normal").disabled = !s2.tractMeasured;
-  $2("normal").title = s2.tractMeasured ? "" : `no ${label(s2.model)} players' tract measured yet`;
+  $2("normal").title = s2.tractMeasured ? "" : `No ${label(s2.model)} player's vocal tract has been measured yet.`;
   const rows = (id, pairs) => {
     $2(id).replaceChildren(...pairs.filter(([, v]) => v != null && v !== "").map(([a, b]) => {
       const tr = document.createElement("tr");
@@ -11154,22 +11294,22 @@ function build(s2) {
   rows("body", [
     ["Instrument", label(s2.model)],
     ["Compass", `${etName(low)} to ${etName(high)}, ${s2.notes.length} ${brass ? "partials and fingerings" : "charted notes"}`],
-    ["Holes", brass ? null : `${new Set(s2.columns.filter((c) => c[0] === "opening").map((c) => c[1])).size} (${holes} columns)`],
-    ["Valves", s2.valves ? `${s2.valves.length}, each its deviation pipe and two switches` : null],
-    ["Slide", s2.slide ? `${(1e3 * s2.slide.most).toFixed(0)} mm of tube past first position, ${s2.slide.positions.length} positions` : null],
-    ["Neutral note", s2.neutral ? `${etName(s2.notes[s2.neutral.note])} at ${s2.neutral.dynamic}${s2.neutral.breathTimes !== 1 ? `, its breath ${s2.neutral.breathTimes} times its players' law's` : ""}, heard ${s2.neutral.cents} ¢ from its pitch (found ${new Date(s2.neutral.found).toLocaleDateString()})` : "not found on this body yet: Commands/Make Dial Bodies.command finds it"],
-    ["Its body", s2.layout?.madeFrom ? `made from ${s2.layout.madeFrom.slice(0, 12)}` : null]
+    ["Holes", brass ? null : `${new Set(s2.columns.filter((c) => c[0] === "opening").map((c) => c[1])).size} holes (${holes} openings in the model)`],
+    ["Valves", s2.valves ? `${s2.valves.length}, each with its own extra tube and two switches in the model` : null],
+    ["Slide", s2.slide ? `${(1e3 * s2.slide.most).toFixed(0)} mm of extra tube at full reach; ${s2.slide.positions.length} positions` : null],
+    ["Neutral note", s2.neutral ? `${etName(s2.notes[s2.neutral.note])} at ${s2.neutral.dynamic}${s2.neutral.breathTimes !== 1 ? `, blown at ${s2.neutral.breathTimes} times its players' usual breath pressure` : ""}; it sounds ${s2.neutral.cents} cents from its pitch (found ${new Date(s2.neutral.found).toLocaleDateString()})` : "Not found for this body yet: Commands/Make Dial Bodies.command finds one."],
+    ["Body file", s2.layout?.madeFrom ? `made from ${s2.layout.madeFrom.slice(0, 12)}` : null]
   ]);
   const lay = s2.layout ?? {};
   rows("engineTable", [
     ["Losses", lay.losses],
     ["Mesh", lay.mesh],
-    ["Elements", lay.order != null ? `order ${lay.order}` : null],
+    ["Finite elements", lay.order != null ? `order ${lay.order}` : null],
     ["Precision", lay.single == null ? null : lay.single ? "single" : "double"],
-    ["Rate", lay.rate ? `${lay.rate} Hz${lay.ratio ? `, stepped ${lay.ratio} times a sample` : ""}` : null],
-    ["Unknowns", lay.unknowns ? `${lay.unknowns} (${lay.entries} entries)` : null],
-    ["Cores", String(s2.threads)],
-    ["Dials' reach", `1/${s2.reach} to ${s2.reach} times the rules' value`]
+    ["Rate", lay.rate ? `${lay.rate} Hz${lay.ratio ? `, ${lay.ratio} steps a sample` : ""}` : null],
+    ["Unknowns", lay.unknowns ? `${lay.unknowns} (${lay.entries} matrix entries)` : null],
+    ["Processor cores", String(s2.threads)],
+    ["Sliders' reach", `from 1/${s2.reach} of to ${s2.reach} times the playing rules' value`]
   ]);
   for (const b of blocks()) b.hidden = false;
   refresh();
@@ -11196,7 +11336,7 @@ function refresh() {
   if (P.breathAttack) {
     attack.set(P.breathAttack);
     const [t, y2] = peakOf(P.breathAttack);
-    $2("attackNote").textContent = (y2 > 1 ? `Its peak ${y2.toFixed(2)} times the breath dialled, ${Math.round(1e3 * t)} ms in, settled at ${Math.round(1e3 * P.breathAttack.at(-1)[0])} ms. ` : "A plain rise: the breath brought up to what is dialled and held. ") + `Played from rest and after every tongued stroke${S.kind === "reed" ? " (the tongue let go of the reed as the first segment ends)" : ""}. Press anywhere on the plot to put a point there and drag it -- above the dashed line, a peak over the breath dialled; drag a point; select one to set it as numbers; double-click it, or press Delete, to take it away. Its first rise is the breath's rise (above); each segment is eased, as the engine moves.`;
+    $2("attackNote").textContent = (y2 > 1 ? `The breath peaks at ${y2.toFixed(2)} times the breath set, ${Math.round(1e3 * t)} ms in, and settles by ${Math.round(1e3 * P.breathAttack.at(-1)[0])} ms. ` : "A plain rise: the breath comes up to what is set and stays there. ") + `This shape is used for a note from silence and after every tongued stroke${S.kind === "reed" ? " (the tongue lets go of the reed as the first segment ends)" : ""}. To edit it: press anywhere on the plot to add a point and drag it (above the dashed line is a peak over the breath set); drag a point to move it; select one to type its numbers; double-click it, or press Delete, to remove it. The first segment is the breath's rise set above. The engine eases through each segment.`;
   }
   $2("repeating").checked = P.repeat.on;
   controls.repeatRate.set(P.repeat.rate);
@@ -11227,11 +11367,11 @@ function refresh() {
       controls.growlRough.set(P.growl.rough);
     }
     const growling = P.growl?.on && P.growled != null, h = growling ? P.growled : P.hummed, f = hzOf(P.pitch);
-    $2("humNote").textContent = h == null ? "" : `${growling ? "Growled" : "Hummed"} at ${h.toFixed(1)} Hz (${etName(12 * Math.log2(h / 440) + 69)}); with the note's ${f.toFixed(1)} Hz, its difference tone ${Math.abs(f - h).toFixed(1)} Hz and its sum ${(f + h).toFixed(1)} Hz.`;
+    $2("humNote").textContent = h == null ? "" : `${growling ? "Growled" : "Hummed"} at ${h.toFixed(1)} Hz (${etName(12 * Math.log2(h / 440) + 69)}). Against the note's ${f.toFixed(1)} Hz, it makes a difference tone at ${Math.abs(f - h).toFixed(1)} Hz and a sum tone at ${(f + h).toFixed(1)} Hz.`;
   }
   if (controls.slide && P.slide != null) {
     controls.slide.set(positionOf(P.slide));
-    controls.slide.note.textContent = `${Math.round(1e3 * P.slide)} mm of tube past first position, the hand ${Math.round(500 * P.slide)} mm out; moved as its players move it, over ${Math.round(1e3 * S.slide.least)} ms or at some ${S.slide.speed} m/s.`;
+    controls.slide.note.textContent = `${Math.round(1e3 * P.slide)} mm of extra tube; the hand is ${Math.round(500 * P.slide)} mm out. The slide moves as players move it: taking at least ${Math.round(1e3 * S.slide.least)} ms, at about ${S.slide.speed} m/s.`;
   }
   muteSaid();
   fingered();
@@ -11245,7 +11385,7 @@ function refresh() {
     if (document.activeElement !== c.number) c.number.value = shownValue(c.name, P.row[c.k]);
     if (c.name === "gamma" && c.note) {
       const at = S.columns.findIndex((q) => q[0] === "reed" && q[2] === "closing_pressure");
-      if (at >= 0) c.note.textContent = `${meaningOf("gamma")[1]}: ${(P.row[c.k] * P.row[at] / 1e3).toFixed(2)} kPa`;
+      if (at >= 0) c.note.textContent = `${meaningOf("gamma")[1]} Now ${(P.row[c.k] * P.row[at] / 1e3).toFixed(2)} kPa.`;
     }
   }
   drawPlayers2();
@@ -11253,12 +11393,12 @@ function refresh() {
 }
 function lungsSaid() {
   const f = P.lungs.flow, players = P.lungs.players, src = S.lungs.airflow, b = S.breath, dialled = P.rules[b] > 0 && Math.abs(P.row[b] / P.rules[b] - 1) > 5e-3;
-  $2("lungsNote").textContent = `${f > 0 ? `As it was last blown its model let ${f.toFixed(3)} L a second into its bore (its engine's own flow)` : "Its model's flow is measured as it is blown"}; at ${P.dynamic} on ${etName(P.pitch)}${dialled ? ", at the breath dialled," : ""} its players spend ${players.toFixed(2)} L a second (` + (src.evidence === "measured" ? `measured of ${label(S.model)} players: Bouhuys 1965` : `borrowed from ${src.from.map(label).join(", ")} players' measured flows, Bouhuys 1965: none measured on the ${label(S.model)}`) + `). ${P.breathing.on ? `${f > 0 ? `A breath of ${P.breathing.litres.toFixed(2)} L lasts it ${(P.breathing.litres / f).toFixed(1)} s` : `A breath of ${P.breathing.litres.toFixed(2)} L spent`}, then the note is let go, a breath taken in over ${Math.round(1e3 * P.breathing.inhale)} ms and the note attacked again as from rest -- as the strings' bow turns.` : "Unbreathing, it blows one breath without end."}`;
+  $2("lungsNote").textContent = `${f > 0 ? `When last blown, the model let ${f.toFixed(3)} L of air a second into the bore` : "The model's air flow is measured once it is blown"}. At ${P.dynamic} on ${etName(P.pitch)}${dialled ? ", at the breath set," : ""} real players use ${players.toFixed(2)} L a second (` + (src.evidence === "measured" ? `measured of ${label(S.model)} players by Bouhuys 1965` : `taken from ${src.from.map(label).join(", ")} players measured by Bouhuys 1965, since no ${label(S.model)} player was measured`) + `). ${P.breathing.on ? `${f > 0 ? `A breath of ${P.breathing.litres.toFixed(2)} L lasts ${(P.breathing.litres / f).toFixed(1)} s` : `When a breath of ${P.breathing.litres.toFixed(2)} L is spent`}; then the note stops, a new breath is taken in over ${Math.round(1e3 * P.breathing.inhale)} ms, and the note starts again from silence, as a string player's bow changes direction.` : "With breathing off, it blows one endless breath."}`;
 }
 var kPa = (v) => `${(v / 1e3).toFixed(1)} kPa`;
 var msOf = (v) => `${Math.round(v)} ms`;
 var shortly = (v) => String(+(+v).toPrecision(2));
-var WRITTEN = { pulsation: (v) => `${Math.round(v / 2 / Math.PI)} Hz`, closing_pressure: kPa, qfactor: shortly };
+var WRITTEN = { pulsation: (v) => `${Math.round(v / 2 / Math.PI)} Hz`, closing_pressure: kPa, qfactor: (v) => `Q ${shortly(v)}` };
 var OWN = {
   stroke: [1e3, msOf],
   softSeconds: [1e3, msOf],
@@ -11312,7 +11452,7 @@ function fingered() {
     const unkeyed = holes.filter(([c, k]) => !w.holes.includes(S.holes[c[1]]) && Math.abs(P.row[k] - P.rules[k]) > 5e-3).map(([c, k]) => `${S.holes[c[1]]} at ${P.row[k].toFixed(2)}`);
     const pct = (a) => `${Math.round(100 * a)} %`, shown4 = new Set(faint.map(([, v]) => v.hole)), off = f.off.filter((h) => !shown4.has(h));
     svg = d.svg;
-    note = (f.documented ? `${f.documented}, as its players' guide writes it.` : f.off.length ? "No fingering of its keys leaves its holes so: the keys nearest them." : "Its keys for the holes as they stand: no charted fingering.") + (parts.length ? ` Pressed part way: ${parts.map(([key2, a]) => `${key2} ${pct(a)}`).join(", ")}.` : "") + (faint.length ? ` Drawn faint: ${faint.map(([key2, v]) => `${key2} ${pct(v.share)} for ${v.hole} (${open[v.hole].toFixed(2)} open), which it moves only with ${v.moves.join(", ")}`).join("; ")}.` : "") + (off.length ? ` Left otherwise than they stand: ${off.map((h) => `${h} (${open[h].toFixed(2)} open)`).join(", ")}.` : "") + (d.undrawn.length ? ` Also pressed, with no place in LilyPond's ${w.diagram} diagram: ${d.undrawn.join(", ")}.` : "") + (unkeyed.length ? ` Dialled, with no key on its diagram: ${unkeyed.join(", ")}.` : "");
+    note = (f.documented ? `${f.documented}, as the players' fingering chart gives it.` : f.off.length ? "No fingering of the keys leaves the holes exactly as they are; these are the nearest keys." : "The keys for the holes as they stand; this is not a charted fingering.") + (parts.length ? ` Pressed part way: ${parts.map(([key2, a]) => `${key2} ${pct(a)}`).join(", ")}.` : "") + (faint.length ? ` Drawn faint: ${faint.map(([key2, v]) => `${key2} ${pct(v.share)} for hole ${v.hole} (${open[v.hole].toFixed(2)} open), which it only moves together with ${v.moves.join(", ")}`).join("; ")}.` : "") + (off.length ? ` Holes the drawn keys cannot leave as they are: ${off.map((h) => `${h} (${open[h].toFixed(2)} open)`).join(", ")}.` : "") + (d.undrawn.length ? ` Also pressed, but not shown on LilyPond's ${w.diagram} diagram: ${d.undrawn.join(", ")}.` : "") + (unkeyed.length ? ` Set by hand, with no key on the diagram: ${unkeyed.join(", ")}.` : "");
   }
   drawnFor = key;
   $2("diagram").classList.toggle("brass", brass);
@@ -11324,7 +11464,7 @@ function muteSaid() {
   if (!S.mutes?.length) return;
   const m = S.muting, name2 = (k) => k ? MUTE_NAME[k] ?? k : "no mute";
   if (document.activeElement !== $2("mute")) $2("mute").value = (m ? m.mute : S.mute) ?? "";
-  $2("muteNote").textContent = m?.error ? `The ${name2(m.mute)}'s body could not be made: ${m.error}. Still played with ${name2(S.mute)}.` : m ? `${name2(m.mute)[0].toUpperCase() + name2(m.mute).slice(1)} asked: ${m.ready ? "put in as soon as the breath is let go and the bell has rung down" : `its body being made: ${m.step} (${Math.round(m.seconds)} s)`}. Played with ${name2(S.mute)} until then.` : S.mute ? `Played with its ${name2(S.mute)} in: its body's bore the mute's ring, its hollow a closed branch at its tip.` : "Played open.";
+  $2("muteNote").textContent = m?.error ? `The model with the ${name2(m.mute)} could not be made: ${m.error}. It is still played with ${name2(S.mute)}.` : m ? `${name2(m.mute)[0].toUpperCase() + name2(m.mute).slice(1)} asked for: ${m.ready ? "it goes in as soon as the breath stops and the bell has stopped ringing" : `its model is being made: ${m.step} (${Math.round(m.seconds)} s so far)`}. Until then it is played with ${name2(S.mute)}.` : S.mute ? `Played with the ${name2(S.mute)} in. The model treats the gap around the mute as the end of the bore, and the mute's hollow as a closed side branch.` : "Played open, without a mute.";
 }
 function said() {
   const b = P.between, partialOf = (m) => {
@@ -11333,16 +11473,16 @@ function said() {
   };
   if (S.kind === "lips") {
     const k = P.note ?? S.notes.indexOf(P.midi), none = S.unattacked?.[k] ?? [], a = P.attack;
-    $2("pitchSaid").textContent = P.lip == null ? "" : (P.slideDialled ? "The slide drawn by itself: the bore gives the pitch. " : "") + `Lips at ${P.lip.toFixed(1)} Hz: ` + (P.lipDialled ? "dialled by themselves; the bore picks the partial" : !b || b.share === 0 && b.low === b.high ? `partial ${partialOf(P.midi)}, as its lips sound it` : `between partial ${partialOf(b.low)}'s lips and ${partialOf(b.high)}'s, ${Math.round(100 * b.share)} % of the way; the bore picks the partial`) + (!a ? `. Blown from rest at ${P.dynamic}, no attack found it.` : a.share === 1 ? "." : `. Blown from rest: attacked from lips ${Math.abs(100 * (1 - a.share)).toFixed(0)} % ${a.share < 1 ? "lower" : "higher"}, settled after ${Math.round(1e3 * a.settleAfter)} ms.`) + (none.length ? ` Partial ${partialOf(P.midi)}'s attack finds it at no lips at ${none.join(", ")}.` : "") + (P.vibrato.on && P.vibrato.width > 0 ? P.vibratoHeard == null ? " Its vibrato's swing is not measured on this body." : P.vibratoHeard < P.vibrato.width - 0.05 ? ` Its vibrato heard ${P.vibratoHeard.toFixed(1)} ¢ wide, the widest its partial holds.` : "" : "");
+    $2("pitchSaid").textContent = P.lip == null ? "" : (P.slideDialled ? "The slide was moved by itself, so the bore sets the pitch. " : "") + `Lips at ${P.lip.toFixed(1)} Hz: ` + (P.lipDialled ? "set by hand, so the bore decides which partial sounds" : !b || b.share === 0 && b.low === b.high ? `partial ${partialOf(P.midi)}, as the lips sound it` : `${Math.round(100 * b.share)} % of the way from partial ${partialOf(b.low)}'s lip frequency to partial ${partialOf(b.high)}'s; the bore decides which partial sounds`) + (!a ? `. Started from silence at ${P.dynamic}, no attack was found that sounds it.` : a.share === 1 ? "." : `. Started from silence: the lips start ${Math.abs(100 * (1 - a.share)).toFixed(0)} % ${a.share < 1 ? "lower" : "higher"} and settle after ${Math.round(1e3 * a.settleAfter)} ms.`) + (none.length ? ` Partial ${partialOf(P.midi)} could not be started from silence at ${none.join(", ")}.` : "") + (P.vibrato.on && P.vibrato.width > 0 ? P.vibratoHeard == null ? " How far its vibrato swings the pitch has not been measured on this body." : P.vibratoHeard < P.vibrato.width - 0.05 ? ` Its vibrato is heard ${P.vibratoHeard.toFixed(1)} cents wide, the widest this partial allows.` : "" : "");
     return;
   }
-  $2("pitchSaid").textContent = !b ? "" : b.sounds == null ? `${etName(P.pitch)}: the charted note, as the rules play it.` : `${b.share > 0 && b.share < 1 ? `Between the charted ${noteName(b.low)} and ${noteName(b.high)}, ${Math.round(100 * b.share)} % of the way` : `The charted ${noteName(b.share < 1 ? b.low : b.high)}`}${Math.abs(b.sounds - P.pitch) > 5e-3 ? `; the nearest it reaches, ${etName(b.sounds)}.` : "."}`;
+  $2("pitchSaid").textContent = !b ? "" : b.sounds == null ? `${etName(P.pitch)}: the charted note, as the playing rules play it.` : `${b.share > 0 && b.share < 1 ? `${Math.round(100 * b.share)} % of the way from the charted ${noteName(b.low)} to ${noteName(b.high)}` : `The charted ${noteName(b.share < 1 ? b.low : b.high)}`}${Math.abs(b.sounds - P.pitch) > 5e-3 ? `; the nearest it can reach is ${etName(b.sounds)}.` : "."}`;
 }
 var pitchSlow = null;
 var toPitch = (pitch, charted = false, dynamic = $2("dynamic").value, note = null) => {
   clearTimeout(pitchSlow);
   pitchSlow = setTimeout(() => {
-    $2("pitchSaid").textContent = `Measuring the glides near ${etName(pitch)} ...`;
+    $2("pitchSaid").textContent = `Measuring how the pitch bends near ${etName(pitch)} ...`;
   }, 300);
   return sendPitch({ pitch: Math.min(Math.max(pitch, +$2("pitch").min), +$2("pitch").max), dynamic, charted, ...note != null ? { note } : {} }).finally(() => {
     clearTimeout(pitchSlow);
@@ -11408,7 +11548,7 @@ $2("solo").onclick = async () => {
   const on = !S.soloist?.playing;
   if (on) {
     sound2();
-    $2("soloSaid").textContent = "Its band composes the piece ...";
+    $2("soloSaid").textContent = "Its band is composing the piece ...";
   }
   const r = await post("/soloist", on ? { on, ...musebot2.given() } : { on });
   if (r.error) {
@@ -11449,7 +11589,7 @@ function soloShown2(s2) {
   $2("render").disabled = busy && !prerendered2.running();
   musebot2.show(s2.player, said2?.personality);
   if (!said2) return;
-  $2("soloSaid").textContent = `${said2.player} on the ${label(s2.model ?? said2.instrument)}, seed ${said2.seed}: ${playing ? "" : "played "}${clock2(Math.min(said2.at, said2.seconds))} of ${clock2(said2.seconds)}, ${said2.notes} notes` + (said2.unplayed.length ? `; ${said2.unplayed.length} not played here (${said2.unplayed[0].why})` : "") + (said2.late ? `; ${said2.late} came late` : "") + (said2.refused.length ? `; ${said2.refused.length} refused (${said2.refused.at(-1).error})` : "") + (said2.personality ? `; its register ${etName(said2.personality.register[0])} to ${etName(said2.personality.register[1])}, its motif ${said2.personality.motif}` : "") + ".";
+  $2("soloSaid").textContent = `${said2.player} on the ${label(s2.model ?? said2.instrument)}, seed ${said2.seed}: ${playing ? "" : "played "}${clock2(Math.min(said2.at, said2.seconds))} of ${clock2(said2.seconds)}, ${said2.notes} notes` + (said2.unplayed.length ? `; ${said2.unplayed.length} not played here (${said2.unplayed[0].why})` : "") + (said2.late ? `; ${said2.late} came late` : "") + (said2.refused.length ? `; ${said2.refused.length} refused (${said2.refused.at(-1).error})` : "") + (said2.personality ? `. Its register is ${etName(said2.personality.register[0])} to ${etName(said2.personality.register[1])}, and its motif ${said2.personality.motif}` : "") + ".";
 }
 $2("keep").onclick = async () => {
   const r = await post("/keep", { words: $2("words").value });
@@ -11579,7 +11719,7 @@ function draw() {
 }
 function legend() {
   const brass = S.kind === "lips", air = S.kind === "air";
-  $2("legend").textContent = `Grey: the bore's input impedance ${brass ? S.slide ? "at its slide's nearest position" : S.valves ? "at its fingering, as its valves stand (each pressed past half way)" : "(its one fingering, open)" : "for the nearest charted fingering"}${impedance ? "" : " (being computed: a minute or two, the first time)"}. ` + (air ? "The jet is blown from the mouth's pressure: no tract stands before it in the engine. " : `Red: the tract's impedance; dashed: the two in series, what the ${brass ? "lips meet" : "reed meets"}. `) + "Blue lines: the pitch heard and its harmonics. " + (MEASURED ? `Shaded: measured -- clarinettists' first resonance (Fritz & Wolfe 2005), and above ${MEASURED.held} Hz the peaks of bends and glissandi (Chen, Smith & Wolfe 2009); the dot, where their tract keeps its resonance in normal playing, ${MEASURED.offset} Hz above the note, held at ${MEASURED.held} Hz under it -- the tract a shape's, its resonances its physics', following the note${P.tractFollows ? "" : " when asked for again"}.` : air ? "" : `No ${label(S.model)} players' tract is measured yet: double-click to add a resonance.`);
+  $2("legend").textContent = `Frequency (Hz) runs across; impedance (MPa s/m³) runs up. Grey: the bore's input impedance ${brass ? S.slide ? "at the nearest slide position" : S.valves ? "at the fingering the valves are in (each counted as pressed once past half way)" : "(open, its one fingering)" : "for the nearest charted fingering"}${impedance ? "" : " (being computed: a minute or two the first time)"}. ` + (air ? "The jet is driven by the mouth's pressure alone: the engine puts no vocal tract before it. " : `Red: the vocal tract's impedance. Dashed: the two together, which is what the ${brass ? "lips meet" : "reed meets"}. `) + "Blue lines: the pitch heard and its harmonics. " + (MEASURED ? `Shaded, measured: the ${MEASURED.whose} first tract resonance (${MEASURED.cites.first}), and above ${MEASURED.held} Hz, the peaks they reached in bends and glissandi (${MEASURED.cites.bend}). The dot: where their tract resonance sits in normal playing, ${MEASURED.offset} Hz above the note, and never below ${MEASURED.held} Hz (${MEASURED.cites.normal}). The tract follows the note${P.tractFollows ? "" : " when you press its button again"}; its shape is a real tract's, and its resonances come from that shape's physics.` : air ? "" : `No ${label(S.model)} player's vocal tract has been measured yet: double-click to add a resonance.`);
 }
 var dragging = -1;
 var near = (e) => {
@@ -11678,7 +11818,7 @@ setInterval(() => {
   if (!active || !started2 || !S?.model || !P || rendering2) return;
   const p = seriesPitch(recent, RATE, { silent: -90 }), rms = Math.sqrt(recent.reduce((a, v) => a + v * v, 0) / recent.length);
   heard = p.hz;
-  $2("heard").textContent = heard ? `${heard.toFixed(1)} Hz = ${etName(69 + 12 * Math.log2(heard / 440))}, ${(1200 * Math.log2(heard / hzOf(P.pitch))).toFixed(0)} ¢ from the pitch asked` : P.blowing && pace != null && !(rms > 1e-5) ? `blown, but no tone: the ${label(S.model)}'s model does not sound this note here` : "--";
+  $2("heard").textContent = heard ? `${heard.toFixed(1)} Hz = ${etName(69 + 12 * Math.log2(heard / 440))}, ${(1200 * Math.log2(heard / hzOf(P.pitch))).toFixed(0)} cents from the pitch asked for` : P.blowing && pace != null && !(rms > 1e-5) ? `Blown, but no tone: the ${label(S.model)}'s model does not sound this note with these settings` : "--";
   const db = rms > 0 ? 20 * Math.log10(rms) : -Infinity;
   $2("level").textContent = db > -120 ? `${db.toFixed(1)} dBFS` : "silent";
   $2("meter").style.width = `${Math.max(0, Math.min(100, (db + 60) / 60 * 100))}%`;
@@ -11691,7 +11831,7 @@ setInterval(() => {
   shorts.push([now, under]);
   while (shorts[0][0] < now - SHORT_SECONDS) shorts.shift();
   const short = (under - shorts[0][1]) / RATE * 1e3;
-  $2("engine").textContent = `${pace ? `${Math.round(100 * pace)} % of real time` : "--"}${S.threads > 1 ? ` on ${S.threads} cores` : ""}; ${(buffered / RATE * 1e3).toFixed(0)} ms ahead${short > 0 ? `, ${short.toFixed(0)} ms short in the last ${SHORT_SECONDS} s` : ""}`;
+  $2("engine").textContent = `${pace ? `computing at ${Math.round(100 * pace)} % of real time` : "--"}${S.threads > 1 ? ` on ${S.threads} cores` : ""}; ${(buffered / RATE * 1e3).toFixed(0)} ms of sound buffered${short > 0 ? `; ${short.toFixed(0)} ms missing in the last ${SHORT_SECONDS} s` : ""}`;
   draw();
 }, 150);
 async function settings2() {
@@ -12045,17 +12185,17 @@ async function choose(next) {
   remember();
 }
 async function addressMade(to, next) {
-  const unread = asked2.unread.length ? `; not read: ${asked2.unread.join("; ")}` : "";
+  const unread = asked2.unread.length ? `; could not read: ${asked2.unread.join("; ")}` : "";
   if (!asksSettings(asked2)) {
-    if (unread) settingsSaid(`The address${unread}.`);
+    if (unread) settingsSaid(`In the page's address${unread}.`);
     return;
   }
-  settingsSaid("Making the settings in the address ...");
+  settingsSaid("Applying the settings in the page's address ...");
   try {
     const { made, refused } = await DIALS[to].load({ family: to, model: next, settings: settingsFromAddress(asked2, before[next]), words: "" });
-    settingsSaid(`The address's settings made (${made})${refused.length ? `; ${refused.length} refused: ${refusedSaid(refused)}` : ""}${unread}.`);
+    settingsSaid(`Applied the settings in the page's address (${made})${refused.length ? `; ${refused.length} refused: ${refusedSaid(refused)}` : ""}${unread}.`);
   } catch (error) {
-    settingsSaid(`The address's settings not made: ${error.message}${unread}.`);
+    settingsSaid(`Could not apply the settings in the page's address: ${error.message}${unread}.`);
   }
 }
 async function main() {
@@ -12076,7 +12216,7 @@ async function main() {
   addEventListener("keydown", (e) => family2 && DIALS[family2].keys(e));
   const all = [...families2.strings.instruments, ...families2.winds.instruments.map((i) => i.model)];
   addressFor = asked2.instrument === void 0 ? families2.first : all.includes(asked2.instrument) ? asked2.instrument : null;
-  if (!addressFor) settingsSaid(`No ${asked2.instrument} here to take up: the address's settings not made.`);
+  if (!addressFor) settingsSaid(`There is no ${asked2.instrument} here, so the settings in the page's address were not applied.`);
   choose(addressFor ?? families2.first);
 }
 var settingsSaid = (text) => {
@@ -12099,10 +12239,10 @@ async function saveSettings() {
 async function loadSettings(text) {
   const file = readSettingsFile(text);
   if (file.model !== model) {
-    settingsSaid(`Taking up the ${label2(file.model)} ...`);
+    settingsSaid(`Loading the ${label2(file.model)} ...`);
     await choose(file.model);
   }
-  settingsSaid(`Making its settings, saved ${new Date(file.saved).toLocaleString()} ...`);
+  settingsSaid(`Applying its settings, saved ${new Date(file.saved).toLocaleString()} ...`);
   const { made, refused } = await DIALS[file.family].load(file);
   remember();
   return { file, made, refused };
@@ -12115,7 +12255,7 @@ $3("settingsFile").onchange = async () => {
   if (!chosen2) return;
   try {
     const { file, made, refused } = await loadSettings(await chosen2.text());
-    settingsSaid(`${chosen2.name}: the ${label2(file.model)}'s settings made (${made})${refused.length ? `; ${refused.length} refused: ${refusedSaid(refused)}` : ""}${file.words ? ` -- "${file.words}"` : ""}.`);
+    settingsSaid(`${chosen2.name}: applied the ${label2(file.model)}'s settings (${made})${refused.length ? `; ${refused.length} refused: ${refusedSaid(refused)}` : ""}${file.words ? `. Its words: "${file.words}"` : ""}.`);
   } catch (error) {
     settingsSaid(`${chosen2.name} not loaded: ${error.message}`);
   }

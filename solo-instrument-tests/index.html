@@ -1,10 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script src="coi-settings.js"></script>
-<script src="coi-serviceworker.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script id="afresh">
+// A reload starts the page afresh (the owner, 7 November 2026: "hard refresh should reset"): the instrument kept, the
+// rest its address held -- the settings dialled, written there as they change -- left behind, so a setting that left it
+// silent is not made again. Not the site's own reload (site/coi-settings.js, its 'coi-reloaded' within 10 s), which
+// comes once as a link is first opened, its settings to be made: so this runs ahead of it, before it can mark one.
+try{
+  const reload=performance.getEntriesByType('navigation')[0]?.type==='reload',isolating=Date.now()-Number(sessionStorage.getItem('coi-reloaded'))<10e3;
+  const instrument=new URLSearchParams(location.search).get('instrument');
+  if(reload&&!isolating)history.replaceState(history.state,'',`${location.pathname}${instrument?`?instrument=${encodeURIComponent(instrument)}`:''}${location.hash}`);
+}catch{}
+</script>
+<script src="coi-settings.js"></script>
+<script src="coi-serviceworker.js"></script>
 <title>Solo Instrument Tests</title>
 <style>
 :root{--bg:#f7f6f2;--fg:#1d1d1b;--muted:#6b6a64;--line:#d9d6cc;--accent:#b4462c;--strings:#2f5d8a;--warn:#a2452c;--on:#2e7d4f;--bore:#8a8a86;--sum:#1d1d1b;--band:rgba(180,70,44,.10);--bend:rgba(44,110,180,.10);--harm:rgba(44,110,180,.55);--players:rgba(46,125,79,.6)}
@@ -90,26 +101,26 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </head>
 <body>
 <h1>Solo instrument tests</h1>
-<div class="muted" id="what">Every instrument we model, played live, by you or by a musebot: its player, its instrument, its physics and the musebot's personality dialled by ear.</div>
+<div class="muted" id="what">Every instrument we model, played live by you or by a musebot. You can adjust the player, the instrument, its physics and the musebot's personality by ear.</div>
 <nav id="sections" aria-label="The page's parts"><div class="parts"></div><div class="boxes"></div></nav>
 
 <h2 id="part-play">Play</h2>
-<div class="muted">Who plays the instrument: you, as the dials under Player set it, or a musebot, as its personality under Musebot sets it.</div>
+<div class="muted">Who plays the instrument: you, with the controls under Player, or a musebot, with the personality set under Musebot.</div>
 <fieldset><legend>Instrument</legend>
   <div class="row"><label for="instrument">Instrument</label><select id="instrument"></select><span></span></div>
   <div id="status"></div>
   <div data-family="strings" hidden>
     <div class="duo">
-      <div><button id="s-play" class="big" title="space">▶ Play</button><div class="muted">you bow it, as the dials under <a href="#part-player">Player</a> set it (space)</div></div>
-      <div><button id="s-solo" class="big" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player, told what this dial plays of it -- played on it as its synthesizer; everything in it drawn from its seed">▶ A musebot plays</button>
-        <div class="muted">a piece its band composes, as its seed and personality under <a href="#part-musebot">Musebot</a> set it</div>
-        <button id="s-render" class="render" title="the piece composed, then made by this dial as fast or as slowly as this computer can, and heard once it is made: the same instrument as dialled">Render its piece first</button>
-        <div class="muted">then hear it: for a computer too slow to play it live</div></div>
+      <div><button id="s-play" class="big" title="space">▶ Play</button><div class="muted">You bow it, as set under <a href="#part-player">Player</a> (space bar).</div></div>
+      <div><button id="s-solo" class="big" title="A musebot band (plex_clodbot, MemoryBOT and this instrument's player) composes a piece and plays it on this instrument. Everything in the piece comes from its seed.">▶ A musebot plays</button>
+        <div class="muted">A piece its band composes, from the seed and personality set under <a href="#part-musebot">Musebot</a>.</div>
+        <button id="s-render" class="render" title="The piece is composed, then computed on this instrument as set, as fast as this computer can, and played once it is finished.">Render its piece first</button>
+        <div class="muted">Then hear it. For a computer too slow to play it live.</div></div>
     </div>
     <div class="also">
       <button id="s-reverse" title="r">Change bow now (r)</button>
       <button id="s-pluck" title="p">Pluck (p)</button>
-      <button id="s-good" title="every dial back to its neutral note on this instrument (a good note made from the violin's where it has none)">↺ Neutral note</button>
+      <button id="s-good" title="Every control back to this instrument's neutral note (made from the violin's where this instrument has none of its own).">↺ Neutral note</button>
     </div>
     <div class="meter"><div id="s-meter"></div></div>
     <table class="readouts"><tbody><tr><td>Level</td><td id="s-level">silent</td></tr><tr><td>Bow</td><td id="s-way"></td></tr></tbody></table>
@@ -119,16 +130,16 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
   </div>
   <div data-family="winds" hidden>
     <div class="duo">
-      <div><button id="w-blow" class="big" title="space">Blow</button><div class="muted">you play it, as the dials under <a href="#part-player">Player</a> set it (space)</div></div>
-      <div><button id="w-solo" class="big" title="a piece composed by a musebot band -- plex_clodbot, MemoryBOT and this instrument's player -- played on it; everything in it drawn from its seed">▶ A musebot plays</button>
-        <div class="muted">a piece its band composes, as its seed and personality under <a href="#part-musebot">Musebot</a> set it</div>
-        <button id="w-render" class="render" title="the piece composed, then made by this dial as fast or as slowly as this computer can, and heard once it is made: the same instrument as dialled">Render its piece first</button>
-        <div class="muted">then hear it: for a computer too slow to play it live</div></div>
+      <div><button id="w-blow" class="big" title="space">Blow</button><div class="muted">You play it, as set under <a href="#part-player">Player</a> (space bar).</div></div>
+      <div><button id="w-solo" class="big" title="A musebot band (plex_clodbot, MemoryBOT and this instrument's player) composes a piece and plays it on this instrument. Everything in the piece comes from its seed.">▶ A musebot plays</button>
+        <div class="muted">A piece its band composes, from the seed and personality set under <a href="#part-musebot">Musebot</a>.</div>
+        <button id="w-render" class="render" title="The piece is composed, then computed on this instrument as set, as fast as this computer can, and played once it is finished.">Render its piece first</button>
+        <div class="muted">Then hear it. For a computer too slow to play it live.</div></div>
     </div>
     <div class="also">
       <button id="w-tongueNow" title="t">Tongue now (t)</button>
-      <button id="w-neutral" title="its neutral note, at its dynamic, every dial back to the rules' value there">↺ Neutral note</button>
-      <button id="w-reset" title="every dial back to the rules' value at this pitch and dynamic, the holes the pitch's">↺ Back to the rules</button>
+      <button id="w-neutral" title="Back to its neutral note and dynamic, with every control at the value the playing rules give there.">↺ Neutral note</button>
+      <button id="w-reset" title="Every control back to the value the playing rules give at this pitch and dynamic, and the holes back to this pitch's fingering.">↺ Back to the rules</button>
     </div>
     <div class="meter"><div id="w-meter"></div></div>
     <table class="readouts"><tbody>
@@ -143,20 +154,20 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </fieldset>
 
 <h2 id="part-musebot">Musebot</h2>
-<div class="muted">What the musebot is: this instrument's player in a band -- plex_clodbot, MemoryBOT and it -- that composes a piece and plays it here, everything in it drawn from its seed, its personality too but what is set here.</div>
+<div class="muted">The musebot is this instrument's player in a band with plex_clodbot and MemoryBOT. The band composes a piece and plays it here. Everything in it, including the player's personality, comes from the seed, except what you set here.</div>
 <div data-family="strings" class="musebot" hidden>
   <fieldset><legend>Its piece</legend>
     <div class="row"><label for="s-soloSeed">Seed</label><input type="number" id="s-soloSeed" min="0" step="1"><span></span></div>
-    <div class="row"><label for="s-soloSeconds">At most (s)</label><input type="number" id="s-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
-    <div class="note">Played by ▶ A musebot plays, under <a href="#part-play">Play</a>, or rendered first and then heard: your bow stopped as it starts, the musebot bowing, turning its bow and making its vibrato.</div>
+    <div class="row"><label for="s-soloSeconds">Longest (s)</label><input type="number" id="s-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
+    <div class="note">Start it with ▶ A musebot plays under <a href="#part-play">Play</a>, or render it first and then hear it. Your bowing stops when it starts; the musebot bows, changes bow direction and makes its own vibrato.</div>
   </fieldset>
   <div id="s-personality"></div>
 </div>
 <div data-family="winds" class="musebot" hidden>
   <fieldset><legend>Its piece</legend>
     <div class="row"><label for="w-soloSeed">Seed</label><input type="number" id="w-soloSeed" min="0" step="1"><span></span></div>
-    <div class="row"><label for="w-soloSeconds">At most (s)</label><input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
-    <div class="note">Played by ▶ A musebot plays, under <a href="#part-play">Play</a>, or rendered first and then heard: the dials under Player following what it plays.</div>
+    <div class="row"><label for="w-soloSeconds">Longest (s)</label><input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
+    <div class="note">Start it with ▶ A musebot plays under <a href="#part-play">Play</a>, or render it first and then hear it. The controls under Player follow what it plays.</div>
   </fieldset>
   <div id="w-personality"></div>
 </div>
@@ -172,15 +183,15 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div id="s-right"></div>
   </fieldset>
   <fieldset><legend>Strokes</legend>
-    <div class="row"><label><input type="checkbox" id="s-alternate" checked> Turn the bow by itself</label><span class="muted">down-bow, up-bow, … while it plays</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-alternate" checked> Turn the bow by itself</label><span class="muted">down-bow, up-bow, and so on, while it plays</span><span></span></div>
     <div id="s-strokes"></div>
   </fieldset>
   <fieldset><legend>Attack: how each stroke starts</legend>
-    <div class="row"><label for="s-attackFrom">Shape it from</label><select id="s-attackFrom"></select><span></span></div>
+    <div class="row"><label for="s-attackFrom">Start from</label><select id="s-attackFrom"></select><span></span></div>
     <div class="note" id="s-attackNote"></div>
-    <div class="curveLabel">Bow force, × the force dialled</div><div id="s-forceCurve"></div>
-    <div class="curveLabel">Bow speed, × the speed dialled</div><div id="s-speedCurve"></div>
-    <div class="muted">Played at Play and at every turn. Press anywhere on a plot to put a point there and drag it -- above the dashed line, a peak over what the stroke settles at; drag a point; select one to set it as numbers or make the segment into it straight; double-click it, or press Delete, to take it away. The speed's first rise is the stroke's start (s) above.</div>
+    <div class="curveLabel">Bow force (× the force set above)</div><div id="s-forceCurve"></div>
+    <div class="curveLabel">Bow speed (× the speed set above)</div><div id="s-speedCurve"></div>
+    <div class="muted">Used when you press Play and at every change of bow. Time (s) runs across each plot. Press anywhere on a plot to add a point and drag it; above the dashed line is more than the stroke settles at. Select a point to type its values or to make the line into it straight. Double-click a point, or press Delete, to remove it. The speed's first rise is the stroke's start, set above.</div>
     <div class="note" id="s-attackSaid"></div>
   </fieldset>
   <fieldset><legend>Vibrato</legend>
@@ -191,13 +202,13 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div id="s-plucking"></div>
   </fieldset>
   <fieldset><legend>The hands' noise</legend>
-    <div class="note">What a player's hands never hold exactly, drawn afresh from the seed: 0 the exact machine, 1 a player's (each kind's size ours, slight, until measured).</div>
+    <div class="note">What a player's hands never hold perfectly steady, drawn fresh from the seed. 0 is a perfectly steady machine; 1 is a player. The size of each kind is our own estimate, kept slight, until it is measured.</div>
     <div id="s-noise"></div>
   </fieldset>
   <fieldset><legend>The hands' reach on this instrument</legend>
-    <div class="row"><label><input type="checkbox" id="s-limitFingerboard" checked> The fingerboard's end</label><span class="muted" id="s-fingerboardLimit"></span><span></span></div>
-    <div class="row"><label><input type="checkbox" id="s-limitHair" checked> The bow hair's width</label><span class="muted" id="s-hairLimit"></span><span></span></div>
-    <div class="note">Each caps its dials while it is on; off, a dial reaches whatever the model can play.</div>
+    <div class="row"><label><input type="checkbox" id="s-limitFingerboard" checked> The end of the fingerboard</label><span class="muted" id="s-fingerboardLimit"></span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-limitHair" checked> The width of the bow hair</label><span class="muted" id="s-hairLimit"></span><span></span></div>
+    <div class="note">While a limit is on, it caps its controls. When it is off, the controls reach whatever the model can play.</div>
   </fieldset>
 </div>
 <div data-family="winds" hidden>
@@ -206,7 +217,7 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div class="fingering"><div class="fingered">
     <div class="row"><label for="w-note">Charted note</label><select id="w-note"></select><span></span></div>
     <div class="row"><label for="w-dynamic">Dynamic</label><select id="w-dynamic"></select><span></span></div>
-    <div class="row"><label for="w-pitch">Pitch</label><input type="range" id="w-pitch" step="0.01"><input type="number" id="w-pitchN" step="0.01" title="fractional MIDI: 72.5 is a quarter tone above C5"></div>
+    <div class="row"><label for="w-pitch">Pitch (MIDI)</label><input type="range" id="w-pitch" step="0.01"><input type="number" id="w-pitchN" step="0.01" title="In MIDI note numbers, fractions allowed: 72.5 is a quarter tone above C5."></div>
     <div class="muted" id="w-pitchSaid"></div>
     <div class="muted" id="w-diagramNote"></div></div><figure id="w-diagram"></figure></div>
   </fieldset>
@@ -215,7 +226,7 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div id="w-excitorPlayer"></div>
   </fieldset>
   <fieldset id="w-fingerSet"><legend id="w-fingerLegend">Fingers</legend>
-    <div class="muted" id="w-fingerNote">Each hole's opening, 0 closed to 1 open: the pitch's, until the pitch moves.</div>
+    <div class="muted" id="w-fingerNote">How open each hole is, from 0 (closed) to 1 (open). They follow the pitch until you move one.</div>
     <div class="holes" id="w-holes"></div><div id="w-slideBox"></div>
   </fieldset>
   <fieldset id="w-muteSet" hidden><legend>Mute</legend>
@@ -229,14 +240,14 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
       <label><input type="radio" name="w-articulation" value="tongued"> tongued</label></span><span></span></div>
     <div class="note" id="w-articulationNote"></div>
     <div id="w-tongue"></div>
-    <div class="curveLabel">Breath at a note's start, × the breath dialled</div><div id="w-attack"></div>
+    <div class="curveLabel">Breath at the start of a note (× the breath set above)</div><div id="w-attack"></div>
     <div class="muted" id="w-attackNote"></div>
-    <button id="w-plainRise" title="the breath risen to what is dialled, no more">↺ A plain rise</button>
-    <div class="row"><label><input type="checkbox" id="w-repeating"> Repeat the note</label><span class="muted">tongued again by itself while it is blown</span><span></span></div>
+    <button id="w-plainRise" title="The breath rises straight to what is set, with no overshoot.">↺ A plain rise</button>
+    <div class="row"><label><input type="checkbox" id="w-repeating"> Repeat the note</label><span class="muted">tongued again automatically while it is blown</span><span></span></div>
     <div id="w-repeat"></div>
   </fieldset>
   <fieldset><legend>Breathing</legend>
-    <div class="row"><label><input type="checkbox" id="w-breathing" checked> Breathe by itself</label><span class="muted">the note let go as its breath runs out, a breath taken, the note attacked again</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="w-breathing" checked> Breathe by itself</label><span class="muted">when the breath runs out, the note stops, a breath is taken, and the note starts again</span><span></span></div>
     <div id="w-lungs"></div>
     <div class="note" id="w-lungsNote"></div>
     <div class="row"><label>Air left</label><div class="meter"><div id="w-air"></div></div><span id="w-airN">--</span></div>
@@ -246,22 +257,22 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
     <div id="w-vibrato"></div>
   </fieldset>
   <fieldset><legend>The player's noise</legend>
-    <div class="note">What a player's breath and lips never hold exactly, drawn afresh from the seed: 0 the exact machine, 1 a player's (each kind's size ours, slight, until measured).</div>
+    <div class="note">What a player's breath and lips never hold perfectly steady, drawn fresh from the seed. 0 is a perfectly steady machine; 1 is a player. The size of each kind is our own estimate, kept slight, until it is measured.</div>
     <div id="w-noise"></div>
   </fieldset>
   <fieldset><legend>Flutter, hum and growl</legend>
-    <div class="row"><label><input type="checkbox" id="w-fluttering"> Flutter</label><span class="muted">the tongue's roll closing the breath off while it is blown</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="w-fluttering"> Flutter</label><span class="muted">the tongue rolls, cutting the breath off and on while it is blown</span><span></span></div>
     <div id="w-flutter"></div>
-    <div class="row"><label><input type="checkbox" id="w-humming"> Hum</label><span class="muted">the player's voice through the instrument</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="w-humming"> Hum</label><span class="muted">the player sings into the instrument while playing</span><span></span></div>
     <div id="w-hum"></div>
-    <div class="row"><label><input type="checkbox" id="w-growling"> Growl</label><span class="muted">the voice made rough, its period doubled, with breath noise</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="w-growling"> Growl</label><span class="muted">a rough sung tone (its period doubled) with breath noise, sung into the instrument</span><span></span></div>
     <div id="w-growl"></div>
     <div class="note" id="w-humNote"></div>
     <div class="note" id="w-techniqueNote"></div>
   </fieldset>
   <fieldset><legend id="w-tractLegend">Vocal tract</legend>
-    <button id="w-normal">Players' normal tract, following the note</button><button id="w-none">No tract</button>
-    <div class="muted" id="w-tractHow">Drag a handle: its frequency and peak. Wheel on it: its width (Q). Double-click: add one, or remove one.</div>
+    <button id="w-normal">A player's normal tract, following the note</button><button id="w-none">No tract</button>
+    <div class="muted" id="w-tractHow">Drag a handle to move a resonance's frequency and height. Scroll on it to change its width (Q). Double-click to add or remove one.</div>
     <canvas id="w-plot"></canvas>
     <div class="muted" id="w-legend"></div>
   </fieldset>
@@ -269,23 +280,23 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </div>
 
 <h2 id="part-instrument">Instrument</h2>
-<div class="muted">What the instrument is: its body, its strings or bore, its reed.</div>
+<div class="muted">What the instrument is made of: its body, its strings or bore, and its reed.</div>
 <div data-family="strings" hidden>
   <fieldset><legend>Which one</legend>
-    <div class="row"><label for="s-variant">Artifastring's</label><select id="s-variant"></select><span class="muted" id="s-variants"></span></div>
+    <div class="row"><label for="s-variant">Artifastring model</label><select id="s-variant"></select><span class="muted" id="s-variants"></span></div>
     <div class="row"><label for="s-seed">Seed</label><input type="number" id="s-seed" min="0" step="1"><button id="s-reseed">Seed again</button></div>
-    <div class="note">An instrument changed comes in at rest, the sound brought down and up again around it, on its good note.</div>
+    <div class="note">A newly chosen instrument starts at rest on its good note; the sound fades out and back in around the change.</div>
   </fieldset>
   <fieldset><legend>This string, as Artifastring builds it</legend>
-    <div class="muted">Each a decade either side of Artifastring's own. Its length, diameter, density or stiffness (or a tension that changes how many modes it has) remakes its modes: the sound dips for a moment each time. Its friction and losses are under Physics.</div>
+    <div class="muted">Each can be set from a tenth to ten times Artifastring's own value. Changing the length, diameter, density or stiffness (or a tension that changes how many modes the string has) recomputes its modes, so the sound dips for a moment. Its friction and losses are under Physics.</div>
     <div id="s-build"></div>
     <button id="s-ownBuild">Back to Artifastring's own</button>
   </fieldset>
   <fieldset><legend>Body</legend>
-    <div class="row"><label><input type="checkbox" id="s-correcting" checked> Body as the renders correct it</label><span class="muted">its bridge hill and highs restored</span><span></span></div>
-    <div class="row"><label><input type="checkbox" id="s-radiating" checked> Body radiates as a body does</label><span class="muted">nothing at 0 Hz; less and less under its corner</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-correcting" checked> Body as the renders correct it</label><span class="muted">with its bridge hill and high frequencies restored</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-radiating" checked> Body radiates as a body does</label><span class="muted">nothing at 0 Hz, and less and less below its corner frequency</span><span></span></div>
     <div id="s-body"></div>
-    <div class="row"><label for="s-falling">Falling under it</label><select id="s-falling"><option value="2">12 dB an octave</option><option value="4">24 dB an octave</option></select><span></span></div>
+    <div class="row"><label for="s-falling">Roll-off below the corner</label><select id="s-falling"><option value="2">12 dB an octave</option><option value="4">24 dB an octave</option></select><span></span></div>
     <div class="note" id="s-bodyNote"></div>
   </fieldset>
 </div>
@@ -302,14 +313,14 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
 </div>
 
 <h2 id="part-physics">Physics</h2>
-<div class="muted">What the model holds: its laws' constants, its losses and resolution, and what they say of the playing.</div>
+<div class="muted">What the model contains: the constants in its equations, its losses and its resolution, and what they say about the playing.</div>
 <div data-family="strings" hidden>
   <fieldset><legend>This string's friction and losses</legend>
-    <div class="muted">Artifastring's friction curve and modal losses for this string, each a decade either side of its own; how many modes it is resolved with.</div>
+    <div class="muted">Artifastring's friction curve and losses for this string, each settable from a tenth to ten times its own value, and how many modes the string is computed with.</div>
     <div id="s-buildPhysics"></div>
   </fieldset>
   <fieldset><legend>Artifastring's own constants</legend>
-    <div class="muted">Fixed in Artifastring's source; several marked there "estimated from listening". The friction noise lowers the friction curve's slope v0 at random by up to this share on every sample the string slips.</div>
+    <div class="muted">These are fixed in Artifastring's source code, and several are marked there "estimated from listening". The friction noise randomly lowers the friction curve's slope v0 by up to this share on every sample in which the string slips.</div>
     <div id="s-constants"></div>
     <button id="s-ownConstants">Back to Artifastring's</button>
   </fieldset>
@@ -351,8 +362,8 @@ input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background
   </fieldset>
 </div>
 <fieldset><legend>Settings as a file</legend>
-  <button id="saveSettings" title="every setting made here -- the player's, the instrument's, the model's and the musebot's -- with the words written above, as a file">Save settings</button>
-  <button id="loadSettings" title="a saved file's settings, its instrument taken up first">Load settings…</button>
+  <button id="saveSettings" title="Saves every setting made here (the player's, the instrument's, the model's and the musebot's) and the words written above, as a file.">Save settings</button>
+  <button id="loadSettings" title="Loads a saved file's settings, switching to its instrument first.">Load settings…</button>
   <input type="file" id="settingsFile" accept=".json,application/json" hidden>
   <div class="muted" id="settingsSaid"></div>
 </fieldset>

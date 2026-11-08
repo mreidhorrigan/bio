@@ -977,6 +977,9 @@ var sources_default = {
     "vsl-academy-double-bass": { kind: "vernacular", who: "Vienna Symphonic Library, Academy: the double bass's page (its strings, compass and notation)", url: "https://www.vsl.co.at/academy/strings/double-bass", accessed: "2026-10-29" },
     "galluzzo-2004": { kind: "literature", authors: "P. M. Galluzzo", title: "On the playability of stringed instruments (PhD thesis, University of Cambridge)", year: 2004, doi: "10.17863/CAM.14046", saved: "research-downloads/strings/bowed-friction-papers/galluzzo-2004-thesis-playability.pdf", note: "a DataCite DOI, checked there: section 4.2.3, the waveform identification" },
     "lampis-2024": { kind: "literature", authors: "A. Lampis, A. Mayer, V. Chatziioannou", title: "An experimental approach for comparing the influence of cello string type on bowed attack response", year: 2024, doi: "10.1121/10.0034330", in: "JASA Express Letters 4, 113201", saved: "research-downloads/strings/lampis-2024-cello-string-attack-jasael.pdf" },
+    "lampis-acta-2024": { kind: "literature", authors: "A. Lampis, A. Mayer, V. Chatziioannou", title: "Assessing playability limits of bowed-string transients using experimental measurements", year: 2024, doi: "10.1051/aacus/2024034", in: "Acta Acustica 8, 44", saved: "research-downloads/strings/lampis-2024-playability-transients-acta.pdf", note: "CC BY; checked on Crossref" },
+    "lampis-attacks-2024": { kind: "other", who: `A. Lampis, "Bridge force waveforms obtained by systematically bowing various cello G-string models", Zenodo 2024, doi:10.5281/zenodo.13374477: a bowing robot's attacks from rest on four cello G strings, each file a bow force and acceleration, its bridge force at 50 kHz -- the recordings behind lampis-acta-2024's Guettler diagrams`, url: "https://doi.org/10.5281/zenodo.13374477", licence: "CC BY 4.0", saved: "research-downloads/strings/lampis-attacks/waveforms", note: "two of its sessions fetched, string C's and string A's (research-downloads/README.md)" },
+    "matusiak-chatziioannou-2024": { kind: "literature", authors: "E. Matusiak, V. Chatziioannou", title: "Elasto-plastic friction modeling toward reconstructing measured bowed-string transients", year: 2024, doi: "10.1121/10.0028228", in: "J. Acoust. Soc. Am. 156(2), 1135-1147", saved: "research-downloads/strings/matusiak-2024/matusiak-chatziioannou-2024-jasa.pdf", note: "CC BY; checked on Crossref" },
     "geringer-allen-2004": { kind: "literature", authors: "J. M. Geringer, M. L. Allen", title: "An Analysis of Vibrato among High School and University Violin and Cello Students", year: 2004, doi: "10.2307/3345438", in: "Journal of Research in Music Education 52(2), 167-178" },
     "allen-geringer-macleod-2009": { kind: "literature", authors: "M. L. Allen, J. M. Geringer, R. B. MacLeod", title: "Performance Practice of Violin Vibrato: An Artist-Level Case Study", year: 2009, doi: "10.1177/1948499209OS-400103", in: "String Research Journal os-4(1), 27-38" },
     "macleod-2008": { kind: "literature", authors: "R. B. MacLeod", title: "Influences of Dynamic Level and Pitch Register on the Vibrato Rates and Widths of Violin and Viola Players", year: 2008, doi: "10.1177/0022429408323070", in: "Journal of Research in Music Education 56(1), 43-54" },
@@ -996,6 +999,8 @@ var sources_default = {
     "pamies-vila-hofmann-chatziioannou-2018": { kind: "literature", authors: "M. Pàmies-Vilà, A. Hofmann, V. Chatziioannou", title: "Analysis of Tonguing and Blowing Actions During Clarinet Performance", year: 2018, doi: "10.3389/fpsyg.2018.00617", in: "Frontiers in Psychology 9, 617", saved: "research-downloads/winds/pamies-vila-2018-tonguing-blowing.pdf" },
     "fritz-wolfe-2005": { kind: "literature", authors: "C. Fritz, J. Wolfe", title: "How do clarinet players adjust the resonances of their vocal tracts for different playing effects?", year: 2005, doi: "10.1121/1.2041287", in: "The Journal of the Acoustical Society of America 118(5), 3306-3315", saved: "research-downloads/winds/vocal-tract/fritz-wolfe-2005-clarinet-vocal-tract.pdf" },
     "chen-smith-wolfe-2009": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Pitch bending and glissandi on the clarinet: Roles of the vocal tract and partial tone hole closure", year: 2009, doi: "10.1121/1.3177269", in: "The Journal of the Acoustical Society of America 126(3), 1511-1520", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2009-clarinet-pitch-bending.pdf" },
+    "chen-smith-wolfe-2008": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Experienced saxophonists learn to tune their vocal tracts", year: 2008, doi: "10.1126/science.1151411", in: "Science 319(5864), 776", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2008-saxophonists-tune-vocal-tracts.pdf" },
+    "chen-smith-wolfe-2011": { kind: "literature", authors: "J.-M. Chen, J. Smith, J. Wolfe", title: "Saxophonists tune vocal tract resonances in advanced performance techniques", year: 2011, doi: "10.1121/1.3514423", in: "The Journal of the Acoustical Society of America 129(1), 415-426", saved: "research-downloads/winds/vocal-tract/chen-smith-wolfe-2011-saxophonists-tune-vocal-tract-resonances.pdf" },
     "wiertlewski-hayward-2012": { kind: "literature", authors: "M. Wiertlewski, V. Hayward", title: "Transducer for mechanical impedance testing over a wide frequency range through active feedback", year: 2012, doi: "10.1063/1.3683572", in: "Review of Scientific Instruments 83(2), 025001", saved: "research-downloads/strings/finger/wiertlewski-hayward-2012-transducer-impedance-rsi.pdf" },
     "hennig-2011": { kind: "literature", authors: "H. Hennig, R. Fleischmann, A. Fredebohm, Y. Hagmayer, J. Nagler, A. Witt, F. J. Theis, T. Geisel", title: "The Nature and Perception of Fluctuations in Human Musical Rhythms", year: 2011, doi: "10.1371/journal.pone.0026457", in: "PLoS ONE 6(10), e26457", saved: "research-downloads/performer-noise/hennig-2011-fluctuations-human-musical-rhythms.pdf" },
     "mcauley-marsden-2000": { kind: "literature", authors: "J. H. McAuley, C. D. Marsden", title: "Physiological and pathological tremors and rhythmic central motor control", year: 2e3, doi: "10.1093/brain/123.8.1545", in: "Brain 123(8), 1545-1567", read: "its abstract (PubMed 10908186)" },
@@ -1038,7 +1043,13 @@ var sources_default = {
     "cellofun-extensions": { kind: "vernacular", who: `cellofun.eu, a cellist's technique encyclopaedia: "Extensions On The Cello" and "Simple Extensions in the Neck Region"`, url: "https://cellofun.eu/?p=1661", accessed: "2026-11-06" },
     "gale-triangulation": { kind: "vernacular", who: `T. B. Gale, Triangulation of Fingering Systems for the Double Bass (A Complete Method), Vol. 1, its publisher's page: "Closed Hand (Simandl 1-2-4), Open Hand (extension fingering 1-2-3-4), and Thumb Positions"`, url: "https://www.sheetmusicplus.com/en/product/triangulation-of-fingering-systems-for-the-double-bass-a-complete-method-vol-1-22576307.html", accessed: "2026-11-06" },
     "visentin-2015": { kind: "literature", authors: "P. Visentin, S. Li, G. Tardif, G. Shan", title: "Unraveling mysteries of personal performance style; biomechanics of left-hand position changes (shifting) in violin performance", year: 2015, doi: "10.7717/peerj.1299", in: "PeerJ 3, e1299", saved: "research-downloads/strings/shifting/visentin-2015-peerj-1299.bioc.json (its PubMed Central text, PMC4636401, CC BY)" },
-    "furneaux-1999": { kind: "literature", authors: "S. Furneaux, M. F. Land", title: "The effects of skill on the eye-hand span during musical sight-reading", year: 1999, doi: "10.1098/rspb.1999.0943", in: "Proceedings of the Royal Society of London B 266(1436), 2435-2440" }
+    "furneaux-1999": { kind: "literature", authors: "S. Furneaux, M. F. Land", title: "The effects of skill on the eye-hand span during musical sight-reading", year: 1999, doi: "10.1098/rspb.1999.0943", in: "Proceedings of the Royal Society of London B 266(1436), 2435-2440" },
+    "gaillard-koehl-gazengel-2024": { kind: "literature", authors: "A. Gaillard, V. Koehl, B. Gazengel", title: "Theoretical and experimental studies about single cane reeds: a review", year: 2024, doi: "10.1051/aacus/2024050", in: "Acta Acustica 8, 63", licence: "CC BY 4.0", saved: "research-downloads/winds/saxophone-reed/aacus240040.pdf" },
+    "ukshini-dirckx-2020": { kind: "literature", authors: "E. Ukshini, J. J. J. Dirckx", title: "Longitudinal and transversal elasticity of natural and artificial materials for musical instrument reeds", year: 2020, doi: "10.3390/ma13204566", in: "Materials 13(20), 4566", licence: "CC BY 4.0", saved: "research-downloads/materials/arundo-donax/ukshini-dirckx-2020-reed-elasticity.pdf" },
+    "wood-handbook-2021": { kind: "literature", authors: "R. J. Ross (ed.), Forest Products Laboratory", title: "Wood handbook: wood as an engineering material", year: 2021, doi: "10.2737/FPL-GTR-282", in: "General Technical Report FPL-GTR-282, USDA Forest Service, Forest Products Laboratory, Madison, WI", licence: "public domain (a work of the United States government)", saved: "research-downloads/materials/wood-handbook/wood-handbook-2021-fpl-gtr-282.pdf" },
+    "global-wood-density-database": { kind: "other", who: 'A. E. Zanne, G. Lopez-Gonzalez, D. A. Coomes, J. Ilic, S. Jansen, S. L. Lewis, R. B. Miller, N. G. Swenson, M. C. Wiemann, J. Chave, "Data from: Towards a worldwide wood economics spectrum", Dryad 2009 (Chave et al. 2009, Ecology Letters 12, 351-366, doi:10.1111/j.1461-0248.2009.01285.x): the Global Wood Density Database, 16,468 basic densities (oven-dry mass over green volume) of 8,412 taxa, each with its region and reference', url: "https://doi.org/10.5061/dryad.234", licence: "CC0 1.0 (Dryad's for every deposit)", saved: "research-downloads/materials/global-wood-density/archive", note: "the copy fetched is the Encyclopedia of Life's on Zenodo (record 13322441), the same records as a Darwin Core archive: Dryad's own refused the download (403)" },
+    "concast-c26000": { kind: "vernacular", who: "Concast Metal Products, C26000 cartridge brass (70/30): its data sheet, the Copper Development Association's values", url: "https://www.concast.com/files/C26000.pdf", accessed: "2026-11-07", saved: "research-downloads/materials/metals/concast-c26000-cartridge-brass.pdf" },
+    "concast-c23000": { kind: "vernacular", who: "Concast Metal Products, C23000 red brass (85/15, instrument makers' gold brass): its data sheet, the Copper Development Association's values", url: "https://www.concast.com/files/C23000.pdf", accessed: "2026-11-07", saved: "research-downloads/materials/metals/concast-c23000-red-brass.pdf" }
   }
 };
 
@@ -1051,7 +1062,40 @@ var constants_default = {
     "t60-db": { value: 60, unit: "dB", kind: "literature", source: "iso-3382-1-2009", note: "a reverberation time's fall: the time a sound takes to decay by 60 dB" },
     milli: { value: 1e3, unit: "1", kind: "literature", source: "nist-sp811-2008", note: "SI's milli: thousandths in one (ms in a second)" },
     "pound-force": { value: 4.4482216152605, unit: "N/lbf", kind: "literature", source: "nist-sp811-2008", note: "one pound-force in newtons, exactly" },
-    "steel-density": { value: 7850, range: [7600, 8e3], unit: "kg/m^3", kind: "vernacular", source: "physics-factbook-steel", note: "the handbooks' steels span the range; 7850 the value engineers take (490 lb/ft^3). A wound string's stiffness enters the models only as E d^4, so its d is taken as the steel cylinder of its density and E what gives its measured stiffness" }
+    "steel-density": { value: 7850, range: [7600, 8e3], unit: "kg/m^3", kind: "vernacular", source: "physics-factbook-steel", note: "the handbooks' steels span the range; 7850 the value engineers take (490 lb/ft^3). A wound string's stiffness enters the models only as E d^4, so its d is taken as the steel cylinder of its density and E what gives its measured stiffness" },
+    "arundo-donax-density": { value: 500, range: [450, 520], unit: "kg/m^3", kind: "literature", source: "gaillard-koehl-gazengel-2024", at: "Table A2", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "clarinet reeds' cane: 450 (Facchinetti, Boutillon & Constantinescu 2003; Pinard, Laine & Vach 2003), 520 (Guimezanes 2008; Taillard et al. 2014), 500 (Chatziioannou 2010; the review gives Ukshini & Dirckx 2020 too, who do not state it)" },
+    "arundo-donax-longitudinal-modulus": { value: 5e9, range: [3e9, 14e9], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "dry, along the fibres, 1 mm specimens: 5.0 (±0.7) GPa; 1.5 mm: 3.0 (±0.2). The range the others' (Gaillard, Koehl & Gazengel 2024, Table A2): 3 to 9.5 along a reed from heel to tip (Guimezanes 2008, Table A3), 10 (Facchinetti 2003; Chatziioannou 2010), 14 (Taillard et al. 2014). Its tissues by indentation: the fibres' sheaths about 7 GPa, the parenchyma 2 to 3, the vascular bundles 1.5 to 2 (Kawasaki et al. 2017, doi:10.1002/jemt.22889)" },
+    "arundo-donax-longitudinal-modulus-wet": { value: 31e8, range: [21e8, 31e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "soaked 15 minutes, as a reed is played: 1 mm specimens 3.1 (±0.4) GPa, 1.5 mm 2.1 (±0.3)" },
+    "arundo-donax-transverse-modulus": { value: 5e8, range: [2e8, 5e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "dry, across the fibres: 1 mm 0.5 (±0.03) GPa, 1.5 mm 0.4 (±0.06); 0.2 to 0.5 along a reed (Guimezanes 2008), 0.4 (Facchinetti 2003; Chatziioannou 2010) (Gaillard, Koehl & Gazengel 2024, Table A2). Ten times softer than along them" },
+    "arundo-donax-transverse-modulus-wet": { value: 1e8, range: [1e8, 2e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "soaked: 1 mm 0.1 (±0.05) GPa, 1.5 mm 0.2 (±0.02); 24 times softer than along the fibres" },
+    "arundo-donax-shear-modulus": { value: 13e8, range: [6e8, 13e8], unit: "Pa", kind: "literature", source: "gaillard-koehl-gazengel-2024", at: "Table A2", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "G_xz, along the fibres and through the thickness: 1.3 GPa (Facchinetti 2003; Chatziioannou 2010), 0.6 to 0.87 along a reed (Guimezanes 2008), 1.1 (Taillard et al. 2014)" },
+    "arundo-donax-poisson": { value: 0.22, unit: "1", kind: "literature", source: "gaillard-koehl-gazengel-2024", at: "Table A2", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "nu_x (Facchinetti 2003; Guimezanes 2008; Chatziioannou 2010); nu_y 0.08 (Chatziioannou 2010)" },
+    "arundo-donax-hysteresis-wet": { value: 0.157, range: [0.119, 0.191], unit: "1", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 3", material: "Arundo donax L. (giant cane): the single reeds of clarinets and saxophones and the double reeds of oboes, English horns and bassoons", note: "the share of the work of a slow bend lost as it is let go, soaked, along the fibres, 1 mm specimens (11.9, 16.1, 19.1 %); 1.5 mm 14.2 to 32.8 %, across the fibres 28.1 to 41.2 %: a quasi-static loss, not the reed's damping at its resonance" },
+    "legere-longitudinal-modulus": { value: 75e8, range: [59e8, 75e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Légère (polypropylene fibres in polypropylene): the synthetic single reed", note: "1 mm specimens 7.5 (±0.3) GPa, 1.5 mm 5.9 (±0.2): half again cane's, and unchanged by water" },
+    "legere-transverse-modulus": { value: 19e8, range: [18e8, 19e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Légère (polypropylene fibres in polypropylene): the synthetic single reed", note: "1 mm 1.9 (±0.1) GPa, 1.5 mm 1.8 (±0.01): four times softer than along its fibres, where cane is ten" },
+    "legere-density": { value: 910, unit: "kg/m^3", kind: "literature", source: "ukshini-dirckx-2020", at: "4.2", material: "Légère (polypropylene fibres in polypropylene): the synthetic single reed", note: "isotropic polypropylene's, about 0.91 g/mL, as Légère's patent gives it (cited, not measured)" },
+    "fiberreed-longitudinal-modulus": { value: 189e8, range: [154e8, 189e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Carbon Fiberreed (carbon fibres in a matrix): a synthetic single reed", note: "1 mm 18.9 (±6.4) GPa, 1.5 mm 15.4 (±1.1)" },
+    "fiberreed-transverse-modulus": { value: 53e8, range: [43e8, 53e8], unit: "Pa", kind: "literature", source: "ukshini-dirckx-2020", at: "Table 2; Table 4", material: "Carbon Fiberreed (carbon fibres in a matrix): a synthetic single reed", note: "1 mm 5.3 (±0.3) GPa, 1.5 mm 4.3 (±0.3)" },
+    "dalbergia-melanoxylon-gravity": { value: 1.08, range: [0.9, 1.2], unit: "1", kind: "other", source: "global-wood-density-database", material: "Dalbergia melanoxylon Guill. & Perr. (African blackwood, grenadilla, mpingo): the bodies of clarinets, oboes, English horns and piccolos", note: "basic specific gravity: oven-dry mass over green volume, over water's density; its five records, tropical Africa (the database's references 58, 147, 192, 192, 200): 1.08, 1.13, 0.90, 1.20, 1.076; the median taken. Its hygromechanical constants measured by Alkadri et al. 2020 (doi:10.1007/s00226-020-01215-z), not yet fetched" },
+    "acer-pseudoplatanus-gravity": { value: 0.51, range: [0.508, 0.51], unit: "1", kind: "other", source: "global-wood-density-database", material: "Acer pseudoplatanus L. (sycamore maple, mountain maple): bassoons' and contrabassoons' bodies; the violin family's backs, ribs and necks", note: "basic specific gravity: oven-dry mass over green volume, over water's density; Europe (references 28, 60)" },
+    "acer-platanoides-gravity": { value: 0.51, range: [0.508, 0.525], unit: "1", kind: "other", source: "global-wood-density-database", material: "Acer platanoides L. (Norway maple): the violin family's backs and ribs, bassoons' bodies", note: "basic specific gravity: oven-dry mass over green volume, over water's density; Europe (references 158, 28)" },
+    "picea-abies-gravity": { value: 0.37, unit: "1", kind: "other", source: "global-wood-density-database", material: "Picea abies (L.) H. Karst. (Norway spruce, European spruce): the violin family's tops", note: "basic specific gravity: oven-dry mass over green volume, over water's density; Europe (reference 28)" },
+    "paubrasilia-echinata-gravity": { value: 0.89, range: [0.86, 0.92], unit: "1", kind: "other", source: "global-wood-density-database", material: "Paubrasilia echinata (Lam.) Gagnon, H.C.Lima & G.P.Lewis (pernambuco, Caesalpinia echinata in the database): the violin family's bows", note: "basic specific gravity: oven-dry mass over green volume, over water's density; tropical South America (references 35, 44)" },
+    "diospyros-crassiflora-gravity": { value: 0.83, range: [0.775, 0.99], unit: "1", kind: "other", source: "global-wood-density-database", material: "Diospyros crassiflora Hiern (African ebony): the violin family's fingerboards, pegs and tailpieces", note: "basic specific gravity: oven-dry mass over green volume, over water's density; tropical Africa (references 136, 1, 137, 99, 40): 0.80, 0.99, 0.826, 0.90, 0.775, the median taken" },
+    "acer-saccharum-modulus": { value: 126e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-3a", material: "Acer saccharum Marshall (sugar maple, hard maple)", note: "its modulus in static bending at 12 % moisture, specific gravity 0.63 at 12 % (green: 10.7 GPa at 0.56); along the grain about 10 % above it (Table 5-1, note). Its elastic ratios at 12 %: E_T/E_L 0.065, E_R/E_L 0.132, G_LR/E_L 0.111, G_LT/E_L 0.063 (Table 5-1); its Poisson's ratios mu_LR 0.424, mu_LT 0.476, mu_RT 0.774, mu_TR 0.349 (Table 5-2)" },
+    "picea-sitchensis-modulus": { value: 108e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-3a", material: "Picea sitchensis (Bong.) Carr. (Sitka spruce): soundboards and the tops of instruments made in America", note: "its modulus in static bending at 12 % moisture, specific gravity 0.40 at 12 % (green: 8.5 GPa at 0.37); red spruce (Picea rubens) 11.4 GPa at 0.40. Its elastic ratios at 12 %: E_T/E_L 0.043, E_R/E_L 0.078, G_LR/E_L 0.064, G_LT/E_L 0.061, G_RT/E_L 0.003 (Table 5-1)" },
+    "wood-modulus-green-softwood-coefficient": { value: 161e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, green softwoods (16,100 MPa)" },
+    "wood-modulus-green-softwood-exponent": { value: 0.76, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, green softwoods" },
+    "wood-modulus-green-hardwood-coefficient": { value: 139e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, green hardwoods (13,900 MPa)" },
+    "wood-modulus-green-hardwood-exponent": { value: 0.72, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, green hardwoods" },
+    "wood-modulus-dry-softwood-coefficient": { value: 203e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, softwoods at 12 % moisture (20,300 MPa); G their gravity at 12 %. Sitka spruce at 0.40 gives 9.5 GPa, measured 10.8" },
+    "wood-modulus-dry-softwood-exponent": { value: 0.83, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, softwoods at 12 % moisture" },
+    "wood-modulus-dry-hardwood-coefficient": { value: 165e8, unit: "Pa", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "a in E = a G^b, hardwoods at 12 % moisture (16,500 MPa); G their gravity at 12 %. Sugar maple at 0.63 gives 11.9 GPa, measured 12.6" },
+    "wood-modulus-dry-hardwood-exponent": { value: 0.7, unit: "1", kind: "literature", source: "wood-handbook-2021", at: "Table 5-11a", note: "b in E = a G^b, hardwoods at 12 % moisture" },
+    "cartridge-brass-density": { value: 8530, unit: "kg/m^3", kind: "vernacular", source: "concast-c26000", material: "C26000 cartridge brass, 70 % copper and 30 % zinc (yellow brass): the saxophones' and most brass instruments' bodies and bells", note: "at 20 °C" },
+    "cartridge-brass-modulus": { value: 110317e6, unit: "Pa", kind: "vernacular", source: "concast-c26000", material: "C26000 cartridge brass, 70 % copper and 30 % zinc (yellow brass)", note: "in tension, 16,000 ksi" },
+    "gold-brass-density": { value: 8670, unit: "kg/m^3", kind: "vernacular", source: "concast-c23000", material: "C23000 red brass, 85 % copper and 15 % zinc (instrument makers' gold brass): bells and leadpipes", note: "at 20 °C" },
+    "gold-brass-modulus": { value: 110317e6, unit: "Pa", kind: "vernacular", source: "concast-c23000", material: "C23000 red brass, 85 % copper and 15 % zinc (gold brass)", note: "in tension, 16,000 ksi" }
   }
 };
 
@@ -1108,7 +1152,12 @@ var equations_default = {
     sawtooth: { formula: "x = 2 frac(f0 t) - 1: a sawtooth rising from -1 to 1 each period, falling back at once", inputs: { t: "s", f0: "Hz" }, unit: "1", source: null, statistic: "a definition", checks: [{ inputs: { t: 0.3, f0: 1 }, value: -0.4 }, { inputs: { t: 1.7, f0: 3 }, value: -0.8000000000000007 }] },
     "cents-ratio": { formula: "r = 2^(cents / 1200): the frequency ratio of an interval in cents", inputs: { cents: "cents" }, unit: "1", source: null, statistic: "a definition (twelve hundred cents to the octave)", checks: [{ inputs: { cents: 1200 }, value: 2 }, { inputs: { cents: -20 }, value: 0.9885140203528962 }] },
     "normal-deviate": { formula: "z = sqrt(-2 ln max(u, 1e-12)) cos(2 pi v): a standard normal deviate from two uniform ones in [0, 1) (u floored, so a draw of 0 gives a finite deviate)", inputs: { u: "1", v: "1" }, unit: "1", source: "box-muller-1958", statistic: "a transformation (Box & Muller)", checks: [{ inputs: { u: 0.5, v: 0 }, value: 1.1774100225154747 }, { inputs: { u: 0, v: 0.5 }, value: -7.4338443776996765 }] },
-    "hz-midi": { formula: "midi = 69 + 12 log2(f / a4): a frequency as a MIDI note, midi-hz's inverse", inputs: { hz: "Hz", a4: "Hz" }, unit: "MIDI note (semitones, fractional)", source: "iso-16-1975", checks: [{ inputs: { hz: 440, a4: 440 }, value: 69 }, { inputs: { hz: 41.20344461410875, a4: 440 }, value: 28 }] }
+    "hz-midi": { formula: "midi = 69 + 12 log2(f / a4): a frequency as a MIDI note, midi-hz's inverse", inputs: { hz: "Hz", a4: "Hz" }, unit: "MIDI note (semitones, fractional)", source: "iso-16-1975", checks: [{ inputs: { hz: 440, a4: 440 }, value: 69 }, { inputs: { hz: 41.20344461410875, a4: 440 }, value: 28 }] },
+    difference: { formula: "a - b: a quantity less another", inputs: { a: "any", b: "as a" }, unit: "as a", source: null, statistic: "an identity", checks: [{ inputs: { a: 1.537, b: 0.305 }, value: 1.232 }] },
+    scaled: { formula: "x a / b: a quantity scaled by a ratio", inputs: { x: "any", a: "any", b: "as a" }, unit: "as x", source: null, statistic: "an identity", checks: [{ inputs: { x: 0.12, a: 1064, b: 419 }, value: 0.30472553699284 }] },
+    "loss-per-frequency": { formula: "r2 = r1 (2 pi)^2 mu / T: a string's loss per squared wavenumber (its damping term 2 r1 rho A u_txx, m^2/s) as a loss per squared frequency, its modes at k = 2 pi f / c, c^2 = T / mu", inputs: { r1: "m^2/s", T: "N", mu: "kg/m" }, unit: "s", source: "matusiak-chatziioannou-2024", at: "Eq. (1)", checks: [{ inputs: { r1: 87e-4, T: 149.6, mu: 794e-5 }, value: 18229212107445202e-21 }] },
+    "friction-drop-scale": { formula: "k = (s0 - d0) / (s1 - d1): a bow's force measured under one friction (static s0, dynamic d0) moved to another (s1, d1) -- both of Schelleng's bounds on the force, the most and the least, go as one over the drop from static to dynamic friction, so the force keeps its place between them", inputs: { s0: "the static coefficient it was measured under", d0: "its dynamic", s1: "the static coefficient it meets", d1: "its dynamic" }, unit: "1", source: "schelleng-1973", checks: [{ inputs: { s0: 0.654, d0: 0.301, s1: 1.4, d1: 0.5 }, value: 0.39222222222222 }] },
+    "power-law": { formula: "y = a x^b", inputs: { a: "as y", x: "1", b: "1" }, unit: "as a", source: null, statistic: "a power law: the Wood Handbook's modulus from specific gravity (Table 5-11a) is one", checks: [{ inputs: { a: 139e8, x: 1.08, b: 0.72 }, value: 14691965647165176e-6 }, { inputs: { a: 165e8, x: 0.63, b: 0.7 }, value: 11940494937878204e-6 }] }
   }
 };
 
@@ -1144,7 +1193,18 @@ var bowed_default = {
         lowestHz: { kind: "derived", derive: { equation: "lowest-hz", inputs: { tuning: "tuning", a4: "constant:a4" } }, unit: "Hz" },
         bow: {
           stringsAtOnce: { value: 2, unit: "strings", kind: "vernacular", source: "vsl-academy-violin", note: `the bridge's curvature and the bow's tension make it "not possible to sound more than two strings at the same time": a triple or quadruple stop arpeggiated (the violin's page; the family's bridges alike arched)` },
-          hairWidth: { value: 0.01, unit: "m", kind: "unmeasured", reason: "the violin bow's measured width taken for every bow of the family: no viola, cello or bass bow's ribbon found measured (its rehairers set it by the bow's mortise and ferrule, bow by bow)", searched: [{ where: "web search", query: "bow hair ribbon width mm violin viola cello double bass", date: "2026-10-29", found: "retailers' bow lengths, weights and hair lengths; a museum bass bow's head 21.2 mm wide (University of Edinburgh MIMEd 17331); no ribbon width" }, { where: "web search", query: "bow ferrule width mm violin cello bass hair ribbon width rehair specification", date: "2026-10-29", found: "a violin ribbon 10 to 12 mm by its ferrule (violinist.com forum); Arcus's hair cross-sections by bow, mm2 (violin 5-8, cello 9-13, bass 11-16), not widths; no larger bow's ribbon width" }] }
+          hairWidth: { value: 0.01, unit: "m", kind: "unmeasured", reason: "the violin bow's measured width taken for every bow of the family: no viola, cello or bass bow's ribbon found measured (its rehairers set it by the bow's mortise and ferrule, bow by bow)", searched: [{ where: "web search", query: "bow hair ribbon width mm violin viola cello double bass", date: "2026-10-29", found: "retailers' bow lengths, weights and hair lengths; a museum bass bow's head 21.2 mm wide (University of Edinburgh MIMEd 17331); no ribbon width" }, { where: "web search", query: "bow ferrule width mm violin cello bass hair ribbon width rehair specification", date: "2026-10-29", found: "a violin ribbon 10 to 12 mm by its ferrule (violinist.com forum); Arcus's hair cross-sections by bow, mm2 (violin 5-8, cello 9-13, bass 11-16), not widths; no larger bow's ribbon width" }] },
+          hairStiffness: { value: 4829700, unit: "N/m^2", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "the robot's cello bow's hair a spring in series with its contact, per metre of its ribbon's width, optimized against its attacks on string A with the string's torsion and elasto-plastic friction; taken for every bow of the family (no other measured)" },
+          hairDamping: { value: 5767.4, unit: "kg/(s m)", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "the dashpot beside that spring, as it" },
+          stringLoss: {
+            r0: { kind: "derived", derive: { equation: "difference", inputs: { a: "object:lampis-2024-g-strings:A.bowedLoss.r0", b: "object:lampis-2024-g-strings:A.pluckLoss.r0" } }, unit: "1/s", note: "the losses a string has while the bow is on it beyond its own: string A's bowed less its plucked -- the torsion its friction drives and the hair's damping, which the engine does not model; one cello G string's, taken for every string of the family (none other measured)" },
+            r2: { kind: "derived", derive: { equation: "difference", inputs: { a: "object:lampis-2024-g-strings:A.bowedLoss.r2", b: "object:lampis-2024-g-strings:A.pluckLoss.r2" } }, unit: "s", note: "as its r0" }
+          },
+          friction: {
+            static: { value: 1.4, unit: "1", kind: "literature", source: "lampis-acta-2024", at: "4.1, Figure 11a", note: `rosined hair on a cello G string (Dominant), from its bridge force just before the first slip: "approximately 1.4" averaged over all their attacks, strongly dependent on the force, little on the acceleration (Galluzzo's 0.66 the measured span's other end); taken for every string of the family (no other measured), where Artifastring's tables drew theirs from 0.58 to 1.06` },
+            dynamic: { value: 0.5, unit: "1", kind: "literature", source: "lampis-acta-2024", at: "4, Figure 10", note: 'the dynamic coefficient their limits took from the literature (Smith & Woodhouse 2000, "The tribology of rosin"); its drop from the static, 0.9, within the 0.6 at low force to 1 at high they measured at the first slip (4.1, Figure 11b)' },
+            steepness: { value: 0.1, unit: "m/s", kind: "unmeasured", reason: "ours: the speed of slipping over which the friction falls from its static to its dynamic coefficient in Artifastring's hyperbola (its v0), within the 0.05 to 0.3 its tables were drawn from (Percival, Artifastring research/shared/published_constants.py); with it, the static and dynamic above and the hair and losses, the engine's attacks from rest on Lampis' string A met the robot's, 236 of its 859 within 20 periods to its 188 (Artifastring's contact 27) (native/strings-model/lampis_guettler.py, 7 November 2026)", searched: [{ where: "registry sources", query: "lampis-acta-2024: a friction curve's speed scale", date: "2026-11-07", found: 'the coefficients at the first slip and averaged over 0.1 s, a quadratic in force and acceleration "solely as a visualization tool"; no curve against slipping speed' }, { where: "registry sources", query: "matusiak-chatziioannou-2024: its friction law", date: "2026-11-07", found: "an elasto-plastic law (bristles, their stiffness and damping fitted) in place of a curve of slipping speed; no v0" }] }
+          }
         },
         engine: {
           solver: { kind: "derived", like: { candidates: ["violin", "viola", "cello"], match: "lowestHz", take: "@id" }, unit: "Artifastring instrument", note: "the bowed-string engine plays it on the solver and rates of the measured instrument whose lowest open string is nearest its own (itself where it is one)" },
@@ -1534,19 +1594,53 @@ var bowed_default = {
     },
     "lampis-2024-g-strings": {
       is: null,
-      about: "The bowing robot's cello G strings (Lampis, Mayer & Chatziioannou 2024; their bowed responses, Zenodo 2025, doi:10.5281/zenodo.17749110, CC BY 4.0): each string type's transverse impedance as they measured it on their monochord -- the real strings the model's Schelleng diagrams are held to.",
+      about: "The bowing robot's cello G strings (Lampis, Mayer & Chatziioannou 2024; their bowed responses, Zenodo 2025, doi:10.5281/zenodo.17749110, CC BY 4.0; their attacks from rest, lampis-attacks-2024): each string type as they measured it on their monochord, 0.7 m long -- the real strings the model's Schelleng and Guettler diagrams are held to; string A's losses while bowed and the robot's bow's hair as Matusiak & Chatziioannou fitted them to its bridge force.",
       values: {
+        length: { value: 0.7, unit: "m", kind: "literature", source: "lampis-2024", at: "2", note: '"a playing length of L = 70 cm", each string bowed 5.5 cm from the bridge (beta 0.0786)' },
         A: {
-          impedance: { value: 1.09, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "D'Addario Prelude" }
+          impedance: { value: 1.09, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "D'Addario Prelude" },
+          diameter: { value: 1092e-6, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 149.6, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 1.3" },
+          linearDensity: { value: 0.007940000000000001, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.07 g/m" },
+          bendingStiffness: { value: 685e-6, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.14e-4" },
+          quality: { value: 419, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" },
+          pluckLoss: {
+            r0: { kind: "derived", derive: { equation: "scaled", inputs: { x: "object:lampis-2024-g-strings:C.pluckLoss.r0", a: "object:lampis-2024-g-strings:C.quality", b: "object:lampis-2024-g-strings:A.quality" } }, note: "string C's plucked losses (none of string A's measured mode by mode) by the two strings' Q, averaged over their modes", unit: "1/s" },
+            r2: { kind: "derived", derive: { equation: "scaled", inputs: { x: "object:lampis-2024-g-strings:C.pluckLoss.r2", a: "object:lampis-2024-g-strings:C.quality", b: "object:lampis-2024-g-strings:A.quality" } }, note: "string C's plucked losses (none of string A's measured mode by mode) by the two strings' Q, averaged over their modes", unit: "s" }
+          },
+          bowedLoss: {
+            r0: { value: 1.53714, unit: "1/s", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "optimized against the robot's steady bridge force on string A with its transverse motion alone, no torsion, and static friction: the losses of the string while bowed, its torsion's and the hair's among them" },
+            r1: { value: 87e-4, unit: "m^2/s", kind: "literature", source: "matusiak-chatziioannou-2024", at: "Table I", note: "as its r0: a loss per squared wavenumber" },
+            r2: { kind: "derived", derive: { equation: "loss-per-frequency", inputs: { r1: "object:lampis-2024-g-strings:A.bowedLoss.r1", T: "object:lampis-2024-g-strings:A.tension", mu: "object:lampis-2024-g-strings:A.linearDensity" } }, unit: "s" }
+          }
         },
         B: {
-          impedance: { value: 1.12, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Helicore" }
+          impedance: { value: 1.12, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Helicore" },
+          diameter: { value: 877e-6, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 153.2, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.8" },
+          linearDensity: { value: 0.008140000000000001, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.03 g/m" },
+          bendingStiffness: { value: 43200000000000004e-20, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.16e-4" },
+          quality: { value: 503, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" }
         },
         C: {
-          impedance: { value: 0.85, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Thomastik Dominant" }
+          impedance: { value: 0.85, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Thomastik Dominant" },
+          diameter: { value: 115e-5, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 116.3, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.7" },
+          linearDensity: { value: 62e-4, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.06 g/m" },
+          bendingStiffness: { value: 303e-6, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.07e-4" },
+          quality: { value: 1064, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" },
+          pluckLoss: {
+            r0: { value: 0.12, unit: "1/s", kind: "literature", source: "lampis-acta-2024", at: "Fig. 4b", note: "ours, read from its plot: each of its 30 modes' decay pi f / Q, fitted r0 + r2 f^2 (string-loss-law), within 0.4/s of its modes to its 30th but its 10th (1.8 against 1.4)" },
+            r2: { value: 177e-8, unit: "s", kind: "literature", source: "lampis-acta-2024", at: "Fig. 4b", note: "as its r0" }
+          }
         },
         D: {
-          impedance: { value: 1.13, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Kaplan" }
+          impedance: { value: 1.13, unit: "kg/s", kind: "literature", source: "lampis-2024", at: "Table 1", note: "Kaplan" },
+          diameter: { value: 8950000000000001e-19, unit: "m", kind: "literature", source: "lampis-2024", at: "Table 1" },
+          tension: { value: 153.5, unit: "N", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.9" },
+          linearDensity: { value: 0.008199999999999999, unit: "kg/m", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.04 g/m" },
+          bendingStiffness: { value: 31e-5, unit: "N m^2", kind: "literature", source: "lampis-2024", at: "Table 1", note: "± 0.42e-4" },
+          quality: { value: 521, unit: "1", kind: "literature", source: "lampis-2024", at: "Table 1", note: "its Q averaged over its first 30 modes, plucked" }
         }
       }
     }
@@ -2855,21 +2949,26 @@ var winds_default = {
       is: "reed-woodwind",
       about: "The contrabassoon, a double reed: its players' tract the reed woodwinds' (the clarinettists' measured) until its own are measured."
     },
-    "soprano-saxophone": {
+    saxophone: {
       is: "reed-woodwind",
-      about: "The soprano saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      abstract: true,
+      about: "A saxophone, whose players' tracts were measured as they played the tenor (Chen, Smith & Wolfe 2008, 2011): every saxophonist's until each size's own are measured."
+    },
+    "soprano-saxophone": {
+      is: "saxophone",
+      about: "The soprano saxophone: its players' tract the saxophonists' (measured on the tenor) until its own are measured."
     },
     "alto-saxophone": {
-      is: "reed-woodwind",
-      about: "The alto saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      is: "saxophone",
+      about: "The alto saxophone: its players' tract the saxophonists' (measured on the tenor) until its own are measured."
     },
     "tenor-saxophone": {
-      is: "reed-woodwind",
-      about: "The tenor saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      is: "saxophone",
+      about: "The tenor saxophone, whose players' tracts were measured as they played (Chen, Smith & Wolfe 2008, 2011)."
     },
     "baritone-saxophone": {
-      is: "reed-woodwind",
-      about: "The baritone saxophone: its players' tract the reed woodwinds' (the clarinettists' measured) until saxophonists' own are registered."
+      is: "saxophone",
+      about: "The baritone saxophone: its players' tract the saxophonists' (measured on the tenor) until its own are measured."
     },
     "jet-woodwind": {
       is: "instrument",
@@ -2950,6 +3049,28 @@ var winds_default2 = {
           leap: { value: 0.03, unit: "s an octave", kind: "unmeasured", reason: "ours: the time a leap within one register takes its fingers, an octave of it; to be measured on the engine, a slur from note to note held shorter until its second note no longer speaks (research/IDIOM_AS_RELATIONS.md)", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
           up: { value: 0.04, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur upward into a resonance (a register: overblown with its register key) above takes, each crossed, its whole at a leap of an octave and more, a step across barely any; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] },
           down: { value: 0.12, unit: "s a register crossed, at a leap of an octave or more (in proportion below it)", kind: "unmeasured", reason: "ours: the time a slur downward into a resonance (a register: overblown with its register key) below takes, each crossed, its whole at a leap of an octave and more, a step across barely any, the lower regime established again; to be measured on the engine as `leap`", searched: [{ where: "web search", query: "woodwind slur interval ascending descending register break difficulty speed measured players", date: "2026-11-06", found: "rules of thumb only (a clarinet's slur down a tenth or more over the break nearly impossible, up easy); no player's or instrument's playable interval by direction and speed measured" }] }
+        }
+      }
+    },
+    saxophone: {
+      values: {
+        tract: {
+          resonances: { value: [200, 1e3], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.A", note: "a modest first peak consistently around 150-250 Hz, and the next, of primary interest, typically around 1 kHz; measured on the tenor, five expert and three amateur saxophonists" },
+          first: {
+            frequency: { range: [150, 250], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.A", note: "a modest peak in the mouth consistently observed around 150-250 Hz, not tuned in any playing condition studied (III.C: 253 and 242 Hz under a standard and an altissimo note)" },
+            peak: { range: [25e5, 8e6], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.A, III.C, III.E", note: "not more than several MPa s/m^3: 2.5 (240 Hz, a soft note), 3.3 and 2.9 (253 and 242 Hz), 8 under one multiphonic's tract" }
+          },
+          normal: {
+            held: { value: 650, range: [500, 1100], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.D.1; Fig. 7", note: "over the standard range the second resonance from about 500 to 1100 Hz with no simple relation to the note, experts' broadly spread, amateurs' in two bands at about 650 and 1100 Hz; the lower band where it is held" },
+            offset: { value: 60, range: [0, 100], unit: "Hz", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.C, III.D.1; Fig. 7", note: "in the altissimo (on the tenor from sounding 659-698 Hz) experts tune a strong resonance near the note, typically not more than 100 Hz apart, on or above it rather than below: the note 921 Hz, 60 Hz below its peak at 980; toward the upper standard range experts already adjust it" },
+            peak: { value: 3e6, range: [4e5, 1e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "III.D.3, III.F", note: "over the standard range amateurs' 0.4-6 MPa s/m^3, experts' rising from about 1 to about 10 near the top of the second register; 3 in normal playing at C#5 against the bore's operating 62" }
+          },
+          altissimo: {
+            peak: { range: [1e7, 4e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "IV; III.C", note: "to play the weaker bore resonances (typically below 30 MPa s/m^3) experienced saxophonists make a strong resonance with impedance maxima ranging from 10 to 40 MPa s/m^3, comparable with the bore's: 33 at 980 Hz against the bore's 9.8 at 949; amateurs, who did not, could not play the altissimo (Chen, Smith & Wolfe 2008)" }
+          },
+          bend: {
+            peak: { range: [1e7, 4e7], unit: "Pa s/m^3", kind: "literature", source: "chen-smith-wolfe-2011", at: "IV; III.B; III.F", note: "bugling, 22-28 MPa s/m^3 near the 7th to 12th bore peaks; a pitch bend raising the mouth's peak almost sixfold from 3, the note 91 Hz (300 cents) below its fingering's; 10-40 in bugling and the altissimo" }
+          }
         }
       }
     },
@@ -3148,7 +3269,8 @@ var strings_default = {
         dcBlockHz: { value: 10, unit: "Hz", kind: "setting", reason: "the offset from zero the bow's friction leaves in Artifastring's sound blocked under this, first order, from silence" },
         kaiserBeta: { value: 8, unit: "1", kind: "setting", reason: "a body's impulse response stretched in time read between its samples by a Kaiser-windowed sinc of this beta: a stretch only narrows the band, so nothing folds back" },
         sincHalf: { value: 32, unit: "samples", kind: "setting", reason: "that sinc this many samples either side" },
-        scaledBins: { value: 32768, unit: "bins", kind: "setting", reason: "a minimum-phase body filter scaled to a body's size read and remade at this many frequency bins" }
+        scaledBins: { value: 32768, unit: "bins", kind: "setting", reason: "a minimum-phase body filter scaled to a body's size read and remade at this many frequency bins" },
+        bowContact: { value: false, unit: "switch", kind: "setting", reason: "the bow's contact as measured: its hair's give in series with each cell of the ribbon, the string's losses while bowed beyond its own, and rosin's friction on every string (registry/objects/bowed.json violin-family bow.hairStiffness, hairDamping, stringLoss, friction; Matusiak & Chatziioannou 2024, Lampis et al. 2024): the attacks from rest on Lampis' string A within 20 periods as often as the robot's, 236 of its 859 to its 188, where Artifastring's made 27 (native/strings-model/lampis_guettler.py), each part alone short of it; off, Artifastring's rigid contact, its strings' own losses and its tables' friction. Off until the laws are fitted under it (neutral.py fit, its maps stamped with it): a force measured under the one is played under the other moved by their frictions (friction-drop-scale), which keeps it under Schelleng's most force but not over his least, the bowed losses and the hair raising the least force more than the friction lowers it (a contrabass's mf bow moved from 5.06 N to 2.11 N double-slipped where 3 N held Helmholtz motion, 7 November 2026). The bodies' corrections, levels and pizzicati are measured through the engine, and are measured again when it changes (native/strings-model/README.md)" }
       }
     },
     "bow-planner": {
@@ -3998,6 +4120,11 @@ var EQUATION = Object.freeze({
     return b[1] + (b[1] - a[1]) * (x - b[0]) / (b[0] - a[0]);
   },
   "string-loss-law": ({ r0, r2, f }) => r0 + r2 * f * f,
+  "difference": ({ a, b }) => a - b,
+  "scaled": ({ x, a, b }) => x * a / b,
+  "friction-drop-scale": ({ s0, d0, s1, d1 }) => (s0 - d0) / (s1 - d1),
+  "power-law": ({ a, x, b }) => a * x ** b,
+  "loss-per-frequency": ({ r1, T, mu }) => r1 * (2 * Math.PI) ** 2 * mu / T,
   "least": ({ values }) => Math.min(...values),
   "ratio": ({ a, b }) => a / b,
   "lowest-hz": ({ tuning, a4 }) => a4 * 2 ** ((Math.min(...tuning) - 69) / 12),
@@ -4778,6 +4905,9 @@ var RULES = Object.freeze(["widest", "leap", "last", "alike", "run", "trill"]);
 var FISSION = perception("fission-boundary");
 var COHERENCE = perception("temporal-coherence-boundary");
 var THRESHOLD = setting("streaming", "threshold");
+
+// public/shared/performers/idiom.js
+var OPEN = setting("strings-compiler", "openWithin");
 
 // public/shared/performers/figure-space.js
 var THIRD = setting("figure-space", "third");
@@ -11989,7 +12119,7 @@ var breath_literature_default = {
 var reed_literature_default = {
   schema: "musebots.reed-literature/1",
   source: `J. Chabassier & R. Auvray 2022, "Control parameters for reed wind instruments or organ pipes with reed induced flow", Proceedings of the 25th International Conference on Digital Audio Effects (DAFx20in22), Vienna, Table 1: the clarinet-like reeds' dimensioned values found in the literature; the values they set in italic (guessed, not found in the reference) left out (null)`,
-  use: "tools/fit_reed.py: each single reed's parameter's prior spread, the standard deviation of its logarithm over these reeds -- how far published reeds stand from one another (tools/measured_registry.py exciter_spreads); workers/woodwind_reeds.py: each kind's damping as its player's lip leaves it, the geometric mean of its reeds' `qr` measured under a player's lip (LIP_QR); workers/openwind_worker.py: the saxophones' reed, the middle of its kind's measured stiffness, resistance and mass per area (saxophone_reed). Rows after Chabassier & Auvray's: [6]'s and [8]'s, added from their papers, each with its size and, where measured, its stiffness and resistance per area",
+  use: "tools/fit_reed.py: each single reed's parameter's prior spread, the standard deviation of its logarithm over these reeds -- how far published reeds stand from one another (tools/measured_registry.py exciter_spreads); workers/woodwind_reeds.py: each kind's damping as its player's lip leaves it, the geometric mean of its reeds' `qr` measured under a player's lip (LIP_QR); workers/openwind_worker.py: the saxophones' reed's resonance, the geometric middle of its kind's measured under a lip (`lip` foam), and the stiffness per area measured under a player's lip (`lip` player) that checks its reed's (SAX_REED). Rows after Chabassier & Auvray's: [6]'s and [8]'s, added from their papers, each with its size, the lip it was measured under (`lip`: a player's, or a foam lip) and, where measured, its stiffness and resistance per area",
   references: {
     "[1]": 'S. Bilbao 2008, "Direct simulation for wind instrument synthesis", DAFx-08, 145-152',
     "[2]": 'V. Chatziioannou & M. van Walstijn 2012, "Estimation of clarinet reed parameters by inverse modelling", Acta Acustica united with Acustica 98(4), 629-639',
@@ -12000,6 +12130,7 @@ var reed_literature_default = {
     "[8]": `D. Tonetti & E. A. Piana 2025, "Imaging based saxophone reed modelling", Forum Acusticum / EuroNoise 2025, Malaga, 2871-2876, doi:10.61782/fa.2025.0442 (checked on Crossref; CC BY 3.0; research-downloads/winds/saxophone-reed/tonetti-piana-2025-sax-reed-imaging.pdf): a synthetic tenor reed (Legere 3) on its mouthpiece, its tip filmed at 10 kHz under a sine sweep, a foam lip loaded 0 to 1000 g; their Table 1, a one-degree oscillator fitted to each load's transfer function`,
     "[9]": `A. Gaillard, V. Koehl & B. Gazengel 2024, "Theoretical and experimental studies about single cane reeds: a review", Acta Acustica 8, 63, doi:10.1051/aacus/2024050 (checked on Crossref; research-downloads/winds/saxophone-reed/aacus240040.pdf): Table A7, the reed + lip's equivalent parameters published (clarinet: damping rates 453 to 2900 /s, damping factors 0.03 to 0.24; the tenor saxophone, [6]'s); Table A4, Nederveen's measured stiffness by saxophone size (soprano 1e7, alto 8.33e6, tenor 3.33e6 N/m3)`,
     "[11]": `V. Chatziioannou 2010, "Forward and inverse modelling of single-reed woodwind instruments with application to digital sound synthesis", PhD thesis, Queen's University Belfast (research-downloads/winds/from-owner-2026-11-05/chatziioannou-2010-thesis-single-reed-inverse-modelling.pdf): its Table 6.1, a clarinet reed's parameters estimated from a real player's blowing (its chapter 6, "a real player-clarinet system"), two of its takes, beating smoothly and strongly -- its reed m y'' + m g y' + Ka y, g its damping (1/s), Sr its area for its flow, ym its opening; its resonance the root of Ka over m`,
+    "[12]": `J.-M. Chen, J. Smith & J. Wolfe 2011, "Saxophonists tune vocal tract resonances in advanced performance techniques", JASA 129(1), 415-426, doi:10.1121/1.3514423 (checked on Crossref; research-downloads/winds/vocal-tract/chen-smith-wolfe-2011-saxophonists-tune-vocal-tract-resonances.pdf): its II.A, the tenor saxophone reed's effective compliance in playing conditions (Benade's technique: played on cylindrical pipes), Legere synthetic reeds of hardness 2.5, 3, 3.5 and 4`,
     "[10]": `D. Tonetti & E. A. Piana 2026, "Saxophone acoustical modeling and vibrato 'a la machoire' sound synthesis", JASA 159, 141-156, doi:10.1121/10.0041870 (checked on Crossref; research-downloads/winds/from-owner-2026-10-25/141_1_10.0041870.pdf): [8]'s reed against [6]'s, whose in-vivo damping is some eight times its foam lip's and its resonance half -- the lip's material, they say, sets the damping; a saxophonist's vibrato matched at a blowing pressure of 2.3 kPa`
   },
   reeds: [
@@ -12009,10 +12140,12 @@ var reed_literature_default = {
     { ref: "[3] Tab. I", instrument: "clarinet", massPerArea: 0.0231, section: 146e-6, opening: 4e-4, width: 0.0634, dissip: 3e3, hz: 3700 },
     { ref: "[1] Fig. 7", instrument: "clarinet", massPerArea: 0.0231, section: 146e-6, opening: 4e-4, width: 0.01, dissip: 3e3, hz: 3700 },
     { ref: "[2] Tab. I", instrument: "clarinet", massPerArea: 0.05, section: 7e-5, opening: 4e-4, width: 0.013, dissip: 3e3, hz: 2747 },
-    { ref: "[2] Tab. II", instrument: "clarinet", massPerArea: 0.056, section: 177e-6, opening: 255e-6, width: 0.012, dissip: 453, hz: 2368 },
+    { ref: "[2] Tab. II", instrument: "clarinet", lip: "player", nonlinearStiffness: 37e10, massPerArea: 0.056, section: 177e-6, opening: 255e-6, width: 0.012, dissip: 453, hz: 2368 },
     {
       ref: "[6] Tab VI",
       instrument: "saxophone",
+      lip: "player",
+      nonlinearStiffness: 7e11,
       massPerArea: null,
       section: null,
       opening: 36e-5,
@@ -12022,19 +12155,28 @@ var reed_literature_default = {
       size: "tenor",
       stiffness: 48e5,
       resistance: 1e3,
-      qr: 0.88,
-      qrOf: "the reed and its player's lip as played, its damping over its resonance (R over the root of K times M: 1.0e3 over the root of 4.8e6 x 0.269) -- of the measured reeds' damping the one taken under a player's lip with its mass (A. Gaillard, V. Koehl & B. Gazengel 2024, Acta Acustica 8, 63, doi:10.1051/aacus/2024050, Table A7: 'measured', 0.88), its mass not accurately estimated: with RKnl's stiffness and resistance at p and mf (Table V) and this mass, 1.45 and 1.09",
-      notMeasured: `its massPerArea (0.269), and the hz (672) and dissip (3717) Chabassier & Auvray derive from it: its authors' Table VI "provides some improvement ... though the mass is not accurately estimated because a linear modeling of the inertial effects is employed. This result is presented as an insight" (p. 2763), their reed at mf an oscillator of stiffness and damping, "the effect of mass (inertia) being very small" (abstract); its stiffness K 4.8e6 Pa/m and damping R 1.0e3 Pa s/m its measurements`
+      notMeasured: `its massPerArea (0.269), and the hz (672) and dissip (3717) Chabassier & Auvray derive from it, and its qr with them (0.88: the reed and its player's lip as played, its damping over its resonance (R over the root of K times M: 1.0e3 over the root of 4.8e6 x 0.269) -- of the measured reeds' damping the one taken under a player's lip with its mass (A. Gaillard, V. Koehl & B. Gazengel 2024, Acta Acustica 8, 63, doi:10.1051/aacus/2024050, Table A7: 'measured', 0.88), its mass not accurately estimated: with RKnl's stiffness and resistance at p and mf (Table V) and this mass, 1.45 and 1.09; taken until 7 November 2026, its reed's lag, 0.2 ms, pulled every saxophone's upper first register 100 to 460 cents under its reed-free resonance at its threshold, where UNSW's soprano, played, stands at its maxima): its authors' Table VI "provides some improvement ... though the mass is not accurately estimated because a linear modeling of the inertial effects is employed. This result is presented as an insight" (p. 2763), their reed at mf an oscillator of stiffness and damping, "the effect of mass (inertia) being very small" (abstract); its stiffness K 4.8e6 Pa/m and damping R 1.0e3 Pa s/m its measurements`
     },
-    { ref: "[6] Tab V p", instrument: "saxophone", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 64e5, resistance: 1900, note: "their reed at p as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
-    { ref: "[6] Tab V mf", instrument: "saxophone", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 45e5, resistance: 1200, note: "their reed at mf as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
-    { ref: "[8] Tab. 1 250 g", instrument: "saxophone", massPerArea: 0.1674, section: null, opening: null, width: null, dissip: 1036, hz: 1526, size: "tenor", stiffness: 154e5, resistance: 173.4, derived: "their kr 1.54e+07 Pa/m, wr 9.59e+03 rad/s, xi 0.054 at a foam lip loaded 250 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
-    { ref: "[8] Tab. 1 500 g", instrument: "saxophone", massPerArea: 0.1524, section: null, opening: null, width: null, dissip: 1238, hz: 1579, size: "tenor", stiffness: 15e6, resistance: 188.7, derived: "their kr 1.5e+07 Pa/m, wr 9.92e+03 rad/s, xi 0.0624 at a foam lip loaded 500 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
-    { ref: "[8] Tab. 1 750 g", instrument: "saxophone", massPerArea: 0.1646, section: null, opening: null, width: null, dissip: 1304, hz: 1655, size: "tenor", stiffness: 178e5, resistance: 214.6, derived: "their kr 1.78e+07 Pa/m, wr 1.04e+04 rad/s, xi 0.0627 at a foam lip loaded 750 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
-    { ref: "[8] Tab. 1 1000 g", instrument: "saxophone", massPerArea: 0.1555, section: null, opening: null, width: null, dissip: 1727, hz: 1783, size: "tenor", stiffness: 195e5, resistance: 268.5, derived: "their kr 1.95e+07 Pa/m, wr 1.12e+04 rad/s, xi 0.0771 at a foam lip loaded 1000 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea" },
+    { ref: "[6] Tab V p", instrument: "saxophone", lip: "player", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 64e5, resistance: 1900, note: "their reed at p as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
+    { ref: "[6] Tab V mf", instrument: "saxophone", lip: "player", massPerArea: null, section: null, opening: null, width: null, dissip: null, hz: null, size: "tenor", stiffness: 45e5, resistance: 1200, note: "their reed at mf as a spring and damper (RKnl), played by a saxophonist: its stiffness and resistance per area measured, its mass none" },
+    { ref: "[8] Tab. 1 250 g", instrument: "saxophone", lip: "foam", massPerArea: 0.1674, section: null, opening: null, width: null, dissip: 1036, hz: 1526, size: "tenor", stiffness: 154e5, resistance: 173.4, derived: "their kr 1.54e+07 Pa/m, wr 9.59e+03 rad/s, xi 0.054 at a foam lip loaded 250 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea", qr: 0.108, qrOf: "the reed under the lip as their synthesis played it, its damping over its resonance, 2 xi" },
+    { ref: "[8] Tab. 1 500 g", instrument: "saxophone", lip: "foam", massPerArea: 0.1524, section: null, opening: null, width: null, dissip: 1238, hz: 1579, size: "tenor", stiffness: 15e6, resistance: 188.7, derived: "their kr 1.5e+07 Pa/m, wr 9.92e+03 rad/s, xi 0.0624 at a foam lip loaded 500 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea", qr: 0.1248, qrOf: "the reed under the lip as their synthesis played it, its damping over its resonance, 2 xi" },
+    { ref: "[8] Tab. 1 750 g", instrument: "saxophone", lip: "foam", massPerArea: 0.1646, section: null, opening: null, width: null, dissip: 1304, hz: 1655, size: "tenor", stiffness: 178e5, resistance: 214.6, derived: "their kr 1.78e+07 Pa/m, wr 1.04e+04 rad/s, xi 0.0627 at a foam lip loaded 750 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea", qr: 0.1254, qrOf: "the reed under the lip as their synthesis played it, its damping over its resonance, 2 xi" },
+    { ref: "[8] Tab. 1 1000 g", instrument: "saxophone", lip: "foam", massPerArea: 0.1555, section: null, opening: null, width: null, dissip: 1727, hz: 1783, size: "tenor", stiffness: 195e5, resistance: 268.5, derived: "their kr 1.95e+07 Pa/m, wr 1.12e+04 rad/s, xi 0.0771 at a foam lip loaded 1000 g: massPerArea kr/wr^2, dissip 2 xi wr, resistance dissip x massPerArea", qr: 0.1542, qrOf: "the reed under the lip as their synthesis played it, its damping over its resonance, 2 xi" },
     { ref: "[7] initial", instrument: "clarinet", massPerArea: 0.033, section: 986e-7, opening: 246e-6, width: 0.012, dissip: 3e3, hz: 3709 },
-    { ref: "[11] Tab. 6.1 smooth", instrument: "clarinet", massPerArea: 0.0357, section: 23714e-8, opening: 32204e-8, width: null, dissip: 8626, hz: 2775, stiffness: 10853e3, qr: 0.495, qrOf: "the reed and its player's lip as played, its damping over its resonance (g over the root of Ka over m), beating smoothly" },
-    { ref: "[11] Tab. 6.1 strong", instrument: "clarinet", massPerArea: 0.0508, section: 10012e-8, opening: 33625e-8, width: null, dissip: 6969, hz: 1825, stiffness: 6681200, qr: 0.608, qrOf: "the reed and its player's lip as played, its damping over its resonance (g over the root of Ka over m), beating strongly" }
+    { ref: "[11] Tab. 6.1 smooth", instrument: "clarinet", lip: "player", massPerArea: 0.0357, section: 23714e-8, opening: 32204e-8, width: null, dissip: 8626, hz: 2775, stiffness: 10853e3, qr: 0.495, qrOf: "the reed and its player's lip as played, its damping over its resonance (g over the root of Ka over m), beating smoothly" },
+    { ref: "[11] Tab. 6.1 strong", instrument: "clarinet", lip: "player", massPerArea: 0.0508, section: 10012e-8, opening: 33625e-8, width: null, dissip: 6969, hz: 1825, stiffness: 6681200, qr: 0.608, qrOf: "the reed and its player's lip as played, its damping over its resonance (g over the root of Ka over m), beating strongly" }
+  ],
+  measured: [
+    { ref: "[8] Tab. 1 0 g", instrument: "saxophone", size: "tenor", condition: "alone", stiffness: 601e4, hz: 1109, q: 12.66, note: "a synthetic tenor reed (Legere 3) on its mouthpiece with no lip: their kr 6.01e6 Pa/m, wr 6.97e3 rad/s, xi 0.0395 (q 1/(2 xi)); two resonances in its measured transfer function, 1104 and 2549 Hz, 'in agreement with the one measured in [their 16] for a tenor saxophone cane reed' (4)" },
+    { ref: "[9] Tab. A4", instrument: "saxophone", size: "soprano", condition: "alone", stiffness: 1e7, note: "Nederveen's reed alone under a static load, a reed of medium hardness free to move (Gaillard et al. 2024 A.3.1, from C. J. Nederveen 1969, JASA 45(2), 513-514)" },
+    { ref: "[9] Tab. A4", instrument: "saxophone", size: "alto", condition: "alone", stiffness: 833e4, note: "as the soprano's row" },
+    { ref: "[9] Tab. A4", instrument: "saxophone", size: "tenor", condition: "alone", stiffness: 333e4, note: "as the soprano's row" },
+    { ref: "[9] Tab. A4", instrument: "clarinet", condition: "alone", stiffness: 1e7, note: "as the saxophones' rows" },
+    { ref: "[9] Tab. A6 [66]", instrument: "clarinet", condition: "alone", hzRange: [1890, 2270], qRange: [30, 50], stiffnessRange: [25e6, 67e6], note: "a clarinet reed alone on a bench, its free length 30 mm, measured 2 mm from its tip (B. Gazengel, J.-P. Dalmont & J.-F. Petiot 2016, Applied Acoustics 106, 155-166)" },
+    { ref: "[9] Tab. A6 [50]", instrument: "clarinet", condition: "alone", hzRange: [1530, 2440], note: "clarinet reeds alone on a mouthpiece: 2140-2440 Hz dry, 1530-1890 wet (F. Pinard, B. Laine & H. Vach 2003, JASA 113(3), 1736-1742)" },
+    { ref: "[9] Tab. A6 [70]", instrument: "clarinet", condition: "alone", hzRange: [2060, 2300], note: "a clarinet reed alone on a mouthpiece: 2300 Hz dry, 2060 wet (K. Stetson 2014, Optical Engineering 53(11), 112305)" },
+    { ref: "[12] II.A", instrument: "saxophone", size: "tenor", condition: "played", complianceVolume: [27e-7, 37e-7], note: "the tenor reed's effective compliance in playing, an equivalent volume of air of 3.2 +- 0.5 ml for every reed measured, hardness 2.5 to 4" }
   ]
 };
 
@@ -12053,9 +12195,9 @@ function compassOf(model) {
   const host = String(r.sources?.[0] ?? "").match(/^https?:\/\/(?:www\.)?([^/]+)/)?.[1];
   return {
     range: [...r.range],
-    what: `its players' compass (${r.name})`,
+    what: `The range of notes its players play (${r.name}).`,
     source: host === "vsl.co.at" ? "Vienna Symphonic Library" : host === "phys.unsw.edu.au" ? "Chen, Smith & Wolfe" : host ?? "instrument-ranges.js",
-    ...model === "trumpet" ? { by: "the C trumpet's" } : {}
+    ...model === "trumpet" ? { by: "the C trumpet" } : {}
   };
 }
 var MEASURED_BREATH = {
@@ -12084,9 +12226,9 @@ function reedBreath(model) {
   });
   return {
     points: [...at2].sort((a, b) => a[0] - b[0]).map(([midi, [low, high]]) => [midi, Math.round(low * CM_H2O), Math.round(high * CM_H2O)]),
-    what: "the mouth's pressure two professional players blew, pp to ff",
+    what: "The pressure in the mouths of two professional players, from their softest (pp) to their loudest (ff) at this note.",
     source: "Fuks & Sundberg 1996",
-    ...from !== model ? { by: `the ${label(from)}'s players, at the same written note` } : {}
+    ...from !== model ? { by: `${label(from)} players, at the same written note` } : {}
   };
 }
 function lipsBreath(model, compass) {
@@ -12097,9 +12239,9 @@ function lipsBreath(model, compass) {
   }
   return {
     points,
-    what: "the mouth's pressure brass players blew, pp to ff",
+    what: "The pressure in brass players' mouths, from their softest (pp) to their loudest (ff) at this pitch.",
     source: "Fletcher & Tarnopolsky 1999; Bouhuys 1965",
-    ...["trumpet", "tuba"].includes(model) ? {} : { by: "the trumpet and tuba players measured, at its pitch" }
+    ...["trumpet", "tuba"].includes(model) ? {} : { by: "trumpet and tuba players, at the same pitch" }
   };
 }
 var REED_KIND = {
@@ -12112,40 +12254,69 @@ var REED_KIND = {
   "baritone-saxophone": "saxophone"
 };
 var spanOf = (values) => values.length ? values.length > 1 ? { range: [Math.min(...values), Math.max(...values)] } : { value: values[0] } : null;
+var hzText = (values) => {
+  const [lo, hi] = [Math.min(...values), Math.max(...values)];
+  return lo === hi ? `${Math.round(lo)}` : `${Math.round(lo)}-${Math.round(hi)}`;
+};
 function reedOwn(model) {
   const kind = REED_KIND[model];
   if (!kind) return {};
-  const reeds = reed_literature_default.reeds.filter((r) => r.instrument === kind), omega = (r) => 2 * Math.PI * r.hz;
-  const about = (what, values) => {
-    const s = spanOf(values);
-    return s && {
-      ...s,
-      what: `${what}, ${values.length} published ${kind} reed${values.length > 1 ? "s" : ""}`,
-      source: "Chabassier & Auvray 2022; Muñoz Arancón et al. 2016; Tonetti & Piana 2025",
-      ...kind === "saxophone" && model !== "tenor-saxophone" ? { by: "a tenor saxophone's reeds" } : {}
-    };
+  const size = model.replace(/-saxophone$/, ""), mine = (r) => r.instrument === kind && (!r.size || kind !== "saxophone" || r.size === size);
+  const played = reed_literature_default.reeds.filter((r) => r.instrument === kind && r.lip === "player"), machine = reed_literature_default.reeds.filter((r) => r.instrument === kind && r.lip === "foam");
+  const alone = reed_literature_default.measured.filter((r) => r.condition === "alone" && r.instrument === kind), aloneMine = alone.filter(mine);
+  const by = kind === "saxophone" && model !== "tenor-saxophone" ? { by: "a tenor saxophone's reed" } : kind === "clarinet" && model !== "clarinet" ? { by: "a B-flat clarinet's reed" } : {};
+  const aloneHz = alone.flatMap((r) => r.hzRange ?? (r.hz ? [r.hz] : [])), machineHz = machine.filter((r) => r.hz).map((r) => r.hz);
+  const said = (parts) => parts.filter(Boolean).join(" ");
+  const playedHz = played.filter((r) => r.hz > 0).map((r) => r.hz);
+  const pulsation = playedHz.length ? {
+    ...spanOf(playedHz.map((h) => 2 * Math.PI * h)),
+    what: said([`The reed's resonance while a player plays it, the lip on it: ${hzText(playedHz)} Hz.`, aloneHz.length && `The reed alone, with no lip on it: ${hzText(aloneHz)} Hz.`, machineHz.length && `Under a playing machine's foam lip: ${hzText(machineHz)} Hz.`]),
+    source: "Chatziioannou & van Walstijn 2012; Chatziioannou 2010; Gaillard, Koehl & Gazengel 2024",
+    ...by
+  } : aloneHz.length ? {
+    ...spanOf(alone.flatMap((r) => r.hz ? [r.hz] : []).map((h) => 2 * Math.PI * h)),
+    what: said([`The reed's resonance alone, with no lip on it: ${hzText(aloneHz)} Hz. Nobody has measured it while a player plays it.`, machineHz.length && `Under a playing machine's foam lip: ${hzText(machineHz)} Hz.`]),
+    source: "Tonetti & Piana 2025",
+    ...by
+  } : null;
+  const playedQ = played.filter((r) => r.hz > 0 && r.dissip > 0).map((r) => 2 * Math.PI * r.hz / r.dissip), aloneQ = alone.flatMap((r) => r.qRange ?? (r.q ? [r.q] : [])), machineQ = machine.filter((r) => r.hz > 0 && r.dissip > 0).map((r) => 2 * Math.PI * r.hz / r.dissip);
+  const qText = (values) => {
+    const [lo, hi] = [Math.min(...values), Math.max(...values)];
+    return lo === hi ? lo.toFixed(1) : `${lo.toFixed(1)}-${hi.toFixed(1)}`;
   };
-  return {
-    pulsation: about("its resonance", reeds.filter((r) => r.hz > 0).map(omega)),
-    qfactor: about("its quality factor", reeds.filter((r) => r.hz > 0 && r.dissip > 0).map((r) => omega(r) / r.dissip)),
-    closing_pressure: about("its closing pressure", reeds.map((r) => r.hz > 0 && r.massPerArea > 0 && r.opening > 0 ? omega(r) ** 2 * r.massPerArea * r.opening : r.stiffness > 0 && r.opening > 0 ? r.stiffness * r.opening : null).filter(Number.isFinite))
-  };
+  const qfactor = playedQ.length ? { ...spanOf(playedQ), what: said([`How lightly the reed is damped (its Q, no unit) while a player plays it: ${qText(playedQ)}.`, aloneQ.length && `The reed alone, with no lip on it: ${qText(aloneQ)}.`]), source: "Chatziioannou & van Walstijn 2012; Chatziioannou 2010; Gaillard, Koehl & Gazengel 2024", ...by } : aloneQ.length ? { ...spanOf(alone.flatMap((r) => r.q ? [r.q] : [])), what: said([`How lightly the reed is damped (its Q, no unit) alone, with no lip on it: ${qText(aloneQ)}. Nobody has measured it while a player plays it; a lip damps it more.`, machineQ.length && `Under a playing machine's foam lip: ${qText(machineQ)}.`]), source: "Tonetti & Piana 2025", ...by } : null;
+  const shut = played.filter((r) => r.stiffness > 0 && r.opening > 0).map((r) => r.stiffness * r.opening);
+  const stiffAlone = aloneMine.flatMap((r) => r.stiffnessRange ?? (r.stiffness ? [r.stiffness] : [])).map((k) => (k / 1e6).toFixed(1));
+  const closing_pressure = shut.length ? {
+    ...spanOf(shut),
+    what: said([`The pressure that pushes the reed shut while a player plays it (its stiffness times its opening): ${hzText(shut)} Pa.`, stiffAlone.length && `The reed's stiffness alone: ${[...new Set(stiffAlone)].join(", ")} MPa per metre.`]),
+    source: "Muñoz Arancón et al. 2016; Chatziioannou 2010; Gaillard, Koehl & Gazengel 2024 (Nederveen 1969)",
+    ...by
+  } : null;
+  const nonlinear = played.filter((r) => r.nonlinearStiffness).map((r) => r.nonlinearStiffness);
+  const contact_stifness = nonlinear.length ? {
+    value: null,
+    what: `How much stiffer the reed grows as it bends towards the mouthpiece, measured while played: ${nonlinear.map((k) => k.toExponential(1)).join(", ")} N/m⁴. This slider is something else: the model's stiffness once the reed is fully shut, which nobody has measured.`,
+    source: "Gaillard, Koehl & Gazengel 2024, Table A7",
+    ...by
+  } : null;
+  return { pulsation, qfactor, closing_pressure, contact_stifness };
 }
 function tongueOf(model) {
   const portato = playerEntry("reed-woodwind", "tongue.portato.contact"), staccato = player("reed-woodwind", "tongue.staccato.contact");
   const clarinets = ["clarinet", "e-flat-clarinet", "bass-clarinet"].includes(model);
   return {
     range: [+(portato.value - portato.sd).toFixed(3), Math.max(...staccato.map(([, s]) => s))],
-    what: "the tongue's contact, portato to staccato at two notes a second",
+    what: "How long the tongue touches the reed, from portato to staccato, at two notes a second.",
     source: "Pàmies-Vilà, Hofmann & Chatziioannou 2018",
-    ...clarinets ? {} : { by: "clarinettists'" }
+    ...clarinets ? {} : { by: "clarinettists" }
   };
 }
 function breathTaken() {
   const { capacity, spent } = LUNGS, low = Math.max(0, capacity.litres - 2 * capacity.sd) * spent.share, high = (capacity.litres + 2 * capacity.sd) * spent.share;
   return {
-    litres: { range: [+low.toFixed(2), +high.toFixed(2)], what: `a breath: ${Math.round(100 * spent.share)} % of wind players' vital capacity, two deviations either side`, source: "Bouros et al. 2018; Cossette, Sliwinski & Macklem 2000" },
-    inhale: { range: [0.3, LUNGS.inhale.seconds], what: "a breath taken in: reed players' fastest to a singer's full breath", source: "Fuks & Sundberg 1998; Salomoni, van den Hoorn & Hodges 2016" }
+    litres: { range: [+low.toFixed(2), +high.toFixed(2)], what: `The air in one breath: ${Math.round(100 * spent.share)} % of what wind players' lungs hold, from two standard deviations below the average to two above.`, source: "Bouros et al. 2018; Cossette, Sliwinski & Macklem 2000" },
+    inhale: { range: [0.3, LUNGS.inhale.seconds], what: "How long a breath takes to draw in: from reed players' quickest to a singer's full breath.", source: "Fuks & Sundberg 1998; Salomoni, van den Hoorn & Hodges 2016" }
   };
 }
 function windsRanges(model, kind) {
@@ -12157,7 +12328,7 @@ function windsRanges(model, kind) {
     stroke: tongueOf(model),
     softSeconds: null,
     rise: null,
-    repeatRate: { range: [null, 8], what: "single tonguing, some 8 notes a second (double some 11.5)", source: "Bertsch & Hoole 2014", ...kind === "lips" ? {} : { by: "brass players'" } },
+    repeatRate: { range: [null, 8], what: "The fastest repeated notes with single tonguing: about 8 a second (about 11.5 with double tonguing).", source: "Bertsch & Hoole 2014", ...kind === "lips" ? {} : { by: "brass players" } },
     litres,
     inhale,
     vibratoWidth: null,
