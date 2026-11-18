@@ -1,2 +1,2 @@
 /*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
-import{mountStudio as e}from"./studio.js";const t=document.getElementById("studioMain");await e(t,{edition:new URLSearchParams(location.search).get("edition")||t.dataset.edition||"page"});
+import{mountStudio as a}from"./studio.js";const t=document.getElementById("studioMain"),e=new URLSearchParams(location.search);await a(t,{edition:e.get("edition")||t.dataset.edition||"page",plain:e.get("mix")==="one-pass"});
