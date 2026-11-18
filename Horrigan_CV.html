@@ -130,6 +130,11 @@ Renders as <dl>
   /* A ledger entry's leading bold lead-in (degree, role, award name) */
   dl dd strong { color: var(--ink); }
 
+  /* A course's term and enrolment stand on their own line under its title, as the CV
+     builder's own stylesheet sets them (cv.css). The page's content has carried this
+     span since August 2026 without the rule, so the two ran together. */
+  .course-info { display: block; margin-left: 0.8rem; padding-left: 0; text-indent: 0; font-weight: 400; }
+
   /* ==========================================================================
      4. PAGED-MEDIA ENGINE  (printing / PDF) — shared by every document type
      @page sets the sheet size, margins and the "name — page X of Y" footer; the
@@ -267,15 +272,16 @@ Renders as <dl>
 <header id="title-block-header">
   <h1 class="title">M. Reid Horrigan</h1>
 </header>
+<!-- Generated from src/latex/cv.tex by tools/latex_career_export.py. Edit the TeX source. -->
 <p>School of Interactive Arts &amp; Technology, Simon Fraser
 University</p>
-<p>(778) 996-9770 | <a href="mailto:matt.horrigan@icloud.com">matt.horrigan@icloud.com</a> | <a href="mailto:mhorriga@sfu.ca">mhorriga@sfu.ca</a> | <a href="https://matthorrigan.com/?theme=technurture">https://matthorrigan.com/?theme=technurture</a></p>
+<p>(778) 996-9770 | <a href="mailto:matt.horrigan@icloud.com">matt.horrigan@icloud.com</a> | <a href="mailto:mhorriga@sfu.ca">mhorriga@sfu.ca</a> | <a href="https://matthorrigan.com/?theme=technurture" class="uri">https://matthorrigan.com/?theme=technurture</a></p>
 <h1 id="education">Education</h1>
 <dl>
 <div class="led-row"><dt>2025</dt>
 <dd>
 <strong>PhD</strong>, Individualized Interdisciplinary Studies. Faculty
-of Communication, Art, and Technology, Simon Fraser University, Burnaby,
+of Communication, Art and Technology, Simon Fraser University, Burnaby,
 BC. <em>Dissertation:</em> “Departmentalities: Class, Myth, and Service
 Moviemaking.” <em>Committee:</em> Eldritch Priest, Lindsey Freeman,
 Nicolas Kenny, Aleena Chia.
@@ -317,141 +323,161 @@ and the Arts. University of Huddersfield, Huddersfield, UK.
 </dd></div>
 <div class="led-row"><dt>2016–23</dt>
 <dd>
-<strong>Teaching Assistant</strong>, Faculty of Communication, Art, and
+<strong>Teaching Assistant</strong>, Faculty of Communication, Art and
 Technology. Simon Fraser University, Burnaby, Surrey, and Vancouver, BC.
 </dd></div>
 </dl>
 <h1 id="publications">Publications</h1>
 <h2 id="monographs">Monographs</h2>
-<div class="pub-plain">
 <p>Under contract—manuscript delivery December 2026.
 <em>Voiceshifting.</em> Routledge.</p>
-</div>
 <h2 id="refereed-journal-publications">Refereed Journal
 Publications</h2>
 <div class="pub-list">
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
-<div id="ref-horriganmatthewMythSufferingArtist2026" class="csl-entry" role="listitem">
+<div class="csl-entry" role="listitem">
 “The Myth of the Suffering Artist in the Mind of the City, or
 Hinterscapes: A Textured Circuit”. Horrigan, Matthew. 2026. <em>BC
-Studies: The British Columbian Quarterly</em> (230): 113–117. <a href="https://doi.org/10.14288/BCS.NO230.201506">https://doi.org/10.14288/BCS.NO230.201506</a>.
+Studies: The British Columbian Quarterly</em> (230): 113–117. <a href="https://doi.org/10.14288/BCS.NO230.201506" class="uri">https://doi.org/10.14288/BCS.NO230.201506</a>.
 </div>
-<div id="ref-horriganVoiceshiftingGenderProlific2025" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Voiceshifting, Gender, and Prolific Profiles in the Songs of 100 Gecs
 and Alex G”. Horrigan, Matthew Reid. 2025. <em>Rock Music Studies</em>:
-1–18. <a href="https://doi.org/10.1080/19401159.2025.2506204">https://doi.org/10.1080/19401159.2025.2506204</a>.
+1–18. <a href="https://doi.org/10.1080/19401159.2025.2506204" class="uri">https://doi.org/10.1080/19401159.2025.2506204</a>.
 </div>
-<div id="ref-horriganDrainingSwamp2023" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Draining a Swamp”. Horrigan, Matthew. 2023. <em>Comparative Media Arts
-Journal</em> 13. <a href="https://www.sfu.ca/cmajournal/issues/issue-thirteen--the-outside/Matt-Horrigan.html">https://www.sfu.ca/cmajournal/issues/issue-thirteen--the-outside/Matt-Horrigan.html</a>.
+Journal</em> 13. <a href="https://www.sfu.ca/cmajournal/issues/issue-thirteen--the-outside/Matt-Horrigan.html" class="uri">https://www.sfu.ca/cmajournal/issues/issue-thirteen--the-outside/Matt-Horrigan.html</a>.
 </div>
-<div id="ref-horriganListeningInterruptionsSonic2022" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Listening to Interruptions: Sonic Dominance and Sonic Norms”. Horrigan,
-Matthew. 2022. <em>Sound Studies</em> 8 (2): 219–234. <a href="https://doi.org/10.1080/20551940.2022.2107347">https://doi.org/10.1080/20551940.2022.2107347</a>.
+Matthew. 2022. <em>Sound Studies</em> 8 (2): 219–234. <a href="https://doi.org/10.1080/20551940.2022.2107347" class="uri">https://doi.org/10.1080/20551940.2022.2107347</a>.
 </div>
-<div id="ref-horriganPlayingLegendAge2022" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Playing for the Legend in the Age of Empires II Online Community”.
-Horrigan, Matthew. 2022. <em>Press Start</em> 8 (1): 20–40. <a href="http://press-start.gla.ac.uk/index.php/press-start/article/view/210">http://press-start.gla.ac.uk/index.php/press-start/article/view/210</a>.
+Horrigan, Matthew. 2022. <em>Press Start</em> 8 (1): 20–40. <a href="http://press-start.gla.ac.uk/index.php/press-start/article/view/210" class="uri">http://press-start.gla.ac.uk/index.php/press-start/article/view/210</a>.
 </div>
-<div id="ref-horriganNulltopiaDisjunctSpace2022" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Nulltopia: Of Disjunct Space”. Horrigan, Matthew. 2022. <em>Acta
-Ludologica</em> 5 (2): 58–70. <a href="https://actaludologica.com/volume-5/">https://actaludologica.com/volume-5/</a>.
+Ludologica</em> 5 (2): 58–70. <a href="https://actaludologica.com/volume-5/" class="uri">https://actaludologica.com/volume-5/</a>.
 </div>
-<div id="ref-horriganLiminoidSinglePlayerVideogaming2021" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “The Liminoid in Single-Player Videogaming: A Critical and Collaborative
 Response to Recent Work on Liminality and Ritual”. Horrigan, Matthew.
-2021. <em>Game Studies</em> 21 (2). <a href="http://gamestudies.org/2102/articles/horrigan">http://gamestudies.org/2102/articles/horrigan</a>.
+2021. <em>Game Studies</em> 21 (2). <a href="http://gamestudies.org/2102/articles/horrigan" class="uri">http://gamestudies.org/2102/articles/horrigan</a>.
 </div>
-<div id="ref-horriganFlatteringRobopocalypseHuman2020" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “A Flattering Robopocalypse: Human Exclusion and the Procedural Rhetoric
 of Captcha”. Horrigan, Matthew Reid. 2020. <em>M/C Journal</em> 23 (6).
-<a href="https://doi.org/10.5204/mcj.2726">https://doi.org/10.5204/mcj.2726</a>.
-</div>
+<a href="https://doi.org/10.5204/mcj.2726" class="uri">https://doi.org/10.5204/mcj.2726</a>.
 </div>
 </div>
 <h2 id="book-chapters">Book Chapters</h2>
 <div class="pub-list">
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
-<div id="ref-horrigan2026gilded" class="csl-entry" role="listitem">
-“Gilded Time: Trophies, Exploits, and Gaming Capital in Call of Duty’s
-Publics”. Horrigan, Matthew. 2026. In <em>Trophy Cases: The Theory,
-Design, and Cultural Politics of Video Game Trophies and
+<div class="csl-entry" role="listitem">
+“Gilded Time: Trophies, Exploits, and Gaming Capital in <em>Call of
+Duty</em>’s Publics”. Horrigan, Matthew. 2026. In <em>Trophy Cases: The
+Theory, Design, and Cultural Politics of Video Game Trophies and
 Achievements</em>, edited by Ryan Scheiding, Dan Staines, and Sarah
-Christina Ganzon. Bloomsbury Academic.
+Christina Ganzon, 81–100. Bloomsbury Academic. <a href="https://doi.org/10.5040/9798881888398.ch-004" class="uri">https://doi.org/10.5040/9798881888398.ch-004</a>.
 </div>
-<div id="ref-horriganmallgoth" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Mall Goth Aristocracy: Vampire Students and Class”. Horrigan, Matthew.
 Accepted. In <em>Vampires and Fashion</em>, edited by Teresa
 Cutler-Broyles and Lorraine Rumson. Peter Lang.
 </div>
 </div>
-</div>
 <h2 id="refereed-conference-proceedings">Refereed Conference
 Proceedings</h2>
 <div class="pub-list">
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
-<div id="ref-horrigan2026player" class="csl-entry" role="listitem">
+<div class="csl-entry" role="listitem">
 “Player as Medium: Games of Mid(dle) Management”. Horrigan, Matthew.
 Forthcoming. In <em>The Interdisciplinary Journal on Games and
-Narrative</em>. <a href="https://uwaterloo.ca/games-institute/events/international-conference-games-and-narrative-2025">https://uwaterloo.ca/games-institute/events/international-conference-games-and-narrative-2025</a>.
+Narrative</em>. <a href="https://uwaterloo.ca/games-institute/events/international-conference-games-and-narrative-2025" class="uri">https://uwaterloo.ca/games-institute/events/international-conference-games-and-narrative-2025</a>.
 </div>
-<div id="ref-horriganEnormousFabricatedAbility2023" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Enormous Fabricated Ability: Boosting in the Battlefront II Player
 Community”. Horrigan, Matthew. 2023. In <em>Proceedings of DiGRA
-2023</em> Online. <a href="https://dl.digra.org/index.php/dl/article/download/1968/1967/1964">https://dl.digra.org/index.php/dl/article/download/1968/1967/1964</a>.
+2023</em> Online. <a href="https://dl.digra.org/index.php/dl/article/download/1968/1967/1964" class="uri">https://dl.digra.org/index.php/dl/article/download/1968/1967/1964</a>.
 </div>
-<div id="ref-horriganFirstGlueProtocolar2023" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “First Glue: Protocolar Power and the Texts of Game Cultures”. Horrigan,
-Matthew. 2023. In <em>Proceedings of DiGRA 2023</em> Online. <a href="https://dl.digra.org/index.php/dl/article/view/2110/2109">https://dl.digra.org/index.php/dl/article/view/2110/2109</a>.
+Matthew. 2023. In <em>Proceedings of DiGRA 2023</em> Online. <a href="https://dl.digra.org/index.php/dl/article/view/2110/2109" class="uri">https://dl.digra.org/index.php/dl/article/view/2110/2109</a>.
 </div>
-<div id="ref-brown2018musebots" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Interacting with Musebots”. Brown, Andrew R., Matthew Horrigan, Arne
 Eigenfeldt, Toby Gifford, Daniel Field, and Jon McCormack. 2018. In
 <em>Proceedings of the International Conference on New Interfaces for
-Musical Expression</em> Blacksburg, Virginia, USA. <a href="https://zenodo.org/record/1302659">https://zenodo.org/record/1302659</a>.
-</div>
+Musical Expression</em> Blacksburg, Virginia, USA. <a href="https://zenodo.org/record/1302659" class="uri">https://zenodo.org/record/1302659</a>.
 </div>
 </div>
 <h2 id="book-reviews">Book Reviews</h2>
 <div class="pub-list">
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
-<div id="ref-horriganReviewCineworldingScenes2023" class="csl-entry" role="listitem">
+<div class="csl-entry" role="listitem">
 “A Review of Cineworlding: Scenes of Cinematic Research-Creation, by
 Michael B. MacDonald”. Horrigan, Matt. 2023. <em>Performance
-Matters</em> 9 (1-2): 406–408. <a href="https://performancematters-thejournal.com/index.php/pm/article/view/471">https://performancematters-thejournal.com/index.php/pm/article/view/471</a>.
-</div>
+Matters</em> 9 (1-2): 406–408. <a href="https://performancematters-thejournal.com/index.php/pm/article/view/471" class="uri">https://performancematters-thejournal.com/index.php/pm/article/view/471</a>.
 </div>
 </div>
 <h2 id="other-articles">Other Articles</h2>
 <div class="pub-list">
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="1" role="list">
-<div id="ref-poirierpoulin2025editorial" class="csl-entry" role="listitem">
+<div class="csl-entry" role="listitem">
 “Editorial”. Poirier-Poulin, Samuel, Juan Escobar-Lamana, David ten
 Cate, Rory Manning Graham, Alex Habgood, Hyerin Shin, Chelsea Russell,
 and Matt Horrigan. 2025. <em>Press Start</em> 11 (1): 1.
 </div>
-<div id="ref-poirierpoulin2024editorial" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Editorial: Ten Years of Press Start”. Poirier-Poulin, Samuel, Cassandra
 Barkman, Andrew Fleshman, Meg Ritchie, Matt Horrigan, Charlotte
 Courtois, and Olivia Shepard. 2024. <em>Press Start</em> 10 (1): i–iii.
 </div>
-<div id="ref-horriganPuppersNotYuppers2022" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Puppers Not Yuppers (On Abstractive Mnemonics)”. Horrigan, Matthew
-Reid. 2022. <em>Society for Ethnomusicology Student News</em> 18 (1). <a href="https://cdn.ymaws.com/ethnomusicology.site-ym.com/resource/group/dc75b7e7-47d7-4d59-a660-19c3e0f7c83e/publications/18_1fieldwork/horrigan_semsn_18-1.pdf">https://cdn.ymaws.com/ethnomusicology.site-ym.com/resource/group/dc75b7e7-47d7-4d59-a660-19c3e0f7c83e/publications/18_1fieldwork/horrigan_semsn_18-1.pdf</a>.
+Reid. 2022. <em>Society for Ethnomusicology Student News</em> 18 (1). <a href="https://cdn.ymaws.com/ethnomusicology.site-ym.com/resource/group/dc75b7e7-47d7-4d59-a660-19c3e0f7c83e/publications/18_1fieldwork/horrigan_semsn_18-1.pdf" class="uri">https://cdn.ymaws.com/ethnomusicology.site-ym.com/resource/group/dc75b7e7-47d7-4d59-a660-19c3e0f7c83e/publications/18_1fieldwork/horrigan_semsn_18-1.pdf</a>.
 </div>
-<div id="ref-horriganAggregateMonstersEcologies2021" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Aggregate Monsters: Ecologies Challenging Encounters”. Horrigan, Matt.
-2021. <em>Analog Game Studies</em>. <a href="https://analoggamestudies.org/2021/10/aggregate-monsters-ecologies-challenging-encounters/">https://analoggamestudies.org/2021/10/aggregate-monsters-ecologies-challenging-encounters/</a>.
+2021. <em>Analog Game Studies</em>. <a href="https://analoggamestudies.org/2021/10/aggregate-monsters-ecologies-challenging-encounters/" class="uri">https://analoggamestudies.org/2021/10/aggregate-monsters-ecologies-challenging-encounters/</a>.
 </div>
-<div id="ref-horriganScholarClassTabletop2020" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “The Scholar Class in the Tabletop Role-Play Party - First Person
 Scholar”. Horrigan, Matthew, and Bradley Young. 2020. <em>First Person
-Scholar</em>. <a href="http://www.firstpersonscholar.com/the-scholar-class-in-the-tabletop-role-play-party/">http://www.firstpersonscholar.com/the-scholar-class-in-the-tabletop-role-play-party/</a>.
+Scholar</em>. <a href="http://www.firstpersonscholar.com/the-scholar-class-in-the-tabletop-role-play-party/" class="uri">http://www.firstpersonscholar.com/the-scholar-class-in-the-tabletop-role-play-party/</a>.
 </div>
-<div id="ref-horriganDoodlingPosthumanCorpus2017" class="csl-entry" role="listitem">
+</div>
+<div class="pub-list">
+<div class="csl-entry" role="listitem">
 “Doodling in the Posthuman Corpus”. Horrigan, Matthew. 2017.
-<em>eContact!</em> 19 (3). <a href="https://www.econtact.ca/19_3/horrigan_posthuman.html">https://www.econtact.ca/19_3/horrigan_posthuman.html</a>.
-</div>
+<em>eContact!</em> 19 (3). <a href="https://www.econtact.ca/19_3/horrigan_posthuman.html" class="uri">https://www.econtact.ca/19_3/horrigan_posthuman.html</a>.
 </div>
 </div>
 <h1 id="awards">Awards</h1>
@@ -532,7 +558,7 @@ SSHRC Michael Smith Foreign Study Supplement (5449 CAD).
 </dd></div>
 <div class="led-row"><dt>2015</dt>
 <dd>
-SSHRC Joseph–Armand Bombardier Graduate Scholarship (17500 CAD).
+SSHRC Joseph-Armand Bombardier Graduate Scholarship (17500 CAD).
 </dd></div>
 <div class="led-row"><dt>2015</dt>
 <dd>
@@ -749,110 +775,185 @@ Fraser University, September 9.
 <h2 id="teaching-sfu">Simon Fraser University</h2>
 <h3 id="teaching-role-sfu-online-instructor">Instructor of record,
 online asynchronous</h3>
-<ul>
-<li><strong>Introduction to Game Studies: Theory and Design (<a href="https://www.sfu.ca/students/calendar/2026/fall/courses/iat/210.html">IAT
+<dl>
+<div class="led-row"><dt>2026</dt>
+<dd>
+<strong>Introduction to Game Studies: Theory and Design (<a href="https://www.sfu.ca/students/calendar/2026/fall/courses/iat/210.html">IAT
 210</a>)</strong><span class="course-info">Fall ’26, 1 teaching
-assistant, 154 students</span></li>
-</ul>
+assistant, 89 students</span>
+</dd></div>
+</dl>
 <h3 id="teaching-role-sfu-presential-instructor">Instructor of record,
 presential</h3>
-<ul>
-<li><strong>Media Across Cultures (<a href="https://www.sfu.ca/students/calendar/2026/summer/courses/iat/206w.html">IAT
+<dl>
+<div class="led-row"><dt>2026</dt>
+<dd>
+<strong>Media Across Cultures (<a href="https://www.sfu.ca/students/calendar/2026/summer/courses/iat/206w.html">IAT
 206W</a>)</strong><span class="course-info">Summer ’26, 1 teaching
-assistant, 46 students</span></li>
-<li><strong>Creative Electronics Lab I (<a href="https://www.sfu.ca/students/calendar/2025/fall/courses/ca/247.html">CA
+assistant, 46 students</span>
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+<strong>Creative Electronics Lab I (<a href="https://www.sfu.ca/students/calendar/2025/fall/courses/ca/247.html">CA
 247</a>)</strong><span class="course-info">Fall ’25, 2 sections, 26
-students</span></li>
-<li><strong>Critical Writing in the Arts (<a href="https://www.sfu.ca/students/calendar/2025/spring/courses/ca.html">CA
-319</a>)</strong><span class="course-info">Spring ’25, 1 teaching
-assistant, 50 students</span></li>
-<li><strong>Thinking and Writing About Sound: Musical Subcultures (<a href="https://www.sfu.ca/students/calendar/2023/spring/courses/ca/344.html">CA
+students</span>
+</dd></div>
+<div class="led-row"><dt>2025</dt>
+<dd>
+<strong>Critical Writing in the Arts (<a href="https://www.sfu.ca/students/calendar/2025/spring/courses/ca.html">CA
+319W</a>)</strong><span class="course-info">Spring ’25, 1 teaching
+assistant, 50 students</span>
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+<strong>Thinking and Writing About Sound: Musical Subcultures (<a href="https://www.sfu.ca/students/calendar/2023/spring/courses/ca/344.html">CA
 344</a>)</strong><span class="course-info">Spring ’23, 19
-students</span></li>
-<li><strong>Advanced Topic in the History of Art, Performance and Cinema
+students</span>
+</dd></div>
+<div class="led-row"><dt>2023</dt>
+<dd>
+<strong>Advanced Topic in the History of Art, Performance and Cinema
 Studies: Hauntology (<a href="https://www.sfu.ca/students/calendar/2023/fall/courses/ca/414.html">CA
-414</a>)</strong><span class="course-info">Fall ’23, 19
-students</span></li>
-<li><strong>Electroacoustic Music I (<a href="https://www.sfu.ca/students/calendar/2017/fall/courses/ca/247.html">CA
-247</a>)</strong><span class="course-info">Fall ’17, 10
-students</span></li>
-</ul>
+414</a>)</strong><span class="course-info">Fall ’23, 19 students</span>
+</dd></div>
+<div class="led-row"><dt>2017</dt>
+<dd>
+<strong>Electroacoustic Music I (<a href="https://www.sfu.ca/students/calendar/2017/fall/courses/ca/247.html">CA
+247</a>)</strong><span class="course-info">Fall ’17, 10 students</span>
+</dd></div>
+</dl>
 <h3 id="teaching-role-sfu-presential-assistant">Teaching assistant,
 presential</h3>
-<ul>
-<li><strong>Filmmaking I (<a href="https://www.sfu.ca/students/calendar/2023/spring/courses/ca/131.html">CA
-131</a>)</strong><span class="course-info">Spring ’23, ’22</span></li>
-<li><strong>Digital Media Communication Techniques (<a href="https://www.sfu.ca/students/calendar/2022/fall/courses/cmns/226.html">CMNS
-226</a>)</strong><span class="course-info">Fall ’22</span></li>
-<li><strong>Fundamentals of Film (<a href="https://www.sfu.ca/students/calendar/2022/fall/courses/ca/130.html">CA
-130</a>)</strong><span class="course-info">Fall ’22</span></li>
-<li><strong>The History and Aesthetics of Cinema (<a href="https://www.sfu.ca/students/calendar/2022/fall/courses/ca/136.html">CA
-136</a>)</strong><span class="course-info">Fall ’22</span></li>
-<li><strong>Audio Media Analysis (<a href="https://www.sfu.ca/students/calendar/2022/spring/courses/cmns.html">CMNS
-257</a>)</strong><span class="course-info">Spring ’22</span></li>
-<li><strong>Sound Design (<a href="https://www.sfu.ca/outlines.html?2020/spring/iat/340/d100">IAT
-340</a>)</strong><span class="course-info">Spring ’20</span></li>
-<li><strong>Selected Topics in Art and Culture Studies: Sonic Fiction
-(<a href="https://www.sfu.ca/students/calendar/2019/fall/courses/ca/312.html">CA
-312</a>)</strong><span class="course-info">Fall ’19</span></li>
-<li><strong>Music After 1900 (<a href="https://www.sfu.ca/students/calendar/2017/fall/courses/ca/140.html">CA
-140</a>)</strong><span class="course-info">Summer ’17, Fall
-’16</span></li>
-</ul>
+<dl>
+<div class="led-row"><dt>2022–23</dt>
+<dd>
+<strong>Filmmaking I (<a href="https://www.sfu.ca/students/calendar/2023/spring/courses/ca/131.html">CA
+131</a>)</strong><span class="course-info">Spring ’23, ’22</span>
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+<strong>Digital Media Communication Techniques (<a href="https://www.sfu.ca/students/calendar/2022/fall/courses/cmns/226.html">CMNS
+226</a>)</strong><span class="course-info">Fall ’22</span>
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+<strong>Fundamentals of Film (<a href="https://www.sfu.ca/students/calendar/2022/fall/courses/ca/130.html">CA
+130</a>)</strong><span class="course-info">Fall ’22</span>
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+<strong>The History and Aesthetics of Cinema (<a href="https://www.sfu.ca/students/calendar/2022/fall/courses/ca/136.html">CA
+136</a>)</strong><span class="course-info">Fall ’22</span>
+</dd></div>
+<div class="led-row"><dt>2022</dt>
+<dd>
+<strong>Audio Media Analysis (<a href="https://www.sfu.ca/students/calendar/2022/spring/courses/cmns.html">CMNS
+257</a>)</strong><span class="course-info">Spring ’22</span>
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+<strong>Sound Design (<a href="https://www.sfu.ca/outlines.html?2020/spring/iat/340/d100">IAT
+340</a>)</strong><span class="course-info">Spring ’20</span>
+</dd></div>
+<div class="led-row"><dt>2019</dt>
+<dd>
+<strong>Selected Topics in Art and Culture Studies: Sonic Fiction (<a href="https://www.sfu.ca/students/calendar/2019/fall/courses/ca/312.html">CA
+312</a>)</strong><span class="course-info">Fall ’19</span>
+</dd></div>
+<div class="led-row"><dt>2016–17</dt>
+<dd>
+<strong>Music After 1900 (<a href="https://www.sfu.ca/students/calendar/2017/fall/courses/ca/140.html">CA
+140</a>)</strong><span class="course-info">Summer ’17, Fall ’16</span>
+</dd></div>
+</dl>
 <h3 id="teaching-role-sfu-synchronous-assistant">Teaching assistant,
 online synchronous</h3>
-<ul>
-<li><strong>Introduction to Cinema (<a href="https://www.sfu.ca/students/calendar/2021/summer/courses/ca/135.html">CA
-135</a>)</strong><span class="course-info">Summer ’21</span></li>
-<li><strong>Music Composition and Theory (<a href="https://www.sfu.ca/students/calendar/2021/spring/courses/ca.html">CA
+<dl>
+<div class="led-row"><dt>2021</dt>
+<dd>
+<strong>Introduction to Cinema (<a href="https://www.sfu.ca/students/calendar/2021/summer/courses/ca/135.html">CA
+135</a>)</strong><span class="course-info">Summer ’21</span>
+</dd></div>
+<div class="led-row"><dt>2020–21</dt>
+<dd>
+<strong>Music Composition and Theory (<a href="https://www.sfu.ca/students/calendar/2021/spring/courses/ca.html">CA
 146/246/346</a>)</strong><span class="course-info">Fall ’20, Spring
-’21</span></li>
-</ul>
+’21</span>
+</dd></div>
+</dl>
 <h3 id="teaching-role-sfu-asynchronous-assistant">Teaching assistant,
 online asynchronous</h3>
-<ul>
-<li><strong>Contexts in Creative Music &amp; Sound (<a href="https://www.sfu.ca/students/calendar/2023/summer/courses/ca/140.html">CA
-140</a>)</strong><span class="course-info">Summer ’23, Fall
-’22</span></li>
-<li><strong>Film Music (<a href="https://www.sfu.ca/students/calendar/2021/summer/courses/ca/386.html">CA
-386</a>)</strong><span class="course-info">Summer ’21</span></li>
-<li><strong>20th Century Music Appreciation (<a href="https://www.sfu.ca/students/calendar/2020/summer/courses/ca/142.html">CA
-142</a>)</strong><span class="course-info">Summer ’20</span></li>
-<li><strong>Music Fundamentals (<a href="https://www.sfu.ca/students/calendar/2022/summer/courses/ca/104.html">CA
+<dl>
+<div class="led-row"><dt>2022–23</dt>
+<dd>
+<strong>Contexts in Creative Music &amp; Sound (<a href="https://www.sfu.ca/students/calendar/2023/summer/courses/ca/140.html">CA
+140</a>)</strong><span class="course-info">Summer ’23, Fall ’22</span>
+</dd></div>
+<div class="led-row"><dt>2016–22</dt>
+<dd>
+<strong>Music Fundamentals (<a href="https://www.sfu.ca/students/calendar/2022/summer/courses/ca/104.html">CA
 104</a>)</strong><span class="course-info">Summer ’22 &amp; ’21, Spring
-’20, Fall ’19, Spring ’17, Summer ’16</span></li>
-</ul>
+’20, Fall ’19, Spring ’17, Summer ’16</span>
+</dd></div>
+<div class="led-row"><dt>2021</dt>
+<dd>
+<strong>Film Music (<a href="https://www.sfu.ca/students/calendar/2021/summer/courses/ca/386.html">CA
+386</a>)</strong><span class="course-info">Summer ’21</span>
+</dd></div>
+<div class="led-row"><dt>2020</dt>
+<dd>
+<strong>20th Century Music Appreciation (<a href="https://www.sfu.ca/students/calendar/2020/summer/courses/ca/142.html">CA
+142</a>)</strong><span class="course-info">Summer ’20</span>
+</dd></div>
+</dl>
 <h2 id="teaching-alexander">Alexander College</h2>
 <h3 id="teaching-role-alexander-presential-instructor">Instructor of
 record, presential</h3>
-<ul>
-<li><strong>Social Movements and Social Change (SOCI 220)</strong><span class="course-info">Spring ’26, 31 students; Fall ’25, 35
-students</span></li>
-<li><strong>Sociology of Popular Culture (SOCI 230)</strong><span class="course-info">Winter ’26, 32 students</span></li>
-<li><strong>Cultural Industries: Canada and the World (CMNS
-230)</strong><span class="course-info">Winter ’26, 32
-students</span></li>
-<li><strong>Introduction to New Media and ICTs (CMNS 253)</strong><span class="course-info">Fall ’25, 35 students; Spring ’25, 2 sections, 64
+<dl>
+<div class="led-row"><dt>2026</dt>
+<dd>
+<strong>Sociology of Popular Culture (SOCI 230)</strong><span class="course-info">Winter ’26, 32 students</span>
+</dd></div>
+<div class="led-row"><dt>2026</dt>
+<dd>
+<strong>Cultural Industries: Canada and the World (CMNS
+230)</strong><span class="course-info">Winter ’26, 32 students</span>
+</dd></div>
+<div class="led-row"><dt>2025–26</dt>
+<dd>
+<strong>Social Movements and Social Change (SOCI 220)</strong><span class="course-info">Spring ’26, 31 students; Fall ’25, 35
+students</span>
+</dd></div>
+<div class="led-row"><dt>2023–25</dt>
+<dd>
+<strong>Introduction to New Media and ICTs (CMNS 253)</strong><span class="course-info">Fall ’25, 35 students; Spring ’25, 2 sections, 64
 students; Fall ’24, 35 students; Spring ’24, 2 sections, 70 students;
-Spring ’23, 35 students</span></li>
-<li><strong>Communication and Social Change (CMNS 130)</strong><span class="course-info">Spring ’25, 34 students; Winter ’25, 2 sections, 57
+Spring ’23, 35 students</span>
+</dd></div>
+<div class="led-row"><dt>2023–25</dt>
+<dd>
+<strong>Communication and Social Change (CMNS 130)</strong><span class="course-info">Spring ’25, 34 students; Winter ’25, 2 sections, 57
 students; Spring ’24, 35 students; Winter ’24, 2 sections, 69 students;
-Fall ’23, 2 sections, 70 students; Spring ’23, 35 students</span></li>
-<li><strong>Introduction to Communication Studies (CMNS
-110)</strong><span class="course-info">Fall ’24, 2 sections, 61
-students</span></li>
-</ul>
+Fall ’23, 2 sections, 70 students; Spring ’23, 35 students</span>
+</dd></div>
+<div class="led-row"><dt>2024</dt>
+<dd>
+<strong>Introduction to Communication Studies (CMNS 110)</strong><span class="course-info">Fall ’24, 2 sections, 61 students</span>
+</dd></div>
+</dl>
 <h3 id="teaching-role-alexander-developer">Consultant course
 developer</h3>
-<ul>
-<li><strong>Inclusive Interpersonal Communications (CMNS
-2XX)</strong><span class="course-info">Developed Summer ’24</span></li>
-</ul>
+<dl>
+<div class="led-row"><dt>2024</dt>
+<dd>
+<strong>Inclusive Interpersonal Communications (CMNS 2XX)</strong><span class="course-info">Developed Summer ’24</span>
+</dd></div>
+</dl>
 <h2 id="mentorship-and-tutoring">Mentorship and Tutoring</h2>
 <dl>
 <div class="led-row"><dt>2025</dt>
 <dd>
-Mentor, Faculty of Communication, Art, and Technology mentorship program
+Mentor, Faculty of Communication, Art and Technology mentorship program
 (SFU).
 </dd></div>
 <div class="led-row"><dt>2006–18</dt>
@@ -866,7 +967,7 @@ Experience</h1>
 <div class="led-row"><dt>2023–24</dt>
 <dd>
 “Reading Modalities: Conditions of Interface Between Student and Text.”
-<em>Funding:</em> Transforming Inquiry into Teaching and Learning, Simon
+<em>Funding:</em> Transforming Inquiry into Learning and Teaching, Simon
 Fraser University. <em>Principal investigator:</em> Eldritch Priest. As
 a collaborator, I analyzed student experience data.
 </dd></div>
@@ -897,6 +998,11 @@ musical emotion literature.
 <h1 id="service">Service</h1>
 <h2 id="to-the-profession">To the Profession</h2>
 <dl>
+<div class="led-row"><dt>2026–</dt>
+<dd>
+Editorial review board member: <em>Loading…: The Journal of the Canadian
+Game Studies Association</em>.
+</dd></div>
 <div class="led-row"><dt>2015–26</dt>
 <dd>
 Peer review: <em>New Media and Society</em>, <em>Continuum</em>,
@@ -958,7 +1064,7 @@ Chair, Graduate Student Caucus, School for the Contemporary Arts, SFU.
 <dl>
 <div class="led-row"><dt>2018</dt>
 <dd>
-Host, <em>The Arts Rational</em>, CFRO 100.5 FM Vancouver Co-op Radio.
+Host, <em>Arts Rational</em>, CFRO 100.5 FM Vancouver Co-op Radio.
 </dd></div>
 <div class="led-row"><dt>2017–18</dt>
 <dd>
@@ -1019,7 +1125,7 @@ July 28.
 <dd>
 <em>Follow Turtle Chase Leaf</em>, for chamber ensemble Ecstatic Waves,
 30m, 240 Northern Street, Vancouver, June 23; reworked as <em>Around the
-House</em> for chamber ensemble, 11m, Boca da Lupo, Vancouver, October
+House</em> for chamber ensemble, 11m, Boca del Lupo, Vancouver, October
 13.
 </dd></div>
 <div class="led-row"><dt>2017</dt>
@@ -1237,7 +1343,7 @@ The James Black Gallery, Vancouver, October–November.
 <dd>
 BC motion picture industry: craftsperson (IATSE 891 permittee lamp
 operator, set dresser, construction labourer) &amp; production assistant
-(Director’s Guild of Canada BC permittee locations production assistant
+(Directors Guild of Canada BC permittee locations production assistant
 and van driver).
 </dd></div>
 <div class="led-row"><dt>2019</dt>
