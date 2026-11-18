@@ -1,6 +1,6 @@
 # Sources of the Musebots studio's binaries
 
-Built 2026-11-18T10:11:11.022Z by `scripts/build-studio.mjs`. Laid beside the page by `scripts/build-live-site.mjs` as the repository has them, under `public/`, `experiments/` and `registry/`: its scripts minified, each under its notice.
+Built 2026-11-18T14:59:43.306Z by `scripts/build-studio.mjs`. Laid beside the page by `scripts/build-live-site.mjs` as the repository has them, under `public/`, `experiments/` and `registry/`: its scripts minified, each under its notice.
 
 | File | What it is | Licence | Source |
 | --- | --- | --- | --- |
