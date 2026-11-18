@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+import{scoreCore as e,scoreCoreReady as s}from"./score-core.js";const a=(r,{performed:o=!1}={})=>o?e().readPerformed(r):e().readScore(r),p=r=>e().parseXML(r);export{a as musicXMLToScore,p as parseXML,s as scoreCoreReady};

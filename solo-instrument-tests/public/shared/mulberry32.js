@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+function u(r){let e=r>>>0;return()=>{e=e+1831565813>>>0;let t=e;return t=Math.imul(t^t>>>15,t|1),t^=t+Math.imul(t^t>>>7,t|61),((t^t>>>14)>>>0)/2**32}}export{u as mulberry32};

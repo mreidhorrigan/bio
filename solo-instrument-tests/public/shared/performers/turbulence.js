@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+import{playerEntry as r}from"../../../registry/registry.js";function u(e){let t;try{t=r(e,"flow.turbulence")}catch{return null}return{value:t.value,unit:t.unit,kind:t.kind,what:"its flow's turbulent fluctuation, a share of the flow per root hertz"}}const l=e=>u(e)?.value??null;export{u as turbulenceEntry,l as turbulenceOf};

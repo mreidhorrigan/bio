@@ -1,0 +1,47 @@
+Solo Instrument Tests (Musebots)
+
+Terms and licences
+
+Copyright (c) 2026 M. Reid Horrigan. All rights reserved.
+
+These terms apply to this site's folder and everything in it, whatever licence the website or the repository that holds it gives its other contents.
+
+What is reserved
+
+This site and everything served from it, other than the parts listed under "Parts under their own licences" below, are M. Reid Horrigan's own work: the page and its
+code; the Musebots - the bots, their planning and scoring cores, and the studio that composes, engraves and plays a piece; each instrument's body, its player's settings and
+every other data file; and the text.
+
+You may open the site in a web browser and use it there. No other permission is given. In particular, without M. Reid Horrigan's written permission you may not:
+
+ - copy, host, redistribute, sublicense or sell them, in whole or in part;
+
+ - modify them or make works derived from them;
+
+ - decompile, disassemble or otherwise reverse engineer them, except to the extent the law allows this whatever a licence says;
+
+ - use them, or any part of them, to train, fine-tune, evaluate or otherwise develop a machine-learning or artificial-intelligence model or system, or include them in a dataset made for that;
+
+ - crawl, scrape or mine them by automated means. Text and data mining rights are expressly reserved, including under Article 4(3) of Directive (EU) 2019/790; each page says so to machines (tdm-reservation: 1, robots: noai, noimageai).
+
+Parts under their own licences
+
+The physical models that sound here are built on free software, and stay free. Each engine, together with the code linked with it in its own Worker, is published under the
+GNU General Public License, version 3 or later (sources/GPL-3.0.txt): you may use, study, change and pass on those parts under that licence, and nothing above restricts
+that. Their complete source is in sources/; SOURCES.html and SOURCES-band.txt say which files they are, file by file.
+
+ - The winds' engine: OpenWInD's scheme (Inria), in Rust for WebAssembly. GPL-3.0-or-later.
+
+ - The bowed strings' engine: Artifastring (G. Percival), GPL-3.0-or-later, with FFTW (GPL-2.0-or-later) and Eigen (MPL-2.0).
+
+ - The code that plays each of them in its Worker. GPL-3.0-or-later.
+
+ - In the Band: LilyPond in WebAssembly (GPL-3.0-or-later), which engraves the score as a program of its own; LAME (LGPL-2.0); NESS (MIT); the Synthesis ToolKit (its own MIT-style licence); JZZ and fflate (MIT).
+
+ - coi-serviceworker (MIT); the num-bigint and num-integer crates (MIT or Apache-2.0).
+
+These are separate works. Their being served beside M. Reid Horrigan's own gives no licence to anything else here, and M. Reid Horrigan's terms take nothing from the rights their licences give you.
+
+No warranty
+
+The site is provided as it is, without warranty of any kind.

@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="tdm-reservation" content="1">
+<meta name="copyright" content="Copyright 2026 M. Reid Horrigan. All rights reserved.">
+<link rel="license" href="LICENSE.html">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Solo Instrument Tests: Sources</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;max-width:60rem;margin:0 auto;padding:16px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #8884;padding:6px 8px;text-align:left;vertical-align:top}code{font-size:.92em;overflow-wrap:anywhere}</style>
+</head>
+<body>
+<h1>Sources of the solo instrument tests</h1>
+<p>Built 2026-11-18T04:26:20.266Z from the Musebots repository at 02f86740b0bdc565438bd02ea4866cb2de6953d7 as committed there.
+This page says, file by file, what each part of the site is, under which licence it is here, and where its source is. The terms are in <a href="LICENSE.html"><code>LICENSE.html</code></a>.</p>
+<p>Two kinds of file are here. An <b>engine's program</b> is a physical model published under the GNU General Public License together with the code that is linked
+with it in its own Worker: you may use, change and pass it on under that licence, and its complete source is in <code>sources/</code>, with the licence's text
+(<a href="sources/GPL-3.0.txt"><code>sources/GPL-3.0.txt</code></a>). <b>Everything else</b> &ndash; the page, the band of bots and their cores, the studio, each instrument's body and its player's settings
+&ndash; is M. Reid Horrigan's own, exchanges only messages and data with the engines, and is not offered under any open licence: its source is not published.</p>
+<table>
+<tr><th>File</th><th>What it is</th><th>Licence</th><th>Source</th></tr>
+<tr><td><code>openwind-threads.wasm.gz</code>, <code>openwind.wasm.gz</code></td><td>OpenWInD's scheme (Inria) as the Musebots streaming player for winds, built for WebAssembly with and without threads (Rust's wasm32-wasip1-threads and wasm32-unknown-unknown, SIMD128)</td><td>GPL-3.0-or-later (its crate's)</td><td><a href="sources/openwind-engine.tar.gz"><code>sources/openwind-engine.tar.gz</code></a></td></tr>
+<tr><td><code>strings-live.js</code>, <code>strings-live.wasm.gz</code></td><td>Artifastring (G. Percival) as Musebots patch it, played by the Musebots live host (<code>native/strings-model/musebots-strings-live.cpp</code>), with FFTW 3.3.10 single precision and Eigen 5.0.1's headers, built for WebAssembly by Emscripten 6.0.12</td><td>GPL-3.0-or-later (Artifastring's; FFTW's GPL-2.0-or-later taken under it; Eigen's MPL-2.0)</td><td><a href="sources/strings-engine.tar.gz"><code>sources/strings-engine.tar.gz</code></a>, <a href="sources/dial-engines-code.tar.gz"><code>sources/dial-engines-code.tar.gz</code></a>; FFTW 3.3.10: <a href="sources/fftw-3.3.10.tar.gz"><code>sources/fftw-3.3.10.tar.gz</code></a> (sha256 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467), built <code>--enable-float --disable-shared</code> by Emscripten; Eigen 5.0.1: <a href="https://gitlab.com/libeigen/eigen/-/releases/5.0.1">gitlab.com/libeigen/eigen</a>, unchanged</td></tr>
+<tr><td><code>dial-worker.js</code>, <code>strings-worker.js</code>, <code>openwind-thread.js</code>, <code>soloist/soloist.js</code>, <code>soloist/strings.js</code></td><td>the dials: what plays each engine in its own Worker, with each dial's musebot player's line, bundled and minified by esbuild 0.28.1 from the 152 files packed in <code>sources/dial-engines-code.tar.gz</code> (<code>node scripts/build-engine-bundles.mjs --out DIR</code> there makes them again)</td><td>GPL-3.0-or-later, as linked with the engines</td><td><a href="sources/dial-engines-code.tar.gz"><code>sources/dial-engines-code.tar.gz</code></a></td></tr>
+<tr><td><code>index.html</code>, <code>live.js</code>, <code>coi-settings.js</code>, <code>soloist/composer.js</code></td><td>the page; and the band of bots that composes a piece for a dial's musebot, in a Worker of its own, asked by message and answering with the piece's notes</td><td>&copy; 2026 M. Reid Horrigan, all rights reserved (<a href="LICENSE.html"><code>LICENSE.html</code></a>)</td><td>not published</td></tr>
+<tr><td><code>wasm/midi2.wasm</code></td><td>MIDI 2.0's core in Rust: clip files read and written, MIDI 1.0 translated, a line's notes traced</td><td>the Musebots project's, conveyed here with the engines it is loaded beside: GPL-3.0-or-later</td><td><a href="sources/dial-engines-code.tar.gz"><code>sources/dial-engines-code.tar.gz</code></a></td></tr>
+<tr><td><code>wasm/body-view/body_view.wasm</code></td><td>the view of a wind's shape in three dimensions: its mesh, camera and picking in Rust, no dependencies</td><td>&copy; 2026 M. Reid Horrigan, all rights reserved (<a href="LICENSE.html"><code>LICENSE.html</code></a>)</td><td>not published</td></tr>
+<tr><td><code>wasm/musical-core/musical_core.wasm</code></td><td>the bots' planning core in Rust, with the num-bigint and num-integer crates</td><td>&copy; 2026 M. Reid Horrigan, all rights reserved (<a href="LICENSE.html"><code>LICENSE.html</code></a>); num-bigint and num-integer &copy; The Rust Project Developers, MIT or Apache-2.0</td><td>not published</td></tr>
+<tr><td><code>wasm/score-core/score_core.wasm</code></td><td>the MusicXML reader and the scores' timing in Rust, with the num-bigint crate</td><td>&copy; 2026 M. Reid Horrigan, all rights reserved (<a href="LICENSE.html"><code>LICENSE.html</code></a>); num-bigint &copy; The Rust Project Developers, MIT or Apache-2.0</td><td>not published</td></tr>
+<tr><td><code>coi-serviceworker.js</code></td><td>coi-serviceworker 0.1.7 (G. Zuidhof and contributors): the page's cross-origin isolation, a static host sending no headers</td><td>MIT (<a href="coi-serviceworker-LICENSE.txt"><code>coi-serviceworker-LICENSE.txt</code></a>)</td><td><a href="https://github.com/gzuidhof/coi-serviceworker">github.com/gzuidhof/coi-serviceworker</a></td></tr>
+<tr><td><code>winds/&lt;instrument&gt;/</code></td><td>each instrument's body and its player's settings: data the winds' engine is given, gzipped</td><td>&copy; 2026 M. Reid Horrigan, all rights reserved (<a href="LICENSE.html"><code>LICENSE.html</code></a>)</td><td>data, as it is</td></tr>
+<tr><td><code>strings/manifest.json.gz</code></td><td>what the strings' dial measures beforehand: the monitor's gains, Artifastring's variants, the started note's bowing</td><td>&copy; 2026 M. Reid Horrigan, all rights reserved (<a href="LICENSE.html"><code>LICENSE.html</code></a>)</td><td>data, as it is</td></tr>
+</table>
+<p>The page's Band is the Musebots studio, served under <code>public/</code>, <code>experiments/</code> and <code>registry/</code>: its engines' Workers (<code>public/studio/engines/</code>) and binaries are engines' programs, each with its licence and source in <a href="SOURCES-band.txt"><code>SOURCES-band.txt</code></a>; the rest of it is M. Reid Horrigan's own, as above.</p>
+</body>
+</html>

@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+const n=2.1,o=1,e=r=>{const t=typeof r=="string"?/^bar:(\d{1,9})$/.exec(r):null;return t?Number(t[1]):null},a=r=>`bar:${Math.max(0,Math.floor(Number(r)||0))}`;export{n as METER_NOTICE_SECONDS,o as TEMPO_NOTICE_SECONDS,a as atBar,e as whenBar};

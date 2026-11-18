@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+const e=Object.freeze([["maxima",8],["long",4],["breve",2],["whole",1],["half",.5],["quarter",.25],["eighth",.125],["16th",.0625],["32nd",.03125],["64th",.015625],["128th",.0078125],["256th",.00390625],["512th",.001953125],["1024th",.0009765625]].map(Object.freeze));export{e as NOTE_TYPES};

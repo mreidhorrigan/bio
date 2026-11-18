@@ -1,0 +1,17 @@
+# Sources of the Musebots studio's binaries
+
+Built 2026-11-13T05:52:25.727Z by `scripts/build-studio.mjs`. Laid beside the page by `scripts/build-live-site.mjs` as the repository has them, under `public/`, `experiments/` and `registry/`: its scripts minified, each under its notice.
+
+| File | What it is | Licence | Source |
+| --- | --- | --- | --- |
+| `public/studio/build/openwind.wasm` | OpenWInD's scheme, the Musebots streaming player for woodwinds | GPL-3.0-or-later (its crate's) | `sources/openwind-engine.tar.gz` |
+| `public/studio/build/strings.mjs`, `strings.wasm` | Artifastring (GPL-3.0) as Musebots patch it, the Musebots render driver, FFTW 3.3.10 (GPL-2.0-or-later) | GPL-3.0 | `sources/strings-driver.tar.gz`, `sources/artifastring-patched-and-generated.tar.gz`; FFTW 3.3.10: https://www.fftw.org/fftw-3.3.10.tar.gz (sha256 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467), built `--enable-float --disable-shared` by Emscripten 6.0.12 |
+| `public/studio/build/ness.mjs`, `ness.wasm` | NESS's framework (MIT) with Musebots' patches (slide, inward lips, woodwind, bowed) | MIT | `sources/ness-with-musebots-patches.tar.gz`, `sources/ness-wasm-shim.tar.gz` |
+| `public/studio/build/mp3.mjs`, `mp3.wasm` | LAME 4.0 (LGPL-2.0) and the Musebots encoder wrapper | LGPL-2.0 | `sources/mp3-encoder.tar.gz`; LAME 4.0: https://downloads.sourceforge.net/project/lame/lame/4.0/lame-4.0.tar.gz (sha256 3df5124d5ad3a98312ffd7ba6a9b36230e4f8a3e66d3ce0f425e336c32d216eb), built `--disable-shared --disable-frontend --disable-decoder` by Emscripten 6.0.12 |
+| `public/studio/build/stk.mjs`, `stk.wasm` | STK 5.0.1, the Synthesis ToolKit (P. R. Cook & G. P. Scavone), its waveguides with Musebots' patch (the flute's output gain, the brass's rate constants) | STK's own, MIT-style (`public/studio/build/stk-LICENSE.txt`) | `sources/stk-player.tar.gz`; STK: https://github.com/thestk/stk at 1cb2c81d04922b6337073ecb44d83bf2208690f5 |
+| `public/vendor/lilypond-wasm/` | LilyPond in WebAssembly (@sightread/lilypond-wasm 0.2.0) | GPL-3.0-or-later and its fonts' (its `LICENSE`, `licenses/`) | its package's own (`public/vendor/lilypond-wasm/FETCHED.json`) |
+| `public/studio/engines/` | the engines' Workers: what plays each engine above in a Worker of its own, with what it imports | GPL-3.0-or-later, as linked with the engines | `sources/studio-engines.tar.gz` |
+| `public/studio/build/render.js` | the renderer's share for the page, bundled by esbuild (with JZZ, MIT: https://github.com/jazz-soft/JZZ) | the Musebots project's own, all rights reserved | not published |
+| the rest of the studio | the page, the bots and their cores, the score's and the mix's code, each instrument's body and data | the Musebots project's own, all rights reserved | not published |
+
+How to build: `node scripts/build-studio.mjs` (`sources/build-scripts.tar.gz`), Emscripten 6.0.12, Rust's wasm32-unknown-unknown with SIMD128.

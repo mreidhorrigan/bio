@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+const r=2166136261,N=16777619,c=4294967296;function e(F,o=2166136261){let t=o;for(const n of F)t^=n.charCodeAt(0),t=Math.imul(t,16777619)>>>0;return t}export{r as FNV_OFFSET,N as FNV_PRIME,c as FNV_SPAN,e as fnv1a};

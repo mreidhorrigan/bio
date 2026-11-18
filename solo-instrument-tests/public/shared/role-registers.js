@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+const e=Object.freeze({bass:Object.freeze([31,36,43,48]),lines:Object.freeze([60,64,67,72]),poly:Object.freeze([48,55,60,64])}),s=Object.freeze({bass:"bass",keys:"poly",texture:"poly",lead:"lines"});export{s as GROUP_ROLES,e as ROLE_REGISTERS};

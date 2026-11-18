@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+let e=null;function o(t){if(t!==null&&typeof t?.stream!="function")throw new TypeError("A beat tracker opens streams: {stream({sampleRate, windowSeconds})}");const n=e;return e=t,()=>{e===t&&(e=n)}}const r=()=>e;export{r as beatTracker,o as installBeatTracker};

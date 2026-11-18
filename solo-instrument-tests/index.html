@@ -1,0 +1,300 @@
+<!doctype html>
+<!-- Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noai, noimageai">
+<meta name="tdm-reservation" content="1">
+<meta name="copyright" content="Copyright 2026 M. Reid Horrigan. All rights reserved.">
+<link rel="license" href="LICENSE.html">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script id="afresh">try{const e=performance.getEntriesByType("navigation")[0]?.type==="reload",t=Date.now()-Number(sessionStorage.getItem("coi-reloaded"))<1e4,o=new URLSearchParams(location.search).get("instrument");window.reloadedAfresh=e&&!t,e&&!t&&history.replaceState(history.state,"",`${location.pathname}${o?`?instrument=${encodeURIComponent(o)}`:""}${location.hash}`)}catch{}</script>
+<script src="coi-settings.js"></script>
+<script src="coi-serviceworker.js"></script>
+<title>Solo Instrument Tests</title>
+<style>:root{color-scheme:light;--bg:#ffffff;--paper:#ffffff;--ground:#f1edf7;--wash:#f7f6f8;--fg:#1a1a1a;--ink:#1a1a1a;--muted:#595959;--line:#d9d9d9;--line-strong:#bdbdbd;--accent:#5b2a86;--accent-strong:#46206a;--accent-ink:#ffffff;--accent-wash:#f1ebf8;--hover:#c3f0ff;--ok:#287e2c;--teal:#2a8186;--warn:#b2241a;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--hand-title:600 26px/1.15 var(--serif);--hand-part:600 15px/1.3 var(--serif);--hand-box:italic 600 14px/1.3 var(--serif);--leaf:3px;--leaf-lg:4px;--leaf-sm:2px;--popup-shadow:0 6px 18px rgba(0,0,0,.12)}:root{--bob:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 20'%3E%3Cpath d='M4.2 1h5.6l3.5 18H.7z' fill='%23fff' stroke='%231a1a1a' stroke-width='1.1' stroke-linejoin='round'/%3E%3Cpath d='M7 2.5v15' stroke='%231a1a1a' stroke-width='.9'/%3E%3Cpath d='M2.6 10h8.8' stroke='%231a1a1a' stroke-width='.5'/%3E%3C/svg%3E");--bob-held:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 20'%3E%3Cpath d='M4.2 1h5.6l3.5 18H.7z' fill='%23f1ebf8' stroke='%231a1a1a' stroke-width='1.1' stroke-linejoin='round'/%3E%3Cpath d='M7 2.5v15' stroke='%231a1a1a' stroke-width='.9'/%3E%3Cpath d='M2.6 10h8.8' stroke='%231a1a1a' stroke-width='.5'/%3E%3C/svg%3E");--rod:linear-gradient(var(--ink),var(--ink)) left center/1px 9px no-repeat,linear-gradient(var(--ink),var(--ink)) right center/1px 9px no-repeat,linear-gradient(var(--ink),var(--ink)) center/100% 1px no-repeat}@layer house{body{background:var(--bg);color:var(--fg);font:15px/1.45 var(--sans)}h1{font:var(--hand-title);letter-spacing:.01em}::selection{background:var(--hover);color:#000}a{color:var(--accent);text-underline-offset:2px}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:0 0 0 5px var(--hover)}input[type=checkbox],input[type=radio]{accent-color:var(--ink)}input[type=range]{-webkit-appearance:none;appearance:none;height:26px;background:transparent;cursor:pointer;margin:0;padding:0}input[type=range]:disabled{opacity:.45;cursor:default}input[type=range]::-webkit-slider-runnable-track{height:26px;background:var(--rod)}input[type=range]::-moz-range-track{height:26px;background:var(--rod)}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:24px;margin-top:1px;border:0;border-radius:0;background:var(--bob) center/contain no-repeat}input[type=range]::-moz-range-thumb{width:16px;height:24px;border:0;border-radius:0;background:var(--bob) center/contain no-repeat}input[type=range]:active::-webkit-slider-thumb{background-image:var(--bob-held)}input[type=range]:active::-moz-range-thumb{background-image:var(--bob-held)}input[type=range]:focus-visible{outline:none;box-shadow:none}input[type=range]:focus-visible::-webkit-slider-thumb{filter:drop-shadow(0 0 2px var(--accent))}input[type=range]:focus-visible::-moz-range-thumb{filter:drop-shadow(0 0 2px var(--accent))}}</style>
+<style>:root{--strings:var(--teal);--on:var(--ink);--bore:#8a8a86;--sum:var(--ink);--measured:rgba(89,89,89,.12);--harm:rgba(91,42,134,.55);--players:rgba(40,126,44,.55);--computed:var(--teal)}body{margin:0 auto;padding:16px;max-width:860px;position:relative}@media(min-width:1100px){body{max-width:1240px}}h1{margin:10px 0 2px}.muted{color:var(--muted);font-size:13px}body>h2{font:var(--hand-part);font-variant:small-caps;letter-spacing:.06em;color:var(--ink);margin:30px 0 0;padding-top:8px;border-top:3px solid var(--ink)}body>h2+.muted{margin:2px 0 0}#sections{position:sticky;top:0;z-index:2;background:var(--bg);margin:12px -16px 0;padding:6px 16px 2px;border-bottom:1px solid var(--ink);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;column-gap:16px}#sections .parts{grid-column:1;grid-row:1}#sections .folds{grid-column:2;grid-row:1}#sections .boxes{grid-column:1/-1;grid-row:2}#sections div{display:flex;gap:0 16px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}#sections div::-webkit-scrollbar{display:none}#sections a{color:var(--muted);text-decoration:none;font-size:13px;padding:3px 0 4px;border-bottom:2px solid transparent}#sections a:hover{color:var(--fg)}#sections a[aria-current]{color:var(--fg);border-bottom-color:var(--ink)}#sections .parts a{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}#sections .boxes:empty{display:none}#sections div.more{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent)}h2,fieldset{scroll-margin-top:calc(var(--bar,64px) + 10px)}fieldset{border:1px solid var(--line);border-radius:var(--leaf-lg);margin:14px 0;padding:10px 14px;min-width:0;background:var(--paper)}legend{color:var(--ink);font:var(--hand-box);padding:0 6px}fieldset.bare{border:0;padding:0;margin:0;background:none}fieldset.bare:disabled{opacity:.45}@media(min-width:1100px){fieldset.bare.w-controls:not([hidden]),body>div[data-family]:not([hidden]):not(.musebot){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px;align-items:start}fieldset.bare.w-controls>:not(fieldset),body>div[data-family]>:not(fieldset),body>div[data-family]>fieldset.bare,fieldset.wide{grid-column:1/-1}fieldset.bare.w-controls>fieldset,body>div[data-family]>fieldset{width:100%;box-sizing:border-box}}.row{display:grid;grid-template-columns:170px 1fr 104px;gap:10px;align-items:center;margin:8px 0}.row label{font-size:14px}.row input[type=range]{width:100%}.track{display:block;position:relative;padding-bottom:16px}.track input[type=range]{display:block;margin:0;position:relative;z-index:1}.players{position:absolute;left:0;right:0;bottom:0;height:16px}.players i{position:absolute;top:0;height:5px;box-sizing:border-box;border:1px solid var(--ink);border-top:0}.players i.tick{width:0;height:0;border:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:6px solid var(--ink);margin-left:-4px}.players b{position:absolute;top:-16px;height:5px;box-sizing:border-box;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);background:var(--paper)}.players small{position:absolute;top:6px;left:0;font-size:10.5px;line-height:1.2;color:var(--muted);white-space:nowrap}.players .computed u{position:absolute;top:-19px;height:24px;border-left:1px dashed var(--ink)}.players small.computed{left:auto;right:0;color:var(--ink);font-style:italic}input[type=number],select{width:104px;box-sizing:border-box;font:inherit;background:var(--paper);color:var(--fg);border:1px solid var(--line);border-radius:var(--leaf-sm);padding:2px 4px;font-variant-numeric:tabular-nums}#instrument,#w-note{width:100%;max-width:260px}.note{color:var(--muted);font-size:12px;margin:-4px 0 6px 180px}button{font:inherit;padding:8px 14px;border-radius:var(--leaf);border:1px solid var(--ink);background:var(--paper);color:var(--fg);cursor:pointer;margin:4px 6px 4px 0}button:hover{background:var(--accent-wash)}button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}button:disabled{opacity:.5;cursor:default}button.big{font-size:18px;padding:12px 26px;font-weight:600;min-width:8.5em}.duo{display:grid;grid-template-columns:repeat(2,minmax(0,17em));gap:4px 14px;margin:10px 0 6px}.duo button.big{width:100%;margin:0}.duo .muted{margin-top:4px}.also{margin:4px 0 0}@media(max-width:560px){.duo{grid-template-columns:1fr 1fr}.duo button.big{font-size:15px;padding:10px 6px;min-width:0;white-space:nowrap}}.meter{height:4px;background:linear-gradient(var(--line),var(--line)) center/100% 1px no-repeat;overflow:hidden;margin:10px 0 4px}.meter div{height:100%;width:0;background:var(--ink);transition:width 60ms linear}[data-family=strings] .meter div{background:var(--strings)}.row.param.held label{font-weight:600}table{border-collapse:collapse;font-size:14px;width:100%;table-layout:fixed}td{padding:2px 12px 2px 0;vertical-align:top;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}td:first-child{color:var(--muted);width:110px}table.reading td{white-space:normal}table.reading td:first-child{width:220px}.readouts td{font-variant-numeric:tabular-nums}#status{min-height:2.9em;font-size:14px;margin:4px 0}#status.failed{color:var(--warn)}.said{color:var(--warn);font-size:13px;min-height:2.9em}.soloSaid{min-height:2.9em}.duo button.render{width:100%;margin:8px 0 0}.rendered .meter div{background:var(--muted)}.rendered audio{display:block;width:100%;max-width:34em;margin:6px 0 2px}.rendered a{font-size:14px}.row.drawn input[type=range],.row.drawn input[type=number]{opacity:.5}.musebotNote{margin:0 0 6px}#settingsSaid{font-size:13px;min-height:1.4em}#w-pitchSaid{min-height:2.9em}.radios label,.strings label{margin-right:14px;font-size:14px;white-space:nowrap}.fingered{min-width:0}.figures{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 18px;align-items:start;margin-top:6px}#w-diagram{margin:0;width:150px;height:300px;display:flex;justify-content:center;align-items:flex-start}#w-diagram svg{height:300px;width:auto;max-width:150px}#w-diagram.brass{width:220px;height:auto}#w-diagram.brass svg{height:auto;width:220px;max-width:220px}#w-diagram:empty{display:none}.figures:has(#w-diagram:empty){grid-template-columns:minmax(0,1fr)}.figure-head{font:italic 13px/1.3 var(--serif);color:var(--muted);margin:0 0 2px}#w-diagramNote{min-height:2.9em;margin-top:6px}@media(max-width:640px){.figures{grid-template-columns:minmax(0,1fr)}#w-diagram{justify-self:center}}.holes{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px 10px;margin-top:6px}.holes label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:4px;font-variant-numeric:tabular-nums}.holes label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.holes input{width:100%}canvas{width:100%;height:320px;display:block;touch-action:none;cursor:crosshair;margin-top:6px}.shape-bar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 2px}.shape-bar label{font-size:13px;color:var(--muted);margin:0 6px 0 8px}.shape-bar select{width:auto}.shape-views{display:inline-flex}.shape-views button{padding:3px 10px;font-size:13px;border-radius:0;margin:0 0 0 -1px}.shape-views button:first-child{border-radius:3px 0 0 3px;margin-left:0}.shape-views button:last-child{border-radius:0 3px 3px 0}.shape-scale{display:inline-block;font-size:13px;color:var(--muted);margin-left:8px}.shape-scale summary{cursor:pointer}.shape-scale[open]{display:block;margin:4px 0}.shape-scale input{width:5em}.shape-about{margin-top:4px}.shape-about summary{cursor:pointer;font-size:13px;color:var(--muted)}.shape-about[hidden]{display:none}.shape-about p{margin:4px 0}.shape-formed{display:block;font-size:13px;margin:6px 0}.shape-formed[hidden]{display:none}.shape-formed select{width:auto;margin-left:6px}.shape-bar[hidden],.shape-stage[hidden],.shape-readout[hidden]{display:none}.shape-stage{position:relative;margin:6px 0 4px}.shape-stage canvas{height:clamp(240px,40vw,440px);margin:0;border:1px solid var(--ink);border-radius:var(--leaf-lg);cursor:grab;background:var(--paper)}.shape-stage canvas:active{cursor:grabbing}.shape-stage canvas:focus{outline:none}.shape-stage canvas:focus-visible{outline:2px solid var(--muted)}.shape-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}.shape-labels span{position:absolute;transform:translate(-50%);font-size:11px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}.shape-labels span.up{transform:translate(-100%,-50%)}.shape-readout{min-height:2.9em;font-variant-numeric:tabular-nums}.shape-note{margin-top:4px}#w-legend{min-height:5.8em}#s-keptList td{white-space:normal}#s-keptList td:first-child{color:inherit}#s-keptList button{padding:2px 8px;margin:0 4px 0 0;font-size:13px}svg.curve{width:100%;height:auto;display:block;touch-action:none;user-select:none;margin:2px 0 4px;cursor:crosshair;border-radius:6px}svg.curve:focus{outline:none}svg.curve:focus-visible{outline:2px solid var(--line)}.curve .grid{stroke:var(--line);stroke-width:1}.curve text{fill:var(--muted);font:11px system-ui,sans-serif}.curve .settled{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4}.curve .line{stroke-width:2.5}.curve .dot{cursor:grab;stroke:var(--bg);stroke-width:2}.curve .dot.selected{stroke:var(--fg);stroke-width:2.5}.curve .tip{fill:var(--fg)}.curveTools{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px;font-size:13px}.curveTools input{width:5.5em}.curveLabel{font-size:14px;margin-top:8px}input.words{width:100%;box-sizing:border-box;font:inherit;padding:6px;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px}body>h2,fieldset:not(#band fieldset)>legend{cursor:pointer;user-select:none}body>h2:before,fieldset:not(#band fieldset)>legend:before{content:"▾";display:inline-block;width:1.1em;font-weight:400}body>h2[data-fold]:before,fieldset[data-fold]>legend:before{content:"▸"}fieldset[data-fold]>:not(legend){display:none!important}fieldset[data-fold]{padding-bottom:4px}[data-folded]{display:none!important}#sections div.folds{gap:0 4px;padding:0 0 4px}#sections .folds button{font-size:12px;padding:2px 4px;margin:0;color:var(--muted);border:0;background:none;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}#sections .folds button:hover{color:var(--ink);text-decoration-color:var(--ink)}#sections .folds button+button:before{content:"·";display:inline-block;margin:0 8px 0 0;color:var(--line);text-decoration:none}@media(max-width:560px){.row{grid-template-columns:1fr 96px}.row>input[type=range],.row>.track,.row>.radios{grid-column:1/3;grid-row:2}.note{margin-left:0}td:first-child{width:72px}table.reading td:first-child{width:40%}}</style>
+<style>#band.studio{padding:12px 0;margin-top:4px}</style>
+<link rel="stylesheet" href="public/studio/studio.css">
+<script src="public/meter.js"></script>
+</head>
+<body>
+<h1>Solo instrument tests</h1>
+<div class="muted" id="what">Every instrument we model, played live by you or by a musebot. You can adjust the player, the instrument, its physics and the musebot's personality by ear.</div>
+<nav id="sections" aria-label="The page's parts"><div class="parts"></div><div class="boxes"></div><div class="folds"><button id="foldAll" title="Every box folded to its legend: then open the ones to read side by side.">Fold all</button><button id="unfoldAll" title="Every part and box open.">Unfold all</button></div></nav>
+<h2 id="part-play">Play</h2>
+<div class="muted">Who plays the instrument: you, with the controls under Player, or a musebot, with the personality set under Musebot.</div>
+<fieldset><legend>Instrument</legend>
+  <div class="row"><label for="instrument">Instrument</label><select id="instrument"></select><span></span></div>
+  <div id="status"></div>
+  <div data-family="strings" hidden>
+    <div class="duo">
+      <div><button id="s-play" class="big" title="space">▶ Play</button><div class="muted">You bow it, as set under <a href="#part-player">Player</a> (space bar).</div></div>
+      <div><button id="s-solo" class="big" title="A musebot band (plex_clodbot, MemoryBOT and this instrument's player) composes a piece and plays it on this instrument. Everything in the piece comes from its seed.">▶ A musebot plays</button>
+        <div class="muted">A piece its band composes, from the seed and personality set under <a href="#part-musebot">Musebot</a>.</div>
+        <button id="s-render" class="render" title="The piece is composed, then computed on this instrument as set, as fast as this computer can, and played once it is finished.">Render its piece first</button>
+        <div class="muted">Then hear it. For a computer too slow to play it live.</div></div>
+    </div>
+    <div class="also">
+      <button id="s-reverse" title="r">Change bow now (r)</button>
+      <button id="s-pluck" title="p">Pluck (p)</button>
+      <button id="s-good" title="Every control back to this instrument's neutral note (made from the violin's where this instrument has none of its own).">↺ Neutral note</button>
+    </div>
+    <div class="meter"><div id="s-meter"></div></div>
+    <table class="readouts"><tbody><tr><td>Level</td><td id="s-level">silent</td></tr><tr><td>Bow</td><td id="s-way"></td></tr></tbody></table>
+    <div class="said" id="s-said"></div>
+    <div class="muted soloSaid" id="s-soloSaid"></div>
+    <div class="rendered" id="s-rendered" hidden></div>
+  </div>
+  <div data-family="winds" hidden>
+    <div class="duo">
+      <div><button id="w-blow" class="big" title="space">Blow</button><div class="muted">You play it, as set under <a href="#part-player">Player</a> (space bar).</div></div>
+      <div><button id="w-solo" class="big" title="A musebot band (plex_clodbot, MemoryBOT and this instrument's player) composes a piece and plays it on this instrument. Everything in the piece comes from its seed.">▶ A musebot plays</button>
+        <div class="muted">A piece its band composes, from the seed and personality set under <a href="#part-musebot">Musebot</a>.</div>
+        <button id="w-render" class="render" title="The piece is composed, then computed on this instrument as set, as fast as this computer can, and played once it is finished.">Render its piece first</button>
+        <div class="muted">Then hear it. For a computer too slow to play it live.</div></div>
+    </div>
+    <div class="also">
+      <button id="w-tongueNow" title="t">Tongue now (t)</button>
+      <button id="w-neutral" title="Back to its neutral note and dynamic, with every control at the value the playing rules give there.">↺ Neutral note</button>
+      <button id="w-reset" title="Every control back to the value the playing rules give at this pitch and dynamic, and the holes back to this pitch's fingering.">↺ Back to the rules</button>
+    </div>
+    <div class="meter"><div id="w-meter"></div></div>
+    <table class="readouts"><tbody>
+      <tr><td>Heard</td><td id="w-heard">--</td></tr>
+      <tr><td>Level</td><td id="w-level">silent</td></tr>
+      <tr><td>Engine</td><td id="w-engine">--</td></tr>
+    </tbody></table>
+    <div class="said" id="w-said"></div>
+    <div class="muted soloSaid" id="w-soloSaid"></div>
+    <div class="rendered" id="w-rendered" hidden></div>
+  </div>
+</fieldset>
+<h2 id="part-musebot">Musebot</h2>
+<div class="muted">The musebot is this instrument's player in a band with plex_clodbot and MemoryBOT. The band composes a piece and plays it here. Everything in it, including the player's personality, comes from the seed, except what you set here.</div>
+<div data-family="strings" class="musebot" hidden>
+  <fieldset><legend>Its piece</legend>
+    <div class="row"><label for="s-soloSeed">Seed</label><input type="number" id="s-soloSeed" min="0" step="1"><span></span></div>
+    <div class="row"><label for="s-soloSeconds">Longest (s)</label><input type="number" id="s-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
+    <div class="note">Start it with ▶ A musebot plays under <a href="#part-play">Play</a>, or render it first and then hear it. Your bowing stops when it starts; the musebot bows, changes bow direction and makes its own vibrato.</div>
+  </fieldset>
+  <div id="s-personality"></div>
+</div>
+<div data-family="winds" class="musebot" hidden>
+  <fieldset><legend>Its piece</legend>
+    <div class="row"><label for="w-soloSeed">Seed</label><input type="number" id="w-soloSeed" min="0" step="1"><span></span></div>
+    <div class="row"><label for="w-soloSeconds">Longest (s)</label><input type="number" id="w-soloSeconds" min="5" max="600" step="5" value="60"><span></span></div>
+    <div class="note">Start it with ▶ A musebot plays under <a href="#part-play">Play</a>, or render it first and then hear it. The controls under Player follow what it plays.</div>
+  </fieldset>
+  <div id="w-personality"></div>
+</div>
+<div class="row"><button id="toBand" title="This instrument, as dialled now, joins the studio's band under Band: the band's piece is played on this dial with these settings and this musebot's personality.">Add to the band</button><span class="muted" id="toBandSaid"></span></div>
+<h2 id="part-player">Player</h2>
+<div class="muted">What the player does: the note, the hands, the breath and the mouth.</div>
+<div data-family="strings" hidden>
+  <fieldset><legend>Left hand</legend>
+    <div class="strings" id="s-strings"></div>
+    <div id="s-left"></div>
+  </fieldset>
+  <fieldset><legend>Right hand: the bow on the string</legend>
+    <div id="s-right"></div>
+  </fieldset>
+  <fieldset class="wide" id="s-shapeSet"><legend>The instrument, as it is played</legend>
+    <div class="figure-head">Its strings and body in three dimensions: the finger and the bow where the engine has them</div><div id="s-shape"></div>
+  </fieldset>
+  <fieldset><legend>Strokes</legend>
+    <div class="row"><label><input type="checkbox" id="s-alternate" checked> Turn the bow by itself</label><span class="muted">down-bow, up-bow, and so on, while it plays</span><span></span></div>
+    <div id="s-strokes"></div>
+  </fieldset>
+  <fieldset><legend>Attack: how each stroke starts</legend>
+    <div class="row"><label for="s-attackFrom">Start from</label><select id="s-attackFrom"></select><span></span></div>
+    <div class="note" id="s-attackNote"></div>
+    <div class="curveLabel">Bow force (× the force set above)</div><div id="s-forceCurve"></div>
+    <div class="curveLabel">Bow speed (× the speed set above)</div><div id="s-speedCurve"></div>
+    <div class="muted">Used when you press Play and at every change of bow. Time (s) runs across each plot. Press anywhere on a plot to add a point and drag it; above the dashed line is more than the stroke settles at. Select a point to type its values or to make the line into it straight. Double-click a point, or press Delete, to remove it. The speed's first rise is the stroke's start, set above.</div>
+    <div class="note" id="s-attackSaid"></div>
+  </fieldset>
+  <fieldset><legend>Vibrato</legend>
+    <div class="row"><label><input type="checkbox" id="s-vibrating"> Vibrato</label><span class="muted" id="s-vibratoNote"></span><span></span></div>
+    <div id="s-vibrato"></div>
+  </fieldset>
+  <fieldset><legend>Pluck</legend>
+    <div id="s-plucking"></div>
+  </fieldset>
+  <fieldset><legend>The hands' noise</legend>
+    <div class="note">What a player's hands never hold perfectly steady, drawn fresh from the seed. 0 is a perfectly steady machine; 1 is a player. The size of each kind is our own estimate, kept slight, until it is measured.</div>
+    <div id="s-noise"></div>
+  </fieldset>
+  <fieldset><legend>The hands' reach on this instrument</legend>
+    <div class="row"><label><input type="checkbox" id="s-limitFingerboard" checked> The end of the fingerboard</label><span class="muted" id="s-fingerboardLimit"></span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-limitHair" checked> The width of the bow hair</label><span class="muted" id="s-hairLimit"></span><span></span></div>
+    <div class="note">While a limit is on, it caps its controls. When it is off, the controls reach whatever the model can play.</div>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+<fieldset class="bare w-controls" hidden>
+  <fieldset class="wide"><legend>Note</legend>
+    <div class="fingering"><div class="fingered">
+    <div class="row"><label for="w-note">Charted note</label><select id="w-note"></select><span></span></div>
+    <div class="row"><label for="w-dynamic">Dynamic</label><select id="w-dynamic"></select><span></span></div>
+    <div class="row"><label for="w-pitch">Pitch (MIDI)</label><input type="range" id="w-pitch" step="0.01"><input type="number" id="w-pitchN" step="0.01" title="In MIDI note numbers, fractions allowed: 72.5 is a quarter tone above C5."></div>
+    <div class="muted" id="w-pitchSaid"></div></div>
+    <div class="figures"><figure id="w-diagram"></figure>
+      <div id="w-shapeSet"><div class="figure-head">Its shape in three dimensions, as it is played</div><div id="w-shape"></div></div></div>
+    <div class="muted" id="w-diagramNote"></div></div>
+  </fieldset>
+  <fieldset><legend id="w-playerLegend">Breath and embouchure</legend>
+    <div class="row"><label><input type="checkbox" id="w-within" checked> Within a player's body</label><span></span><span></span></div>
+    <div class="note">While on, the sliders hold one another to what a player's body can do, drawn as a hollow stretch of each slider's rod: a single reed's opening and damping move only with the lip, so either one moves the lip; the breath stays under the most pressure a mouth was measured holding; and the tongue's stroke fits within the time of each repeated note. Moving one slider to its end pulls the others with it. When it is off, each slider moves alone.</div>
+    <div class="muted" id="w-excitorNote"></div>
+    <div id="w-excitorPlayer"></div>
+  </fieldset>
+  <fieldset id="w-fingerSet"><legend id="w-fingerLegend">Fingers</legend>
+    <div class="muted" id="w-fingerNote">How open each hole is, from 0 (closed) to 1 (open). They follow the pitch until you move one.</div>
+    <div class="holes" id="w-holes"></div><div id="w-slideBox"></div>
+  </fieldset>
+  <fieldset id="w-muteSet" hidden><legend>Mute</legend>
+    <div class="row"><label for="w-mute">In the bell</label><select id="w-mute"></select><span></span></div>
+    <div class="muted" id="w-muteNote"></div>
+  </fieldset>
+  <fieldset><legend>Tongue</legend>
+    <div class="row"><label>Articulation</label><span class="radios">
+      <label><input type="radio" name="w-articulation" value="slurred"> slurred</label>
+      <label><input type="radio" name="w-articulation" value="legato"> legato-tongued</label>
+      <label><input type="radio" name="w-articulation" value="tongued"> tongued</label></span><span></span></div>
+    <div class="note" id="w-articulationNote"></div>
+    <div id="w-tongue"></div>
+    <div class="curveLabel">Breath at the start of a note (× the breath set above)</div><div id="w-attack"></div>
+    <div class="muted" id="w-attackNote"></div>
+    <button id="w-plainRise" title="The breath rises straight to what is set, with no overshoot.">↺ A plain rise</button>
+    <div class="row"><label><input type="checkbox" id="w-repeating"> Repeat the note</label><span class="muted">tongued again automatically while it is blown</span><span></span></div>
+    <div id="w-repeat"></div>
+  </fieldset>
+  <fieldset><legend>Breathing</legend>
+    <div class="row"><label><input type="checkbox" id="w-breathing" checked> Breathe by itself</label><span class="muted">when the breath runs out, the note stops, a breath is taken, and the note starts again</span><span></span></div>
+    <div id="w-lungs"></div>
+    <div class="note" id="w-lungsNote"></div>
+    <div class="row"><label>Air left</label><div class="meter"><div id="w-air"></div></div><span id="w-airN">--</span></div>
+  </fieldset>
+  <fieldset><legend>Vibrato</legend>
+    <div class="row"><label><input type="checkbox" id="w-vibrating"> Vibrato</label><span class="muted" id="w-vibratoNote"></span><span></span></div>
+    <div id="w-vibrato"></div>
+  </fieldset>
+  <fieldset><legend>The player's noise</legend>
+    <div class="note">What a player's breath and lips never hold perfectly steady, drawn fresh from the seed. 0 is a perfectly steady machine; 1 is a player. The size of each kind is our own estimate, kept slight, until it is measured.</div>
+    <div id="w-noise"></div>
+  </fieldset>
+  <fieldset><legend>Flutter, hum and growl</legend>
+    <div class="row"><label><input type="checkbox" id="w-fluttering"> Flutter</label><span class="muted">the tongue rolls, cutting the breath off and on while it is blown</span><span></span></div>
+    <div id="w-flutter"></div>
+    <div class="row"><label><input type="checkbox" id="w-humming"> Hum</label><span class="muted">the player sings into the instrument while playing</span><span></span></div>
+    <div id="w-hum"></div>
+    <div class="row"><label><input type="checkbox" id="w-growling"> Growl</label><span class="muted">a rough sung tone (its period doubled) with breath noise, sung into the instrument</span><span></span></div>
+    <div id="w-growl"></div>
+    <div class="note" id="w-humNote"></div>
+    <div class="note" id="w-techniqueNote"></div>
+  </fieldset>
+  <fieldset><legend id="w-tractLegend">Vocal tract</legend>
+    <button id="w-normal">A player's normal tract, following the note</button><button id="w-none">No tract</button>
+    <div class="muted" id="w-tractHow">Drag a handle to move a resonance's frequency and height. Scroll on it to change its width (Q). Double-click to add or remove one. A tract set here holds until the pitch changes; then the player's tract for the new note takes over.</div>
+    <canvas id="w-plot"></canvas>
+    <div class="muted" id="w-legend"></div>
+  </fieldset>
+</fieldset>
+</div>
+<h2 id="part-instrument">Instrument</h2>
+<div class="muted">What the instrument is made of: its body, its strings or bore, and its reed.</div>
+<div data-family="strings" hidden>
+  <fieldset><legend>Which one</legend>
+    <div class="row"><label for="s-variant">Artifastring model</label><select id="s-variant"></select><span class="muted" id="s-variants"></span></div>
+    <div class="row"><label for="s-seed">Seed</label><input type="number" id="s-seed" min="0" step="1"><button id="s-reseed">Seed again</button></div>
+    <div class="note">A newly chosen instrument starts at rest on its good note; the sound fades out and back in around the change.</div>
+  </fieldset>
+  <fieldset><legend>This string, as Artifastring builds it</legend>
+    <div class="muted">Each can be set from a tenth to ten times Artifastring's own value. Changing the length, diameter, density or stiffness (or a tension that changes how many modes the string has) recomputes its modes, so the sound dips for a moment. Its friction and losses are under Physics.</div>
+    <div id="s-build"></div>
+    <button id="s-ownBuild">Back to Artifastring's own</button>
+  </fieldset>
+  <fieldset><legend>Body</legend>
+    <div class="row"><label><input type="checkbox" id="s-correcting" checked> Body as the renders correct it</label><span class="muted">with its bridge hill and high frequencies restored</span><span></span></div>
+    <div class="row"><label><input type="checkbox" id="s-radiating" checked> Body radiates as a body does</label><span class="muted">nothing at 0 Hz, and less and less below its corner frequency</span><span></span></div>
+    <div id="s-body"></div>
+    <div class="row"><label for="s-falling">Roll-off below the corner</label><select id="s-falling"><option value="2">12 dB an octave</option><option value="4">24 dB an octave</option></select><span></span></div>
+    <div class="note" id="s-bodyNote"></div>
+    <div class="muted">Its strings and body in three dimensions are drawn under <a href="#s-shapeSet">Player</a>.</div>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+<fieldset class="bare w-controls" hidden>
+  <fieldset><legend>Body</legend>
+    <table><tbody id="w-body"></tbody></table>
+    <div class="muted">Its shape in three dimensions is drawn beside its fingering, under <a href="#w-shapeSet">Player, Note</a>.</div>
+  </fieldset>
+  <fieldset id="w-instrumentSet"><legend id="w-instrumentLegend">Reed</legend>
+    <div class="muted" id="w-instrumentNote"></div>
+    <div id="w-excitorInstrument"></div>
+  </fieldset>
+</fieldset>
+</div>
+<h2 id="part-physics">Physics</h2>
+<div class="muted">What the model contains: the constants in its equations, its losses and its resolution, and what they say about the playing.</div>
+<div data-family="strings" hidden>
+  <fieldset><legend>This string's friction and losses</legend>
+    <div class="muted">Artifastring's friction curve and losses for this string, each settable from a tenth to ten times its own value, and how many modes the string is computed with.</div>
+    <div id="s-buildPhysics"></div>
+  </fieldset>
+  <fieldset><legend>Artifastring's own constants</legend>
+    <div class="muted">These are fixed in Artifastring's source code, and several are marked there "estimated from listening". The friction noise randomly lowers the friction curve's slope v0 by up to this share on every sample in which the string slips.</div>
+    <div id="s-constants"></div>
+    <button id="s-ownConstants">Back to Artifastring's</button>
+  </fieldset>
+  <fieldset><legend>What the physics says about this bowing</legend>
+    <table class="reading"><tbody id="s-reading"></tbody></table>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+<fieldset class="bare w-controls" hidden>
+  <fieldset id="w-physicsSet"><legend id="w-physicsLegend">The model's own</legend>
+    <div class="muted" id="w-physicsNote"></div>
+    <div id="w-excitorPhysics"></div>
+  </fieldset>
+  <fieldset><legend>The engine</legend>
+    <table><tbody id="w-engineTable"></tbody></table>
+  </fieldset>
+</fieldset>
+</div>
+<h2 id="part-keeping">Listening and keeping</h2>
+<div data-family="strings" hidden>
+  <fieldset><legend>Listening</legend>
+    <button id="s-output">Hearing: the instrument</button>
+    <div id="s-listening"></div>
+  </fieldset>
+  <fieldset><legend>Keep this setting</legend>
+    <input class="words" id="s-words" placeholder="what you hear: smooth, scratchy, whistling, airy, choked…">
+    <button id="s-keep">Keep</button><span class="muted" id="s-kept"></span>
+  </fieldset>
+  <fieldset><legend>Kept</legend>
+    <div class="muted" id="s-keptNone">Nothing kept yet.</div>
+    <table><tbody id="s-keptList"></tbody></table>
+  </fieldset>
+</div>
+<div data-family="winds" hidden>
+  <fieldset><legend>Keep this setting</legend>
+    <input class="words" id="w-words" placeholder="what you hear: clean, airy, choked, buzzy, unstable…">
+    <button id="w-keep">Keep</button><span class="muted" id="w-kept"></span>
+  </fieldset>
+</div>
+<fieldset><legend>Settings as a file</legend>
+  <button id="saveSettings" title="Saves every setting made here (the player's, the instrument's, the model's and the musebot's) and the words written above, as a file.">Save settings</button>
+  <button id="loadSettings" title="Loads a saved file's settings, switching to its instrument first.">Load settings…</button>
+  <input type="file" id="settingsFile" accept=".json,application/json" hidden>
+  <div class="muted" id="settingsSaid"></div>
+</fieldset>
+<h2 id="part-band">Band</h2>
+<div class="muted">The studio: choose the players and their instruments' models, and the bots compose a piece and play it on
+  the physical models, here in the browser, with its score and parts, each part's MIDI 2.0, and its sound.</div>
+<div id="band" class="studio"></div>
+<script>(()=>{const i="live-folds",c=(()=>{try{return JSON.parse(localStorage.getItem(i))??{}}catch{return{}}})(),d=()=>{try{localStorage.setItem(i,JSON.stringify(c))}catch{}},b=e=>e.parentElement?.matches("fieldset")&&!e.closest("#band")&&e.parentElement.querySelector(":scope>legend")===e?e.parentElement:null,n=e=>e.matches("h2")?`part ${e.id}`:`box ${e.closest("[data-family]")?.dataset.family??""} ${e.querySelector(":scope>legend").id||e.querySelector(":scope>legend").textContent.trim()}`,h=e=>{const r=[];for(let t=e.nextElementSibling;t&&!t.matches("h2,script");t=t.nextElementSibling)r.push(t);return r},a=e=>e.hasAttribute("data-fold"),s=(e,r)=>{if(r?e.setAttribute("data-fold",""):e.removeAttribute("data-fold"),e.matches("h2"))for(const t of h(e))r?t.setAttribute("data-folded",""):t.removeAttribute("data-folded");r?c[n(e)]=!0:delete c[n(e)]},u=e=>{for(const r of[...e.querySelectorAll?.("body>h2,fieldset")??[]].filter(t=>t.matches("h2")||t.querySelector(":scope>legend")&&!t.closest("#band")))c[n(r)]&&s(r,!0)};document.addEventListener("click",e=>{const r=e.target.closest?.("body>h2"),t=!r&&!e.target.closest?.("input,button,select,a,label")&&e.target.closest?.("legend")&&b(e.target.closest("legend"));if(r||t){s(r||t,!a(r||t)),d();return}if(e.target.id==="foldAll"){for(const o of document.querySelectorAll("fieldset"))o.querySelector(":scope>legend")&&!o.closest("#band")&&o.getClientRects().length&&s(o,!0);d();return}if(e.target.id==="unfoldAll"){for(const o of document.querySelectorAll("body>h2[data-fold],fieldset[data-fold]"))s(o,!1);d();return}const m=e.target.closest?.('a[href^="#"]'),l=m&&document.getElementById(m.getAttribute("href").slice(1));if(!l)return;for(let o=l;o&&o!==document.body;o=o.parentElement)o.matches("fieldset")&&a(o)&&s(o,!1);l.matches("h2")&&a(l)&&s(l,!1);const f=[...document.querySelectorAll("body>h2")].findLast(o=>o===l||o.compareDocumentPosition(l)&Node.DOCUMENT_POSITION_FOLLOWING);f&&a(f)&&s(f,!1),d()},!0),addEventListener("DOMContentLoaded",()=>{u(document),new MutationObserver(e=>{for(const r of e)for(const t of r.addedNodes)t.nodeType===1&&(t.matches("fieldset")&&t.querySelector(":scope>legend")&&!t.closest("#band")&&c[n(t)]&&s(t,!0),u(t))}).observe(document.body,{subtree:!0,childList:!0})})})();</script>
+<script type="module" src="live.js"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+const COI_RELOADED="coi-reloaded",RELOADED_WITHIN=1e4;window.coi={coepCredentialless:()=>!1,doReload:()=>{try{if(Date.now()-Number(sessionStorage.getItem(COI_RELOADED))<1e4)return;sessionStorage.setItem(COI_RELOADED,String(Date.now()))}catch{}navigator.serviceWorker.ready.then(()=>location.reload())}};

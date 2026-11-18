@@ -1,0 +1,6 @@
+# GitHub Pages builds this site with Jekyll, which leaves out any folder whose
+# name begins with a dot. This one is to be served: /.well-known/tdmrep.json
+# reserves text and data mining for the Musebots pages under
+# /solo-instrument-tests/ (the W3C TDM Reservation Protocol; robots.txt says the
+# same to crawlers). Nothing else about the build is changed.
+include: [".well-known"]

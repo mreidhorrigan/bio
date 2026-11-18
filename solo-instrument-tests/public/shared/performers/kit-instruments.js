@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+function i(e,r,t){if(!Array.isArray(r?.notes))return e;const n=new Set(r.notes);return Object.fromEntries(Object.entries(e).filter(([,s])=>t(s).every(o=>n.has(o))))}const c=(e,r)=>!Array.isArray(e?.notes)||r.every(t=>e.notes.includes(t));export{i as instrumentsInKit,c as kitHasNotes};

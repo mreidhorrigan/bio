@@ -46,6 +46,7 @@
     ["CV", "Horrigan_CV.html"]
   ];
   var MUSIC = [
+    ["Musebots", "musebots.html"],   // the software musicians' page: instruments to play, a band to build, demonstrations
     ["No Phenomenon", "https://nophenomenon.bandcamp.com/"],
     ["SoundCloud", "https://soundcloud.com/mhorriga"]
   ];

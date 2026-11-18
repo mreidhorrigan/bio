@@ -153,6 +153,22 @@ What a design would need, at least:
   the language they were held in).
 - A way to take one down quickly, knowing that history and caches keep it.
 
+## The Musebots pages (2026-11-17)
+
+- `musebots.html` gathers what a visitor can do with the Musebots: play the instruments and compose a piece (both in
+  `solo-instrument-tests/`, the second its Band, `#part-band`), build a band (the signal towers), the two films, and
+  how it is built. Each sentence under "How it is built" states what the `web-musebots` repository does; change one
+  only with that repository open. Its French is in `i18n-fr.js`; the menubar's Music list opens it.
+- `solo-instrument-tests/` is generated (`AGENTS.md`), and is published under terms of its own, not this
+  repository's `LICENSE`: `solo-instrument-tests/LICENSE.txt` and `LICENSE.html`. Its code is minified, and the
+  source it publishes is its engines' alone, as their licence (the GPL) asks; `web-musebots/docs/SITE_LICENSING.md`
+  says where each line is drawn.
+- `robots.txt` asks the crawlers that gather training data to stay out of `/solo-instrument-tests/`;
+  `.well-known/tdmrep.json` reserves text and data mining for it; `_config.yml` is there only so that Jekyll serves
+  `.well-known/`. The rest of the site is open to every crawler, as before.
+- The Band composes in Chrome, Edge and Safari. Firefox cannot run it (it cannot pause offline audio between the
+  bots' decisions), and the page says so there.
+
 ## Left, or offered and not yet asked for
 
 - A pass with VoiceOver on a Mac and an iPhone; the checks so far read the

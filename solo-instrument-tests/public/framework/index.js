@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+import{Agent as t}from"./agent.js";import{BotRegistry as f,defineBot as g}from"./bot-registry.js";export{t as Agent,f as BotRegistry,g as defineBot};

@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+function l(e=null){return{every(r,t){const n=setInterval(t,r);return()=>clearInterval(n)},now(){return e?.context?.currentTime??0}}}export{l as wallClock};

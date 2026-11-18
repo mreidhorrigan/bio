@@ -1,0 +1,2 @@
+/*! Copyright (c) 2026 M. Reid Horrigan. All rights reserved. No copying, redistribution, modification or reverse engineering; no text and data mining; no use to train or develop AI or machine-learning models. Terms: LICENSE.html at this site's page. */
+function e(n,i){if(!i?.instanceId)return;if(i.instanceId===i.definitionId){if([...n.values()].find(d=>d.definitionId===i.definitionId&&d.instanceId!==d.definitionId))return}else i.definitionId&&n.delete(i.definitionId);n.set(i.instanceId,i)}export{e as recordAgentState};
